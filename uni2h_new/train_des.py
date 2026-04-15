@@ -24,21 +24,21 @@ from uni2h_des import ( # 注意：导入文件名改为 uni2h_des
     train_one_epoch,
 )
 
-# 设置环境变量以强制使用本地缓存
-os.environ['HF_HUB_LOCAL_FILES_ONLY'] = '1'
+# 设置环境变量以允许从 HuggingFace Hub 下载模型（如果本地没有缓存）
+# os.environ['HF_HUB_LOCAL_FILES_ONLY'] = '1'
 HF_TOKEN = "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"  # 替换为你的实际 HuggingFace Token
 
 
 def build_argparser():
     p = argparse.ArgumentParser(description="Train a regressor on frozen UNI2-h features.")
     p.add_argument("--train_patches_dir", type=str,
-                   default=r"D:\AIPatho\ESCC_aipatho\patch\HYZ15040\train_patches")  # 训练集
+                   default=r"d:\AI空间转录病理研究\PFMval_new\HYZ15040\train_patches")  # 训练集
     p.add_argument("--val_patches_dir", type=str,
-                   default=r"D:\AIPatho\ESCC_aipatho\patch\HYZ15040\val_patches")  # 验证集/测试集
+                   default=r"d:\AI空间转录病理研究\PFMval_new\HYZ15040\val_patches")  # 验证集/测试集
     p.add_argument("--labels_csv_raw", type=str,
-                   default=r"D:\AIPatho\ESCC_aipatho\HYZ15040_ssgsea_260331.csv")  # 原始csv文件
+                   default=r"d:\AI空间转录病理研究\PFMval_new\HYZ15040_ssGSEA_scores.csv")  # 原始csv文件
     p.add_argument("--labels_csv_zscore", type=str,
-                   default=r"D:\AIPatho\ESCC_aipatho\HYZ15040_ssgsea_260331_zscored.csv")  # 标准化后的csv文件
+                   default=r"d:\AI空间转录病理研究\PFMval_new\HYZ15040_ssGSEA_scores_zscore.csv")  # 标准化后的csv文件
     p.add_argument("--cache_root", type=str, default=r".\uni2h_cache\HYZ15040")  # 特征缓存路径
     p.add_argument("--checkpoint_path", type=str, default=r".\checkpoints\HYZ15040\best_model_uni2h.pth")  # 最优模型保存路径
     # p.add_argument("--hf_token", type=str, default=os.environ.get("HUGGINGFACE_HUB_TOKEN", os.environ.get("HF_TOKEN", "")))
@@ -60,7 +60,7 @@ def build_argparser():
     p.add_argument("--early_stop_patience", type=int, default=10) # 早停
     p.add_argument("--min_delta", type=float, default=0.0) # 至少要比当前 best 好这么多才算提升
     p.add_argument("--target_start_col", type=int, default=DEFAULT_TARGET_START_COL)  # 标签从 CSV 的第几列开始，定义在uni2h_utils.py
-    p.add_argument("--num_targets", type=int, default=30)  # 要预测几个指标，定义在uni2h_utils.py (修改为 30)
+    p.add_argument("--num_targets", type=int, default=8)  # 要预测几个指标，定义在uni2h_utils.py (修改为 8)
     p.add_argument("--rebuild_cache", action="store_true")  # 是否重新提取 UNI2-h 特征
     return p
 

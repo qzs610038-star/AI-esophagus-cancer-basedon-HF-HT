@@ -6,10 +6,10 @@
 - [uni2h/uni2h_utils.py](file://uni2h/uni2h_utils.py)
 - [uni2h/infer.py](file://uni2h/infer.py)
 - [uni2h/train.py](file://uni2h/train.py)
-- [histogene/model.py](file://histogene/model.py)
-- [histogene/infer.py](file://histogene/infer.py)
-- [histogene/dataset.py](file://histogene/dataset.py)
-- [histogene/utils.py](file://histogene/utils.py)
+- [uni2h_new/uni2h_des.py](file://uni2h_new/uni2h_des.py)
+- [uni2h_new/infer.py](file://uni2h_new/infer.py)
+- [uni2h_new/train_des.py](file://uni2h_new/train_des.py)
+- [uni2h_new/we.txt](file://uni2h_new/we.txt)
 - [HYZ15040_ssGSEA_scores_zscore.csv](file://HYZ15040_ssGSEA_scores_zscore.csv)
 - [analyze_stats.py](file://analyze_stats.py)
 - [HisToGene应用规划.md](file://HisToGene应用规划.md)
@@ -29,7 +29,7 @@
 10. [附录](#附录)
 
 ## 简介
-本技术文档围绕“UNI2-h+MLP”两阶段推理流程展开，系统阐述从图像Patch到基因集评分预测的完整管线。该流程采用两阶段策略：
+本技术文档围绕"UNI2-h+MLP"两阶段推理流程展开，系统阐述从图像Patch到基因集评分预测的完整管线。该流程采用两阶段策略：
 - 特征提取阶段：使用冻结的UNI2-h骨干网络提取1536维视觉特征，并将特征缓存至磁盘，支持断点续传与重复利用。
 - 回归预测阶段：加载预训练的轻量回归头（MLP），对缓存特征进行端到端回归，输出8个ssGSEA通路评分，并计算MSE、MAE、R²、PCC等指标。
 
@@ -303,12 +303,8 @@ C -.-> F
 - [analyze_stats.py:1-40](file://analyze_stats.py#L1-L40)
 
 ## 结论
-UNI2-h+MLP推理流程通过“特征提取+轻量回归”的两阶段策略，在保证性能的同时显著降低了计算与存储成本。特征缓存机制实现了高效的重复利用与断点续传；MLP回归头结构简单、易于部署；评估指标与HisToGene一致，便于横向对比。结合批量推理优化与硬件资源建议，可在实际场景中稳定高效地完成大规模Patch的ssGSEA通路评分预测。
+UNI2-h+MLP推理流程通过"特征提取+轻量回归"的两阶段策略，在保证性能的同时显著降低了计算与存储成本。特征缓存机制实现了高效的重复利用与断点续传；MLP回归头结构简单、易于部署；评估指标与HisToGene一致，便于横向对比。结合批量推理优化与硬件资源建议，可在实际场景中稳定高效地完成大规模Patch的ssGSEA通路评分预测。
 
 ## 附录
 - 数据分布分析：可使用analyze_stats.py对8个通路评分进行描述性统计与异常值检测，辅助异常值清洗与模型鲁棒性评估。
 - HisToGene适配：若需端到端图像输入与空间位置编码，可参考histogene模块的模型、数据集与推理脚本，与UNI2-h+MLP方案进行对比实验。
-
-章节来源
-- [analyze_stats.py:1-40](file://analyze_stats.py#L1-L40)
-- [HisToGene应用规划.md:1-1092](file://HisToGene应用规划.md#L1-L1092)

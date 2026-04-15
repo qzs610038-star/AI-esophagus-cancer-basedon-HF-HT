@@ -3,14 +3,12 @@
 <cite>
 **本文引用的文件**
 - [README.md](file://README.md)
-- [histogene/train.py](file://histogene/train.py)
-- [histogene/model.py](file://histogene/model.py)
-- [histogene/dataset.py](file://histogene/dataset.py)
-- [histogene/utils.py](file://histogene/utils.py)
-- [histogene/infer.py](file://histogene/infer.py)
 - [uni2h/train.py](file://uni2h/train.py)
 - [uni2h/uni2h_utils.py](file://uni2h/uni2h_utils.py)
 - [uni2h/infer.py](file://uni2h/infer.py)
+- [uni2h_new/train_des.py](file://uni2h_new/train_des.py)
+- [uni2h_new/uni2h_des.py](file://uni2h_new/uni2h_des.py)
+- [uni2h_new/checkpoints/HYZ15040/best_model_uni2h.history.csv](file://uni2h_new/checkpoints/HYZ15040/best_model_uni2h.history.csv)
 - [HYZ15040_ssGSEA_scores_zscore.csv](file://HYZ15040_ssGSEA_scores_zscore.csv)
 </cite>
 
@@ -27,7 +25,7 @@
 10. [附录：超参数与配置指南](#附录超参数与配置指南)
 
 ## 简介
-本项目围绕“两阶段训练流程”展开：第一阶段使用冻结的 UNI2-h 特征提取器，将组织学切片 patch 转换为 1536 维特征向量，并缓存；第二阶段以这些特征作为输入，训练一个轻量级 MLP 多任务回归头，直接拟合 ssGSEA 通路评分。该流程显著降低计算成本，便于快速迭代与部署。
+本项目围绕"两阶段训练流程"展开：第一阶段使用冻结的 UNI2-h 特征提取器，将组织学切片 patch 转换为 1536 维特征向量，并缓存；第二阶段以这些特征作为输入，训练一个轻量级 MLP 多任务回归头，直接拟合 ssGSEA 通路评分。该流程显著降低计算成本，便于快速迭代与部署。
 
 - 第一阶段（UNI2-h 特征提取与缓存）
   - 通过 Hugging Face 加载官方 UNI2-h 模型，冻结参数，使用官方预处理流水线。
@@ -37,12 +35,14 @@
   - 支持早停、学习率调度、混合精度、梯度裁剪等工程化优化。
 
 ## 项目结构
-- histogene：基于 ViT-MLP 的端到端训练（可选，本流程更推荐 UNI2-h + MLP）。
 - uni2h：两阶段流程的核心实现，包含特征提取、缓存、训练与推理。
+- uni2h_new：新增的改进版本，包含 DenseNet121 风格的 MLP 回归头和 MAPE 指标。
 - 数据与脚本：
   - 数据划分与 z-score 标准化脚本（split.py、zscore.py）。
   - 分析与统计输出（analyze_stats.py、data_distribution_analysis.py）。
-  - 通用工具与实用函数（uni2h_utils.py、histogene/utils.py）。
+- 缓存目录：
+  - uni2h_cache：特征缓存目录，按训练/验证集划分。
+  - checkpoints：模型检查点和训练历史记录。
 
 ```mermaid
 graph TB
@@ -57,37 +57,29 @@ U1["uni2h/train.py"]
 U2["uni2h/uni2h_utils.py"]
 U3["uni2h/infer.py"]
 C1[".cache/huggingface<br/>UNI2-h 权重"]
-CK["checkpoints<br/>best_model_uni2h.pth"]
 HC["uni2h_cache<br/>特征缓存(.pt)"]
 end
-subgraph "HisToGene阶段"
-H1["histogene/train.py"]
-H2["histogene/model.py"]
-H3["histogene/dataset.py"]
-H4["histogene/utils.py"]
-H5["histogene/infer.py"]
-CK2["checkpoints<br/>best_histogene.pth"]
+subgraph "UNI2-h改进版"
+U4["uni2h_new/train_des.py"]
+U5["uni2h_new/uni2h_des.py"]
+U6["uni2h_new/infer.py"]
+CH["uni2h_new/uni2h_cache<br/>特征缓存(.pt)"]
+CK["uni2h_new/checkpoints<br/>训练历史与模型"]
 end
-S1 --> S2 --> H3
-S2 --> U2
+S1 --> S2 --> U2
 U1 --> U2 --> C1
-U1 --> CK
 U1 --> HC
-H1 --> H2
-H1 --> H3
-H1 --> H4
-H1 --> CK2
+U4 --> U5 --> C1
+U4 --> CH
+U6 --> CH
+U6 --> CK
 ```
 
-图表来源
+**图表来源**
 - [uni2h/train.py:52-227](file://uni2h/train.py#L52-L227)
 - [uni2h/uni2h_utils.py:31-71](file://uni2h/uni2h_utils.py#L31-L71)
-- [histogene/train.py:174-338](file://histogene/train.py#L174-L338)
-- [histogene/model.py:64-160](file://histogene/model.py#L64-L160)
-- [histogene/dataset.py:23-118](file://histogene/dataset.py#L23-L118)
-
-章节来源
-- [README.md:1-44](file://README.md#L1-L44)
+- [uni2h_new/train_des.py:68-301](file://uni2h_new/train_des.py#L68-L301)
+- [uni2h_new/uni2h_des.py:341-447](file://uni2h_new/uni2h_des.py#L341-L447)
 
 ## 核心组件
 - UNI2-h 特征提取与缓存
@@ -97,16 +89,19 @@ H1 --> CK2
   - 从缓存目录加载特征，按 patch 匹配标签，返回 (feature, target)。
 - BackboneRegressor（MLP回归头）
   - 线性归一化 + 线性层 + GELU + Dropout + 线性输出，多任务回归。
+- DenseNet121StyleRegressor（改进版）
+  - 参照 DenseNet-121 结构的多层感知机，包含密集块和过渡层。
 - 训练与评估循环
   - 训练：前向、Huber/L2损失、反向、梯度裁剪、优化器步进、混合精度缩放。
-  - 评估：前向、计算指标（MSE、MAE、R²、PCC）。
+  - 评估：前向、计算指标（MSE、MAE、R²、PCC、MAPE）。
 - 推理与指标导出
   - 加载 checkpoint，对新数据集进行推理，输出预测 CSV 与指标 CSV。
 
-章节来源
+**章节来源**
 - [uni2h/uni2h_utils.py:137-170](file://uni2h/uni2h_utils.py#L137-L170)
 - [uni2h/uni2h_utils.py:173-226](file://uni2h/uni2h_utils.py#L173-L226)
 - [uni2h/uni2h_utils.py:228-247](file://uni2h/uni2h_utils.py#L228-L247)
+- [uni2h_new/uni2h_des.py:341-447](file://uni2h_new/uni2h_des.py#L341-L447)
 - [uni2h/train.py:120-131](file://uni2h/train.py#L120-L131)
 - [uni2h/train.py:137-191](file://uni2h/train.py#L137-L191)
 - [uni2h/train.py:209-223](file://uni2h/train.py#L209-L223)
@@ -148,7 +143,7 @@ end
 Train-->>User : 保存最佳checkpoint与history
 ```
 
-图表来源
+**图表来源**
 - [uni2h/train.py:52-227](file://uni2h/train.py#L52-L227)
 - [uni2h/uni2h_utils.py:31-71](file://uni2h/uni2h_utils.py#L31-L71)
 - [uni2h/uni2h_utils.py:137-170](file://uni2h/uni2h_utils.py#L137-L170)
@@ -183,11 +178,11 @@ Skip --> Loop
 Loop --> Done(["完成"])
 ```
 
-图表来源
+**图表来源**
 - [uni2h/uni2h_utils.py:31-71](file://uni2h/uni2h_utils.py#L31-L71)
 - [uni2h/uni2h_utils.py:137-170](file://uni2h/uni2h_utils.py#L137-L170)
 
-章节来源
+**章节来源**
 - [uni2h/uni2h_utils.py:31-71](file://uni2h/uni2h_utils.py#L31-L71)
 - [uni2h/uni2h_utils.py:137-170](file://uni2h/uni2h_utils.py#L137-L170)
 - [uni2h/uni2h_utils.py:173-226](file://uni2h/uni2h_utils.py#L173-L226)
@@ -195,6 +190,7 @@ Loop --> Done(["完成"])
 ### 第二阶段：MLP回归头训练
 - 模型结构
   - BackboneRegressor：LayerNorm → Linear → GELU → Dropout → Linear，输出多任务分数。
+  - DenseNet121StyleRegressor：参照 DenseNet-121 结构，包含密集块和过渡层，支持 MAPE 指标。
 - 数据加载
   - CachedFeaturePatchDataset：按 patch 匹配标签，返回 (feature, target)。
 - 训练流程
@@ -206,11 +202,16 @@ Loop --> Done(["完成"])
   - 梯度裁剪：clip_grad_norm_。
 - 指标计算
   - compute_metrics：MSE、MAE、R²、PCC，支持多任务平均。
+  - 新增 MAPE 指标计算和最大绝对差异分析。
 
 ```mermaid
 classDiagram
 class BackboneRegressor {
 +forward(x)
+}
+class DenseNet121StyleRegressor {
++forward(x)
++_make_dense_block()
 }
 class CachedFeaturePatchDataset {
 +__len__()
@@ -224,21 +225,26 @@ class evaluate {
 +forward()
 }
 CachedFeaturePatchDataset --> BackboneRegressor : "提供特征与标签"
+CachedFeaturePatchDataset --> DenseNet121StyleRegressor : "提供特征与标签"
 train_one_epoch --> BackboneRegressor : "训练"
+train_one_epoch --> DenseNet121StyleRegressor : "训练"
 evaluate --> BackboneRegressor : "验证"
+evaluate --> DenseNet121StyleRegressor : "验证"
 ```
 
-图表来源
+**图表来源**
 - [uni2h/uni2h_utils.py:228-247](file://uni2h/uni2h_utils.py#L228-L247)
+- [uni2h_new/uni2h_des.py:341-447](file://uni2h_new/uni2h_des.py#L341-L447)
 - [uni2h/uni2h_utils.py:173-226](file://uni2h/uni2h_utils.py#L173-L226)
-- [uni2h/uni2h_utils.py:250-277](file://uni2h/uni2h_utils.py#L250-L277)
-- [uni2h/uni2h_utils.py:279-303](file://uni2h/uni2h_utils.py#L279-L303)
+- [uni2h_new/uni2h_des.py:512-568](file://uni2h_new/uni2h_des.py#L512-L568)
 
-章节来源
+**章节来源**
 - [uni2h/uni2h_utils.py:228-247](file://uni2h/uni2h_utils.py#L228-L247)
 - [uni2h/uni2h_utils.py:173-226](file://uni2h/uni2h_utils.py#L173-L226)
 - [uni2h/uni2h_utils.py:250-277](file://uni2h/uni2h_utils.py#L250-L277)
 - [uni2h/uni2h_utils.py:279-303](file://uni2h/uni2h_utils.py#L279-L303)
+- [uni2h_new/uni2h_des.py:341-447](file://uni2h_new/uni2h_des.py#L341-L447)
+- [uni2h_new/uni2h_des.py:512-568](file://uni2h_new/uni2h_des.py#L512-L568)
 
 ### 数据加载与批次管理
 - HisToGene 数据集（可选）
@@ -250,7 +256,7 @@ evaluate --> BackboneRegressor : "验证"
   - DataLoader：shuffle、pin_memory、num_workers。
   - 非阻塞移动张量至设备，减少 CPU-GPU 传输等待。
 
-章节来源
+**章节来源**
 - [histogene/dataset.py:23-118](file://histogene/dataset.py#L23-L118)
 - [uni2h/uni2h_utils.py:173-226](file://uni2h/uni2h_utils.py#L173-L226)
 - [histogene/train.py:222-230](file://histogene/train.py#L222-L230)
@@ -262,7 +268,7 @@ evaluate --> BackboneRegressor : "验证"
 - UNI2-h 推理
   - 加载 checkpoint，重建回归头，对指定 split 的 patch 进行特征提取与缓存，再进行推理，输出预测与指标 CSV。
 
-章节来源
+**章节来源**
 - [histogene/infer.py:66-169](file://histogene/infer.py#L66-L169)
 - [uni2h/infer.py:43-175](file://uni2h/infer.py#L43-L175)
 
@@ -271,34 +277,37 @@ evaluate --> BackboneRegressor : "验证"
   - HuggingFace Hub：加载 UNI2-h 模型。
   - timm：官方数据配置与 transforms。
   - PyTorch：模型、优化器、混合精度、数据加载。
-  - scikit-learn：指标计算（MSE、MAE、R²、PCC）。
+  - scikit-learn：指标计算（MSE、MAE、R²、PCC、MAPE）。
 - 内部模块
   - uni2h/train.py 依赖 uni2h/uni2h_utils.py。
-  - histogene/train.py 依赖 histogene/model.py、histogene/dataset.py、histogene/utils.py。
+  - uni2h_new/train_des.py 依赖 uni2h_new/uni2h_des.py。
   - 推理脚本依赖各自模块与 utils。
 
 ```mermaid
 graph TB
 T["uni2h/train.py"] --> U["uni2h/uni2h_utils.py"]
+T2["uni2h_new/train_des.py"] --> U2["uni2h_new/uni2h_des.py"]
 U --> HF["HuggingFace Hub"]
 U --> TIMM["timm"]
+U2 --> HF
+U2 --> TIMM
 T --> CKPT["checkpoints/*.pth"]
 T --> CACHE["uni2h_cache/*.pt"]
-HT["histogene/train.py"] --> HM["histogene/model.py"]
-HT --> HD["histogene/dataset.py"]
-HT --> HU["histogene/utils.py"]
-HT --> CKPT2["checkpoints/*.pth"]
+T2 --> CKPT2["uni2h_new/checkpoints/*.pth"]
+T2 --> CACHE2["uni2h_new/uni2h_cache/*.pt"]
 ```
 
-图表来源
+**图表来源**
 - [uni2h/train.py:12-21](file://uni2h/train.py#L12-L21)
 - [uni2h/uni2h_utils.py:12-16](file://uni2h/uni2h_utils.py#L12-L16)
-- [histogene/train.py:24-26](file://histogene/train.py#L24-L26)
+- [uni2h_new/train_des.py:12-25](file://uni2h_new/train_des.py#L12-L25)
+- [uni2h_new/uni2h_des.py:12-16](file://uni2h_new/uni2h_des.py#L12-L16)
 
-章节来源
+**章节来源**
 - [uni2h/train.py:12-21](file://uni2h/train.py#L12-L21)
 - [uni2h/uni2h_utils.py:12-16](file://uni2h/uni2h_utils.py#L12-L16)
-- [histogene/train.py:24-26](file://histogene/train.py#L24-L26)
+- [uni2h_new/train_des.py:12-25](file://uni2h_new/train_des.py#L12-L25)
+- [uni2h_new/uni2h_des.py:12-16](file://uni2h_new/uni2h_des.py#L12-L16)
 
 ## 性能与内存优化
 - 混合精度训练
@@ -313,7 +322,7 @@ HT --> CKPT2["checkpoints/*.pth"]
   - pin_memory 在 GPU 可用时启用，提高数据搬运效率。
   - num_workers 在 Windows 上设为 0（兼容性考虑），Linux 可适当增大。
 
-章节来源
+**章节来源**
 - [histogene/train.py:197-199](file://histogene/train.py#L197-L199)
 - [histogene/train.py:124-127](file://histogene/train.py#L124-L127)
 - [uni2h/train.py:128-131](file://uni2h/train.py#L128-L131)
@@ -331,13 +340,13 @@ HT --> CKPT2["checkpoints/*.pth"]
 - 数据集为空
   - 若 patch 目录中没有匹配的 PNG 文件或标签映射为空，会报错，检查路径与文件名。
 
-章节来源
+**章节来源**
 - [uni2h/uni2h_utils.py:24-29](file://uni2h/uni2h_utils.py#L24-L29)
 - [uni2h/uni2h_utils.py:205-207](file://uni2h/uni2h_utils.py#L205-L207)
 - [uni2h/infer.py:48-56](file://uni2h/infer.py#L48-L56)
 
 ## 结论
-两阶段训练流程以 UNI2-h 作为特征提取器，结合轻量级 MLP 回归头，实现了高效、稳定且可复现的多任务回归训练。通过特征缓存与工程化优化（混合精度、早停、学习率调度、梯度裁剪），在有限资源下获得良好性能与可维护性。建议优先采用该流程，并根据下游任务进一步扩展与定制。
+两阶段训练流程以 UNI2-h 作为特征提取器，结合轻量级 MLP 回归头，实现了高效、稳定且可复现的多任务回归训练。通过特征缓存与工程化优化（混合精度、早停、学习率调度、梯度裁剪），在有限资源下获得良好性能与可维护性。新增的 DenseNet121 风格回归头和 MAPE 指标进一步提升了模型表达能力和评估精度。建议优先采用该流程，并根据下游任务进一步扩展与定制。
 
 ## 附录：超参数与配置指南
 - 第一阶段（UNI2-h 特征提取）
@@ -353,6 +362,11 @@ HT --> CKPT2["checkpoints/*.pth"]
   - early_stop_patience：建议 5–20。
   - num_workers：Windows 默认 0，Linux 可设为 2–8。
   - min_delta：验证集 loss 至少下降幅度阈值。
+- DenseNet121 风格回归头参数
+  - initial_dim：初始投影维度，建议 256。
+  - growth_rate：增长速率，建议 32。
+  - bottleneck_factor：瓶颈因子，建议 4。
+  - transition_factor：过渡因子，建议 0.5。
 - 数据与标签
   - labels_csv：z-score 标准化后的 ssGSEA 通路分数 CSV。
   - target_start_col、num_targets：从 CSV 中选择目标列的起始与数量。
@@ -360,7 +374,9 @@ HT --> CKPT2["checkpoints/*.pth"]
   - best_model_uni2h.pth：包含模型状态字典、超参数、缓存目录等。
   - 推理时通过 checkpoint_path 加载，自动重建回归头。
 
-章节来源
+**章节来源**
 - [uni2h/train.py:26-49](file://uni2h/train.py#L26-L49)
 - [uni2h/uni2h_utils.py:173-226](file://uni2h/uni2h_utils.py#L173-L226)
 - [uni2h/infer.py:24-41](file://uni2h/infer.py#L24-L41)
+- [uni2h_new/train_des.py:32-65](file://uni2h_new/train_des.py#L32-L65)
+- [uni2h_new/uni2h_des.py:341-447](file://uni2h_new/uni2h_des.py#L341-L447)

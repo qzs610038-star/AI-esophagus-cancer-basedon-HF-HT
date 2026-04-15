@@ -19,18 +19,20 @@ DEFAULT_MODEL_ID = "MahmoodLab/UNI2-h"
 DEFAULT_FEATURE_DIM = 1536 # UNI2-h输出特征维度
 DEFAULT_TARGET_START_COL = 1   # 标签从 CSV 的第几列开始，第 2 列开始是 N 个指标
 # DEFAULT_NUM_TARGETS = 8 # # 要预测几个指标 (修改为 30)
-DEFAULT_NUM_TARGETS = 30 # # 要预测几个指标 (修改为 30)
+DEFAULT_NUM_TARGETS = 8 # # 要预测几个指标 (修改为 8)
 
 # Huggingface登录
 def ensure_hf_login(token: Optional[str] = None) -> None:
     token = token or os.environ.get("HUGGINGFACE_HUB_TOKEN") or os.environ.get("HF_TOKEN")
     if token:
-        # 尝试注释掉 login 调用，因为已设置 HF_HUB_LOCAL_FILES_ONLY=1
-        # login(token=token)
-        pass # 假设 token 已通过环境变量等方式设置
+        # 使用 token 登录 HuggingFace
+        try:
+            login(token=token)
+            print("HuggingFace login successful.")
+        except Exception as e:
+            print(f"HuggingFace login warning: {e}")
     else:
-        print("Warning: Hugging Face token not provided. Loading public model might fail or be rate-limited.")
-        # 即使没有_HUB_LOCAL_FILES_ONLY=1 且文件已缓存，加载仍可能成功
+        print("Warning: Hugging Face token not provided. Loading model might fail or be rate-limited.")
 
 
 # 加载UNI2-h backbone
