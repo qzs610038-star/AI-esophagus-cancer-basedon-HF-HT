@@ -1,0 +1,6 @@
+模型: HisToGene
+状态: early_stop
+时间: 2026-04-16 22:44:30
+总Epoch: 42
+最佳Epoch: 27
+最佳Val PCC: 0.6041

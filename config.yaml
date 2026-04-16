@@ -1,0 +1,31 @@
+# ============================================================
+# PFMval 项目统一配置文件
+# 迁移到服务器时，只需修改此文件中的路径即可
+# ============================================================
+
+# 数据路径配置（支持相对路径和绝对路径）
+# 相对路径基于项目根目录解析
+data:
+  # ─── 3ST 数据集（30 通路）- 当前使用 ───
+  train_patches_dir: "./data_new_3ST/patch_noov_spilt/HYZ15040_noov_split/train_patches"
+  val_patches_dir: "./data_new_3ST/patch_noov_spilt/HYZ15040_noov_split/val_patches"
+  labels_csv_raw: "./data_new_3ST/ssGSEA_zscore/HYZ15040_ssGSEA_zscore.csv"
+  labels_csv_zscore: "./data_new_3ST/ssGSEA_zscore/HYZ15040_ssGSEA_zscore.csv"
+
+  # ─── 原始 8 通路数据集（已备份）─
+  # train_patches_dir: "./HYZ15040/train_patches"
+  # val_patches_dir: "./HYZ15040/val_patches"
+  # labels_csv_raw: "./HYZ15040_ssGSEA_scores.csv"
+  # labels_csv_zscore: "./HYZ15040_ssGSEA_scores_zscore.csv"
+
+# HuggingFace 配置
+huggingface:
+  # HF Token，留空则从环境变量 HF_TOKEN 读取
+  token: ""
+  # 是否强制使用本地缓存（无网络环境设为 true）
+  local_only: false
+
+# 通用训练配置
+training:
+  # 设备选择: "auto"(自动检测) / "cuda" / "cpu"
+  device: "auto"

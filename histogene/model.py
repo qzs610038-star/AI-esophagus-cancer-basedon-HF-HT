@@ -1,7 +1,7 @@
 """
 HisToGene 模型适配版 - 用于 PFMval 项目
 基于原始 HisToGene (Pang et al., 2021) 的 ViT-MLP 架构
-适配为 8 通路 ssGSEA 评分预测
+适配为多通路 ssGSEA 评分预测（默认 30 通路）
 """
 
 import torch
@@ -75,7 +75,7 @@ class HisToGeneModel(nn.Module):
     """
     def __init__(self, img_size=224, patch_size=16, in_channels=3,
                  dim=1024, depth=8, heads=16, mlp_dim=2048,
-                 n_pos=128, n_targets=8, dropout=0.3):
+                 n_pos=128, n_targets=30, dropout=0.3):
         super().__init__()
 
         self.img_size = img_size

@@ -27,7 +27,7 @@ class HisToGeneDataset(Dataset):
         Args:
             patches_dir: PNG 图像目录
             labels_csv: Z-score 标准化后的标签 CSV
-            target_cols: 目标列名列表（默认取 CSV 最后 8 列）
+            target_cols: 目标列名列表（默认自动检测：除第一列 patch_id 外的所有列）
             n_pos: 位置编码的最大索引
             transform: 图像变换
             coord_stats: 坐标统计 dict {'x_min', 'x_max', 'y_min', 'y_max'}（推理时从训练集传入）
@@ -40,7 +40,8 @@ class HisToGeneDataset(Dataset):
         df = pd.read_csv(labels_csv)
         id_col = df.columns[0]
         if target_cols is None:
-            target_cols = list(df.columns[-8:])  # 最后 8 列
+            # 自动检测：除第一列 patch_id 外的所有列作为目标列
+            target_cols = list(df.columns[1:])
         self.target_cols = target_cols
 
         # 构建标签映射: patch_stem -> target_values

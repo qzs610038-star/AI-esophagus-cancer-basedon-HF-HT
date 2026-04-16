@@ -39,12 +39,23 @@ def ensure_hf_login(token: Optional[str] = None) -> None:
 def load_uni2h_backbone(
     token: Optional[str] = None,
     device: Optional[torch.device] = None,
+    local_only: bool = False,
 ) -> Tuple[torch.nn.Module, callable, int]:
     """
     Load frozen UNI2-h backbone and its official preprocessing transform.
+    Args:
+        token: HuggingFace token for authentication.
+        device: Device to load the model on.
+        local_only: If True, only use local cache without network access.
     Returns: model, transform, feature_dim
     """
     ensure_hf_login(token)
+
+    # 设置 HF_HUB_LOCAL_FILES_ONLY 环境变量
+    if local_only:
+        os.environ['HF_HUB_LOCAL_FILES_ONLY'] = '1'
+    elif 'HF_HUB_LOCAL_FILES_ONLY' in os.environ:
+        del os.environ['HF_HUB_LOCAL_FILES_ONLY']
 
     # UNI2-h官方结构参数
     timm_kwargs = {

@@ -23,8 +23,17 @@ from histogene.dataset import HisToGeneDataset
 from histogene.utils import compute_metrics, pearson_corrcoef
 
 _DEFAULT_CKPT   = str(_SCRIPT_DIR / "checkpoints" / "best_histogene.pth")
-_DEFAULT_LABELS = r"d:\AI空间转录病理研究\PFMval_new\HYZ15040_ssGSEA_scores_zscore.csv"
 _DEFAULT_OUT    = str(_SCRIPT_DIR / "infer_results")
+
+# ─── 从 config.yaml 读取默认路径 ───────────────────────────────────────────────
+try:
+    from config_utils import load_config, get_data_paths
+    _config = load_config()
+    _data_paths = get_data_paths(_config)
+    _DEFAULT_LABELS = _data_paths.get("labels_csv_zscore")
+except Exception as e:
+    print(f"[WARNING] 无法加载 config.yaml: {e}，使用默认路径")
+    _DEFAULT_LABELS = None
 
 
 def build_argparser():
@@ -89,7 +98,7 @@ def main():
     heads       = saved_args.get('heads',       16)
     mlp_dim     = saved_args.get('mlp_dim',     2048)
     n_pos       = saved_args.get('n_pos',       128)
-    n_targets   = saved_args.get('n_targets',   8)
+    n_targets   = saved_args.get('n_targets',   30)
     dropout     = saved_args.get('dropout',     0.3)
 
     # 构建模型
