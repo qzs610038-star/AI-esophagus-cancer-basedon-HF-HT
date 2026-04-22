@@ -8,9 +8,19 @@
 - [uni2h/infer.py](file://uni2h/infer.py)
 - [uni2h_new/train_des.py](file://uni2h_new/train_des.py)
 - [uni2h_new/uni2h_des.py](file://uni2h_new/uni2h_des.py)
+- [uni2h_new/infer.py](file://uni2h_new/infer.py)
 - [uni2h_new/checkpoints/HYZ15040/best_model_uni2h.history.csv](file://uni2h_new/checkpoints/HYZ15040/best_model_uni2h.history.csv)
 - [HYZ15040_ssGSEA_scores_zscore.csv](file://HYZ15040_ssGSEA_scores_zscore.csv)
+- [checkpoints/HYZ15040/best_model_uni2h.history.csv](file://checkpoints/HYZ15040/best_model_uni2h.history.csv)
 </cite>
+
+## 更新摘要
+**变更内容**
+- 目标数量从30减少到8，优化了训练效率
+- 新增DenseNet121风格回归头，提升模型表达能力
+- 改进评估指标，新增MAPE指标
+- 增强HuggingFace集成和路径配置
+- 优化特征缓存管理和训练历史记录
 
 ## 目录
 1. [简介](#简介)
@@ -33,6 +43,7 @@
 - 第二阶段（MLP回归头训练）
   - 使用缓存的特征与标签（z-score 后的 ssGSEA 通路分数）训练简单 MLP 回归头。
   - 支持早停、学习率调度、混合精度、梯度裁剪等工程化优化。
+  - **新增**：DenseNet121风格回归头，包含密集连接和过渡层，提升模型表达能力。
 
 ## 项目结构
 - uni2h：两阶段流程的核心实现，包含特征提取、缓存、训练与推理。
@@ -89,11 +100,11 @@ U6 --> CK
   - 从缓存目录加载特征，按 patch 匹配标签，返回 (feature, target)。
 - BackboneRegressor（MLP回归头）
   - 线性归一化 + 线性层 + GELU + Dropout + 线性输出，多任务回归。
-- DenseNet121StyleRegressor（改进版）
-  - 参照 DenseNet-121 结构的多层感知机，包含密集块和过渡层。
+- **新增**：DenseNet121StyleRegressor（DenseNet121风格回归头）
+  - 参照 DenseNet-121 结构的多层感知机，包含密集块和过渡层，支持 MAPE 指标。
 - 训练与评估循环
   - 训练：前向、Huber/L2损失、反向、梯度裁剪、优化器步进、混合精度缩放。
-  - 评估：前向、计算指标（MSE、MAE、R²、PCC、MAPE）。
+  - 评估：前向、计算指标（MSE、MAE、R²、PCC、**MAPE**）。
 - 推理与指标导出
   - 加载 checkpoint，对新数据集进行推理，输出预测 CSV 与指标 CSV。
 
@@ -190,7 +201,7 @@ Loop --> Done(["完成"])
 ### 第二阶段：MLP回归头训练
 - 模型结构
   - BackboneRegressor：LayerNorm → Linear → GELU → Dropout → Linear，输出多任务分数。
-  - DenseNet121StyleRegressor：参照 DenseNet-121 结构，包含密集块和过渡层，支持 MAPE 指标。
+  - **新增**：DenseNet121StyleRegressor：参照 DenseNet-121 结构，包含密集块和过渡层，支持 MAPE 指标。
 - 数据加载
   - CachedFeaturePatchDataset：按 patch 匹配标签，返回 (feature, target)。
 - 训练流程
@@ -201,8 +212,9 @@ Loop --> Done(["完成"])
   - 混合精度：GradScaler（CUDA）。
   - 梯度裁剪：clip_grad_norm_。
 - 指标计算
-  - compute_metrics：MSE、MAE、R²、PCC，支持多任务平均。
-  - 新增 MAPE 指标计算和最大绝对差异分析。
+  - compute_metrics：MSE、MAE、**MAPE**、R²、PCC，支持多任务平均。
+  - **新增**：MAPE（平均绝对百分比误差）指标计算。
+  - **新增**：calculate_max_abs_diff_per_target 最大绝对差异分析。
 
 ```mermaid
 classDiagram
@@ -277,7 +289,7 @@ evaluate --> DenseNet121StyleRegressor : "验证"
   - HuggingFace Hub：加载 UNI2-h 模型。
   - timm：官方数据配置与 transforms。
   - PyTorch：模型、优化器、混合精度、数据加载。
-  - scikit-learn：指标计算（MSE、MAE、R²、PCC、MAPE）。
+  - scikit-learn：指标计算（MSE、MAE、R²、PCC、**MAPE**）。
 - 内部模块
   - uni2h/train.py 依赖 uni2h/uni2h_utils.py。
   - uni2h_new/train_des.py 依赖 uni2h_new/uni2h_des.py。
@@ -346,7 +358,7 @@ T2 --> CACHE2["uni2h_new/uni2h_cache/*.pt"]
 - [uni2h/infer.py:48-56](file://uni2h/infer.py#L48-L56)
 
 ## 结论
-两阶段训练流程以 UNI2-h 作为特征提取器，结合轻量级 MLP 回归头，实现了高效、稳定且可复现的多任务回归训练。通过特征缓存与工程化优化（混合精度、早停、学习率调度、梯度裁剪），在有限资源下获得良好性能与可维护性。新增的 DenseNet121 风格回归头和 MAPE 指标进一步提升了模型表达能力和评估精度。建议优先采用该流程，并根据下游任务进一步扩展与定制。
+两阶段训练流程以 UNI2-h 作为特征提取器，结合轻量级 MLP 回归头，实现了高效、稳定且可复现的多任务回归训练。通过特征缓存与工程化优化（混合精度、早停、学习率调度、梯度裁剪），在有限资源下获得良好性能与可维护性。**新增的 DenseNet121 风格回归头和 MAPE 指标进一步提升了模型表达能力和评估精度**。目标数量从30减少到8的优化使得训练更加高效，同时保持了良好的预测性能。建议优先采用该流程，并根据下游任务进一步扩展与定制。
 
 ## 附录：超参数与配置指南
 - 第一阶段（UNI2-h 特征提取）
@@ -362,14 +374,16 @@ T2 --> CACHE2["uni2h_new/uni2h_cache/*.pt"]
   - early_stop_patience：建议 5–20。
   - num_workers：Windows 默认 0，Linux 可设为 2–8。
   - min_delta：验证集 loss 至少下降幅度阈值。
-- DenseNet121 风格回归头参数
+- **新增**：DenseNet121 风格回归头参数
   - initial_dim：初始投影维度，建议 256。
   - growth_rate：增长速率，建议 32。
   - bottleneck_factor：瓶颈因子，建议 4。
   - transition_factor：过渡因子，建议 0.5。
+  - **目标数量**：从30减少到8，提升训练效率。
 - 数据与标签
   - labels_csv：z-score 标准化后的 ssGSEA 通路分数 CSV。
   - target_start_col、num_targets：从 CSV 中选择目标列的起始与数量。
+  - **注意**：目标数量已从30减少到8。
 - 模型保存与恢复
   - best_model_uni2h.pth：包含模型状态字典、超参数、缓存目录等。
   - 推理时通过 checkpoint_path 加载，自动重建回归头。
@@ -380,3 +394,5 @@ T2 --> CACHE2["uni2h_new/uni2h_cache/*.pt"]
 - [uni2h/infer.py:24-41](file://uni2h/infer.py#L24-L41)
 - [uni2h_new/train_des.py:32-65](file://uni2h_new/train_des.py#L32-L65)
 - [uni2h_new/uni2h_des.py:341-447](file://uni2h_new/uni2h_des.py#L341-L447)
+- [uni2h_new/uni2h_des.py:21-22](file://uni2h_new/uni2h_des.py#L21-L22)
+- [uni2h/uni2h_utils.py:22](file://uni2h/uni2h_utils.py#L22)
