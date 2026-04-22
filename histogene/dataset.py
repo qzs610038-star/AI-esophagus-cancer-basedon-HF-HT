@@ -7,7 +7,7 @@ import re
 import numpy as np
 import pandas as pd
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, ConcatDataset
 from PIL import Image
 import torchvision.transforms as transforms
 
@@ -116,3 +116,65 @@ class HisToGeneDataset(Dataset):
 
         return image, torch.tensor(pos_x, dtype=torch.long), \
                torch.tensor(pos_y, dtype=torch.long), targets
+
+    @classmethod
+    def from_multiple_patients(cls, patient_configs, n_pos=128, transform=None, verbose=True):
+        """
+        多患者联合训练：合并多个患者的 Dataset
+
+        Args:
+            patient_configs: list of dicts, 每个包含:
+                - patches_dir: str, 该患者的 patch 目录
+                - labels_csv: str, 该患者的标签 CSV
+                - patient_name: str, 患者名称（可选，用于 coord_stats 键名）
+            n_pos: 位置编码最大索引
+            transform: 图像变换
+            verbose: 是否打印详细信息
+
+        Returns:
+            merged_dataset: ConcatDataset 合并后的数据集
+            coord_stats_dict: dict, 每个患者的坐标统计 {patient_name: {x_min, x_max, y_min, y_max}}
+            target_cols: list, 目标列名（所有患者应一致）
+        """
+        datasets = []
+        coord_stats_dict = {}
+        target_cols = None
+
+        for i, config in enumerate(patient_configs):
+            patches_dir = config['patches_dir']
+            labels_csv = config['labels_csv']
+            patient_name = config.get('patient_name', f'patient_{i}')
+
+            if verbose:
+                print(f"\n[MultiPatient] 加载患者 {patient_name}...")
+
+            # 创建该患者的 Dataset（独立坐标归一化）
+            dataset = cls(
+                patches_dir=patches_dir,
+                labels_csv=labels_csv,
+                target_cols=target_cols,  # 第一个患者为 None 自动检测，后续保持一致
+                n_pos=n_pos,
+                transform=transform,
+                coord_stats=None,  # 各自独立计算坐标统计
+            )
+
+            # 记录该患者的坐标统计
+            coord_stats_dict[patient_name] = dataset.get_coord_stats()
+
+            # 保持目标列一致（后续患者使用第一个患者的目标列）
+            if target_cols is None:
+                target_cols = dataset.target_cols
+
+            datasets.append(dataset)
+
+            if verbose:
+                print(f"  样本数: {len(dataset)}, 坐标范围: x=[{coord_stats_dict[patient_name]['x_min']}, {coord_stats_dict[patient_name]['x_max']}], y=[{coord_stats_dict[patient_name]['y_min']}, {coord_stats_dict[patient_name]['y_max']}]")
+
+        # 合并所有患者的 Dataset
+        merged_dataset = ConcatDataset(datasets)
+
+        if verbose:
+            total_samples = sum(len(d) for d in datasets)
+            print(f"\n[MultiPatient] 合并完成: {len(datasets)} 个患者, 共 {total_samples} 个样本")
+
+        return merged_dataset, coord_stats_dict, target_cols

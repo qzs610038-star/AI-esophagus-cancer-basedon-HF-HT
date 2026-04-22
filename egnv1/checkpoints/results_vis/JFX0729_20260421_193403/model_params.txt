@@ -1,0 +1,38 @@
+==================================================
+EGN-v1 模型训练参数
+==================================================
+训练时间: 2026-04-21 19:34:07
+数据集: JFX0729
+训练样本: 7055
+验证样本: 783
+
+--- 模型架构参数 ---
+backbone         = ViT-Large    # patch32, depth=8, heads=16, dim=1024
+graph_type       = knn          # 图构建方式
+graph_layers     = 2            # GCN 层数
+hidden_dim       = 1024         # GCN 隐藏维度
+k_neighbors      = 10           # Exemplar KNN k值 / KNN图k值
+n_exemplars      = 全量           # 代表库大小
+radius           = 300          # 空间图构建半径
+n_targets        = 30           # 预测通路数
+dropout          = 0.5          # Dropout 比率
+freeze_layers    = 4            # ViT 冻结前N层
+总参数量          ≈ 6.8M
+
+--- 训练超参数 ---
+epochs           = 150          # 最大训练轮数（配合早停）
+batch_size       = 16           # 特征提取阶段批大小
+learning_rate    = 1e-05        # AdamW 初始学习率
+optimizer        = AdamW        # weight_decay=1e-4，解耦正则化
+loss             = HuberLoss    # δ=1.0，对异常值鲁棒
+scheduler        = ReduceLROnPlateau # factor=0.5, patience=5
+early_stop       = patience 15  # 基于 val_loss
+
+--- 训练结果 ---
+总 Epoch: 150
+最佳 Epoch: 150
+Best Val PCC: 0.3141
+Best Val R²: 0.0986
+Best Val Loss: 0.3784
+最终 Train PCC: 0.2695
+过拟合 Gap (PCC): -0.0447

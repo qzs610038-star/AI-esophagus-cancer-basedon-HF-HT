@@ -1,14 +1,25 @@
 """
-HisToGene 训练脚本 - PFMval 项目
-完整训练流程：数据加载、模型训练、验证、早停、保存
-支持：断点续训、暂停信号检测
+EGN-v1 训练脚本 - PFMval 项目
+完整训练流程：数据加载、ViT特征提取、图构建(KNN/spatial/hybrid)、GCN模型训练、验证、早停、保存
+支持：断点续训、暂停信号检测、多患者联合训练
+
+与 EGNv2 训练脚本的关键差异：
+- 特征提取器: ViT-Large (dim=1024) vs ResNet-50 (dim=2048)
+- GNN: GCN (GCNConv) vs GraphSAGE (SAGEConv)
+- 图构建: KNN 图 (特征相似性) vs 空间半径图
+- hidden_dim: 1024 vs 512
+- batch_size: 16 (ViT 显存大) vs 64
+- lr: 1e-5 vs 1e-4
+- dropout: 0.5 vs 0.3
 """
+
 import argparse
 import os
 import sys
 import time
 import signal
 import shutil
+import re
 from pathlib import Path
 from datetime import datetime
 
@@ -18,6 +29,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, ConcatDataset
 import torchvision.transforms as transforms
+from torch_geometric.data import Data
 
 # 将项目根目录加入 sys.path
 _SCRIPT_DIR = Path(__file__).resolve().parent
@@ -25,10 +37,16 @@ _PROJECT_ROOT = _SCRIPT_DIR.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-from histogene.model import HisToGeneModel
-from histogene.dataset import HisToGeneDataset
-from histogene.utils import compute_metrics
-from notify_utils import notify_training_complete, notify_training_error, check_pause_signal, clear_pause_signal
+from egnv1.model import EGNv1Model, ViTFeatureExtractor, ExemplarLibrary
+from egnv1.dataset import EGNv1Dataset
+from egnv1.utils import compute_metrics
+from egnv1.exemplar_builder import (
+    preprocess_and_cache, compute_exemplar_agg_features,
+)
+from notify_utils import (
+    notify_training_complete, notify_training_error,
+    check_pause_signal, clear_pause_signal,
+)
 
 # 忽略 Ctrl+C 信号，防止误触中断训练
 signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -50,29 +68,24 @@ except Exception as e:
 
 
 def generate_model_params_txt(args, n_params, history_df, output_path,
-                             train_samples=None, val_samples=None):
+                              train_samples=None, val_samples=None):
     """训练结束后生成模型参数与结果摘要文本文件"""
-    # 从训练历史中提取最佳指标
     best_row = history_df.loc[history_df['val_loss'].idxmin()]
     best_epoch = int(best_row['epoch'])
     best_val_loss = best_row['val_loss']
     best_val_pcc = best_row['val_pcc']
     best_val_r2 = best_row['val_r2']
 
-    # 最终 epoch 的训练指标
     last_row = history_df.iloc[-1]
     final_train_pcc = last_row['train_pcc']
     total_epochs = int(last_row['epoch'])
 
-    # 过拟合 Gap
     overfit_gap = final_train_pcc - best_val_pcc
-
-    # 训练完成时间
     train_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     lines = []
     lines.append("=" * 50)
-    lines.append("HisToGene 模型训练参数")
+    lines.append("EGN-v1 模型训练参数")
     lines.append("=" * 50)
     lines.append(f"训练时间: {train_time}")
     lines.append(f"数据集: {args.dataset_name}")
@@ -83,19 +96,21 @@ def generate_model_params_txt(args, n_params, history_df, output_path,
     lines.append("")
 
     lines.append("--- 模型架构参数 ---")
+    n_exemplars_str = str(args.n_exemplars) if args.n_exemplars > 0 else "全量"
     model_param_defs = [
-        ('img_size',    args.img_size,    '输入图像尺寸，与 ImageNet 标准一致'),
-        ('patch_size',  args.patch_size,  'ViT patch 分割粒度，14×14=196 个 token'),
-        ('model_dim',   args.model_dim,   '嵌入维度，ViT-Large 标准配置'),
-        ('depth',       args.model_depth, 'Transformer 层数，略低于标准 12 层以控制参数量'),
-        ('heads',       args.heads,       '多头注意力，每头 64 维子空间'),
-        ('mlp_dim',     args.mlp_dim,     'FFN 隐藏层，嵌入维度的 2 倍'),
-        ('n_pos',       args.n_pos,       '坐标嵌入表大小'),
-        ('n_targets',   args.n_targets,   '预测通路数'),
-        ('dropout',     args.dropout,     'Dropout 比率，高于标准 0.1 以适应小数据'),
+        ('backbone',       'ViT-Large',         'patch32, depth=8, heads=16, dim=1024'),
+        ('graph_type',     args.graph_type,      '图构建方式'),
+        ('graph_layers',   args.graph_layers,    'GCN 层数'),
+        ('hidden_dim',     args.hidden_dim,      'GCN 隐藏维度'),
+        ('k_neighbors',    args.k_neighbors,     'Exemplar KNN k值 / KNN图k值'),
+        ('n_exemplars',    n_exemplars_str,      '代表库大小'),
+        ('radius',         args.radius,          '空间图构建半径'),
+        ('n_targets',      args.n_targets,       '预测通路数'),
+        ('dropout',        args.dropout,         'Dropout 比率'),
+        ('freeze_layers',  args.freeze_layers,   'ViT 冻结前N层'),
     ]
     for name, val, desc in model_param_defs:
-        lines.append(f"{name:<14} = {str(val):<12} # {desc}")
+        lines.append(f"{name:<16} = {str(val):<12} # {desc}")
     # 总参数量
     if n_params >= 1e6:
         params_str = f"≈ {n_params / 1e6:.1f}M"
@@ -103,22 +118,21 @@ def generate_model_params_txt(args, n_params, history_df, output_path,
         params_str = f"≈ {n_params / 1e3:.1f}K"
     else:
         params_str = str(n_params)
-    lines.append(f"总参数量        {params_str}")
+    lines.append(f"总参数量          {params_str}")
     lines.append("")
 
     lines.append("--- 训练超参数 ---")
     train_param_defs = [
         ('epochs',        args.num_epochs,          '最大训练轮数（配合早停）'),
-        ('batch_size',    args.batch_size,          '批大小，兼顾显存和梯度稳定性'),
+        ('batch_size',    args.batch_size,          '特征提取阶段批大小'),
         ('learning_rate', args.lr,                  'AdamW 初始学习率'),
         ('optimizer',     'AdamW',                  'weight_decay=1e-4，解耦正则化'),
         ('loss',          'HuberLoss',              'δ=1.0，对异常值鲁棒'),
         ('scheduler',     'ReduceLROnPlateau',      'factor=0.5, patience=5'),
         ('early_stop',    f'patience {args.early_stop_patience}', '基于 val_loss'),
-        ('AMP',           '启用' if args.amp else '未启用', '混合精度训练'),
     ]
     for name, val, desc in train_param_defs:
-        lines.append(f"{name:<14} = {str(val):<12} # {desc}")
+        lines.append(f"{name:<16} = {str(val):<12} # {desc}")
     lines.append("")
 
     lines.append("--- 训练结果 ---")
@@ -137,44 +151,58 @@ def generate_model_params_txt(args, n_params, history_df, output_path,
 
 
 def build_argparser():
-    p = argparse.ArgumentParser(description="Train HisToGene on ssGSEA pathway scores.")
+    p = argparse.ArgumentParser(description="Train EGN-v1 on ssGSEA pathway scores.")
+
+    # 数据路径
     p.add_argument("--dataset_name", type=str, default="HYZ15040",
                    help="数据集名称，用于区分不同数据集的训练结果")
     p.add_argument("--train_patches_dir", type=str, default=_DEFAULT_TRAIN)
     p.add_argument("--val_patches_dir",   type=str, default=_DEFAULT_VAL)
     p.add_argument("--labels_csv",        type=str, default=_DEFAULT_LABELS)
     p.add_argument("--checkpoint_dir",    type=str, default=None,
-                   help="checkpoint 保存目录，默认为 histogene/checkpoints/{dataset_name}")
+                   help="checkpoint 保存目录，默认为 egnv1/checkpoints/{dataset_name}")
     p.add_argument("--history_csv",       type=str, default=None,
-                   help="训练历史 CSV 路径，默认为 histogene/training_history_{dataset_name}.csv")
+                   help="训练历史 CSV 路径，默认为 egnv1/training_history_{dataset_name}.csv")
 
     # 训练超参
-    p.add_argument("--batch_size",   type=int,   default=64)
+    p.add_argument("--batch_size",   type=int,   default=16,
+                   help="特征提取阶段批大小（ViT 显存大，默认16）")
     p.add_argument("--num_epochs",   type=int,   default=150)
-    p.add_argument("--lr",           type=float, default=1e-4)
-    p.add_argument("--num_workers",  type=int,   default=0)   # Windows 下用 0
+    p.add_argument("--lr",           type=float, default=1e-5,
+                   help="AdamW 初始学习率（ViT 需要更小的学习率）")
 
-    # 模型超参
-    p.add_argument("--img_size",     type=int,   default=224)
-    p.add_argument("--patch_size",   type=int,   default=16)
-    p.add_argument("--model_dim",    type=int,   default=1024)
-    p.add_argument("--model_depth",  type=int,   default=8)
-    p.add_argument("--heads",        type=int,   default=16)
-    p.add_argument("--mlp_dim",      type=int,   default=2048)
-    p.add_argument("--n_pos",        type=int,   default=128)
-    p.add_argument("--n_targets",    type=int,   default=30)
-    p.add_argument("--dropout",      type=float, default=0.3)
+    # --- EGN-v1 专属参数 ---
+    p.add_argument("--backbone",       type=str,   default="vit",
+                   help="backbone 类型 (默认 vit)")
+    p.add_argument("--n_targets",      type=int,   default=30)
+    p.add_argument("--graph_type",     type=str,   default="knn",
+                   choices=['knn', 'spatial', 'hybrid'],
+                   help="图构建方式: knn(特征相似性)/spatial(空间距离)/hybrid(混合)")
+    p.add_argument("--graph_layers",   type=int,   default=2,
+                   help="GCN 层数")
+    p.add_argument("--hidden_dim",     type=int,   default=1024,
+                   help="GCN 隐藏维度（匹配 ViT 输出维度）")
+    p.add_argument("--k_neighbors",    type=int,   default=10,
+                   help="KNN 图 k 值 / Exemplar KNN k 值")
+    p.add_argument("--n_exemplars",    type=int,   default=0,
+                   help="代表库大小，0=全量，>0=K-means 到该数量")
+    p.add_argument("--radius",         type=float, default=300,
+                   help="空间图构建半径")
+    p.add_argument("--freeze_layers",  type=int,   default=4,
+                   help="冻结 ViT 前 N 层")
+    p.add_argument("--dropout",        type=float, default=0.5)
+    p.add_argument("--weight_decay",   type=float, default=1e-4)
 
     # 早停
     p.add_argument("--early_stop_patience", type=int, default=15)
 
-    # 混合精度
-    p.add_argument("--amp", action="store_true", default=True,
-                   help="使用混合精度训练（仅 CUDA 生效）")
-
     # 断点续训
-    p.add_argument("--resume", type=str, default=None,
-                   help="从checkpoint恢复训练的路径")
+    p.add_argument("--resume", type=str, default='',
+                   help="resume checkpoint 路径")
+
+    # 缓存目录
+    p.add_argument("--cache_dir", type=str, default=None,
+                   help="特征/图缓存目录，默认为 egnv1/cache/{dataset_name}")
 
     # ─── 多患者联合训练模式 ───────────────────────────────────────────────────
     p.add_argument("--multi_patient", action="store_true", default=False,
@@ -190,13 +218,12 @@ def build_argparser():
     return p
 
 
-def get_transforms(img_size, train=True):
+def get_transforms(img_size=224, train=True):
     """构建图像变换流水线"""
     imagenet_mean = [0.485, 0.456, 0.406]
     imagenet_std  = [0.229, 0.224, 0.225]
 
     base = []
-    # 若图像非 img_size，则 resize
     base.append(transforms.Resize((img_size, img_size)))
 
     if train:
@@ -213,74 +240,6 @@ def get_transforms(img_size, train=True):
     return transforms.Compose(base)
 
 
-def train_one_epoch(model, loader, optimizer, criterion, device, scaler=None):
-    model.train()
-    total_loss = 0.0
-    all_preds, all_labels = [], []
-
-    for images, pos_x, pos_y, targets in loader:
-        images  = images.to(device, non_blocking=True)
-        pos_x   = pos_x.to(device, non_blocking=True)
-        pos_y   = pos_y.to(device, non_blocking=True)
-        targets = targets.to(device, non_blocking=True)
-
-        optimizer.zero_grad()
-
-        if scaler is not None:
-            with torch.amp.autocast('cuda'):
-                preds = model(images, pos_x, pos_y)
-                loss  = criterion(preds, targets)
-            scaler.scale(loss).backward()
-            scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-            scaler.step(optimizer)
-            scaler.update()
-        else:
-            preds = model(images, pos_x, pos_y)
-            loss  = criterion(preds, targets)
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-            optimizer.step()
-
-        total_loss += loss.item() * images.size(0)
-        all_preds.append(preds.detach().cpu())
-        all_labels.append(targets.detach().cpu())
-
-    n = len(loader.dataset)
-    avg_loss = total_loss / n
-    all_preds  = torch.cat(all_preds,  dim=0)
-    all_labels = torch.cat(all_labels, dim=0)
-    metrics = compute_metrics(all_labels.numpy(), all_preds.numpy())
-    return avg_loss, metrics
-
-
-@torch.no_grad()
-def evaluate(model, loader, criterion, device):
-    model.eval()
-    total_loss = 0.0
-    all_preds, all_labels = [], []
-
-    for images, pos_x, pos_y, targets in loader:
-        images  = images.to(device, non_blocking=True)
-        pos_x   = pos_x.to(device, non_blocking=True)
-        pos_y   = pos_y.to(device, non_blocking=True)
-        targets = targets.to(device, non_blocking=True)
-
-        preds = model(images, pos_x, pos_y)
-        loss  = criterion(preds, targets)
-
-        total_loss += loss.item() * images.size(0)
-        all_preds.append(preds.cpu())
-        all_labels.append(targets.cpu())
-
-    n = len(loader.dataset)
-    avg_loss = total_loss / n
-    all_preds  = torch.cat(all_preds,  dim=0)
-    all_labels = torch.cat(all_labels, dim=0)
-    metrics = compute_metrics(all_labels.numpy(), all_preds.numpy())
-    return avg_loss, metrics
-
-
 def main():
     args = build_argparser().parse_args()
 
@@ -289,6 +248,8 @@ def main():
         args.checkpoint_dir = str(_SCRIPT_DIR / "checkpoints" / args.dataset_name)
     if args.history_csv is None:
         args.history_csv = str(_SCRIPT_DIR / f"training_history_{args.dataset_name}.csv")
+    if args.cache_dir is None:
+        args.cache_dir = str(_SCRIPT_DIR / "cache" / args.dataset_name)
 
     # ── 路径检查 ──────────────────────────────────────────────────────────────
     if args.train_patches_dir is None or not os.path.isdir(args.train_patches_dir):
@@ -310,38 +271,28 @@ def main():
     device = get_device(_config)
     print(f"[INFO] Using device: {device}")
 
-    use_amp = args.amp and device.type == "cuda"
-    scaler = torch.amp.GradScaler('cuda') if use_amp else None
-    if use_amp:
-        print("[INFO] 混合精度训练已启用")
-
     # ── 数据集 ────────────────────────────────────────────────────────────────
-    train_transform = get_transforms(args.img_size, train=True)
-    val_transform   = get_transforms(args.img_size, train=False)
+    train_transform = get_transforms(train=True)
+    val_transform   = get_transforms(train=False)
 
     # ── 多患者模式 vs 单患者模式 ────────────────────────────────────────────
     if args.multi_patient:
-        # 多患者联合训练模式
         print("\n" + "=" * 60)
-        print("[INFO] 多患者联合训练模式")
+        print("[INFO] 多患者联合训练模式 (EGN-v1)")
         print("=" * 60)
 
-        # 参数校验
         if not args.patient_dirs or not args.patient_val_dirs or not args.patient_csvs:
             print("[ERROR] 多患者模式需要 --patient_dirs, --patient_val_dirs, --patient_csvs 参数")
             sys.exit(1)
 
         n_patients = len(args.patient_dirs)
         if len(args.patient_val_dirs) != n_patients or len(args.patient_csvs) != n_patients:
-            print(f"[ERROR] 患者目录数量不一致: dirs={n_patients}, val_dirs={len(args.patient_val_dirs)}, csvs={len(args.patient_csvs)}")
+            print(f"[ERROR] 患者目录数量不一致")
             sys.exit(1)
 
-        # 推断或使用提供的患者名称
         if args.patient_names:
             patient_names = args.patient_names
         else:
-            # 从目录路径推断患者名称
-            import re
             patient_names = []
             for dir_path in args.patient_dirs:
                 match = re.search(r'(HYZ\d+|JFX\d+|LMZ\d+)', dir_path)
@@ -350,7 +301,6 @@ def main():
                 else:
                     patient_names.append(os.path.basename(os.path.dirname(dir_path)))
 
-        # 构建患者配置列表
         train_configs = []
         val_configs = []
         for i in range(n_patients):
@@ -369,24 +319,18 @@ def main():
         for cfg in train_configs:
             print(f"  - {cfg['patient_name']}: {cfg['patches_dir']}")
 
-        # 创建合并的训练集
-        train_dataset, coord_stats_dict, target_cols = HisToGeneDataset.from_multiple_patients(
+        train_dataset, target_cols = EGNv1Dataset.from_multiple_patients(
             patient_configs=train_configs,
-            n_pos=args.n_pos,
             transform=train_transform,
         )
 
-        # 创建合并的验证集（使用训练集的 target_cols 和各患者的 coord_stats）
         val_datasets = []
         for cfg in val_configs:
-            patient_name = cfg['patient_name']
-            ds = HisToGeneDataset(
+            ds = EGNv1Dataset(
                 patches_dir=cfg['patches_dir'],
                 labels_csv=cfg['labels_csv'],
                 target_cols=target_cols,
-                n_pos=args.n_pos,
                 transform=val_transform,
-                coord_stats=coord_stats_dict.get(patient_name),  # 使用训练集对应患者的坐标统计
             )
             val_datasets.append(ds)
         val_dataset = ConcatDataset(val_datasets)
@@ -394,48 +338,84 @@ def main():
         print(f"\n[INFO] 合并后: 训练集 {len(train_dataset)} 样本, 验证集 {len(val_dataset)} 样本")
 
     else:
-        # 单患者模式（原有逻辑）
-        train_dataset = HisToGeneDataset(
+        # 单患者模式
+        train_dataset = EGNv1Dataset(
             patches_dir=args.train_patches_dir,
             labels_csv=args.labels_csv,
-            n_pos=args.n_pos,
             transform=train_transform,
         )
-        coord_stats = train_dataset.get_coord_stats()
 
-        val_dataset = HisToGeneDataset(
+        val_dataset = EGNv1Dataset(
             patches_dir=args.val_patches_dir,
             labels_csv=args.labels_csv,
-            n_pos=args.n_pos,
+            target_cols=train_dataset.target_cols,
             transform=val_transform,
-            coord_stats=coord_stats,
         )
-        # 单患者模式：coord_stats_dict 格式统一
-        coord_stats_dict = {args.dataset_name: coord_stats}
         target_cols = train_dataset.target_cols
 
-    train_loader = DataLoader(
-        train_dataset, batch_size=args.batch_size, shuffle=True,
-        num_workers=args.num_workers, pin_memory=(device.type == "cuda"),
-        drop_last=False,
-    )
-    val_loader = DataLoader(
-        val_dataset, batch_size=args.batch_size, shuffle=False,
-        num_workers=args.num_workers, pin_memory=(device.type == "cuda"),
+    # ── 特征提取 + 图构建 + 代表库（缓存机制） ────────────────────────────────
+    print("\n" + "=" * 60)
+    print(f"[INFO] EGN-v1 预处理: ViT 特征提取 → {args.graph_type} 图构建 → 代表库构建")
+    print("=" * 60)
+
+    feature_extractor = ViTFeatureExtractor(freeze_layers=args.freeze_layers).to(device)
+
+    cached = preprocess_and_cache(
+        dataset_name=args.dataset_name,
+        train_dataset=train_dataset,
+        val_dataset=val_dataset,
+        feature_extractor=feature_extractor,
+        device=device,
+        cache_dir=args.cache_dir,
+        n_exemplars=args.n_exemplars if args.n_exemplars > 0 else None,
+        graph_type=args.graph_type,
+        k_neighbors=args.k_neighbors,
+        radius=args.radius,
     )
 
+    train_features = cached['train_features']
+    train_targets = cached['train_targets']
+    train_edge_index = cached['train_edge_index']
+    val_features = cached['val_features']
+    val_targets = cached['val_targets']
+    val_edge_index = cached['val_edge_index']
+    exemplar_lib = cached['exemplar_lib']
+
+    # ── 计算 Exemplar 聚合特征 ────────────────────────────────────────────────
+    print("\n[INFO] 计算 Exemplar 聚合特征...")
+    train_exemplar_agg, _ = compute_exemplar_agg_features(
+        train_features, exemplar_lib, args.hidden_dim,
+        k=args.k_neighbors, device=device,
+    )
+    val_exemplar_agg, _ = compute_exemplar_agg_features(
+        val_features, exemplar_lib, args.hidden_dim,
+        k=args.k_neighbors, device=device,
+    )
+
+    # ── 构建 PyG Data 对象 ────────────────────────────────────────────────────
+    train_data = Data(
+        x=train_features.to(device),
+        edge_index=train_edge_index.to(device),
+        y=train_targets.to(device),
+    ).to(device)
+
+    val_data = Data(
+        x=val_features.to(device),
+        edge_index=val_edge_index.to(device),
+        y=val_targets.to(device),
+    ).to(device)
+
+    print(f"\n[INFO] Train graph: {train_data.num_nodes} 节点, {train_data.num_edges} 边")
+    print(f"[INFO] Val   graph: {val_data.num_nodes} 节点, {val_data.num_edges} 边")
+
     # ── 模型 ──────────────────────────────────────────────────────────────────
-    model = HisToGeneModel(
-        img_size=args.img_size,
-        patch_size=args.patch_size,
-        in_channels=3,
-        dim=args.model_dim,
-        depth=args.model_depth,
-        heads=args.heads,
-        mlp_dim=args.mlp_dim,
-        n_pos=args.n_pos,
+    model = EGNv1Model(
+        in_dim=args.hidden_dim,  # ViT 输出 1024，通过 feature_proj
+        hidden_dim=args.hidden_dim,
         n_targets=args.n_targets,
+        graph_layers=args.graph_layers,
         dropout=args.dropout,
+        k_exemplars=args.k_neighbors,
     ).to(device)
 
     n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -443,16 +423,17 @@ def main():
 
     # ── 损失 / 优化器 / 调度器 ────────────────────────────────────────────────
     criterion = nn.HuberLoss(delta=1.0)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    # 注意：不传 verbose 参数（新版 PyTorch 不兼容）
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode='min', factor=0.5, patience=5, verbose=False
+        optimizer, mode='min', factor=0.5, patience=5
     )
 
     # ── 检查点目录 ────────────────────────────────────────────────────────────
     ckpt_dir = Path(args.checkpoint_dir)
     ckpt_dir.mkdir(parents=True, exist_ok=True)
-    best_ckpt = ckpt_dir / "best_histogene.pth"
-    resume_ckpt = ckpt_dir / "resume_histogene.pth"
+    best_ckpt = ckpt_dir / "best_egnv1.pth"
+    resume_ckpt = ckpt_dir / "resume_egnv1.pth"
 
     # ── 断点续训加载 ───────────────────────────────────────────────────────────
     start_epoch = 1
@@ -461,40 +442,40 @@ def main():
     best_pcc = 0.0
     patience_counter = 0
     history = []
+    # 缓存路径状态
+    _train_exemplar_agg_state = train_exemplar_agg
+    _val_exemplar_agg_state = val_exemplar_agg
 
     if args.resume:
         print(f"[INFO] 从checkpoint恢复训练: {args.resume}")
         ckpt = torch.load(args.resume, weights_only=False, map_location=device)
         model.load_state_dict(ckpt['model_state_dict'])
-        
+
         if 'optimizer_state_dict' in ckpt:
             optimizer.load_state_dict(ckpt['optimizer_state_dict'])
         if 'scheduler_state_dict' in ckpt:
             scheduler.load_state_dict(ckpt['scheduler_state_dict'])
-        
+
         start_epoch = ckpt.get('epoch', 0) + 1
         best_val_loss = ckpt.get('best_val_loss', float('inf'))
         patience_counter = ckpt.get('patience_counter', 0)
         best_epoch = ckpt.get('best_epoch', 0)
         best_pcc = ckpt.get('best_pcc', 0.0)
-        
-        if 'scaler_state_dict' in ckpt and ckpt['scaler_state_dict'] and scaler:
-            scaler.load_state_dict(ckpt['scaler_state_dict'])
-        
-        # 恢复训练历史
+
         if 'history' in ckpt:
             history = ckpt['history']
-        
+
         print(f"[INFO] 从 Epoch {start_epoch} 继续，best_val_loss={best_val_loss:.4f}")
-        
-        # 清除暂停信号
+
         clear_pause_signal(_PROJECT_ROOT)
 
     # ── 训练循环 ──────────────────────────────────────────────────────────────
     early_stopped = False
 
     print("\n" + "=" * 90)
-    print(f"开始训练 HisToGene | Epochs={args.num_epochs} | BS={args.batch_size} | LR={args.lr}")
+    print(f"开始训练 EGN-v1 | Epochs={args.num_epochs} | LR={args.lr} | "
+          f"GraphType={args.graph_type} | GraphLayers={args.graph_layers} | "
+          f"Hidden={args.hidden_dim} | K={args.k_neighbors} | Backbone={args.backbone}")
     print("=" * 90)
 
     current_epoch = 0
@@ -503,31 +484,46 @@ def main():
             current_epoch = epoch
             t0 = time.time()
 
-            train_loss, train_m = train_one_epoch(
-                model, train_loader, optimizer, criterion, device, scaler)
-            val_loss, val_m = evaluate(model, val_loader, criterion, device)
+            # --- 训练 ---
+            model.train()
+            optimizer.zero_grad()
+            preds = model(train_data.x, train_data.edge_index, _train_exemplar_agg_state)
+            train_loss = criterion(preds, train_data.y)
+            train_loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            optimizer.step()
+
+            train_m = compute_metrics(train_data.y.detach().cpu(), preds.detach().cpu())
+
+            # --- 验证 ---
+            model.eval()
+            with torch.no_grad():
+                val_preds = model(val_data.x, val_data.edge_index, _val_exemplar_agg_state)
+                val_loss = criterion(val_preds, val_data.y)
+
+            val_m = compute_metrics(val_data.y.cpu(), val_preds.cpu())
 
             current_lr = optimizer.param_groups[0]['lr']
-            scheduler.step(val_loss)
+            scheduler.step(val_loss.item())
 
             elapsed = time.time() - t0
 
             print(
                 f"Epoch [{epoch:3d}/{args.num_epochs}] "
-                f"Train Loss: {train_loss:.4f} MAE: {train_m['mae']:.4f} "
+                f"Train Loss: {train_loss.item():.4f} MAE: {train_m['mae']:.4f} "
                 f"R²: {train_m['r2']:.4f} PCC: {train_m['pcc']:.4f} | "
-                f"Val Loss: {val_loss:.4f} MAE: {val_m['mae']:.4f} "
+                f"Val Loss: {val_loss.item():.4f} MAE: {val_m['mae']:.4f} "
                 f"R²: {val_m['r2']:.4f} PCC: {val_m['pcc']:.4f} | "
                 f"LR: {current_lr:.2e} | {elapsed:.1f}s"
             )
 
             history.append({
                 'epoch': epoch,
-                'train_loss': train_loss,
+                'train_loss': train_loss.item(),
                 'train_mae': train_m['mae'],
                 'train_r2': train_m['r2'],
                 'train_pcc': train_m['pcc'],
-                'val_loss': val_loss,
+                'val_loss': val_loss.item(),
                 'val_mae': val_m['mae'],
                 'val_r2': val_m['r2'],
                 'val_pcc': val_m['pcc'],
@@ -535,8 +531,8 @@ def main():
             })
 
             # 保存最佳模型
-            if val_loss < best_val_loss:
-                best_val_loss = val_loss
+            if val_loss.item() < best_val_loss:
+                best_val_loss = val_loss.item()
                 best_epoch = epoch
                 best_pcc = val_m['pcc']
                 patience_counter = 0
@@ -547,16 +543,14 @@ def main():
                     'scheduler_state_dict': scheduler.state_dict(),
                     'best_val_loss': best_val_loss,
                     'patience_counter': patience_counter,
-                    'val_loss': val_loss,
+                    'val_loss': val_loss.item(),
                     'val_metrics': val_m,
                     'args': vars(args),
-                    'coord_stats_dict': coord_stats_dict,  # 多患者坐标统计
                     'target_cols': target_cols,
-                    'scaler_state_dict': scaler.state_dict() if scaler else None,
                     'best_epoch': best_epoch,
                     'best_pcc': best_pcc,
                 }, best_ckpt)
-                print(f"  ✓ 最佳模型已保存 (val_loss={val_loss:.4f})")
+                print(f"  ✓ 最佳模型已保存 (val_loss={val_loss.item():.4f})")
             else:
                 patience_counter += 1
                 if patience_counter >= args.early_stop_patience:
@@ -578,28 +572,26 @@ def main():
                     'scheduler_state_dict': scheduler.state_dict(),
                     'best_val_loss': best_val_loss,
                     'patience_counter': patience_counter,
-                    'val_loss': val_loss,
+                    'val_loss': val_loss.item(),
                     'val_metrics': val_m,
                     'args': vars(args),
-                    'coord_stats_dict': coord_stats_dict,  # 多患者坐标统计
                     'target_cols': target_cols,
-                    'scaler_state_dict': scaler.state_dict() if scaler else None,
                     'history': history,
                     'best_epoch': best_epoch,
                     'best_pcc': best_pcc,
                 }, resume_ckpt)
                 print(f"[INFO] 暂停 checkpoint 已保存: {resume_ckpt}")
-                notify_training_complete("HisToGene", epoch, best_epoch, best_pcc, "paused")
+                notify_training_complete("EGN-v1", epoch, best_epoch, best_pcc, "paused")
                 clear_pause_signal(_PROJECT_ROOT)
                 return
 
     except Exception as e:
-        notify_training_error("HisToGene", current_epoch, str(e))
+        notify_training_error("EGN-v1", current_epoch, str(e))
         raise
 
     # 训练完成通知
     status = "early_stop" if early_stopped else "completed"
-    notify_training_complete("HisToGene", current_epoch, best_epoch, best_pcc, status)
+    notify_training_complete("EGN-v1", current_epoch, best_epoch, best_pcc, status)
 
     # 最终保存历史
     pd.DataFrame(history).to_csv(args.history_csv, index=False)
@@ -608,52 +600,41 @@ def main():
     print(f"  训练历史: {args.history_csv}")
 
     # ── 训练结束后：加载最佳模型，对验证集推理 ────────────────────────────────
-    predictions_csv_path = None
     try:
         print("\n[INFO] 加载最佳模型进行验证集推理...")
         best_ckpt_data = torch.load(best_ckpt, weights_only=False, map_location=device)
         model.load_state_dict(best_ckpt_data['model_state_dict'])
         model.eval()
 
-        # 对验证集推理
-        all_preds = []
-        all_labels = []
         with torch.no_grad():
-            for images, pos_x, pos_y, targets in val_loader:
-                images = images.to(device, non_blocking=True)
-                pos_x = pos_x.to(device, non_blocking=True)
-                pos_y = pos_y.to(device, non_blocking=True)
-                preds = model(images, pos_x, pos_y)
-                all_preds.append(preds.cpu())
-                all_labels.append(targets.cpu())
+            val_preds = model(val_data.x, val_data.edge_index, _val_exemplar_agg_state)
 
-        preds_cat = torch.cat(all_preds).numpy()
-        labels_cat = torch.cat(all_labels).numpy()
+        preds_cat = val_preds.cpu().numpy()
+        labels_cat = val_data.y.cpu().numpy()
 
-        # 生成 predictions.csv（真值和预测值对比）
-        # 注意：列名格式必须是 true_{通路名} 和 pred_{通路名}，与 visualize_results.py 期望的格式一致
-        # target_cols 已在前面定义（单患者和多患者模式均支持）
+        # 生成 predictions.csv（列名: true_{pathway}, pred_{pathway}，与 visualize_results.py 约定一致）
         pred_df = pd.DataFrame()
         for i, col in enumerate(target_cols):
             pred_df[f'true_{col}'] = labels_cat[:, i]
             pred_df[f'pred_{col}'] = preds_cat[:, i]
-        
-        # 创建可视化输出目录并保存 predictions.csv
+
+        # 创建可视化输出目录
         from visualize_results import generate_full_report
         output_vis_dir = str(ckpt_dir.parent / "results_vis")
-        model_name_with_dataset = f"HisToGene_{args.dataset_name}"
-        
+        model_name_with_dataset = f"EGN-v1_{args.dataset_name}"
+
         # 创建时间戳目录
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         actual_vis_dir = os.path.join(output_vis_dir, f"{args.dataset_name}_{timestamp}")
         os.makedirs(actual_vis_dir, exist_ok=True)
-        
+
         # 保存 predictions.csv 到可视化目录
         predictions_csv_path = os.path.join(actual_vis_dir, "predictions.csv")
         pred_df.to_csv(predictions_csv_path, index=False)
         print(f"[OK] 验证集预测结果已保存: {predictions_csv_path}")
-        
-        # 生成完整可视化报告（只调用一次，传入已有的 actual_vis_dir）
+
+        # 生成完整可视化报告（全局单次调用，避免重复存储）
+        n_exemplars_str = str(args.n_exemplars) if args.n_exemplars > 0 else "全量"
         generate_full_report(
             model_name=model_name_with_dataset,
             history_csv=args.history_csv,
@@ -662,23 +643,26 @@ def main():
             prefix=args.dataset_name,
             actual_output_dir=actual_vis_dir,
             params={
+                "backbone": args.backbone,
+                "graph_type": args.graph_type,
                 "batch_size": args.batch_size,
                 "num_epochs": args.num_epochs,
                 "lr": args.lr,
-                "img_size": args.img_size,
-                "patch_size": args.patch_size,
-                "model_dim": args.model_dim,
-                "model_depth": args.model_depth,
-                "heads": args.heads,
-                "mlp_dim": args.mlp_dim,
-                "n_pos": args.n_pos,
+                "graph_layers": args.graph_layers,
+                "hidden_dim": args.hidden_dim,
+                "k_neighbors": args.k_neighbors,
+                "n_exemplars": n_exemplars_str,
+                "radius": args.radius,
                 "n_targets": args.n_targets,
                 "dropout": args.dropout,
+                "freeze_layers": args.freeze_layers,
+                "weight_decay": args.weight_decay,
                 "early_stop_patience": args.early_stop_patience,
                 "dataset_name": args.dataset_name,
             }
         )
-        # 生成模型参数摘要文件 model_params.txt
+
+        # 生成模型参数摘要文件 model_params.txt（输出到 results_vis 时间戳目录）
         try:
             history_df = pd.read_csv(args.history_csv)
             model_params_path = os.path.join(actual_vis_dir, "model_params.txt")
