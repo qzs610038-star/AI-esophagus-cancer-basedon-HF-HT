@@ -1,0 +1,39 @@
+==================================================
+HisToGene 原版跨患者泛化训练参数
+==================================================
+训练时间: 2026-04-25 01:37:38
+数据集: CrossPatient_JFX_LMZ_to_HYZ_orig
+训练策略: JFX0729+LMZ12939 -> HYZ15040
+训练样本: 15351
+测试样本: 2655
+
+--- 模型架构参数 ---
+img_size       = 224          # 输入图像尺寸，与 ImageNet 标准一致
+patch_size     = 16           # ViT patch 分割粒度，14x14=196 个 token
+model_dim      = 1024         # 嵌入维度，ViT-Large 标准配置
+depth          = 8            # Transformer 层数，略低于标准 12 层以控制参数量
+heads          = 16           # 多头注意力，每头 64 维子空间
+mlp_dim        = 2048         # FFN 隐藏层，嵌入维度的 2 倍
+n_pos          = 128          # 坐标嵌入表大小
+n_targets      = 30           # 预测通路数
+dropout        = 0.3          # Dropout 比率，高于标准 0.1 以适应小数据
+总参数量        ≈ 70.6M
+
+--- 训练超参数 ---
+epochs         = 150          # 最大训练轮数（配合早停）
+batch_size     = 64           # 批大小，兼顾显存和梯度稳定性
+learning_rate  = 0.0001       # AdamW 初始学习率
+optimizer      = AdamW        # weight_decay=1e-4，解耦正则化
+loss           = HuberLoss    # δ=1.0，对异常值鲁棒
+scheduler      = ReduceLROnPlateau # factor=0.5, patience=5
+early_stop     = patience 15  # 基于 val_loss
+AMP            = 启用           # 混合精度训练
+
+--- 训练结果 ---
+总 Epoch: 17
+最佳 Epoch: 2
+Best Test PCC: 0.1178
+Best Test R²: -0.0270
+Best Test Loss: 0.3890
+最终 Train PCC: 0.6387
+过拟合 Gap (PCC): 0.5209

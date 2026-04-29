@@ -1,0 +1,6 @@
+模型: HisToGene-UNI_CrossPatient
+状态: early_stop
+时间: 2026-04-28 22:59:42
+总Epoch: 17
+最佳Epoch: 2
+最佳Val PCC: 0.3921

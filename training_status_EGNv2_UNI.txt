@@ -1,0 +1,6 @@
+模型: EGNv2_UNI
+状态: completed
+时间: 2026-04-25 00:08:40
+总Epoch: 150
+最佳Epoch: 150
+最佳Val PCC: 0.6075

@@ -8,6 +8,9 @@
 - [utils.py](file://histogene/utils.py)
 - [infer.py](file://histogene/infer.py)
 - [README.md](file://README.md)
+- [training_history_MultiPatient_3ST.csv](file://histogene/training_history_MultiPatient_3ST.csv)
+- [training_history_HYZ15040.csv](file://histogene/training_history_HYZ15040.csv)
+- [run_egnv1_multi_3st.ps1](file://run_egnv1_multi_3st.ps1)
 - [HYZ15040_ssGSEA_scores_zscore.csv](file://HYZ15040_ssGSEA_scores_zscore.csv)
 - [training_history.csv](file://histogene/training_history.csv)
 - [best_histogene.pth](file://histogene/checkpoints/best_histogene.pth)
@@ -21,25 +24,29 @@
 4. [架构总览](#架构总览)
 5. [详细组件分析](#详细组件分析)
 6. [训练流程详解](#训练流程详解)
-7. [验证与推理流程](#验证与推理流程)
-8. [检查点管理](#检查点管理)
-9. [性能考量](#性能考量)
-10. [故障排查指南](#故障排查指南)
-11. [结论](#结论)
-12. [附录](#附录)
+7. [多患者训练功能](#多患者训练功能)
+8. [验证与推理流程](#验证与推理流程)
+9. [检查点管理](#检查点管理)
+10. [性能考量](#性能考量)
+11. [故障排查指南](#故障排查指南)
+12. [结论](#结论)
+13. [附录](#附录)
 
 ## 简介
-本技术文档面向HisToGene在ssGSEA通路评分上的端到端训练流程，系统阐述数据加载、坐标统计与空间位置编码、模型结构、训练循环、验证与推理、检查点管理、指标计算与日志记录，并给出命令行参数说明、性能优化建议与常见问题解决方案。目标是帮助读者快速理解并高效复现训练过程。
+本技术文档面向HisToGene在ssGSEA通路评分上的端到端训练流程，系统阐述数据加载、坐标统计与空间位置编码、模型结构、训练循环、验证与推理、检查点管理、指标计算与日志记录，并给出命令行参数说明、性能优化建议与常见问题解决方案。特别关注新增的多患者联合训练功能，包括from_multiple_patients方法和坐标统计跟踪机制。目标是帮助读者快速理解并高效复现训练过程。
 
 ## 项目结构
 - histogene：训练与推理相关模块
-  - train.py：训练入口，包含数据加载、训练循环、验证、早停、保存
-  - dataset.py：HisToGeneDataset数据集适配器，负责从PNG图像解析坐标、匹配标签、坐标统计与归一化
+  - train.py：训练入口，包含数据加载、训练循环、验证、早停、保存，支持单患者和多患者联合训练
+  - dataset.py：HisToGeneDataset数据集适配器，负责从PNG图像解析坐标、匹配标签、坐标统计与归一化，新增多患者联合训练支持
   - model.py：HisToGeneModel模型，基于ViT-MLP架构，融合空间位置编码与CLS token回归头
   - utils.py：指标计算工具（MSE、MAE、R²、PCC）
   - infer.py：推理脚本，加载训练好的checkpoint进行预测
 - 其他支持文件：
   - README.md：环境与使用说明
+  - training_history_MultiPatient_3ST.csv：多患者联合训练历史记录
+  - training_history_HYZ15040.csv：单患者训练历史记录
+  - run_egnv1_multi_3st.ps1：多患者训练示例脚本
   - HYZ15040_ssGSEA_scores_zscore.csv：训练标签（8个通路评分，z-score标准化）
   - training_history.csv：训练历史记录
   - best_histogene.pth：最佳模型检查点
@@ -52,14 +59,15 @@ A --> C["模型定义<br/>histogene/model.py"]
 A --> D["指标工具<br/>histogene/utils.py"]
 A --> E["推理脚本<br/>histogene/infer.py"]
 B --> F["标签CSV<br/>HYZ15040_ssGSEA_scores_zscore.csv"]
-A --> G["检查点管理<br/>histogene/checkpoints/*"]
-A --> H["训练历史<br/>histogene/training_history.csv"]
-E --> I["推理结果<br/>histogene/infer_results/*"]
+B --> G["多患者联合训练<br/>from_multiple_patients"]
+A --> H["检查点管理<br/>histogene/checkpoints/*"]
+A --> I["训练历史<br/>histogene/training_history*.csv"]
+E --> J["推理结果<br/>histogene/infer_results/*"]
 ```
 
 **图表来源**
 - [train.py:174-338](file://histogene/train.py#L174-L338)
-- [dataset.py:23-118](file://histogene/dataset.py#L23-L118)
+- [dataset.py:23-181](file://histogene/dataset.py#L23-L181)
 - [model.py:64-160](file://histogene/model.py#L64-L160)
 - [utils.py:20-31](file://histogene/utils.py#L20-L31)
 - [infer.py:66-169](file://histogene/infer.py#L66-L169)
@@ -73,6 +81,7 @@ E --> I["推理结果<br/>histogene/infer_results/*"]
   - 从PNG文件名解析坐标(x,y)，扫描目录匹配标签，构建样本列表
   - 支持训练集与验证集共享同一套坐标统计，保证归一化一致
   - 提供坐标到索引的映射，将连续坐标归一化到[0, n_pos-1]
+  - **新增**：from_multiple_patients类方法支持多患者联合训练，独立计算每个患者的坐标统计并返回坐标统计字典
 - 模型HisToGeneModel
   - Patch Embedding + CLS Token + ViT位置嵌入 + 多头注意力 + MLP前馈
   - 空间位置编码采用独立X/Y嵌入，并加到CLS token上
@@ -87,14 +96,14 @@ E --> I["推理结果<br/>histogene/infer_results/*"]
   - 输出逐通路指标和预测CSV文件
 
 **章节来源**
-- [dataset.py:23-118](file://histogene/dataset.py#L23-L118)
+- [dataset.py:23-181](file://histogene/dataset.py#L23-L181)
 - [model.py:64-160](file://histogene/model.py#L64-L160)
 - [train.py:106-172](file://histogene/train.py#L106-L172)
 - [utils.py:20-31](file://histogene/utils.py#L20-L31)
 - [infer.py:52-63](file://histogene/infer.py#L52-L63)
 
 ## 架构总览
-训练流程从命令行参数解析开始，构建数据集与数据加载器，初始化模型、损失函数、优化器与学习率调度器，进入训练循环并在每个epoch结束后评估验证集，记录历史并保存最佳模型。推理阶段加载最佳检查点进行预测。
+训练流程从命令行参数解析开始，构建数据集与数据加载器，初始化模型、损失函数、优化器与学习率调度器，进入训练循环并在每个epoch结束后评估验证集，记录历史并保存最佳模型。推理阶段加载最佳检查点进行预测。**新增**：多患者联合训练模式下，训练集和验证集分别通过from_multiple_patients方法和ConcatDataset合并。
 
 ```mermaid
 sequenceDiagram
@@ -107,7 +116,13 @@ participant Opt as "AdamW"
 participant Sch as "ReduceLROnPlateau"
 participant Utils as "compute_metrics"
 CLI->>Train : 解析参数
+alt 多患者模式
+Train->>DS : HisToGeneDataset.from_multiple_patients()
+Train->>DS : 为每个患者独立计算坐标统计
+Train->>DS : 合并训练集和验证集
+else 单患者模式
 Train->>DS : 初始化训练/验证数据集
+end
 Train->>Loader : 构建DataLoader(训练/验证)
 Train->>Model : 实例化模型
 Train->>Opt : 配置优化器
@@ -126,7 +141,7 @@ end
 
 **图表来源**
 - [train.py:174-338](file://histogene/train.py#L174-L338)
-- [dataset.py:23-118](file://histogene/dataset.py#L23-L118)
+- [dataset.py:23-181](file://histogene/dataset.py#L23-L181)
 - [model.py:122-159](file://histogene/model.py#L122-L159)
 - [utils.py:20-31](file://histogene/utils.py#L20-L31)
 
@@ -140,6 +155,7 @@ end
   - 验证集接收训练集统计，避免数据泄露
   - 归一化公式：(val - vmin) / (vmax - vmin) * (n_pos-1)，并裁剪到[0, n_pos-1]
 - 输出：(图像张量, pos_x索引, pos_y索引, targets张量)
+- **新增**：from_multiple_patients类方法支持多患者联合训练，独立计算每个患者的坐标统计并返回坐标统计字典
 
 ```mermaid
 flowchart TD
@@ -154,10 +170,10 @@ Norm --> Out(["返回样本元组"])
 ```
 
 **图表来源**
-- [dataset.py:15-118](file://histogene/dataset.py#L15-L118)
+- [dataset.py:15-181](file://histogene/dataset.py#L15-L181)
 
 **章节来源**
-- [dataset.py:23-118](file://histogene/dataset.py#L23-L118)
+- [dataset.py:23-181](file://histogene/dataset.py#L23-L181)
 
 ### 模型HisToGeneModel
 - Patch Embedding：将图像切分为patches并线性映射到模型维度
@@ -253,6 +269,58 @@ Train-->>Train : 返回avg_loss与metrics
 **章节来源**
 - [train.py:249-331](file://histogene/train.py#L249-L331)
 
+## 多患者训练功能
+
+### 多患者联合训练模式
+HisToGene支持多患者联合训练，通过--multi_patient参数启用。该模式允许同时使用多个患者的训练数据进行联合训练，提高模型的泛化能力。
+
+#### 关键特性
+- **独立坐标统计**：每个患者独立计算坐标统计，确保坐标归一化的准确性
+- **统一目标列**：所有患者使用相同的目标列（通路评分），保证模型输出一致性
+- **坐标统计字典**：返回每个患者的坐标统计信息，用于验证集的坐标归一化
+- **灵活的患者配置**：支持通过命令行参数指定多个患者的目录和标签文件
+
+#### from_multiple_patients方法
+该类方法实现了多患者数据集的合并逻辑：
+
+```mermaid
+flowchart TD
+Start(["from_multiple_patients调用"]) --> Config["解析患者配置列表"]
+Config --> Loop{"遍历每个患者"}
+Loop --> Create["创建独立的HisToGeneDataset"]
+Create --> Stats["记录坐标统计"]
+Stats --> Merge["合并所有患者数据集"]
+Loop --> |更多患者| Create
+Loop --> |完成| Return["返回合并数据集、坐标统计字典、目标列"]
+```
+
+**图表来源**
+- [dataset.py:120-181](file://histogene/dataset.py#L120-L181)
+
+#### 训练流程差异
+在多患者模式下，训练流程的主要差异在于数据集构建阶段：
+
+1. **参数校验**：验证必须提供患者目录、验证目录和标签文件列表
+2. **患者配置构建**：根据命令行参数构建患者配置列表
+3. **独立坐标统计**：每个患者独立计算坐标统计，存储在字典中
+4. **验证集构建**：使用训练集的坐标统计对每个患者的验证集进行归一化
+5. **检查点保存**：保存坐标统计字典和目标列信息
+
+**章节来源**
+- [train.py:322-394](file://histogene/train.py#L322-L394)
+- [dataset.py:120-181](file://histogene/dataset.py#L120-L181)
+
+### 多患者训练示例
+多患者训练的典型使用场景是联合训练多个不同患者的样本，以提高模型的泛化能力。示例脚本展示了如何配置三个患者的联合训练：
+
+- **患者配置**：HYZ15040、JFX0729、LMZ12939三个患者的数据
+- **数据目录**：每个患者都有独立的训练和验证patch目录
+- **标签文件**：每个患者都有对应的z-score标准化标签CSV
+- **参数设置**：适合多患者联合训练的学习率、批次大小等超参数
+
+**章节来源**
+- [run_egnv1_multi_3st.ps1:1-34](file://run_egnv1_multi_3st.ps1#L1-L34)
+
 ## 验证与推理流程
 
 ### 推理脚本infer.py
@@ -279,8 +347,10 @@ Train-->>Train : 返回avg_loss与metrics
 - val_loss：验证损失
 - val_metrics：验证指标
 - args：训练参数字典
-- coord_stats：坐标统计信息
+- coord_stats：坐标统计信息（单患者模式）
+- coord_stats_dict：坐标统计字典（多患者模式）
 - target_cols：目标列名列表
+- scaler_state_dict：混合精度状态（如果启用）
 
 ### 检查点保存策略
 - 每当验证损失降低时保存新的最佳模型
@@ -298,6 +368,7 @@ Train-->>Train : 返回avg_loss与metrics
 - 图像预处理：使用ImageNet均值/方差归一化，提升收敛稳定性
 - 模型维度与深度：可通过调整heads、mlp_dim、depth控制计算复杂度与内存占用
 - Huber损失：相比MSE对异常值更鲁棒，有助于稳定回归任务
+- **多患者训练优势**：联合训练多个患者的样本可以提高模型的泛化能力和稳定性
 
 ## 故障排查指南
 - 数据路径错误
@@ -318,13 +389,16 @@ Train-->>Train : 返回avg_loss与metrics
 - 检查点加载失败
   - 症状：checkpoint文件损坏或版本不兼容
   - 处理：重新训练或手动修复检查点文件
+- **多患者训练问题**
+  - 症状：患者数量不匹配或坐标统计不一致
+  - 处理：确认--patient_dirs、--patient_val_dirs、--patient_csvs参数数量一致；确保所有患者使用相同的标签列
 
 **章节来源**
 - [train.py:177-188](file://histogene/train.py#L177-L188)
 - [README.md:30-38](file://README.md#L30-L38)
 
 ## 结论
-本文档系统梳理了HisToGene在ssGSEA通路上的完整训练流程，覆盖数据加载、坐标统计与空间位置编码、模型结构、训练循环、验证与推理、检查点管理、指标计算与日志记录。通过合理的超参数配置与性能优化策略，可在保证稳定性的同时获得良好的回归效果。建议在实际部署前，结合数据分布与硬件资源对超参数进行微调。
+本文档系统梳理了HisToGene在ssGSEA通路上的完整训练流程，覆盖数据加载、坐标统计与空间位置编码、模型结构、训练循环、验证与推理、检查点管理、指标计算与日志记录。**新增**：多患者联合训练功能显著提升了模型的泛化能力和稳定性。通过合理的超参数配置与性能优化策略，可在保证稳定性的同时获得良好的回归效果。建议在实际部署前，结合数据分布与硬件资源对超参数进行微调。
 
 ## 附录
 
@@ -333,8 +407,8 @@ Train-->>Train : 返回avg_loss与metrics
   - --train_patches_dir：训练patch目录，默认自动搜索
   - --val_patches_dir：验证patch目录，默认自动搜索
   - --labels_csv：z-score标签CSV路径，默认指向HYZ15040_ssGSEA_scores_zscore.csv
-  - --checkpoint_dir：检查点保存目录，默认histogene/checkpoints
-  - --history_csv：训练历史CSV保存路径，默认histogene/training_history.csv
+  - --checkpoint_dir：检查点保存目录，默认histogene/checkpoints/{dataset_name}
+  - --history_csv：训练历史CSV保存路径，默认histogene/training_history_{dataset_name}.csv
 - 训练超参
   - --batch_size：批大小，默认64
   - --num_epochs：训练轮数，默认150
@@ -353,6 +427,12 @@ Train-->>Train : 返回avg_loss与metrics
 - 早停与混合精度
   - --early_stop_patience：早停耐心值，默认15
   - --amp：启用混合精度（仅CUDA）
+- **多患者训练参数**
+  - --multi_patient：启用多患者联合训练模式
+  - --patient_dirs：多患者训练目录列表（多患者模式）
+  - --patient_val_dirs：多患者验证目录列表（多患者模式）
+  - --patient_csvs：多患者标签 CSV 列表（多患者模式）
+  - --patient_names：患者名称列表（可选，默认从路径推断）
 - 推理参数
   - --patches_dir：推理patch目录（必需）
   - --checkpoint：检查点文件路径，默认best_histogene.pth
@@ -366,7 +446,17 @@ Train-->>Train : 返回avg_loss与metrics
 - 标签CSV包含8个ssGSEA通路评分列，经z-score标准化后使用
 - 目标列：tls、tgfb、emt、hypoxia、mhc、icp、ifng、toxic
 - analyze_stats.py与data_distribution_analysis.py可用于探索标签分布与统计特性
+- **多患者训练**：支持联合训练多个患者的样本，提高模型泛化能力
 
 **章节来源**
 - [HYZ15040_ssGSEA_scores_zscore.csv:1-200](file://HYZ15040_ssGSEA_scores_zscore.csv#L1-L200)
 - [README.md:4-8](file://README.md#L4-L8)
+
+### 训练历史对比
+- **单患者训练**：如HYZ15040，通常具有稳定的训练曲线和较好的收敛性
+- **多患者联合训练**：如3ST联合训练，可能具有更好的泛化性能，但训练初期可能波动较大
+- 两种模式都支持完整的训练历史记录和可视化报告生成
+
+**章节来源**
+- [training_history_MultiPatient_3ST.csv:1-41](file://histogene/training_history_MultiPatient_3ST.csv#L1-L41)
+- [training_history_HYZ15040.csv:1-39](file://histogene/training_history_HYZ15040.csv#L1-L39)
