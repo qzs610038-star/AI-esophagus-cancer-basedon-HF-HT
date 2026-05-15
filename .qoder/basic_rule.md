@@ -1,6 +1,7 @@
 # PFMval 项目基本规则
 
-> 本文件定义项目硬性规则，必须无条件遵守。
+> 🔒 **必读文件**：本文件在每次会话开始时必须读取，定义项目硬性规则。
+> 与 `experience.md`（经验索引）共同构成项目上下文基础。
 
 ---
 
@@ -23,6 +24,7 @@
 | EGN-v1 | **已淘汰** | 2048维(ResNet50) | ~6.8M | 性能最差，不再纳入对比分析 |
 | EGN-v2 原版 | 活跃 | 2048维(ResNet50) | ~3.0M | GraphSAGE+Exemplar |
 | EGN-v2+UNI | 活跃 | 1536维(UNI2-h) | ~2.8M | 主力模型，跨患者泛化最强 |
+| HisToGene-UNI+GAT | 实验完成 | 1536维(UNI2-h) | ~13.5M | P0-3 GAT空间建模，提升不显著(-0.27%) |
 
 **重要**：EGN-v1已淘汰，所有对比分析严格排除EGN-v1（除非用户明确要求包含）。
 
@@ -38,8 +40,8 @@
 
 ## 四、运行环境
 
-1. **HisToGene系列训练**：`C:\Program Files\Python313\python.exe`（已装torch 2.6.0+cu118）
-2. **EGN-v2系列训练（需PyG）**：`D:\conda_envs\pfmval_py310\python.exe`（含torch_geometric）
+1. **HisToGene系列训练**：`C:\Program Files\Python313\python.exe`（torch 2.6.0+cu118）
+2. **EGN-v2/GAT系列（需PyG）**：`D:\conda_envs\pfmval_py310\python.exe`（torch_geometric 2.7.0）
 3. **Conda base环境**：已装torch 2.6.0+cu118，可直接运行无需激活特定env
 4. **Conda激活命令**：`(& "D:\miniconda\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression`
 5. **PowerShell**：不支持 `&&`，使用 `;` 分隔语句
@@ -97,3 +99,20 @@ uni2h_cache/{patient}/train/  和 val/
 ## 八、Git提交规则
 
 忽略：训练数据目录(`data_new_3ST/`)、模型权重(`*.pth`)、虚拟环境(`.venv/`)、缓存(`__pycache__/`、`uni2h_cache/`)
+
+---
+
+## 九、配套文档体系
+
+| 文件 | 性质 | 说明 |
+|------|------|------|
+| `basic_rule.md`（本文件） | 🔒 每次必读 | 硬性规则，无条件遵守 |
+| `experience.md` | 🔒 每次必读 | 经验索引，指向skill文件 |
+| `skills/数据处理经验.md` | 按需阅读 | 数据加载、路径、CSV相关 |
+| `skills/训练工程经验.md` | 按需阅读 | 训练、调参、环境配置 |
+| `skills/可视化与输出规范.md` | 按需阅读 | 可视化结果、报告生成 |
+| `skills/组会汇报撰写指南.md` | 按需阅读 | 组会汇报撰写 |
+
+**阅读策略**：
+- 每次会话启动时：读取 `basic_rule.md` + `experience.md`
+- 执行具体任务时：根据 `experience.md` 索引，按需读取相关skill文件

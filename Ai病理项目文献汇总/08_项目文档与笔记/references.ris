@@ -1,0 +1,240 @@
+TY  - JOUR
+AU  - Thrift A P
+TI  - Global burden and epidemiology of Barrett oesophagus and oesophageal cancer
+JO  - Nature Reviews Gastroenterology & Hepatology
+PY  - 2021
+DO  - 10.1038/s41575-021-00419-3
+UR  - https://doi.org/10.1038/s41575-021-00419-3
+N1  - 开题报告编号[1]
+ER  - 
+
+TY  - JOUR
+AU  - Sung H
+TI  - Global Cancer Statistics 2020: GLOBOCAN estimates of incidence and mortality worldwide for 36 cancers in 185 countries
+JO  - CA: A Cancer Journal for Clinicians
+PY  - 2021
+DO  - 10.3322/caac.21660
+UR  - https://doi.org/10.3322/caac.21660
+N1  - 开题报告编号[2]
+ER  - 
+
+TY  - JOUR
+AU  - Williams C G, Lee H J, Asatsuma T
+TI  - An introduction to spatial transcriptomics for biomedical research
+JO  - Genome Medicine
+PY  - 2022
+DO  - 10.1186/s13073-022-01075-1
+UR  - https://doi.org/10.1186/s13073-022-01075-1
+N1  - 开题报告编号[3]
+ER  - 
+
+TY  - JOUR
+AU  - Macenko M
+TI  - A method for normalizing histology slides for quantitative analysis
+JO  - IEEE ISBI
+PY  - 2009
+DO  - 10.1109/isbi.2009.5193250
+UR  - https://doi.org/10.1109/isbi.2009.5193250
+N1  - 开题报告编号[4]
+ER  - 
+
+TY  - JOUR
+AU  - Bankhead P
+TI  - QuPath: open source software for digital pathology image analysis
+JO  - Scientific Reports
+PY  - 2017
+DO  - 10.1038/s41598-017-17204-5
+UR  - https://doi.org/10.1038/s41598-017-17204-5
+N1  - 开题报告编号[5]
+ER  - 
+
+TY  - JOUR
+AU  - He B
+TI  - Integrating spatial gene expression and breast tumor morphology via deep learning
+JO  - Nature Biomedical Engineering
+PY  - 2020
+DO  - 10.1038/s41551-020-0578-x
+UR  - https://doi.org/10.1038/s41551-020-0578-x
+N1  - 开题报告编号[6]
+ER  - 
+
+TY  - JOUR
+AU  - Chen R J
+TI  - Pathomic fusion: an integrated framework for fusing histopathology and genomic features for cancer diagnosis and prognosis
+JO  - IEEE TMI
+PY  - 2020
+DO  - 10.1109/tmi.2020.3021387
+UR  - https://doi.org/10.1109/tmi.2020.3021387
+N1  - 开题报告编号[7]
+ER  - 
+
+TY  - JOUR
+AU  - Campanella G
+TI  - Clinical-grade computational pathology using weakly supervised deep learning on whole slide images
+JO  - Nature Medicine
+PY  - 2019
+DO  - 10.1038/s41591-019-0508-1
+UR  - https://doi.org/10.1038/s41591-019-0508-1
+N1  - 开题报告编号[9]
+ER  - 
+
+TY  - JOUR
+AU  - Lu M Y
+TI  - Data-efficient and weakly supervised computational pathology on whole-slide images
+JO  - Nature Biomedical Engineering
+PY  - 2021
+DO  - 10.1038/s41551-020-00682-w
+UR  - https://doi.org/10.1038/s41551-020-00682-w
+N1  - 开题报告编号[10]
+ER  - 
+
+TY  - JOUR
+AU  - Yao J
+TI  - Whole slide images based cancer survival prediction using attention guided deep multiple instance learning networks
+JO  - Medical Image Analysis
+PY  - 2020
+DO  - 10.1016/j.media.2020.101789
+UR  - https://doi.org/10.1016/j.media.2020.101789
+N1  - 开题报告编号[11]
+ER  - 
+
+TY  - JOUR
+AU  - Chen R J
+TI  - Pan-cancer integrative histology-genomic analysis via multimodal deep learning
+JO  - Cancer Cell
+PY  - 2022
+DO  - 10.1016/j.ccell.2022.07.004
+UR  - https://doi.org/10.1016/j.ccell.2022.07.004
+N1  - 开题报告编号[12]
+ER  - 
+
+TY  - JOUR
+AU  - Schmauch B
+TI  - A deep learning model to predict RNA-Seq expression of tumours from whole slide images
+JO  - Nature Communications
+PY  - 2020
+DO  - 10.1038/s41467-020-17678-4
+UR  - https://doi.org/10.1038/s41467-020-17678-4
+N1  - 开题报告编号[13]
+ER  - 
+
+TY  - JOUR
+AU  - Chen R J
+TI  - Towards a general-purpose foundation model for computational pathology
+JO  - Nature Medicine
+PY  - 2024
+DO  - 10.1038/s41591-024-02857-3
+UR  - https://doi.org/10.1038/s41591-024-02857-3
+N1  - 开题报告编号[16]
+ER  - 
+
+TY  - JOUR
+AU  - Vorontsov E
+TI  - A foundation model for clinical-grade computational pathology
+JO  - Nature
+PY  - 2024
+DO  - 10.1038/s41591-024-03141-0
+UR  - https://doi.org/10.1038/s41591-024-03141-0
+N1  - 开题报告编号[17]
+ER  - 
+
+TY  - JOUR
+AU  - Xu H
+TI  - A whole-slide foundation model for digital pathology from real-world data
+JO  - Nature
+PY  - 2024
+DO  - 10.1038/s41586-024-07441-w
+UR  - https://doi.org/10.1038/s41586-024-07441-w
+N1  - 开题报告编号[19]
+ER  - 
+
+TY  - JOUR
+AU  - Wang X
+TI  - Transformer-based unsupervised contrastive learning for histopathological image classification
+JO  - Medical Image Analysis
+PY  - 2022
+DO  - 10.1016/j.media.2022.102559
+UR  - https://doi.org/10.1016/j.media.2022.102559
+N1  - 开题报告编号[20]
+ER  - 
+
+TY  - JOUR
+AU  - Ståhl P L
+TI  - Visualization and analysis of gene expression in tissue sections by spatial transcriptomics
+JO  - Science
+PY  - 2016
+DO  - 10.1126/science.aaf2403
+UR  - https://doi.org/10.1126/science.aaf2403
+N1  - 开题报告编号[21]
+ER  - 
+
+TY  - JOUR
+AU  - Vickovic S
+TI  - High-definition spatial transcriptomics for in situ tissue profiling
+JO  - Nature Methods
+PY  - 2019
+DO  - 10.1038/s41592-019-0548-y
+UR  - https://doi.org/10.1038/s41592-019-0548-y
+N1  - 开题报告编号[22]
+ER  - 
+
+TY  - JOUR
+AU  - Kleshchevnikov V
+TI  - Cell2location maps fine-grained cell types in spatial transcriptomics
+JO  - Nature Biotechnology
+PY  - 2022
+DO  - 10.1038/s41587-021-01139-4
+UR  - https://doi.org/10.1038/s41587-021-01139-4
+N1  - 开题报告编号[23]
+ER  - 
+
+TY  - JOUR
+AU  - Hao Y
+TI  - Integrated analysis of multimodal single-cell data
+JO  - Cell
+PY  - 2021
+DO  - 10.1016/j.cell.2021.04.048
+UR  - https://doi.org/10.1016/j.cell.2021.04.048
+N1  - 开题报告编号[24]
+ER  - 
+
+TY  - JOUR
+AU  - Lotfollahi M
+TI  - Mapping single-cell data to reference atlases by transfer learning
+JO  - Nature Biotechnology
+PY  - 2022
+DO  - 10.1038/s41587-021-01001-7
+UR  - https://doi.org/10.1038/s41587-021-01001-7
+N1  - 开题报告编号[25]
+ER  - 
+
+TY  - JOUR
+AU  - Andreatta M, Carmeliet P
+TI  - UCell: robust and scalable single-cell gene signature scoring
+JO  - Computational and Structural Biotechnology Journal
+PY  - 2021
+DO  - 10.1016/j.csbj.2021.06.043
+UR  - https://doi.org/10.1016/j.csbj.2021.06.043
+N1  - 开题报告编号[26]
+ER  - 
+
+TY  - JOUR
+AU  - Berglund E
+TI  - Spatial maps of prostate cancer transcriptomes reveal an unexplored landscape of heterogeneity
+JO  - Nature Communications
+PY  - 2018
+DO  - 10.1038/s41467-018-04724-5
+UR  - https://doi.org/10.1038/s41467-018-04724-5
+N1  - 开题报告编号[27]
+ER  - 
+
+TY  - JOUR
+AU  - Fu Y
+TI  - Pan-cancer computational histopathology reveals mutations, tumor composition and prognosis
+JO  - Nature Cancer
+PY  - 2020
+DO  - 10.1038/s43018-020-0087-5
+UR  - https://doi.org/10.1038/s43018-020-0087-5
+N1  - 开题报告编号[28]
+ER  - 
+

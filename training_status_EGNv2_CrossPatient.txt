@@ -1,6 +1,0 @@
-模型: EGNv2_CrossPatient
-状态: early_stop
-时间: 2026-04-24 22:04:40
-总Epoch: 31
-最佳Epoch: 16
-最佳Val PCC: 0.1950

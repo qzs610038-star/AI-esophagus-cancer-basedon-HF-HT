@@ -42,6 +42,12 @@ HYZ15040-org.zip
 uni2h_cache/
 **/uni2h_cache/
 
+# UNI Token 特征缓存（体积巨大，34GB+，不可提交）
+uni2h_cache_tokens/
+uni2h_cache_tokens_aug/
+**/uni2h_cache_tokens/
+**/uni2h_cache_tokens_aug/
+
 # ViT / ResNet 等中间特征缓存（egnv1/cache/, egnv2/cache/ 等）
 **/cache/
 
@@ -88,6 +94,9 @@ PAUSE_TRAINING
 # 日志文件
 *.log
 
+# 大型提取日志（2MB+）
+extract_aug_log.txt
+
 # --------------------------------------------
 # 7. IDE 与编辑器配置
 # --------------------------------------------
@@ -109,3 +118,9 @@ desktop.ini
 # --------------------------------------------
 *.tmp
 *.bak
+
+# 训练状态监控临时文件
+training_status_*.txt
+
+# 临时调试脚本（temp_*.py）
+temp_*.py

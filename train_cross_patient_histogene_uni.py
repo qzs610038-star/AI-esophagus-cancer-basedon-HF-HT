@@ -1,9 +1,10 @@
 """
-HisToGene-UNI 跨患者泛化训练脚本
-================================
-训练集：JFX0729（train+val合并）+ LMZ12939（train+val合并）
-测试集：HYZ15040（train+val合并）
-dataset_name: CrossPatient_JFX_LMZ_to_HYZ
+HisToGene-UNI 跨患者泛化训练脚本（三折交叉验证）
+================================================
+支持三种交叉验证 fold：
+  Fold 1: JFX0729+LMZ12939 训练 → HYZ15040 测试（默认，后向兼容）
+  Fold 2: HYZ15040+LMZ12939 训练 → JFX0729 测试
+  Fold 3: HYZ15040+JFX0729 训练 → LMZ12939 测试
 
 约束：
   - 不修改 histogene/ 目录下的任何文件
@@ -46,7 +47,7 @@ from config_utils import load_config, get_device
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  数据路径配置
+#  数据路径配置（三患者 × 三折交叉验证）
 # ═══════════════════════════════════════════════════════════════════════════
 
 # 基础路径
@@ -54,28 +55,52 @@ _PATCH_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "patch_noov_spilt")
 _SSGSEA_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "ssGSEA_zscore")
 _UNI_CACHE_BASE = str(_PROJECT_ROOT / "uni2h_cache")
 
-# JFX0729
-JFX_TRAIN_DIR = os.path.join(_PATCH_BASE, "JFX0729_noov_split", "train_patches")
-JFX_VAL_DIR   = os.path.join(_PATCH_BASE, "JFX0729_noov_split", "val_patches")
-JFX_CSV       = os.path.join(_SSGSEA_BASE, "JFX0729_ssGSEA_zscore.csv")
+# 三患者数据路径配置
+PATIENT_CONFIGS = {
+    "HYZ15040": {
+        "patches_dir": os.path.join(_PATCH_BASE, "HYZ15040_noov_split"),
+        "csv_path": os.path.join(_SSGSEA_BASE, "HYZ15040_ssGSEA_zscore.csv"),
+        "cache_dir": os.path.join(_UNI_CACHE_BASE, "HYZ15040"),
+    },
+    "JFX0729": {
+        "patches_dir": os.path.join(_PATCH_BASE, "JFX0729_noov_split"),
+        "csv_path": os.path.join(_SSGSEA_BASE, "JFX0729_ssGSEA_zscore.csv"),
+        "cache_dir": os.path.join(_UNI_CACHE_BASE, "JFX0729"),
+    },
+    "LMZ12939": {
+        "patches_dir": os.path.join(_PATCH_BASE, "LMZ12939_noov_split"),
+        "csv_path": os.path.join(_SSGSEA_BASE, "LMZ12939_ssGSEA_zscore.csv"),
+        "cache_dir": os.path.join(_UNI_CACHE_BASE, "LMZ12939"),
+    },
+}
 
-# LMZ12939
-LMZ_TRAIN_DIR = os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "train_patches")
-LMZ_VAL_DIR   = os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "val_patches")
-LMZ_CSV       = os.path.join(_SSGSEA_BASE, "LMZ12939_ssGSEA_zscore.csv")
+# 三折交叉验证配置
+FOLD_CONFIGS = {
+    1: {"train": ["JFX0729", "LMZ12939"], "test": "HYZ15040"},
+    2: {"train": ["HYZ15040", "LMZ12939"], "test": "JFX0729"},
+    3: {"train": ["HYZ15040", "JFX0729"], "test": "LMZ12939"},
+}
 
-# HYZ15040（测试集）
-HYZ_TRAIN_DIR = os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "train_patches")
-HYZ_VAL_DIR   = os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "val_patches")
-HYZ_CSV       = os.path.join(_SSGSEA_BASE, "HYZ15040_ssGSEA_zscore.csv")
+# Fold 1 后向兼容别名（保持旧代码引用不中断）
+_f1_jfx = PATIENT_CONFIGS["JFX0729"]
+_f1_lmz = PATIENT_CONFIGS["LMZ12939"]
+_f1_hyz = PATIENT_CONFIGS["HYZ15040"]
 
-# UNI2-h 特征缓存路径
-JFX_TRAIN_CACHE = os.path.join(_UNI_CACHE_BASE, "JFX0729", "train")
-JFX_VAL_CACHE   = os.path.join(_UNI_CACHE_BASE, "JFX0729", "val")
-LMZ_TRAIN_CACHE = os.path.join(_UNI_CACHE_BASE, "LMZ12939", "train")
-LMZ_VAL_CACHE   = os.path.join(_UNI_CACHE_BASE, "LMZ12939", "val")
-HYZ_TRAIN_CACHE = os.path.join(_UNI_CACHE_BASE, "HYZ15040", "train")
-HYZ_VAL_CACHE   = os.path.join(_UNI_CACHE_BASE, "HYZ15040", "val")
+JFX_TRAIN_DIR   = os.path.join(_f1_jfx["patches_dir"], "train_patches")
+JFX_VAL_DIR     = os.path.join(_f1_jfx["patches_dir"], "val_patches")
+JFX_CSV         = _f1_jfx["csv_path"]
+LMZ_TRAIN_DIR   = os.path.join(_f1_lmz["patches_dir"], "train_patches")
+LMZ_VAL_DIR     = os.path.join(_f1_lmz["patches_dir"], "val_patches")
+LMZ_CSV         = _f1_lmz["csv_path"]
+HYZ_TRAIN_DIR   = os.path.join(_f1_hyz["patches_dir"], "train_patches")
+HYZ_VAL_DIR     = os.path.join(_f1_hyz["patches_dir"], "val_patches")
+HYZ_CSV         = _f1_hyz["csv_path"]
+JFX_TRAIN_CACHE = os.path.join(_f1_jfx["cache_dir"], "train")
+JFX_VAL_CACHE   = os.path.join(_f1_jfx["cache_dir"], "val")
+LMZ_TRAIN_CACHE = os.path.join(_f1_lmz["cache_dir"], "train")
+LMZ_VAL_CACHE   = os.path.join(_f1_lmz["cache_dir"], "val")
+HYZ_TRAIN_CACHE = os.path.join(_f1_hyz["cache_dir"], "train")
+HYZ_VAL_CACHE   = os.path.join(_f1_hyz["cache_dir"], "val")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -150,7 +175,8 @@ def save_per_pathway_pcc_table(predictions_csv_path, output_dir):
 
 
 def generate_model_params_txt(args, n_params, history_df, output_path,
-                              train_samples=None, val_samples=None):
+                              train_samples=None, val_samples=None,
+                              train_desc="JFX0729+LMZ12939", test_desc="HYZ15040"):
     """训练结束后生成模型参数与结果摘要文本文件"""
     best_row = history_df.loc[history_df['val_loss'].idxmin()]
     best_epoch = int(best_row['epoch'])
@@ -171,7 +197,7 @@ def generate_model_params_txt(args, n_params, history_df, output_path,
     lines.append("=" * 50)
     lines.append(f"训练时间: {train_time}")
     lines.append(f"数据集: {args.dataset_name}")
-    lines.append(f"训练策略: JFX0729+LMZ12939 → HYZ15040")
+    lines.append(f"训练策略: {train_desc} → {test_desc}")
     if train_samples is not None:
         lines.append(f"训练样本: {train_samples}")
     if val_samples is not None:
@@ -310,22 +336,23 @@ def evaluate(model, loader, criterion, device):
 
 def build_argparser():
     p = argparse.ArgumentParser(
-        description="HisToGene-UNI 跨患者泛化训练: JFX0729+LMZ12939 → HYZ15040"
+        description="HisToGene-UNI 跨患者泛化训练（三折交叉验证）"
     )
 
-    # 数据集名称
-    p.add_argument("--dataset_name", type=str,
-                   default="CrossPatient_JFX_LMZ_to_HYZ",
-                   help="数据集名称，用于区分训练结果")
+    # 交叉验证 fold
+    p.add_argument("--fold", type=int, choices=[1, 2, 3], default=1,
+                   help="三折交叉验证编号: 1=JFX+LMZ→HYZ, 2=HYZ+LMZ→JFX, 3=HYZ+JFX→LMZ")
 
-    # 输出路径
+    # 数据集名称（None 表示自动推导）
+    p.add_argument("--dataset_name", type=str, default=None,
+                   help="数据集名称，用于区分训练结果（留空则根据fold自动生成）")
+
+    # 输出路径（None 表示自动推导）
     _histogene_dir = str(_PROJECT_ROOT / "histogene")
-    p.add_argument("--checkpoint_dir", type=str,
-                   default=os.path.join(_histogene_dir, "checkpoints", "CrossPatient_JFX_LMZ_to_HYZ"),
-                   help="checkpoint 保存目录")
-    p.add_argument("--history_csv", type=str,
-                   default=os.path.join(_histogene_dir, "training_history_CrossPatient_JFX_LMZ_to_HYZ.csv"),
-                   help="训练历史 CSV 路径")
+    p.add_argument("--checkpoint_dir", type=str, default=None,
+                   help="checkpoint 保存目录（留空则根据fold自动生成）")
+    p.add_argument("--history_csv", type=str, default=None,
+                   help="训练历史 CSV 路径（留空则根据fold自动生成）")
 
     # 训练超参
     p.add_argument("--batch_size",   type=int,   default=64)
@@ -376,27 +403,58 @@ def build_argparser():
 def main():
     args = build_argparser().parse_args()
 
+    # ── Fold 配置与自动推导 ───────────────────────────────────────────────
+    fold_cfg = FOLD_CONFIGS[args.fold]
+    train_patient_names = fold_cfg["train"]
+    test_patient_name = fold_cfg["test"]
+    _histogene_dir = str(_PROJECT_ROOT / "histogene")
+
+    # Fold 1 后向兼容：dataset_name / checkpoint_dir / history_csv 保持原始值
+    if args.fold == 1:
+        default_dataset_name = "CrossPatient_JFX_LMZ_to_HYZ"
+        default_ckpt_dir = os.path.join(_histogene_dir, "checkpoints", "CrossPatient_JFX_LMZ_to_HYZ")
+        default_history_csv = os.path.join(_histogene_dir, "training_history_CrossPatient_JFX_LMZ_to_HYZ.csv")
+    else:
+        default_dataset_name = f"CrossPatient_Fold{args.fold}_to_{test_patient_name}"
+        default_ckpt_dir = os.path.join(_histogene_dir, "checkpoints", f"CrossPatient_Fold{args.fold}")
+        default_history_csv = os.path.join(
+            _histogene_dir, f"training_history_CrossPatient_Fold{args.fold}_to_{test_patient_name}.csv")
+
+    if args.dataset_name is None:
+        args.dataset_name = default_dataset_name
+    if args.checkpoint_dir is None:
+        args.checkpoint_dir = default_ckpt_dir
+    if args.history_csv is None:
+        args.history_csv = default_history_csv
+
+    train_desc = "+".join(train_patient_names)
+
     # ── 路径检查 ──────────────────────────────────────────────────────────
     print("=" * 70)
-    print("HisToGene-UNI 跨患者泛化训练")
-    print("  训练集: JFX0729(train+val) + LMZ12939(train+val)")
-    print("  测试集: HYZ15040(train+val)")
+    print(f"HisToGene-UNI 跨患者泛化训练 (Fold {args.fold})")
+    print(f"  训练集: {train_desc}(train+val)")
+    print(f"  测试集: {test_patient_name}(train+val)")
     print("  dataset_name: " + args.dataset_name)
     print("=" * 70)
 
-    required_dirs = [
-        ("JFX train patches", JFX_TRAIN_DIR), ("JFX val patches", JFX_VAL_DIR),
-        ("LMZ train patches", LMZ_TRAIN_DIR), ("LMZ val patches", LMZ_VAL_DIR),
-        ("HYZ train patches", HYZ_TRAIN_DIR), ("HYZ val patches", HYZ_VAL_DIR),
-    ]
-    required_cache_dirs = [
-        ("JFX train cache", JFX_TRAIN_CACHE), ("JFX val cache", JFX_VAL_CACHE),
-        ("LMZ train cache", LMZ_TRAIN_CACHE), ("LMZ val cache", LMZ_VAL_CACHE),
-        ("HYZ train cache", HYZ_TRAIN_CACHE), ("HYZ val cache", HYZ_VAL_CACHE),
-    ]
-    required_files = [
-        ("JFX CSV", JFX_CSV), ("LMZ CSV", LMZ_CSV), ("HYZ CSV", HYZ_CSV),
-    ]
+    # 动态构建需要检查的路径（遍历所有涉及的患者）
+    all_patients = train_patient_names + [test_patient_name]
+    required_dirs = []
+    required_cache_dirs = []
+    required_files = []
+
+    for pname in all_patients:
+        pcfg = PATIENT_CONFIGS[pname]
+        train_dir = os.path.join(pcfg["patches_dir"], "train_patches")
+        val_dir   = os.path.join(pcfg["patches_dir"], "val_patches")
+        train_cache = os.path.join(pcfg["cache_dir"], "train")
+        val_cache   = os.path.join(pcfg["cache_dir"], "val")
+
+        required_dirs.append((f"{pname} train patches", train_dir))
+        required_dirs.append((f"{pname} val patches", val_dir))
+        required_cache_dirs.append((f"{pname} train cache", train_cache))
+        required_cache_dirs.append((f"{pname} val cache", val_cache))
+        required_files.append((f"{pname} CSV", pcfg["csv_path"]))
 
     for label, path in required_dirs:
         if not os.path.isdir(path):
@@ -417,9 +475,7 @@ def main():
         if not os.path.isfile(path):
             print(f"[ERROR] {label} 不存在: {path}")
             sys.exit(1)
-    print(f"  JFX CSV: {JFX_CSV}")
-    print(f"  LMZ CSV: {LMZ_CSV}")
-    print(f"  HYZ CSV: {HYZ_CSV}")
+        print(f"  {label}: {path}")
 
     # ── 设备 ──────────────────────────────────────────────────────────────
     _config = load_config()
@@ -433,49 +489,36 @@ def main():
 
     # ── 确保 UNI 特征缓存就绪 ──────────────────────────────────────────────
     print("\n[INFO] 检查UNI2-h特征缓存...")
-    for patches_dir, cache_dir, label in [
-        (JFX_TRAIN_DIR, JFX_TRAIN_CACHE, "JFX0729/train"),
-        (JFX_VAL_DIR,   JFX_VAL_CACHE,   "JFX0729/val"),
-        (LMZ_TRAIN_DIR, LMZ_TRAIN_CACHE, "LMZ12939/train"),
-        (LMZ_VAL_DIR,   LMZ_VAL_CACHE,   "LMZ12939/val"),
-        (HYZ_TRAIN_DIR, HYZ_TRAIN_CACHE, "HYZ15040/train"),
-        (HYZ_VAL_DIR,   HYZ_VAL_CACHE,   "HYZ15040/val"),
-    ]:
-        ensure_features_cached(patches_dir, cache_dir, device, args.rebuild_cache)
+    for pname in all_patients:
+        pcfg = PATIENT_CONFIGS[pname]
+        for split in ["train_patches", "val_patches"]:
+            patches_dir = os.path.join(pcfg["patches_dir"], split)
+            cache_sub = "train" if split == "train_patches" else "val"
+            cache_dir = os.path.join(pcfg["cache_dir"], cache_sub)
+            ensure_features_cached(patches_dir, cache_dir, device, args.rebuild_cache)
 
-    # ── 训练集：JFX0729 + LMZ12939 全部数据 ───────────────────────────────
+    # ── 训练集：动态加载 fold 对应的训练患者 ────────────────────────────────
     print("\n" + "=" * 60)
-    print("[INFO] 加载训练集: JFX0729 + LMZ12939 全部数据")
+    print(f"[INFO] 加载训练集: {train_desc} 全部数据")
     print("=" * 60)
 
     # 每个患者的 train/val 作为独立的 patient_config，
     # from_multiple_patients 会为每个 config 独立计算坐标统计
-    train_patient_configs = [
-        {
-            'patches_dir': JFX_TRAIN_DIR,
-            'labels_csv': JFX_CSV,
-            'patient_name': 'JFX0729_train',
-            'feature_cache_dir': JFX_TRAIN_CACHE,
-        },
-        {
-            'patches_dir': JFX_VAL_DIR,
-            'labels_csv': JFX_CSV,
-            'patient_name': 'JFX0729_val',
-            'feature_cache_dir': JFX_VAL_CACHE,
-        },
-        {
-            'patches_dir': LMZ_TRAIN_DIR,
-            'labels_csv': LMZ_CSV,
-            'patient_name': 'LMZ12939_train',
-            'feature_cache_dir': LMZ_TRAIN_CACHE,
-        },
-        {
-            'patches_dir': LMZ_VAL_DIR,
-            'labels_csv': LMZ_CSV,
-            'patient_name': 'LMZ12939_val',
-            'feature_cache_dir': LMZ_VAL_CACHE,
-        },
-    ]
+    train_patient_configs = []
+    for pname in train_patient_names:
+        pcfg = PATIENT_CONFIGS[pname]
+        train_patient_configs.append({
+            'patches_dir': os.path.join(pcfg["patches_dir"], "train_patches"),
+            'labels_csv': pcfg["csv_path"],
+            'patient_name': f'{pname}_train',
+            'feature_cache_dir': os.path.join(pcfg["cache_dir"], "train"),
+        })
+        train_patient_configs.append({
+            'patches_dir': os.path.join(pcfg["patches_dir"], "val_patches"),
+            'labels_csv': pcfg["csv_path"],
+            'patient_name': f'{pname}_val',
+            'feature_cache_dir': os.path.join(pcfg["cache_dir"], "val"),
+        })
 
     train_dataset, coord_stats_dict, target_cols = HisToGeneUNIDataset.from_multiple_patients(
         patient_configs=train_patient_configs,
@@ -484,24 +527,25 @@ def main():
 
     print(f"\n[INFO] 训练集合并完成: {len(train_dataset)} 样本")
 
-    # ── 测试集：HYZ15040 全部数据 ─────────────────────────────────────────
+    # ── 测试集：fold 对应的测试患者全部数据 ─────────────────────────────────
     print("\n" + "=" * 60)
-    print("[INFO] 加载测试集: HYZ15040 全部数据")
+    print(f"[INFO] 加载测试集: {test_patient_name} 全部数据")
     print("=" * 60)
 
-    # HYZ15040 的 train/val 各自独立创建（使用各自的坐标统计）
+    # 测试患者的 train/val 各自独立创建（使用各自的坐标统计）
+    test_pcfg = PATIENT_CONFIGS[test_patient_name]
     test_patient_configs = [
         {
-            'patches_dir': HYZ_TRAIN_DIR,
-            'labels_csv': HYZ_CSV,
-            'patient_name': 'HYZ15040_train',
-            'feature_cache_dir': HYZ_TRAIN_CACHE,
+            'patches_dir': os.path.join(test_pcfg["patches_dir"], "train_patches"),
+            'labels_csv': test_pcfg["csv_path"],
+            'patient_name': f'{test_patient_name}_train',
+            'feature_cache_dir': os.path.join(test_pcfg["cache_dir"], "train"),
         },
         {
-            'patches_dir': HYZ_VAL_DIR,
-            'labels_csv': HYZ_CSV,
-            'patient_name': 'HYZ15040_val',
-            'feature_cache_dir': HYZ_VAL_CACHE,
+            'patches_dir': os.path.join(test_pcfg["patches_dir"], "val_patches"),
+            'labels_csv': test_pcfg["csv_path"],
+            'patient_name': f'{test_patient_name}_val',
+            'feature_cache_dir': os.path.join(test_pcfg["cache_dir"], "val"),
         },
     ]
 
@@ -591,9 +635,9 @@ def main():
     early_stopped = False
 
     print("\n" + "=" * 90)
-    print(f"开始训练 HisToGene-UNI 跨患者泛化 | Epochs={args.num_epochs} | BS={args.batch_size} | LR={args.lr}")
-    print(f"  训练集: JFX0729+LMZ12939 ({len(train_dataset)} 样本)")
-    print(f"  测试集: HYZ15040 ({len(test_dataset)} 样本)")
+    print(f"开始训练 HisToGene-UNI 跨患者泛化 Fold {args.fold} | Epochs={args.num_epochs} | BS={args.batch_size} | LR={args.lr}")
+    print(f"  训练集: {train_desc} ({len(train_dataset)} 样本)")
+    print(f"  测试集: {test_patient_name} ({len(test_dataset)} 样本)")
     print("=" * 90)
 
     current_epoch = 0
@@ -689,17 +733,17 @@ def main():
                     'best_pcc': best_pcc,
                 }, resume_ckpt)
                 print(f"[INFO] 暂停 checkpoint 已保存: {resume_ckpt}")
-                notify_training_complete("HisToGene-UNI_CrossPatient", epoch, best_epoch, best_pcc, "paused")
+                notify_training_complete(f"HisToGene-UNI_CrossPatient_Fold{args.fold}", epoch, best_epoch, best_pcc, "paused")
                 clear_pause_signal(_PROJECT_ROOT)
                 return
 
     except Exception as e:
-        notify_training_error("HisToGene-UNI_CrossPatient", current_epoch, str(e))
+        notify_training_error(f"HisToGene-UNI_CrossPatient_Fold{args.fold}", current_epoch, str(e))
         raise
 
     # 训练完成通知
     status = "early_stop" if early_stopped else "completed"
-    notify_training_complete("HisToGene-UNI_CrossPatient", current_epoch, best_epoch, best_pcc, status)
+    notify_training_complete(f"HisToGene-UNI_CrossPatient_Fold{args.fold}", current_epoch, best_epoch, best_pcc, status)
 
     # 最终保存历史
     pd.DataFrame(history).to_csv(args.history_csv, index=False)
@@ -775,8 +819,8 @@ def main():
                 "dropout": args.dropout,
                 "early_stop_patience": args.early_stop_patience,
                 "dataset_name": args.dataset_name,
-                "train_patients": "JFX0729+LMZ12939",
-                "test_patient": "HYZ15040",
+                "train_patients": train_desc,
+                "test_patient": test_patient_name,
             }
         )
 
@@ -797,6 +841,8 @@ def main():
                 output_path=model_params_path,
                 train_samples=len(train_dataset),
                 val_samples=len(test_dataset),
+                train_desc=train_desc,
+                test_desc=test_patient_name,
             )
         except Exception as e:
             print(f"[WARNING] 生成 model_params.txt 失败: {e}")

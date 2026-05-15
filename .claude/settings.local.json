@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"d:\\\\AI空间转录病理研究\\\\PFMval_new\" log --oneline -20)",
+      "Bash(git -C \"d:\\\\AI空间转录病理研究\\\\PFMval_new\" ls-files --cached)",
+      "Bash(git -C \"d:\\\\AI空间转录病理研究\\\\PFMval_new\" rm --cached temp_check.py temp_check2.py temp_check_epoch.py temp_compare.py temp_csv_check.py temp_egnv2_cross.py temp_histogene_cross.py temp_params.py training_status_EGN_v1.txt training_status_EGNv2.txt training_status_EGNv2_CrossPatient.txt training_status_EGNv2_UNI.txt training_status_HisToGene.txt training_status_HisToGene_CrossPatient_Orig.txt training_status_HisToGene_UNI.txt training_status_HisToGene_UNI_CrossPatient.txt)",
+      "Bash(cd \"d:\\\\AI空间转录病理研究\\\\PFMval_new\" && rm temp_*.py extract_aug_log.txt)",
+      "Bash(cd \"d:\\\\AI空间转录病理研究\\\\PFMval_new\" && mv *.ps1 scripts/)",
+      "Bash(git -C \"d:\\\\AI空间转录病理研究\\\\PFMval_new\" status --short)"
+    ],
+    "additionalDirectories": [
+      "D:\\AI空间转录病理研究\\PFMval_new"
+    ]
+  }
+}
