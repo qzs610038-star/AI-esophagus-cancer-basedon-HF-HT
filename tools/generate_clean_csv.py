@@ -6,7 +6,10 @@ import os
 import pandas as pd
 from pathlib import Path
 
-base_dir = Path(r"d:\AI空间转录病理研究\PFMval_new")
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from config_utils import get_project_root
+
+base_dir = Path(get_project_root())
 
 # 加载原始混合CSV
 csv_file = base_dir / "data_new_3ST" / "ssGSEA_zscore" / "HYZ15040_ssGSEA_zscore.csv"

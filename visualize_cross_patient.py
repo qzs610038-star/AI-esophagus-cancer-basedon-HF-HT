@@ -42,7 +42,9 @@ _setup_font()
 # ─────────────────────────────────────────────
 # 数据定义
 # ─────────────────────────────────────────────
-BASE_DIR = r"d:\AI空间转录病理研究\PFMval_new"
+from config_utils import get_project_root
+
+BASE_DIR = get_project_root()
 
 # 配色方案（与 visualize_model_comparison.py 一致）
 COLOR_HISTO_UNI = "#70AD47"   # 绿色 — HisToGene-UNI 单患者

@@ -45,56 +45,123 @@ from notify_utils import (
     notify_training_complete, notify_training_error,
     check_pause_signal, clear_pause_signal,
 )
-from config_utils import load_config, get_device
+from config_utils import load_config, get_device, get_patient_paths, get_fold_config, get_histogene_dir
 
 # 忽略 Ctrl+C 信号，防止误触中断训练
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  数据路径配置
+#  数据路径配置 — 统一由 config_utils.get_patient_paths() 管理
+#  本地使用默认路径，服务器通过 config.yaml 覆盖
 # ═══════════════════════════════════════════════════════════════════════════
 
-_PATCH_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "patch_noov_spilt")
-_SSGSEA_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "ssGSEA_zscore")
-_TOKEN_CACHE_BASE = str(_PROJECT_ROOT / "uni2h_cache_tokens")
-_TOKEN_AUG_CACHE_BASE = str(_PROJECT_ROOT / "uni2h_cache_tokens_aug")
+# ═══════════════════════════════════════════════════════════════════════════
+#  通路加权损失（P1-1）
+# ═══════════════════════════════════════════════════════════════════════════
 
-PATIENT_CONFIG = {
-    'HYZ15040': {
-        'train_patches': os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "train_patches"),
-        'val_patches':   os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "val_patches"),
-        'labels_csv':    os.path.join(_SSGSEA_BASE, "HYZ15040_ssGSEA_zscore.csv"),
-        'token_cache_train': os.path.join(_TOKEN_CACHE_BASE, "HYZ15040", "train"),
-        'token_cache_val':   os.path.join(_TOKEN_CACHE_BASE, "HYZ15040", "val"),
-        'token_aug_train':   os.path.join(_TOKEN_AUG_CACHE_BASE, "HYZ15040", "train"),
-        'token_aug_val':     os.path.join(_TOKEN_AUG_CACHE_BASE, "HYZ15040", "val"),
-    },
-    'JFX0729': {
-        'train_patches': os.path.join(_PATCH_BASE, "JFX0729_noov_split", "train_patches"),
-        'val_patches':   os.path.join(_PATCH_BASE, "JFX0729_noov_split", "val_patches"),
-        'labels_csv':    os.path.join(_SSGSEA_BASE, "JFX0729_ssGSEA_zscore.csv"),
-        'token_cache_train': os.path.join(_TOKEN_CACHE_BASE, "JFX0729", "train"),
-        'token_cache_val':   os.path.join(_TOKEN_CACHE_BASE, "JFX0729", "val"),
-        'token_aug_train':   os.path.join(_TOKEN_AUG_CACHE_BASE, "JFX0729", "train"),
-        'token_aug_val':     os.path.join(_TOKEN_AUG_CACHE_BASE, "JFX0729", "val"),
-    },
-    'LMZ12939': {
-        'train_patches': os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "train_patches"),
-        'val_patches':   os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "val_patches"),
-        'labels_csv':    os.path.join(_SSGSEA_BASE, "LMZ12939_ssGSEA_zscore.csv"),
-        'token_cache_train': os.path.join(_TOKEN_CACHE_BASE, "LMZ12939", "train"),
-        'token_cache_val':   os.path.join(_TOKEN_CACHE_BASE, "LMZ12939", "val"),
-        'token_aug_train':   os.path.join(_TOKEN_AUG_CACHE_BASE, "LMZ12939", "train"),
-        'token_aug_val':     os.path.join(_TOKEN_AUG_CACHE_BASE, "LMZ12939", "val"),
-    },
+# 通路顺序（与 HYZ15040_ssGSEA_scores_zscore.csv 列顺序一致，共30条）
+_PATHWAY_NAMES = [
+    'tls', 'tgfb', 'emt', 'hypoxia', 'mhc', 'icp', 'ifng', 'toxic',
+    'Glycolysis', 'Inflammatory_Response', 'IL6_JAK_STAT3', 'P53_Pathway',
+    'DNA_Damage_Response', 'Complement', 'Coagulation',
+    'Oxidative_Phosphorylation', 'Reactive_Oxygen_Species', 'Wound_Healing',
+    'Fibrosis', 'MYC_Targets', 'E2F_Targets', 'G2M_Checkpoint',
+    'Mitotic_Spindle', 'Unfolded_Protein_Response', 'mTOR_Signaling',
+    'Interferon_Alpha', 'Angiogenesis', 'Apoptosis', 'TNF_Signaling',
+    'ECM_Organization',
+]
+
+# 各通路PCC值（来自α=0.2最优实验 20260516_134705）
+_PATHWAY_PCC = {
+    'tls': 0.6092, 'tgfb': 0.1925, 'emt': 0.5200, 'hypoxia': 0.4037,
+    'mhc': 0.4279, 'icp': 0.3176, 'ifng': 0.1240, 'toxic': 0.5279,
+    'Glycolysis': 0.5612, 'Inflammatory_Response': 0.2779,
+    'IL6_JAK_STAT3': 0.5487, 'P53_Pathway': 0.4087,
+    'DNA_Damage_Response': 0.3360, 'Complement': 0.3666,
+    'Coagulation': 0.2911, 'Oxidative_Phosphorylation': 0.6803,
+    'Reactive_Oxygen_Species': 0.2678, 'Wound_Healing': 0.5547,
+    'Fibrosis': 0.6556, 'MYC_Targets': 0.6985,
+    'E2F_Targets': 0.5297, 'G2M_Checkpoint': 0.4307,
+    'Mitotic_Spindle': 0.4204, 'Unfolded_Protein_Response': 0.3737,
+    'mTOR_Signaling': 0.4682, 'Interferon_Alpha': 0.0221,
+    'Angiogenesis': 0.4609, 'Apoptosis': 0.2249,
+    'TNF_Signaling': 0.2138, 'ECM_Organization': 0.6844,
 }
 
-# 三折交叉验证配置
-FOLD_CONFIGS = {
-    1: {"train": ["JFX0729", "LMZ12939"], "test": "HYZ15040"},
-    2: {"train": ["HYZ15040", "LMZ12939"], "test": "JFX0729"},
-    3: {"train": ["HYZ15040", "JFX0729"], "test": "LMZ12939"},
-}
+
+# 困难组：PCC极低的通路（显式列出，保证难/易比=4×）
+_HARD_PATHWAYS = {'Interferon_Alpha', 'ifng', 'tgfb', 'Apoptosis', 'TNF_Signaling'}
+
+
+def compute_pathway_weights(method='inverse_pcc'):
+    """根据历史PCC计算通路权重向量（长度30）
+
+    方法1 (inverse_pcc): weight = clip(1/(pcc+eps), 0.5, 2.0) → 归一化均值=1.0
+    方法2 (manual_group): 困难组→2.0, 中等组→1.0, 容易组→0.5 → 归一化均值=1.0, 难/易比=4×
+        困难组（含 Interferon_Alpha, ifng, tgfb, Apoptosis, TNF_Signaling）
+        中等组（0.2 ≤ PCC < 0.5，排除困难组）
+        容易组（PCC ≥ 0.5）
+    """
+    weights = []
+    for pw in _PATHWAY_NAMES:
+        pcc = _PATHWAY_PCC[pw]
+        if method == 'inverse_pcc':
+            w = 1.0 / (pcc + 0.01)
+            w = max(0.5, min(2.0, w))  # clip [0.5, 2.0]
+        elif method == 'manual_group':
+            if pw in _HARD_PATHWAYS:
+                w = 2.0   # 困难组（免疫/炎症通路）
+            elif pcc >= 0.5:
+                w = 0.5   # 容易组
+            else:
+                w = 1.0   # 中等组
+        else:
+            raise ValueError(f"未知 weight_method: {method}")
+        weights.append(w)
+
+    # 归一化使均值 = 1.0
+    weights = np.array(weights, dtype=np.float32)
+    weights = weights / weights.mean()
+    if method == 'inverse_pcc':
+        # inverse_pcc 方法使用 clip 安全阀
+        weights = np.clip(weights, 0.5, 2.0)
+        weights = weights / weights.mean()
+    # manual_group 不做 clip，保证难/易比精确为 4×
+    return weights
+
+
+class PathwayWeightedMSELoss(nn.Module):
+    """通路加权MSE损失
+
+    loss = mean_over_batch( sum_over_pathways( weight_i * (pred_i - target_i)^2 ) / n_pathways )
+    等价于带权重的逐通路MSE，权重均值=1.0保证与标准MSE量级可比。
+    """
+
+    def __init__(self, weights, device='cpu'):
+        super().__init__()
+        # weights: numpy array (n_targets,)
+        w = torch.tensor(weights, dtype=torch.float32).to(device)
+        self.register_buffer('weights', w)
+
+    def forward(self, pred, target):
+        # pred, target: (B, n_targets)
+        sq_err = (pred - target) ** 2            # (B, n_targets)
+        weighted = sq_err * self.weights          # broadcast (n_targets,)
+        return weighted.mean()
+
+
+class PathwayWeightedHuberLoss(nn.Module):
+    """HuberLoss + 通路权重叠加，保持对异常值鲁棒性"""
+    def __init__(self, weights, delta=1.0):
+        super().__init__()
+        self.huber = nn.HuberLoss(delta=delta, reduction='none')
+        self.register_buffer('weights', torch.tensor(weights, dtype=torch.float32))
+
+    def forward(self, pred, target):
+        loss_per_dim = self.huber(pred, target)  # (B, n_targets)
+        weighted = loss_per_dim * self.weights   # 逐通路加权
+        return weighted.mean()
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  MixUp 核心实现
@@ -196,7 +263,7 @@ def generate_model_params_txt(args, n_params, history_df, output_path,
     is_cross = getattr(args, 'cross_patient', False)
     if is_cross:
         fold = getattr(args, 'fold', 1)
-        fc = FOLD_CONFIGS.get(fold, FOLD_CONFIGS[1])
+        fc = get_fold_config(fold)
         mode_str = f"跨患者泛化训练 Fold {fold} ({'+'.join(fc['train'])}→{fc['test']})"
     else:
         mode_str = f"单患者训练 ({getattr(args, 'patient', 'N/A')})"
@@ -250,7 +317,8 @@ def generate_model_params_txt(args, n_params, history_df, output_path,
         ('learning_rate', args.lr,                  'AdamW 初始学习率'),
         ('weight_decay',  args.weight_decay,        'AdamW 权重衰减（L2正则化）'),
         ('optimizer',     'AdamW',                  '解耦正则化'),
-        ('loss',          'HuberLoss',              'δ=1.0，对异常值鲁棒'),
+        ('loss', 'PathwayWeightedHuberLoss' if args.use_pathway_weights else 'HuberLoss',
+         f'通路加权({args.weight_method})' if args.use_pathway_weights else 'δ=1.0，对异常值鲁棒'),
         ('scheduler',     'ReduceLROnPlateau',      f'factor={args.scheduler_factor}, patience={args.scheduler_patience}'),
         ('gradient_clip', args.gradient_clip,        '梯度裁剪最大范数'),
         ('label_noise',   args.label_noise,          '标签高斯噪声（回归版label smoothing）'),
@@ -412,6 +480,13 @@ def build_argparser():
     p.add_argument("--mixup_prob", type=float, default=0.5,
                    help="每个batch应用MixUp的概率")
 
+    # ─── 通路加权损失 (P1-1) ───
+    p.add_argument("--use_pathway_weights", action="store_true", default=False,
+                   help="启用通路加权MSE损失（基于历史PCC反比权重）")
+    p.add_argument("--weight_method", type=str, default="inverse_pcc",
+                   choices=["inverse_pcc", "manual_group"],
+                   help="权重计算方式: inverse_pcc=PCC反比, manual_group=手动三组")
+
     # 模型超参
     p.add_argument("--feature_dim",  type=int,   default=1536)
     p.add_argument("--model_dim",    type=int,   default=1024)
@@ -471,11 +546,11 @@ def main():
             if args.fold == 1:
                 args.dataset_name = "CrossPatient_JFX_LMZ_to_HYZ_UNI_tokens_AugMix"
             else:
-                test_patient = FOLD_CONFIGS[args.fold]["test"]
+                test_patient = get_fold_config(args.fold)["test"]
                 args.dataset_name = f"CrossPatient_Fold{args.fold}_to_{test_patient}_UNI_tokens_AugMix"
 
     # ── 路径设置 ──────────────────────────────────────────────────────────
-    _histogene_dir = str(_PROJECT_ROOT / "histogene")
+    _histogene_dir = get_histogene_dir()
     ckpt_subdir = "HisToGene_UNI_Tokens_AugMix"
     ckpt_dir = Path(_histogene_dir) / "checkpoints" / ckpt_subdir / args.dataset_name
     ckpt_dir.mkdir(parents=True, exist_ok=True)
@@ -489,7 +564,7 @@ def main():
     if args.patient:
         print(f"  模式: 单患者 ({args.patient})")
     else:
-        fold_cfg = FOLD_CONFIGS[args.fold]
+        fold_cfg = get_fold_config(args.fold)
         train_desc = "+".join(fold_cfg["train"])
         test_desc = fold_cfg["test"]
         print(f"  模式: 跨患者 Fold {args.fold} ({train_desc} → {test_desc})")
@@ -502,9 +577,9 @@ def main():
     # ── 构建数据集 ────────────────────────────────────────────────────────
     if args.patient:
         # 单患者模式
-        pc = PATIENT_CONFIG.get(args.patient)
-        if pc is None:
-            print(f"[ERROR] 未知患者: {args.patient}，可选: {list(PATIENT_CONFIG.keys())}")
+        pc = get_patient_paths(args.patient, backbone='uni_tokens_aug')
+        if pc is None or not os.path.isdir(pc.get('train_patches', '')):
+            print(f"[ERROR] 未知患者: {args.patient}，可选: ['HYZ15040', 'JFX0729', 'LMZ12939']")
             sys.exit(1)
 
         # 检查路径
@@ -552,13 +627,13 @@ def main():
 
     else:
         # 跨患者模式：基于 fold 配置动态加载
-        fold_cfg = FOLD_CONFIGS[args.fold]
+        fold_cfg = get_fold_config(args.fold)
         train_patient_names = fold_cfg["train"]
         test_patient_name = fold_cfg["test"]
 
         train_patient_configs = []
         for pname in train_patient_names:
-            pc = PATIENT_CONFIG[pname]
+            pc = get_patient_paths(pname, backbone='uni_tokens_aug')
             for split, patches_key, cache_key, aug_key in [
                 ('train', 'train_patches', 'token_cache_train', 'token_aug_train'),
                 ('val', 'val_patches', 'token_cache_val', 'token_aug_val'),
@@ -585,7 +660,7 @@ def main():
 
         # 测试集：测试患者全部数据（不使用增强）
         test_patient_configs = []
-        pc = PATIENT_CONFIG[test_patient_name]
+        pc = get_patient_paths(test_patient_name, backbone='uni_tokens_aug')
         for split, patches_key, cache_key in [
             ('train', 'train_patches', 'token_cache_train'),
             ('val', 'val_patches', 'token_cache_val'),
@@ -646,7 +721,18 @@ def main():
     print(f"[INFO] 模型参数量: {n_params:,} ({n_params/1e6:.2f}M)")
 
     # ── 损失 / 优化器 / 调度器 ────────────────────────────────────────────
-    criterion = nn.HuberLoss(delta=1.0)
+    if args.use_pathway_weights:
+        pw_weights = compute_pathway_weights(method=args.weight_method)
+        criterion = PathwayWeightedHuberLoss(weights=pw_weights, delta=1.0).to(device)
+        print(f"\n[INFO] 使用 PathwayWeightedHuberLoss (method={args.weight_method})")
+        print(f"[INFO] 权重范围: [{min(pw_weights):.4f}, {max(pw_weights):.4f}], 均值: {np.mean(pw_weights):.4f}")
+        print(f"  通路权重分配:")
+        for i, pw in enumerate(_PATHWAY_NAMES):
+            pcc_val = _PATHWAY_PCC[pw]
+            print(f"    {i+1:2d}. {pw:<30s} PCC={pcc_val:.4f}  weight={pw_weights[i]:.4f}")
+        print()
+    else:
+        criterion = nn.HuberLoss(delta=1.0)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode='min', factor=args.scheduler_factor,

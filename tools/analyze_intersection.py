@@ -1,7 +1,10 @@
 ﻿import os
+import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from config_utils import get_project_root
 
-base_dir = Path(r"d:\AI空间转录病理研究\PFMval_new")
+base_dir = Path(get_project_root())
 
 # 加载三层数据
 val_patches = set()

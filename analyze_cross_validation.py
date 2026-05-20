@@ -11,10 +11,12 @@ import matplotlib
 matplotlib.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei']
 matplotlib.rcParams['axes.unicode_minus'] = False
 
+from config_utils import get_project_root
+
 # ============================================================
 # 配置
 # ============================================================
-BASE_DIR = r"d:\AI空间转录病理研究\PFMval_new"
+BASE_DIR = get_project_root()
 OUTPUT_DIR = os.path.join(BASE_DIR, "histogene", "checkpoints", "results_vis",
                           "CrossValidation_3Fold_Comparison")
 os.makedirs(OUTPUT_DIR, exist_ok=True)

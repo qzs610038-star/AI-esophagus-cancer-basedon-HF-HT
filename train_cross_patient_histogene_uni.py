@@ -41,7 +41,7 @@ from notify_utils import (
     notify_training_complete, notify_training_error,
     check_pause_signal, clear_pause_signal,
 )
-from config_utils import load_config, get_device
+from config_utils import load_config, get_device, get_patient_paths, get_fold_config, get_histogene_dir
 
 # 忽略 Ctrl+C 信号，防止误触中断训练
 signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -50,41 +50,20 @@ signal.signal(signal.SIGINT, signal.SIG_IGN)
 #  数据路径配置（三患者 × 三折交叉验证）
 # ═══════════════════════════════════════════════════════════════════════════
 
-# 基础路径
-_PATCH_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "patch_noov_spilt")
-_SSGSEA_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "ssGSEA_zscore")
-_UNI_CACHE_BASE = str(_PROJECT_ROOT / "uni2h_cache")
-
-# 三患者数据路径配置
-PATIENT_CONFIGS = {
-    "HYZ15040": {
-        "patches_dir": os.path.join(_PATCH_BASE, "HYZ15040_noov_split"),
-        "csv_path": os.path.join(_SSGSEA_BASE, "HYZ15040_ssGSEA_zscore.csv"),
-        "cache_dir": os.path.join(_UNI_CACHE_BASE, "HYZ15040"),
-    },
-    "JFX0729": {
-        "patches_dir": os.path.join(_PATCH_BASE, "JFX0729_noov_split"),
-        "csv_path": os.path.join(_SSGSEA_BASE, "JFX0729_ssGSEA_zscore.csv"),
-        "cache_dir": os.path.join(_UNI_CACHE_BASE, "JFX0729"),
-    },
-    "LMZ12939": {
-        "patches_dir": os.path.join(_PATCH_BASE, "LMZ12939_noov_split"),
-        "csv_path": os.path.join(_SSGSEA_BASE, "LMZ12939_ssGSEA_zscore.csv"),
-        "cache_dir": os.path.join(_UNI_CACHE_BASE, "LMZ12939"),
-    },
-}
-
-# 三折交叉验证配置
-FOLD_CONFIGS = {
-    1: {"train": ["JFX0729", "LMZ12939"], "test": "HYZ15040"},
-    2: {"train": ["HYZ15040", "LMZ12939"], "test": "JFX0729"},
-    3: {"train": ["HYZ15040", "JFX0729"], "test": "LMZ12939"},
-}
+# 患者路径 — 由 config_utils.get_patient_paths() 管理（backbone='uni_cls'）
+def _patient_cfg(patient):
+    """将标准路径格式转为脚本中的 PATIENT_CONFIGS 格式"""
+    pc = get_patient_paths(patient, backbone='uni_cls')
+    return {
+        "patches_dir": os.path.dirname(pc['train_patches']),  # 去掉 train_patches/
+        "csv_path": pc['labels_csv'],
+        "cache_dir": os.path.dirname(pc['token_cache_train']),  # 去掉 train/
+    }
 
 # Fold 1 后向兼容别名（保持旧代码引用不中断）
-_f1_jfx = PATIENT_CONFIGS["JFX0729"]
-_f1_lmz = PATIENT_CONFIGS["LMZ12939"]
-_f1_hyz = PATIENT_CONFIGS["HYZ15040"]
+_f1_jfx = _patient_cfg("JFX0729")
+_f1_lmz = _patient_cfg("LMZ12939")
+_f1_hyz = _patient_cfg("HYZ15040")
 
 JFX_TRAIN_DIR   = os.path.join(_f1_jfx["patches_dir"], "train_patches")
 JFX_VAL_DIR     = os.path.join(_f1_jfx["patches_dir"], "val_patches")
@@ -348,7 +327,7 @@ def build_argparser():
                    help="数据集名称，用于区分训练结果（留空则根据fold自动生成）")
 
     # 输出路径（None 表示自动推导）
-    _histogene_dir = str(_PROJECT_ROOT / "histogene")
+    _histogene_dir = get_histogene_dir()
     p.add_argument("--checkpoint_dir", type=str, default=None,
                    help="checkpoint 保存目录（留空则根据fold自动生成）")
     p.add_argument("--history_csv", type=str, default=None,
@@ -404,10 +383,10 @@ def main():
     args = build_argparser().parse_args()
 
     # ── Fold 配置与自动推导 ───────────────────────────────────────────────
-    fold_cfg = FOLD_CONFIGS[args.fold]
+    fold_cfg = get_fold_config(args.fold)
     train_patient_names = fold_cfg["train"]
     test_patient_name = fold_cfg["test"]
-    _histogene_dir = str(_PROJECT_ROOT / "histogene")
+    _histogene_dir = get_histogene_dir()
 
     # Fold 1 后向兼容：dataset_name / checkpoint_dir / history_csv 保持原始值
     if args.fold == 1:
@@ -444,7 +423,7 @@ def main():
     required_files = []
 
     for pname in all_patients:
-        pcfg = PATIENT_CONFIGS[pname]
+        pcfg = _patient_cfg(pname)
         train_dir = os.path.join(pcfg["patches_dir"], "train_patches")
         val_dir   = os.path.join(pcfg["patches_dir"], "val_patches")
         train_cache = os.path.join(pcfg["cache_dir"], "train")
@@ -490,7 +469,7 @@ def main():
     # ── 确保 UNI 特征缓存就绪 ──────────────────────────────────────────────
     print("\n[INFO] 检查UNI2-h特征缓存...")
     for pname in all_patients:
-        pcfg = PATIENT_CONFIGS[pname]
+        pcfg = _patient_cfg(pname)
         for split in ["train_patches", "val_patches"]:
             patches_dir = os.path.join(pcfg["patches_dir"], split)
             cache_sub = "train" if split == "train_patches" else "val"
@@ -506,7 +485,7 @@ def main():
     # from_multiple_patients 会为每个 config 独立计算坐标统计
     train_patient_configs = []
     for pname in train_patient_names:
-        pcfg = PATIENT_CONFIGS[pname]
+        pcfg = _patient_cfg(pname)
         train_patient_configs.append({
             'patches_dir': os.path.join(pcfg["patches_dir"], "train_patches"),
             'labels_csv': pcfg["csv_path"],
@@ -533,7 +512,7 @@ def main():
     print("=" * 60)
 
     # 测试患者的 train/val 各自独立创建（使用各自的坐标统计）
-    test_pcfg = PATIENT_CONFIGS[test_patient_name]
+    test_pcfg = _patient_cfg(test_patient_name)
     test_patient_configs = [
         {
             'patches_dir': os.path.join(test_pcfg["patches_dir"], "train_patches"),

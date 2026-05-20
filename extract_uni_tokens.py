@@ -24,22 +24,7 @@ from PIL import Image
 
 # ── 复用项目已有的 backbone 加载 ──────────────────────────────
 from uni2h.uni2h_utils import load_uni2h_backbone
-
-# ── 患者数据路径映射 ──────────────────────────────────────────
-PATIENT_PATHS = {
-    "HYZ15040": {
-        "train": "data_new_3ST/patch_noov_spilt/HYZ15040_noov_split/train_patches",
-        "val":   "data_new_3ST/patch_noov_spilt/HYZ15040_noov_split/val_patches",
-    },
-    "JFX0729": {
-        "train": "data_new_3ST/patch_noov_spilt/JFX0729_noov_split/train_patches",
-        "val":   "data_new_3ST/patch_noov_spilt/JFX0729_noov_split/val_patches",
-    },
-    "LMZ12939": {
-        "train": "data_new_3ST/patch_noov_spilt/LMZ12939_noov_split/train_patches",
-        "val":   "data_new_3ST/patch_noov_spilt/LMZ12939_noov_split/val_patches",
-    },
-}
+from config_utils import get_patient_paths
 
 LITE_TOKENS = 65   # CLS(1) + 前64个patch token
 FULL_TOKENS = 265  # CLS(1) + reg(8) + patch(256)
@@ -133,19 +118,18 @@ def main():
     print(f"输出目录: {args.output_dir}")
     print("=" * 60)
 
-    project_root = Path(__file__).resolve().parent
-
     for patient in args.patient:
         print(f"\n{'='*60}")
         print(f"患者: {patient}")
         print(f"{'='*60}")
 
-        paths = PATIENT_PATHS[patient]
+        pc = get_patient_paths(patient, backbone='uni_tokens')
+        splits = [
+            ('train', Path(pc['train_patches']), Path(pc['token_cache_train'])),
+            ('val',   Path(pc['val_patches']),   Path(pc['token_cache_val'])),
+        ]
 
-        for split_name, rel_path in paths.items():
-            patches_dir = project_root / rel_path
-            cache_dir = project_root / args.output_dir / patient / split_name
-
+        for split_name, patches_dir, cache_dir in splits:
             print(f"\n  [{split_name}]")
             print(f"  输入: {patches_dir}")
             print(f"  输出: {cache_dir}")

@@ -390,7 +390,8 @@ def main():
     plt.tight_layout(rect=[0, 0, 1, 0.93])
 
     # 保存
-    output_dir = r"d:\AI空间转录病理研究\PFMval_new\histogene\results_vis"
+    from config_utils import get_project_root
+    output_dir = os.path.join(get_project_root(), "histogene", "results_vis")
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, "model_comparison_report.png")
     fig.savefig(output_path, bbox_inches="tight", facecolor="white")

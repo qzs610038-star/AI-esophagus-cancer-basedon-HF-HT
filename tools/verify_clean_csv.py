@@ -1,10 +1,11 @@
 ﻿import sys
-sys.path.insert(0, r"d:\AI空间转录病理研究\PFMval_new")
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from histogene.dataset_uni import HisToGeneUNIDataset
-from pathlib import Path
+from config_utils import get_project_root
 
-base_dir = Path(r"d:\AI空间转录病理研究\PFMval_new")
+base_dir = Path(get_project_root())
 
 print("=" * 70)
 print("验证清洁CSV是否能加载正确的样本数")

@@ -3,7 +3,10 @@ import sys
 from pathlib import Path
 import pandas as pd
 
-base_dir = Path(r"d:\AI空间转录病理研究\PFMval_new")
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from config_utils import get_project_root
+
+base_dir = Path(get_project_root())
 
 # 加载val_patches
 val_patches_dir = base_dir / "data_new_3ST" / "patch_noov_spilt" / "HYZ15040_noov_split" / "val_patches"

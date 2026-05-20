@@ -15,8 +15,10 @@ from scipy.stats import pearsonr
 import warnings
 warnings.filterwarnings('ignore')
 
+from config_utils import get_project_root
+
 # ============== 配置 ==============
-PROJECT_ROOT = r"D:\AI空间转录病理研究\PFMval_new"
+PROJECT_ROOT = get_project_root()
 HISTOGENE_DIR = os.path.join(PROJECT_ROOT, "histogene")
 OUTPUT_DIR = os.path.join(HISTOGENE_DIR, "results_vis", "三数据集对比")
 

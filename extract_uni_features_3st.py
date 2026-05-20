@@ -9,12 +9,12 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from uni2h.uni2h_utils import load_uni2h_backbone, extract_and_cache_features
-from config_utils import get_hf_config, get_device
+from config_utils import get_hf_config, get_device, get_patient_paths
 
 def main():
     device = get_device()
     print(f"设备: {device}")
-    
+
     # 加载UNI2-h模型（只加载一次）
     hf_config = get_hf_config()
     print("正在加载 UNI2-h 模型...")
@@ -22,32 +22,19 @@ def main():
         token=hf_config.get('token'), device=device
     )
     print(f"UNI2-h 模型已加载，特征维度: {feat_dim}")
-    
-    # 定义三个数据集的路径
-    datasets = [
-        {
-            'name': 'HYZ15040',
-            'train_patches': PROJECT_ROOT / 'data_new_3ST' / 'patch_noov_spilt' / 'HYZ15040_noov_split' / 'train_patches',
-            'val_patches': PROJECT_ROOT / 'data_new_3ST' / 'patch_noov_spilt' / 'HYZ15040_noov_split' / 'val_patches',
-            'train_cache': PROJECT_ROOT / 'uni2h_cache' / 'HYZ15040' / 'train',
-            'val_cache': PROJECT_ROOT / 'uni2h_cache' / 'HYZ15040' / 'val',
-        },
-        {
-            'name': 'JFX0729',
-            'train_patches': PROJECT_ROOT / 'data_new_3ST' / 'patch_noov_spilt' / 'JFX0729_noov_split' / 'train_patches',
-            'val_patches': PROJECT_ROOT / 'data_new_3ST' / 'patch_noov_spilt' / 'JFX0729_noov_split' / 'val_patches',
-            'train_cache': PROJECT_ROOT / 'uni2h_cache' / 'JFX0729' / 'train',
-            'val_cache': PROJECT_ROOT / 'uni2h_cache' / 'JFX0729' / 'val',
-        },
-        {
-            'name': 'LMZ12939',
-            'train_patches': PROJECT_ROOT / 'data_new_3ST' / 'patch_noov_spilt' / 'LMZ12939_noov_split' / 'train_patches',
-            'val_patches': PROJECT_ROOT / 'data_new_3ST' / 'patch_noov_spilt' / 'LMZ12939_noov_split' / 'val_patches',
-            'train_cache': PROJECT_ROOT / 'uni2h_cache' / 'LMZ12939' / 'train',
-            'val_cache': PROJECT_ROOT / 'uni2h_cache' / 'LMZ12939' / 'val',
-        },
-    ]
-    
+
+    # 从 config_utils 获取三个患者的路径
+    datasets = []
+    for p in ['HYZ15040', 'JFX0729', 'LMZ12939']:
+        pc = get_patient_paths(p, backbone='uni_cls')
+        datasets.append({
+            'name': p,
+            'train_patches': Path(pc['train_patches']),
+            'val_patches': Path(pc['val_patches']),
+            'train_cache': Path(pc['token_cache_train']),
+            'val_cache': Path(pc['token_cache_val']),
+        })
+
     for ds in datasets:
         print(f"\n{'='*60}")
         print(f"处理数据集: {ds['name']}")

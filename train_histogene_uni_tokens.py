@@ -41,49 +41,15 @@ from notify_utils import (
     notify_training_complete, notify_training_error,
     check_pause_signal, clear_pause_signal,
 )
-from config_utils import load_config, get_device
+from config_utils import load_config, get_device, get_patient_paths, get_fold_config, get_histogene_dir
 
 # 忽略 Ctrl+C 信号，防止误触中断训练
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  数据路径配置
+#  数据路径配置 — 统一由 config_utils.get_patient_paths() 管理
+#  本地使用默认路径，服务器通过 config.yaml 覆盖
 # ═══════════════════════════════════════════════════════════════════════════
-
-_PATCH_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "patch_noov_spilt")
-_SSGSEA_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "ssGSEA_zscore")
-_TOKEN_CACHE_BASE = str(_PROJECT_ROOT / "uni2h_cache_tokens")
-
-PATIENT_CONFIG = {
-    'HYZ15040': {
-        'train_patches': os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "train_patches"),
-        'val_patches':   os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "val_patches"),
-        'labels_csv':    os.path.join(_SSGSEA_BASE, "HYZ15040_ssGSEA_zscore.csv"),
-        'token_cache_train': os.path.join(_TOKEN_CACHE_BASE, "HYZ15040", "train"),
-        'token_cache_val':   os.path.join(_TOKEN_CACHE_BASE, "HYZ15040", "val"),
-    },
-    'JFX0729': {
-        'train_patches': os.path.join(_PATCH_BASE, "JFX0729_noov_split", "train_patches"),
-        'val_patches':   os.path.join(_PATCH_BASE, "JFX0729_noov_split", "val_patches"),
-        'labels_csv':    os.path.join(_SSGSEA_BASE, "JFX0729_ssGSEA_zscore.csv"),
-        'token_cache_train': os.path.join(_TOKEN_CACHE_BASE, "JFX0729", "train"),
-        'token_cache_val':   os.path.join(_TOKEN_CACHE_BASE, "JFX0729", "val"),
-    },
-    'LMZ12939': {
-        'train_patches': os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "train_patches"),
-        'val_patches':   os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "val_patches"),
-        'labels_csv':    os.path.join(_SSGSEA_BASE, "LMZ12939_ssGSEA_zscore.csv"),
-        'token_cache_train': os.path.join(_TOKEN_CACHE_BASE, "LMZ12939", "train"),
-        'token_cache_val':   os.path.join(_TOKEN_CACHE_BASE, "LMZ12939", "val"),
-    },
-}
-
-# 三折交叉验证配置
-FOLD_CONFIGS = {
-    1: {"train": ["JFX0729", "LMZ12939"], "test": "HYZ15040"},
-    2: {"train": ["HYZ15040", "LMZ12939"], "test": "JFX0729"},
-    3: {"train": ["HYZ15040", "JFX0729"], "test": "LMZ12939"},
-}
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  辅助函数
@@ -154,7 +120,7 @@ def generate_model_params_txt(args, n_params, history_df, output_path,
     is_cross = getattr(args, 'cross_patient', False)
     if is_cross:
         fold = getattr(args, 'fold', 1)
-        fc = FOLD_CONFIGS.get(fold, FOLD_CONFIGS[1])
+        fc = get_fold_config(fold)
         mode_str = f"跨患者泛化训练 Fold {fold} ({'+'.join(fc['train'])}→{fc['test']})"
     else:
         mode_str = f"单患者训练 ({getattr(args, 'patient', 'N/A')})"
@@ -387,11 +353,11 @@ def main():
             if args.fold == 1:
                 args.dataset_name = "CrossPatient_JFX_LMZ_to_HYZ_UNI_tokens"
             else:
-                test_patient = FOLD_CONFIGS[args.fold]["test"]
+                test_patient = get_fold_config(args.fold)["test"]
                 args.dataset_name = f"CrossPatient_Fold{args.fold}_to_{test_patient}_UNI_tokens"
 
     # ── 路径设置 ──────────────────────────────────────────────────────────
-    _histogene_dir = str(_PROJECT_ROOT / "histogene")
+    _histogene_dir = get_histogene_dir()
     ckpt_dir = Path(_histogene_dir) / "checkpoints" / args.dataset_name
     ckpt_dir.mkdir(parents=True, exist_ok=True)
     history_csv = os.path.join(_histogene_dir, f"training_history_{args.dataset_name}.csv")
@@ -404,7 +370,7 @@ def main():
     if args.patient:
         print(f"  模式: 单患者 ({args.patient})")
     else:
-        fold_cfg = FOLD_CONFIGS[args.fold]
+        fold_cfg = get_fold_config(args.fold)
         train_desc = "+".join(fold_cfg["train"])
         test_desc = fold_cfg["test"]
         print(f"  模式: 跨患者 Fold {args.fold} ({train_desc} → {test_desc})")
@@ -415,9 +381,9 @@ def main():
     # ── 构建数据集 ────────────────────────────────────────────────────────
     if args.patient:
         # 单患者模式
-        pc = PATIENT_CONFIG.get(args.patient)
-        if pc is None:
-            print(f"[ERROR] 未知患者: {args.patient}，可选: {list(PATIENT_CONFIG.keys())}")
+        pc = get_patient_paths(args.patient, backbone='uni_tokens')
+        if pc is None or not os.path.isdir(pc.get('train_patches', '')):
+            print(f"[ERROR] 未知患者: {args.patient}，可选: ['HYZ15040', 'JFX0729', 'LMZ12939']")
             sys.exit(1)
 
         # 检查路径
@@ -457,13 +423,13 @@ def main():
 
     else:
         # 跨患者模式：基于 fold 配置动态加载
-        fold_cfg = FOLD_CONFIGS[args.fold]
+        fold_cfg = get_fold_config(args.fold)
         train_patient_names = fold_cfg["train"]
         test_patient_name = fold_cfg["test"]
 
         train_patient_configs = []
         for pname in train_patient_names:
-            pc = PATIENT_CONFIG[pname]
+            pc = get_patient_paths(pname, backbone='uni_tokens')
             for split, patches_key, cache_key in [
                 ('train', 'train_patches', 'token_cache_train'),
                 ('val', 'val_patches', 'token_cache_val'),
@@ -484,7 +450,7 @@ def main():
 
         # 测试集：测试患者全部数据
         test_patient_configs = []
-        pc = PATIENT_CONFIG[test_patient_name]
+        pc = get_patient_paths(test_patient_name, backbone='uni_tokens')
         for split, patches_key, cache_key in [
             ('train', 'train_patches', 'token_cache_train'),
             ('val', 'val_patches', 'token_cache_val'),

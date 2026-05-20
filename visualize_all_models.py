@@ -47,7 +47,9 @@ _setup_font()
 # ─────────────────────────────────────────────
 # 全局配置
 # ─────────────────────────────────────────────
-BASE_DIR = r"d:\AI空间转录病理研究\PFMval_new"
+from config_utils import get_project_root
+
+BASE_DIR = get_project_root()
 OUTPUT_DIR = os.path.join(BASE_DIR, "histogene", "checkpoints", "results_vis", "AllModels_comparison")
 
 # 5 色方案

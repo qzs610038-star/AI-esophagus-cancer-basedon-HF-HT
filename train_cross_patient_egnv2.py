@@ -45,7 +45,7 @@ from notify_utils import (
     notify_training_complete, notify_training_error,
     check_pause_signal, clear_pause_signal,
 )
-from config_utils import load_config, get_device
+from config_utils import load_config, get_device, get_patient_paths, get_egnv2_dir
 
 # 忽略 Ctrl+C 信号，防止误触中断训练
 signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -54,24 +54,20 @@ signal.signal(signal.SIGINT, signal.SIG_IGN)
 #  数据路径配置
 # ═══════════════════════════════════════════════════════════════════════════
 
-# 基础路径
-_PATCH_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "patch_noov_spilt")
-_SSGSEA_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "ssGSEA_zscore")
+# 患者路径 — 由 config_utils.get_patient_paths() 管理
+_jfx = get_patient_paths('JFX0729')
+_lmz = get_patient_paths('LMZ12939')
+_hyz = get_patient_paths('HYZ15040')
 
-# JFX0729
-JFX_TRAIN_DIR = os.path.join(_PATCH_BASE, "JFX0729_noov_split", "train_patches")
-JFX_VAL_DIR   = os.path.join(_PATCH_BASE, "JFX0729_noov_split", "val_patches")
-JFX_CSV       = os.path.join(_SSGSEA_BASE, "JFX0729_ssGSEA_zscore.csv")
-
-# LMZ12939
-LMZ_TRAIN_DIR = os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "train_patches")
-LMZ_VAL_DIR   = os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "val_patches")
-LMZ_CSV       = os.path.join(_SSGSEA_BASE, "LMZ12939_ssGSEA_zscore.csv")
-
-# HYZ15040（测试集）
-HYZ_TRAIN_DIR = os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "train_patches")
-HYZ_VAL_DIR   = os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "val_patches")
-HYZ_CSV       = os.path.join(_SSGSEA_BASE, "HYZ15040_ssGSEA_zscore.csv")
+JFX_TRAIN_DIR = _jfx['train_patches']
+JFX_VAL_DIR   = _jfx['val_patches']
+JFX_CSV       = _jfx['labels_csv']
+LMZ_TRAIN_DIR = _lmz['train_patches']
+LMZ_VAL_DIR   = _lmz['val_patches']
+LMZ_CSV       = _lmz['labels_csv']
+HYZ_TRAIN_DIR = _hyz['train_patches']
+HYZ_VAL_DIR   = _hyz['val_patches']
+HYZ_CSV       = _hyz['labels_csv']
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -264,7 +260,7 @@ def build_argparser():
                    help="数据集名称，用于区分训练结果")
 
     # 输出路径
-    _egnv2_dir = str(_PROJECT_ROOT / "egnv2")
+    _egnv2_dir = get_egnv2_dir()
     p.add_argument("--checkpoint_dir", type=str,
                    default=os.path.join(_egnv2_dir, "checkpoints", "CrossPatient_JFX_LMZ_to_HYZ"),
                    help="checkpoint 保存目录")

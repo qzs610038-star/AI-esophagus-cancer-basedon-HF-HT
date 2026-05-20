@@ -45,75 +45,34 @@ from notify_utils import (
     notify_training_complete, notify_training_error,
     check_pause_signal, clear_pause_signal,
 )
-from config_utils import load_config, get_device
+from config_utils import load_config, get_device, get_patient_paths, get_fold_config, get_output_dir, get_histogene_dir
 
 # 忽略 Ctrl+C 信号，防止误触中断训练
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  数据路径配置
+#  数据路径配置 — 统一由 config_utils.get_patient_paths() 管理
+#  本地使用默认路径，服务器通过 config.yaml 覆盖
 # ═══════════════════════════════════════════════════════════════════════════
 
-_PATCH_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "patch_noov_spilt")
-_SSGSEA_BASE = str(_PROJECT_ROOT / "data_new_3ST" / "ssGSEA_zscore")
-_TOKEN_CACHE_BASE = str(_PROJECT_ROOT / "uni2h_cache_tokens")
+def _gat_patient_config(patient):
+    """将 get_patient_paths() 输出转为 GAT 特有格式"""
+    pc = get_patient_paths(patient, backbone='uni_tokens')
+    return {
+        'patch_dirs': [pc['train_patches'], pc['val_patches']],
+        'csv_path': pc['labels_csv'],
+        'cache_dirs': [pc['token_cache_train'], pc['token_cache_val']],
+    }
 
-# 每个患者的完整配置（含train+val两个split）
-PATIENT_CONFIG = {
-    'HYZ15040': {
-        'patch_dirs': [
-            os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "train_patches"),
-            os.path.join(_PATCH_BASE, "HYZ15040_noov_split", "val_patches"),
-        ],
-        'csv_path': os.path.join(_SSGSEA_BASE, "HYZ15040_ssGSEA_zscore.csv"),
-        'cache_dirs': [
-            os.path.join(_TOKEN_CACHE_BASE, "HYZ15040", "train"),
-            os.path.join(_TOKEN_CACHE_BASE, "HYZ15040", "val"),
-        ],
-    },
-    'JFX0729': {
-        'patch_dirs': [
-            os.path.join(_PATCH_BASE, "JFX0729_noov_split", "train_patches"),
-            os.path.join(_PATCH_BASE, "JFX0729_noov_split", "val_patches"),
-        ],
-        'csv_path': os.path.join(_SSGSEA_BASE, "JFX0729_ssGSEA_zscore.csv"),
-        'cache_dirs': [
-            os.path.join(_TOKEN_CACHE_BASE, "JFX0729", "train"),
-            os.path.join(_TOKEN_CACHE_BASE, "JFX0729", "val"),
-        ],
-    },
-    'LMZ12939': {
-        'patch_dirs': [
-            os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "train_patches"),
-            os.path.join(_PATCH_BASE, "LMZ12939_noov_split", "val_patches"),
-        ],
-        'csv_path': os.path.join(_SSGSEA_BASE, "LMZ12939_ssGSEA_zscore.csv"),
-        'cache_dirs': [
-            os.path.join(_TOKEN_CACHE_BASE, "LMZ12939", "train"),
-            os.path.join(_TOKEN_CACHE_BASE, "LMZ12939", "val"),
-        ],
-    },
-}
-
-# 三折交叉验证配置
-FOLD_CONFIGS = {
-    'fold1': {
-        'train_patients': ['JFX0729', 'LMZ12939'],
-        'test_patient': 'HYZ15040',
-        'description': 'JFX+LMZ → HYZ'
-    },
-    'fold2': {
-        'train_patients': ['HYZ15040', 'LMZ12939'],
-        'test_patient': 'JFX0729',
-        'description': 'HYZ+LMZ → JFX'
-    },
-    'fold3': {
-        'train_patients': ['HYZ15040', 'JFX0729'],
-        'test_patient': 'LMZ12939',
-        'description': 'HYZ+JFX → LMZ'
-    },
-}
-
+def _gat_fold_config(fold_name):
+    """将 GAT 的 'fold1'/'fold2'/'fold3' 转为标准 fold 配置"""
+    fold_num = int(fold_name.replace('fold', ''))
+    fc = get_fold_config(fold_num)
+    return {
+        'train_patients': fc['train'],
+        'test_patient': fc['test'],
+        'description': '+'.join(fc['train']) + ' → ' + fc['test'],
+    }
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  训练与评估函数
@@ -389,7 +348,7 @@ def save_training_params(args, fold_name, n_params, output_path):
     params = {
         'model': 'HisToGene-UNI-Tokens-GAT',
         'fold': fold_name,
-        'fold_description': FOLD_CONFIGS.get(fold_name, {}).get('description', ''),
+        'fold_description': _gat_fold_config(fold_name).get('description', fold_name),
         'total_parameters': n_params,
         'gat_hidden': args.gat_hidden,
         'gat_heads': args.gat_heads,
@@ -448,7 +407,7 @@ def save_per_pathway_pcc_table(preds, labels, target_cols, output_path):
 
 def train_single_fold(args, fold_name: str, device: torch.device):
     """训练单个fold"""
-    fold_cfg = FOLD_CONFIGS[fold_name]
+    fold_cfg = _gat_fold_config(fold_name)
     train_patients = fold_cfg['train_patients']
     test_patient = fold_cfg['test_patient']
 
@@ -460,7 +419,7 @@ def train_single_fold(args, fold_name: str, device: torch.device):
     # ── 构建数据集 ─────────────────────────────────────────────────────
     train_configs = []
     for pname in train_patients:
-        pc = PATIENT_CONFIG[pname]
+        pc = _gat_patient_config(pname)
         train_configs.append({
             'patient_name': pname,
             'patch_dirs': pc['patch_dirs'],
@@ -475,11 +434,12 @@ def train_single_fold(args, fold_name: str, device: torch.device):
         split='train'
     )
 
+    test_pc = _gat_patient_config(test_patient)
     test_configs = [{
         'patient_name': test_patient,
-        'patch_dirs': PATIENT_CONFIG[test_patient]['patch_dirs'],
-        'csv_path': PATIENT_CONFIG[test_patient]['csv_path'],
-        'cache_dirs': PATIENT_CONFIG[test_patient]['cache_dirs'],
+        'patch_dirs': test_pc['patch_dirs'],
+        'csv_path': test_pc['csv_path'],
+        'cache_dirs': test_pc['cache_dirs'],
     }]
 
     val_dataset = MultiSplitGraphTokenDataset(
@@ -519,7 +479,7 @@ def train_single_fold(args, fold_name: str, device: torch.device):
 
     # ── 输出目录 ──────────────────────────────────────────────────────
     dataset_name = f"GAT_{fold_name}_{'+'.join(train_patients)}_to_{test_patient}"
-    ckpt_dir = _PROJECT_ROOT / "checkpoints" / "HisToGene_UNI_Tokens_GAT" / fold_name
+    ckpt_dir = Path(get_output_dir(f"HisToGene_UNI_Tokens_GAT/{fold_name}"))
     ckpt_dir.mkdir(parents=True, exist_ok=True)
 
     best_ckpt_path = ckpt_dir / f"best_model_{fold_name}.pt"
@@ -737,7 +697,7 @@ def train_single_fold(args, fold_name: str, device: torch.device):
         final_pcc = final_metrics['pcc']
 
         # 可视化输出目录（时间戳隔离）
-        vis_base = _PROJECT_ROOT / "histogene" / "checkpoints" / "results_vis"
+        vis_base = Path(get_histogene_dir()) / "checkpoints" / "results_vis"
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         actual_vis_dir = vis_base / f"{dataset_name}_{timestamp}"
         actual_vis_dir.mkdir(parents=True, exist_ok=True)
@@ -807,7 +767,7 @@ def regenerate_visualization(fold_name: str):
     读取 training_history CSV 和 predictions CSV（如存在），
     生成训练曲线图并保存到 checkpoints 目录。
     """
-    ckpt_dir = _PROJECT_ROOT / "checkpoints" / "HisToGene_UNI_Tokens_GAT" / fold_name
+    ckpt_dir = Path(get_output_dir(f"HisToGene_UNI_Tokens_GAT/{fold_name}"))
 
     # 查找 history CSV
     history_csv_path = ckpt_dir / f"training_history_{fold_name}.csv"
@@ -822,7 +782,7 @@ def regenerate_visualization(fold_name: str):
 
     # 查找 predictions CSV（可能在 vis 目录下）
     predictions_csv_path = None
-    vis_base = _PROJECT_ROOT / "histogene" / "checkpoints" / "results_vis"
+    vis_base = Path(get_histogene_dir()) / "checkpoints" / "results_vis"
     if vis_base.is_dir():
         for d in sorted(vis_base.iterdir(), reverse=True):
             if d.is_dir() and "GAT" in d.name and fold_name in d.name:

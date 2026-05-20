@@ -68,6 +68,7 @@
 1. **暂停训练**：创建 `PAUSE_TRAINING` 空文件触发（PowerShell：`New-Item -Path 'PAUSE_TRAINING' -ItemType File -Force`）
 2. **断点续训**：`--resume <checkpoint_path>` 参数
 3. **通知方式**：plyer桌面Toast弹窗，禁用Ctrl+C中断
+4. **训练监控节约原则**：委派子代理执行训练时，只需观察前1-2轮epoch输出确认训练正常启动（loss正常下降、无报错），随后立即返回，不持续跟踪整个训练过程。训练完成由用户主动告知结果，以节省token消耗
 
 ---
 

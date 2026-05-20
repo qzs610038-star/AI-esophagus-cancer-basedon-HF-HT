@@ -1,0 +1,38 @@
+# PFMval EGN-v2 / GAT 训练环境
+# 用法: conda env create -f env_egnv2.yml
+# 激活: conda activate pfmval_egnv2
+#
+# 支持: EGN-v2, EGN-v2+UNI, HisToGene-UNI-Tokens-GAT
+# 额外依赖: PyTorch Geometric (图神经网络)
+
+name: pfmval_egnv2
+
+channels:
+  - pytorch
+  - pyg
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - pyyaml
+  - tqdm
+  - pillow
+  - opencv
+  - einops
+  - pytorch::pytorch>=2.0
+  - pytorch::torchvision
+  - conda-forge::pytorch-cuda>=12.1  # 根据服务器 CUDA 版本调整
+  - pyg::pyg
+  - pyg::pytorch-scatter
+  - pyg::pytorch-sparse
+  - pip:
+    - transformers
+    - timm
+    - huggingface_hub

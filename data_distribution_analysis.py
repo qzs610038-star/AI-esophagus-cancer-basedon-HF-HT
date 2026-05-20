@@ -36,7 +36,8 @@ plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'Arial Unicode M
 plt.rcParams['axes.unicode_minus'] = False
 
 # 输出目录
-OUTPUT_DIR = r'd:\AI空间转录病理研究\PFMval_new\analysis_output'
+from config_utils import get_project_root
+OUTPUT_DIR = os.path.join(get_project_root(), 'analysis_output')
 
 
 def ensure_output_dir():
@@ -423,7 +424,7 @@ def main():
     ensure_output_dir()
     
     # 数据文件路径
-    data_file = r'd:\AI空间转录病理研究\PFMval_new\HYZ15040_ssGSEA_scores.csv'
+    data_file = os.path.join(get_project_root(), 'HYZ15040_ssGSEA_scores.csv')
     
     # 加载数据
     df = load_data(data_file)

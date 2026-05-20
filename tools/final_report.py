@@ -1,7 +1,8 @@
 ﻿import pandas as pd
 import os
+from config_utils import get_project_root
 
-BASE_DIR = r'd:\AI空间转录病理研究\PFMval_new'
+BASE_DIR = get_project_root()
 
 # 从visualize_all_models.py脚本收集的数据
 script_data_single = {

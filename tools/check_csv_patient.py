@@ -1,7 +1,10 @@
 ﻿import pandas as pd
+import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from config_utils import get_project_root
 
-base_dir = Path(r"d:\AI空间转录病理研究\PFMval_new")
+base_dir = Path(get_project_root())
 
 csv_file = base_dir / "data_new_3ST" / "ssGSEA_zscore" / "HYZ15040_ssGSEA_zscore.csv"
 print(f"Reading: {csv_file}")

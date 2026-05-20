@@ -1,7 +1,10 @@
 ﻿import os
+import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from config_utils import get_project_root
 
-base_dir = r"d:\AI空间转录病理研究\PFMval_new"
+base_dir = Path(get_project_root())
 
 # 1. 列出val_patches前20个PNG文件名
 val_patches_dir = Path(base_dir) / "data_new_3ST" / "patch_noov_spilt" / "HYZ15040_noov_split" / "val_patches"

@@ -6,12 +6,12 @@ import os
 from pathlib import Path
 
 # 加入项目路径
-sys.path.insert(0, r"d:\AI空间转录病理研究\PFMval_new")
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from histogene.dataset_uni import HisToGeneUNIDataset
-from config_utils import load_config, get_data_paths
+from config_utils import load_config, get_data_paths, get_project_root
 
-base_dir = Path(r"d:\AI空间转录病理研究\PFMval_new")
+base_dir = Path(get_project_root())
 
 print("=" * 70)
 print("模拟train_uni.py的加载逻辑")

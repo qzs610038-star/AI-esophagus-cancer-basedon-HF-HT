@@ -4,8 +4,10 @@ import shutil
 import os
 from datetime import datetime
 
+from config_utils import get_project_root
+
 # ─── 项目路径 ────────────────────────────────────────────────────────────────
-PROJECT_ROOT = r"d:\AI空间转录病理研究\PFMval_new"
+PROJECT_ROOT = get_project_root()
 HISTOGENE_DIR = os.path.join(PROJECT_ROOT, "histogene")
 RESULTS_VIS_DIR = os.path.join(HISTOGENE_DIR, "checkpoints", "results_vis")
 

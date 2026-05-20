@@ -1,0 +1,35 @@
+# PFMval HisToGene 系列训练环境
+# 用法: conda env create -f env_histogene.yml
+# 激活: conda activate pfmval_histogene
+#
+# 支持: HisToGene, HisToGene-UNI, HisToGene-UNI-Tokens, UNI/Virchow2/OmiCLIP 特征提取
+
+name: pfmval_histogene
+
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - pyyaml
+  - tqdm
+  - pillow
+  - opencv
+  - einops
+  - pytorch::pytorch>=2.0
+  - pytorch::torchvision
+  - conda-forge::pytorch-cuda>=12.1  # 根据服务器 CUDA 版本调整
+  - pip:
+    - transformers
+    - timm
+    - albumentations
+    - huggingface_hub
+    - open_clip_torch  # OmiCLIP 依赖

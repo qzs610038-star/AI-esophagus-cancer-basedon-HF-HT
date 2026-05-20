@@ -258,6 +258,283 @@ def get_device(config=None):
 
 
 # ============================================================
+# 路径配置扩展（服务器迁移用）
+# ============================================================
+
+# Backbone → (config_key, default_cache_dir, default_aug_dir)
+_BACKBONE_CACHE_MAP = {
+    'uni_cls':         ('uni_cls',         'uni2h_cache',           None),
+    'uni_tokens':      ('uni_tokens',      'uni2h_cache_tokens',    'uni2h_cache_tokens_aug'),
+    'uni_tokens_aug':  ('uni_tokens_aug',  'uni2h_cache_tokens',    'uni2h_cache_tokens_aug'),
+    'omiclip':         ('omiclip',         'omiclip_cache',         None),
+    'virchow2':        ('virchow2',        'virchow2_cache_tokens', None),
+}
+
+
+def get_patient_paths(patient, backbone=None, config=None):
+    """
+    获取单个患者的完整数据路径字典。
+
+    路径解析优先级（每级未配置时自动 fallback 到本地默认值）：
+      1. config.yaml patients.{patient}.patches_dir / labels_path（绝对路径覆盖）
+      2. config.yaml paths.patch_base / ssgsea_base + 患者 subdir
+      3. 项目根目录下的默认路径（与迁移前硬编码行为完全一致）
+
+    Args:
+        patient (str): 患者 ID（HYZ15040 / JFX0729 / LMZ12939）
+        backbone (str or None): 特征缓存类型，None 表示不需要缓存路径
+        config (dict or None): 已加载的配置，None 时自动调用 load_config()
+
+    Returns:
+        dict: {
+            'train_patches': str,        # 训练集补丁目录
+            'val_patches': str,          # 验证集补丁目录
+            'labels_csv': str,           # 标签 CSV 文件路径
+            # --- 以下仅在 backbone 非 None 时存在 ---
+            'token_cache_train': str,    # backbone token 缓存训练集
+            'token_cache_val': str,      # backbone token 缓存验证集
+            'cache_train': str,          # 别名（兼容 omiclip 命名）
+            'cache_val': str,            # 别名
+            # --- 以下仅在 backbone='uni_tokens_aug' 时存在 ---
+            'token_aug_train': str,      # AugMix 增强缓存训练集
+            'token_aug_val': str,        # AugMix 增强缓存验证集
+        }
+    """
+    if config is None:
+        config = load_config()
+
+    project_root = get_project_root()
+    paths_cfg = config.get('paths', {}) or {}
+    patients_cfg = config.get('patients', {}) or {}
+    patient_cfg = patients_cfg.get(patient, {}) or {}
+
+    # ── 补丁目录 ──
+    if patient_cfg.get('patches_dir'):
+        patch_root = resolve_path(patient_cfg['patches_dir'], project_root)
+        train_patches = os.path.join(patch_root, 'train_patches')
+        val_patches = os.path.join(patch_root, 'val_patches')
+    elif paths_cfg.get('patch_base'):
+        patch_base = resolve_path(paths_cfg['patch_base'], project_root)
+        subdir = patient_cfg.get('patches_subdir', f'{patient}_noov_split')
+        train_patches = os.path.join(patch_base, subdir, 'train_patches')
+        val_patches = os.path.join(patch_base, subdir, 'val_patches')
+    else:
+        # 本地默认（与现有硬编码一致）
+        patch_base = os.path.join(project_root, 'data_new_3ST', 'patch_noov_spilt')
+        subdir = patient_cfg.get('patches_subdir', f'{patient}_noov_split')
+        train_patches = os.path.join(patch_base, subdir, 'train_patches')
+        val_patches = os.path.join(patch_base, subdir, 'val_patches')
+
+    # ── 标签 CSV ──
+    if patient_cfg.get('labels_path'):
+        labels_csv = resolve_path(patient_cfg['labels_path'], project_root)
+    elif paths_cfg.get('ssgsea_base'):
+        ssgsea_base = resolve_path(paths_cfg['ssgsea_base'], project_root)
+        csv_name = patient_cfg.get('labels_csv', f'{patient}_ssGSEA_zscore.csv')
+        labels_csv = os.path.join(ssgsea_base, csv_name)
+    else:
+        ssgsea_base = os.path.join(project_root, 'data_new_3ST', 'ssGSEA_zscore')
+        csv_name = patient_cfg.get('labels_csv', f'{patient}_ssGSEA_zscore.csv')
+        labels_csv = os.path.join(ssgsea_base, csv_name)
+
+    result = {
+        'train_patches': train_patches,
+        'val_patches': val_patches,
+        'labels_csv': labels_csv,
+    }
+
+    # ── Backbone 特征缓存 ──
+    if backbone:
+        cache_key, default_cache_dir, default_aug_dir = _BACKBONE_CACHE_MAP.get(
+            backbone, (backbone, f'{backbone}_cache', None)
+        )
+
+        caches_cfg = paths_cfg.get('caches', {}) or {}
+
+        if caches_cfg.get(cache_key):
+            cache_base = resolve_path(caches_cfg[cache_key], project_root)
+        else:
+            cache_base = os.path.join(project_root, default_cache_dir)
+
+        result['token_cache_train'] = os.path.join(cache_base, patient, 'train')
+        result['token_cache_val'] = os.path.join(cache_base, patient, 'val')
+        result['cache_train'] = result['token_cache_train']
+        result['cache_val'] = result['token_cache_val']
+
+        # AugMix 额外缓存目录
+        if backbone == 'uni_tokens_aug':
+            aug_key = 'uni_tokens_aug'
+            if caches_cfg.get(aug_key):
+                aug_base = resolve_path(caches_cfg[aug_key], project_root)
+            else:
+                aug_base = os.path.join(project_root, default_aug_dir or 'uni2h_cache_tokens_aug')
+            result['token_aug_train'] = os.path.join(aug_base, patient, 'train')
+            result['token_aug_val'] = os.path.join(aug_base, patient, 'val')
+
+    return result
+
+
+def get_all_patient_configs(patients=None, backbone=None, config=None):
+    """
+    批量获取多患者路径配置。
+
+    Args:
+        patients (list or None): 患者 ID 列表，None 时默认三患者
+        backbone (str or None): 传递给 get_patient_paths
+        config (dict or None): 已加载的配置
+
+    Returns:
+        dict: {patient_id: path_dict}
+    """
+    if patients is None:
+        patients = ['HYZ15040', 'JFX0729', 'LMZ12939']
+    return {p: get_patient_paths(p, backbone=backbone, config=config) for p in patients}
+
+
+def get_fold_config(fold, config=None):
+    """
+    获取三折交叉验证配置。
+
+    Args:
+        fold (int): 折号 (1/2/3)
+        config (dict or None): 已加载的配置
+
+    Returns:
+        dict: {'train': [patient, ...], 'test': patient}
+    """
+    if config is None:
+        config = load_config()
+
+    cv_cfg = config.get('cross_validation', {}) or {}
+    folds_cfg = cv_cfg.get('folds', {}) or {}
+
+    fold_key = str(fold)
+    if fold_key in folds_cfg and folds_cfg[fold_key]:
+        return dict(folds_cfg[fold_key])
+
+    # 硬编码默认值（与所有训练脚本中 FOLD_CONFIGS 一致）
+    _FALLBACK_FOLDS = {
+        '1': {'train': ['JFX0729', 'LMZ12939'], 'test': 'HYZ15040'},
+        '2': {'train': ['HYZ15040', 'LMZ12939'], 'test': 'JFX0729'},
+        '3': {'train': ['HYZ15040', 'JFX0729'], 'test': 'LMZ12939'},
+    }
+    return dict(_FALLBACK_FOLDS.get(fold_key, _FALLBACK_FOLDS['1']))
+
+
+def get_paths_config(config=None):
+    """
+    获取 paths 节全部路径配置，均解析为绝对路径。
+
+    Args:
+        config (dict or None): 已加载的配置
+
+    Returns:
+        dict: paths 节各键的解析后绝对路径
+    """
+    if config is None:
+        config = load_config()
+
+    project_root = get_project_root()
+    paths_cfg = config.get('paths', {}) or {}
+    result = {}
+
+    for key in ['patch_base', 'ssgsea_base']:
+        val = paths_cfg.get(key, '')
+        result[key] = resolve_path(val, project_root) if val else ''
+
+    for section in ['caches', 'resources', 'outputs']:
+        section_cfg = paths_cfg.get(section, {}) or {}
+        result[section] = {}
+        for key, val in section_cfg.items():
+            result[section][key] = resolve_path(val, project_root) if val else ''
+
+    return result
+
+
+def get_output_dir(subdir_name=None, config=None):
+    """
+    获取输出目录路径。
+
+    Args:
+        subdir_name (str or None): 子目录名
+        config (dict or None): 已加载的配置
+
+    Returns:
+        str: 输出目录绝对路径
+    """
+    if config is None:
+        config = load_config()
+
+    project_root = get_project_root()
+    paths_cfg = config.get('paths', {}) or {}
+    outputs_cfg = paths_cfg.get('outputs', {}) or {}
+
+    checkpoints_root = outputs_cfg.get('checkpoints_root', '')
+    if checkpoints_root:
+        base = resolve_path(checkpoints_root, project_root)
+    else:
+        base = os.path.join(project_root, 'checkpoints')
+
+    if subdir_name:
+        return os.path.join(base, subdir_name)
+    return base
+
+
+def get_omiclip_checkpoint_path(config=None):
+    """
+    获取 OmiCLIP checkpoint 路径。
+
+    Args:
+        config (dict or None): 已加载的配置
+
+    Returns:
+        str: checkpoint 文件绝对路径
+    """
+    if config is None:
+        config = load_config()
+
+    project_root = get_project_root()
+    paths_cfg = config.get('paths', {}) or {}
+    resources_cfg = paths_cfg.get('resources', {}) or {}
+
+    if resources_cfg.get('omiclip_checkpoint'):
+        return resolve_path(resources_cfg['omiclip_checkpoint'], project_root)
+    return os.path.join(project_root, 'pretrained_omiclip', 'checkpoint.pt')
+
+
+def get_hf_cache_dir(config=None):
+    """
+    获取 HuggingFace 缓存目录。
+
+    Args:
+        config (dict or None): 已加载的配置
+
+    Returns:
+        str: HF 缓存目录绝对路径
+    """
+    if config is None:
+        config = load_config()
+
+    project_root = get_project_root()
+    paths_cfg = config.get('paths', {}) or {}
+    resources_cfg = paths_cfg.get('resources', {}) or {}
+
+    if resources_cfg.get('hf_cache'):
+        return resolve_path(resources_cfg['hf_cache'], project_root)
+    return os.path.join(project_root, 'hf_cache')
+
+
+def get_histogene_dir(config=None):
+    """返回 histogene/ 目录的绝对路径。"""
+    return os.path.join(get_project_root(), 'histogene')
+
+
+def get_egnv2_dir(config=None):
+    """返回 egnv2/ 目录的绝对路径。"""
+    return os.path.join(get_project_root(), 'egnv2')
+
+
+# ============================================================
 # 快速验证入口（python config_utils.py 直接运行时执行）
 # ============================================================
 
@@ -274,7 +551,7 @@ if __name__ == "__main__":
         print(f"[ERROR] {e}")
         raise SystemExit(1)
 
-    print("\n--- 数据路径 ---")
+    print("\n--- 数据路径 (data: 节，供受保护文件使用) ---")
     for key, val in get_data_paths(cfg).items():
         exists = os.path.exists(val)
         status = "存在" if exists else "不存在"
@@ -289,5 +566,24 @@ if __name__ == "__main__":
     print("\n--- 训练设备 ---")
     device = get_device(cfg)
     print(f"  device: {device}")
+
+    print("\n--- 患者路径 (get_patient_paths) ---")
+    for p in ['HYZ15040', 'JFX0729', 'LMZ12939']:
+        paths = get_patient_paths(p, backbone='uni_tokens', config=cfg)
+        train_ok = "存在" if os.path.exists(paths['train_patches']) else "不存在"
+        labels_ok = "存在" if os.path.exists(paths['labels_csv']) else "不存在"
+        cache_ok = "存在" if os.path.exists(paths.get('token_cache_train', '')) else "不存在"
+        print(f"  {p}: patches[{train_ok}]  labels[{labels_ok}]  cache[{cache_ok}]")
+
+    print("\n--- 交叉验证配置 ---")
+    for f in [1, 2, 3]:
+        fc = get_fold_config(f, config=cfg)
+        print(f"  Fold {f}: train={fc['train']} -> test={fc['test']}")
+
+    print("\n--- 外部资源 ---")
+    omi = get_omiclip_checkpoint_path(cfg)
+    print(f"  OmiCLIP checkpoint: {omi}  [{'存在' if os.path.exists(omi) else '不存在'}]")
+    hf_dir = get_hf_cache_dir(cfg)
+    print(f"  HF cache dir:       {hf_dir}  [{'存在' if os.path.exists(hf_dir) else '不存在'}]")
 
     print("\n[完成] 所有配置项检查完毕。")

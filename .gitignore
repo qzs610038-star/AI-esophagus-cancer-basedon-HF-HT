@@ -124,3 +124,29 @@ training_status_*.txt
 
 # 临时调试脚本（temp_*.py）
 temp_*.py
+
+# --------------------------------------------
+# 10. 新增 Backbone 特征缓存与权重（2026-05-20）
+# --------------------------------------------
+# HuggingFace 模型下载缓存
+hf_cache/
+
+# OmiCLIP 特征缓存
+omiclip_cache/
+
+# OmiCLIP 预训练权重（~7.14GB）
+pretrained_omiclip/
+
+# Virchow2 特征缓存
+virchow2_cache_tokens/
+
+# 第三方模型源码与仓库（只读参考，不直接维护）
+loki_src/
+virchow2/
+virchow2_repo/
+
+# 一次性检查/调试脚本
+inspect_omiclip.py
+inspect_omiclip2.py
+run_omiclip_training.ps1
+scripts/download_omiclip.py

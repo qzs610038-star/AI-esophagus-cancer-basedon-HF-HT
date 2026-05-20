@@ -22,7 +22,8 @@ def parse_coordinates(filename):
 
 class HisToGeneUNITokensDataset(Dataset):
     def __init__(self, patches_dir, feature_cache_dir, labels_csv,
-                 target_cols=None, n_pos=128, n_targets=30, coord_stats=None):
+                 target_cols=None, n_pos=128, n_targets=30, coord_stats=None,
+                 feature_dim=1536, backbone_name="UNI2-h"):
         """
         Args:
             patches_dir: PNG 图像目录（用于坐标解析和交集过滤，不加载图像）
@@ -32,10 +33,14 @@ class HisToGeneUNITokensDataset(Dataset):
             n_pos: 位置编码的最大索引
             n_targets: 目标数量（仅在无法自动检测时使用）
             coord_stats: 坐标统计 dict {'x_min', 'x_max', 'y_min', 'y_max'}（推理时从训练集传入）
+            feature_dim: 每个 token 的特征维度（UNI2-h=1536, Virchow2=1280）
+            backbone_name: backbone 名称（用于错误提示）
         """
         self.feature_cache_dir = feature_cache_dir
         self.patches_dir = patches_dir
         self.n_pos = n_pos
+        self.feature_dim = feature_dim
+        self.backbone_name = backbone_name
 
         # 加载标签
         df = pd.read_csv(labels_csv)
@@ -123,8 +128,9 @@ class HisToGeneUNITokensDataset(Dataset):
         # 确保形状为 [num_tokens, 1536]（2D tensor）
         if tokens.dim() == 1:
             tokens = tokens.unsqueeze(0)  # [1536] -> [1, 1536]
-        assert tokens.dim() == 2 and tokens.shape[1] == 1536, (
-            f"Token特征维度不匹配: 期望 [num_tokens, 1536], 实际 {tokens.shape}, stem={stem}"
+        assert tokens.dim() == 2 and tokens.shape[1] == self.feature_dim, (
+            f"Token特征维度不匹配: 期望 [{self.backbone_name}] [num_tokens, {self.feature_dim}], "
+            f"实际 {tokens.shape}, stem={stem}"
         )
 
         # 坐标映射
@@ -139,7 +145,8 @@ class HisToGeneUNITokensDataset(Dataset):
                 targets)
 
     @classmethod
-    def from_multiple_patients(cls, patient_configs, n_pos=128, n_targets=30, verbose=True):
+    def from_multiple_patients(cls, patient_configs, n_pos=128, n_targets=30, verbose=True,
+                                feature_dim=1536, backbone_name="UNI2-h"):
         """
         多患者联合训练：合并多个患者的 Dataset
 
@@ -147,11 +154,13 @@ class HisToGeneUNITokensDataset(Dataset):
             patient_configs: list of dicts, 每个包含:
                 - patches_dir: str, 该患者的 patch 目录
                 - labels_csv: str, 该患者的标签 CSV
-                - feature_cache_dir: str, 该患者的 UNI2-h token 特征缓存目录
+                - feature_cache_dir: str, 该患者的 token 特征缓存目录
                 - patient_name: str, 患者名称（可选）
             n_pos: 位置编码最大索引
             n_targets: 目标数量
             verbose: 是否打印详细信息
+            feature_dim: 每个 token 的特征维度（1536=UNI2-h, 1280=Virchow2, 768=OmiCLIP）
+            backbone_name: backbone 标识名称
 
         Returns:
             merged_dataset: ConcatDataset 合并后的数据集
@@ -169,7 +178,7 @@ class HisToGeneUNITokensDataset(Dataset):
             patient_name = config.get('patient_name', f'patient_{i}')
 
             if verbose:
-                print(f"\n[MultiPatient-UNI-Tokens] 加载患者 {patient_name}...")
+                print(f"\n[MultiPatient-{backbone_name}] 加载患者 {patient_name}...")
 
             dataset = cls(
                 patches_dir=patches_dir,
@@ -179,6 +188,8 @@ class HisToGeneUNITokensDataset(Dataset):
                 n_pos=n_pos,
                 n_targets=n_targets,
                 coord_stats=None,
+                feature_dim=feature_dim,
+                backbone_name=backbone_name,
             )
 
             coord_stats_dict[patient_name] = dataset.get_coord_stats()

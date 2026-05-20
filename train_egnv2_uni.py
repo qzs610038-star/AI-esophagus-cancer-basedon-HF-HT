@@ -44,12 +44,12 @@ from notify_utils import (
     notify_training_complete, notify_training_error,
     check_pause_signal, clear_pause_signal,
 )
-from config_utils import load_config, get_device
+from config_utils import load_config, get_device, get_egnv2_dir, get_project_root
 
 # 忽略 Ctrl+C 信号，防止误触中断训练
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 
-_EGNV2_DIR = str(_PROJECT_ROOT / "egnv2")
+_EGNV2_DIR = get_egnv2_dir()
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -300,9 +300,9 @@ def build_argparser():
                    help="跨患者模式：训练集患者列表")
     p.add_argument("--test_patient", type=str, default=None,
                    help="跨患者模式：测试集患者名称")
-    p.add_argument("--base_dir", type=str, default=str(_PROJECT_ROOT / "data_new_3ST"),
+    p.add_argument("--base_dir", type=str, default=os.path.join(get_project_root(), "data_new_3ST"),
                    help="跨患者模式：数据根目录")
-    p.add_argument("--cache_dir", type=str, default=str(_PROJECT_ROOT / "uni2h_cache"),
+    p.add_argument("--cache_dir", type=str, default=os.path.join(get_project_root(), "uni2h_cache"),
                    help="跨患者模式：UNI 特征缓存根目录")
 
     # 输出路径

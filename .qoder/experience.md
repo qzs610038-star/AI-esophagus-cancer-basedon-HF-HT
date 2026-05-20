@@ -40,3 +40,29 @@
 ## 🔬 下一步方向
 
 P0-2 多模态融合（GenePT通路嵌入 + 交叉注意力）为最高优先级。
+
+---
+
+## OmiCLIP (Loki) 部署经验（2026-05-19）
+
+### 架构探查结论
+- 模型：coca_ViT-L-14（CoCa架构），通过 open_clip 2.26.1 加载
+- 加载方式：`model = open_clip.create_model('coca_ViT-L-14'); model.load_state_dict(ckpt['state_dict'])`
+- checkpoint key 是 `state_dict`（非 `model`）
+- `loki.predex.OmiCLIP_Predictor` 在 loki==0.0.1 中不存在
+- vision encoder：`model.visual`（307M参数）
+- token输出：`model.visual(x)[1]` → [B, 255, 768]
+- CLS输出：`model.encode_image(x)` → [B, 768]
+- 预处理：224×224，OPENAI_DATASET_MEAN/STD
+
+### 关键坑点
+1. PyTorch 2.0.1 无法处理中文路径写文件 → 用 io.BytesIO + Python open() 绕过
+2. total_mem属性 → 应为 total_memory
+3. HuggingFace Python库国内卡住 → curl.exe + hf-mirror.com
+4. dataset_uni_tokens.py 有1536维硬编码断言 → 自定义OmiCLIPTokensDataset
+
+### 文件位置
+- 提取脚本：extract_omiclip_features.py（loki_env运行）
+- 训练脚本：train_histogene_omiclip.py（Python313运行）
+- 权重：pretrained_omiclip/checkpoint.pt（7.14GB）
+- 缓存：omiclip_cache/{patient}/{train|val}/*.pt

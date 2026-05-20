@@ -25,8 +25,10 @@ COLORS = {
     'MultiPatient': '#C44E52'
 }
 
+from config_utils import get_project_root
+
 # 文件路径配置
-BASE_DIR = r"d:\AI空间转录病理研究\PFMval_new\histogene"
+BASE_DIR = os.path.join(get_project_root(), "histogene")
 OUTPUT_DIR = os.path.join(BASE_DIR, "results_vis", "单患者vs联合训练对比")
 
 # 训练历史文件
