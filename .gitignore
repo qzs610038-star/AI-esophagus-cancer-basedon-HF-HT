@@ -19,8 +19,21 @@ openmidnight/data/
 *.tiff
 *.tif
 
+# 部署密钥（包含服务器密码，绝对不能提交）
+deploy/secrets.sh
+
 # 原始压缩包（HYZ15040 原始数据，约 950MB）
 HYZ15040-org.zip
+
+# 所有压缩包和归档文件
+*.zip
+*.tar.gz
+*.tar
+*.rar
+*.7z
+
+# 部署打包文件
+pfmval_deploy_*.tar.gz
 
 # --------------------------------------------
 # 2. 模型权重与检查点（体积大，可重新训练生成）
@@ -30,6 +43,9 @@ HYZ15040-org.zip
 
 # 根目录 checkpoints 目录（完全忽略，仅匹配根目录）
 /checkpoints/
+
+# uni2h_new 子目录下的 checkpoints（模型权重 + 训练产物）
+uni2h_new/checkpoints/
 
 # 注意：子目录（如 histogene/checkpoints/）不整体忽略，
 # 因为其中可能包含 results_vis 可视化结果子目录。
@@ -41,6 +57,10 @@ HYZ15040-org.zip
 # UNI2-h 特征缓存
 uni2h_cache/
 **/uni2h_cache/
+
+# UNI2-h 特征缓存（uni2h_new 子目录下）
+uni2h_new/uni2h_cache/
+uni2h_new/uni2h_cache_30/
 
 # UNI Token 特征缓存（体积巨大，34GB+，不可提交）
 uni2h_cache_tokens/
@@ -144,6 +164,20 @@ virchow2_cache_tokens/
 loki_src/
 virchow2/
 virchow2_repo/
+
+# --------------------------------------------
+# 11. 文献与文档（体积大，不应版本控制）
+# --------------------------------------------
+# 旧数据目录（已被 data_new_3ST 替代）
+data/
+
+# PDF 文献（体积大，10-30MB/个，72个共~300MB）
+*.pdf
+
+# Office 文档
+*.pptx
+*.docx
+*.doc
 
 # 一次性检查/调试脚本
 inspect_omiclip.py
