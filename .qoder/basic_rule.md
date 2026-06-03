@@ -44,7 +44,7 @@
 2. **EGN-v2/GAT系列（需PyG）**：`D:\conda_envs\pfmval_py310\python.exe`（torch_geometric 2.7.0）
 3. **Conda base环境**：已装torch 2.6.0+cu118，可直接运行无需激活特定env
 4. **Conda激活命令**：`(& "D:\miniconda\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression`
-5. **PowerShell**：不支持 `&&`，使用 `;` 分隔语句
+5. **PowerShell**：不支持 `&&`（PS 5.1），使用 `;` 分隔语句或通过 `cmd.exe /c` 包装。**服务器 .ps1 脚本必须全英文**（中文 Windows 默认 GBK 编码，UTF-8 without BOM 会导致解析器崩溃）
 
 ---
 

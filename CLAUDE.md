@@ -109,8 +109,16 @@ uni2h_cache/{patient}/{train,val}/                      # UNI 特征缓存
 > 训练命令模板和配置参数速查：[[server-environment-quickref]]。部署日志：[[server-deploy-status]]。
 > **代码同步**：本地通过 **SSH** 直推 GitHub（`git@github.com:qzs610038-star/...`）。HTTPS + Clash 代理在大流量传输时会 TLS 断连，已切换为 SSH 协议（密钥：`~/.ssh/pfmval_server`）。服务器同步用 `git pull`。推送故障排查参考 `.claude/skills/git-rescue/SKILL.md`。
 
+## 部署脚本规范（2026-06-04 踩坑总结）
+
+- **PowerShell 5.1 编码铁律**：服务器 PowerShell 脚本必须 **全英文**，不得包含中文等非 ASCII 字符。Windows 中文版默认编码为 GBK，UTF-8 without BOM 的文件会被错误解码导致解析器崩溃
+- **命令链执行**：PowerShell 5.1 不支持 `&&`，需用 `Start-Process cmd.exe -ArgumentList "/c", "cmd1 && cmd2"` 包装
+- **Checkpoint 目录名规则**：`checkpoints/online_cls/{mode}_r{rank}_{dataset_name}/`。仅改变 `--lora_dropout` 不改变 mode/rank/dataset_name → 目录名不变 → 会覆盖先前结果。必须显式传 `--dataset_name` 区分（如 `online_cls_cross_fold1_d01`）
+- **批量实验调度**：参考 `deploy/run_nightly_experiments.ps1` — 队列定义 + 依赖检查 + 已完成跳过 + 自动汇总 CSV
+- **SSH 密钥维护**：`~/.ssh/pfmval_server` / `pfmval_server_local` 可能过期，定期验证连通性
+
 ## PowerShell / Git
 
-- PowerShell 不支持 `&&`，用 `;` 分隔；Conda 激活需 `conda.exe shell.powershell hook`
+- PowerShell 不支持 `&&`，用 `;` 分隔或用 `cmd.exe /c` 包装；Conda 激活需 `conda.exe shell.powershell hook`
 - Git 忽略：`data_new_3ST/`、`*.pth`、`.venv/`、缓存目录、`*.log`
 - 训练输出保存至 `{model_dir}/checkpoints/results_vis/{dataset}_{timestamp}/`，不覆盖历史

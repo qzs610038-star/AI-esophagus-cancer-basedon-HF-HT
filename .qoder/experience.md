@@ -30,10 +30,13 @@
 
 | 模型 | 单患者Val PCC | 跨患者Test PCC |
 |------|-------------|---------------|
-| HisToGene-UNI Token（方案B） | 0.5336 | 0.4095 (Fold1) |
+| UNI2-h + DenseNet121 CLS (frozen) | 0.5236 | 0.3969 (三折均值) / Fold1 0.4113 |
+| UNI2-h LoRA Stage1 (r=8) | **0.5462** | 待验证 (夜间实验进行中) |
+| HisToGene-UNI Token + AugMix | 0.5217 | 0.4142 (Fold1) |
 | HisToGene-UNI Token + GAT | — | 0.4068 (Fold1, 不显著) |
 | EGN-v2+UNI | — | 0.1950 |
-| 方案B 三折平均 | — | 0.3812 |
+
+> **LoRA 单患者增益**: +0.0226 vs frozen (0.5236→0.5462)。跨患者泛化为关键验证缺口。
 
 ---
 
@@ -42,6 +45,32 @@
 P0-2 多模态融合（GenePT通路嵌入 + 交叉注意力）为最高优先级。
 
 ---
+
+## 服务器批量实验部署经验（2026-06-04）
+
+### PowerShell 脚本编码
+- Windows 中文版 PowerShell 5.1 默认编码为 **GBK**，UTF-8 without BOM 文件中的中文会被错解码 → 字符串边界断裂 → 解析器崩溃
+- **铁律**：服务器 .ps1 脚本必须全英文，不含中文/emoji
+- Python 训练仍需 `PYTHONIOENCODING=utf-8`（处理日志中的中文路径）
+
+### 命令链执行
+- PowerShell 5.1 不支持 `&&` 语句分隔（仅 PowerShell 7+ 支持）
+- 需要 `&&` 链接多条命令时，用 `Start-Process cmd.exe -ArgumentList "/c", "cmd1 && cmd2"`
+- 不要用 `cmd /c` 的单字符串形式，容易出现引号转义问题
+
+### Checkpoint 目录名冲突
+- `train_online_cls.py` 输出目录由 `--mode`、`--lora_rank`、`--dataset_name` 决定
+- 仅改 `--lora_dropout` 不改 `--dataset_name` → 同名目录覆盖 → 结果丢失
+- **解决**：变体实验必须显式传 `--dataset_name online_cls_cross_fold1_d01`
+
+### 批量实验调度模式
+- 脚本：`deploy/run_nightly_experiments.ps1`（全英文，可复用）
+- 特性：优先级队列 + 依赖检查 + 已完成跳过 + 自动汇总 CSV
+- 启动方式：`powershell -NoProfile -ExecutionPolicy Bypass -File deploy/run_nightly_experiments.ps1`
+
+### SSH 连接
+- `~/.ssh/pfmval_server` 密钥认证失败（2026-06-04），需排查服务器端 authorized_keys
+- GitHub SSH 推送正常工作（密钥不同）
 
 ## OmiCLIP (Loki) 部署经验（2026-05-19）
 
