@@ -1,0 +1,517 @@
+{
+  "documents": [
+    {
+      "name": "5.16改进建议原因分析_初学者版.md",
+      "path": "01_指南与解读/学习指南/5.16改进建议原因分析_初学者版.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "PFMval学习指南.md",
+      "path": "01_指南与解读/学习指南/PFMval学习指南.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "RL方法选择_初学者指南.md",
+      "path": "01_指南与解读/学习指南/RL方法选择_初学者指南.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "infer_解读指南.md",
+      "path": "01_指南与解读/学习指南/infer_解读指南.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "split_解读指南.md",
+      "path": "01_指南与解读/学习指南/split_解读指南.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "train_解读指南.md",
+      "path": "01_指南与解读/学习指南/train_解读指南.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "uni2h_utils_解读指南.md",
+      "path": "01_指南与解读/学习指南/uni2h_utils_解读指南.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "zscore_解读指南.md",
+      "path": "01_指南与解读/学习指南/zscore_解读指南.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "服务器迁移指南_初学者版.md",
+      "path": "01_指南与解读/学习指南/服务器迁移指南_初学者版.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "训练进度查看指南.md",
+      "path": "01_指南与解读/学习指南/训练进度查看指南.md",
+      "category": "学习指南",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "项目全貌与迁移指南.md",
+      "path": "01_指南与解读/学习指南/项目全貌与迁移指南.md",
+      "category": "学习指南",
+      "purpose": "项目整体架构、技术栈与服务器迁移方法总览",
+      "created": "2026-05-19",
+      "tags": ["项目概览", "迁移", "架构"]
+    },
+    {
+      "name": "SSH远程操作_初学者指南.md",
+      "path": "01_指南与解读/学习指南/SSH远程操作_初学者指南.md",
+      "category": "学习指南",
+      "purpose": "SSH 远程连接服务器的操作指南，含端口转发与免密登录",
+      "created": "2026-05-30",
+      "tags": ["SSH", "远程", "服务器", "初学者"]
+    },
+    {
+      "name": "UNI2-H_渐进式解冻训练_初学者指南.md",
+      "path": "01_指南与解读/学习指南/UNI2-H_渐进式解冻训练_初学者指南.md",
+      "category": "学习指南",
+      "purpose": "UNI2-H 在线 LoRA + 渐进式解冻三阶段训练全流程指南",
+      "created": "2026-05-30",
+      "tags": ["UNI2-H", "LoRA", "渐进式解冻", "在线训练", "初学者"]
+    },
+    {
+      "name": "EGNv1_部署方案.md",
+      "path": "01_指南与解读/部署方案/EGNv1_部署方案.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "EGNv2_UNI集成方案.md",
+      "path": "01_指南与解读/部署方案/EGNv2_UNI集成方案.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "EGNv2_部署方案.md",
+      "path": "01_指南与解读/部署方案/EGNv2_部署方案.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "HisToGene_UNI特征集成方案.md",
+      "path": "01_指南与解读/部署方案/HisToGene_UNI特征集成方案.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "Loki_OmiCLIP_安装指南.md",
+      "path": "01_指南与解读/部署方案/Loki_OmiCLIP_安装指南.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "OmiCLIP_部署方案.md",
+      "path": "01_指南与解读/部署方案/OmiCLIP_部署方案.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "RL方案B与方案D_部署实现策略.md",
+      "path": "01_指南与解读/部署方案/RL方案B与方案D_部署实现策略.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "Virchow2_部署方案.md",
+      "path": "01_指南与解读/部署方案/Virchow2_部署方案.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "服务器部署指南.md",
+      "path": "01_指南与解读/部署方案/服务器部署指南.md",
+      "category": "部署方案",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "融合空间组学执行方案_20260522.md",
+      "path": "01_指南与解读/部署方案/融合空间组学执行方案_20260522.md",
+      "category": "部署方案",
+      "purpose": "空间转录组数据融合至病理图像分析的完整执行方案",
+      "created": "2026-05-22",
+      "tags": ["空间转录组", "数据融合", "执行方案"]
+    },
+    {
+      "name": "服务器手动部署速查手册.md",
+      "path": "01_指南与解读/部署方案/服务器手动部署速查手册.md",
+      "category": "部署方案",
+      "purpose": "Windows 服务器手动部署 PFMval 的快速操作步骤速查",
+      "created": "2026-05-30",
+      "tags": ["服务器", "部署", "速查", "手动"]
+    },
+    {
+      "name": "5.16修复记录.md",
+      "path": "01_指南与解读/分析报告/5.16修复记录.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "AugMix实验评估报告_20260515.md",
+      "path": "01_指南与解读/分析报告/AugMix实验评估报告_20260515.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "EGNv2_实验分析与建议.md",
+      "path": "01_指南与解读/分析报告/EGNv2_实验分析与建议.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "HisToGene_UNI训练结果对比分析.md",
+      "path": "01_指南与解读/分析报告/HisToGene_UNI训练结果对比分析.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "HisToGene应用规划.md",
+      "path": "01_指南与解读/分析报告/HisToGene应用规划.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "PEaRL通路增强改进方案.md",
+      "path": "01_指南与解读/分析报告/PEaRL通路增强改进方案.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "PFMval_PCC优化建议报告_附论文推荐_20260513.md",
+      "path": "01_指南与解读/分析报告/PFMval_PCC优化建议报告_附论文推荐_20260513.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "Phase2模型改进建议_0507.md",
+      "path": "01_指南与解读/分析报告/Phase2模型改进建议_0507.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "he-ssgsea-greedy-river.md",
+      "path": "01_指南与解读/分析报告/he-ssgsea-greedy-river.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "下一步改进操作建议_0516.md",
+      "path": "01_指南与解读/分析报告/下一步改进操作建议_0516.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "全模型训练总结与研究方向分析.md",
+      "path": "01_指南与解读/分析报告/全模型训练总结与研究方向分析.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "教师-学生架构改进方案_20260522.md",
+      "path": "01_指南与解读/分析报告/教师-学生架构改进方案_20260522.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "数据分布与Z-score适用性分析.md",
+      "path": "01_指南与解读/分析报告/数据分布与Z-score适用性分析.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "文献整理报告_模型选型建议.md",
+      "path": "01_指南与解读/分析报告/文献整理报告_模型选型建议.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "新数据集3ST分析报告.md",
+      "path": "01_指南与解读/分析报告/新数据集3ST分析报告.md",
+      "category": "分析报告",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "模型评估与选型分析.md",
+      "path": "01_指南与解读/分析报告/模型评估与选型分析.md",
+      "category": "分析报告",
+      "purpose": "HisToGene/EGN-v2/UNI/Virchow2 等多模型性能对比与选型分析",
+      "created": "2026-05-15",
+      "tags": ["模型对比", "选型", "PCC", "评估"]
+    },
+    {
+      "name": "UNI2h_LoRA冒烟测试报告_20260530.md",
+      "path": "01_指南与解读/分析报告/UNI2h_LoRA冒烟测试报告_20260530.md",
+      "category": "分析报告",
+      "purpose": "UNI2-h 在线 LoRA 渐进解冻代码落地冒烟测试报告（单患者验证，PCC=0.5462）",
+      "created": "2026-05-30",
+      "tags": ["UNI2-H", "LoRA", "冒烟测试", "渐进式解冻", "在线训练"]
+    },
+    {
+      "name": "02_README.md",
+      "path": "02_组会汇报/02_README.md",
+      "category": "组会汇报",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "组会汇报_0418_HisToGene训练.md",
+      "path": "02_组会汇报/组会汇报_0418_HisToGene训练.md",
+      "category": "组会汇报",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "组会汇报_0424_模型训练结果.md",
+      "path": "02_组会汇报/组会汇报_0424_模型训练结果.md",
+      "category": "组会汇报",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "组会汇报_0429_W17周报.md",
+      "path": "02_组会汇报/组会汇报_0429_W17周报.md",
+      "category": "组会汇报",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "组会汇报_0507_文献与Phase2.md",
+      "path": "02_组会汇报/组会汇报_0507_文献与Phase2.md",
+      "category": "组会汇报",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "组会汇报_0516_P1实验与下一步.md",
+      "path": "02_组会汇报/组会汇报_0516_P1实验与下一步.md",
+      "category": "组会汇报",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "组会汇报_0523_W21周报.md",
+      "path": "02_组会汇报/组会汇报_0523_W21周报.md",
+      "category": "组会汇报",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "服务器部署问题提问清单_20260530.md",
+      "path": "02_组会汇报/服务器部署问题提问清单_20260530.md",
+      "category": "组会汇报",
+      "purpose": "2026-05-30 组会向老师咨询服务器配置与权限问题的提问清单",
+      "created": "2026-05-30",
+      "tags": ["服务器", "部署", "提问清单", "组会", "权限", "网络通道"]
+    },
+    {
+      "name": "组会汇报_0530_W22周报.md",
+      "path": "02_组会汇报/组会汇报_0530_W22周报.md",
+      "category": "组会汇报",
+      "purpose": "W22 周报：UNI2-h LoRA 渐进解冻单患者验证完成、服务器部署进展、项目审查关键结论",
+      "created": "2026-05-30",
+      "tags": ["周报", "LoRA", "UNI2-H", "服务器", "项目审查", "W22"]
+    },
+    {
+      "name": "README.md",
+      "path": "README.md",
+      "category": "项目核心",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "CLAUDE.md",
+      "path": "CLAUDE.md",
+      "category": "项目核心",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "模型性能排名_Model_Performance_Ranking.md",
+      "path": "模型性能排名_Model_Performance_Ranking.md",
+      "category": "项目核心",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "git-cloud-sync-options.md",
+      "path": ".claude/git-cloud-sync-options.md",
+      "category": "配置参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "maintenance-plan.md",
+      "path": ".claude/maintenance-plan.md",
+      "category": "配置参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "basic_rule.md",
+      "path": ".qoder/basic_rule.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "experience.md",
+      "path": ".qoder/experience.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "故障排除.md",
+      "path": ".qoder/repowiki/zh/content/故障排除.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "数据系统.md",
+      "path": ".qoder/repowiki/zh/content/数据系统.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "环境与配置.md",
+      "path": ".qoder/repowiki/zh/content/环境与配置.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "项目概述.md",
+      "path": ".qoder/repowiki/zh/content/项目概述.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "推理与评估.md",
+      "path": ".qoder/repowiki/zh/content/推理评估/推理与评估.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "模型体系.md",
+      "path": ".qoder/repowiki/zh/content/模型体系/模型体系.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    },
+    {
+      "name": "训练指南.md",
+      "path": ".qoder/repowiki/zh/content/训练系统/训练指南.md",
+      "category": "技术参考",
+      "purpose": "",
+      "created": "",
+      "tags": []
+    }
+  ],
+  "updated": "2026-06-03"
+}

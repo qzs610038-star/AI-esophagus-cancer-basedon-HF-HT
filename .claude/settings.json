@@ -56,8 +56,8 @@
       "Bash(git lfs *)",
       "Bash(git clone *)",
       "Bash(git checkout *)",
-      "Bash(curl -L -C - -o \"D:/AI空间转录病理研究/PFMval_new/virchow2_repo/model.safetensors\" -H \"Authorization: Bearer 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\" \"https://huggingface.co/paige-ai/Virchow2/resolve/main/model.safetensors\")",
-      "Bash(curl -L -C - -o \"D:/AI空间转录病理研究/PFMval_new/virchow2_repo/model.safetensors\" -H \"Authorization: Bearer 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\" \"https://hf-mirror.com/paige-ai/Virchow2/resolve/main/model.safetensors\")",
+      "Bash(curl -L -C - -o \"D:/AI空间转录病理研究/PFMval_new/virchow2_repo/model.safetensors\" -H \"Authorization: Bearer <HF_TOKEN>\" \"https://huggingface.co/paige-ai/Virchow2/resolve/main/model.safetensors\")",
+      "Bash(curl -L -C - -o \"D:/AI空间转录病理研究/PFMval_new/virchow2_repo/model.safetensors\" -H \"Authorization: Bearer <HF_TOKEN>\" \"https://hf-mirror.com/paige-ai/Virchow2/resolve/main/model.safetensors\")",
       "Bash(PYTHONIOENCODING=utf-8 \"C:\\\\Program Files\\\\Python313\\\\python.exe\" virchow2/virchow2_utils.py)",
       "Bash(PYTHONIOENCODING=utf-8 \"C:\\\\Program Files\\\\Python313\\\\python.exe\" extract_virchow2_tokens.py --patient HYZ15040 --mode lite)",
       "Bash(PYTHONIOENCODING=utf-8 \"C:\\\\Program Files\\\\Python313\\\\python.exe\" extract_virchow2_tokens.py --patient JFX0729 LMZ12939 --mode lite)",
@@ -72,7 +72,13 @@
       "Bash(ls -la \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\01_指南与解读\\\\\\\\服务器迁移指南_初学者版.md\")",
       "Bash(ls -la \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\config.yaml\" \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\config_utils.py\")",
       "Bash(ls -la \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\env_histogene.yml\" \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\env_egnv2.yml\")",
-      "Bash(ls -la \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\README.md\" \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\CLAUDE.md\")"
+      "Bash(ls -la \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\README.md\" \"d:\\\\\\\\AI空间转录病理研究\\\\\\\\PFMval_new\\\\\\\\CLAUDE.md\")",
+      "Skill(doc-registry)",
+      "Skill(doc-registry:*)",
+      "Bash(GIT_CURL_VERBOSE=0 git -c http.postBuffer=1048576000 -c http.lowSpeedLimit=0 -c core.compression=0 fetch origin main --depth=1)",
+      "Bash(ssh -o ConnectTimeout=5 -T git@github.com)",
+      "Bash(GIT_LFS_SKIP_PUSH=1 git push origin main)",
+      "Bash(sed -i 's/<HF_TOKEN>/<HF_TOKEN>/g' \"d:/AI空间转录病理研究/PFMval_new/.claude/settings.json\" && grep -c \"hf_LIH\\\\|<HF_TOKEN>\" \"d:/AI空间转录病理研究/PFMval_new/.claude/settings.json\" 2>&1)"
     ],
     "additionalDirectories": [
       "C:\\Users\\33696\\.claude\\projects\\d--AI---------PFMval-new",
