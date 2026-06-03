@@ -1,0 +1,87 @@
+# ============================================================
+# PFMval 项目统一配置文件
+# 迁移到服务器时，只需修改此文件中的路径即可
+# ============================================================
+
+# 数据路径配置（支持相对路径和绝对路径）
+# 相对路径基于项目根目录解析
+data:
+  # ─── 3ST 数据集（30 通路）- 当前使用 ───
+  train_patches_dir: "./data_new_3ST/patch_noov_spilt/HYZ15040_noov_split/train_patches"
+  val_patches_dir: "./data_new_3ST/patch_noov_spilt/HYZ15040_noov_split/val_patches"
+  labels_csv_raw: "./data_new_3ST/ssGSEA_zscore/HYZ15040_ssGSEA_zscore.csv"
+  labels_csv_zscore: "./data_new_3ST/ssGSEA_zscore/HYZ15040_ssGSEA_zscore.csv"
+
+  # ─── 原始 8 通路数据集（已备份）─
+  # train_patches_dir: "./HYZ15040/train_patches"
+  # val_patches_dir: "./HYZ15040/val_patches"
+  # labels_csv_raw: "./HYZ15040_ssGSEA_scores.csv"
+  # labels_csv_zscore: "./HYZ15040_ssGSEA_scores_zscore.csv"
+
+# HuggingFace 配置
+huggingface:
+  # HF Token，留空则从环境变量 HF_TOKEN 读取
+  token: ""
+  # 是否强制使用本地缓存（无网络环境设为 true）
+  local_only: false
+
+# 通用训练配置
+training:
+  # 设备选择: "auto"(自动检测) / "cuda" / "cpu"
+  device: "auto"
+
+# ══════════════════════════════════════════════════════════════
+# 以下为服务器迁移新增配置
+# 本地环境无需修改，服务器部署时取消注释并填写实际路径
+# ══════════════════════════════════════════════════════════════
+
+# ── 路径根目录配置（留空 = 使用项目根目录下的默认路径）──
+paths:
+  # 补丁与标签根目录（覆盖默认 data_new_3ST/）
+  # patch_base: "/data/server/HE_patches"
+  # ssgsea_base: "/data/server/ssGSEA_scores"
+
+  # 特征缓存根目录
+  caches:
+    # uni_tokens: "/data/caches/uni_tokens"
+    # uni_tokens_aug: "/data/caches/uni_tokens_aug"
+    # uni_cls: "/data/caches/uni_cls"
+    # omiclip: "/data/caches/omiclip"
+    # virchow2: "/data/caches/virchow2"
+
+  # 外部资源
+  resources:
+    # omiclip_checkpoint: "/data/models/omiclip/checkpoint.pt"
+    # hf_cache: "/data/huggingface_cache"
+
+  # 输出目录
+  outputs:
+    # checkpoints_root: "./checkpoints"
+    # results_vis: "./histogene/checkpoints/results_vis"
+
+# ── 患者级路径覆盖（服务器上数据位置不同时取消注释）──
+patients:
+  HYZ15040:
+    patches_subdir: "HYZ15040_noov_split"
+    labels_csv: "HYZ15040_ssGSEA_zscore.csv"
+    # patches_dir: "/data/HE_images/HYZ15040"
+    # labels_path: "/data/ssGSEA/HYZ15040_scores.csv"
+
+  JFX0729:
+    patches_subdir: "JFX0729_noov_split"
+    labels_csv: "JFX0729_ssGSEA_zscore.csv"
+    # patches_dir: "/data/HE_images/JFX0729"
+    # labels_path: "/data/ssGSEA/JFX0729_scores.csv"
+
+  LMZ12939:
+    patches_subdir: "LMZ12939_noov_split"
+    labels_csv: "LMZ12939_ssGSEA_zscore.csv"
+    # patches_dir: "/data/HE_images/LMZ12939"
+    # labels_path: "/data/ssGSEA/LMZ12939_scores.csv"
+
+# ── 三折交叉验证配置 ──
+cross_validation:
+  folds:
+    1: { train: ["JFX0729", "LMZ12939"], test: "HYZ15040" }
+    2: { train: ["HYZ15040", "LMZ12939"], test: "JFX0729" }
+    3: { train: ["HYZ15040", "JFX0729"], test: "LMZ12939" }

@@ -1,0 +1,238 @@
+PFMval 服务器部署配置指南
+========================================
+打包时间: 2026-05-29
+最佳模型: HisToGene-UNI-Tokens + AugMix + TV Loss (L2 w=0.01)
+性能指标: Fold1 PCC=0.4170 | 3-fold CV Mean=0.3943
+
+========================================
+第一步：服务器环境检查
+========================================
+
+1. 确认 Python 环境
+   打开 PowerShell，运行:
+   "C:\ProgramData\miniconda3\python.exe" --version
+   预期: Python 3.13.x
+
+2. 确认 CUDA 可用
+   "C:\ProgramData\miniconda3\python.exe" -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+   预期: True, NVIDIA GeForce RTX 4080
+
+3. 确认项目目录存在
+   如果服务器上还没有项目目录，先完整 clone 一次:
+   git clone <项目仓库地址> D:\AIPatho\qzs
+   或者从本地完整复制整个项目文件夹到 D:\AIPatho\qzs。
+
+========================================
+第二步：解压部署包
+========================================
+
+1. 将 pfmval_deploy_YYYYMMDD_HHMMSS.zip 复制到服务器
+2. 在服务器上解压:
+   cd D:\AIPatho\qzs
+   Expand-Archive -Path "下载目录\pfmval_deploy_YYYYMMDD_HHMMSS.zip" -DestinationPath . -Force
+
+   解压后会覆盖/新增以下文件:
+   - train_histogene_uni_tokens_augmix.py  (训练脚本)
+   - model_uni_tokens.py                   (模型架构)
+   - dataset_uni_tokens_augmix.py          (数据集)
+   - spatial_tv_loss.py                    (TV Loss)
+   - notify_utils.py                       (通知工具)
+   - config_utils.py                       (路径配置)
+   - config.yaml                           (配置文件)
+   - histogene/utils.py                    (指标计算)
+   - checkpoints/TV_Sweep_tv_l2_w0.01/     (最佳权重 ~112 MB)
+   - deploy/SYNC_GUIDE.md                  (同步操作手册)
+
+========================================
+第三步：配置服务器路径 (config.yaml)
+========================================
+
+服务器上的数据路径与本地不同，必须修改 config.yaml！
+
+用记事本打开 D:\AIPatho\qzs\config.yaml，找到 paths: 节，修改为服务器实际路径:
+
+  paths:
+    # 病理 patch 图像根目录
+    patch_base: "D:/data/HE_patches"
+
+    # ssGSEA 标签文件根目录
+    ssgsea_base: "D:/data/ssGSEA_scores"
+
+    # 特征缓存根目录
+    cache_base: "D:/data/caches"
+
+    # 模型权重/输出根目录
+    output_base: "D:/data/outputs"
+
+如果服务器上的数据目录结构不同，请根据实际路径修改。
+注意：
+  - 路径使用正斜杠 / 而非反斜杠 \
+  - 不要加末尾斜杠
+  - 如果某数据就在项目目录下，可以留空使用默认值
+
+如果患者级别的路径与默认不一致（默认: {patch_base}/{patient}_noov_split/），
+在 patients: 节逐患者配置:
+
+  patients:
+    HYZ15040:
+      patches_dir: "D:/data/HE_patches/HYZ15040_noov_split"
+      labels_path: "D:/data/ssGSEA_scores/HYZ15040_ssGSEA_scores_zscore.csv"
+    JFX0729:
+      patches_dir: "D:/data/HE_patches/JFX0729_noov_split"
+      labels_path: "D:/data/ssGSEA_scores/JFX0729_ssGSEA_scores_zscore.csv"
+    LMZ12939:
+      patches_dir: "D:/data/HE_patches/LMZ12939_noov_split"
+      labels_path: "D:/data/ssGSEA_scores/LMZ12939_ssGSEA_scores_zscore.csv"
+
+========================================
+第四步：确认数据就绪
+========================================
+
+以下数据和缓存必须在服务器上存在，否则训练会报 FileNotFoundError:
+
+□ 原始 patch 图像
+  {patch_base}/HYZ15040_noov_split/train/
+  {patch_base}/HYZ15040_noov_split/val/
+  {patch_base}/JFX0729_noov_split/train/
+  {patch_base}/JFX0729_noov_split/val/
+  {patch_base}/LMZ12939_noov_split/train/
+  {patch_base}/LMZ12939_noov_split/val/
+
+□ ssGSEA 标签 CSV
+  {ssgsea_base}/HYZ15040_ssGSEA_scores_zscore.csv
+  {ssgsea_base}/JFX0729_ssGSEA_scores_zscore.csv
+  {ssgsea_base}/LMZ12939_ssGSEA_scores_zscore.csv
+
+□ UNI Token 特征缓存 (训练必须，由特征提取脚本生成)
+  {cache_base}/uni2h_cache_tokens/HYZ15040/train/*.pt
+  {cache_base}/uni2h_cache_tokens/HYZ15040/val/*.pt
+  {cache_base}/uni2h_cache_tokens/JFX0729/train/*.pt
+  {cache_base}/uni2h_cache_tokens/JFX0729/val/*.pt
+  {cache_base}/uni2h_cache_tokens/LMZ12939/train/*.pt
+  {cache_base}/uni2h_cache_tokens/LMZ12939/val/*.pt
+
+□ AugMix Token 缓存 (如果使用 AugMix 增强)
+  {cache_base}/uni2h_cache_tokens_aug/HYZ15040/train/*.pt
+  {cache_base}/uni2h_cache_tokens_aug/JFX0729/train/*.pt
+  ... (训练集 3 患者 × 3 augment)
+
+如果这些缓存还未生成，需先在服务器上运行特征提取脚本。
+联系本地开发者获取特征提取脚本和 UNI2-h 模型权重。
+
+========================================
+第五步：安装 Python 依赖
+========================================
+
+服务器上需要安装以下 Python 包:
+
+  "C:\ProgramData\miniconda3\python.exe" -m pip install torch numpy pandas scikit-learn pyyaml
+
+可选（训练通知弹窗需要）:
+  "C:\ProgramData\miniconda3\python.exe" -m pip install plyer
+
+========================================
+第六步：冒烟测试 (1 Epoch)
+========================================
+
+打开 PowerShell (以管理员身份运行以避免编码问题):
+
+  cd D:\AIPatho\qzs
+  $env:PYTHONIOENCODING = "utf-8"
+
+  # 冒烟测试 1 — 单患者训练 1 epoch
+  & "C:\ProgramData\miniconda3\python.exe" train_histogene_uni_tokens_augmix.py --patient HYZ15040 --epochs 1
+
+预期结果:
+  - 无报错 (ImportError / FileNotFoundError / CUDA out of memory)
+  - 显示 "Epoch 1/1"
+  - loss 数值合理下降
+  - 完成后无异常退出
+
+如果报错，检查:
+  - config.yaml 中路径是否正确
+  - 特征缓存是否存在于对应目录
+  - CUDA 是否可用 (nvidia-smi)
+  - Python 包是否安装齐全
+
+  # 冒烟测试 2 — 跨患者训练 1 epoch
+  & "C:\ProgramData\miniconda3\python.exe" train_histogene_uni_tokens_augmix.py --cross_patient --fold 1 --epochs 1
+
+========================================
+第七步：验证已有权重可用
+========================================
+
+加载打包的最佳权重，快速跑一个评估:
+
+  # 加载最佳权重，跑 1 epoch 看是否能正常加载和保存
+  & "C:\ProgramData\miniconda3\python.exe" train_histogene_uni_tokens_augmix.py --cross_patient --fold 1 --epochs 1 --resume checkpoints/TV_Sweep_tv_l2_w0.01/best_histogene_uni_tokens_augmix.pth
+
+如果权重能正常加载并继续训练，说明部署成功。
+
+========================================
+第八步：开始正式训练
+========================================
+
+部署验证通过后，开始完整训练:
+
+  # 三折 CV — 在三个独立的 PowerShell 窗口中分别运行:
+
+  # 窗口 1 — Fold 1 (JFX+LMZ → HYZ)
+  $env:PYTHONIOENCODING = "utf-8"
+  & "C:\ProgramData\miniconda3\python.exe" train_histogene_uni_tokens_augmix.py --cross_patient --fold 1 --epochs 150 --tv_weight 0.01 --tv_mode l2
+
+  # 窗口 2 — Fold 2 (HYZ+LMZ → JFX)
+  $env:PYTHONIOENCODING = "utf-8"
+  & "C:\ProgramData\miniconda3\python.exe" train_histogene_uni_tokens_augmix.py --cross_patient --fold 2 --epochs 150 --tv_weight 0.01 --tv_mode l2
+
+  # 窗口 3 — Fold 3 (HYZ+JFX → LMZ)
+  $env:PYTHONIOENCODING = "utf-8"
+  & "C:\ProgramData\miniconda3\python.exe" train_histogene_uni_tokens_augmix.py --cross_patient --fold 3 --epochs 150 --tv_weight 0.01 --tv_mode l2
+
+每个 Fold 预计耗时: 5-10 小时 (RTX 4080)
+
+========================================
+第九步：回收结果
+========================================
+
+训练完成后，打包结果回传本地:
+
+  cd D:\AIPatho\qzs
+  Compress-Archive -Path @(
+      "checkpoints\results_vis\CrossPatient_Fold1_*",
+      "checkpoints\results_vis\CrossPatient_Fold2_*",
+      "checkpoints\results_vis\CrossPatient_Fold3_*",
+      "checkpoints\*.pth",
+      "predictions*.csv"
+  ) -DestinationPath "D:\pfmval_results_YYYYMMDD.zip"
+
+将 pfmval_results_YYYYMMDD.zip 复制回本地。
+
+========================================
+常见问题排查
+========================================
+
+Q: 运行时报 "gbk" 相关编码错误？
+A: 必须设置 $env:PYTHONIOENCODING = "utf-8"，每次新开 PowerShell 都要设置。
+
+Q: CUDA out of memory？
+A: RTX 4080 16GB 跑单任务不会 OOM（脚本默认 batch_size=64）。
+   如果同时跑 3 个 Fold 导致 OOM，减少并行数到 2 个。
+
+Q: 找不到 uni2h_cache_tokens 下的 .pt 文件？
+A: 特征缓存需要提前生成。确认 {cache_base}/uni2h_cache_tokens/ 下
+   各患者 train/ 和 val/ 目录中有 .pt 文件。
+   如果没有，需要先运行特征提取脚本（联系本地开发者）。
+
+Q: 找不到 config_utils 模块？
+A: 确保在项目根目录 (D:\AIPatho\qzs) 下运行 Python 命令，
+   且所有 .py 文件已解压到该目录。
+
+========================================
+本地开发者的联系信息
+========================================
+
+- 部署包生成脚本: deploy/pack_deploy.sh (本地运行)
+- 同步文件清单: deploy/sync_list.sh
+- 操作手册: deploy/SYNC_GUIDE.md
+- 项目说明: README.md
+- 模型性能排名: 模型性能排名_Model_Performance_Ranking.md

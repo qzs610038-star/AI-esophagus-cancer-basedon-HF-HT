@@ -1,0 +1,22 @@
+# ============================================================
+# PFMval 服务器 SSH 配置
+# 复制以下内容到本地 ~/.ssh/config 文件中
+# ============================================================
+# 服务器: Windows 10 Pro, RTX 4080 (16GB), 1TB RAM
+# 设备名: DESKTOP-HKP0IV0
+
+Host pfmval-server
+    HostName <填写服务器IP>
+    User <填写Windows用户名>
+    Port 22
+    IdentityFile ~/.ssh/pfmval_server
+    ServerAliveInterval 60
+    ServerAliveCountMax 10
+    # Windows OpenSSH 默认 shell 是 cmd，如需 PowerShell:
+    # PreferredAuthentications publickey
+
+# 常用操作（配置完成后）:
+#   ssh pfmval-server                           # 登录
+#   ./deploy/push.sh                            # 推送代码
+#   ./deploy/run.sh 'python train_xxx.py'       # 推送+训练
+#   ./deploy/pull.sh                            # 拉取结果

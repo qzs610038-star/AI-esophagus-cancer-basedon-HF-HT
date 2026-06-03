@@ -91,13 +91,23 @@ uni2h_cache/{patient}/{train,val}/                      # UNI 特征缓存
 ```
 预训练权重：`pretrained_omiclip/checkpoint.pt` (7.1GB) | `virchow2_repo/model.safetensors` (2.4GB)
 
-## 服务器
+## 服务器 (2026-06-03 部署完成)
 
 | 项目 | 值 |
 |------|-----|
 | IP / 用户 | 117.68.10.96 / AIPatho1 |
-| 项目路径 | `D:\AIPatho\qzs\pfmval_deploy\` |
-| 阻塞 | VPN 未接入 (GitHub 不可达) + HF 缓存权限 |
+| 项目路径 | `D:\AIPatho\qzs\pfmval_deploy_git\` |
+| Python venv | `C:\Users\AIPatho1\pfmval_env\Scripts\python.exe` |
+| PyTorch | 2.6.0+cu124, CUDA 12.9 |
+| GPU | RTX 4080 (16GB) |
+| HF 缓存 | `D:\AIPatho\shared\.cache\huggingface\` (HF_HOME) |
+| GitHub | `qzs610038-star/AI-esophagus-cancer-basedon-HF-HT` (公开) |
+| 代理 | Clash Verge 7897 (HTTP/HTTPS) |
+| 数据 patches | `D:\AIPatho\qzs\data-phase2\patch\{患者}_noov_split\` |
+| ssGSEA 标签 | `D:\AIPatho\qzs\data-phase2\ssGSEA_zscore\{患者}_ssGSEA_zscore.csv` |
+
+> 训练命令模板和配置参数速查：[[server-environment-quickref]]。部署日志：[[server-deploy-status]]。
+> **代码同步**：本地 RDP 传文件 → 服务器 `git add/commit/push`（本地 git push 不稳定）。
 
 ## PowerShell / Git
 

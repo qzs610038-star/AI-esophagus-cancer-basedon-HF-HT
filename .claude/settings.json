@@ -77,8 +77,7 @@
       "Skill(doc-registry:*)",
       "Bash(GIT_CURL_VERBOSE=0 git -c http.postBuffer=1048576000 -c http.lowSpeedLimit=0 -c core.compression=0 fetch origin main --depth=1)",
       "Bash(ssh -o ConnectTimeout=5 -T git@github.com)",
-      "Bash(GIT_LFS_SKIP_PUSH=1 git push origin main)",
-      "Bash(sed -i 's/<HF_TOKEN>/<HF_TOKEN>/g' \"d:/AI空间转录病理研究/PFMval_new/.claude/settings.json\" && grep -c \"hf_LIH\\\\|<HF_TOKEN>\" \"d:/AI空间转录病理研究/PFMval_new/.claude/settings.json\" 2>&1)"
+      "Bash(sed -i 's/<HF_TOKEN>/<HF_TOKEN>/g' \"d:/AI空间转录病理研究/PFMval_new/.claude/settings.json\" && git add .claude/settings.json && git rebase --continue 2>&1)"
     ],
     "additionalDirectories": [
       "C:\\Users\\33696\\.claude\\projects\\d--AI---------PFMval-new",
