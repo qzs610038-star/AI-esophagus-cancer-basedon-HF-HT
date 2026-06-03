@@ -11,7 +11,7 @@
 
 | 模型 | 状态 | 特征 | 单患者Val PCC | 跨患者Test PCC |
 |------|------|------|:---:|:---:|
-| UNI2-h + DenseNet121 CLS (frozen) | **主力** | 1536维 | 0.5227 | **0.3969** (三折均值) |
+| UNI2-h + DenseNet121 CLS (frozen) | **主力** | 1536维 | 0.5236 | **0.3969** (三折均值) / Fold1 0.4113 |
 | UNI2-h LoRA 渐进解冻 | **实验** | 1536维 | **0.5462** | 待验证 |
 | HisToGene-UNI Token + AugMix | 活跃 | 1536维 | 0.5217 | 0.4142 (Fold1) |
 | HisToGene-UNI+GAT | 实验完成 | 1536维 | — | 0.4068 (提升不显著) |
@@ -20,7 +20,7 @@
 | OmiCLIP | **暂停(P3)** | 768维 | 0.55 | 0.19 (单患者强跨患者崩) |
 | EGN-v1 | **已淘汰** | — | — | 所有对比排除 |
 
-> 当前最佳 frozen 基线：UNI2-h + DenseNet121 CLS 三折均值 **0.3969**。LoRA Stage 1 单患者 **0.5462**（+0.0235 vs frozen），跨患者 Fold1 为下一关键验证。
+> 当前最佳 frozen 基线：UNI2-h + DenseNet121 CLS 三折均值 **0.3969**，Fold1 **0.4113**（已确认）。LoRA Stage 1 单患者 **0.5462**（+0.0235 vs frozen），跨患者 Fold1 为下一关键验证。
 
 ## 核心铁律
 
@@ -107,7 +107,7 @@ uni2h_cache/{patient}/{train,val}/                      # UNI 特征缓存
 | ssGSEA 标签 | `D:\AIPatho\qzs\data-phase2\ssGSEA_zscore\{患者}_ssGSEA_zscore.csv` |
 
 > 训练命令模板和配置参数速查：[[server-environment-quickref]]。部署日志：[[server-deploy-status]]。
-> **代码同步**：本地 RDP 传文件 → 服务器 `git add/commit/push`（本地 git push 不稳定）。
+> **代码同步**：本地通过 **SSH** 直推 GitHub（`git@github.com:qzs610038-star/...`）。HTTPS + Clash 代理在大流量传输时会 TLS 断连，已切换为 SSH 协议（密钥：`~/.ssh/pfmval_server`）。服务器同步用 `git pull`。推送故障排查参考 `.claude/skills/git-rescue/SKILL.md`。
 
 ## PowerShell / Git
 
