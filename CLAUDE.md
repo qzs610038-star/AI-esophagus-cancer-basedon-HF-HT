@@ -25,13 +25,16 @@
 
 | 模型 | 状态 | 特征 | 说明 |
 |------|------|------|------|
-| HisToGene-UNI | 活跃 | 1536维 | 主力，跨患者泛化最强 |
+| HisToGene-UNI (frozen) | 活跃 | 1536维 | 主力，跨患者泛化最强 |
+| UNI2-h LoRA 渐进解冻 | **实验** | 1536维 | 在线训练，单患者Val PCC=0.5462，跨患者待验证 |
 | EGN-v2+UNI | 活跃 | 1536维 | 跨患者PCC 0.195 |
 | HisToGene-UNI+GAT | 实验完成 | 1536维 | 提升不显著(-0.27%) |
+| Virchow2 | **已关闭** | 1280维 | 四轮实验 PCC 天花板~0.35，低于UNI~0.40 |
+| OmiCLIP | **暂停(P3)** | 768维 | 单患者0.55→跨患者0.19(-64%)，等待LoRA验证完成后恢复 |
 | HisToGene 原版 | 活跃 | ViT | 基线，~70.6M参数 |
 | EGN-v1 | **已淘汰** | — | 所有对比分析排除 |
 
-当前最佳：HisToGene-UNI Token 跨患者3折平均PCC=0.3812。
+当前最佳：UNI2-h + DenseNet121 CLS (frozen) 跨患者3折平均PCC=**0.3969**；UNI2-h LoRA Stage 1 单患者Val PCC=**0.5462**。
 
 ## 核心铁律
 
@@ -69,16 +72,26 @@ PYTHONIOENCODING=utf-8 "C:\Program Files\Python313\python.exe" train_histogene_u
 
 | 模型 | 单患者Val PCC | 跨患者Test PCC |
 |------|-------------|---------------|
+| **UNI2-h + DenseNet121 CLS (frozen) 三折平均** | — | **0.3969** |
 | HisToGene-UNI Token（方案B AugMix） | 0.5217 | 0.4142 (Fold1) |
 | HisToGene-UNI Token 三折平均 | — | 0.3812 |
 | HisToGene-UNI Token + GAT | — | 0.4068 (Fold1, 提升不显著) |
 | EGN-v2+UNI | — | 0.1950 |
 
+### 在线训练（LoRA 渐进解冻）基线
+
+| 模型 | 单患者Val PCC | 说明 |
+|------|:---:|------|
+| UNI2-h LoRA Stage 1 (Epoch 2) | **0.5462** | +0.0235 vs frozen 基线 0.5227 |
+| UNI2-h + DenseNet121 CLS (frozen) | 0.5227 | 当前 frozen 单患者基线 |
+| OmiCLIP (frozen, 参考) | 0.55 | 单患者强但跨患者崩(-64%) |
+
 ## 下一步方向
 
-- **短期**：OmiCLIP 训练验证 + 三折交叉验证
-- **中期**：Virchow2 / BLEEP 探索；扩展至 5 患者
-- **长期**：多中心验证；论文投稿
+- **P0 短期**：LoRA 渐进解冻跨患者验证 + 服务器连通性 + Phase 3 预后最小闭环
+- **P1 中期**：LoRA Stage 2/3（末层解冻）、正则化对抗过拟合（rank↓ + Dropout↑ + AugMix + TV Loss）
+- **P2 远期**：9 患者到齐（预计 2026年6月底）后重训 + RL 通路选择（方案 D BO 搜索）
+- **P3 暂停**：GAT 深化 / AttnPool / OmiCLIP 跨患者 / 大规模多教师融合
 
 ## 训练控制机制
 

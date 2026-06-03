@@ -20,9 +20,9 @@
       "name": "RL方法选择_初学者指南.md",
       "path": "01_指南与解读/学习指南/RL方法选择_初学者指南.md",
       "category": "学习指南",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "RL 四种方案（DQN调度/PPO/BO通路选择/多臂老虎机）的可行性分析与选择指南",
+      "created": "2026-05-24",
+      "tags": ["RL", "强化学习", "DQN", "BO", "初学者", "方案选择"]
     },
     {
       "name": "infer_解读指南.md",
@@ -68,17 +68,17 @@
       "name": "服务器迁移指南_初学者版.md",
       "path": "01_指南与解读/学习指南/服务器迁移指南_初学者版.md",
       "category": "学习指南",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "PFMval 项目从本地迁移至 Windows 服务器的完整操作指南",
+      "created": "2026-05-22",
+      "tags": ["服务器", "迁移", "部署", "初学者"]
     },
     {
       "name": "训练进度查看指南.md",
       "path": "01_指南与解读/学习指南/训练进度查看指南.md",
       "category": "学习指南",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "如何查看训练进度、理解训练日志输出、判断模型是否正常收敛",
+      "created": "2026-05-17",
+      "tags": ["训练", "监控", "日志", "初学者"]
     },
     {
       "name": "项目全貌与迁移指南.md",
@@ -156,25 +156,25 @@
       "name": "RL方案B与方案D_部署实现策略.md",
       "path": "01_指南与解读/部署方案/RL方案B与方案D_部署实现策略.md",
       "category": "部署方案",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "RL 方案 B（DQN训练调度）与方案 D（BO通路选择）的 MDP 设计、训练策略与风险评估",
+      "created": "2026-05-24",
+      "tags": ["RL", "DQN", "BO", "部署", "MDP", "训练调度", "通路选择"]
     },
     {
       "name": "Virchow2_部署方案.md",
       "path": "01_指南与解读/部署方案/Virchow2_部署方案.md",
       "category": "部署方案",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "Virchow2 (ViT-H/14, 632M, 1280-dim) 的部署、特征提取与训练流程（方向已关闭）",
+      "created": "2026-05-19",
+      "tags": ["Virchow2", "部署", "特征提取", "已关闭"]
     },
     {
       "name": "服务器部署指南.md",
       "path": "01_指南与解读/部署方案/服务器部署指南.md",
       "category": "部署方案",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "Windows 服务器部署 PFMval 项目的完整操作手册，含环境搭建与依赖安装",
+      "created": "2026-05-22",
+      "tags": ["服务器", "部署", "环境搭建", "Windows"]
     },
     {
       "name": "融合空间组学执行方案_20260522.md",
@@ -204,9 +204,9 @@
       "name": "AugMix实验评估报告_20260515.md",
       "path": "01_指南与解读/分析报告/AugMix实验评估报告_20260515.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "AugMix 数据增强在 UNI Token 模型上的消融实验评估，含 PCC 对比与过拟合分析",
+      "created": "2026-05-15",
+      "tags": ["AugMix", "数据增强", "消融实验", "过拟合", "PCC"]
     },
     {
       "name": "EGNv2_实验分析与建议.md",
@@ -220,9 +220,9 @@
       "name": "HisToGene_UNI训练结果对比分析.md",
       "path": "01_指南与解读/分析报告/HisToGene_UNI训练结果对比分析.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "HisToGene-UNI Token vs CLS 两种特征提取方式的跨患者训练结果对比分析",
+      "created": "2026-05-17",
+      "tags": ["HisToGene", "UNI", "Token", "CLS", "对比分析", "跨患者"]
     },
     {
       "name": "HisToGene应用规划.md",
@@ -244,49 +244,49 @@
       "name": "PFMval_PCC优化建议报告_附论文推荐_20260513.md",
       "path": "01_指南与解读/分析报告/PFMval_PCC优化建议报告_附论文推荐_20260513.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "PCC 优化系统性建议报告，含 37 篇文献综述与论文推荐",
+      "created": "2026-05-13",
+      "tags": ["PCC优化", "文献综述", "论文推荐", "改进方向"]
     },
     {
       "name": "Phase2模型改进建议_0507.md",
       "path": "01_指南与解读/分析报告/Phase2模型改进建议_0507.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "Phase 2 模型改进建议：损失加权、编码器深度优化、特征天花板分析与 Virchow2 替代方案",
+      "created": "2026-05-07",
+      "tags": ["Phase2", "改进建议", "损失加权", "编码器", "特征天花板"]
     },
     {
       "name": "he-ssgsea-greedy-river.md",
       "path": "01_指南与解读/分析报告/he-ssgsea-greedy-river.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "H&E 图像 → ssGSEA 通路预测的 Greedy River 方法探索与实验分析",
+      "created": "2026-05-24",
+      "tags": ["GreedyRiver", "ssGSEA", "通路预测", "HE"]
     },
     {
       "name": "下一步改进操作建议_0516.md",
       "path": "01_指南与解读/分析报告/下一步改进操作建议_0516.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "0516 组会后整理的下一步实验操作建议：P1 实验完成后的 P2-P4 优先级排序",
+      "created": "2026-05-16",
+      "tags": ["改进建议", "操作建议", "P2", "优先级", "实验规划"]
     },
     {
       "name": "全模型训练总结与研究方向分析.md",
       "path": "01_指南与解读/分析报告/全模型训练总结与研究方向分析.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "HisToGene/EGN-v2/UNI/Virchow2 全模型训练结果总结与后续研究方向研判",
+      "created": "2026-05-18",
+      "tags": ["训练总结", "模型对比", "研究方向", "综述"]
     },
     {
       "name": "教师-学生架构改进方案_20260522.md",
       "path": "01_指南与解读/分析报告/教师-学生架构改进方案_20260522.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "教师-学生架构在病理图像→通路预测任务上的改进方案设计与可行性分析",
+      "created": "2026-05-22",
+      "tags": ["教师-学生", "知识蒸馏", "改进方案", "架构设计"]
     },
     {
       "name": "数据分布与Z-score适用性分析.md",
@@ -308,9 +308,9 @@
       "name": "新数据集3ST分析报告.md",
       "path": "01_指南与解读/分析报告/新数据集3ST分析报告.md",
       "category": "分析报告",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "3 位食管癌患者空间转录组数据集（3ST）的统计分析报告，含通路分布与患者差异",
+      "created": "2026-05-08",
+      "tags": ["3ST", "数据集", "统计分析", "ssGSEA", "通路分布"]
     },
     {
       "name": "模型评估与选型分析.md",
@@ -404,25 +404,25 @@
       "name": "README.md",
       "path": "README.md",
       "category": "项目核心",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "项目门面文档，面向人类读者的项目概览与快速入门",
+      "created": "2026-04-18",
+      "tags": ["README", "项目概览", "快速入门"]
     },
     {
       "name": "CLAUDE.md",
       "path": "CLAUDE.md",
       "category": "项目核心",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "AI Agent 项目指南：模型体系、核心铁律、运行环境、路径配置、Git 规则",
+      "created": "2026-04-18",
+      "tags": ["CLAUDE.md", "AI指南", "核心铁律", "环境配置"]
     },
     {
       "name": "模型性能排名_Model_Performance_Ranking.md",
       "path": "模型性能排名_Model_Performance_Ranking.md",
       "category": "项目核心",
-      "purpose": "",
-      "created": "",
-      "tags": []
+      "purpose": "PFMval 全模型（HisToGene/EGN-v2/UNI/Virchow2/OmiCLIP）性能排名与最佳基线速查",
+      "created": "2026-05-21",
+      "tags": ["性能排名", "模型对比", "PCC", "基线", "速查"]
     },
     {
       "name": "git-cloud-sync-options.md",
