@@ -1,0 +1,106 @@
+2026-06-04 01:42:44 | ============================================
+2026-06-04 01:42:44 |   PFMval Nightly LoRA Validation
+2026-06-04 01:42:44 |   Host: DESKTOP-HKP0IV0
+2026-06-04 01:42:44 |   Start: 2026-06-04 01:42:44
+2026-06-04 01:42:44 |   Total experiments: 9
+2026-06-04 01:42:44 | ============================================
+2026-06-04 01:42:44 | 
+2026-06-04 01:42:44 | [ENV] Python 3.13.5
+2026-06-04 01:42:44 | [ENV] Working dir: D:\AIPatho\qzs\pfmval_deploy_git
+2026-06-04 01:42:44 | 
+2026-06-04 01:42:44 | ------------------------------------------------------------
+2026-06-04 01:42:44 | [P0] P0-1 LoRA r=8 Cross-Fold1
+2026-06-04 01:42:44 |      Output dir: checkpoints\online_cls\lora_r8_online_cls_cross_fold1
+2026-06-04 01:42:44 | ------------------------------------------------------------
+2026-06-04 01:42:44 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode lora --lora_rank 8 --cross_patient --fold 1
+2026-06-04 04:18:21 | [OK] Val PCC=0.4322 | Epoch=2 | Val Loss=0.3212 | Elapsed 155.6min
+2026-06-04 04:18:21 | 
+2026-06-04 04:18:21 | ------------------------------------------------------------
+2026-06-04 04:18:21 | [P0] P0-2 Stage2 r=8 Cross-Fold1
+2026-06-04 04:18:21 |      Output dir: checkpoints\online_cls\stage2_r8_online_cls_cross_fold1
+2026-06-04 04:18:21 | ------------------------------------------------------------
+2026-06-04 04:18:21 | [DEP] Prerequisite lora_r8_online_cls_cross_fold1 -> best_model.pth ready
+2026-06-04 04:18:21 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode stage2 --lora_rank 8 --cross_patient --fold 1 --resume checkpoints/online_cls/lora_r8_online_cls_cross_fold1/best_model.pth
+2026-06-04 06:35:48 | [OK] Val PCC=0.4118 | Epoch=1 | Val Loss=0.3292 | Elapsed 137.4min
+2026-06-04 06:35:48 | 
+2026-06-04 06:35:48 | ------------------------------------------------------------
+2026-06-04 06:35:48 | [P0] P0-3 Stage3 r=8 Cross-Fold1
+2026-06-04 06:35:48 |      Output dir: checkpoints\online_cls\stage3_r8_online_cls_cross_fold1
+2026-06-04 06:35:48 | ------------------------------------------------------------
+2026-06-04 06:35:48 | [DEP] Prerequisite stage2_r8_online_cls_cross_fold1 -> best_model.pth ready
+2026-06-04 06:35:48 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode stage3 --lora_rank 8 --cross_patient --fold 1 --resume checkpoints/online_cls/stage2_r8_online_cls_cross_fold1/best_model.pth
+2026-06-04 08:55:30 | [OK] Val PCC=0.4056 | Epoch=1 | Val Loss=0.3325 | Elapsed 139.7min
+2026-06-04 08:55:30 | 
+2026-06-04 08:55:30 | ------------------------------------------------------------
+2026-06-04 08:55:30 | [P1] P1-1 LoRA r=8 Cross-Fold2
+2026-06-04 08:55:30 |      Output dir: checkpoints\online_cls\lora_r8_online_cls_cross_fold2
+2026-06-04 08:55:30 | ------------------------------------------------------------
+2026-06-04 08:55:30 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode lora --lora_rank 8 --cross_patient --fold 2
+2026-06-04 10:42:24 | [WARN] exit=1 | Val PCC=0.3726
+2026-06-04 10:42:24 | 
+2026-06-04 10:42:24 | ------------------------------------------------------------
+2026-06-04 10:42:24 | [P1] P1-2 LoRA r=8 Cross-Fold3
+2026-06-04 10:42:24 |      Output dir: checkpoints\online_cls\lora_r8_online_cls_cross_fold3
+2026-06-04 10:42:24 | ------------------------------------------------------------
+2026-06-04 10:42:24 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode lora --lora_rank 8 --cross_patient --fold 3
+2026-06-04 10:49:41 | [FAIL] exit=1 | Elapsed min | No result file found
+2026-06-04 10:49:41 | 
+2026-06-04 10:49:41 | ------------------------------------------------------------
+2026-06-04 10:49:41 | [P1] P1-3 LoRA r=8 Dropout=0.1 Cross-Fold1
+2026-06-04 10:49:41 |      Output dir: checkpoints\online_cls\lora_r8_online_cls_cross_fold1_d01
+2026-06-04 10:49:41 | ------------------------------------------------------------
+2026-06-04 10:49:41 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode lora --lora_rank 8 --lora_dropout 0.1 --cross_patient --fold 1 --dataset_name online_cls_cross_fold1_d01
+2026-06-04 10:49:47 | [FAIL] exit=1 | Elapsed min | No result file found
+2026-06-04 10:49:47 | 
+2026-06-04 10:49:47 | ------------------------------------------------------------
+2026-06-04 10:49:47 | [P2] P2-1 LoRA r=4 Cross-Fold1
+2026-06-04 10:49:47 |      Output dir: checkpoints\online_cls\lora_r4_online_cls_cross_fold1
+2026-06-04 10:49:47 | ------------------------------------------------------------
+2026-06-04 10:49:47 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode lora --lora_rank 4 --cross_patient --fold 1
+2026-06-04 10:50:00 | [FAIL] exit=1 | Elapsed min | No result file found
+2026-06-04 10:50:00 | 
+2026-06-04 10:50:00 | ------------------------------------------------------------
+2026-06-04 10:50:00 | [P2] P2-2 Frozen r=8 Cross-Fold2
+2026-06-04 10:50:00 |      Output dir: checkpoints\online_cls\frozen_r8_online_cls_cross_fold2
+2026-06-04 10:50:00 | ------------------------------------------------------------
+2026-06-04 10:50:00 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode frozen --lora_rank 8 --cross_patient --fold 2
+2026-06-04 10:50:02 | [FAIL] exit=1 | Elapsed min | No result file found
+2026-06-04 10:50:02 | 
+2026-06-04 10:50:02 | ------------------------------------------------------------
+2026-06-04 10:50:02 | [P2] P2-3 Frozen r=8 Cross-Fold3
+2026-06-04 10:50:02 |      Output dir: checkpoints\online_cls\frozen_r8_online_cls_cross_fold3
+2026-06-04 10:50:02 | ------------------------------------------------------------
+2026-06-04 10:50:02 | [CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py --mode frozen --lora_rank 8 --cross_patient --fold 3
+2026-06-04 10:50:04 | [FAIL] exit=1 | Elapsed min | No result file found
+2026-06-04 10:50:04 | 
+2026-06-04 10:50:04 | ============================================
+2026-06-04 10:50:04 |   EXPERIMENT SUMMARY
+2026-06-04 10:50:04 | ============================================
+2026-06-04 10:50:04 | Finished: 2026-06-04 10:50:04
+2026-06-04 10:50:04 | Total time: h
+2026-06-04 10:50:04 | Done: 4 | Failed: 5 | Total: 9
+2026-06-04 10:50:04 | 
+2026-06-04 10:50:04 | ========== P0 ==========
+2026-06-04 10:50:04 |   P0-1 LoRA r=8 Cross-Fold1: PCC=0.4322 (Epoch 2)
+2026-06-04 10:50:04 |   P0-2 Stage2 r=8 Cross-Fold1: PCC=0.4118 (Epoch 1)
+2026-06-04 10:50:04 |   P0-3 Stage3 r=8 Cross-Fold1: PCC=0.4056 (Epoch 1)
+2026-06-04 10:50:04 | 
+2026-06-04 10:50:04 | ========== P1 ==========
+2026-06-04 10:50:04 |   P1-1 LoRA r=8 Cross-Fold2: PCC=0.3726 (Epoch 2)
+2026-06-04 10:50:04 |   P1-2 LoRA r=8 Cross-Fold3: FAIL - exit=1, no training_history.csv
+2026-06-04 10:50:04 |   P1-3 LoRA r=8 Dropout=0.1 Cross-Fold1: FAIL - exit=1, no training_history.csv
+2026-06-04 10:50:04 | 
+2026-06-04 10:50:04 | ========== P2 ==========
+2026-06-04 10:50:04 |   P2-1 LoRA r=4 Cross-Fold1: FAIL - exit=1, no training_history.csv
+2026-06-04 10:50:04 |   P2-2 Frozen r=8 Cross-Fold2: FAIL - exit=1, no training_history.csv
+2026-06-04 10:50:04 |   P2-3 Frozen r=8 Cross-Fold3: FAIL - exit=1, no training_history.csv
+2026-06-04 10:50:04 | 
+2026-06-04 10:50:04 | ========== Key Comparisons ==========
+2026-06-04 10:50:04 | LoRA Cross-Fold1: 0.4322 | Frozen: 0.4113 | Delta = +4f
+2026-06-04 10:50:04 | Stage2 Cross-Fold1: 0.4118
+2026-06-04 10:50:04 | Stage3 Cross-Fold1: 0.4056
+2026-06-04 10:50:04 | LoRA Cross-Fold2: 0.3726
+2026-06-04 10:50:04 | 
+2026-06-04 10:50:04 | Summary CSV: logs\nightly\summary_20260604_014244.csv
+2026-06-04 10:50:04 | Main log: logs\nightly\batch_20260604_014244.log
+2026-06-04 10:50:04 | ============================================

@@ -1,0 +1,10 @@
+﻿label,ckpt_dir,status,pcc,epoch,detail
+P0-1 LoRA r=8 Cross-Fold1,lora_r8_online_cls_cross_fold1,OK,0.4322,2,PCC=0.4322
+P0-2 Stage2 r=8 Cross-Fold1,stage2_r8_online_cls_cross_fold1,OK,0.4118,1,PCC=0.4118
+P0-3 Stage3 r=8 Cross-Fold1,stage3_r8_online_cls_cross_fold1,OK,0.4056,1,PCC=0.4056
+P1-1 LoRA r=8 Cross-Fold2,lora_r8_online_cls_cross_fold2,OK,0.3726,2,PCC=0.3726 (exit=1)
+P1-2 LoRA r=8 Cross-Fold3,lora_r8_online_cls_cross_fold3,FAIL,-,-,exit=1, no training_history.csv
+P1-3 LoRA r=8 Dropout=0.1 Cross-Fold1,lora_r8_online_cls_cross_fold1_d01,FAIL,-,-,exit=1, no training_history.csv
+P2-1 LoRA r=4 Cross-Fold1,lora_r4_online_cls_cross_fold1,FAIL,-,-,exit=1, no training_history.csv
+P2-2 Frozen r=8 Cross-Fold2,frozen_r8_online_cls_cross_fold2,FAIL,-,-,exit=1, no training_history.csv
+P2-3 Frozen r=8 Cross-Fold3,frozen_r8_online_cls_cross_fold3,FAIL,-,-,exit=1, no training_history.csv
