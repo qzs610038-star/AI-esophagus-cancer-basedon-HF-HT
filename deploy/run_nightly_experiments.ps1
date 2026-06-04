@@ -9,7 +9,9 @@
 # ============================================================
 
 $ErrorActionPreference = "Continue"
-$PYTHON = "C:\Users\AIPatho1\pfmval_env\Scripts\python.exe"
+# Python 路径 — 部署到新服务器时修改此处
+# 建议使用 venv: C:\Users\<YourUser>\pfmval_env\Scripts\python.exe
+$PYTHON = if ($env:PFMVAL_PYTHON) { $env:PFMVAL_PYTHON } else { "C:\Users\AIPatho1\pfmval_env\Scripts\python.exe" }
 
 # ── CPU Thread Limit (2026-06-04: NUMA0 protection, max 64 threads) ──
 $env:OMP_NUM_THREADS = "8"

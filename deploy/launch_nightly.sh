@@ -12,18 +12,13 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
 # ══════════════════════════════════════════════
-# 服务器连接参数（来自 CLAUDE.md + ~/.ssh/config）
+# 服务器连接参数 — 从 secrets.sh (gitignored) 或 config.sh 读取
 # ══════════════════════════════════════════════
-SERVER_HOST="117.68.10.96"
-SERVER_USER="AIPatho1"
-SERVER_PORT="22"
-SSH_KEY="$HOME/.ssh/pfmval_server"
-
-# 服务器路径
-SERVER_PROJECT_DIR="D:/AIPatho/qzs/pfmval_deploy_git"
-SERVER_PYTHON="C:/Users/AIPatho1/pfmval_env/Scripts/python.exe"
-
-# SSH 基础命令
+if [ -f "${SCRIPT_DIR}/secrets.sh" ]; then
+    source "${SCRIPT_DIR}/secrets.sh"
+else
+    source "${SCRIPT_DIR}/config.sh"
+fi
 SSH_CMD="ssh -i ${SSH_KEY} -p ${SERVER_PORT} -o StrictHostKeyChecking=no"
 SCP_CMD="scp -i ${SSH_KEY} -P ${SERVER_PORT} -o StrictHostKeyChecking=no"
 

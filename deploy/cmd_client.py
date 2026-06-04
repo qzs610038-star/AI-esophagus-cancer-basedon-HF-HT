@@ -6,14 +6,14 @@ PFMval 远程命令客户端
 
 用法:
   # 单次执行
-  python deploy/cmd_client.py --host 117.68.10.96 --port 8080 --token my-token "python train_xxx.py --epochs 5"
+  python deploy/cmd_client.py --host <SERVER_IP> --port 8080 --token my-token "python train_xxx.py --epochs 5"
 
   # 交互模式
-  python deploy/cmd_client.py --host 117.68.10.96 --port 8080 --token my-token
+  python deploy/cmd_client.py --host <SERVER_IP> --port 8080 --token my-token
 
   # 从环境变量或 secrets.sh 读取配置
-  source deploy/secrets.sh  # 含 CMD_SERVER_TOKEN
-  python deploy/cmd_client.py --host 117.68.10.96 --port 8080 "train command"
+  source deploy/secrets.sh  # 含 CMD_SERVER_HOST / CMD_SERVER_TOKEN
+  python deploy/cmd_client.py --port 8080 "train command"
 """
 
 import argparse
@@ -66,7 +66,7 @@ def is_long_running(cmd):
 
 def main():
     parser = argparse.ArgumentParser(description="PFMval 远程命令客户端")
-    parser.add_argument("--host", default=os.environ.get("CMD_SERVER_HOST", "117.68.10.96"))
+    parser.add_argument("--host", default=os.environ.get("CMD_SERVER_HOST", "localhost"))
     parser.add_argument("--port", type=int, default=int(os.environ.get("CMD_SERVER_PORT", 8080)))
     parser.add_argument("--token", default=os.environ.get("CMD_SERVER_TOKEN", ""))
     parser.add_argument("command", nargs="*", help="要执行的命令（留空进入交互模式）")
