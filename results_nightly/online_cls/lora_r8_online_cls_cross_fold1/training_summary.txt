@@ -1,0 +1,9 @@
+训练模式: lora
+LoRA rank: 8
+数据集: online_cls_cross_fold1
+训练模式: 跨患者 Fold 1 (JFX0729+LMZ12939→HYZ15040)
+Best Epoch: 2
+Best Val PCC: 0.4322
+Best Val Loss: 0.3212
+训练样本: 15351
+验证样本: 2655

@@ -1,0 +1,9 @@
+训练模式: frozen
+LoRA rank: 8
+数据集: online_cls_HYZ15040
+训练模式: 单患者 HYZ15040
+Best Epoch: 1
+Best Val PCC: 0.5236
+Best Val Loss: 0.2713
+训练样本: 2390
+验证样本: 265
