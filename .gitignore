@@ -41,8 +41,8 @@ pfmval_deploy_*.tar.gz
 # 所有 .pth 权重文件（包含 checkpoints 目录下及根目录下的）
 **/*.pth
 
-# 根目录 checkpoints 目录（完全忽略，仅匹配根目录）
-/checkpoints/
+# 根目录 checkpoints 保留作为服务器回传通道
+# 不再整体忽略 /checkpoints/，仅排除其中的 .pth 权重（由 **/*.pth 覆盖）
 
 # uni2h_new 子目录下的 checkpoints（模型权重 + 训练产物）
 uni2h_new/checkpoints/
@@ -184,3 +184,50 @@ inspect_omiclip.py
 inspect_omiclip2.py
 run_omiclip_training.ps1
 scripts/download_omiclip.py
+
+# --------------------------------------------
+# 12. AI Agent 文件（仅本地 Claude Code 使用，2026-06-04）
+# --------------------------------------------
+.claude/
+.qoder/
+codex_memory/
+CLAUDE.md
+
+# --------------------------------------------
+# 13. 本地文档与文献（仅本地参考，2026-06-04）
+# --------------------------------------------
+01_指南与解读/
+02_组会汇报/
+Ai病理项目文献汇总/
+docs/
+archive/
+
+# --------------------------------------------
+# 14. 分析与报告产物（2026-06-04）
+# --------------------------------------------
+HYZ_analysis_output/
+experiments/
+reports/
+report_figures/
+*.npz
+
+# --------------------------------------------
+# 15. 第三方参考代码（只读参考，2026-06-04）
+# --------------------------------------------
+openmidnight/
+
+# --------------------------------------------
+# 16. 已废弃实验目录（2026-06-04）
+# --------------------------------------------
+uni2h_new/
+
+# --------------------------------------------
+# 17. 受保护目录中的旧训练产物（2026-06-04）
+# 仅保留 .py 源码，排除 checkpoints 下的可视化结果和 training_history
+# --------------------------------------------
+histogene/checkpoints/
+egnv1/checkpoints/
+egnv2/checkpoints/
+histogene/training_history*.csv
+egnv1/training_history*.csv
+egnv2/training_history*.csv
