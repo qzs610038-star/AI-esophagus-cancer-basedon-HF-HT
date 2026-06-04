@@ -65,6 +65,7 @@ case "$MODE" in
 
         git push server main
         echo ""
-        echo ">>> 推送完成。服务器上执行: cd ${SERVER_PROJECT_DIR} && git pull"
+        echo ">>> 推送完成。服务器上执行（禁止加 git clean -fd！）:"
+        echo "    cd ${SERVER_PROJECT_DIR} && git fetch origin main --force && git reset --hard origin/main"
         ;;
 esac

@@ -33,7 +33,27 @@ dir D:\AIPatho\qzs\train_histogene_uni_tokens_augmix.py
 
 ## 二、代码同步（本地 → 服务器）
 
-### 本地操作
+> **🚫 警告：绝对禁止在服务器上执行 `git clean -fd`！**
+> 2026-06-04 已因此丢失 lora_r4 Fold1 + Fold3 等训练结果。`git clean` 会删除 checkpoints/ 下未 commit 的结果文件。
+> 正确的服务器同步命令见下方。
+
+### Git 方式（推荐，增量同步）
+
+**本地**：
+```bash
+git push origin main
+```
+
+**服务器**：
+```powershell
+# ✅ 安全同步（仅这两条，不包含 git clean）
+git fetch origin main --force
+git reset --hard origin/main
+
+# ❌ 绝对不要加 git clean -fd！会删除 checkpoints/ 下训练结果
+```
+
+### 手动方式（网络不通时的替代）
 
 ```bash
 # 1. 生成同步文件清单
