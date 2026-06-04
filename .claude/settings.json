@@ -81,7 +81,13 @@
       "Bash(GIT_LFS_SKIP_PUSH=1 git push origin main)",
       "Bash(mkdir -p \"d:/AI空间转录病理研究/PFMval_new/.claude/skills/git-rescue\" 2>&1)",
       "Edit(/.claude/skills/git-rescue/**)",
-      "Edit(/.claude/skills/sync-server/**)"
+      "Edit(/.claude/skills/sync-server/**)",
+      "Read(//c/Users/33696/AppData/Local/Temp/**)",
+      "Read(//c/Users/**)",
+      "Bash(cat checkpoints/online_cls/lora_r8_online_cls_cross_fold3/training_history.csv)",
+      "Bash(ls checkpoints/online_cls/lora_r8_online_cls_cross_fold3/)",
+      "Bash(cat checkpoints/online_cls/lora_r8_online_cls_cross_fold3/training_summary.txt)",
+      "Bash(ls checkpoints/online_cls/)"
     ],
     "additionalDirectories": [
       "C:\\Users\\33696\\.claude\\projects\\d--AI---------PFMval-new",

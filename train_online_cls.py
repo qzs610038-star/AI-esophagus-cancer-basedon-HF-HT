@@ -145,7 +145,13 @@ def train_one_epoch(
     avg_loss = total_loss / n_samples
     all_preds_t = torch.cat(all_preds, dim=0)
     all_labels_t = torch.cat(all_labels, dim=0)
-    metrics = compute_metrics(all_labels_t.numpy(), all_preds_t.numpy())
+
+    # NaN safety: clip extreme values
+    preds_np = np.clip(np.nan_to_num(all_preds_t.numpy(), nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+    labels_np = np.clip(np.nan_to_num(all_labels_t.numpy(), nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+
+    with np.errstate(over='warn', invalid='warn'):
+        metrics = compute_metrics(labels_np, preds_np)
     return avg_loss, metrics
 
 
@@ -179,7 +185,16 @@ def evaluate(
     avg_loss = total_loss / n
     all_preds_t = torch.cat(all_preds, dim=0)
     all_labels_t = torch.cat(all_labels, dim=0)
-    metrics = compute_metrics(all_labels_t.numpy(), all_preds_t.numpy())
+
+    # NaN safety: clip extreme values before metric computation
+    # (LMZ12939 labels may have extreme z-scores causing numpy overflow)
+    preds_np = all_preds_t.numpy()
+    labels_np = all_labels_t.numpy()
+    preds_np = np.clip(np.nan_to_num(preds_np, nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+    labels_np = np.clip(np.nan_to_num(labels_np, nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+
+    with np.errstate(over='warn', invalid='warn'):
+        metrics = compute_metrics(labels_np, preds_np)
     return avg_loss, metrics
 
 
@@ -311,6 +326,8 @@ def build_argparser() -> argparse.ArgumentParser:
                    help="AdamW 权重衰减")
     p.add_argument("--gradient_clip", type=float, default=1.0,
                    help="梯度裁剪范数")
+    p.add_argument("--num_threads", type=int, default=8,
+                   help="CPU 线程数限制 (default: 8, 0=不限制)")
     p.add_argument("--scheduler_patience", type=int, default=5,
                    help="LR 调度器耐心值")
     p.add_argument("--scheduler_factor", type=float, default=0.5,
@@ -335,6 +352,17 @@ def build_argparser() -> argparse.ArgumentParser:
 
 def main():
     args = build_argparser().parse_args()
+
+    # ── CPU 线程限制（2026-06-04：避免 NUMA0 节点过载）──
+    # 默认 8 线程，GPU 训练瓶颈在显卡，CPU 线程过多无益且影响系统服务
+    cpu_threads = getattr(args, 'num_threads', 8)
+    if cpu_threads > 0:
+        torch.set_num_threads(cpu_threads)
+        # 设置 OpenMP/MKL 线程数（BLAS 操作会用到）
+        os.environ.setdefault("OMP_NUM_THREADS", str(cpu_threads))
+        os.environ.setdefault("MKL_NUM_THREADS", str(cpu_threads))
+        os.environ.setdefault("OPENBLAS_NUM_THREADS", str(cpu_threads))
+        print(f"[INFO] CPU 线程数已限制: {cpu_threads} (PyTorch/OMP/MKL/OpenBLAS)")
 
     # ── 数据集名称 ──
     if args.dataset_name is None:

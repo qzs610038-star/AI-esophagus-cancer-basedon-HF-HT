@@ -10,6 +10,13 @@
 
 $ErrorActionPreference = "Continue"
 $PYTHON = "C:\Users\AIPatho1\pfmval_env\Scripts\python.exe"
+
+# ── CPU Thread Limit (2026-06-04: NUMA0 protection, max 64 threads) ──
+$env:OMP_NUM_THREADS = "8"
+$env:MKL_NUM_THREADS = "8"
+$env:OPENBLAS_NUM_THREADS = "8"
+$THREAD_ARG = "--num_threads 8"
+
 $TIMESTAMP = Get-Date -Format "yyyyMMdd_HHmmss"
 $LOG_DIR = "logs\nightly"
 New-Item -ItemType Directory -Force -Path $LOG_DIR | Out-Null
@@ -196,7 +203,7 @@ foreach ($exp in $QUEUE) {
 
     # ── Execute ──
     # cmd.exe is needed because Python path has spaces and we chain with &&
-    $cmdArgs = "/c", "set PYTHONIOENCODING=utf-8 && `"$PYTHON`" -u train_online_cls.py $cmd"
+    $cmdArgs = "/c", "set PYTHONIOENCODING=utf-8 && `"$PYTHON`" -u train_online_cls.py $THREAD_ARG $cmd"
     Write-Log "[CMD] cmd.exe /c set PYTHONIOENCODING=utf-8 && ... train_online_cls.py $cmd"
 
     $expStart = Get-Date
@@ -221,6 +228,11 @@ foreach ($exp in $QUEUE) {
     } else {
         Write-Log "[FAIL] exit=$exitCode | Elapsed ${elapsed:F1}min | No result file found"
         $FAILED[$ckptDir] = "exit=$exitCode, no training_history.csv"
+        # Quick-fail recovery: if exit < 2min, GPU may be in bad state, wait longer
+        if ($elapsed -lt 2.0) {
+            Write-Log "[RECOVER] Quick-fail detected, waiting 60s for GPU recovery..."
+            Start-Sleep -Seconds 60
+        }
     }
     Write-Log ""
 }
