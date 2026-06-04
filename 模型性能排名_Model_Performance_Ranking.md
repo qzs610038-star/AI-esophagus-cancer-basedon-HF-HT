@@ -1,6 +1,12 @@
 # PFMval 已测试模型性能排名
 
-> 更新时间：2026-05-30 | 任务：H&E 病理切片 → 30条基因通路 ssGSEA 预测（食管癌 3 患者：HYZ15040 / JFX0729 / LMZ12939）
+> 更新时间：2026-06-04 | 任务：H&E 病理切片 → 30条基因通路 ssGSEA 预测（食管癌 3 患者：HYZ15040 / JFX0729 / LMZ12939）
+>
+> ⚠️ **已知问题（2026-06-04）**：UNI2-h + DenseNet121 跨患者 Fold1 存在两次独立训练结果不一致：
+> - `uni2h_new/train_des_cross.py` → PCC **0.4429** (epoch 5, val_pcc 最大)
+> - `train_online_cls.py` → PCC **0.4113** (epoch 1, val_loss 最小)
+> - 差异 0.0316，可能来源：epoch 选择标准（val_pcc vs val_loss）、训练脚本差异、数据加载差异。**待排查，暂不修改旧排名**。
+> - **LoRA 实验全部基于 `train_online_cls.py` 训练**，与 frozen online 结果 (0.4113) 对比，不使用旧 `uni2h_new/` 结果 (0.4429)。
 
 ---
 
@@ -10,21 +16,26 @@
 
 | 排名 | 模型 | Val/Test PCC | 最佳Epoch | 参数量 | 过拟合Gap | 权重路径 |
 |:---:|------|:---:|:---:|:---:|:---:|------|
-| 1 | **UNI2-h + DenseNet121** 🔥 | **0.4429** | 5 | ~5.8M | 0.19 | `uni2h_new/checkpoints/CrossPatient_Fold1_HYZ15040_UNI2h_DenseNet121/best_model_uni2h.pth` |
-| 2 | **HisToGene-UNI-Tokens + AugMix + TV Loss + Virchow2融合** | **0.4242** | 14 (+融合) | ~9.8M + 7.2M | — | TV模型: `histogene/checkpoints/HisToGene_UNI_Tokens_AugMix/CrossPatient_JFX_LMZ_to_HYZ_UNI_tokens_AugMix/best_histogene_uni_tokens_augmix.pth` |
-| 3 | **HisToGene-UNI-Tokens + AugMix + TV Loss** | **0.4212** (val) | 14 | ~9.8M | 0.15 | 同上 |
-| 4 | **HisToGene-UNI-Tokens + AugMix + TV Loss (L2 w=0.01)** | **0.4170** (val) | 14 | ~9.8M | 0.21 | `histogene/checkpoints/results_vis/TV_Sweep_tv_l2_w0.01_20260523_165603/` |
-| 5 | HisToGene-UNI-Tokens + AugMix | 0.4142 (val) | 4 | ~9.8M | 0.23 | `histogene/checkpoints/HisToGene_UNI_Tokens_AugMix/CrossPatient_JFX_LMZ_to_HYZ_UNI_tokens_AugMix/best_histogene_uni_tokens_augmix.pth`（旧版） |
-| 6 | HisToGene-UNI-Tokens + GAT | 0.4068 (val) | 50 | ~13.5M | — | `histogene/checkpoints/GAT_fold1/` |
-| 7 | HisToGene-UNI（方案A） | 0.3946 (test) | 3 | ~4.0M | 0.39 | `histogene/checkpoints/CrossPatient_JFX_LMZ_to_HYZ/best_histogene_uni.pth` |
-| 8 | HisToGene-UNI + Reg | 0.3923 (test) | 5 | ~4.0M | 0.28 | `histogene/checkpoints/results_vis/CrossPatient_JFX_LMZ_to_HYZ_reg_optimized_20260428_225944/` |
-| 9 | HisToGene-UNI-Tokens（方案B base） | 0.3835 (val) | 3 | ~7.7M | 0.31 | `histogene/checkpoints/CrossPatient_Fold3_to_LMZ12939_UNI_tokens/best_histogene_uni_tokens.pth` |
-| 10 | EGN-v2+UNI | 0.3537 (test) | 16 | ~2.8M | -0.04 | `egnv2/checkpoints/CrossPatient_JFX_LMZ_to_HYZ_UNI/best_egnv2_uni.pth` |
-| 11 | HisToGene-Virchow2 Tokens | 0.3537 (val) | 11 | ~7.2M | — | 最新 run `20260521_110949/` |
-| 12 | HisToGene-OmiCLIP | 0.2544 (val, 3折均值 0.1970) | 1 | ~6.1M | 0.02 | `checkpoints/omiclip_CrossPatient_JFX0729+LMZ12939_to_HYZ15040_OmiCLIP/best_histogene_omiclip.pth` |
-| 13 | EGN-v2 (ResNet-50) | 0.1950 (test) | 16 | ~3.0M | 0.10 | `egnv2/checkpoints/CrossPatient_JFX_LMZ_to_HYZ/best_egnv2.pth` |
-| 14 | HisToGene 原版 (ViT) | 0.1178 (test) | 2 | ~70.6M | 0.52 | `histogene/checkpoints/CrossPatient_JFX_LMZ_to_HYZ_orig/best_histogene.pth` |
+| 1 | **UNI2-h + DenseNet121 (旧, uni2h_new/)** 🔥 | **0.4429** ⚠️ | 5 | ~5.8M | 0.19 | `uni2h_new/checkpoints/CrossPatient_Fold1_HYZ15040_UNI2h_DenseNet121/best_model_uni2h.pth` |
+| 2 | **UNI2-h + DenseNet121 CLS + LoRA r=8** 🆕 | **0.4322** (val) | 2 | ~5.8M + 1.8M LoRA | 0.17 | `checkpoints/online_cls/lora_r8_online_cls_cross_fold1/best_model.pth` |
+| 3 | **HisToGene-UNI-Tokens + AugMix + TV Loss + Virchow2融合** | **0.4242** | 14 (+融合) | ~9.8M + 7.2M | — | TV模型: `histogene/checkpoints/HisToGene_UNI_Tokens_AugMix/CrossPatient_JFX_LMZ_to_HYZ_UNI_tokens_AugMix/best_histogene_uni_tokens_augmix.pth` |
+| 4 | **HisToGene-UNI-Tokens + AugMix + TV Loss** | **0.4212** (val) | 14 | ~9.8M | 0.15 | 同上 |
+| 5 | **HisToGene-UNI-Tokens + AugMix + TV Loss (L2 w=0.01)** | **0.4170** (val) | 14 | ~9.8M | 0.21 | `histogene/checkpoints/results_vis/TV_Sweep_tv_l2_w0.01_20260523_165603/` |
+| 6 | HisToGene-UNI-Tokens + AugMix | 0.4142 (val) | 4 | ~9.8M | 0.23 | `histogene/checkpoints/HisToGene_UNI_Tokens_AugMix/CrossPatient_JFX_LMZ_to_HYZ_UNI_tokens_AugMix/best_histogene_uni_tokens_augmix.pth`（旧版） |
+| 7 | **UNI2-h + DenseNet121 CLS (frozen, online复现)** 🆕 | **0.4113** (val) | 1 | ~5.8M | 0.10 | `checkpoints/online_cls/frozen_r8_online_cls_cross_fold1/best_model.pth` |
+| 8 | HisToGene-UNI-Tokens + GAT | 0.4068 (val) | 50 | ~13.5M | — | `histogene/checkpoints/GAT_fold1/` |
+| 9 | HisToGene-UNI（方案A） | 0.3946 (test) | 3 | ~4.0M | 0.39 | `histogene/checkpoints/CrossPatient_JFX_LMZ_to_HYZ/best_histogene_uni.pth` |
+| 10 | HisToGene-UNI + Reg | 0.3923 (test) | 5 | ~4.0M | 0.28 | `histogene/checkpoints/results_vis/CrossPatient_JFX_LMZ_to_HYZ_reg_optimized_20260428_225944/` |
+| 11 | HisToGene-UNI-Tokens（方案B base） | 0.3835 (val) | 3 | ~7.7M | 0.31 | `histogene/checkpoints/CrossPatient_Fold3_to_LMZ12939_UNI_tokens/best_histogene_uni_tokens.pth` |
+| 12 | EGN-v2+UNI | 0.3537 (test) | 16 | ~2.8M | -0.04 | `egnv2/checkpoints/CrossPatient_JFX_LMZ_to_HYZ_UNI/best_egnv2_uni.pth` |
+| 13 | HisToGene-Virchow2 Tokens | 0.3537 (val) | 11 | ~7.2M | — | 最新 run `20260521_110949/` |
+| 14 | HisToGene-OmiCLIP | 0.2544 (val, 3折均值 0.1970) | 1 | ~6.1M | 0.02 | `checkpoints/omiclip_CrossPatient_JFX0729+LMZ12939_to_HYZ15040_OmiCLIP/best_histogene_omiclip.pth` |
+| 15 | EGN-v2 (ResNet-50) | 0.1950 (test) | 16 | ~3.0M | 0.10 | `egnv2/checkpoints/CrossPatient_JFX_LMZ_to_HYZ/best_egnv2.pth` |
+| 16 | HisToGene 原版 (ViT) | 0.1178 (test) | 2 | ~70.6M | 0.52 | `histogene/checkpoints/CrossPatient_JFX_LMZ_to_HYZ_orig/best_histogene.pth` |
+| — | ~~LoRA Stage2 (解冻末2层)~~ | ~~0.4118~~ ❌ | 1 | — | — | **已放弃**：=frozen，无增益 |
+| — | ~~LoRA Stage3 (解冻末4层)~~ | ~~0.4056~~ ❌ | 1 | — | — | **已放弃**：<frozen，损害泛化 |
 
+> **2026-06-04 更新**：🆕 **LoRA 验证实验** — LoRA Stage1 r=8 Cross-Fold1 PCC=**0.4322**（vs frozen online 0.4113，+5.1%）。Fold2 (JFX)=0.3726。Stage2/3 已放弃（解冻 backbone 损害泛化：0.4118/0.4056）。frozen online 复现仅 0.4113（vs 旧 uni2h_new/ 0.4429），差异待排查。方向从"渐进解冻"转向"正则化约束"。详细结果：`results_nightly/README.md`
 > **2026-05-23 更新**：TV Loss 超参扫参完成（9组合: 3 mode × 3 weight）。L2 w=0.01 最优 (PCC=0.4170)，L1 mode 全面劣于 L2/Laplacian。三折 CV 平均 PCC=0.3943 (+0.0131 vs UNI Tokens 基线 0.3812)。AttnPool 失败根因修正：注意力模式跨患者高度一致 (ρ=0.99) 但近乎均匀 (熵=0.95/1.0)，根因非"患者特异性"而是注意力过于微弱无信息增益。
 > **2026-05-22 更新**：新增 TV Loss 空间平滑正则化（PCC +0.0070，+1.7%）+ Virchow2 晚期融合（PCC +0.0030）。联合提升从 0.4142→0.4242 (+2.4%)。
 > AttnPool（注意力池化）在跨患者场景下未带来提升，单患者+0.0036 但跨患者过拟合加剧（参数量 +2.1M）。
@@ -33,14 +44,17 @@
 
 | 模型 | Fold1 (→HYZ) | Fold2 (→JFX) | Fold3 (→LMZ) | **3折平均** |
 |------|:---:|:---:|:---:|:---:|
-| **UNI2-h + DenseNet121** 🔥 | **0.4429** | **0.3683** | **0.3796** | **0.3969** |
+| **UNI2-h + DenseNet121 (旧, uni2h_new/)** | **0.4429** ⚠️ | **0.3683** | **0.3796** | **0.3969** |
+| **UNI2-h + DenseNet121 CLS + LoRA r=8** 🆕 | **0.4322** | **0.3726** | ⏳ 待重跑 | — |
 | **HisToGene-UNI-Tokens + AugMix + TV L2 w=0.01** | **0.4170** | **0.3752** | **0.3907** | **0.3943** |
+| **UNI2-h + DenseNet121 CLS (frozen, online复现)** 🆕 | **0.4113** | ⏳ 待补 | ⏳ 待补 | — |
 | HisToGene-UNI-Tokens + AugMix | 0.4142 | — | 0.3835 | — |
 | HisToGene-UNI | 0.3946 | 0.3424 | 0.3731 | **0.3700** |
 | EGN-v2+UNI | 0.3537 | 0.3917 | 0.3980 | **0.3811** |
 | HisToGene-OmiCLIP | 0.2544 | 0.1081 | 0.2284 | **0.1970** |
 
 > 注：UNI2-h + DenseNet121 三折平均 PCC = **0.3969**，无任何数据增强、无 TV Loss、无模型融合，裸奔即超越 UNI-Tokens + AugMix + TV L2（0.3943）。Fold1=0.4429 创跨患者 Fold1 新高（此前最佳 0.4242）。**首次证明 UNI2-h backbone 在跨患者场景下优于 UNI**。
+> 🆕 **LoRA Stage1 跨患者 Fold1=0.4322，Fold2=0.3726**。Fold3 (LMZ) 因 numpy overflow 待重跑（NaN 保护已修复）。若 Fold3 能达到 ~0.38，三折均值约 0.395，与旧 frozen 0.3969 持平——但 LoRA 仅训练 1.8M 额外参数、2 epoch 即达此水平，正则化后可望超越。
 > TV Loss (L2 w=0.01) 三折平均 PCC = **0.3943**，较 UNI Tokens 基线 0.3812 提升 **+0.0131 (+3.4%)**。
 
 ---
@@ -61,7 +75,9 @@
 
 | 模型 | HYZ15040 | JFX0729 | LMZ12939 | 权重目录 |
 |------|:---:|:---:|:---:|------|
-| UNI2-h + DenseNet121 | **0.5227** | — | — | `uni2h_new/checkpoints/HYZ15040/best_model_uni2h.pth` |
+| UNI2-h + DenseNet121 CLS + LoRA r=8 🆕 | **0.5462** | — | — | `checkpoints/online_cls/lora_r8_online_cls_HYZ15040/best_model.pth` |
+| UNI2-h + DenseNet121 CLS (frozen) 🆕 | **0.5236** | — | — | `checkpoints/online_cls/frozen_r8_online_cls_HYZ15040/best_model.pth` |
+| UNI2-h + DenseNet121 (旧, uni2h_new/) | **0.5227** | — | — | `uni2h_new/checkpoints/HYZ15040/best_model_uni2h.pth` |
 
 ### EGN-v2 系列
 
@@ -86,7 +102,51 @@
 
 ## 模型架构与超参数速查
 
-### 0. UNI2-h + DenseNet121 ★ 最新最佳跨患者 (2026-05-30)
+### 0a. UNI2-h + DenseNet121 CLS + LoRA r=8 🆕 ★ 最新最佳 LoRA (2026-06-04)
+
+```
+架构: UNI2-h backbone (frozen) + LoRA (qkv+proj, 24层, r=8, α=16) + DenseNet121-style MLP
+输入: 在线图像 patches [B, 3, 224, 224] + 空间坐标 (pos_x, pos_y)
+参数量: 687.2M 总 / 5.8M 可训练 (0.8%)，其中 LoRA 1.8M + MLP 4.0M
+
+训练: train_online_cls.py, lr_downstream=1e-4, lr_lora=1e-4, BS=8, HuberLoss, AMP
+在线加载: 每个 epoch 实时通过 backbone 前向提取特征（非预缓存）
+LoRA 注入: blocks 0-23 全部, target_modules=[qkv, proj]
+
+跨患者 Fold1: PCC=0.4322 (epoch 2), Fold2=0.3726, Fold3 待重跑
+单患者 HYZ: PCC=0.5462 (epoch 2), vs frozen 0.5236 (+0.0226)
+过拟合: Train-Val Gap 0.17 (与 frozen 0.10 相比略宽，但仍优于 Stage2/3)
+权重路径: checkpoints/online_cls/lora_r8_online_cls_cross_fold1/best_model.pth
+文本结果: results_nightly/online_cls/lora_r8_online_cls_cross_fold1/
+
+关键发现:
+- LoRA 跨患者泛化 +5.1% vs frozen online (0.4113→0.4322)
+- 可训练参数越少泛化越好: Frozen < LoRA < Stage2 < Stage3
+- 正确方向: 正则化约束（dropout↑ / rank↓），非解冻 backbone
+- Stage2/3 已放弃 (PCC 0.4118/0.4056, ≤ frozen)
+```
+
+### 0b. UNI2-h + DenseNet121 CLS (frozen, online) 🆕 ★ 在线训练 frozen 基线 (2026-06-04)
+
+```
+架构: Frozen UNI2-h backbone + DenseNet121-style MLP + 坐标嵌入
+输入: 在线图像 patches [B, 3, 224, 224] + 空间坐标
+参数量: 687.2M 总 / 4.0M 可训练 (MLP only, backbone 冻结)
+
+训练: train_online_cls.py --mode frozen, lr=1e-4, BS=8, HuberLoss, AMP
+跨患者 Fold1: PCC=0.4113 (epoch 1, val_loss 最小)
+单患者 HYZ: PCC=0.5236 (epoch 1)
+
+⚠️ 与 uni2h_new/ 的 frozen 结果差异：
+- uni2h_new/train_des_cross.py: PCC=0.4429 (epoch 5, val_pcc 最大)
+- train_online_cls.py: PCC=0.4113 (epoch 1, val_loss 最小)
+- 差异 0.0316 (7.7%)，待排查。可能来源: epoch 选择标准、数据加载、
+  特征缓存 vs 在线提取、MLP 架构细节差异
+- 所有 LoRA 实验基于此在线训练方案，用此 0.4113 作为对照基线
+权重路径: checkpoints/online_cls/frozen_r8_online_cls_cross_fold1/best_model.pth
+```
+
+### 0. UNI2-h + DenseNet121 (旧, uni2h_new/) ★ 旧最佳跨患者 (2026-05-30)
 
 ```
 架构: Frozen UNI2-h backbone (MahmoodLab/UNI2-h, 1536-dim) + DenseNet121-style MLP
