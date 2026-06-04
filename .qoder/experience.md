@@ -30,19 +30,53 @@
 
 | 模型 | 单患者Val PCC | 跨患者Test PCC |
 |------|-------------|---------------|
-| UNI2-h + DenseNet121 CLS (frozen) | 0.5236 | 0.3969 (三折均值) / Fold1 0.4113 |
-| UNI2-h LoRA Stage1 (r=8) | **0.5462** | 待验证 (夜间实验进行中) |
+| UNI2-h + DenseNet121 CLS LoRA r=8 (Stage1) | **0.5462** | **0.4322 (Fold1)** / 0.3726 (Fold2) / Fold3 待重跑 |
+| UNI2-h + DenseNet121 CLS (frozen) | 0.5236 | 0.4113 (Fold1) / Fold2/3 待补 |
+| LoRA Stage2 (解冻末2层) | — | 0.4118 (Fold1, =frozen) ❌ |
+| LoRA Stage3 (解冻末4层) | — | 0.4056 (Fold1, <frozen) ❌ |
 | HisToGene-UNI Token + AugMix | 0.5217 | 0.4142 (Fold1) |
 | HisToGene-UNI Token + GAT | — | 0.4068 (Fold1, 不显著) |
 | EGN-v2+UNI | — | 0.1950 |
 
-> **LoRA 单患者增益**: +0.0226 vs frozen (0.5236→0.5462)。跨患者泛化为关键验证缺口。
+> **2026-06-04 结论**：LoRA Stage1 跨患者有效（+5.1% vs frozen）。**Stage2/3 已放弃**（解冻 backbone 损害泛化）。方向从"渐进解冻"转向"正则化约束"（dropout↑ / rank↓ / AugMix）。详细结果：`results_nightly/online_cls/`
 
 ---
 
 ## 🔬 下一步方向
 
-P0-2 多模态融合（GenePT通路嵌入 + 交叉注意力）为最高优先级。
+| 优先级 | 任务 |
+|:---:|------|
+| **P0** | LoRA Fold3 重跑（已修复 NaN 保护+CPU 限线程） → 三折均值 |
+| **P0** | LoRA Dropout 0.1/0.2/0.3 Cross-Fold1 |
+| **P1** | LoRA 低 rank (r=4, r=2) Cross-Fold1 |
+| **P1** | Frozen Cross-Fold2/3 基线补齐 |
+
+---
+
+## LoRA 夜间实验结果详情（2026-06-04）
+
+### Cross-Fold1 四模式对比
+
+| 模式 | Val PCC | Epoch | Δ Frozen | Train-Val Gap | 判定 |
+|------|:---:|:---:|:---:|:---:|:---:|
+| Frozen | 0.4113 | 1 | — | 窄 | 基线 |
+| LoRA | **0.4322** | 2 | **+0.0209** | 中 | ✅ 最优 |
+| Stage2 | 0.4118 | 1 | +0.0005 | 宽 | ❌ 退回基线 |
+| Stage3 | 0.4056 | 1 | -0.0057 | 最宽 | ❌ 低于基线 |
+
+### 关键规律
+- **过拟合速度**：Frozen < LoRA < Stage2 < Stage3（参数越多过拟合越快）
+- **有效窗口**：仅 1-2 epoch，之后 Train-Val Gap 急剧扩大
+- **Fold 差异**：Fold1 (HYZ)=0.4322 > Fold2 (JFX)=0.3726，JFX 更难预测
+- **Fold3 失败原因**：LMZ12939 标签极端 z-score → numpy overflow（已修复 NaN 保护）
+- **逐通路最强**：ECM(0.725)、MYC(0.719)、Fibrosis(0.688)
+- **逐通路最弱**：Interferon_Alpha(0.049)、ifng(0.162)、tgfb(0.165)
+
+### 实验文件存档
+- 文本结果：`results_nightly/online_cls/{实验名}/`（training_history / predictions / per_pathway_pcc / summary）
+- 批量日志：`results_nightly/batch_*.log` / `summary_*.csv`
+- 训练脚本：`train_online_cls.py`（已加 CPU 限线程 + NaN 保护）
+- 批量调度：`deploy/run_nightly_experiments.ps1`
 
 ---
 

@@ -11,8 +11,10 @@
 
 | 模型 | 状态 | 特征 | 单患者Val PCC | 跨患者Test PCC |
 |------|------|------|:---:|:---:|
-| UNI2-h + DenseNet121 CLS (frozen) | **主力** | 1536维 | 0.5236 | **0.3969** (三折均值) / Fold1 0.4113 |
-| UNI2-h LoRA 渐进解冻 | **实验** | 1536维 | **0.5462** | 待验证 |
+| UNI2-h + DenseNet121 CLS (frozen) | **主力** | 1536维 | 0.5236 | 0.4113 (Fold1) / 三折待补 |
+| UNI2-h LoRA r=8 Stage1 | **主力** | 1536维 | **0.5462** | **0.4322 (Fold1)** / 0.3726 (Fold2) / Fold3待重跑 |
+| UNI2-h LoRA Stage2 | **已放弃** | 1536维 | — | 0.4118 (Fold1, =frozen) |
+| UNI2-h LoRA Stage3 | **已放弃** | 1536维 | — | 0.4056 (Fold1, <frozen) |
 | HisToGene-UNI Token + AugMix | 活跃 | 1536维 | 0.5217 | 0.4142 (Fold1) |
 | HisToGene-UNI+GAT | 实验完成 | 1536维 | — | 0.4068 (提升不显著) |
 | EGN-v2+UNI | 活跃 | 1536维 | — | 0.1950 |
@@ -20,7 +22,7 @@
 | OmiCLIP | **暂停(P3)** | 768维 | 0.55 | 0.19 (单患者强跨患者崩) |
 | EGN-v1 | **已淘汰** | — | — | 所有对比排除 |
 
-> 当前最佳 frozen 基线：UNI2-h + DenseNet121 CLS 三折均值 **0.3969**，Fold1 **0.4113**（已确认）。LoRA Stage 1 单患者 **0.5462**（+0.0235 vs frozen），跨患者 Fold1 为下一关键验证。
+> **LoRA Stage1 跨患者验证通过（2026-06-04）**：Fold1 PCC **0.4322**（vs Frozen 0.4113，+5.1%）。Fold2 (JFX) = 0.3726，Fold3 因 LMZ 标签溢出待重跑。**Stage2/3 已放弃**：解冻 backbone 导致过拟合加剧（0.4118 / 0.4056，均 ≤ frozen）。**结论**：正确方向是正则化约束（dropout↑ / rank↓ / AugMix），非增加可训参数。
 
 ## 核心铁律
 
@@ -52,17 +54,23 @@
 - `dataset_name` 从 `--patient` 自动推导，不硬编码
 - evaluate() 必须同时输出 PCC、MAE、R²
 - 在线训练过拟合极快：有效窗口仅 1-2 epoch，Train-Val Gap 是最有用的监控指标
+- **LoRA 关键发现（2026-06-04）**：可训练参数越多 → Train-Val Gap 越宽 → 泛化越差。Frozen < LoRA < Stage2 < Stage3 的过拟合递增。**正则化（dropout/低rank）是正确的改进方向，解冻 backbone 是死路。**
 - HF 离线加载需 `HF_HUB_OFFLINE=1`（网络不可达时避免重试等待）
-- LoRA 训练需 `batch_size=1 + grad_accum=2 + AMP` 适配 8GB 显存
+- LMZ12939 标签含极端 z-score 值 → 需 NaN 保护（`np.nan_to_num + clip ±100`）
+- CPU 线程限制：`--num_threads 8` + `OMP_NUM_THREADS=MKL_NUM_THREADS=8`，避免 NUMA0 过载
+- 完整实验文本结果存档：`results_nightly/online_cls/{实验名}/`
 
 ## 下一步方向
 
 | 优先级 | 任务 |
 |:---:|------|
-| **P0** | LoRA 跨患者 Fold1 验证 + 服务器 VPN 连通 + Phase 3 预后最小闭环 |
-| **P1** | LoRA Stage 2/3 + 正则化（rank↓/Dropout↑/AugMix/TV Loss） |
-| **P2** | 9 患者到齐（~6月底）后重训 + RL 方案 D BO 通路选择 |
-| **P3** | 暂停：GAT 深化 / AttnPool / OmiCLIP 跨患者 / 多教师融合 |
+| **P0** | LoRA Cross-Fold3 重跑（已修复 NaN 保护+CPU 限线程） → LoRA 三折均值 |
+| **P0** | LoRA Dropout 正则化 (0.1/0.2/0.3) Cross-Fold1 |
+| **P1** | LoRA 低 rank 验证 (r=4, r=2) Cross-Fold1 |
+| **P1** | Frozen Cross-Fold2/3 补齐（三折基线） |
+| **P2** | 9 患者到齐（~6月底）后全量重训 + Phase 3 预后闭环 |
+| **P3** | 暂停：GAT 深化 / AttnPool / OmiCLIP / 多教师融合 |
+| **❌** | ~~LoRA Stage2/Stage3~~ — 2026-06-04 实验证明解冻 backbone 损害泛化
 
 ## 在线训练脚本速查
 
