@@ -353,13 +353,16 @@ def main():
         print(f"[INFO] CPU 线程数已限制: {cpu_threads} (PyTorch/OMP/MKL/OpenBLAS)")
 
     # ── 数据集名称 ──
+    # 自动包含 encoder_type + num_tokens，避免不同 encoder 结果互相覆盖
+    _enc_tag = args.encoder_type
+    _nt_tag = f"{args.num_tokens}t"
     if args.dataset_name is None:
         if args.cross_patient:
-            args.dataset_name = f"online_tokens_cross_fold{args.fold}"
+            args.dataset_name = f"online_tokens_cross_fold{args.fold}_{_nt_tag}_{_enc_tag}"
         elif args.patient:
-            args.dataset_name = f"online_tokens_{args.patient}"
+            args.dataset_name = f"online_tokens_{args.patient}_{_nt_tag}_{_enc_tag}"
         else:
-            args.dataset_name = "online_tokens"
+            args.dataset_name = f"online_tokens_{_nt_tag}_{_enc_tag}"
 
     # 输出目录
     output_base = _PROJECT_ROOT / "checkpoints" / "online_tokens"
@@ -372,7 +375,7 @@ def main():
     history_csv = str(run_dir / "training_history.csv")
 
     print("=" * 80)
-    print(f"UNI2-H 在线 CLS 训练 | 模式: {args.mode} | LoRA rank: {args.lora_rank}")
+    print(f"UNI2-H 在线 Token 训练 | 模式: {args.mode} | Encoder: {args.encoder_type} | Tokens: {args.num_tokens}")
     print(f"输出目录: {run_dir}")
     print("=" * 80)
 
