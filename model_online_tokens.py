@@ -39,6 +39,7 @@ class OnlineTokenModel(nn.Module):
         mlp_dim: int = 2048,
         dropout: float = 0.3,
         # TokenEncoder 参数
+        encoder_type: str = "transformer",
         encoder_hidden_dim: int = 512,
         n_encoder_layers: int = 1,
         n_encoder_heads: int = 8,
@@ -54,27 +55,39 @@ class OnlineTokenModel(nn.Module):
             n_targets: 输出通路数
             mlp_dim: MLP 隐藏层维度
             dropout: dropout 概率
+            encoder_type: TokenEncoder 类型 ("transformer" | "gfnet")
             encoder_hidden_dim: TokenEncoder 隐藏维度
-            n_encoder_layers: TokenEncoder Transformer 层数
-            n_encoder_heads: TokenEncoder 注意力头数
-            token_drop_rate: 训练时随机丢弃 token 的概率
+            n_encoder_layers: TokenEncoder Transformer/GFNet 层数
+            n_encoder_heads: TokenEncoder 注意力头数 (仅 transformer)
+            token_drop_rate: 训练时随机丢弃 token 的概率 (当前未使用，保留参数兼容)
             num_tokens: 保留的 token 数量（lite=65, full=265）
         """
         super().__init__()
         self.backbone = backbone
         self.feature_dim = feature_dim
         self.num_tokens = num_tokens
+        self.encoder_type = encoder_type
 
-        # ── Token 编码器（复用 model_uni_tokens.py）──
-        self.token_encoder = LightweightTokenEncoder(
-            embed_dim=feature_dim,
-            hidden_dim=encoder_hidden_dim,
-            n_heads=n_encoder_heads,
-            n_layers=n_encoder_layers,
-            dropout=dropout,
-            token_drop_rate=token_drop_rate,
-            use_attn_pool=False,
-        )
+        # ── Token 编码器 ──
+        if encoder_type == "gfnet":
+            from model_gfnet import GFNetTokenEncoder
+            self.token_encoder = GFNetTokenEncoder(
+                embed_dim=feature_dim,
+                hidden_dim=encoder_hidden_dim,
+                seq_len=num_tokens,
+                n_layers=n_encoder_layers,
+                dropout=dropout,
+            )
+        elif encoder_type == "transformer":
+            self.token_encoder = LightweightTokenEncoder(
+                embed_dim=feature_dim,
+                hidden_dim=encoder_hidden_dim,
+                n_heads=n_encoder_heads,
+                n_layers=n_encoder_layers,
+                dropout=dropout,
+            )
+        else:
+            raise ValueError(f"Unsupported encoder_type: {encoder_type}")
 
         # ── 以下与 HisToGeneUNITokens 完全一致 ──
         self.proj = nn.Sequential(
@@ -114,8 +127,8 @@ class OnlineTokenModel(nn.Module):
         # 裁剪到 num_tokens（lite=65, full=265）
         tokens = all_tokens[:, :self.num_tokens, :]           # [B, num_tokens, feature_dim]
 
-        # TokenEncoder（与 HisToGeneUNITokens 一致）
-        encoded, _attn = self.token_encoder(tokens)           # [B, feature_dim]
+        # TokenEncoder
+        encoded = self.token_encoder(tokens)                   # [B, feature_dim]
 
         # 下游（与 HisToGeneUNITokens 一致）
         x = self.proj(encoded)                                # [B, dim]
@@ -186,5 +199,5 @@ if __name__ == "__main__":
     assert out.shape == (4, 30), f"Expected (4,30), got {out.shape}"
 
     model.print_param_summary()
-    print("  前向传播测试通过 ✓")
+    print("  Forward test passed")
     print("=" * 60)

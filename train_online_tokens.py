@@ -293,6 +293,9 @@ def build_argparser() -> argparse.ArgumentParser:
                    help="梯度累积步数 (本地8GB时 bs=1 + accum=8)")
 
     # ── TokenEncoder 参数 ──
+    p.add_argument("--encoder_type", type=str, default="transformer",
+                   choices=["transformer", "gfnet"],
+                   help="TokenEncoder 类型")
     p.add_argument("--encoder_hidden_dim", type=int, default=512,
                    help="TokenEncoder 隐藏维度")
     p.add_argument("--n_encoder_layers", type=int, default=1,
@@ -414,6 +417,7 @@ def main():
         n_targets=args.n_targets,
         mlp_dim=args.mlp_dim,
         dropout=args.dropout,
+        encoder_type=args.encoder_type,
         encoder_hidden_dim=args.encoder_hidden_dim,
         n_encoder_layers=args.n_encoder_layers,
         n_encoder_heads=args.n_encoder_heads,
@@ -806,6 +810,8 @@ def main():
         summary_path = str(run_dir / "training_summary.txt")
         with open(summary_path, 'w', encoding='utf-8') as f:
             f.write(f"训练模式: {args.mode}\n")
+            f.write(f"Encoder type: {args.encoder_type}\n")
+            f.write(f"Num tokens: {args.num_tokens}\n")
             f.write(f"LoRA rank: {args.lora_rank}\n")
             f.write(f"数据集: {args.dataset_name}\n")
             f.write(f"训练模式: {mode_label}\n")
