@@ -364,6 +364,12 @@ def main():
         os.environ.setdefault("OPENBLAS_NUM_THREADS", str(cpu_threads))
         print(f"[INFO] CPU 线程数已限制: {cpu_threads} (PyTorch/OMP/MKL/OpenBLAS)")
 
+    # ── HF 离线模式（2026-06-10：服务器无法直连 huggingface.co）──
+    # 默认强制离线（避免 HEAD 请求 5 次超时重试）。
+    # 本地/服务器均有完整缓存，离线不影响正常运行。
+    # 如需在线下载新模型，显式设环境变量 HF_HUB_OFFLINE=0 覆盖。
+    os.environ.setdefault("HF_HUB_OFFLINE", "1")
+
     # ── 数据集名称 ──
     if args.dataset_name is None:
         if args.cross_patient:
