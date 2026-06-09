@@ -1,0 +1,50 @@
+# ============================================================
+# PFMval 服务器配置文件 — AIPatho1@DESKTOP-HKP0IV0 (RTX 4080)
+# ============================================================
+# 使用方式: 服务器上设置持久化环境变量 PFMVAL_CONFIG 指向此文件
+#   setx PFMVAL_CONFIG "D:\AIPatho\qzs\pfmval_deploy_git\configs\config.server.yaml"
+#
+# 此文件通过 paths.patch_base + paths.ssgsea_base 覆盖数据根目录，
+# config_utils.py 的 get_patient_paths() 会自动拼接患者子目录。
+#
+# ⚠️ 数据路径变更时: 只需修改此文件中的 patch_base / ssgsea_base，
+#    然后 git commit + push，服务器 pull 后即刻生效。
+
+# ── 训练设备 ──
+training:
+  device: "auto"
+
+# ── 数据根目录覆盖（服务器上数据不在项目目录下）──
+paths:
+  patch_base: "D:/AIPatho/qzs/data-phase2/patch"
+  ssgsea_base: "D:/AIPatho/qzs/data-phase2/ssGSEA_zscore"
+
+  # 特征缓存（可选覆盖，不设则用项目相对路径）
+  # caches:
+  #   uni_tokens: "D:/AIPatho/qzs/data-phase2/caches/uni_tokens"
+  #   uni_cls: "D:/AIPatho/qzs/data-phase2/caches/uni_cls"
+
+  # 输出目录（可选覆盖，不设则用项目相对路径 ./checkpoints）
+  # outputs:
+  #   checkpoints_root: "./checkpoints"
+
+# ── 患者子目录配置（与本地一致，无变更）──
+patients:
+  HYZ15040:
+    patches_subdir: "HYZ15040_noov_split"
+    labels_csv: "HYZ15040_ssGSEA_zscore.csv"
+
+  JFX0729:
+    patches_subdir: "JFX0729_noov_split"
+    labels_csv: "JFX0729_ssGSEA_zscore.csv"
+
+  LMZ12939:
+    patches_subdir: "LMZ12939_noov_split"
+    labels_csv: "LMZ12939_ssGSEA_zscore.csv"
+
+# ── 交叉验证配置（与本地一致）──
+cross_validation:
+  folds:
+    1: { train: ["JFX0729", "LMZ12939"], test: "HYZ15040" }
+    2: { train: ["HYZ15040", "LMZ12939"], test: "JFX0729" }
+    3: { train: ["HYZ15040", "JFX0729"], test: "LMZ12939" }

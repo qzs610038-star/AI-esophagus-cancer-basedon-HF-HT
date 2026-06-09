@@ -314,6 +314,8 @@ def build_argparser() -> argparse.ArgumentParser:
                    help="AdamW 权重衰减")
     p.add_argument("--gradient_clip", type=float, default=1.0,
                    help="梯度裁剪范数")
+    p.add_argument("--num_threads", type=int, default=8,
+                   help="CPU 线程数限制 (default: 8, 0=不限制)")
     p.add_argument("--scheduler_patience", type=int, default=5,
                    help="LR 调度器耐心值")
     p.add_argument("--scheduler_factor", type=float, default=0.5,
@@ -338,6 +340,17 @@ def build_argparser() -> argparse.ArgumentParser:
 
 def main():
     args = build_argparser().parse_args()
+
+    # ── CPU 线程限制（2026-06-04：避免 NUMA0 节点过载）──
+    # 默认 8 线程，GPU 训练瓶颈在显卡，CPU 线程过多无益且影响系统服务
+    cpu_threads = getattr(args, 'num_threads', 8)
+    if cpu_threads > 0:
+        torch.set_num_threads(cpu_threads)
+        # 设置 OpenMP/MKL 线程数（BLAS 操作会用到）
+        os.environ.setdefault("OMP_NUM_THREADS", str(cpu_threads))
+        os.environ.setdefault("MKL_NUM_THREADS", str(cpu_threads))
+        os.environ.setdefault("OPENBLAS_NUM_THREADS", str(cpu_threads))
+        print(f"[INFO] CPU 线程数已限制: {cpu_threads} (PyTorch/OMP/MKL/OpenBLAS)")
 
     # ── 数据集名称 ──
     if args.dataset_name is None:
