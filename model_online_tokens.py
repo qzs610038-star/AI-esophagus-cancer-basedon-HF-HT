@@ -23,6 +23,52 @@ import torch.nn as nn
 from model_uni_tokens import LightweightTokenEncoder
 
 
+# ═══════════════════════════════════════════════════════════════
+# Token 选择工具
+# ═══════════════════════════════════════════════════════════════
+
+# UNI2-H 的 token 排列: [CLS, reg_0..reg_7, patch_0..patch_255] = 265 tokens
+# 来源: uni2h_utils.py 中 reg_tokens=8, no_embed_class=True
+_UNI2H_REG_TOKENS = 8
+
+
+def select_uni_tokens(
+    all_tokens: torch.Tensor,
+    num_tokens: int = 65,
+    mode: str = "legacy_firstN",
+    reg_tokens: int = _UNI2H_REG_TOKENS,
+) -> torch.Tensor:
+    """从 UNI2-H 完整 token 序列中选择指定模式的子集。
+
+    Args:
+        all_tokens: [B, 265, D] — backbone.forward_features() 的完整输出
+        num_tokens: 需要的 token 数量
+        mode: 选择模式
+            - "legacy_firstN": 历史行为，直接取前 N 个 token。
+              包含 CLS + register tokens（如果 N 够大），用于复现已有结果。
+            - "cls_patch64": CLS + 前 64 个 patch token（跳过 register tokens）。
+              仅适用于 num_tokens=65，用于后续频域实验的干净空间序列。
+        reg_tokens: register token 数量（默认 8，与 UNI2-H 配置一致）
+
+    Returns:
+        [B, num_tokens, D]
+    """
+    if mode == "legacy_firstN":
+        return all_tokens[:, :num_tokens, :]
+
+    if mode == "cls_patch64":
+        if num_tokens != 65:
+            raise ValueError(
+                f"cls_patch64 is only defined for num_tokens=65, got {num_tokens}"
+            )
+        cls_token = all_tokens[:, 0:1, :]                        # [B, 1, D]
+        patch_start = 1 + reg_tokens                               # 跳过 CLS + reg
+        patch_tokens = all_tokens[:, patch_start:patch_start + 64, :]  # [B, 64, D]
+        return torch.cat([cls_token, patch_tokens], dim=1)        # [B, 65, D]
+
+    raise ValueError(f"Unsupported token_select_mode: {mode}")
+
+
 class OnlineTokenModel(nn.Module):
     """在线 Token 模型：图像 → UNI2-H → token 序列 → TokenEncoder → MLP 回归。
 
@@ -45,6 +91,7 @@ class OnlineTokenModel(nn.Module):
         n_encoder_heads: int = 8,
         token_drop_rate: float = 0.0,
         num_tokens: int = 65,
+        token_select_mode: str = "legacy_firstN",
     ):
         """
         Args:
@@ -61,12 +108,16 @@ class OnlineTokenModel(nn.Module):
             n_encoder_heads: TokenEncoder 注意力头数 (仅 transformer)
             token_drop_rate: 训练时随机丢弃 token 的概率 (当前未使用，保留参数兼容)
             num_tokens: 保留的 token 数量（lite=65, full=265）
+            token_select_mode: token 选择模式
+                - "legacy_firstN": 历史行为，取前 N 个 token（含 register）
+                - "cls_patch64": CLS + 前 64 个 patch token，跳过 register（仅 65-token）
         """
         super().__init__()
         self.backbone = backbone
         self.feature_dim = feature_dim
         self.num_tokens = num_tokens
         self.encoder_type = encoder_type
+        self.token_select_mode = token_select_mode
 
         # ── Token 编码器 ──
         if encoder_type == "gfnet":
@@ -124,8 +175,12 @@ class OnlineTokenModel(nn.Module):
         # 通过 backbone 提取完整 token 序列
         all_tokens = self.backbone.forward_features(images)  # [B, 265, feature_dim]
 
-        # 裁剪到 num_tokens（lite=65, full=265）
-        tokens = all_tokens[:, :self.num_tokens, :]           # [B, num_tokens, feature_dim]
+        # 按模式选择 token 子集
+        tokens = select_uni_tokens(
+            all_tokens,
+            num_tokens=self.num_tokens,
+            mode=self.token_select_mode,
+        )  # [B, num_tokens, feature_dim]
 
         # TokenEncoder
         encoded = self.token_encoder(tokens)                   # [B, feature_dim]
@@ -172,32 +227,61 @@ if __name__ == "__main__":
     print("OnlineTokenModel 自检")
     print("=" * 60)
 
-    # 用轻量替代模拟 backbone
+    # 用轻量替代模拟 backbone：返回 [CLS, reg×8, patch×256] = 265 tokens
     class DummyViT(nn.Module):
         """模拟 UNI2-H: 返回 [B, 265, 1536] token 序列"""
         def __init__(self):
             super().__init__()
-            self.dummy = nn.Conv2d(3, 1536, 14, 14)
 
         def forward_features(self, x):
-            # 伪造 token 序列
             b = x.size(0)
-            return torch.randn(b, 265, 1536, device=x.device)
+            # 生成可区分的 token: 每个位置有独特的微小偏移
+            base = torch.randn(b, 265, 1536, device=x.device)
+            # 在 dim=1 上叠加位置编码，使不同位置可区分
+            pos_signal = torch.arange(265, device=x.device).float().view(1, 265, 1) * 0.01
+            return base + pos_signal
 
     dummy_backbone = DummyViT()
-    model = OnlineTokenModel(dummy_backbone, num_tokens=65)
-    total = model.count_parameters()
-    print(f"总可训练参数: {total:,} ({total/1e6:.2f}M)")
 
-    # 测试前向
-    images = torch.randn(4, 3, 224, 224)
-    pos_x = torch.randint(0, 128, (4,))
-    pos_y = torch.randint(0, 128, (4,))
+    for mode in ("legacy_firstN", "cls_patch64"):
+        print(f"\n--- token_select_mode={mode} ---")
+        model = OnlineTokenModel(dummy_backbone, num_tokens=65, token_select_mode=mode)
+        total = model.count_parameters()
+        print(f"  总可训练参数: {total:,} ({total/1e6:.2f}M)")
 
-    with torch.no_grad():
-        out = model(images, pos_x, pos_y)
-    assert out.shape == (4, 30), f"Expected (4,30), got {out.shape}"
+        # 测试 select_uni_tokens 直接调用
+        all_tokens = dummy_backbone.forward_features(torch.randn(2, 3, 224, 224))
+        selected = select_uni_tokens(all_tokens, num_tokens=65, mode=mode)
+        print(f"  select_uni_tokens output shape: {tuple(selected.shape)}")
 
-    model.print_param_summary()
-    print("  Forward test passed")
+        # 验证 token 身份
+        if mode == "legacy_firstN":
+            # 前 65: [CLS, reg0..reg7, patch0..patch55]
+            assert torch.allclose(selected[:, 0, :], all_tokens[:, 0, :], atol=1e-5), \
+                "legacy_firstN: position 0 should be CLS"
+            assert torch.allclose(selected[:, 9, :], all_tokens[:, 9, :], atol=1e-5), \
+                "legacy_firstN: position 9 should be patch_0"
+            print("  [OK] token identity verified: [CLS, reg0..reg7, patch0..patch55]")
+        elif mode == "cls_patch64":
+            # 应包含: CLS at 0, patches 8-71 from original (skip reg0..reg7)
+            assert torch.allclose(selected[:, 0, :], all_tokens[:, 0, :], atol=1e-5), \
+                "cls_patch64: position 0 should be CLS"
+            assert torch.allclose(selected[:, 1, :], all_tokens[:, 9, :], atol=1e-5), \
+                "cls_patch64: position 1 should be patch_0 (original index 9)"
+            assert torch.allclose(selected[:, 64, :], all_tokens[:, 72, :], atol=1e-5), \
+                "cls_patch64: position 64 should be patch_63 (original index 72)"
+            print("  [OK] token identity verified: [CLS, patch0..patch63] (register skipped)")
+
+        # 测试完整前向
+        images = torch.randn(4, 3, 224, 224)
+        pos_x = torch.randint(0, 128, (4,))
+        pos_y = torch.randint(0, 128, (4,))
+
+        with torch.no_grad():
+            out = model(images, pos_x, pos_y)
+        assert out.shape == (4, 30), f"Expected (4,30), got {out.shape}"
+        print(f"  [OK] Forward test passed -- output {tuple(out.shape)}")
+
+    print("\n" + "=" * 60)
+    print("所有自检通过")
     print("=" * 60)

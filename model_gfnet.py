@@ -12,7 +12,12 @@ import torch.nn as nn
 
 
 class GlobalFilter(nn.Module):
-    """Learnable residual FFT filter over the token dimension."""
+    """Learnable residual FFT filter over the token dimension.
+
+    v2 (2026-06-10): Added modReLU activation in frequency domain.
+    Applies magnitude-threshold gating to each frequency component
+    while preserving phase, enabling automatic noise-frequency suppression.
+    """
 
     def __init__(self, seq_len: int, dim: int, init_scale: float = 0.02):
         super().__init__()
@@ -21,6 +26,9 @@ class GlobalFilter(nn.Module):
         self.complex_weight = nn.Parameter(
             torch.randn(seq_len // 2 + 1, dim, 2, dtype=torch.float32) * init_scale
         )
+        # modReLU bias: negative = higher threshold (more sparsity)
+        # Initialized to 0 (near all-pass), lets the model learn thresholds.
+        self.bias = nn.Parameter(torch.zeros(seq_len // 2 + 1, dim))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: [B, N, D]
@@ -33,6 +41,12 @@ class GlobalFilter(nn.Module):
         x_freq = torch.fft.rfft(x.float(), dim=1, norm="ortho")
         weight = torch.view_as_complex(self.complex_weight)
         x_freq = x_freq * weight.unsqueeze(0)
+
+        # modReLU: magnitude thresholding with phase preservation
+        magnitude = x_freq.abs()
+        activated = torch.relu(magnitude + self.bias.unsqueeze(0))
+        x_freq = activated * (x_freq / (magnitude + 1e-8))
+
         out = torch.fft.irfft(x_freq, n=n, dim=1, norm="ortho")
         return out.to(dtype=x.dtype)
 

@@ -306,6 +306,14 @@ def build_argparser() -> argparse.ArgumentParser:
                    help="MLP 隐藏层维度")
     p.add_argument("--dropout", type=float, default=0.3,
                    help="Dropout 概率")
+    p.add_argument("--freq_branch", type=str, default="none",
+                   choices=["none", "mean", "gfnet"],
+                   help="CLS 频域旁路模式: none=原始CLS-only, mean=CLS+mean(patch), gfnet=CLS+GFNet(patch)")
+    p.add_argument("--token_select_mode", type=str, default="cls_patch64",
+                   choices=["legacy_firstN", "cls_patch64"],
+                   help="token 选择模式 (仅 freq_branch!=none 时使用)")
+    p.add_argument("--freq_hidden_dim", type=int, default=512,
+                   help="GFNet 旁路内部维度 (仅 freq_branch=gfnet)")
 
     # ── 训练超参数 ──
     p.add_argument("--lr", type=float, default=1e-4,
@@ -378,6 +386,9 @@ def main():
             args.dataset_name = f"online_cls_{args.patient}"
         else:
             args.dataset_name = "online_cls"
+        # 非 none 的 freq_branch 追加后缀，避免与原始 CLS 结果目录碰撞
+        if args.freq_branch != "none":
+            args.dataset_name = f"{args.dataset_name}_freqbranch_{args.freq_branch}"
 
     # 输出目录
     output_base = _PROJECT_ROOT / "checkpoints" / "online_cls"
@@ -390,7 +401,7 @@ def main():
     history_csv = str(run_dir / "training_history.csv")
 
     print("=" * 80)
-    print(f"UNI2-H 在线 CLS 训练 | 模式: {args.mode} | LoRA rank: {args.lora_rank}")
+    print(f"UNI2-H 在线 CLS 训练 | 模式: {args.mode} | LoRA rank: {args.lora_rank} | Freq分支: {args.freq_branch}")
     print(f"输出目录: {run_dir}")
     print("=" * 80)
 
@@ -448,6 +459,9 @@ def main():
         n_targets=args.n_targets,
         mlp_dim=args.mlp_dim,
         dropout=args.dropout,
+        freq_branch=args.freq_branch,
+        token_select_mode=args.token_select_mode,
+        freq_hidden_dim=args.freq_hidden_dim,
     ).to(device)
 
     print_trainable_summary(model, prefix="[Model] ")
@@ -836,6 +850,8 @@ def main():
         with open(summary_path, 'w', encoding='utf-8') as f:
             f.write(f"训练模式: {args.mode}\n")
             f.write(f"LoRA rank: {args.lora_rank}\n")
+            f.write(f"Freq branch: {args.freq_branch}\n")
+            f.write(f"Token select mode: {args.token_select_mode}\n")
             f.write(f"数据集: {args.dataset_name}\n")
             f.write(f"训练模式: {mode_label}\n")
             f.write(f"Best Epoch: {best_epoch}\n")

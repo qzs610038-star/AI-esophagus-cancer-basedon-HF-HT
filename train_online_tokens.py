@@ -306,6 +306,9 @@ def build_argparser() -> argparse.ArgumentParser:
                    help="训练时随机丢弃 token 的概率")
     p.add_argument("--num_tokens", type=int, default=65,
                    help="保留的 token 数量 (lite=65, full=265)")
+    p.add_argument("--token_select_mode", type=str, default="legacy_firstN",
+                   choices=["legacy_firstN", "cls_patch64"],
+                   help="token 选择模式: legacy_firstN=前N个(含register), cls_patch64=CLS+64patch(跳过register)")
     p.add_argument("--num_epochs", type=int, default=150,
                    help="最大训练轮数")
     p.add_argument("--early_stop_patience", type=int, default=20,
@@ -325,7 +328,7 @@ def build_argparser() -> argparse.ArgumentParser:
     p.add_argument("--amp", action="store_true", default=True,
                    help="混合精度训练 (默认启用)")
     p.add_argument("--grad_checkpointing", action="store_true", default=False,
-                   help="启用 gradient checkpointing (节省 ~30% 显存, 慢 ~20%)")
+                   help="启用 gradient checkpointing (节省 ~30%% 显存, 慢 ~20%%)")
 
     # ── 断点续训 ──
     p.add_argument("--resume", type=str, default=None,
@@ -363,12 +366,18 @@ def main():
     _enc_tag = args.encoder_type
     _nt_tag = f"{args.num_tokens}t"
     if args.dataset_name is None:
+        _parts = []
         if args.cross_patient:
-            args.dataset_name = f"online_tokens_cross_fold{args.fold}_{_nt_tag}_{_enc_tag}"
+            _parts.append(f"online_tokens_cross_fold{args.fold}")
         elif args.patient:
-            args.dataset_name = f"online_tokens_{args.patient}_{_nt_tag}_{_enc_tag}"
+            _parts.append(f"online_tokens_{args.patient}")
         else:
-            args.dataset_name = f"online_tokens_{_nt_tag}_{_enc_tag}"
+            _parts.append("online_tokens")
+        _parts.append(f"{_nt_tag}_{_enc_tag}")
+        # 非 legacy token 选择模式追加后缀，避免与历史结果目录碰撞
+        if args.token_select_mode != "legacy_firstN":
+            _parts.append(args.token_select_mode)
+        args.dataset_name = "_".join(_parts)
 
     # 输出目录
     output_base = _PROJECT_ROOT / "checkpoints" / "online_tokens"
@@ -381,7 +390,7 @@ def main():
     history_csv = str(run_dir / "training_history.csv")
 
     print("=" * 80)
-    print(f"UNI2-H 在线 Token 训练 | 模式: {args.mode} | Encoder: {args.encoder_type} | Tokens: {args.num_tokens}")
+    print(f"UNI2-H 在线 Token 训练 | 模式: {args.mode} | Encoder: {args.encoder_type} | Tokens: {args.num_tokens} | Token选择: {args.token_select_mode}")
     print(f"输出目录: {run_dir}")
     print("=" * 80)
 
@@ -445,6 +454,7 @@ def main():
         n_encoder_heads=args.n_encoder_heads,
         token_drop_rate=args.token_drop_rate,
         num_tokens=args.num_tokens,
+        token_select_mode=args.token_select_mode,
     ).to(device)
 
     print_trainable_summary(model, prefix="[Model] ")
@@ -834,6 +844,7 @@ def main():
             f.write(f"训练模式: {args.mode}\n")
             f.write(f"Encoder type: {args.encoder_type}\n")
             f.write(f"Num tokens: {args.num_tokens}\n")
+            f.write(f"Token select mode: {args.token_select_mode}\n")
             f.write(f"LoRA rank: {args.lora_rank}\n")
             f.write(f"数据集: {args.dataset_name}\n")
             f.write(f"训练模式: {mode_label}\n")
