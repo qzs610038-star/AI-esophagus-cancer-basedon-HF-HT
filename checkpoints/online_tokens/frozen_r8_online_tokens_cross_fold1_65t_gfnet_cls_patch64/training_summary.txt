@@ -1,0 +1,12 @@
+训练模式: frozen
+Encoder type: gfnet
+Num tokens: 65
+Token select mode: cls_patch64
+LoRA rank: 8
+数据集: online_tokens_cross_fold1_65t_gfnet_cls_patch64
+训练模式: 跨患者 Fold 1 (JFX0729+LMZ12939→HYZ15040)
+Best Epoch: 2
+Best Val PCC: 0.3967
+Best Val Loss: 0.3320
+训练样本: 15351
+验证样本: 2655

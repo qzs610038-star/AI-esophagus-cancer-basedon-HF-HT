@@ -1,0 +1,11 @@
+训练模式: frozen
+LoRA rank: 8
+Freq branch: mean
+Token select mode: cls_patch64
+数据集: online_cls_cross_fold1_freqbranch_mean
+训练模式: 跨患者 Fold 1 (JFX0729+LMZ12939→HYZ15040)
+Best Epoch: 2
+Best Val PCC: 0.3955
+Best Val Loss: 0.3313
+训练样本: 15351
+验证样本: 2655
