@@ -39,16 +39,17 @@ dir D:\AIPatho\qzs\train_histogene_uni_tokens_augmix.py
 
 ### Git 方式（推荐，增量同步）
 
-**本地**：
+**本地**（双推：Gitee 给服务器用，GitHub 备份）：
 ```bash
-git push origin main
+git push gitee main     # 服务器通过此 remote 拉取
+git push origin main    # GitHub 备份
 ```
 
 **服务器**：
 ```powershell
 # ✅ 安全同步（仅这两条，不包含 git clean）
-git fetch origin main --force
-git reset --hard origin/main
+git fetch gitee main --force
+git reset --hard gitee/main
 
 # ❌ 绝对不要加 git clean -fd！会删除 checkpoints/ 下训练结果
 ```

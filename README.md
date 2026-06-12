@@ -42,26 +42,41 @@
 
 ## 🏆 当前最优结果
 
+> ⚠️ **2026-06-12 自检标记**：本表为 Phase 2-4（旧离线 Token 体系）的快照，已过时。
+> 当前最强结果来自 **在线训练体系**（UNI2-h LoRA + GFNet Token+LoRA + 频域实验），详见 **[CLAUDE.md](CLAUDE.md)** 的「当前最佳模型」表。
+> 本 README 将在 9 患者数据到齐、全量重训完成后统一更新。
+
 | 场景 | 模型 | PCC |
 |------|------|-----|
 | 单患者验证（HYZ15040） | HisToGene-UNI Token AugMix | **0.5217** |
-| 跨患者 Fold1（JFX+LMZ→HYZ） | HisToGene-UNI Token AugMix | **0.4142** |
+| 单患者验证（HYZ15040） | 🆕 UNI2-h CLS LoRA r=8 | **0.5462** ← 当前最佳单患者 |
+| 跨患者 Fold1（JFX+LMZ→HYZ） | 🆕 UNI2-h CLS LoRA r=8 | **0.4322** ← 当前最佳跨患者 |
+| 跨患者 Fold1（JFX+LMZ→HYZ） | 🆕 UNI2-h GFNet Token + LoRA r=8 | **0.4169** |
 | 跨患者 3 折平均 | HisToGene-UNI Token | 0.3812 |
 
 ---
 
 ## ⚡ 快速启动
 
-### 环境一：HisToGene 系列训练（主力）
+### 环境一：在线训练（当前主力，UNI2-h LoRA / GFNet Token）
 
 ```powershell
 # Python 3.13, PyTorch 2.6.0+cu118
 $env:PYTHONIOENCODING = "utf-8"
+# CLS LoRA 训练（当前最强）
+& "C:\Program Files\Python313\python.exe" train_online_cls.py --mode lora --lora_rank 8 --fold 1 --epochs 50
+# Token + GFNet LoRA 训练
+& "C:\Program Files\Python313\python.exe" train_online_tokens.py --encoder_type gfnet --mode lora --lora_rank 8 --fold 1 --epochs 50
+```
+
+### 环境二：旧离线 Token 训练（HisToGene-UNI，历史基线）
+
+```powershell
 & "C:\Program Files\Python313\python.exe" extract_uni_tokens.py --patient HYZ15040
 & "C:\Program Files\Python313\python.exe" train_histogene_uni_tokens_augmix.py --patient HYZ15040 --epochs 50
 ```
 
-### 环境二：OmiCLIP 特征提取（新）
+### 环境三：OmiCLIP 特征提取（新）
 
 ```powershell
 # Python 3.9, open_clip 2.26.1

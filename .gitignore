@@ -207,6 +207,14 @@ archive/
 # --------------------------------------------
 HYZ_analysis_output/
 experiments/
+# Experiment management files synced across machines
+!experiments/
+!experiments/experiment_registry.json
+!experiments/experiment_dashboard.md
+!experiments/decision_log.md
+experiments/analysis/
+experiments/results/
+experiments/sweeps/
 reports/
 report_figures/
 *.npz
