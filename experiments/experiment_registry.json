@@ -1,34 +1,48 @@
 {
   "version": 1,
-  "updated_at": "2026-06-16T22:00:00",
+  "updated_at": "2026-06-16T23:15:00",
   "jfx_data_status": {
-    "status": "synced_processed",
-    "description": "JFX0729 corrected data has been synced from server, validated, split (7010 train / 778 val, seed=42), and z-scored (30 pathways, ddof=1). All old JFX data archived (*_old_20260616). All Fold1/Fold2/Fold3 cross-patient experiments that involve old JFX0729 are now marked invalidated_by_jfx_fix=true and serve as historical references only.",
-    "corrected_data_available": true,
-    "corrected_data_location_server": "server (117.68.10.96, D:\\AIPatho\\qzs\\pfmval_deploy_git\\data_new_3ST\\)",
-    "corrected_data_synced_to_local": true,
-    "corrected_data_location_local": "data_new_3ST/JFX_fixed_data/ (source) + data_new_3ST/patch_noov_spilt/JFX0729_noov_split/ (split output)",
-    "source_patches": 7788,
-    "csv_rows": 7788,
-    "patch_csv_intersection": 7788,
+    "status": "completed_both_sides",
+    "description": "JFX0729 corrected data has been fully processed on BOTH local and server. Local: 2026-06-16 (scripts/prepare_jfx_fixed_data.py, 7/7 checks). Server: 2026-06-16 (same script, 7/7 checks, DESKTOP-HKP0IV0). All old JFX data archived on both sides.",
+    "local": {
+      "status": "done",
+      "completed_at": "2026-06-16T20:26",
+      "source": "data_new_3ST/JFX_fixed_data/JFX0729 (7788 png)",
+      "split_output": "data_new_3ST/patch_noov_spilt/JFX0729_noov_split (7010/778)",
+      "zscore_output": "data_new_3ST/ssGSEA_zscore/JFX0729_ssGSEA_zscore.csv",
+      "params": "data_new_3ST/ssGSEA_zscore/JFX0729_zscore_params.{csv,json}",
+      "validation": "7/7 checks passed",
+      "archives": ["patches (7838)", "zscore (31311 rows)", "uni2h_cache", "uni2h_cache_tokens", "virchow2_cache_tokens", "omiclip_cache"]
+    },
+    "server": {
+      "status": "done",
+      "completed_at": "2026-06-16T23:00",
+      "host": "DESKTOP-HKP0IV0 (117.68.10.96)",
+      "source_patches": "D:\\AIPatho\\qzs\\data-phase2\\patch\\JFX0729_noov (7788 png)",
+      "source_labels": "D:\\AIPatho\\qzs\\data-phase2\\ssGSEA\\JFX0729_ssGSEA.csv (raw)",
+      "split_output": "D:\\AIPatho\\qzs\\data-phase2\\patch\\JFX0729_noov_split (7010/778)",
+      "zscore_output": "D:\\AIPatho\\qzs\\data-phase2\\ssGSEA_zscore\\JFX0729_ssGSEA_zscore.csv",
+      "params": "D:\\AIPatho\\qzs\\data-phase2\\ssGSEA_zscore\\JFX0729_zscore_params.{csv,json}",
+      "validation": "7/7 checks passed",
+      "config_file": "config.server.yaml (PFMVAL_CONFIG env var)",
+      "existing_zscored": "HYZ15040 + LMZ12939 already z-scored in ssGSEA_zscore/, no re-processing needed",
+      "archives": ["JFX0729_noov_old (7838 raw)", "JFX0729_noov_split_old (7055/783 old split)"]
+    },
+    "source_patches_total": 7788,
     "train_count": 7010,
     "val_count": 778,
     "zscore_ddof": 1,
     "zscore_max_abs": 8.08,
     "prep_script": "scripts/prepare_jfx_fixed_data.py",
-    "prep_validation": "7/7 checks passed (disk-vs-manifest, counts, intersection, overlap, zscore quality, NaN/Inf, dataset_online load)",
-    "next_action": "rebuild UNI2-h token caches for JFX0729 → launch P0 retraining matrix with --dataset_name suffix _jfxfix20260616 to avoid overwriting old results",
-    "retraining_naming_convention": "All JFX-corrected retraining runs MUST use explicit --dataset_name ending in _jfxfix20260616 (e.g. online_cls_cross_fold1_lora_r8_jfxfix20260616). This prevents accidental overwrite of old checkpoints and makes provenance clear.",
-    "old_data_archived": [
-      "data_new_3ST/patch_noov_spilt/JFX0729_noov_split → JFX0729_noov_split_old_20260616 (7838 patches, old split)",
-      "data_new_3ST/ssGSEA_zscore/JFX0729_ssGSEA_zscore.csv → _old_20260616.csv (31311 rows, multi-spot per patch, wrong)",
-      "uni2h_cache/JFX0729 → JFX0729_old_20260616",
-      "uni2h_cache_tokens/JFX0729 → JFX0729_old_20260616",
-      "virchow2_cache_tokens/JFX0729 → JFX0729_old_20260616",
-      "omiclip_cache/JFX0729 → JFX0729_old_20260616"
-    ],
+    "next_action": "rebuild JFX + LMZ UNI2-h token caches on server → launch P0 retraining matrix with _jfxfix20260616 suffix",
+    "retraining_naming_convention": "All JFX-corrected retraining runs MUST use --dataset_name ending in _jfxfix20260616",
+    "cache_status": {
+      "HYZ15040": "exists (server: uni2h_cache_tokens, 2655 .pt)",
+      "LMZ12939": "missing — need rebuild",
+      "JFX0729": "missing — need rebuild"
+    },
     "reference_doc": "01_指南与解读/分析报告/JFX0729数据替换后重跑实验清单.md",
-    "last_updated": "2026-06-16T22:00:00"
+    "last_updated": "2026-06-16T23:15:00"
   },
   "nine_patient_status": {
     "status": "pending",
