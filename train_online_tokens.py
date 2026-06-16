@@ -58,6 +58,35 @@ from uni2h.uni2h_utils import load_uni2h_backbone
 # 忽略 Ctrl+C 信号
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 
+_JFX_FIX_SUFFIX = "_jfxfix20260616"
+
+
+def _uses_jfx_corrected_data(args) -> bool:
+    """Whether this run touches JFX0729 and should use the JFX-fix suffix."""
+    if args.patient == "JFX0729":
+        return True
+    if args.cross_patient:
+        try:
+            fold_cfg = get_fold_config(args.fold)
+            patients = list(fold_cfg.get("train", [])) + [fold_cfg.get("test")]
+            return "JFX0729" in patients
+        except Exception:
+            return True
+    return False
+
+
+def _ensure_jfxfix_dataset_name(args) -> None:
+    """Prevent corrected-JFX reruns from overwriting old checkpoint directories."""
+    if not args.dataset_name:
+        return
+    if _uses_jfx_corrected_data(args) and _JFX_FIX_SUFFIX not in args.dataset_name:
+        old_name = args.dataset_name
+        args.dataset_name = f"{args.dataset_name}{_JFX_FIX_SUFFIX}"
+        print(
+            f"[WARN] JFX0729 corrected data run detected; dataset_name auto-suffixed: "
+            f"{old_name} -> {args.dataset_name}"
+        )
+
 
 # ═════════════════════════════════════════════════════════════════════
 #  训练 / 评估循环
@@ -133,7 +162,10 @@ def train_one_epoch(
     avg_loss = total_loss / n_samples
     all_preds_t = torch.cat(all_preds, dim=0)
     all_labels_t = torch.cat(all_labels, dim=0)
-    metrics = compute_metrics(all_labels_t.numpy(), all_preds_t.numpy())
+    # NaN safety (mirrors train_online_cls.py:150-151)
+    preds_np = np.clip(np.nan_to_num(all_preds_t.numpy(), nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+    labels_np = np.clip(np.nan_to_num(all_labels_t.numpy(), nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+    metrics = compute_metrics(labels_np, preds_np)
     return avg_loss, metrics
 
 
@@ -167,7 +199,10 @@ def evaluate(
     avg_loss = total_loss / n
     all_preds_t = torch.cat(all_preds, dim=0)
     all_labels_t = torch.cat(all_labels, dim=0)
-    metrics = compute_metrics(all_labels_t.numpy(), all_preds_t.numpy())
+    # NaN safety (mirrors train_online_cls.py:193-194)
+    preds_np = np.clip(np.nan_to_num(all_preds_t.numpy(), nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+    labels_np = np.clip(np.nan_to_num(all_labels_t.numpy(), nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+    metrics = compute_metrics(labels_np, preds_np)
     return avg_loss, metrics
 
 
@@ -194,6 +229,44 @@ def build_patient_configs(
                 'patient_name': f'{pname}_{split}',
             })
     return configs
+
+
+def _split_patient_name(patient_name: str) -> Tuple[str, str]:
+    """将 HYZ15040_train / HYZ15040_val 拆成患者与切分名。"""
+    for suffix in ("_train", "_val", "_test"):
+        if patient_name.endswith(suffix):
+            return patient_name[:-len(suffix)], suffix[1:]
+    return patient_name, ""
+
+
+def collect_dataset_metadata(dataset) -> List[Dict]:
+    """按 Dataset 顺序收集预测导出所需的空间 metadata。"""
+    if isinstance(dataset, ConcatDataset):
+        rows: List[Dict] = []
+        for child in dataset.datasets:
+            rows.extend(collect_dataset_metadata(child))
+        return rows
+
+    if not hasattr(dataset, "samples"):
+        raise TypeError(
+            f"Unsupported dataset type for metadata export: {type(dataset).__name__}"
+        )
+
+    patient_name = getattr(dataset, "patient_name", "")
+    patient, split = _split_patient_name(patient_name)
+    rows = []
+    for stem, x, y, _targets in dataset.samples:
+        rows.append({
+            "filename": stem,
+            "patient": patient,
+            "split": split,
+            "patient_split": patient_name,
+            "x": int(x),
+            "y": int(y),
+            "pos_x": int(dataset._coord_to_index(x, dataset.x_min, dataset.x_max)),
+            "pos_y": int(dataset._coord_to_index(y, dataset.y_min, dataset.y_max)),
+        })
+    return rows
 
 
 def save_per_pathway_results(predictions_csv_path: str, output_dir: str) -> None:
@@ -239,7 +312,7 @@ def save_per_pathway_results(predictions_csv_path: str, output_dir: str) -> None
 # ═════════════════════════════════════════════════════════════════════
 
 def build_argparser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(description="UNI2-H 在线 CLS 训练（渐进式解冻）")
+    p = argparse.ArgumentParser(description="UNI2-H 在线 Token 序列模式训练（渐进式解冻）")
 
     # ── 模式 ──
     p.add_argument("--mode", type=str, required=True,
@@ -307,8 +380,8 @@ def build_argparser() -> argparse.ArgumentParser:
     p.add_argument("--num_tokens", type=int, default=65,
                    help="保留的 token 数量 (lite=65, full=265)")
     p.add_argument("--token_select_mode", type=str, default="legacy_firstN",
-                   choices=["legacy_firstN", "cls_patch64"],
-                   help="token 选择模式: legacy_firstN=前N个(含register), cls_patch64=CLS+64patch(跳过register)")
+                   choices=["legacy_firstN", "cls_patch64", "cls_pool8x8"],
+                   help="token selection: legacy_firstN, cls_patch64, cls_pool8x8")
     p.add_argument("--num_epochs", type=int, default=150,
                    help="最大训练轮数")
     p.add_argument("--early_stop_patience", type=int, default=20,
@@ -378,6 +451,7 @@ def main():
         if args.token_select_mode != "legacy_firstN":
             _parts.append(args.token_select_mode)
         args.dataset_name = "_".join(_parts)
+    _ensure_jfxfix_dataset_name(args)
 
     # 输出目录
     output_base = _PROJECT_ROOT / "checkpoints" / "online_tokens"
@@ -658,13 +732,15 @@ def main():
         pc = get_patient_paths(args.patient, backbone='uni_tokens')
         train_dataset = OnlinePatchDataset(
             patches_dir=pc['train_patches'], labels_csv=pc['labels_csv'],
-            transform=transform, n_pos=args.n_pos, n_targets=args.n_targets)
+            transform=transform, n_pos=args.n_pos, n_targets=args.n_targets,
+            patient_name=f"{args.patient}_train")
         train_coord = train_dataset.get_coord_stats()
         target_cols = train_dataset.target_cols
         val_dataset = OnlinePatchDataset(
             patches_dir=pc['val_patches'], labels_csv=pc['labels_csv'],
             transform=transform, n_pos=args.n_pos, n_targets=args.n_targets,
-            coord_stats=train_coord, target_cols=target_cols)
+            coord_stats=train_coord, target_cols=target_cols,
+            patient_name=f"{args.patient}_val")
         coord_stats_dict = {f"{args.patient}_train": train_coord}
         mode_label = f"单患者 {args.patient}"
     else:
@@ -824,9 +900,20 @@ def main():
 
         preds_cat = torch.cat(all_preds).numpy()
         labels_cat = torch.cat(all_labels).numpy()
+        # NaN safety for final export (mirrors train_online_cls.py)
+        preds_cat = np.clip(np.nan_to_num(preds_cat, nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
+        labels_cat = np.clip(np.nan_to_num(labels_cat, nan=0.0, posinf=10.0, neginf=-10.0), -100.0, 100.0)
 
-        # 保存 predictions.csv
-        pred_df = pd.DataFrame()
+        # 保存 predictions.csv，包含空间后处理所需 metadata
+        metadata = collect_dataset_metadata(val_dataset)
+        if len(metadata) != len(preds_cat):
+            print(
+                f"[WARN] metadata 数量({len(metadata)})与预测数量({len(preds_cat)})不一致，"
+                "将仅保存 true/pred 列"
+            )
+            pred_df = pd.DataFrame()
+        else:
+            pred_df = pd.DataFrame(metadata)
         for i, col in enumerate(target_cols):
             pred_df[f'true_{col}'] = labels_cat[:, i]
             pred_df[f'pred_{col}'] = preds_cat[:, i]

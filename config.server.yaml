@@ -1,0 +1,17 @@
+# config.server.yaml — PFMval 服务器配置
+# 使用方式: set PFMVAL_CONFIG=config.server.yaml
+# 服务器: 117.68.10.96 / AIPatho1 / RTX 4080 16GB
+
+data:
+  train_patches_dir: ""
+  val_patches_dir: ""
+  labels_csv_raw: ""
+  labels_csv_zscore: ""
+
+paths:
+  # 服务器数据根路径（与本地 data_new_3ST/ 结构不同）
+  patch_base: "D:\\AIPatho\\qzs\\data-phase2\\patch"
+  ssgsea_base: "D:\\AIPatho\\qzs\\data-phase2\\ssGSEA"
+
+# 患者级配置：patches_subdir 和 labels_csv 沿用 config.yaml 默认值
+# 不设绝对路径覆盖，让 paths.patch_base/ssgsea_base + subdir 自动解析

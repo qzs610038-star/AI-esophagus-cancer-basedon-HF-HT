@@ -19,7 +19,7 @@
 | 患者 ID | Patch 数量 | 用途 |
 |---------|-----------|------|
 | HYZ15040 | 2,655 | 主验证集 / 跨患者测试集 |
-| JFX0729 | 7,838 | 训练集 / 跨患者训练 |
+| JFX0729 | 7,788 | 训练集 / 跨患者训练（2026-06-16 更正数据） |
 | LMZ12939 | 7,513 | 训练集 / 跨患者训练 |
 
 数据路径：`data_new_3ST/patch_noov_spilt/{patient}_noov_split/`
@@ -42,17 +42,17 @@
 
 ## 🏆 当前最优结果
 
-> ⚠️ **2026-06-12 自检标记**：本表为 Phase 2-4（旧离线 Token 体系）的快照，已过时。
-> 当前最强结果来自 **在线训练体系**（UNI2-h LoRA + GFNet Token+LoRA + 频域实验），详见 **[CLAUDE.md](CLAUDE.md)** 的「当前最佳模型」表。
-> 本 README 将在 9 患者数据到齐、全量重训完成后统一更新。
+> 🚨 **JFX0729 数据错误（2026-06-16 更新）**：JFX 更正数据已于 2026-06-16 同步到本地并完成 split+z-score 验证（7010 train / 778 val, 7/7 checks passed）。旧数据已归档。**下表跨患者结果仍为历史参考**——待重建 JFX token 缓存 + P0 重跑矩阵完成后更新。详见 `01_指南与解读/分析报告/JFX0729数据替换后重跑实验清单.md`。
+> 
+> ⚠️ 本表同时过时于 Phase 2-4 旧离线 Token 体系。当前最强结果来自 **在线训练体系**（UNI2-h LoRA + GFNet Token+LoRA），详见 **[CLAUDE.md](CLAUDE.md)**。9 患者数据预计 2026 年 7 月初到齐。
 
-| 场景 | 模型 | PCC |
-|------|------|-----|
-| 单患者验证（HYZ15040） | HisToGene-UNI Token AugMix | **0.5217** |
-| 单患者验证（HYZ15040） | 🆕 UNI2-h CLS LoRA r=8 | **0.5462** ← 当前最佳单患者 |
-| 跨患者 Fold1（JFX+LMZ→HYZ） | 🆕 UNI2-h CLS LoRA r=8 | **0.4322** ← 当前最佳跨患者 |
-| 跨患者 Fold1（JFX+LMZ→HYZ） | 🆕 UNI2-h GFNet Token + LoRA r=8 | **0.4169** |
-| 跨患者 3 折平均 | HisToGene-UNI Token | 0.3812 |
+| 场景 | 模型 | PCC | JFX影响 |
+|------|------|-----|:---:|
+| 单患者验证（HYZ15040） | HisToGene-UNI Token AugMix | **0.5217** | ✅ 不涉及JFX |
+| 单患者验证（HYZ15040） | 🆕 UNI2-h CLS LoRA r=8 | **0.5462** | ✅ 不涉及JFX |
+| 跨患者 Fold1（JFX+LMZ→HYZ） | 🆕 UNI2-h CLS LoRA r=8 | ~~0.4322~~ | 🔴 训练含错误JFX |
+| 跨患者 Fold1（JFX+LMZ→HYZ） | 🆕 UNI2-h GFNet Token + LoRA r=8 | ~~0.4169~~ | 🔴 训练含错误JFX |
+| 跨患者 3 折平均 | HisToGene-UNI Token | ~~0.3812~~ | 🔴 含JFX相关Fold |
 
 ---
 
@@ -64,9 +64,9 @@
 # Python 3.13, PyTorch 2.6.0+cu118
 $env:PYTHONIOENCODING = "utf-8"
 # CLS LoRA 训练（当前最强）
-& "C:\Program Files\Python313\python.exe" train_online_cls.py --mode lora --lora_rank 8 --fold 1 --epochs 50
+& "C:\Program Files\Python313\python.exe" train_online_cls.py --mode lora --lora_rank 8 --cross_patient --fold 1 --dataset_name online_cls_cross_fold1_lora_r8_jfxfix20260616 --epochs 50
 # Token + GFNet LoRA 训练
-& "C:\Program Files\Python313\python.exe" train_online_tokens.py --encoder_type gfnet --mode lora --lora_rank 8 --fold 1 --epochs 50
+& "C:\Program Files\Python313\python.exe" train_online_tokens.py --encoder_type gfnet --mode lora --lora_rank 8 --cross_patient --fold 1 --dataset_name online_tokens_cross_fold1_65t_gfnet_lora_r8_jfxfix20260616 --epochs 50
 ```
 
 ### 环境二：旧离线 Token 训练（HisToGene-UNI，历史基线）
@@ -159,8 +159,8 @@ PFMval_new/
 
 ## 🚀 下一步计划
 
-- **短期（本周）**：OmiCLIP 训练验证 + 三折交叉验证
-- **中期**：Virchow2 / BLEEP 探索；扩展至 5 患者
+- **🚨 短期（P0）**：重建 JFX0729 UNI2-h token 缓存 → 使用 `_jfxfix20260616` 后缀重跑 P0 实验矩阵（详见 `01_指南与解读/分析报告/JFX0729数据替换后重跑实验清单.md`）
+- **中期**：9 患者数据（预计 7 月初）到齐后全量重训；Virchow2 / BLEEP 探索
 - **长期**：多中心验证；论文投稿
 
 ---
