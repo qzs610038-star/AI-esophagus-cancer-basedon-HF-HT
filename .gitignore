@@ -239,3 +239,7 @@ egnv2/checkpoints/
 histogene/training_history*.csv
 egnv1/training_history*.csv
 egnv2/training_history*.csv
+
+# Local account migration exports (private conversation/memory archive)
+account_migration_export/
+account_migration_export_*.zip

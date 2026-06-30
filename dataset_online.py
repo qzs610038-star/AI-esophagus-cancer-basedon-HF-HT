@@ -57,6 +57,7 @@ class OnlinePatchDataset(Dataset):
         n_pos: int = 128,
         n_targets: int = 30,
         coord_stats: Optional[Dict[str, int]] = None,
+        patient_name: Optional[str] = None,
     ):
         """
         Args:
@@ -67,10 +68,12 @@ class OnlinePatchDataset(Dataset):
             n_pos: 坐标编码的最大索引
             n_targets: 通路数
             coord_stats: 坐标统计（推理时从训练集传入），None 则从数据自动计算
+            patient_name: 患者/切分标识，用于导出 predictions.csv 的空间后处理 metadata
         """
         self.patches_dir = Path(patches_dir)
         self.transform = transform
         self.n_pos = n_pos
+        self.patient_name = patient_name or self.patches_dir.parent.name
 
         # ── 加载标签 ──
         df = pd.read_csv(labels_csv)
@@ -207,6 +210,7 @@ def from_multiple_patients(
             n_pos=n_pos,
             n_targets=n_targets,
             coord_stats=None,
+            patient_name=patient_name,
         )
 
         coord_stats_dict[patient_name] = dataset.get_coord_stats()

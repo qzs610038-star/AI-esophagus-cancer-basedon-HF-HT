@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 # 复用现有 LightweightTokenEncoder
 from model_uni_tokens import LightweightTokenEncoder
@@ -48,6 +49,8 @@ def select_uni_tokens(
               包含 CLS + register tokens（如果 N 够大），用于复现已有结果。
             - "cls_patch64": CLS + 前 64 个 patch token（跳过 register tokens）。
               仅适用于 num_tokens=65，用于后续频域实验的干净空间序列。
+            - "cls_pool8x8": CLS + 全部 256 patch token 经 2x2 average pooling
+              压缩为 8x8=64 个 patch token。仅适用于 num_tokens=65。
         reg_tokens: register token 数量（默认 8，与 UNI2-H 配置一致）
 
     Returns:
@@ -65,6 +68,24 @@ def select_uni_tokens(
         patch_start = 1 + reg_tokens                               # 跳过 CLS + reg
         patch_tokens = all_tokens[:, patch_start:patch_start + 64, :]  # [B, 64, D]
         return torch.cat([cls_token, patch_tokens], dim=1)        # [B, 65, D]
+
+    if mode == "cls_pool8x8":
+        if num_tokens != 65:
+            raise ValueError(
+                f"cls_pool8x8 is only defined for num_tokens=65, got {num_tokens}"
+            )
+        cls_token = all_tokens[:, 0:1, :]                         # [B, 1, D]
+        patch_start = 1 + reg_tokens                              # 跳过 CLS + reg
+        patch_tokens = all_tokens[:, patch_start:patch_start + 256, :]  # [B, 256, D]
+        if patch_tokens.size(1) != 256:
+            raise ValueError(
+                f"cls_pool8x8 requires 256 patch tokens, got {patch_tokens.size(1)}"
+            )
+        b, _, d = patch_tokens.shape
+        patch_grid = patch_tokens.transpose(1, 2).reshape(b, d, 16, 16)
+        pooled = F.avg_pool2d(patch_grid, kernel_size=2, stride=2)      # [B, D, 8, 8]
+        pooled_flat = pooled.reshape(b, d, 64).transpose(1, 2)          # [B, 64, D]
+        return torch.cat([cls_token, pooled_flat], dim=1)              # [B, 65, D]
 
     raise ValueError(f"Unsupported token_select_mode: {mode}")
 
@@ -111,6 +132,7 @@ class OnlineTokenModel(nn.Module):
             token_select_mode: token 选择模式
                 - "legacy_firstN": 历史行为，取前 N 个 token（含 register）
                 - "cls_patch64": CLS + 前 64 个 patch token，跳过 register（仅 65-token）
+                - "cls_pool8x8": CLS + 2x2 pooled 全空间 patch tokens（仅 65-token）
         """
         super().__init__()
         self.backbone = backbone
@@ -194,7 +216,11 @@ class OnlineTokenModel(nn.Module):
     def forward_features(self, images: torch.Tensor) -> torch.Tensor:
         """仅返回 backbone token 特征，用于分析/调试。"""
         all_tokens = self.backbone.forward_features(images)
-        return all_tokens[:, :self.num_tokens, :]
+        return select_uni_tokens(
+            all_tokens,
+            num_tokens=self.num_tokens,
+            mode=self.token_select_mode,
+        )
 
     def count_parameters(self) -> int:
         """返回可训练参数量。"""
@@ -243,7 +269,7 @@ if __name__ == "__main__":
 
     dummy_backbone = DummyViT()
 
-    for mode in ("legacy_firstN", "cls_patch64"):
+    for mode in ("legacy_firstN", "cls_patch64", "cls_pool8x8"):
         print(f"\n--- token_select_mode={mode} ---")
         model = OnlineTokenModel(dummy_backbone, num_tokens=65, token_select_mode=mode)
         total = model.count_parameters()
@@ -271,6 +297,13 @@ if __name__ == "__main__":
             assert torch.allclose(selected[:, 64, :], all_tokens[:, 72, :], atol=1e-5), \
                 "cls_patch64: position 64 should be patch_63 (original index 72)"
             print("  [OK] token identity verified: [CLS, patch0..patch63] (register skipped)")
+        elif mode == "cls_pool8x8":
+            assert torch.allclose(selected[:, 0, :], all_tokens[:, 0, :], atol=1e-5), \
+                "cls_pool8x8: position 0 should be CLS"
+            expected = all_tokens[:, 9:9 + 256, :].reshape(2, 16, 16, 1536)[:, 0:2, 0:2, :].mean(dim=(1, 2))
+            assert torch.allclose(selected[:, 1, :], expected, atol=1e-5), \
+                "cls_pool8x8: position 1 should be mean of patch grid [0:2, 0:2]"
+            print("  [OK] token identity verified: [CLS, pooled 8x8 full-grid patches]")
 
         # 测试完整前向
         images = torch.randn(4, 3, 224, 224)

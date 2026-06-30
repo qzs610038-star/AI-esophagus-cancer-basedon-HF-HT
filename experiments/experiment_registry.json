@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-16T23:15:00",
+  "updated_at": "2026-06-30T23:40:00",
   "jfx_data_status": {
     "status": "completed_both_sides",
     "description": "JFX0729 corrected data has been fully processed on BOTH local and server. Local: 2026-06-16 (scripts/prepare_jfx_fixed_data.py, 7/7 checks). Server: 2026-06-16 (same script, 7/7 checks, DESKTOP-HKP0IV0). All old JFX data archived on both sides.",
@@ -34,20 +34,20 @@
     "zscore_ddof": 1,
     "zscore_max_abs": 8.08,
     "prep_script": "scripts/prepare_jfx_fixed_data.py",
-    "next_action": "rebuild JFX + LMZ UNI2-h token caches on server → launch P0 retraining matrix with _jfxfix20260616 suffix",
+    "next_action": "defer JFX token-cache rebuild; a new data transformation is planned and caches/retraining should be rebuilt only after that transform is finalized and applied consistently",
     "retraining_naming_convention": "All JFX-corrected retraining runs MUST use --dataset_name ending in _jfxfix20260616",
     "cache_status": {
-      "HYZ15040": "exists (server: uni2h_cache_tokens, 2655 .pt)",
-      "LMZ12939": "missing — need rebuild",
-      "JFX0729": "missing — need rebuild"
+      "HYZ15040": "local exists (uni2h_cache_tokens, 2655 .pt); server status not reverified in this update",
+      "LMZ12939": "local exists (uni2h_cache_tokens, 7513 .pt); server status not reverified in this update",
+      "JFX0729": "missing locally — rebuild deferred pending the upcoming unified data transformation"
     },
     "reference_doc": "01_指南与解读/分析报告/JFX0729数据替换后重跑实验清单.md",
-    "last_updated": "2026-06-16T23:15:00"
+    "last_updated": "2026-06-30T23:40:00"
   },
   "nine_patient_status": {
     "status": "pending",
     "estimated_arrival": "2026-07月初",
-    "description": "9-patient full cohort data expected early July 2026. Current work focuses on 3-patient core matrix with corrected JFX data. JFX data correction unblocks 3-patient P0 retraining now; 9-patient expansion will follow."
+    "description": "9-patient full cohort data was expected around early July 2026, but this checkout has not confirmed its arrival as of 2026-06-30. Current work remains on the 3-patient core matrix; JFX token-cache rebuild and P0 retraining are deferred pending an upcoming unified data transformation."
   },
   "experiments": [
     {
