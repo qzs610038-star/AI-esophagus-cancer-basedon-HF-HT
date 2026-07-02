@@ -68,6 +68,9 @@ uni2h_cache_tokens_aug/
 **/uni2h_cache_tokens/
 **/uni2h_cache_tokens_aug/
 
+# MPP 特征提取缓存（MPP 五划分实验专用，~260MB .pt，2026-07-02）
+mpp_uni2h_cache/
+
 # ViT / ResNet 等中间特征缓存（egnv1/cache/, egnv2/cache/ 等）
 **/cache/
 

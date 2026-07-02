@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-30T23:40:00",
+  "updated_at": "2026-07-02T23:59:00",
   "jfx_data_status": {
     "status": "completed_both_sides",
     "description": "JFX0729 corrected data has been fully processed on BOTH local and server. Local: 2026-06-16 (scripts/prepare_jfx_fixed_data.py, 7/7 checks). Server: 2026-06-16 (same script, 7/7 checks, DESKTOP-HKP0IV0). All old JFX data archived on both sides.",
@@ -350,6 +350,27 @@
       "plan_ref": "空间信息修复方案_20260613.md §S1b",
       "jfx_data_affected": true,
       "launch_dataset_name": "online_tokens_cross_fold1_65t_gfnet_jfxfix20260616"
+    },
+    {
+      "id": "mpp_v3_xzy_external_uni2h_mlp_20260701",
+      "family": "mpp_uni2h_mlp",
+      "status": "planned",
+      "priority": "P0",
+      "script": "train_mpp_uni2h_mlp.py",
+      "mpp_train_id": 3,
+      "train_patients": ["HYZ15040","JFX","LMZ12939","TGC","XSL","ZHZ"],
+      "external_mpp_id": 2,
+      "external_patient": "XZY",
+      "val_strategy": "none",
+      "model": "UNI2-h frozen features + 2-layer MLP",
+      "selection_metric": "none_strategyA_final_ckpt",
+      "epoch_budget": "TBD_after_smoke",
+      "seed": 42,
+      "single_seed_limitation": true,
+      "run_dir": "checkpoints/mpp_uni2h_mlp/mpp_v3_xzy_external_uni2h_mlp_20260701",
+      "created_at": "2026-07-02",
+      "next_action": "extract_features -> smoke -> train -> external_eval",
+      "notes": "MPP-3 train (6 patients, ~42K patches) -> MPP-2/XZY external test. JFX named 'JFX' in MPP root. NaN guard: nan_to_num on raw; clip +-100 only AFTER z-score transform. Codex review fixes applied 2026-07-02: ddof=1, coord matching, metrics key fix, pred order, --no-val guard, HF_HOME, allow_missing."
     }
   ]
 }

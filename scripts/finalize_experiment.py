@@ -9,6 +9,7 @@ Usage:
     python scripts/finalize_experiment.py --run-dir <path> --experiment-id <id>
     python scripts/finalize_experiment.py --run-dir <path> --experiment-id <id> --baseline-id <baseline_id>
     python scripts/finalize_experiment.py --run-dir <path> --experiment-id <id> --mode server
+    python scripts/finalize_experiment.py --run-dir <path> --experiment-id <id> --no-val  # Strategy A (no val_loss)
 
 Does NOT auto-modify CLAUDE.md — outputs sync suggestions only.
 """
@@ -125,7 +126,10 @@ def generate_dashboard(registry):
         epoch = str(exp.get("best_epoch", "—")) if exp.get("best_epoch") is not None else "—"
 
         icon = status_icon.get(status, "question")
-        lines.append(f"| {eid} | {family} | :{icon}: {status} | {fold} | {encoder} | {tokens} | {pcc} | {loss} | {gap} | {epoch} |")
+        note = ""
+        if exp.get("external_xzy_pcc") is not None:
+            note = f" | ext_XZY_PCC={exp['external_xzy_pcc']:.4f}"
+        lines.append(f"| {eid} | {family} | :{icon}: {status} | {fold} | {encoder} | {tokens} | {pcc} | {loss} | {gap} | {epoch}{note} |")
 
     lines.append("")
 
@@ -169,6 +173,10 @@ def main():
     parser.add_argument("--baseline-id", default=None, help="Baseline experiment ID for delta comparison")
     parser.add_argument("--mode", default="local", choices=["local", "server"],
                         help="local: warn on missing CSV; server: fail on missing CSV")
+    parser.add_argument("--no-val", action="store_true",
+                        help="Strategy A: use final epoch (no val_loss column in CSV)")
+    parser.add_argument("--external-xzy-pcc", type=float, default=None,
+                        help="External XZY mean PCC (Strategy A, manually added after training)")
     args = parser.parse_args()
 
     run_dir = Path(args.run_dir)
@@ -198,18 +206,32 @@ def main():
         sys.exit(1)
 
     # ----------------------------------------------------------
-    # Step 2: Find best epoch by val_loss minimum
+    # Step 2: Find best epoch (val_loss minimum) OR use final epoch (--no-val)
     # ----------------------------------------------------------
-    best_row, train_val_gap = find_best_epoch(rows, "val_loss")
-    best_epoch = int(best_row["epoch"])
-    best_val_loss = float(best_row["val_loss"])
-    best_val_pcc = float(best_row["val_pcc"])
-    train_pcc = float(best_row["train_pcc"])
+    if args.no_val:
+        # Strategy A: no validation set. Use the last epoch as final checkpoint.
+        best_row = rows[-1]
+        best_epoch = int(best_row["epoch"])
+        best_val_loss = None
+        best_val_pcc = None
+        train_val_gap = None
+        train_pcc = float(best_row.get("train_pcc", 0)) if best_row.get("train_pcc") else None
 
-    print(f"[INFO] Loaded {len(rows)} epochs from {csv_path}")
-    print(f"[INFO] Best epoch by val_loss_min: epoch={best_epoch}")
-    print(f"       val_loss={best_val_loss:.4f}  val_pcc={best_val_pcc:.4f}  train_pcc={train_pcc:.4f}")
-    print(f"       train_val_gap={train_val_gap:.4f}")
+        print(f"[INFO] Loaded {len(rows)} epochs from {csv_path}")
+        print(f"[INFO] --no-val mode: using FINAL checkpoint (epoch={best_epoch})")
+        print(f"       train_loss={best_row.get('train_loss', 'N/A')}  train_pcc={train_pcc or 'N/A'}")
+    else:
+        # Standard mode: select best epoch by val_loss minimum
+        best_row, train_val_gap = find_best_epoch(rows, "val_loss")
+        best_epoch = int(best_row["epoch"])
+        best_val_loss = float(best_row["val_loss"])
+        best_val_pcc = float(best_row["val_pcc"])
+        train_pcc = float(best_row["train_pcc"])
+
+        print(f"[INFO] Loaded {len(rows)} epochs from {csv_path}")
+        print(f"[INFO] Best epoch by val_loss_min: epoch={best_epoch}")
+        print(f"       val_loss={best_val_loss:.4f}  val_pcc={best_val_pcc:.4f}  train_pcc={train_pcc:.4f}")
+        print(f"       train_val_gap={train_val_gap:.4f}")
 
     # ----------------------------------------------------------
     # Step 3: Update registry
@@ -227,10 +249,12 @@ def main():
         sys.exit(1)
 
     target["status"] = "done"
-    target["best_epoch"] = best_epoch
+    target["best_epoch"] = best_epoch if best_epoch is not None else "final"
     target["best_val_loss"] = best_val_loss
     target["best_val_pcc"] = best_val_pcc
-    target["train_val_gap"] = round(train_val_gap, 6)
+    target["train_val_gap"] = round(train_val_gap, 6) if train_val_gap is not None else None
+    if args.external_xzy_pcc is not None:
+        target["external_xzy_pcc"] = round(args.external_xzy_pcc, 6)
     target["completed_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
     target["next_action"] = "review_results"
 
@@ -240,7 +264,7 @@ def main():
     # ----------------------------------------------------------
     # Step 4: Baseline comparison (optional)
     # ----------------------------------------------------------
-    if args.baseline_id:
+    if args.baseline_id and not args.no_val and best_val_pcc is not None:
         baseline = None
         for exp in experiments:
             if exp["id"] == args.baseline_id:
