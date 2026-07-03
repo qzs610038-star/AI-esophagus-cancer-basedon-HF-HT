@@ -310,6 +310,7 @@ def main():
             "epoch": epoch,
             "train_loss": round(train_loss, 6),
             "train_pcc": round(train_pcc, 6),
+            "is_best": False,  # 占位，统一在 best 判定后回填
         })
 
         print(f"Epoch {epoch:3d}/{args.num_epochs}  "
@@ -324,6 +325,9 @@ def main():
             }
             best_epoch = epoch
             epochs_no_improve = 0
+            # 回填 is_best：当前新 best 行置 True，之前所有行置 False
+            for h in history:
+                h["is_best"] = (h["epoch"] == epoch)
             print(f"  ✅ best")
         else:
             epochs_no_improve += 1
@@ -349,6 +353,14 @@ def main():
     history_df = pd.DataFrame(history)
     history_df.to_csv(out_dir / "training_history.csv", index=False)
     print(f"\n训练历史已保存: {out_dir / 'training_history.csv'}")
+
+    # ── 保存 best epoch 标记（finalize --no-val 据此取真实 best，对齐 best_checkpoint.pth） ──
+    best_epoch_file = out_dir / "best_epoch.txt"
+    with open(best_epoch_file, "w", encoding="utf-8") as f:
+        f.write(f"best_epoch={best_epoch}\n")
+        f.write(f"best_train_loss={best_loss:.6f}\n")
+        f.write(f"actual_final_epoch={epoch}\n")
+    print(f"Best epoch 标记: {best_epoch_file} (best_epoch={best_epoch}, final_epoch={epoch})")
 
     # ── 保存最佳 checkpoint ──
     ckpt_path = out_dir / "best_checkpoint.pth"

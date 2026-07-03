@@ -209,16 +209,39 @@ def main():
     # Step 2: Find best epoch (val_loss minimum) OR use final epoch (--no-val)
     # ----------------------------------------------------------
     if args.no_val:
-        # Strategy A: no validation set. Use the last epoch as final checkpoint.
-        best_row = rows[-1]
-        best_epoch = int(best_row["epoch"])
+        # Strategy A: no validation set. Prefer the explicit best epoch written
+        # by train_mpp_uni2h_mlp.py (early-stopping-aware: best_epoch.txt or
+        # the `is_best` column), consistent with best_checkpoint.pth.
+        # Fall back to rows[-1] (final-epoch) for legacy runs without these markers.
+        best_epoch_file = Path(run_dir) / "best_epoch.txt"
+        best_row = None
+        if best_epoch_file.exists():
+            with open(best_epoch_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.startswith("best_epoch="):
+                        be = int(line.split("=", 1)[1].strip())
+                        best_row = next((r for r in rows if int(r["epoch"]) == be), None)
+                        if best_row is not None:
+                            best_epoch = be
+                        break
+        if best_row is None:
+            for r in rows:
+                if r.get("is_best", "").strip().lower() in ("true", "1", "yes"):
+                    best_row = r
+                    best_epoch = int(best_row["epoch"])
+                    break
+        if best_row is None:
+            best_row = rows[-1]
+            best_epoch = int(best_row["epoch"])
+            print(f"[WARN] No best_epoch.txt / is_best marker found; "
+                  f"falling back to FINAL epoch (epoch={best_epoch})")
         best_val_loss = None
         best_val_pcc = None
         train_val_gap = None
         train_pcc = float(best_row.get("train_pcc", 0)) if best_row.get("train_pcc") else None
 
         print(f"[INFO] Loaded {len(rows)} epochs from {csv_path}")
-        print(f"[INFO] --no-val mode: using FINAL checkpoint (epoch={best_epoch})")
+        print(f"[INFO] --no-val mode: using BEST checkpoint (epoch={best_epoch})")
         print(f"       train_loss={best_row.get('train_loss', 'N/A')}  train_pcc={train_pcc or 'N/A'}")
     else:
         # Standard mode: select best epoch by val_loss minimum
