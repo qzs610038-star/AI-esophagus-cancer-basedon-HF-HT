@@ -13,6 +13,7 @@ import re
 from pathlib import Path
 from typing import List, Optional, Tuple
 
+import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import ConcatDataset, Dataset
@@ -101,7 +102,7 @@ class MPPFeatureDataset(Dataset):
                 x, y = parse_coordinates(pt.stem)
                 if x is not None and (x, y) in coord_map:
                     row_idx = coord_map[(x, y)]
-                    target = self.labels_df.iloc[row_idx][self.target_cols].values
+                    target = self.labels_df.iloc[row_idx][self.target_cols].values.astype(np.float32)
                     self.samples.append((pt.stem, torch.tensor(target, dtype=torch.float32)))
                     n_match += 1
                 else:
@@ -111,7 +112,8 @@ class MPPFeatureDataset(Dataset):
                   f"{len(unmatched_stems)} 未匹配")
         else:
             # 策略 2: 无坐标列 — 尝试按 ID 列匹配
-            possible_id_cols = ["patch", "filename", "spot", "id", "patch_id", "spot_id"]
+            possible_id_cols = ["patch", "filename", "spot", "id", "patch_id",
+                                "spot_id", "barcode"]
             id_col = next((c for c in possible_id_cols if c in all_cols), None)
 
             if id_col:
@@ -122,7 +124,7 @@ class MPPFeatureDataset(Dataset):
 
                 for pt in pt_files:
                     if pt.stem in label_map.index:
-                        target = label_map.loc[pt.stem].values
+                        target = label_map.loc[pt.stem].values.astype(np.float32)
                         self.samples.append((pt.stem, torch.tensor(target, dtype=torch.float32)))
                     else:
                         unmatched_stems.append(pt.stem)
@@ -141,7 +143,7 @@ class MPPFeatureDataset(Dataset):
 
                 for i, pt in enumerate(pt_files):
                     if i < len(self.labels_df):
-                        target = self.labels_df.iloc[i][self.target_cols].values
+                        target = self.labels_df.iloc[i][self.target_cols].values.astype(np.float32)
                         self.samples.append((pt.stem, torch.tensor(target, dtype=torch.float32)))
                     else:
                         unmatched_stems.append(pt.stem)
