@@ -1,0 +1,13 @@
+dataset_name=mpp_v3_xzy_external_uni2h_mlp_20260701
+train_mpp_id=3
+train_patients=HYZ15040,JFX,LMZ12939,TGC,XSL,ZHZ
+external_mpp_id=2
+external_patient=XZY
+val_strategy=none
+model=MPPMLPHead (Linear->GELU->Dropout->Linear)
+in_dim=1536, hidden=1024, out=30
+dropout=0.3, n_params=1604638
+num_epochs=50, batch_size=32
+lr=0.0001, seed=42, num_threads=8
+device=cuda
+created_at=2026-07-03T23:52:26.153516

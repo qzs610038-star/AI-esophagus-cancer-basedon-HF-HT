@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-02T23:59:00",
+  "updated_at": "2026-07-03T18:37:24",
   "jfx_data_status": {
     "status": "completed_both_sides",
     "description": "JFX0729 corrected data has been fully processed on BOTH local and server. Local: 2026-06-16 (scripts/prepare_jfx_fixed_data.py, 7/7 checks). Server: 2026-06-16 (same script, 7/7 checks, DESKTOP-HKP0IV0). All old JFX data archived on both sides.",
@@ -12,7 +12,14 @@
       "zscore_output": "data_new_3ST/ssGSEA_zscore/JFX0729_ssGSEA_zscore.csv",
       "params": "data_new_3ST/ssGSEA_zscore/JFX0729_zscore_params.{csv,json}",
       "validation": "7/7 checks passed",
-      "archives": ["patches (7838)", "zscore (31311 rows)", "uni2h_cache", "uni2h_cache_tokens", "virchow2_cache_tokens", "omiclip_cache"]
+      "archives": [
+        "patches (7838)",
+        "zscore (31311 rows)",
+        "uni2h_cache",
+        "uni2h_cache_tokens",
+        "virchow2_cache_tokens",
+        "omiclip_cache"
+      ]
     },
     "server": {
       "status": "done",
@@ -26,7 +33,10 @@
       "validation": "7/7 checks passed",
       "config_file": "config.server.yaml (PFMVAL_CONFIG env var)",
       "existing_zscored": "HYZ15040 + LMZ12939 already z-scored in ssGSEA_zscore/, no re-processing needed",
-      "archives": ["JFX0729_noov_old (7838 raw)", "JFX0729_noov_split_old (7055/783 old split)"]
+      "archives": [
+        "JFX0729_noov_old (7838 raw)",
+        "JFX0729_noov_split_old (7055/783 old split)"
+      ]
     },
     "source_patches_total": 7788,
     "train_count": 7010,
@@ -354,11 +364,18 @@
     {
       "id": "mpp_v3_xzy_external_uni2h_mlp_20260701",
       "family": "mpp_uni2h_mlp",
-      "status": "planned",
+      "status": "done",
       "priority": "P0",
       "script": "train_mpp_uni2h_mlp.py",
       "mpp_train_id": 3,
-      "train_patients": ["HYZ15040","JFX","LMZ12939","TGC","XSL","ZHZ"],
+      "train_patients": [
+        "HYZ15040",
+        "JFX",
+        "LMZ12939",
+        "TGC",
+        "XSL",
+        "ZHZ"
+      ],
       "external_mpp_id": 2,
       "external_patient": "XZY",
       "val_strategy": "none",
@@ -372,8 +389,14 @@
       "single_seed_limitation": true,
       "run_dir": "checkpoints/mpp_uni2h_mlp/mpp_v3_xzy_external_uni2h_mlp_20260701",
       "created_at": "2026-07-02",
-      "next_action": "extract_features -> smoke -> train -> external_eval",
-      "notes": "MPP-3 train (6 patients, ~42K patches) -> MPP-2/XZY external test. JFX named 'JFX' in MPP root. NaN guard: nan_to_num on raw; clip +-100 only AFTER z-score transform. Codex review fixes applied 2026-07-02: ddof=1, coord matching, metrics key fix, pred order, --no-val guard, HF_HOME, allow_missing."
+      "next_action": "review_results",
+      "notes": "MPP-3 train (6 patients, ~42K patches) -> MPP-2/XZY external test. JFX named 'JFX' in MPP root. NaN guard: nan_to_num on raw; clip +-100 only AFTER z-score transform. Codex review fixes applied 2026-07-02: ddof=1, coord matching, metrics key fix, pred order, --no-val guard, HF_HOME, allow_missing.",
+      "best_epoch": 50,
+      "best_val_loss": null,
+      "best_val_pcc": null,
+      "train_val_gap": null,
+      "external_xzy_pcc": 0.602,
+      "completed_at": "2026-07-03T18:37:24"
     }
   ]
 }

@@ -1,0 +1,16 @@
+Experiment: mpp_v3_xzy_external_uni2h_mlp_20260701
+Model: UNI2-h frozen features + 2-layer MLP
+Training strategy: val_strategy=none
+Training budget: 50 epochs max, early stopping patience=10
+  actual_epochs=50, best_epoch=50, best_loss=0.187644
+Train patients (MPP-3): HYZ15040,JFX,LMZ12939,TGC,XSL,ZHZ
+External test: MPP-2/XZY
+XZY used for: test ONLY (not training, not z-score fit, not epoch selection)
+Report: Fixed-budget training; best checkpoint evaluated once on external XZY.
+
+--- External XZY Results ---
+Mean PCC: 0.6020
+Mean MAE: 0.6591
+Mean R2:  -0.2369
+Test Loss: 0.7391
+Completed at: 2026-07-04T02:03:28.962767
