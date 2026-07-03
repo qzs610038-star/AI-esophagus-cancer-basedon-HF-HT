@@ -32,9 +32,16 @@ def ensure_hf_login(token: Optional[str] = None) -> None:
 def load_uni2h_backbone(
     token: Optional[str] = None,
     device: Optional[torch.device] = None,
+    local_cache_dir: Optional[str] = None,
 ) -> Tuple[torch.nn.Module, callable, int]:
     """
     Load frozen UNI2-h backbone and its official preprocessing transform.
+
+    Loading priority:
+    1. local_cache_dir: direct path to pytorch_model.bin or parent dir
+    2. HF_HOME cache (searches automatically via huggingface_hub)
+    3. HuggingFace Hub online (if not offline)
+
     Returns: model, transform, feature_dim
     """
     ensure_hf_login(token)
@@ -45,7 +52,7 @@ def load_uni2h_backbone(
         "patch_size": 14,
         "depth": 24,
         "num_heads": 24,
-        "init_values": 1e-5,
+                "init_values": 1e-5,
         "embed_dim": 1536,
         "mlp_ratio": 2.66667 * 2,
         "num_classes": 0,
@@ -56,18 +63,105 @@ def load_uni2h_backbone(
         "dynamic_img_size": True,
     }
 
-    # 从HF加载
-    model = timm.create_model(f"hf-hub:{DEFAULT_MODEL_ID}", pretrained=True, **timm_kwargs)
+    local_ckpt = _find_local_uni2h_ckpt(local_cache_dir)
+    if local_ckpt is not None:
+        model, transform = _load_uni2h_from_local(local_ckpt, timm_kwargs, device)
+    else:
+        model = _load_uni2h_from_hfhub(timm_kwargs, device)
+        transform = create_transform(**resolve_data_config(model.pretrained_cfg, model=model))
+
     model.eval()
     for p in model.parameters():
         p.requires_grad = False
-
     if device is not None:
         model.to(device)
-
-    # 官方预处理
-    transform = create_transform(**resolve_data_config(model.pretrained_cfg, model=model))
     return model, transform, DEFAULT_FEATURE_DIM
+
+
+def _load_uni2h_from_local(
+    ckpt_path: str,
+    timm_kwargs: dict,
+    device: Optional[torch.device] = None,
+) -> Tuple[torch.nn.Module, callable]:
+    """从本地 pytorch_model.bin 直接构造 UNI2-h 模型（完全离线）。"""
+    from timm.models.vision_transformer import VisionTransformer
+
+    print(f"[UNI2-h] 本地加载: {ckpt_path}")
+
+    # 直接构造 VisionTransformer，不依赖任何 HF hub 或 pretrained_cfg
+    model = VisionTransformer(
+        img_size=timm_kwargs["img_size"],
+        patch_size=timm_kwargs["patch_size"],
+        depth=timm_kwargs["depth"],
+        num_heads=timm_kwargs["num_heads"],
+        init_values=timm_kwargs["init_values"],
+        embed_dim=timm_kwargs["embed_dim"],
+        mlp_ratio=timm_kwargs["mlp_ratio"],
+        num_classes=timm_kwargs["num_classes"],
+        no_embed_class=timm_kwargs["no_embed_class"],
+        global_pool="",
+        mlp_layer=timm_kwargs["mlp_layer"],
+        act_layer=timm_kwargs["act_layer"],
+        reg_tokens=timm_kwargs["reg_tokens"],
+        dynamic_img_size=timm_kwargs["dynamic_img_size"],
+    )
+
+    state = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+    # UNI2-h 权重有 head 相关键，去掉它们（num_classes=0）
+    state = {k: v for k, v in state.items()
+             if not k.startswith("head.") and not k.startswith("pre_logits.")}
+    missing, unexpected = model.load_state_dict(state, strict=False)
+    if missing:
+        print(f"  [WARN] missing keys ({len(missing)}): {missing[:5]}...")
+    if unexpected:
+        print(f"  [INFO] unexpected keys (skipped): {len(unexpected)}")
+
+    # UNI2-h 预处理（已知常量，不依赖 pretrained_cfg）
+    from timm.data import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
+    transform = create_transform(
+        input_size=timm_kwargs["img_size"],
+        is_training=False,
+        mean=IMAGENET_DEFAULT_MEAN,
+        std=IMAGENET_DEFAULT_STD,
+        interpolation="bicubic",
+    )
+    return model, transform
+
+
+def _load_uni2h_from_hfhub(
+    timm_kwargs: dict,
+    device: Optional[torch.device] = None,
+) -> torch.nn.Module:
+    """通过 HuggingFace Hub 加载 UNI2-h（需网络）。"""
+    print("[UNI2-h] 从 HuggingFace Hub 加载 ...")
+    model = timm.create_model(f"hf-hub:{DEFAULT_MODEL_ID}", pretrained=True, **timm_kwargs)
+    return model
+
+
+def _find_local_uni2h_ckpt(cache_dir: Optional[str] = None) -> Optional[str]:
+    """在 HF 缓存目录中查找 UNI2-h 的 pytorch_model.bin。"""
+    if cache_dir is not None:
+        p = Path(cache_dir)
+        if p.is_file() and p.name == "pytorch_model.bin":
+            return str(p)
+        candidates = list(p.rglob("pytorch_model.bin"))
+        if candidates:
+            return str(candidates[0])
+
+    # 默认 HF_HOME 搜索路径
+    hf_home = os.environ.get("HF_HOME", "") or os.environ.get("HUGGINGFACE_HUB_CACHE", "")
+    if hf_home:
+        hub_dir = Path(hf_home) / "hub"
+    else:
+        hub_dir = Path.home() / ".cache" / "huggingface" / "hub"
+
+    model_cache = hub_dir / f"models--{DEFAULT_MODEL_ID.replace('/', '--')}"
+    candidates = list(model_cache.rglob("pytorch_model.bin"))
+    # 排除 .incomplete 残渣
+    real = [c for c in candidates if ".incomplete" not in str(c)]
+    if real:
+        return str(real[0])
+    return None
 
 
 
