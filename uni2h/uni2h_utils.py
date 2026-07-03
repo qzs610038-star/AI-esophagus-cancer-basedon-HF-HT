@@ -139,7 +139,14 @@ def _load_uni2h_from_hfhub(
 
 
 def _find_local_uni2h_ckpt(cache_dir: Optional[str] = None) -> Optional[str]:
-    """在 HF 缓存目录中查找 UNI2-h 的 pytorch_model.bin。"""
+    """在 HF 缓存目录中查找 UNI2-h 的 pytorch_model.bin。
+
+    查找策略（优先级）：
+    1. cache_dir 参数（显式传入的路径）
+    2. 通过 refs/main → snapshot hash 直接构建路径（最可靠）
+    3. rglob 全局搜索（兜底）
+    """
+    # ── 策略 1：显式 cache_dir ──
     if cache_dir is not None:
         p = Path(cache_dir)
         if p.is_file() and p.name == "pytorch_model.bin":
@@ -148,7 +155,7 @@ def _find_local_uni2h_ckpt(cache_dir: Optional[str] = None) -> Optional[str]:
         if candidates:
             return str(candidates[0])
 
-    # 默认 HF_HOME 搜索路径
+    # ── 确定 hub 缓存根 ──
     hf_home = os.environ.get("HF_HOME", "") or os.environ.get("HUGGINGFACE_HUB_CACHE", "")
     if hf_home:
         hub_dir = Path(hf_home) / "hub"
@@ -156,11 +163,27 @@ def _find_local_uni2h_ckpt(cache_dir: Optional[str] = None) -> Optional[str]:
         hub_dir = Path.home() / ".cache" / "huggingface" / "hub"
 
     model_cache = hub_dir / f"models--{DEFAULT_MODEL_ID.replace('/', '--')}"
+    if not model_cache.exists():
+        return None
+
+    # ── 策略 2：通过 refs/main → snapshot hash 直接构建路径 ──
+    refs_main = model_cache / "refs" / "main"
+    if refs_main.exists():
+        try:
+            snapshot_hash = refs_main.read_text(encoding="utf-8").strip()
+            if snapshot_hash:
+                ckpt = model_cache / "snapshots" / snapshot_hash / "pytorch_model.bin"
+                if ckpt.exists():
+                    return str(ckpt)
+        except Exception:
+            pass
+
+    # ── 策略 3：rglob 兜底 ──
     candidates = list(model_cache.rglob("pytorch_model.bin"))
-    # 排除 .incomplete 残渣
     real = [c for c in candidates if ".incomplete" not in str(c)]
     if real:
         return str(real[0])
+
     return None
 
 
