@@ -156,34 +156,36 @@ def _find_local_uni2h_ckpt(cache_dir: Optional[str] = None) -> Optional[str]:
             return str(candidates[0])
 
     # ── 确定 hub 缓存根 ──
-    hf_home = os.environ.get("HF_HOME", "") or os.environ.get("HUGGINGFACE_HUB_CACHE", "")
+    hf_home = (os.environ.get("HF_HOME") or os.environ.get("HUGGINGFACE_HUB_CACHE") or "").strip()
     if hf_home:
-        hub_dir = Path(hf_home) / "hub"
+        hub_dir = os.path.join(hf_home, "hub")
     else:
-        hub_dir = Path.home() / ".cache" / "huggingface" / "hub"
+        hub_dir = os.path.join(str(Path.home()), ".cache", "huggingface", "hub")
 
-    model_cache = hub_dir / f"models--{DEFAULT_MODEL_ID.replace('/', '--')}"
-    if not model_cache.exists():
-        return None
+    model_cache = os.path.join(hub_dir, f"models--{DEFAULT_MODEL_ID.replace('/', '--')}")
 
     # ── 策略 2：通过 refs/main → snapshot hash 直接构建路径 ──
-    refs_main = model_cache / "refs" / "main"
-    if refs_main.exists():
+    refs_main = os.path.join(model_cache, "refs", "main")
+    if os.path.isfile(refs_main):
         try:
-            snapshot_hash = refs_main.read_text(encoding="utf-8").strip()
+            with open(refs_main, "r") as f:
+                snapshot_hash = f.read().strip()
             if snapshot_hash:
-                ckpt = model_cache / "snapshots" / snapshot_hash / "pytorch_model.bin"
-                if ckpt.exists():
-                    return str(ckpt)
-        except Exception:
-            pass
+                ckpt = os.path.join(model_cache, "snapshots", snapshot_hash, "pytorch_model.bin")
+                if os.path.isfile(ckpt):
+                    return ckpt
+        except Exception as e:
+            print(f"[WARN] _find_local_uni2h_ckpt: 读取 refs/main 失败: {e}")
 
-    # ── 策略 3：rglob 兜底 ──
-    candidates = list(model_cache.rglob("pytorch_model.bin"))
-    real = [c for c in candidates if ".incomplete" not in str(c)]
-    if real:
-        return str(real[0])
+    # ── 策略 3：rglob 兜底（用 Path，因为 rglob 是 Path 的方法） ──
+    root = Path(model_cache)
+    if root.exists():
+        candidates = list(root.rglob("pytorch_model.bin"))
+        real = [c for c in candidates if ".incomplete" not in str(c)]
+        if real:
+            return str(real[0])
 
+    print(f"[WARN] _find_local_uni2h_ckpt: 在 {model_cache} 中未找到 pytorch_model.bin")
     return None
 
 
