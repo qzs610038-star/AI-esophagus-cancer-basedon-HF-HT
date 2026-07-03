@@ -266,7 +266,7 @@ def main():
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
     # ── 保存参数和配置 ──
-    with open(out_dir / "model_params.txt", "w") as f:
+    with open(out_dir / "model_params.txt", "w", encoding="utf-8") as f:
         f.write(f"dataset_name={args.dataset_name}\n")
         f.write(f"train_mpp_id={args.train_mpp_id}\n")
         f.write(f"train_patients={args.train_patients}\n")
@@ -359,7 +359,7 @@ def main():
     print(f"Bottom-3 通路: {pp_df.tail(3).to_dict('records')}")
 
     # ── 训练摘要 ──
-    with open(out_dir / "training_summary.txt", "w") as f:
+    with open(out_dir / "training_summary.txt", "w", encoding="utf-8") as f:
         f.write(f"Experiment: {args.dataset_name}\n")
         f.write(f"Model: UNI2-h frozen features + 2-layer MLP\n")
         f.write(f"Training strategy: val_strategy={args.val_strategy}\n")
