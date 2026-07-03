@@ -189,6 +189,10 @@ def main():
                         help="输出根目录")
     parser.add_argument("--allow-missing", action="store_true",
                         help="允许缺失患者数据（smoke 测试用，默认报错）")
+    parser.add_argument("--patience", type=int, default=10,
+                        help="早停 patience：训练 loss 连续 N 个 epoch 无改善则停止（默认 10）")
+    parser.add_argument("--min_delta", type=float, default=1e-4,
+                        help="早停最小改善阈值（默认 0.0001）")
     args = parser.parse_args()
 
     # ── CPU 线程限制 ──
@@ -283,8 +287,13 @@ def main():
 
     # ── 训练循环 ──
     history = []
+    best_loss = float("inf")
+    best_state = None
+    best_epoch = 0
+    epochs_no_improve = 0
+
     print(f"\n{'='*60}")
-    print(f"开始训练: {args.num_epochs} epochs")
+    print(f"开始训练: {args.num_epochs} epochs (早停 patience={args.patience}, min_delta={args.min_delta})")
     print(f"{'='*60}")
 
     for epoch in range(1, args.num_epochs + 1):
@@ -305,17 +314,51 @@ def main():
 
         print(f"Epoch {epoch:3d}/{args.num_epochs}  "
               f"loss={train_loss:.4f}  PCC={train_pcc:.4f}  "
-              f"time={elapsed:.1f}s")
+              f"time={elapsed:.1f}s", end="")
+
+        # ── 早停检查 ──
+        if train_loss < best_loss - args.min_delta:
+            best_loss = train_loss
+            best_state = {
+                k: v.cpu().clone() for k, v in model.state_dict().items()
+            }
+            best_epoch = epoch
+            epochs_no_improve = 0
+            print(f"  ✅ best")
+        else:
+            epochs_no_improve += 1
+            print(f"  (no improv. {epochs_no_improve}/{args.patience})")
+
+        if epochs_no_improve >= args.patience and epoch >= 10:
+            print(f"\n[早停] 训练 loss {args.patience} 个 epoch 未改善，"
+                  f"提前停止 (best epoch={best_epoch}, best_loss={best_loss:.6f})")
+            break
+
+    # ── 选择最佳 checkpoint ──
+    if best_state is not None and best_epoch != args.num_epochs:
+        model.load_state_dict(best_state)
+        final_epoch = best_epoch
+        final_loss = best_loss
+        print(f"\n使用最佳 checkpoint (epoch {best_epoch}, loss={best_loss:.6f}) 进行评估")
+    else:
+        final_epoch = epoch
+        final_loss = train_loss
+        print(f"\n使用最终 checkpoint (epoch {epoch}, loss={train_loss:.6f}) 进行评估")
 
     # ── 保存历史 ──
     history_df = pd.DataFrame(history)
     history_df.to_csv(out_dir / "training_history.csv", index=False)
     print(f"\n训练历史已保存: {out_dir / 'training_history.csv'}")
 
-    # ── 保存 final checkpoint ──
-    ckpt_path = out_dir / "final_checkpoint.pth"
-    torch.save({"model_state_dict": model.state_dict(), "epoch": args.num_epochs}, ckpt_path)
-    print(f"Final checkpoint: {ckpt_path}")
+    # ── 保存最佳 checkpoint ──
+    ckpt_path = out_dir / "best_checkpoint.pth"
+    if best_state is not None:
+        torch.save({"model_state_dict": best_state, "epoch": best_epoch,
+                     "train_loss": best_loss}, ckpt_path)
+    else:
+        torch.save({"model_state_dict": model.state_dict(), "epoch": final_epoch,
+                     "train_loss": final_loss}, ckpt_path)
+    print(f"Best checkpoint (epoch {best_epoch}): {ckpt_path}")
 
     # ── 外部评估 ──
     print(f"\n{'='*60}")
@@ -363,15 +406,16 @@ def main():
         f.write(f"Experiment: {args.dataset_name}\n")
         f.write(f"Model: UNI2-h frozen features + 2-layer MLP\n")
         f.write(f"Training strategy: val_strategy={args.val_strategy}\n")
-        f.write(f"Training budget: {args.num_epochs} epochs, final checkpoint\n")
+        f.write(f"Training budget: {args.num_epochs} epochs max, early stopping patience={args.patience}\n")
+        f.write(f"  actual_epochs={final_epoch}, best_epoch={best_epoch}, best_loss={best_loss:.6f}\n")
         f.write(f"Train patients (MPP-{args.train_mpp_id}): {args.train_patients}\n")
         f.write(f"External test: MPP-{args.external_mpp_id}/{args.external_patient}\n")
         f.write(f"XZY used for: test ONLY (not training, not z-score fit, not epoch selection)\n")
-        f.write(f"Report: Fixed-budget training; final checkpoint evaluated once on external XZY.\n")
+        f.write(f"Report: Fixed-budget training; best checkpoint evaluated once on external XZY.\n")
         f.write(f"\n--- External XZY Results ---\n")
         f.write(f"Mean PCC: {mean_pcc:.4f}\n")
         f.write(f"Mean MAE: {mean_mae:.4f}\n")
-        f.write(f"Mean R²:  {mean_r2:.4f}\n")
+        f.write(f"Mean R2:  {mean_r2:.4f}\n")
         f.write(f"Test Loss: {test_loss:.4f}\n")
         f.write(f"Completed at: {datetime.now().isoformat()}\n")
 
