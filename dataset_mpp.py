@@ -189,6 +189,7 @@ def merge_mpp_patients(
     labels_root: str,
     target_cols: Optional[List[str]] = None,
     allow_missing: bool = False,
+    partner: bool = False,
 ) -> ConcatDataset:
     """合并多患者的 MPPFeatureDataset。
 
@@ -200,11 +201,16 @@ def merge_mpp_patients(
         target_cols: 目标通路列
         allow_missing: 若 True，缺失患者仅打印警告不报错 (smoke 模式)
                       若 False (默认)，缺失患者直接报错中止 (正式训练)
+        partner: 若 True，使用队友目录布局 (MPP{N}_UNI/ + group_{N}/train/)
     """
     datasets = []
     for patient in patients:
-        cache_dir = f"{cache_root}/{mpp_id}/{patient}"
-        labels_csv = f"{labels_root}/mpp{mpp_id}_{patient}_zscored.csv"
+        if partner:
+            cache_dir = f"{cache_root}/MPP{mpp_id}_UNI/{patient}"
+            labels_csv = f"{labels_root}/group_{mpp_id}/train/{patient}/{patient}_ssGSEA_zscore.csv"
+        else:
+            cache_dir = f"{cache_root}/{mpp_id}/{patient}"
+            labels_csv = f"{labels_root}/mpp{mpp_id}_{patient}_zscored.csv"
         try:
             ds = MPPFeatureDataset(
                 cache_dir=cache_dir,

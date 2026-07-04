@@ -18,6 +18,7 @@ train_mpp_uni2h_mlp.py — MPP 实验训练入口：UNI2-h 冻结特征 + 两层
 """
 
 import argparse
+import json as _json
 import os
 import signal
 import sys
@@ -156,6 +157,213 @@ def evaluate(
 
 
 # ═══════════════════════════════════════════════════════════════
+# 路径工具函数
+# ═══════════════════════════════════════════════════════════════
+
+def _build_cache_dir(cache_root: str, mpp_id: int, patient: str,
+                     partner: bool = False) -> str:
+    """构建特征缓存目录路径。"""
+    if partner:
+        return f"{cache_root}/MPP{mpp_id}_UNI/{patient}"
+    return f"{cache_root}/{mpp_id}/{patient}"
+
+
+def _build_train_label(labels_root: str, mpp_id: int, patient: str,
+                       partner: bool = False) -> str:
+    """构建训练标签 CSV 路径。"""
+    if partner:
+        return f"{labels_root}/group_{mpp_id}/train/{patient}/{patient}_ssGSEA_zscore.csv"
+    return f"{labels_root}/mpp{mpp_id}_{patient}_zscored.csv"
+
+
+def _build_val_label(labels_root: str, mpp_id: int, patient: str,
+                     partner: bool = False) -> str:
+    """构建内部验证标签 CSV 路径。"""
+    if partner:
+        return f"{labels_root}/group_{mpp_id}/val/{patient}/{patient}_ssGSEA_zscore.csv"
+    return f"{labels_root}/mpp{mpp_id}_{patient}_zscored.csv"
+
+
+def _build_external_label(labels_root: str, train_mpp_id: int,
+                          external_mpp_id: int, external_patient: str,
+                          partner: bool = False) -> str:
+    """构建外部测试标签 CSV 路径。
+
+    partner 模式下：XZY 使用训练组 (group_{train_mpp_id}) 的 z-score 参数变换，
+    命名格式为 XZY_ssGSEA_zscore_by_group_{train_mpp_id}_train.csv。
+    标准模式下：使用 external_mpp_id 拼接。
+    """
+    if partner:
+        return (f"{labels_root}/group_{train_mpp_id}/external/{external_patient}/"
+                f"{external_patient}_ssGSEA_zscore_by_group_{train_mpp_id}_train.csv")
+    return f"{labels_root}/mpp{external_mpp_id}_{external_patient}_zscored.csv"
+
+
+def _build_zscore_params_path(labels_root: str, mpp_id: int,
+                              partner: bool = False) -> str:
+    """构建 z-score 参数文件路径。"""
+    if partner:
+        return f"{labels_root}/group_{mpp_id}/zscore_params_from_train.csv"
+    return f"{labels_root}/zscore_params_mpp{mpp_id}.json"
+
+
+def _run_preflight(cache_root: str, labels_root: str, train_mpp_id: int,
+                   external_mpp_id: int, train_patients: List[str],
+                   val_patient: Optional[str], external_patient: str,
+                   partner: bool, allow_missing: bool = False) -> None:
+    """打印并验证所有 train/val/external 的数据路径和 z-score 参数。
+
+    Args:
+        allow_missing: 若 True，训练患者缺失时仅 warn 不中止 (smoke 模式)。
+                       val 和 external 永远强制检查（缺失即中止）。
+    """
+    print(f"\n{'='*60}")
+    print(f"Preflight: 数据路径审计 (partner={partner}, allow_missing={allow_missing})")
+    print(f"{'='*60}")
+
+    # ── 1. z-score 参数文件（最先检查，失败则无法继续） ──
+    zscore_path = _build_zscore_params_path(labels_root, train_mpp_id, partner)
+    zscore_exists = Path(zscore_path).exists()
+    pair_ok = True
+    if zscore_exists:
+        print(f"  [OK] zscore_params: {zscore_path}")
+    else:
+        print(f"  [MISSING] zscore_params: {zscore_path}")
+        pair_ok = False
+
+    # partner 模式下还检查 split_info.json
+    if partner:
+        split_path = Path(labels_root) / f"group_{train_mpp_id}" / "split_info.json"
+        if split_path.exists():
+            print(f"  [OK] split_info: {split_path}")
+        else:
+            print(f"  [MISSING] split_info: {split_path}")
+            pair_ok = False
+
+    if not pair_ok:
+        print(f"\n[ERROR] Preflight 失败: z-score 参数文件缺失。"
+              f"检查 --labels_root / --train_mpp_id / --use_partner_paths。")
+        sys.exit(1)
+
+    # ── 2. 数据路径 ──
+    n_train_missing = 0
+
+    # 训练患者
+    for p in train_patients:
+        cache_dir = _build_cache_dir(cache_root, train_mpp_id, p, partner)
+        label_csv = _build_train_label(labels_root, train_mpp_id, p, partner)
+        cache_exists = Path(cache_dir).exists()
+        label_exists = Path(label_csv).exists()
+        n_pt = len(list(Path(cache_dir).glob("*.pt"))) if cache_exists else 0
+        n_csv = _read_csv_rows(label_csv) if label_exists else 0
+        ok = cache_exists and label_exists and n_pt > 0 and n_csv > 0
+        if not ok:
+            n_train_missing += 1
+        status = "OK" if ok else ("WARN" if allow_missing else "MISSING")
+        print(f"  [{status:>7s}] [train] {p:>10s}  "
+              f"cache=({n_pt:>5d} .pt)  label=({n_csv:>5d} rows)  "
+              f"cache_dir={cache_dir}")
+
+    # 内部验证
+    if val_patient:
+        cache_dir = _build_cache_dir(cache_root, train_mpp_id, val_patient, partner)
+        label_csv = _build_val_label(labels_root, train_mpp_id, val_patient, partner)
+        cache_exists = Path(cache_dir).exists()
+        label_exists = Path(label_csv).exists()
+        n_pt = len(list(Path(cache_dir).glob("*.pt"))) if cache_exists else 0
+        n_csv = _read_csv_rows(label_csv) if label_exists else 0
+        ok = cache_exists and label_exists and n_pt > 0 and n_csv > 0
+        status = "OK" if ok else "MISSING"
+        print(f"  [{status:>7s}] [val  ] {val_patient:>10s}  "
+              f"cache=({n_pt:>5d} .pt)  label=({n_csv:>5d} rows)  "
+              f"cache_dir={cache_dir}")
+        if not ok:
+            print(f"\n[ERROR] Preflight 失败: 内部验证集数据缺失 (val_patient={val_patient})。")
+            sys.exit(1)
+
+    # 外部测试
+    ext_cache = _build_cache_dir(cache_root, external_mpp_id, external_patient, partner)
+    ext_label = _build_external_label(labels_root, train_mpp_id, external_mpp_id,
+                                      external_patient, partner)
+    cache_exists = Path(ext_cache).exists()
+    label_exists = Path(ext_label).exists()
+    n_pt = len(list(Path(ext_cache).glob("*.pt"))) if cache_exists else 0
+    n_csv = _read_csv_rows(ext_label) if label_exists else 0
+    ok = cache_exists and label_exists and n_pt > 0 and n_csv > 0
+    status = "OK" if ok else "MISSING"
+    print(f"  [{status:>7s}] [ext  ] {external_patient:>10s}  "
+          f"cache=({n_pt:>5d} .pt)  label=({n_csv:>5d} rows)  "
+          f"cache_dir={ext_cache}")
+    if not ok:
+        print(f"\n[ERROR] Preflight 失败: 外部测试集数据缺失 (external_patient={external_patient})。")
+        sys.exit(1)
+
+    # ── 3. 决策 ──
+    if n_train_missing > 0:
+        if allow_missing:
+            print(f"\n  Preflight: {n_train_missing} 个训练患者数据缺失 (allow_missing=True，继续)")
+        else:
+            print(f"\n[ERROR] Preflight 失败: {n_train_missing} 个训练患者数据缺失。"
+                  f"使用 --allow-missing 跳过缺失患者 (仅 smoke 模式)。")
+            sys.exit(1)
+    else:
+        print(f"\n  Preflight 通过 (所有数据路径存在且非空)")
+
+
+def _read_csv_rows(csv_path: str) -> int:
+    """安全读取 CSV 行数（不含表头）。失败返回 0。"""
+    try:
+        return len(pd.read_csv(csv_path))
+    except Exception:
+        return 0
+
+
+def _load_zscore_params(labels_root: str, mpp_id: int,
+                        partner: bool = False) -> Optional[dict]:
+    """加载 z-score 参数并验证防泄漏。
+
+    partner 模式：读 split_info.json 推断 fit_patients + 验证 zscore_params_from_train.csv
+    标准模式：读 zscore_params_mpp{id}.json
+    """
+    if partner:
+        # 从 split_info.json 推断 fit_patients
+        split_path = Path(labels_root) / f"group_{mpp_id}" / "split_info.json"
+        if not split_path.exists():
+            print(f"[WARN] split_info.json 不存在: {split_path}，跳过 z-score 审计")
+            return None
+        with open(split_path, "r") as f:
+            split_info = _json.load(f)
+        fit_patients = split_info.get("train_patients", [])
+        val_patients = split_info.get("val_patients", [])
+        external_patient = split_info.get("external_patient", "")
+
+        # 读取参数文件验证通路数
+        param_path = Path(labels_root) / f"group_{mpp_id}" / "zscore_params_from_train.csv"
+        params_df = pd.read_csv(param_path)
+        pathways = params_df["label"].tolist()
+        mean = params_df["mean"].tolist()
+        std = params_df["std"].tolist()
+
+        return {
+            "fit_patients": fit_patients,
+            "val_patients": val_patients,
+            "external_patient": external_patient,
+            "pathways": pathways,
+            "mean": mean,
+            "std": std,
+            "n_pathways": len(pathways),
+        }
+
+    # 标准模式：读 JSON
+    zscore_path = f"{labels_root}/zscore_params_mpp{mpp_id}.json"
+    if not Path(zscore_path).exists():
+        return None
+    with open(zscore_path, "r") as f:
+        zscore_params = _json.load(f)
+    return zscore_params
+
+
+# ═══════════════════════════════════════════════════════════════
 # 主入口
 # ═══════════════════════════════════════════════════════════════
 
@@ -200,7 +408,42 @@ def main():
                         help="早停 patience：训练 loss 连续 N 个 epoch 无改善则停止（默认 10）")
     parser.add_argument("--min_delta", type=float, default=1e-4,
                         help="早停最小改善阈值（默认 0.0001）")
+    # ── 路径布局选择 ──
+    parser.add_argument("--use_partner_paths", action="store_true",
+                        help="使用队友目录布局 (MPP{N}_UNI/ + group_{N}/train|val|external/)")
+    parser.add_argument("--auto_split", action="store_true",
+                        help="自动从 split_info.json 覆盖 --train_patients 和 --val_patient")
     args = parser.parse_args()
+
+    # ── partner 模式：默认路径覆盖 ──
+    if args.use_partner_paths:
+        if args.cache_root == "mpp_uni2h_cache":
+            args.cache_root = r"D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache"
+        if args.labels_root == "mpp_uni2h_cache/labels":
+            args.labels_root = r"D:\AIPatho\ljx\MPP1_4_uni\patch_split_zscore"
+        print(f"[INFO] use_partner_paths=True")
+        print(f"       cache_root  -> {args.cache_root}")
+        print(f"       labels_root -> {args.labels_root}")
+
+    # ── auto_split：从 split_info.json 自动读取划分 ──
+    if args.auto_split:
+        split_info_path = (Path(args.labels_root) / f"group_{args.train_mpp_id}"
+                           / "split_info.json")
+        if not split_info_path.exists():
+            print(f"[ERROR] --auto_split 但 split_info.json 不存在: {split_info_path}")
+            sys.exit(1)
+        with open(split_info_path, "r") as f:
+            split_info = _json.load(f)
+        args.train_patients = ",".join(split_info["train_patients"])
+        val_list = split_info.get("val_patients", [])
+        if val_list:
+            args.val_patient = val_list[0]
+            if args.val_strategy == "none":
+                args.val_strategy = "internal"
+                print(f"[INFO] auto_split: val_patient={args.val_patient}, "
+                      f"自动切换 val_strategy=internal")
+        print(f"[INFO] auto_split: train_patients={args.train_patients}, "
+              f"val_patient={args.val_patient}")
 
     # ── val_strategy 参数校验 ──
     if args.val_strategy == "internal" and args.val_patient is None:
@@ -256,11 +499,28 @@ def main():
         sys.exit(1)
 
     use_internal_val = (args.val_strategy == "internal" and args.val_patient is not None)
+    partner = args.use_partner_paths
+
     if use_internal_val:
         print(f"\n训练集患者 ({len(train_patients)}): {train_patients}")
         print(f"内部验证患者: MPP-{args.train_mpp_id}/{args.val_patient}")
+        print(f"外部测试患者: MPP-{args.external_mpp_id}/{args.external_patient}")
     else:
         print(f"\n训练集患者 ({len(train_patients)}): {train_patients}")
+        print(f"外部测试患者: MPP-{args.external_mpp_id}/{args.external_patient}")
+
+    # ── Preflight: 数据路径审计 ──
+    _run_preflight(
+        cache_root=args.cache_root,
+        labels_root=args.labels_root,
+        train_mpp_id=args.train_mpp_id,
+        external_mpp_id=args.external_mpp_id,
+        train_patients=train_patients,
+        val_patient=args.val_patient,
+        external_patient=args.external_patient,
+        partner=partner,
+        allow_missing=args.allow_missing,
+    )
 
     print("\n加载训练集 ...")
     train_dataset = merge_mpp_patients(
@@ -269,6 +529,7 @@ def main():
         patients=train_patients,
         labels_root=args.labels_root,
         allow_missing=args.allow_missing,
+        partner=partner,
     )
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size,
                               shuffle=True, num_workers=0)
@@ -277,8 +538,10 @@ def main():
     # ── 内部验证集（val_strategy=internal） ──
     if use_internal_val:
         print(f"\n加载内部验证集 MPP-{args.train_mpp_id}/{args.val_patient} ...")
-        val_cache = f"{args.cache_root}/{args.train_mpp_id}/{args.val_patient}"
-        val_labels = f"{args.labels_root}/mpp{args.train_mpp_id}_{args.val_patient}_zscored.csv"
+        val_cache = _build_cache_dir(args.cache_root, args.train_mpp_id,
+                                     args.val_patient, partner)
+        val_labels = _build_val_label(args.labels_root, args.train_mpp_id,
+                                      args.val_patient, partner)
         val_ds = MPPFeatureDataset(
             cache_dir=val_cache,
             labels_csv=val_labels,
@@ -289,8 +552,11 @@ def main():
         print(f"内部验证集样本: {len(val_ds)}")
 
     print(f"\n加载外部测试集 MPP-{args.external_mpp_id}/{args.external_patient} ...")
-    external_cache = f"{args.cache_root}/{args.external_mpp_id}/{args.external_patient}"
-    external_labels = f"{args.labels_root}/mpp{args.external_mpp_id}_{args.external_patient}_zscored.csv"
+    external_cache = _build_cache_dir(args.cache_root, args.external_mpp_id,
+                                      args.external_patient, partner)
+    external_labels = _build_external_label(args.labels_root, args.train_mpp_id,
+                                            args.external_mpp_id,
+                                            args.external_patient, partner)
     external_ds = MPPFeatureDataset(
         cache_dir=external_cache,
         labels_csv=external_labels,
@@ -303,28 +569,33 @@ def main():
     print(f"通路数: {len(pathway_cols)}")
 
     # ── z-score 参数验证（防泄漏） ──
-    import json as _json
-    zscore_params_path = f"{args.cache_root}/zscore_params_mpp{args.train_mpp_id}.json"
-    if Path(zscore_params_path).exists():
-        with open(zscore_params_path, "r") as _f:
-            zscore_params = _json.load(_f)
+    zscore_params = _load_zscore_params(args.labels_root, args.train_mpp_id, partner)
+    if zscore_params is not None:
         fit_patients = set(zscore_params.get("fit_patients", []))
-        print(f"\nz-score 参数审计: fit_patients={sorted(fit_patients)}, val_patient_file={zscore_params.get('val_patient')}, "
-              f"external_patient_file={zscore_params.get('external_patient')}")
+        val_patients_file = ", ".join(zscore_params.get("val_patients", []))
+        ext_patient_file = zscore_params.get("external_patient", "")
+        n_pw = zscore_params.get("n_pathways", len(zscore_params.get("pathways", [])))
+        print(f"\nz-score 参数审计: fit_patients={sorted(fit_patients)}, "
+              f"val_patients=[{val_patients_file}], external_patient={ext_patient_file}, "
+              f"n_pathways={n_pw}")
         # 校验：训练患者 == fit_patients（训练集恰好由拟合参数的患者组成）
         train_set = set(train_patients)
         if train_set != fit_patients:
-            print(f"[ERROR] train_patients ({sorted(train_set)}) 与 zscore fit_patients ({sorted(fit_patients)}) 不一致")
+            print(f"[ERROR] train_patients ({sorted(train_set)}) 与 zscore fit_patients "
+                  f"({sorted(fit_patients)}) 不一致")
             sys.exit(1)
         if args.val_patient and args.val_patient in fit_patients:
-            print(f"[ERROR] val_patient ({args.val_patient}) 出现在 zscore fit_patients 中，ZHZ 不应参与拟合")
+            print(f"[ERROR] val_patient ({args.val_patient}) 出现在 zscore fit_patients 中，"
+                  f"不应参与拟合")
             sys.exit(1)
         if args.external_patient in fit_patients:
-            print(f"[ERROR] external_patient ({args.external_patient}) 出现在 zscore fit_patients 中，XZY 不应参与拟合")
+            print(f"[ERROR] external_patient ({args.external_patient}) 出现在 zscore fit_patients 中，"
+                  f"不应参与拟合")
             sys.exit(1)
-        print(f"  ✅ z-score 参数审计通过: fit_patients 不包含 {args.val_patient or 'N/A'} / {args.external_patient}")
+        print(f"  z-score 参数审计通过: fit_patients 不包含 "
+              f"{args.val_patient or 'N/A'} / {args.external_patient}")
     else:
-        print(f"[WARN] z-score 参数文件不存在: {zscore_params_path}，跳过审计")
+        print(f"[WARN] z-score 参数文件不存在，跳过审计")
 
     # ── 模型 ──
     model = MPPMLPHead(
@@ -346,6 +617,7 @@ def main():
         f.write(f"train_patients={args.train_patients}\n")
         f.write(f"external_mpp_id={args.external_mpp_id}\n")
         f.write(f"external_patient={args.external_patient}\n")
+        f.write(f"use_partner_paths={args.use_partner_paths}\n")
         f.write(f"val_strategy={args.val_strategy}\n")
         if use_internal_val:
             f.write(f"val_patient={args.val_patient}\n")
