@@ -561,7 +561,14 @@ def main():
         print(f"内部验证集样本: {len(val_ds)}")
 
     print(f"\n加载外部测试集 MPP-{args.external_mpp_id}/{args.external_patient} ...")
-    external_cache = _build_cache_dir(args.cache_root, args.train_mpp_id,
+    # ── 外部测试缓存：partner 模式 XZY 固定从 MPP1 加载 ──
+    # XZY 是同一物理样本，所有 MPP 轮次共享同一份特征缓存。
+    # MPP1_UNI/XZY/train/ 有完整数据 (1039 patches)，MPP4 仅 269 且坐标不匹配。
+    if partner and args.external_patient == "XZY":
+        _xzy_cache_mpp_id = 1
+    else:
+        _xzy_cache_mpp_id = args.train_mpp_id
+    external_cache = _build_cache_dir(args.cache_root, _xzy_cache_mpp_id,
                                       args.external_patient, partner, split="train")
     external_labels = _build_external_label(args.labels_root, args.train_mpp_id,
                                             args.external_mpp_id,
