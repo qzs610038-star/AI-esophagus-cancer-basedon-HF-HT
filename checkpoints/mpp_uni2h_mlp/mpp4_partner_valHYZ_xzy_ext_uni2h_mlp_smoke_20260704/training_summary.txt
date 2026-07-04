@@ -1,0 +1,27 @@
+Experiment: mpp4_partner_valHYZ_xzy_ext_uni2h_mlp_smoke_20260704
+Model: UNI2-h frozen features + 2-layer MLP
+Training strategy: val_strategy=internal
+Early stopping: signal=val_loss, patience=3, min_delta=0.0001
+Training budget: 3 epochs max
+  actual_epochs=3, best_epoch=3, best_val_loss=0.613831
+
+Signal separation:
+- train: MPP-4 / JFX,LMZ12939,TGC,XSL,ZHZ
+- internal_val: MPP-4 / HYZ15040, used for val_loss early stopping only
+- external_test: MPP-2 / XZY, evaluated once after checkpoint selection
+
+XZY used for: test ONLY (not training, not z-score fit, not epoch selection)
+Report: best checkpoint selected by val_loss minimum; external XZY evaluated once.
+
+--- External XZY Results ---
+Mean PCC: 0.5878
+Mean MAE: 0.5346
+Mean R2:  0.0885
+Test Loss: 0.4920
+
+--- Internal Val (HYZ15040) Results (best ckpt) ---
+Mean PCC: 0.6642
+Mean MAE: 0.5941
+Mean R2:  0.1480
+Val Loss: 0.6138
+Completed at: 2026-07-04T15:22:27.711414
