@@ -373,8 +373,8 @@ def main():
                         help="MPP 数据根目录")
     parser.add_argument("--train_mpp_id", type=int, required=True,
                         help="训练集 MPP 编号")
-    parser.add_argument("--train_patients", required=True,
-                        help="训练集患者列表，逗号分隔")
+    parser.add_argument("--train_patients", default="",
+                        help="训练集患者列表，逗号分隔（--auto_split 时无需传，自动从 split_info.json 读取）")
     parser.add_argument("--external_mpp_id", type=int, default=2,
                         help="外部测试集 MPP 编号（默认 2）")
     parser.add_argument("--external_patient", default="XZY",
@@ -414,6 +414,11 @@ def main():
     parser.add_argument("--auto_split", action="store_true",
                         help="自动从 split_info.json 覆盖 --train_patients 和 --val_patient")
     args = parser.parse_args()
+
+    # ── train_patients 来源校验 ──
+    if not args.train_patients and not args.auto_split:
+        print("[ERROR] 必须指定 --train_patients 或 --auto_split（自动从 split_info.json 读取）")
+        sys.exit(1)
 
     # ── partner 模式：默认路径覆盖 ──
     if args.use_partner_paths:
