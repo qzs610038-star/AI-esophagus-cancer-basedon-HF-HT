@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-03T18:37:24",
+  "updated_at": "2026-07-04T05:32:11",
   "jfx_data_status": {
     "status": "completed_both_sides",
     "description": "JFX0729 corrected data has been fully processed on BOTH local and server. Local: 2026-06-16 (scripts/prepare_jfx_fixed_data.py, 7/7 checks). Server: 2026-06-16 (same script, 7/7 checks, DESKTOP-HKP0IV0). All old JFX data archived on both sides.",
@@ -401,7 +401,7 @@
     {
       "id": "mpp_v3bis_valZHZ_xzy_external_uni2h_mlp_20260704",
       "family": "mpp_uni2h_mlp",
-      "status": "planned",
+      "status": "done",
       "priority": "P0",
       "script": "train_mpp_uni2h_mlp.py",
       "mpp_train_id": 3,
@@ -424,8 +424,14 @@
       "single_seed_limitation": true,
       "run_dir": "checkpoints/mpp_uni2h_mlp/mpp_v3bis_valZHZ_xzy_external_uni2h_mlp_20260704",
       "created_at": "2026-07-04",
-      "next_action": "extract_features_and_prepare_labels",
-      "notes": "V3bis: fix V3 overfitting by introducing internal val patient ZHZ. 5 train patients (HYZ,JFX,LMZ,TGC,XSL) -> 1 internal val (ZHZ, val_loss early stopping) -> 1 external test (XZY, single eval after checkpoint selection). Three-layer signal separation. z-score fit on 5 train patients only. val_loss_min selects best checkpoint and triggers early stopping. Min_stop_epoch=max(patience,3)."
+      "next_action": "review_results",
+      "notes": "V3bis: fix V3 overfitting by introducing internal val patient ZHZ. 5 train patients (HYZ,JFX,LMZ,TGC,XSL) -> 1 internal val (ZHZ, val_loss early stopping) -> 1 external test (XZY, single eval after checkpoint selection). Three-layer signal separation. z-score fit on 5 train patients only. val_loss_min selects best checkpoint and triggers early stopping. Min_stop_epoch=max(patience,3).",
+      "best_epoch": 1,
+      "best_val_loss": 1.057387,
+      "best_val_pcc": 0.714575,
+      "train_val_gap": 0.018833,
+      "external_xzy_pcc": 0.6538,
+      "completed_at": "2026-07-04T05:32:11"
     }
   ]
 }
