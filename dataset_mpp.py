@@ -206,7 +206,7 @@ def merge_mpp_patients(
     datasets = []
     for patient in patients:
         if partner:
-            cache_dir = f"{cache_root}/MPP{mpp_id}_UNI/{patient}"
+            cache_dir = f"{cache_root}/MPP{mpp_id}_UNI/{patient}/train"
             labels_csv = f"{labels_root}/group_{mpp_id}/train/{patient}/{patient}_ssGSEA_zscore.csv"
         else:
             cache_dir = f"{cache_root}/{mpp_id}/{patient}"

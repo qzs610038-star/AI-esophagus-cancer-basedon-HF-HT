@@ -161,10 +161,14 @@ def evaluate(
 # ═══════════════════════════════════════════════════════════════
 
 def _build_cache_dir(cache_root: str, mpp_id: int, patient: str,
-                     partner: bool = False) -> str:
-    """构建特征缓存目录路径。"""
+                     partner: bool = False, split: str = "train") -> str:
+    """构建特征缓存目录路径。
+
+    partner 模式下，每个患者目录下还有 train/ val/ 子目录。
+    split 参数指定加载 train 还是 val 缓存。
+    """
     if partner:
-        return f"{cache_root}/MPP{mpp_id}_UNI/{patient}"
+        return f"{cache_root}/MPP{mpp_id}_UNI/{patient}/{split}"
     return f"{cache_root}/{mpp_id}/{patient}"
 
 
@@ -250,7 +254,7 @@ def _run_preflight(cache_root: str, labels_root: str, train_mpp_id: int,
 
     # 训练患者
     for p in train_patients:
-        cache_dir = _build_cache_dir(cache_root, train_mpp_id, p, partner)
+        cache_dir = _build_cache_dir(cache_root, train_mpp_id, p, partner, split="train")
         label_csv = _build_train_label(labels_root, train_mpp_id, p, partner)
         cache_exists = Path(cache_dir).exists()
         label_exists = Path(label_csv).exists()
@@ -266,7 +270,7 @@ def _run_preflight(cache_root: str, labels_root: str, train_mpp_id: int,
 
     # 内部验证
     if val_patient:
-        cache_dir = _build_cache_dir(cache_root, train_mpp_id, val_patient, partner)
+        cache_dir = _build_cache_dir(cache_root, train_mpp_id, val_patient, partner, split="val")
         label_csv = _build_val_label(labels_root, train_mpp_id, val_patient, partner)
         cache_exists = Path(cache_dir).exists()
         label_exists = Path(label_csv).exists()
@@ -282,7 +286,7 @@ def _run_preflight(cache_root: str, labels_root: str, train_mpp_id: int,
             sys.exit(1)
 
     # 外部测试
-    ext_cache = _build_cache_dir(cache_root, external_mpp_id, external_patient, partner)
+    ext_cache = _build_cache_dir(cache_root, train_mpp_id, external_patient, partner, split="train")
     ext_label = _build_external_label(labels_root, train_mpp_id, external_mpp_id,
                                       external_patient, partner)
     cache_exists = Path(ext_cache).exists()
@@ -544,7 +548,7 @@ def main():
     if use_internal_val:
         print(f"\n加载内部验证集 MPP-{args.train_mpp_id}/{args.val_patient} ...")
         val_cache = _build_cache_dir(args.cache_root, args.train_mpp_id,
-                                     args.val_patient, partner)
+                                     args.val_patient, partner, split="val")
         val_labels = _build_val_label(args.labels_root, args.train_mpp_id,
                                       args.val_patient, partner)
         val_ds = MPPFeatureDataset(
@@ -557,8 +561,8 @@ def main():
         print(f"内部验证集样本: {len(val_ds)}")
 
     print(f"\n加载外部测试集 MPP-{args.external_mpp_id}/{args.external_patient} ...")
-    external_cache = _build_cache_dir(args.cache_root, args.external_mpp_id,
-                                      args.external_patient, partner)
+    external_cache = _build_cache_dir(args.cache_root, args.train_mpp_id,
+                                      args.external_patient, partner, split="train")
     external_labels = _build_external_label(args.labels_root, args.train_mpp_id,
                                             args.external_mpp_id,
                                             args.external_patient, partner)
