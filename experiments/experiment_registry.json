@@ -468,7 +468,7 @@
       "best_val_loss": 0.307038,
       "best_val_pcc": 0.540011,
       "train_val_gap": 0.239649,
-      "external_xzy_pcc": null,
+      "external_xzy_pcc": 0.7056,
       "completed_at": "2026-07-04T07:38:44"
     },
     {
@@ -504,7 +504,7 @@
       "best_val_loss": 0.538206,
       "best_val_pcc": 0.684401,
       "train_val_gap": 0.159723,
-      "external_xzy_pcc": null,
+      "external_xzy_pcc": 0.5871,
       "completed_at": "2026-07-04T07:38:56"
     }
   ]
