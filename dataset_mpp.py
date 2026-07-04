@@ -165,7 +165,14 @@ class MPPFeatureDataset(Dataset):
 
         feat_sample = torch.load(self.cache_dir / f"{self.samples[0][0]}.pt",
                                  map_location="cpu")
-        self.feat_dim = feat_sample.shape[0]
+        # 队友缓存可能存的是全部 token [265, 1536] 而非仅 CLS [1536]
+        # 检测 2D → 取 CLS (第 0 行)；1D → 直接用
+        if feat_sample.ndim == 2:
+            self.feat_dim = feat_sample.shape[1]  # 1536
+            self._is_token_cache = True
+        else:
+            self.feat_dim = feat_sample.shape[0]
+            self._is_token_cache = False
         self._empty = False
 
     def __len__(self) -> int:
@@ -178,6 +185,9 @@ class MPPFeatureDataset(Dataset):
             raise IndexError("Empty dataset")
         stem = self.samples[idx][0]
         feature = torch.load(self.cache_dir / f"{stem}.pt", map_location="cpu")
+        # 若缓存存的是全部 token [265, 1536]，取 CLS token [1536]
+        if feature.ndim == 2:
+            feature = feature[0, :]
         target = self.samples[idx][1]
         return feature, target
 
