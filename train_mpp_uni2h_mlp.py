@@ -1,15 +1,20 @@
 """
 train_mpp_uni2h_mlp.py — MPP 实验训练入口：UNI2-h 冻结特征 + 两层 MLP 回归头
 
-Strategy A：不划分内部验证集（--val_strategy none），固定 epoch 预算，
-训练完成后一次性评估外部患者（MPP-2/XZY）。
+两种模式：
+  - --val_strategy none    (V3 模式):  无内部验证，train_loss 早停，固定 epoch 预算
+  - --val_strategy internal (V3bis 模式): 内部验证集，val_loss 选 best ckpt + 早停
 
 固定口径（对照框架文档 §1）：
   - 禁止 LoRA / Token / GFNet / 频域分支 / 渐进解冻 / 旧 3 患者 fold 逻辑
   - XZY 不参与训练、z-score 拟合、epoch 选择或调参
 
 用法:
+    # V3 模式（无内部验证）
     python train_mpp_uni2h_mlp.py --train_mpp_id 3 --train_patients HYZ15040,JFX,LMZ12939,TGC,XSL,ZHZ --external_mpp_id 2 --external_patient XZY --val_strategy none --num_epochs 50
+
+    # V3bis 模式（内部验证）
+    python train_mpp_uni2h_mlp.py --train_mpp_id 3 --train_patients HYZ15040,JFX,LMZ12939,TGC,XSL --val_strategy internal --val_patient ZHZ --external_mpp_id 2 --external_patient XZY --num_epochs 50 --patience 10
 """
 
 import argparse
@@ -170,8 +175,10 @@ def main():
                         help="特征缓存根目录")
     parser.add_argument("--labels_root", default="mpp_uni2h_cache/labels",
                         help="标准化标签目录")
-    parser.add_argument("--val_strategy", default="none", choices=["none"],
-                        help="验证策略（仅支持 none）")
+    parser.add_argument("--val_strategy", default="none", choices=["none", "internal"],
+                        help="验证策略：none=无内部验证(旧V3模式), internal=内部验证集(V3bis模式)")
+    parser.add_argument("--val_patient", default=None,
+                        help="内部验证患者（val_strategy=internal 时必需，如 ZHZ）")
     parser.add_argument("--num_epochs", type=int, required=True,
                         help="训练 epoch 数")
     parser.add_argument("--batch_size", type=int, default=32)
@@ -194,6 +201,14 @@ def main():
     parser.add_argument("--min_delta", type=float, default=1e-4,
                         help="早停最小改善阈值（默认 0.0001）")
     args = parser.parse_args()
+
+    # ── val_strategy 参数校验 ──
+    if args.val_strategy == "internal" and args.val_patient is None:
+        print("[ERROR] --val_strategy internal 必须同时指定 --val_patient")
+        sys.exit(1)
+    if args.val_strategy == "none" and args.val_patient is not None:
+        print("[WARN] --val_patient 已指定但 --val_strategy=none，将忽略 val_patient")
+        args.val_patient = None
 
     # ── CPU 线程限制 ──
     torch.set_num_threads(args.num_threads)
@@ -228,7 +243,24 @@ def main():
 
     # ── 加载数据 ──
     train_patients = [p.strip() for p in args.train_patients.split(",")]
-    print(f"\n训练集患者 ({len(train_patients)}): {train_patients}")
+
+    # 防泄漏检查：val_patient 不应在 train_patients 中
+    if args.val_patient and args.val_patient in train_patients:
+        print(f"[ERROR] val_patient ({args.val_patient}) 出现在 train_patients 中，违反数据隔离规则")
+        sys.exit(1)
+    if args.external_patient in train_patients:
+        print(f"[ERROR] external_patient ({args.external_patient}) 出现在 train_patients 中，违反数据隔离规则")
+        sys.exit(1)
+    if args.external_patient == args.val_patient:
+        print(f"[ERROR] external_patient ({args.external_patient}) 与 val_patient 相同，违反数据隔离规则")
+        sys.exit(1)
+
+    use_internal_val = (args.val_strategy == "internal" and args.val_patient is not None)
+    if use_internal_val:
+        print(f"\n训练集患者 ({len(train_patients)}): {train_patients}")
+        print(f"内部验证患者: MPP-{args.train_mpp_id}/{args.val_patient}")
+    else:
+        print(f"\n训练集患者 ({len(train_patients)}): {train_patients}")
 
     print("\n加载训练集 ...")
     train_dataset = merge_mpp_patients(
@@ -241,6 +273,20 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size,
                               shuffle=True, num_workers=0)
     print(f"训练集总样本: {len(train_dataset)}")
+
+    # ── 内部验证集（val_strategy=internal） ──
+    if use_internal_val:
+        print(f"\n加载内部验证集 MPP-{args.train_mpp_id}/{args.val_patient} ...")
+        val_cache = f"{args.cache_root}/{args.train_mpp_id}/{args.val_patient}"
+        val_labels = f"{args.labels_root}/mpp{args.train_mpp_id}_{args.val_patient}_zscored.csv"
+        val_ds = MPPFeatureDataset(
+            cache_dir=val_cache,
+            labels_csv=val_labels,
+            allow_missing=args.allow_missing,
+        )
+        val_loader = DataLoader(val_ds, batch_size=args.batch_size,
+                                shuffle=False, num_workers=0)
+        print(f"内部验证集样本: {len(val_ds)}")
 
     print(f"\n加载外部测试集 MPP-{args.external_mpp_id}/{args.external_patient} ...")
     external_cache = f"{args.cache_root}/{args.external_mpp_id}/{args.external_patient}"
@@ -255,6 +301,30 @@ def main():
     print(f"外部测试集样本: {len(external_ds)}")
     pathway_cols = external_ds.target_cols
     print(f"通路数: {len(pathway_cols)}")
+
+    # ── z-score 参数验证（防泄漏） ──
+    import json as _json
+    zscore_params_path = f"{args.cache_root}/zscore_params_mpp{args.train_mpp_id}.json"
+    if Path(zscore_params_path).exists():
+        with open(zscore_params_path, "r") as _f:
+            zscore_params = _json.load(_f)
+        fit_patients = set(zscore_params.get("fit_patients", []))
+        print(f"\nz-score 参数审计: fit_patients={sorted(fit_patients)}, val_patient_file={zscore_params.get('val_patient')}, "
+              f"external_patient_file={zscore_params.get('external_patient')}")
+        # 校验：训练患者 == fit_patients（训练集恰好由拟合参数的患者组成）
+        train_set = set(train_patients)
+        if train_set != fit_patients:
+            print(f"[ERROR] train_patients ({sorted(train_set)}) 与 zscore fit_patients ({sorted(fit_patients)}) 不一致")
+            sys.exit(1)
+        if args.val_patient and args.val_patient in fit_patients:
+            print(f"[ERROR] val_patient ({args.val_patient}) 出现在 zscore fit_patients 中，ZHZ 不应参与拟合")
+            sys.exit(1)
+        if args.external_patient in fit_patients:
+            print(f"[ERROR] external_patient ({args.external_patient}) 出现在 zscore fit_patients 中，XZY 不应参与拟合")
+            sys.exit(1)
+        print(f"  ✅ z-score 参数审计通过: fit_patients 不包含 {args.val_patient or 'N/A'} / {args.external_patient}")
+    else:
+        print(f"[WARN] z-score 参数文件不存在: {zscore_params_path}，跳过审计")
 
     # ── 模型 ──
     model = MPPMLPHead(
@@ -277,6 +347,8 @@ def main():
         f.write(f"external_mpp_id={args.external_mpp_id}\n")
         f.write(f"external_patient={args.external_patient}\n")
         f.write(f"val_strategy={args.val_strategy}\n")
+        if use_internal_val:
+            f.write(f"val_patient={args.val_patient}\n")
         f.write(f"model=MPPMLPHead (Linear->GELU->Dropout->Linear)\n")
         f.write(f"in_dim={external_ds.feat_dim}, hidden={args.hidden_dim}, out={len(pathway_cols)}\n")
         f.write(f"dropout={args.dropout}, n_params={n_params}\n")
@@ -287,13 +359,23 @@ def main():
 
     # ── 训练循环 ──
     history = []
-    best_loss = float("inf")
+
+    # 早停 / best checkpoint 判断指标
+    if use_internal_val:
+        early_stop_signal = "val_loss"
+        best_loss = float("inf")
+        print(f"\n早停信号: {early_stop_signal} (最小化, patience={args.patience}, min_delta={args.min_delta})")
+    else:
+        early_stop_signal = "train_loss"
+        best_loss = float("inf")
+        print(f"\n早停信号: {early_stop_signal} (最小化, patience={args.patience}, min_delta={args.min_delta})")
+
     best_state = None
     best_epoch = 0
     epochs_no_improve = 0
 
     print(f"\n{'='*60}")
-    print(f"开始训练: {args.num_epochs} epochs (早停 patience={args.patience}, min_delta={args.min_delta})")
+    print(f"开始训练: {args.num_epochs} epochs")
     print(f"{'='*60}")
 
     for epoch in range(1, args.num_epochs + 1):
@@ -306,71 +388,131 @@ def main():
         elapsed = time.time() - t0_epoch
         train_pcc = train_metrics["pcc"]
 
-        history.append({
+        row = {
             "epoch": epoch,
             "train_loss": round(train_loss, 6),
             "train_pcc": round(train_pcc, 6),
-            "is_best": False,  # 占位，统一在 best 判定后回填
-        })
+            "is_best": False,
+        }
 
-        print(f"Epoch {epoch:3d}/{args.num_epochs}  "
-              f"loss={train_loss:.4f}  PCC={train_pcc:.4f}  "
-              f"time={elapsed:.1f}s", end="")
+        # ── 内部验证评估（val_strategy=internal） ──
+        if use_internal_val:
+            val_loss, val_metrics, _, _ = evaluate(
+                model, val_loader, criterion, device, pathway_cols,
+            )
+            val_pcc = val_metrics["pcc"]
+            val_mae = val_metrics["mae"]
+            val_r2 = val_metrics["r2"]
+            row.update({
+                "val_loss": round(val_loss, 6),
+                "val_pcc": round(val_pcc, 6),
+                "val_mae": round(val_mae, 6),
+                "val_r2": round(val_r2, 6),
+            })
+            monitor_loss = val_loss
+            monitor_label = "val_loss"
+        else:
+            monitor_loss = train_loss
+            monitor_label = "train_loss"
+
+        row["is_best"] = False
+        history.append(row)
+
+        # ── 日志 ──
+        if use_internal_val:
+            print(f"Epoch {epoch:3d}/{args.num_epochs}  "
+                  f"train_loss={train_loss:.4f}  val_loss={val_loss:.4f}  "
+                  f"train_PCC={train_pcc:.4f}  val_PCC={val_pcc:.4f}  "
+                  f"time={elapsed:.1f}s", end="")
+        else:
+            print(f"Epoch {epoch:3d}/{args.num_epochs}  "
+                  f"loss={train_loss:.4f}  PCC={train_pcc:.4f}  "
+                  f"time={elapsed:.1f}s", end="")
 
         # ── 早停检查 ──
-        if train_loss < best_loss - args.min_delta:
-            best_loss = train_loss
-            best_state = {
-                k: v.cpu().clone() for k, v in model.state_dict().items()
-            }
-            best_epoch = epoch
-            epochs_no_improve = 0
-            # 回填 is_best：当前新 best 行置 True，之前所有行置 False
-            for h in history:
-                h["is_best"] = (h["epoch"] == epoch)
-            print(f"  ✅ best")
+        if np.isfinite(monitor_loss):
+            if monitor_loss < best_loss - args.min_delta:
+                best_loss = monitor_loss
+                best_state = {
+                    k: v.cpu().clone() for k, v in model.state_dict().items()
+                }
+                best_epoch = epoch
+                epochs_no_improve = 0
+                # 回填 is_best
+                for h in history:
+                    h["is_best"] = (h["epoch"] == epoch)
+                print(f"  ✅ best ({monitor_label}={monitor_loss:.6f})")
+            else:
+                epochs_no_improve += 1
+                print(f"  (no improv. {epochs_no_improve}/{args.patience})")
         else:
             epochs_no_improve += 1
-            print(f"  (no improv. {epochs_no_improve}/{args.patience})")
+            print(f"  ⚠️ NaN/Inf {monitor_label}, 跳过 best 更新 (no improv. {epochs_no_improve}/{args.patience})")
 
-        if epochs_no_improve >= args.patience and epoch >= 10:
-            print(f"\n[早停] 训练 loss {args.patience} 个 epoch 未改善，"
-                  f"提前停止 (best epoch={best_epoch}, best_loss={best_loss:.6f})")
+        min_stop_epoch = max(args.patience, 3)
+        if epochs_no_improve >= args.patience and epoch >= min_stop_epoch:
+            print(f"\n[早停] {monitor_label} {args.patience} 个 epoch 未改善，"
+                  f"提前停止 (best epoch={best_epoch}, best_{monitor_label}={best_loss:.6f}, "
+                  f"min_stop_epoch={min_stop_epoch})")
             break
 
     # ── 选择最佳 checkpoint ──
+    # monitor_loss 在循环内每次赋值，循环至少执行一次（num_epochs 必传），post-loop 可安全引用
     if best_state is not None and best_epoch != args.num_epochs:
         model.load_state_dict(best_state)
         final_epoch = best_epoch
         final_loss = best_loss
-        print(f"\n使用最佳 checkpoint (epoch {best_epoch}, loss={best_loss:.6f}) 进行评估")
+        print(f"\n使用最佳 checkpoint (epoch {best_epoch}, {early_stop_signal}={best_loss:.6f}) 进行评估")
     else:
         final_epoch = epoch
-        final_loss = train_loss
-        print(f"\n使用最终 checkpoint (epoch {epoch}, loss={train_loss:.6f}) 进行评估")
+        final_loss = monitor_loss  # 使用监控信号（train_loss 或 val_loss），而非总取 train_loss
+        print(f"\n使用最终 checkpoint (epoch {epoch}) 进行评估")
 
     # ── 保存历史 ──
     history_df = pd.DataFrame(history)
     history_df.to_csv(out_dir / "training_history.csv", index=False)
     print(f"\n训练历史已保存: {out_dir / 'training_history.csv'}")
 
-    # ── 保存 best epoch 标记（finalize --no-val 据此取真实 best，对齐 best_checkpoint.pth） ──
+    # ── 保存 best epoch 标记 ──
     best_epoch_file = out_dir / "best_epoch.txt"
     with open(best_epoch_file, "w", encoding="utf-8") as f:
         f.write(f"best_epoch={best_epoch}\n")
-        f.write(f"best_train_loss={best_loss:.6f}\n")
+        f.write(f"val_strategy={args.val_strategy}\n")
+        f.write(f"early_stop_signal={early_stop_signal}\n")
+        f.write(f"best_{early_stop_signal}={best_loss:.6f}\n")
         f.write(f"actual_final_epoch={epoch}\n")
     print(f"Best epoch 标记: {best_epoch_file} (best_epoch={best_epoch}, final_epoch={epoch})")
 
     # ── 保存最佳 checkpoint ──
     ckpt_path = out_dir / "best_checkpoint.pth"
+    ckpt_meta = {"epoch": best_epoch, "val_strategy": args.val_strategy,
+                 early_stop_signal: best_loss}
     if best_state is not None:
-        torch.save({"model_state_dict": best_state, "epoch": best_epoch,
-                     "train_loss": best_loss}, ckpt_path)
+        ckpt_meta["model_state_dict"] = best_state
+        torch.save(ckpt_meta, ckpt_path)
     else:
-        torch.save({"model_state_dict": model.state_dict(), "epoch": final_epoch,
-                     "train_loss": final_loss}, ckpt_path)
+        ckpt_meta["model_state_dict"] = model.state_dict()
+        torch.save(ckpt_meta, ckpt_path)
     print(f"Best checkpoint (epoch {best_epoch}): {ckpt_path}")
+
+    # ── 内部验证集最终评估（val_strategy=internal） ──
+    if use_internal_val:
+        print(f"\n{'='*60}")
+        print(f"最终评估内部验证集 MPP-{args.train_mpp_id}/{args.val_patient} (best checkpoint) ...")
+        val_loss_final, val_metrics_final, val_preds_final, val_labels_final = evaluate(
+            model, val_loader, criterion, device, pathway_cols,
+        )
+        print(f"Internal Val ({args.val_patient}): PCC={val_metrics_final['pcc']:.4f}  "
+              f"MAE={val_metrics_final['mae']:.4f}  R²={val_metrics_final['r2']:.4f}  "
+              f"Loss={val_loss_final:.4f}")
+
+        val_pred_cols = [f"pred_{c}" for c in pathway_cols]
+        val_true_cols = [f"true_{c}" for c in pathway_cols]
+        val_pred_df = pd.DataFrame(np.column_stack([val_labels_final, val_preds_final]),
+                                    columns=val_true_cols + val_pred_cols)
+        val_pred_path = out_dir / "predictions_internal_val.csv"
+        val_pred_df.to_csv(val_pred_path, index=False)
+        print(f"内部验证预测: {val_pred_path}")
 
     # ── 外部评估 ──
     print(f"\n{'='*60}")
@@ -381,7 +523,8 @@ def main():
     mean_pcc = test_metrics["pcc"]
     mean_mae = test_metrics["mae"]
     mean_r2 = test_metrics["r2"]
-    print(f"External XZY: PCC={mean_pcc:.4f}  MAE={mean_mae:.4f}  R²={mean_r2:.4f}  Loss={test_loss:.4f}")
+    print(f"External {args.external_patient}: PCC={mean_pcc:.4f}  MAE={mean_mae:.4f}  "
+          f"R²={mean_r2:.4f}  Loss={test_loss:.4f}")
 
     # ── 保存预测 ──
     pred_cols = [f"pred_{c}" for c in pathway_cols]
@@ -418,17 +561,34 @@ def main():
         f.write(f"Experiment: {args.dataset_name}\n")
         f.write(f"Model: UNI2-h frozen features + 2-layer MLP\n")
         f.write(f"Training strategy: val_strategy={args.val_strategy}\n")
-        f.write(f"Training budget: {args.num_epochs} epochs max, early stopping patience={args.patience}\n")
-        f.write(f"  actual_epochs={final_epoch}, best_epoch={best_epoch}, best_loss={best_loss:.6f}\n")
-        f.write(f"Train patients (MPP-{args.train_mpp_id}): {args.train_patients}\n")
-        f.write(f"External test: MPP-{args.external_mpp_id}/{args.external_patient}\n")
-        f.write(f"XZY used for: test ONLY (not training, not z-score fit, not epoch selection)\n")
-        f.write(f"Report: Fixed-budget training; best checkpoint evaluated once on external XZY.\n")
-        f.write(f"\n--- External XZY Results ---\n")
+        f.write(f"Early stopping: signal={early_stop_signal}, patience={args.patience}, "
+                f"min_delta={args.min_delta}\n")
+        f.write(f"Training budget: {args.num_epochs} epochs max\n")
+        f.write(f"  actual_epochs={epoch}, best_epoch={best_epoch}, "
+                f"best_{early_stop_signal}={best_loss:.6f}\n")
+        f.write(f"\nSignal separation:\n")
+        f.write(f"- train: MPP-{args.train_mpp_id} / {args.train_patients}\n")
+        if use_internal_val:
+            f.write(f"- internal_val: MPP-{args.train_mpp_id} / {args.val_patient}, "
+                    f"used for {early_stop_signal} early stopping only\n")
+        else:
+            f.write(f"- internal_val: none (val_strategy=none)\n")
+        f.write(f"- external_test: MPP-{args.external_mpp_id} / {args.external_patient}, "
+                f"evaluated once after checkpoint selection\n")
+        f.write(f"\nXZY used for: test ONLY (not training, not z-score fit, not epoch selection)\n")
+        f.write(f"Report: best checkpoint selected by {early_stop_signal} minimum; "
+                f"external XZY evaluated once.\n")
+        f.write(f"\n--- External {args.external_patient} Results ---\n")
         f.write(f"Mean PCC: {mean_pcc:.4f}\n")
         f.write(f"Mean MAE: {mean_mae:.4f}\n")
         f.write(f"Mean R2:  {mean_r2:.4f}\n")
         f.write(f"Test Loss: {test_loss:.4f}\n")
+        if use_internal_val:
+            f.write(f"\n--- Internal Val ({args.val_patient}) Results (best ckpt) ---\n")
+            f.write(f"Mean PCC: {val_metrics_final['pcc']:.4f}\n")
+            f.write(f"Mean MAE: {val_metrics_final['mae']:.4f}\n")
+            f.write(f"Mean R2:  {val_metrics_final['r2']:.4f}\n")
+            f.write(f"Val Loss: {val_loss_final:.4f}\n")
         f.write(f"Completed at: {datetime.now().isoformat()}\n")
 
     print(f"\n摘要: {out_dir / 'training_summary.txt'}")

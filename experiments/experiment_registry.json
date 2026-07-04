@@ -397,6 +397,35 @@
       "train_val_gap": null,
       "external_xzy_pcc": 0.602,
       "completed_at": "2026-07-03T18:37:24"
+    },
+    {
+      "id": "mpp_v3bis_valZHZ_xzy_external_uni2h_mlp_20260704",
+      "family": "mpp_uni2h_mlp",
+      "status": "planned",
+      "priority": "P0",
+      "script": "train_mpp_uni2h_mlp.py",
+      "mpp_train_id": 3,
+      "train_patients": [
+        "HYZ15040",
+        "JFX",
+        "LMZ12939",
+        "TGC",
+        "XSL"
+      ],
+      "val_strategy": "internal",
+      "val_patient": "ZHZ",
+      "external_mpp_id": 2,
+      "external_patient": "XZY",
+      "model": "UNI2-h frozen features + 2-layer MLP",
+      "selection_metric": "val_loss_min_internal_val_ZHZ",
+      "epoch_budget": "50 + early_stopping(patience=10, min_delta=1e-4, signal=val_loss)",
+      "data_ready": false,
+      "seed": 42,
+      "single_seed_limitation": true,
+      "run_dir": "checkpoints/mpp_uni2h_mlp/mpp_v3bis_valZHZ_xzy_external_uni2h_mlp_20260704",
+      "created_at": "2026-07-04",
+      "next_action": "extract_features_and_prepare_labels",
+      "notes": "V3bis: fix V3 overfitting by introducing internal val patient ZHZ. 5 train patients (HYZ,JFX,LMZ,TGC,XSL) -> 1 internal val (ZHZ, val_loss early stopping) -> 1 external test (XZY, single eval after checkpoint selection). Three-layer signal separation. z-score fit on 5 train patients only. val_loss_min selects best checkpoint and triggers early stopping. Min_stop_epoch=max(patience,3)."
     }
   ]
 }

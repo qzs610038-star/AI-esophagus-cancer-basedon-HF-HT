@@ -1,17 +1,22 @@
 """
 prepare_mpp_zscore.py — MPP 实验 z-score 标准化标签准备
 
-只在训练集患者上拟合 mean/std（ddof=1），用同一套参数转换训练集 + 外部测试集。
+只在训练集患者上拟合 mean/std（ddof=1），用同一套参数转换训练集 + 内部验证集 + 外部测试集。
 clip ±100 只在 z-score 变换之后做——拟合前不做 clip，防止 LMZ 极端值失真。
 输出 CSV 保留原始坐标/ID 列，以便 dataset 按坐标匹配 .pt 文件与标签。
 
 用法:
+    # V3 模式（无内部验证）
     python prepare_mpp_zscore.py --train_mpp_id 3 --train_patients HYZ15040,JFX,LMZ12939,TGC,XSL,ZHZ --external_mpp_id 2 --external_patient XZY
+
+    # V3bis 模式（内部验证）
+    python prepare_mpp_zscore.py --train_mpp_id 3 --train_patients HYZ15040,JFX,LMZ12939,TGC,XSL --val_strategy internal --val_patient ZHZ --external_mpp_id 2 --external_patient XZY
 """
 
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -61,11 +66,24 @@ def main():
                         help="外部测试集 MPP 编号（默认 2）")
     parser.add_argument("--external_patient", default="XZY",
                         help="外部测试患者（默认 XZY）")
+    parser.add_argument("--val_strategy", default="none",
+                        choices=["none", "internal"],
+                        help="验证策略：none=V3 模式(无内部验证), internal=V3bis 模式")
+    parser.add_argument("--val_patient", default=None,
+                        help="内部验证患者（val_strategy=internal 时必需，如 ZHZ）")
     parser.add_argument("--output_root", default="mpp_uni2h_cache",
                         help="输出根目录")
     parser.add_argument("--clip", type=float, default=100.0,
                         help="z-score 变换后的 clip 阈值（默认 100）")
     args = parser.parse_args()
+
+    # ── 参数校验 ──
+    if args.val_strategy == "internal" and args.val_patient is None:
+        print("[ERROR] --val_strategy internal 必须同时指定 --val_patient")
+        sys.exit(1)
+    if args.val_strategy == "none" and args.val_patient is not None:
+        print("[WARN] --val_patient 已指定但 --val_strategy=none，将忽略 val_patient")
+        args.val_patient = None
 
     output_dir = Path(args.output_root) / "labels"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -75,6 +93,19 @@ def main():
     train_patients = [p.strip() for p in args.train_patients.split(",")]
     print(f"训练集患者 ({len(train_patients)}): {train_patients}")
     print(f"外部测试: MPP-{args.external_mpp_id}/{args.external_patient}")
+    if args.val_patient:
+        print(f"内部验证: MPP-{args.train_mpp_id}/{args.val_patient} (val_strategy={args.val_strategy}, 不参与 z-score 拟合)")
+    # 防泄漏检查：val_patient 不应在 train_patients 中
+    if args.val_patient and args.val_patient in train_patients:
+        print(f"[ERROR] val_patient ({args.val_patient}) 出现在 train_patients 中，违反数据隔离规则")
+        sys.exit(1)
+    if args.external_patient in train_patients:
+        print(f"[ERROR] external_patient ({args.external_patient}) 出现在 train_patients 中，"
+              f"外部测试患者不应参与 z-score 拟合")
+        sys.exit(1)
+    if args.external_patient == args.val_patient:
+        print(f"[ERROR] external_patient ({args.external_patient}) 与 val_patient 相同，违反数据隔离规则")
+        sys.exit(1)
     print("=" * 60)
 
     # ── Step 1: 加载并分类列 ──
@@ -135,14 +166,19 @@ def main():
         "std": std.tolist(),
         "ddof": 1,
         "n_train_samples": int(cleaned.shape[0]),
-        "train_patients": train_patients,
+        "fit_patients": train_patients,
         "train_mpp_id": args.train_mpp_id,
+        "val_strategy": args.val_strategy,
+        "val_patient": args.val_patient,
+        "external_mpp_id": args.external_mpp_id,
+        "external_patient": args.external_patient,
         "coord_cols": all_coord_cols,
         "id_cols": all_id_cols,
         "clip_applied_after_transform": True,
         "clip_range": [-args.clip, args.clip],
         "notes": "Manual np.nanmean/np.nanstd(ddof=1), NOT sklearn StandardScaler (which uses ddof=0). "
-                 "nan_to_num+Inf sentinel pass BEFORE fitting; clip ±100 applied only AFTER (x-mean)/std transform.",
+                 "nan_to_num+Inf sentinel pass BEFORE fitting; clip ±100 applied only AFTER (x-mean)/std transform. "
+                 + (f"val_patient={args.val_patient} excluded from fit; used for internal val only." if args.val_patient else ""),
     }
 
     params_path = params_dir / f"zscore_params_mpp{args.train_mpp_id}.json"
@@ -197,6 +233,11 @@ def main():
     for patient in train_patients:
         transform_and_save(patient, args.train_mpp_id, "[TRAIN]")
 
+    # ── 内部验证集（val_strategy=internal） ──
+    if args.val_patient:
+        print(f"\n[4a/5] 转换内部验证集 MPP-{args.train_mpp_id}/{args.val_patient} (不参与 z-score 拟合) ...")
+        transform_and_save(args.val_patient, args.train_mpp_id, "[INTERNAL_VAL]")
+
     print("\n[5/5] 转换外部测试集 ...")
     transform_and_save(args.external_patient, args.external_mpp_id, "[EXTERNAL]")
 
@@ -205,6 +246,8 @@ def main():
     print(f"参数文件: {params_path}")
     print(f"标签输出: {output_dir}/")
     print(f"训练集拟合患者: {train_patients}")
+    if args.val_patient:
+        print(f"内部验证患者 (不参与拟合): {args.val_patient}")
     print(f"XZY 参与变换: 是  |  参与拟合: 否")
 
 
