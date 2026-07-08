@@ -234,8 +234,10 @@ def audit_patch_coordinates(mpp_root: Path, report_rows: list, candidate_rows: l
             main_dx = dx_counts.most_common(1)[0][0] if dx_counts else 0
             main_dy = dy_counts.most_common(1)[0][0] if dy_counts else 0
 
-            # 步长判定：50% overlap → 主步长≈112；100% → 主步长≈224
-            stride_guess = "100%_stride" if main_dx >= 200 else "50%_stride" if main_dx >= 100 else "unknown"
+            # 步长判定：根据 mpp_id 调整物理 patch 阈值 (MPP-5 为 0.54 MPP, 物理大小翻倍为 448 像素)
+            threshold_100 = 400 if mpp_id == 5 else 200
+            threshold_50 = 200 if mpp_id == 5 else 100
+            stride_guess = "100%_stride" if main_dx >= threshold_100 else "50%_stride" if main_dx >= threshold_50 else "unknown"
 
             row.update({
                 "n_patches": n_patches,

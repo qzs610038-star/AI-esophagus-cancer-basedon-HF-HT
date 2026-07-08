@@ -245,7 +245,7 @@ def compute_embargo(patches: List[Tuple[str, int, int]],
 
 def build_split_for_patient(patient: str, mpp_id: int, block_size: int,
                             patches: List[Tuple[str, int, int]],
-                            seed: int, embargo: bool
+                            seed: int, embargo: bool, patch_size: int = PATCH_SIZE
                             ) -> Tuple[List[dict], dict, List[dict]]:
     """为单例患者生成 split。
 
@@ -263,7 +263,7 @@ def build_split_for_patient(patient: str, mpp_id: int, block_size: int,
     embargo_audit_rows = []
 
     if embargo:
-        embargo_stems, embargo_audit_rows = compute_embargo(patches, val_set, PATCH_SIZE)
+        embargo_stems, embargo_audit_rows = compute_embargo(patches, val_set, patch_size)
 
     # 组装 manifest rows
     manifest_rows = []
@@ -310,7 +310,7 @@ def build_split_for_patient(patient: str, mpp_id: int, block_size: int,
     return manifest_rows, summary, embargo_audit_rows
 
 
-def verify_leakage(manifest_rows: List[dict], embargo: bool) -> Tuple[int, List[dict]]:
+def verify_leakage(manifest_rows: List[dict], embargo: bool, patch_size: int = PATCH_SIZE) -> Tuple[int, List[dict]]:
     """验证无 iou>0 的 train/internal_val 配对 (方案 §三.2 通过条件)。
 
     泄漏检查必须**患者内**: 跨患者坐标属于不同物理切片, 不算泄漏。
@@ -335,7 +335,7 @@ def verify_leakage(manifest_rows: List[dict], embargo: bool) -> Tuple[int, List[
             for t_stem, tx, ty in train_patches:
                 dx = abs(vx - tx)
                 dy = abs(vy - ty)
-                if dx < PATCH_SIZE and dy < PATCH_SIZE:
+                if dx < patch_size and dy < patch_size:
                     leakage_pairs += 1
                     leakage_rows.append({
                         "patient": patient,
@@ -415,6 +415,9 @@ def generate_for_mpp(mpp_id: int, mpp_root: Path, output_root: Path,
         patient_patches[patient] = patches
         print(f"  {patient}: {len(patches)} patches")
 
+    # 根据 MPP 物理分辨率确定实际 patch 大小在原始像素坐标系下的宽度 (MPP-5 为 0.54 MPP, 翻倍为 448)
+    effective_patch_size = 448 if mpp_id == 5 else 224
+
     # ── 三档候选 split ──
     candidate_summary_rows = []
     candidate_manifests: Dict[int, List[dict]] = {}  # block_size -> manifest_rows
@@ -428,7 +431,7 @@ def generate_for_mpp(mpp_id: int, mpp_root: Path, output_root: Path,
         for patient in TRAIN_PATIENTS:
             patches = patient_patches[patient]
             m_rows, s, ea_rows = build_split_for_patient(
-                patient, mpp_id, bs, patches, seed, embargo)
+                patient, mpp_id, bs, patches, seed, embargo, patch_size=effective_patch_size)
             all_manifest.extend(m_rows)
             all_summary.append(s)
             all_embargo_audit.extend(ea_rows)
@@ -438,7 +441,7 @@ def generate_for_mpp(mpp_id: int, mpp_root: Path, output_root: Path,
                   f"n_val_blocks={s['n_val_blocks']}")
 
         # 泄漏检查 (每档都做，embargo 档应=0)
-        leakage_pairs, leakage_rows = verify_leakage(all_manifest, embargo)
+        leakage_pairs, leakage_rows = verify_leakage(all_manifest, embargo, patch_size=effective_patch_size)
         print(f"    泄漏对数 (train<->val bbox 重叠): {leakage_pairs}")
 
         for s in all_summary:
