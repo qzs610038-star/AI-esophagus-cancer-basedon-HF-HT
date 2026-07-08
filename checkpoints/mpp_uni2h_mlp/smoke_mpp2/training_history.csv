@@ -1,0 +1,2 @@
+epoch,train_loss,train_pcc,is_best,val_loss,val_pcc,val_mae,val_r2
+1,0.660194,0.591562,True,0.482073,0.732505,0.52837,0.531044

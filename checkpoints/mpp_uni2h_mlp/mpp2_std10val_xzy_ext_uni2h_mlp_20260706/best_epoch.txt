@@ -1,0 +1,5 @@
+best_epoch=14
+val_strategy=manifest
+early_stop_signal=val_loss
+best_val_loss=0.398432
+actual_final_epoch=24

@@ -1,0 +1,172 @@
+{
+  "description": "MPP-2 train-only z-score parameters for 30 pathways",
+  "fit_split": "train",
+  "ddof": 1,
+  "clip_applied_after_transform": true,
+  "clip_range": [
+    -100.0,
+    100.0
+  ],
+  "fit_patients": [
+    "HYZ15040",
+    "JFX",
+    "LMZ12939",
+    "TGC",
+    "XSL",
+    "ZHZ"
+  ],
+  "n_train_samples": 9472,
+  "pathways": {
+    "tls": {
+      "mean": -2331.71099472936,
+      "std": 1581.2662479284872,
+      "count": 9472
+    },
+    "tgfb": {
+      "mean": 3915.861445467902,
+      "std": 1693.7112937876523,
+      "count": 9472
+    },
+    "emt": {
+      "mean": 2161.161268906713,
+      "std": 2148.562468101941,
+      "count": 9472
+    },
+    "hypoxia": {
+      "mean": 2760.817248006462,
+      "std": 2512.774790124302,
+      "count": 9472
+    },
+    "mhc": {
+      "mean": 7961.578236868838,
+      "std": 2208.9433916447856,
+      "count": 9472
+    },
+    "icp": {
+      "mean": -3630.745072380955,
+      "std": 1516.866527065746,
+      "count": 9472
+    },
+    "ifng": {
+      "mean": -768.8928054239683,
+      "std": 2903.1191243727517,
+      "count": 9472
+    },
+    "toxic": {
+      "mean": -2015.0493150220482,
+      "std": 1918.0223205077596,
+      "count": 9472
+    },
+    "Glycolysis": {
+      "mean": 2719.873400944831,
+      "std": 1737.8824900967306,
+      "count": 9472
+    },
+    "Inflammatory_Response": {
+      "mean": -98.42123347591743,
+      "std": 1911.4588326570486,
+      "count": 9472
+    },
+    "IL6_JAK_STAT3": {
+      "mean": 2636.69249967957,
+      "std": 1967.2134711790106,
+      "count": 9472
+    },
+    "P53_Pathway": {
+      "mean": 979.5528579965032,
+      "std": 1676.9433678828852,
+      "count": 9472
+    },
+    "DNA_Damage_Response": {
+      "mean": 1234.2759642986316,
+      "std": 1470.5033699178962,
+      "count": 9472
+    },
+    "Complement": {
+      "mean": -1800.5111392849126,
+      "std": 1747.6634066576585,
+      "count": 9472
+    },
+    "Coagulation": {
+      "mean": -637.6039728545255,
+      "std": 994.2199324700123,
+      "count": 9472
+    },
+    "Oxidative_Phosphorylation": {
+      "mean": 2815.2501069817918,
+      "std": 2432.154101760611,
+      "count": 9472
+    },
+    "Reactive_Oxygen_Species": {
+      "mean": 2790.5298911875784,
+      "std": 1133.534948588832,
+      "count": 9472
+    },
+    "Wound_Healing": {
+      "mean": 2149.717287808604,
+      "std": 2000.7276556087952,
+      "count": 9472
+    },
+    "Fibrosis": {
+      "mean": 2293.130700148563,
+      "std": 2775.553844408621,
+      "count": 9472
+    },
+    "MYC_Targets": {
+      "mean": 2037.3824363363694,
+      "std": 3163.7129289704753,
+      "count": 9472
+    },
+    "E2F_Targets": {
+      "mean": 1500.8010108877088,
+      "std": 2025.4490924161432,
+      "count": 9472
+    },
+    "G2M_Checkpoint": {
+      "mean": 503.99334918581775,
+      "std": 2152.522407832063,
+      "count": 9472
+    },
+    "Mitotic_Spindle": {
+      "mean": 447.05930244823446,
+      "std": 1845.422357780025,
+      "count": 9472
+    },
+    "Unfolded_Protein_Response": {
+      "mean": 2521.7296822390226,
+      "std": 1922.660699548894,
+      "count": 9472
+    },
+    "mTOR_Signaling": {
+      "mean": 2044.6722793203753,
+      "std": 1801.865201821177,
+      "count": 9472
+    },
+    "Interferon_Alpha": {
+      "mean": 3643.0987602916084,
+      "std": 1860.9178706165696,
+      "count": 9472
+    },
+    "Angiogenesis": {
+      "mean": 1203.4315389114338,
+      "std": 1767.0874416133242,
+      "count": 9472
+    },
+    "Apoptosis": {
+      "mean": 1172.7100519113592,
+      "std": 1562.2678111962966,
+      "count": 9472
+    },
+    "TNF_Signaling": {
+      "mean": 123.95002913186181,
+      "std": 2188.658302267526,
+      "count": 9472
+    },
+    "ECM_Organization": {
+      "mean": 3066.686497730347,
+      "std": 3169.297967164726,
+      "count": 9472
+    }
+  },
+  "note": "mean/std are on RAW ssGSEA scale; use inverse transform pred_raw=pred_z*std+mean for raw-scale MAE/R2"
+}

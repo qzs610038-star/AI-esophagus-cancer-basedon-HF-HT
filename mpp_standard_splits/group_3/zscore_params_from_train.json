@@ -1,0 +1,172 @@
+{
+  "description": "MPP-3 train-only z-score parameters for 30 pathways",
+  "fit_split": "train",
+  "ddof": 1,
+  "clip_applied_after_transform": true,
+  "clip_range": [
+    -100.0,
+    100.0
+  ],
+  "fit_patients": [
+    "HYZ15040",
+    "JFX",
+    "LMZ12939",
+    "TGC",
+    "XSL",
+    "ZHZ"
+  ],
+  "n_train_samples": 35227,
+  "pathways": {
+    "tls": {
+      "mean": -2337.124158574367,
+      "std": 1559.681368788726,
+      "count": 35227
+    },
+    "tgfb": {
+      "mean": 3917.5176584697565,
+      "std": 1699.5043831142589,
+      "count": 35227
+    },
+    "emt": {
+      "mean": 2178.7979120029095,
+      "std": 2144.7649374810903,
+      "count": 35227
+    },
+    "hypoxia": {
+      "mean": 2770.7632771144526,
+      "std": 2525.1671638587804,
+      "count": 35227
+    },
+    "mhc": {
+      "mean": 8007.920979796833,
+      "std": 2170.335250286876,
+      "count": 35227
+    },
+    "icp": {
+      "mean": -3642.2960090450206,
+      "std": 1530.4777355030503,
+      "count": 35227
+    },
+    "ifng": {
+      "mean": -739.1919806976019,
+      "std": 2877.214564519074,
+      "count": 35227
+    },
+    "toxic": {
+      "mean": -2022.768912286653,
+      "std": 1914.1811829497608,
+      "count": 35227
+    },
+    "Glycolysis": {
+      "mean": 2728.7993557997756,
+      "std": 1734.2974284478373,
+      "count": 35227
+    },
+    "Inflammatory_Response": {
+      "mean": -55.03082095205002,
+      "std": 1941.184584893142,
+      "count": 35227
+    },
+    "IL6_JAK_STAT3": {
+      "mean": 2655.5734039879226,
+      "std": 1950.0101844369171,
+      "count": 35227
+    },
+    "P53_Pathway": {
+      "mean": 977.3328607703855,
+      "std": 1673.0352839604432,
+      "count": 35227
+    },
+    "DNA_Damage_Response": {
+      "mean": 1207.8077633445455,
+      "std": 1466.8857489668371,
+      "count": 35227
+    },
+    "Complement": {
+      "mean": -1796.8344940485435,
+      "std": 1749.115958908115,
+      "count": 35227
+    },
+    "Coagulation": {
+      "mean": -627.5900459337599,
+      "std": 996.4124921947728,
+      "count": 35227
+    },
+    "Oxidative_Phosphorylation": {
+      "mean": 2820.6997085072785,
+      "std": 2408.601092219863,
+      "count": 35227
+    },
+    "Reactive_Oxygen_Species": {
+      "mean": 2793.357352551513,
+      "std": 1135.1538816470006,
+      "count": 35227
+    },
+    "Wound_Healing": {
+      "mean": 2157.0484351702307,
+      "std": 1993.2617704803567,
+      "count": 35227
+    },
+    "Fibrosis": {
+      "mean": 2310.025519928727,
+      "std": 2767.9135545248228,
+      "count": 35227
+    },
+    "MYC_Targets": {
+      "mean": 2045.122322354269,
+      "std": 3131.9465831204866,
+      "count": 35227
+    },
+    "E2F_Targets": {
+      "mean": 1460.533215638378,
+      "std": 2014.3351247371806,
+      "count": 35227
+    },
+    "G2M_Checkpoint": {
+      "mean": 461.15650666101357,
+      "std": 2141.5226724736244,
+      "count": 35227
+    },
+    "Mitotic_Spindle": {
+      "mean": 408.31699379006284,
+      "std": 1837.435084062207,
+      "count": 35227
+    },
+    "Unfolded_Protein_Response": {
+      "mean": 2521.4992785456293,
+      "std": 1916.5671112326836,
+      "count": 35227
+    },
+    "mTOR_Signaling": {
+      "mean": 2038.80932499561,
+      "std": 1782.5528070504213,
+      "count": 35227
+    },
+    "Interferon_Alpha": {
+      "mean": 3654.772701781457,
+      "std": 1860.490020838173,
+      "count": 35227
+    },
+    "Angiogenesis": {
+      "mean": 1196.040499737595,
+      "std": 1759.363848185696,
+      "count": 35227
+    },
+    "Apoptosis": {
+      "mean": 1174.4827378175717,
+      "std": 1553.4431529527808,
+      "count": 35227
+    },
+    "TNF_Signaling": {
+      "mean": 155.1672884749805,
+      "std": 2193.119193786484,
+      "count": 35227
+    },
+    "ECM_Organization": {
+      "mean": 3072.313533296732,
+      "std": 3154.9673071541124,
+      "count": 35227
+    }
+  },
+  "note": "mean/std are on RAW ssGSEA scale; use inverse transform pred_raw=pred_z*std+mean for raw-scale MAE/R2"
+}

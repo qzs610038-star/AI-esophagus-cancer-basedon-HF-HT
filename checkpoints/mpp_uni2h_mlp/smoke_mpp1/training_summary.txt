@@ -1,0 +1,29 @@
+Experiment: smoke_mpp1
+Model: UNI2-h frozen features + 2-layer MLP
+Training strategy: val_strategy=manifest
+Early stopping: signal=val_loss, patience=10, min_delta=0.0001
+Training budget: 1 epochs max
+  actual_epochs=1, best_epoch=1, best_val_loss=0.629776
+
+Signal separation:
+- train: MPP-1 / HYZ15040,JFX,LMZ12939,TGC,XSL,ZHZ
+- internal_val: split_manifest patch级各患者10% (manifest), used for val_loss early stopping only
+- external_test: MPP-2 / XZY, evaluated once after checkpoint selection
+
+XZY used for: test ONLY (not training, not z-score fit, not epoch selection)
+Report: best checkpoint selected by val_loss minimum; external XZY evaluated once.
+
+--- External XZY Results ---
+Mean PCC: 0.7034
+Mean MAE: 0.9403 (z-score space)
+Mean R2:  -0.5685
+Mean MAE_raw: 1512.6080 (raw ssGSEA scale, 跨MPP可比)
+Mean R2_raw:  -0.5685
+Test Loss: 1.3802
+
+--- Internal Val Results (best ckpt) ---
+Mean PCC: 0.6336
+Mean MAE: 0.6210
+Mean R2:  0.3841
+Val Loss: 0.6298
+Completed at: 2026-07-08T13:31:34.497604

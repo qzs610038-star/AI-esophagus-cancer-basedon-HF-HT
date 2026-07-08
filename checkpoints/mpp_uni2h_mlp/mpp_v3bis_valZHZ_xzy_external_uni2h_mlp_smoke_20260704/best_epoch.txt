@@ -1,0 +1,5 @@
+best_epoch=1
+val_strategy=internal
+early_stop_signal=val_loss
+best_val_loss=1.057387
+actual_final_epoch=3

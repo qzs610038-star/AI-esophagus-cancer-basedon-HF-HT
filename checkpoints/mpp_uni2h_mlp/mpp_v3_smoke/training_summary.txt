@@ -1,0 +1,12 @@
+Experiment: mpp_v3_smoke
+Model: UNI2-h frozen features + 2-layer MLP
+Training strategy: val_strategy=none
+Training budget: 2 epochs, final checkpoint
+Train patients (MPP-3): HYZ15040,JFX,LMZ12939,TGC,XSL,ZHZ
+External test: MPP-2/XZY
+XZY used for: test ONLY (not training, not z-score fit, not epoch selection)
+Report: Fixed-budget training; final checkpoint evaluated once on external XZY.
+
+--- External XZY Results ---
+Mean PCC: 0.6598
+Mean MAE: 0.6345

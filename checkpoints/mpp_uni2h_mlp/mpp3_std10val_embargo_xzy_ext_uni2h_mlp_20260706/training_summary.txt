@@ -1,0 +1,29 @@
+Experiment: mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706
+Model: UNI2-h frozen features + 2-layer MLP
+Training strategy: val_strategy=manifest
+Early stopping: signal=val_loss, patience=10, min_delta=0.0001
+Training budget: 50 epochs max
+  actual_epochs=14, best_epoch=4, best_val_loss=0.387716
+
+Signal separation:
+- train: MPP-3 / HYZ15040,JFX,LMZ12939,TGC,XSL,ZHZ
+- internal_val: split_manifest patch级各患者10% (manifest), used for val_loss early stopping only
+- external_test: MPP-2 / XZY, evaluated once after checkpoint selection
+
+XZY used for: test ONLY (not training, not z-score fit, not epoch selection)
+Report: best checkpoint selected by val_loss minimum; external XZY evaluated once.
+
+--- External XZY Results ---
+Mean PCC: 0.6462
+Mean MAE: 0.6211 (z-score space)
+Mean R2:  -0.1157
+Mean MAE_raw: 1175.6385 (raw ssGSEA scale, 跨MPP可比)
+Mean R2_raw:  -0.1157
+Test Loss: 0.6745
+
+--- Internal Val Results (best ckpt) ---
+Mean PCC: 0.8016
+Mean MAE: 0.4588
+Mean R2:  0.6354
+Val Loss: 0.3877
+Completed at: 2026-07-08T13:53:47.952094

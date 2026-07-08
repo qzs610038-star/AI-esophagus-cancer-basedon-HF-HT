@@ -1,0 +1,172 @@
+{
+  "description": "MPP-4 train-only z-score parameters for 30 pathways",
+  "fit_split": "train",
+  "ddof": 1,
+  "clip_applied_after_transform": true,
+  "clip_range": [
+    -100.0,
+    100.0
+  ],
+  "fit_patients": [
+    "HYZ15040",
+    "JFX",
+    "LMZ12939",
+    "TGC",
+    "XSL",
+    "ZHZ"
+  ],
+  "n_train_samples": 2553,
+  "pathways": {
+    "tls": {
+      "mean": -2904.306263932481,
+      "std": 2022.6992575197971,
+      "count": 2553
+    },
+    "tgfb": {
+      "mean": 4641.389163006044,
+      "std": 1720.8145267406735,
+      "count": 2553
+    },
+    "emt": {
+      "mean": 2437.143009182886,
+      "std": 2045.7520524648232,
+      "count": 2553
+    },
+    "hypoxia": {
+      "mean": 3350.4018628246376,
+      "std": 2246.956410211866,
+      "count": 2553
+    },
+    "mhc": {
+      "mean": 8401.369533686844,
+      "std": 1749.286614379064,
+      "count": 2553
+    },
+    "icp": {
+      "mean": -3284.0650186259845,
+      "std": 1955.2023127695124,
+      "count": 2553
+    },
+    "ifng": {
+      "mean": 246.71042222331351,
+      "std": 3139.170161819167,
+      "count": 2553
+    },
+    "toxic": {
+      "mean": -1995.9193159977,
+      "std": 2472.5140820048705,
+      "count": 2553
+    },
+    "Glycolysis": {
+      "mean": 3421.023395638732,
+      "std": 1626.0869614864748,
+      "count": 2553
+    },
+    "Inflammatory_Response": {
+      "mean": 663.0457826122289,
+      "std": 2282.6554810866937,
+      "count": 2553
+    },
+    "IL6_JAK_STAT3": {
+      "mean": 3786.870809990851,
+      "std": 1945.673148220354,
+      "count": 2553
+    },
+    "P53_Pathway": {
+      "mean": 2023.2400406824365,
+      "std": 1765.1869019172948,
+      "count": 2553
+    },
+    "DNA_Damage_Response": {
+      "mean": 1671.5980276386415,
+      "std": 1617.0738124726415,
+      "count": 2553
+    },
+    "Complement": {
+      "mean": -1058.1029482872855,
+      "std": 1956.0990015163325,
+      "count": 2553
+    },
+    "Coagulation": {
+      "mean": -908.1870384159035,
+      "std": 1057.643158630826,
+      "count": 2553
+    },
+    "Oxidative_Phosphorylation": {
+      "mean": 4032.925608337431,
+      "std": 2362.0913075045482,
+      "count": 2553
+    },
+    "Reactive_Oxygen_Species": {
+      "mean": 3269.4303581956656,
+      "std": 1100.080329902958,
+      "count": 2553
+    },
+    "Wound_Healing": {
+      "mean": 2764.433041882898,
+      "std": 2220.7252686210686,
+      "count": 2553
+    },
+    "Fibrosis": {
+      "mean": 3164.167834150644,
+      "std": 2937.182762260102,
+      "count": 2553
+    },
+    "MYC_Targets": {
+      "mean": 3617.398460236463,
+      "std": 3041.879533269233,
+      "count": 2553
+    },
+    "E2F_Targets": {
+      "mean": 2166.1718116868296,
+      "std": 2252.3689330516236,
+      "count": 2553
+    },
+    "G2M_Checkpoint": {
+      "mean": 1161.9482990558088,
+      "std": 2454.5821682258584,
+      "count": 2553
+    },
+    "Mitotic_Spindle": {
+      "mean": 911.337955687152,
+      "std": 2104.2667248538673,
+      "count": 2553
+    },
+    "Unfolded_Protein_Response": {
+      "mean": 3676.436423087921,
+      "std": 1908.754882703568,
+      "count": 2553
+    },
+    "mTOR_Signaling": {
+      "mean": 3016.5999091652693,
+      "std": 1805.686169571081,
+      "count": 2553
+    },
+    "Interferon_Alpha": {
+      "mean": 4188.228253396121,
+      "std": 1951.1652794195932,
+      "count": 2553
+    },
+    "Angiogenesis": {
+      "mean": 1733.0750510767439,
+      "std": 2089.4276867939666,
+      "count": 2553
+    },
+    "Apoptosis": {
+      "mean": 2041.8394995061378,
+      "std": 1634.6106335437642,
+      "count": 2553
+    },
+    "TNF_Signaling": {
+      "mean": 1477.2321439638692,
+      "std": 2369.2849314539762,
+      "count": 2553
+    },
+    "ECM_Organization": {
+      "mean": 4171.777668667822,
+      "std": 3290.2105590200267,
+      "count": 2553
+    }
+  },
+  "note": "mean/std are on RAW ssGSEA scale; use inverse transform pred_raw=pred_z*std+mean for raw-scale MAE/R2"
+}
