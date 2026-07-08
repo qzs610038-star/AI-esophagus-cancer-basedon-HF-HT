@@ -97,6 +97,38 @@ def parse_xy(stem: str) -> Tuple[Optional[int], Optional[int]]:
     return None, None
 
 
+def compute_main_stride(patches: List[Tuple[str, int, int]]) -> Tuple[int, int]:
+    """计算单例患者 patch 坐标的主步长 (x, y 方向众数差值)。
+
+    坐标记录在每例患者各自的原始高分辨率扫描网格下, 跨 MPP 一致。
+    物理推理 (医生确认 MPP-3=0.27MPP, MPP-5=0.54MPP):
+      - 100%步长 MPP (1/2/4): main_dx = 物理patch在原始网格下的像素数
+      - 50%步长 MPP (3/5): main_dx = 物理patch/2 在原始网格下的像素数
+    因此 effective_patch_size = (2 if 50%步长 else 1) * main_dx
+    """
+    if not patches:
+        return 0, 0
+    xs = sorted(set(c[1] for c in patches))
+    ys = sorted(set(c[2] for c in patches))
+    from collections import Counter
+    dx_counts = Counter(xs[i + 1] - xs[i] for i in range(len(xs) - 1))
+    dy_counts = Counter(ys[i + 1] - ys[i] for i in range(len(ys) - 1))
+    main_dx = dx_counts.most_common(1)[0][0] if dx_counts else 0
+    main_dy = dy_counts.most_common(1)[0][0] if dy_counts else 0
+    return main_dx, main_dy
+
+
+def effective_patch_size_for(main_dx: int, embargo: bool) -> int:
+    """根据患者实测主步长推断 embargo 用 effective patch size。
+
+    50%步长 (embargo=True): effective = 2 * main_dx (main_dx 是半步长)
+    100%步长 (embargo=False): effective = main_dx (main_dx 是全步长 = 物理patch)
+    """
+    if main_dx <= 0:
+        return PATCH_SIZE  # fallback
+    return 2 * main_dx if embargo else main_dx
+
+
 def block_id_of(patient: str, x: int, y: int, block_size: int) -> str:
     """生成 block_id: patient:bx:by。"""
     bx = x // block_size
@@ -310,12 +342,21 @@ def build_split_for_patient(patient: str, mpp_id: int, block_size: int,
     return manifest_rows, summary, embargo_audit_rows
 
 
-def verify_leakage(manifest_rows: List[dict], embargo: bool, patch_size: int = PATCH_SIZE) -> Tuple[int, List[dict]]:
+def verify_leakage(manifest_rows: List[dict], embargo: bool,
+                   patch_size: int = PATCH_SIZE,
+                   per_patient_patch_size: Optional[Dict[str, int]] = None
+                   ) -> Tuple[int, List[dict]]:
     """验证无 iou>0 的 train/internal_val 配对 (方案 §三.2 通过条件)。
 
     泄漏检查必须**患者内**: 跨患者坐标属于不同物理切片, 不算泄漏。
     对每个患者, 检查该患者 train patch 与 internal_val patch 的 bbox 重叠。
     MPP-1/2/4 (100% 步长) 理论无泄漏; MPP-3/5 (50% 步长) 应靠 embargo 清零。
+
+    Args:
+        patch_size: 全局 fallback (per-patient 未给时用)
+        per_patient_patch_size: {patient: effective_patch_size} 每患者各自的
+            effective patch size (因每例患者原始网格分辨率不同, 见
+            effective_patch_size_for); 优先于全局 patch_size
 
     Returns:
         leakage_pairs: 泄漏对数 (患者内 train patch 与 val patch bbox 重叠)
@@ -329,19 +370,22 @@ def verify_leakage(manifest_rows: List[dict], embargo: bool, patch_size: int = P
     leakage_pairs = 0
     leakage_rows = []
     for patient, rows in by_patient.items():
+        # 每患者各自的 effective patch size (原始网格分辨率因患者而异)
+        ps = (per_patient_patch_size or {}).get(patient, patch_size)
         val_patches = [(r["patch_stem"], r["x"], r["y"]) for r in rows if r["split"] == "internal_val"]
         train_patches = [(r["patch_stem"], r["x"], r["y"]) for r in rows if r["split"] == "train"]
         for v_stem, vx, vy in val_patches:
             for t_stem, tx, ty in train_patches:
                 dx = abs(vx - tx)
                 dy = abs(vy - ty)
-                if dx < patch_size and dy < patch_size:
+                if dx < ps and dy < ps:
                     leakage_pairs += 1
                     leakage_rows.append({
                         "patient": patient,
                         "val_patch": v_stem,
                         "train_patch": t_stem,
                         "dx": dx, "dy": dy,
+                        "effective_patch_size": ps,
                     })
     return leakage_pairs, leakage_rows
 
@@ -415,8 +459,23 @@ def generate_for_mpp(mpp_id: int, mpp_root: Path, output_root: Path,
         patient_patches[patient] = patches
         print(f"  {patient}: {len(patches)} patches")
 
-    # 根据 MPP 物理分辨率确定实际 patch 大小在原始像素坐标系下的宽度 (MPP-5 为 0.54 MPP, 翻倍为 448)
-    effective_patch_size = 448 if mpp_id == 5 else 224
+    # 根据 MPP 物理分辨率 + 每例患者原始网格推断 effective patch size
+    # 医生确认: MPP-3=0.27MPP, MPP-5=0.54MPP (50%步长); MPP-1/2/4=100%步长
+    # 坐标记录在每例患者各自的原始高分辨率扫描网格下 (跨 MPP 一致, 因患者而异)
+    # effective_patch_size = (2 if 50%步长 else 1) * main_dx (该患者实测主步长)
+    # Gemini 旧硬编码 448 只对 MPP-5 中 dx=224 的患者对; HYZ/LMZ(dx=336)、JFX(dx=448) 漏判
+    per_patient_patch_size: Dict[str, int] = {}
+    per_patient_main_stride: Dict[str, Tuple[int, int]] = {}
+    for patient in TRAIN_PATIENTS:
+        mdx, mdy = compute_main_stride(patient_patches[patient])
+        per_patient_main_stride[patient] = (mdx, mdy)
+        per_patient_patch_size[patient] = effective_patch_size_for(mdx, embargo)
+
+    print(f"\n  effective_patch_size (按患者原始网格推断, embargo={embargo}):")
+    for patient in TRAIN_PATIENTS:
+        mdx, mdy = per_patient_main_stride[patient]
+        eps = per_patient_patch_size[patient]
+        print(f"    {patient}: main_dx={mdx}, main_dy={mdy}, effective_patch_size={eps}")
 
     # ── 三档候选 split ──
     candidate_summary_rows = []
@@ -430,18 +489,21 @@ def generate_for_mpp(mpp_id: int, mpp_root: Path, output_root: Path,
         all_embargo_audit = []
         for patient in TRAIN_PATIENTS:
             patches = patient_patches[patient]
+            patient_eps = per_patient_patch_size[patient]
             m_rows, s, ea_rows = build_split_for_patient(
-                patient, mpp_id, bs, patches, seed, embargo, patch_size=effective_patch_size)
+                patient, mpp_id, bs, patches, seed, embargo, patch_size=patient_eps)
             all_manifest.extend(m_rows)
             all_summary.append(s)
             all_embargo_audit.extend(ea_rows)
             print(f"    {patient}: total={s['total_n']}, train={s['train_n']}, "
                   f"val={s['val_n']} ({s['val_ratio']*100:.1f}%), "
                   f"embargo={s['embargo_n']} ({s['embargo_ratio']*100:.1f}%), "
-                  f"n_val_blocks={s['n_val_blocks']}")
+                  f"n_val_blocks={s['n_val_blocks']}, eff_patch={patient_eps}")
 
-        # 泄漏检查 (每档都做，embargo 档应=0)
-        leakage_pairs, leakage_rows = verify_leakage(all_manifest, embargo, patch_size=effective_patch_size)
+        # 泄漏检查 (每档都做，embargo 档应=0); 按 patient 用各自 effective_patch_size
+        leakage_pairs, leakage_rows = verify_leakage(
+            all_manifest, embargo,
+            per_patient_patch_size=per_patient_patch_size)
         print(f"    泄漏对数 (train<->val bbox 重叠): {leakage_pairs}")
 
         for s in all_summary:
@@ -522,7 +584,12 @@ def generate_for_mpp(mpp_id: int, mpp_root: Path, output_root: Path,
         "val_ratio_range": [VAL_RATIO_MIN, VAL_RATIO_MAX],
         "fit_patients": TRAIN_PATIENTS,
         "excluded_from_zscore_fit": ["internal_val", "embargo", "external_test"],
-        "patch_size_for_bbox": PATCH_SIZE,
+        "patch_size_for_bbox": "per_patient (见 per_patient_effective_patch_size)",
+        "per_patient_main_stride": {p: {"main_dx": s[0], "main_dy": s[1]}
+                                    for p, s in per_patient_main_stride.items()},
+        "per_patient_effective_patch_size": per_patient_patch_size,
+        "overlap_mpp_physical_resolution": "MPP-3=0.27MPP, MPP-5=0.54MPP (医生确认)",
+        "effective_patch_size_formula": "(2 if 50pct_stride else 1) * main_dx",
         "leakage_pairs": final_leakage,
         "per_patient_summary": final_summary,
         "status": "OK" if ok else "WARN",

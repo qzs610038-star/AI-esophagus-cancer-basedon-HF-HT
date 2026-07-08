@@ -234,10 +234,15 @@ def audit_patch_coordinates(mpp_root: Path, report_rows: list, candidate_rows: l
             main_dx = dx_counts.most_common(1)[0][0] if dx_counts else 0
             main_dy = dy_counts.most_common(1)[0][0] if dy_counts else 0
 
-            # 步长判定：根据 mpp_id 调整物理 patch 阈值 (MPP-5 为 0.54 MPP, 物理大小翻倍为 448 像素)
-            threshold_100 = 400 if mpp_id == 5 else 200
-            threshold_50 = 200 if mpp_id == 5 else 100
-            stride_guess = "100%_stride" if main_dx >= threshold_100 else "50%_stride" if main_dx >= threshold_50 else "unknown"
+            # 步长判定: 用医生确认的 MPP 物理分辨率配置 (MPP-3/5=50%步长, MPP-1/2/4=100%步长)
+            # 不从坐标反推——因每例患者原始扫描网格分辨率不同 (0.27/0.18/0.135 um/px),
+            # 同一 MPP 内 main_dx 因患者而异, 坐标阈值无法统一判定
+            # (Gemini 旧版按 mpp_id 硬编码阈值 400/200, 漏判 MPP-3 的 dx=168/224 患者)
+            overlap_mpps = {3, 5}  # 医生确认: MPP-3=0.27MPP, MPP-5=0.54MPP, 均 50%步长
+            if mpp_id in overlap_mpps:
+                stride_guess = "50%_stride"
+            else:
+                stride_guess = "100%_stride"
 
             row.update({
                 "n_patches": n_patches,
@@ -279,8 +284,10 @@ def audit_patch_coordinates(mpp_root: Path, report_rows: list, candidate_rows: l
                   f"n={n_patches}{count_note}, unique={unique_coords}, "
                   f"dx={main_dx}, dy={main_dy}, stride={stride_guess}")
 
-    print(f"\n  步长判定: main_dx>=200 → 100%步长(无需 embargo); "
-          f"100<=main_dx<200 → 50%步长(需 embargo)")
+    print(f"\n  步长判定: 按医生确认的 MPP 物理分辨率 — MPP-3/5(0.27/0.54 MPP)=50%步长(需 embargo); "
+          f"MPP-1/2/4=100%步长(无需 embargo)")
+    print(f"  注意: 各患者原始扫描网格分辨率不同 (0.27/0.18/0.135 um/px), main_dx 因患者而异;")
+    print(f"        generate_standard_splits.py 用 effective_patch_size = 2*main_dx (50%步长) 自适应")
 
 
 # ═══════════════════════════════════════════════════════════════
