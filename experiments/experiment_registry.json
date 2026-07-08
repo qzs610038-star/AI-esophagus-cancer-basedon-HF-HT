@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-07T00:00:00",
+  "updated_at": "2026-07-08T05:56:06",
   "jfx_data_status": {
     "status": "completed_both_sides",
     "description": "JFX0729 corrected data has been fully processed on BOTH local and server. Local: 2026-06-16 (scripts/prepare_jfx_fixed_data.py, 7/7 checks). Server: 2026-06-16 (same script, 7/7 checks, DESKTOP-HKP0IV0). All old JFX data archived on both sides.",
@@ -594,11 +594,18 @@
     {
       "id": "mpp1_std10val_xzy_ext_uni2h_mlp_20260706",
       "family": "mpp_uni2h_mlp",
-      "status": "planned",
+      "status": "done",
       "priority": "P0",
       "script": "train_mpp_uni2h_mlp.py",
       "mpp_train_id": 1,
-      "train_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+      "train_patients": [
+        "HYZ15040",
+        "JFX",
+        "LMZ12939",
+        "TGC",
+        "XSL",
+        "ZHZ"
+      ],
       "val_strategy": "manifest",
       "val_ratio_target": 0.1,
       "external_mpp_id": 2,
@@ -612,18 +619,30 @@
       "run_dir": "checkpoints/mpp_uni2h_mlp/mpp1_std10val_xzy_ext_uni2h_mlp_20260706",
       "created_at": "2026-07-07",
       "started_at": null,
-      "next_action": "await_split_and_cache",
+      "next_action": "review_results",
       "notes": "MPP1-5 unified-standard rerun (2026-07-06 plan). Per-patient 10% internal val via spatial block split; train-only z-score rebuilt from raw ssGSEA; MPP-2/XZY fixed external test. Reuses MPP1_UNI partner cache (cross train/val subdir merge by stem). 100% stride MPP, no embargo. Raw-scale MAE/R2 mandatory.",
-      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md"
+      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md",
+      "best_epoch": 6,
+      "best_val_loss": 0.596508,
+      "best_val_pcc": 0.64731,
+      "train_val_gap": -0.022267,
+      "completed_at": "2026-07-08T05:56:05"
     },
     {
       "id": "mpp2_std10val_xzy_ext_uni2h_mlp_20260706",
       "family": "mpp_uni2h_mlp",
-      "status": "planned",
+      "status": "done",
       "priority": "P0",
       "script": "train_mpp_uni2h_mlp.py",
       "mpp_train_id": 2,
-      "train_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+      "train_patients": [
+        "HYZ15040",
+        "JFX",
+        "LMZ12939",
+        "TGC",
+        "XSL",
+        "ZHZ"
+      ],
       "val_strategy": "manifest",
       "val_ratio_target": 0.1,
       "external_mpp_id": 2,
@@ -637,18 +656,30 @@
       "run_dir": "checkpoints/mpp_uni2h_mlp/mpp2_std10val_xzy_ext_uni2h_mlp_20260706",
       "created_at": "2026-07-07",
       "started_at": null,
-      "next_action": "await_cache_rebuild",
+      "next_action": "review_results",
       "notes": "MPP1-5 unified-standard rerun. MPP-2 features RE-EXTRACTED to MPP2_UNI (wzk cache unusable: different split口径 + MPP attribution不可判定). 100% stride MPP, no embargo. Raw-scale MAE/R2 mandatory.",
-      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md"
+      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md",
+      "best_epoch": 14,
+      "best_val_loss": 0.398432,
+      "best_val_pcc": 0.782725,
+      "train_val_gap": 0.02166,
+      "completed_at": "2026-07-08T05:56:05"
     },
     {
       "id": "mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
       "family": "mpp_uni2h_mlp",
-      "status": "planned",
+      "status": "done",
       "priority": "P0",
       "script": "train_mpp_uni2h_mlp.py",
       "mpp_train_id": 3,
-      "train_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+      "train_patients": [
+        "HYZ15040",
+        "JFX",
+        "LMZ12939",
+        "TGC",
+        "XSL",
+        "ZHZ"
+      ],
       "val_strategy": "manifest",
       "val_ratio_target": 0.1,
       "overlap_policy": "bbox_embargo",
@@ -663,18 +694,30 @@
       "run_dir": "checkpoints/mpp_uni2h_mlp/mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
       "created_at": "2026-07-07",
       "started_at": null,
-      "next_action": "await_split_and_cache",
+      "next_action": "review_results",
       "notes": "MPP1-5 unified-standard rerun. MPP-3 50% overlap → bbox embargo mandatory; leakage未清零不得正式训练. Reuses mpp_uni2h_cache/3 (flat structure, my extraction). block_size三档比较(672/1120/1568). Raw-scale MAE/R2 mandatory.",
-      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md"
+      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md",
+      "best_epoch": 4,
+      "best_val_loss": 0.387716,
+      "best_val_pcc": 0.801564,
+      "train_val_gap": -0.052188,
+      "completed_at": "2026-07-08T05:56:06"
     },
     {
       "id": "mpp4_std10val_xzy_ext_uni2h_mlp_20260706",
       "family": "mpp_uni2h_mlp",
-      "status": "planned",
+      "status": "done",
       "priority": "P0",
       "script": "train_mpp_uni2h_mlp.py",
       "mpp_train_id": 4,
-      "train_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+      "train_patients": [
+        "HYZ15040",
+        "JFX",
+        "LMZ12939",
+        "TGC",
+        "XSL",
+        "ZHZ"
+      ],
       "val_strategy": "manifest",
       "val_ratio_target": 0.1,
       "external_mpp_id": 2,
@@ -688,18 +731,30 @@
       "run_dir": "checkpoints/mpp_uni2h_mlp/mpp4_std10val_xzy_ext_uni2h_mlp_20260706",
       "created_at": "2026-07-07",
       "started_at": null,
-      "next_action": "await_split_and_cache",
+      "next_action": "review_results",
       "notes": "MPP1-5 unified-standard rerun. Reuses MPP4_UNI partner cache (cross train/val subdir merge by stem). 100% stride MPP, no embargo. Raw-scale MAE/R2 mandatory.",
-      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md"
+      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md",
+      "best_epoch": 9,
+      "best_val_loss": 0.343084,
+      "best_val_pcc": 0.807458,
+      "train_val_gap": 0.007471,
+      "completed_at": "2026-07-08T05:56:06"
     },
     {
       "id": "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
       "family": "mpp_uni2h_mlp",
-      "status": "planned",
+      "status": "done",
       "priority": "P0",
       "script": "train_mpp_uni2h_mlp.py",
       "mpp_train_id": 5,
-      "train_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+      "train_patients": [
+        "HYZ15040",
+        "JFX",
+        "LMZ12939",
+        "TGC",
+        "XSL",
+        "ZHZ"
+      ],
       "val_strategy": "manifest",
       "val_ratio_target": 0.1,
       "overlap_policy": "bbox_embargo",
@@ -714,9 +769,14 @@
       "run_dir": "checkpoints/mpp_uni2h_mlp/mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
       "created_at": "2026-07-07",
       "started_at": null,
-      "next_action": "await_cache_rebuild",
+      "next_action": "review_results",
       "notes": "MPP1-5 unified-standard rerun. MPP-5 features RE-EXTRACTED to MPP5_UNI. 50% overlap → bbox embargo mandatory. block_size三档比较. Raw-scale MAE/R2 mandatory. Diagnostic target: if val↔ext still reversed under unified protocol → cache/data issue not protocol.",
-      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md"
+      "plan_ref": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md",
+      "best_epoch": 7,
+      "best_val_loss": 0.364096,
+      "best_val_pcc": 0.806922,
+      "train_val_gap": -0.00824,
+      "completed_at": "2026-07-08T05:56:06"
     }
   ]
 }
