@@ -17,7 +17,7 @@
 | S1a_gfnet_frozen_cls_pool8x8_fold1 | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3785 | 0.3366 | 0.2603 | 5 |
 | mpp_v3_xzy_external_uni2h_mlp_20260701 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | — | — | — | 50 | ext_XZY_PCC=0.6020 |
 | mpp_v3bis_valZHZ_xzy_external_uni2h_mlp_20260704 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.7146 | 1.0574 | 0.0188 | 1 | ext_XZY_PCC=0.6665 |
-| mpp1_partner_valHYZ_xzy_ext_uni2h_mlp_20260704 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.5400 | 0.3070 | 0.2396 | 10 | ext_XZY_PCC=0.7056 |
+| mpp1_partner_valHYZ_xzy_ext_uni2h_mlp_20260704 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.5309 | 0.3071 | 0.2340 | 6 | ext_XZY_PCC=0.7056 |
 | mpp4_partner_valHYZ_xzy_ext_uni2h_mlp_20260704 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.6844 | 0.5382 | 0.1597 | 10 | ext_XZY_PCC=0.5871 |
 | mpp2_partnerwzk_xzy_external_uni2h_mlp_20260704 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.6625 | 0.2360 | 0.1349 | 13 | ext_XZY_PCC=0.4555 |
 | mpp5_partnerwzk_xzy_external_uni2h_mlp_20260704 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.8459 | 0.1300 | 0.1350 | 112 | ext_XZY_PCC=0.4472 |

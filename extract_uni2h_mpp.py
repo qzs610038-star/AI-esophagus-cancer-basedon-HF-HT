@@ -100,6 +100,9 @@ def main():
                         help="患者名称列表，如 HYZ15040 JFX LMZ12939")
     parser.add_argument("--output_root", default="mpp_uni2h_cache",
                         help="输出根目录 (默认 mpp_uni2h_cache)")
+    parser.add_argument("--output_style", default="flat", choices=["flat", "mpp_uni"],
+                        help="输出布局: flat={N}/{patient}/ (默认, 旧 MPP-3 用); "
+                             "mpp_uni=MPP{N}_UNI/{patient}/ (新 MPP-2/5 重提取用, 与 MPP1_UNI/MPP4_UNI 同根)")
     parser.add_argument("--batch_size", type=int, default=16,
                         help="批处理大小 (默认 16)")
     parser.add_argument("--rebuild", action="store_true",
@@ -116,7 +119,7 @@ def main():
     print(f"特征维度: {feat_dim}  (CLS-only: [{feat_dim}])")
     print(f"MPP root: {args.mpp_root}")
     print(f"MPP id:   {args.mpp_id}")
-    print(f"输出:     {args.output_root}/{args.mpp_id}/{{patient}}/*.pt")
+    print(f"输出:     {args.output_root}/{{{'MPP{}_UNI'.format(args.mpp_id) if args.output_style=='mpp_uni' else args.mpp_id}}}/{{patient}}/*.pt")
     print("=" * 60)
 
     for patient in args.patient:
@@ -125,7 +128,10 @@ def main():
         print(f"{'='*60}")
 
         patches_dir = Path(args.mpp_root) / str(args.mpp_id) / patient / "patch_images"
-        cache_dir = Path(args.output_root) / str(args.mpp_id) / patient
+        if args.output_style == "mpp_uni":
+            cache_dir = Path(args.output_root) / f"MPP{args.mpp_id}_UNI" / patient
+        else:
+            cache_dir = Path(args.output_root) / str(args.mpp_id) / patient
 
         if not patches_dir.exists():
             print(f"  [ERROR] patch_images 目录不存在: {patches_dir}")
