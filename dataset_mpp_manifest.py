@@ -48,11 +48,13 @@ def parse_xy(stem: str):
 
 
 def _find_pt_in_cache(cache_root: Path, mpp_id: int, patient: str, stem: str,
-                     partner_style: Optional[bool] = None) -> Optional[Path]:
+                     partner_style: Optional[bool] = None,
+                     flat_cache_root: Optional[Path] = None) -> Optional[Path]:
     """在缓存中查找 {stem}.pt, 自动探测 partner 风格或扁平风格。
 
     Args:
         partner_style: None=自动探测; True=只查 train/val 子目录; False=只查扁平
+        flat_cache_root: 备选的扁平缓存根
 
     缓存布局:
       partner 风格: {cache_root}/MPP{N}_UNI/{patient}/{train|val}/{stem}.pt
@@ -70,6 +72,11 @@ def _find_pt_in_cache(cache_root: Path, mpp_id: int, patient: str, stem: str,
     # 扁平 {N}/{patient}/ (MPP-3 旧路径)
     candidates.append(cache_root / str(mpp_id) / patient)
 
+    # 外部备选 flat_cache_root 下路径
+    if flat_cache_root:
+        candidates.append(flat_cache_root / str(mpp_id) / patient)
+        candidates.append(flat_cache_root / f"MPP{mpp_id}_UNI" / patient)
+
     if partner_style is True:
         # 只查 partner 风格 (train/val 子目录)
         candidates = [cache_root / f"MPP{mpp_id}_UNI" / patient / sub
@@ -78,6 +85,9 @@ def _find_pt_in_cache(cache_root: Path, mpp_id: int, patient: str, stem: str,
         # 只查扁平
         candidates = [cache_root / f"MPP{mpp_id}_UNI" / patient,
                       cache_root / str(mpp_id) / patient]
+        if flat_cache_root:
+            candidates.append(flat_cache_root / str(mpp_id) / patient)
+            candidates.append(flat_cache_root / f"MPP{mpp_id}_UNI" / patient)
 
     for d in candidates:
         p = d / fname
@@ -86,12 +96,17 @@ def _find_pt_in_cache(cache_root: Path, mpp_id: int, patient: str, stem: str,
     return None
 
 
-def _detect_partner_style(cache_root: Path, mpp_id: int, patient: str) -> bool:
+def _detect_partner_style(cache_root: Path, mpp_id: int, patient: str,
+                         flat_cache_root: Optional[Path] = None) -> bool:
     """探测缓存风格: 有 train/ 或 val/ 子目录 → partner 风格; 否则扁平。"""
     p_dir = cache_root / f"MPP{mpp_id}_UNI" / patient
     if not p_dir.exists():
         # 试扁平 {N}/{patient}/
         flat = cache_root / str(mpp_id) / patient
+        if not flat.exists() and flat_cache_root:
+            flat = flat_cache_root / str(mpp_id) / patient
+            if not flat.exists():
+                flat = flat_cache_root / f"MPP{mpp_id}_UNI" / patient
         return False if flat.exists() else False
     return (p_dir / "train").exists() or (p_dir / "val").exists()
 
@@ -122,8 +137,10 @@ class ManifestMPPDataset(Dataset):
         target_cols: Optional[List[str]] = None,
         allow_missing: bool = False,
         limit: Optional[int] = None,
+        flat_cache_root: Optional[str] = None,
     ):
         self.cache_root = Path(cache_root)
+        self.flat_cache_root = Path(flat_cache_root) if flat_cache_root else None
         self.mpp_id = mpp_id
         self.patient = patient
         self.split = split
@@ -147,7 +164,7 @@ class ManifestMPPDataset(Dataset):
             raise ValueError(f"{patient}/{split}: manifest 无 patch且 split={split}")
 
         # 探测缓存风格 (partner train/val 子目录 vs 扁平)
-        partner_style = _detect_partner_style(self.cache_root, mpp_id, patient)
+        partner_style = _detect_partner_style(self.cache_root, mpp_id, patient, flat_cache_root=self.flat_cache_root)
         # 对 partner 风格, 按 stem 查找时已自动跨 train/val 子目录合并
 
         # 加载标签
@@ -173,7 +190,8 @@ class ManifestMPPDataset(Dataset):
         unmatched = []
         for stem in stems:
             pt_path = _find_pt_in_cache(self.cache_root, mpp_id, patient, stem,
-                                       partner_style=partner_style)
+                                       partner_style=partner_style,
+                                       flat_cache_root=self.flat_cache_root)
             if pt_path is None:
                 unmatched.append((stem, "no .pt"))
                 continue
@@ -239,6 +257,7 @@ def merge_manifest_patients(
     labels_root: str,
     target_cols: Optional[List[str]] = None,
     allow_missing: bool = False,
+    flat_cache_root: Optional[str] = None,
 ) -> ConcatDataset:
     """合并多患者同一 split 的 Dataset (如 6 患者 train 合并, 6 患者 val 合并)。
 
@@ -260,6 +279,7 @@ def merge_manifest_patients(
             labels_csv=str(labels_csv),
             target_cols=target_cols,
             allow_missing=allow_missing,
+            flat_cache_root=flat_cache_root,
         )
         if len(ds) > 0:
             datasets.append(ds)
@@ -375,10 +395,12 @@ def build_manifest_datasets(
     train_ds = merge_manifest_patients(
         manifest_df, cache_root, train_mpp_id, train_patients,
         split="train", labels_root=labels_root, allow_missing=allow_missing,
+        flat_cache_root=flat_cache_root,
     )
     val_ds = merge_manifest_patients(
         manifest_df, cache_root, train_mpp_id, train_patients,
         split="internal_val", labels_root=labels_root, allow_missing=allow_missing,
+        flat_cache_root=flat_cache_root,
     )
 
     # external XZY 标签: {labels_root}/external/XZY/XZY_ssGSEA_zscore_by_group_{N}_train.csv
