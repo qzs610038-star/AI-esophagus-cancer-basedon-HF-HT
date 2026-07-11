@@ -4,8 +4,9 @@
 # LFS 也会将大文件存储在外部而非 git 历史中
 # ============================================
 
-# 自动检测文本文件，统一 LF 换行
-* text=auto
+# 自动检测文本文件，并强制工作树使用 LF 换行。
+# This keeps state/document SHA-256 values stable on Windows servers.
+* text=auto eol=lf
 
 # --------------------------------------------
 # LFS 追踪：模型权重与特征缓存

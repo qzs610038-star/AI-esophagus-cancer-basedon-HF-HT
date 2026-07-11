@@ -177,7 +177,8 @@ def command_paths(args: argparse.Namespace) -> int:
         return 0 if index["labels_validated"] else 2
     if args.paths_command == "validate":
         report = ValidationReport()
-        validate_server_paths(PROJECT_ROOT, report, task="training" if args.training else "general")
+        task = "training" if args.training else args.task
+        validate_server_paths(PROJECT_ROOT, report, task=task)
         report.emit()
         return 0 if report.ok else 1
     raise ValueError(f"unknown paths command: {args.paths_command}")
@@ -329,6 +330,7 @@ def build_parser() -> argparse.ArgumentParser:
     paths_sub.add_parser("build-index")
     path_validate = paths_sub.add_parser("validate")
     path_validate.add_argument("--training", action="store_true")
+    path_validate.add_argument("--task", choices=["general", "server", "training"], default="general")
 
     result = sub.add_parser("result")
     result_sub = result.add_subparsers(dest="result_command", required=True)

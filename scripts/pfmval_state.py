@@ -906,7 +906,11 @@ def validate_server_paths(root: Path, report: ValidationReport, *, task: str = "
             report.fail(f"path {path_id} has invalid status")
         if not entry.get("path"):
             report.fail(f"path {path_id} has no path value")
-        if entry.get("required_on") in {"local", "both"} and not re.match(r"^[A-Za-z]:[\\/]", str(entry["path"])):
+        # Server worktrees must not require local-only legacy assets. The
+        # default/general task keeps local validation; explicit server checks
+        # validate server/both paths without demanding local-only directories.
+        check_local_path = task != "server" and entry.get("required_on") in {"local", "both"}
+        if check_local_path and not re.match(r"^[A-Za-z]:[\\/]", str(entry["path"])):
             local_path = root / str(entry["path"])
             if not local_path.exists():
                 report.fail(f"required local path missing: {path_id} -> {entry['path']}")

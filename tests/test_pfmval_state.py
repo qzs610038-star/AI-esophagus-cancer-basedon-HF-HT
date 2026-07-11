@@ -27,6 +27,8 @@ from scripts.pfmval_state import (
     validate_result_envelope,
     validate_job_manifest,
     validate_job_semantics,
+    ValidationReport,
+    validate_server_paths,
 )
 from path_registry import get_registered_path
 from config_utils import load_config
@@ -277,6 +279,33 @@ def test_path_registry_resolves_relative_path_and_rejects_escape(tmp_path):
     assert get_registered_path("good", registry_path=registry_path, project_root=tmp_path) == tmp_path / "mpp_standard_splits"
     with pytest.raises(ValueError, match="escapes project root"):
         get_registered_path("bad", registry_path=registry_path, project_root=tmp_path)
+
+
+def test_server_task_skips_missing_local_only_legacy_path(tmp_path):
+    root = make_minimal_project(tmp_path)
+    (root / "configs" / "server_paths.yaml").write_text(
+        (root / "configs" / "server_paths.yaml").read_text(encoding="utf-8")
+        + "\n  legacy_partner_labels_local:\n"
+        + "    path: parter_ljk_MPP1&4_patch_split_zscore\n"
+        + "    kind: repo_directory\n"
+        + "    status: legacy\n"
+        + "    required_on: local\n",
+        encoding="utf-8",
+    )
+
+    server_report = ValidationReport()
+    validate_server_paths(root, server_report, task="server")
+    assert not any("legacy_partner_labels_local" in item for item in server_report.fail_items)
+
+    local_report = ValidationReport()
+    validate_server_paths(root, local_report, task="general")
+    assert any("legacy_partner_labels_local" in item for item in local_report.fail_items)
+
+
+def test_repository_declares_lf_checkout_policy():
+    project_root = Path(__file__).resolve().parent.parent
+    attributes = (project_root / ".gitattributes").read_text(encoding="utf-8")
+    assert "* text=auto eol=lf" in attributes
 
 
 def test_server_config_resolves_machine_paths_from_stable_ids():
