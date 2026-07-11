@@ -35,7 +35,26 @@
         "verified_data_manifest_id": {"type": "string"},
         "active_data_manifest_id": {"type": ["string", "null"]},
         "status": {"enum": ["verified_pending_explicit_gate_release", "active"]},
-        "gate_release_directive_id": {"type": "string"}
+        "gate_release_directive_id": {"type": "string"},
+        "baseline_guard": {
+          "type": "object",
+          "required": ["status", "reference_experiment_id", "reference_metrics", "thresholds", "on_pass", "on_trigger"],
+          "properties": {
+            "status": {"enum": ["pending_repaired_mpp2_baseline", "passed_allow_lora", "triggered_rerun_mpp1_5", "incomplete_block_lora"]},
+            "reference_experiment_id": {"type": "string"},
+            "reference_metrics": {"type": "object"},
+            "thresholds": {"type": "object"},
+            "on_pass": {"type": "string"},
+            "on_trigger": {"type": "string"},
+            "observed_result_id": {"type": "string"},
+            "evaluated_at": {"type": "string"},
+            "missing_metrics": {"type": "array", "items": {"type": "string"}},
+            "triggered_metrics": {"type": "array", "items": {"type": "string"}},
+            "observed_metrics": {"type": "object"},
+            "deltas": {"type": "object"},
+            "reason": {"type": "string"}
+          }
+        }
       }
     }
   },

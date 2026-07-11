@@ -3,7 +3,7 @@
 <!-- project-state:start -->
 ## 当前项目状态（自动生成）
 
-- 状态版本：`19`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
+- 状态版本：`24`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
 - 当前 MPP 主线：**MPP2**；其它统一重跑结果保留为背景/方法参考。
 - 服务器通信：**Gitee-only**；SSH、SCP、HTTP 远程命令和 Tunnel 均非 active 通道。
 - 实验事实源：`experiments/experiment_registry.json`；Dashboard 为派生视图。

@@ -1809,6 +1809,7 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
                 accepted_ids = [item for item in accepted_ids if item != target["id"]]
         state["latest_accepted_result_ids"] = accepted_ids
         state["pending_result_ids"] = [item for item in state.get("pending_result_ids", []) if item != manifest["result_id"]]
+        update_mpp2_baseline_guard_from_result(state, target, manifest)
         state["state_revision"] = int(state["state_revision"]) + 1
         state["updated_at"] = utc_now()
         state["source_commit"] = git_head(root)
@@ -1899,6 +1900,94 @@ def safe_job_parameters(parameters: Mapping[str, Any]) -> List[str]:
     return argv
 
 
+def evaluate_mpp2_baseline_guard(
+    guard: Mapping[str, Any], metrics: Mapping[str, Any]
+) -> Dict[str, Any]:
+    """Compare a repaired MPP2 baseline with the frozen historical reference."""
+    required = ("external_xzy_pcc", "external_xzy_mae_raw", "external_xzy_r2_raw")
+    missing = [key for key in required if key not in metrics]
+    if missing:
+        return {
+            "status": "incomplete_block_lora",
+            "missing_metrics": missing,
+            "triggered_metrics": [],
+        }
+
+    reference = guard["reference_metrics"]
+    thresholds = guard["thresholds"]
+    observed = {key: float(metrics[key]) for key in required}
+    triggered: List[str] = []
+    if float(reference["external_xzy_pcc"]) - observed["external_xzy_pcc"] >= float(thresholds["pcc_abs_drop"]):
+        triggered.append("external_xzy_pcc")
+    mae_relative_increase = (
+        observed["external_xzy_mae_raw"] / float(reference["external_xzy_mae_raw"])
+    ) - 1.0
+    if mae_relative_increase >= float(thresholds["raw_mae_relative_increase"]):
+        triggered.append("external_xzy_mae_raw")
+    if float(reference["external_xzy_r2_raw"]) - observed["external_xzy_r2_raw"] >= float(thresholds["raw_r2_abs_drop"]):
+        triggered.append("external_xzy_r2_raw")
+    return {
+        "status": "triggered_rerun_mpp1_5" if triggered else "passed_allow_lora",
+        "missing_metrics": [],
+        "triggered_metrics": triggered,
+        "observed_metrics": observed,
+        "deltas": {
+            "pcc_drop": float(reference["external_xzy_pcc"]) - observed["external_xzy_pcc"],
+            "raw_mae_relative_increase": mae_relative_increase,
+            "raw_r2_drop": float(reference["external_xzy_r2_raw"]) - observed["external_xzy_r2_raw"],
+        },
+    }
+
+
+def update_mpp2_baseline_guard_from_result(
+    state: MutableMapping[str, Any],
+    experiment: Mapping[str, Any],
+    result: Mapping[str, Any],
+) -> None:
+    if experiment.get("repair_guard_role") != "mpp2_repaired_frozen_baseline":
+        return
+    repair = state.get("mpp_repair") or {}
+    guard = repair.get("baseline_guard")
+    if not isinstance(guard, MutableMapping):
+        raise ValueError("repaired MPP2 baseline result has no configured baseline guard")
+    guard["observed_result_id"] = result.get("result_id")
+    guard["evaluated_at"] = utc_now()
+    if result.get("status") != "success" or result.get("phase") not in {"smoke", "formal"}:
+        evaluation = {
+            "status": "incomplete_block_lora",
+            "missing_metrics": [],
+            "triggered_metrics": [],
+            "reason": "baseline result was not a successful training result",
+        }
+    else:
+        evaluation = evaluate_mpp2_baseline_guard(guard, result.get("metrics", {}))
+    guard.update(evaluation)
+    blocked = list(state.get("blocked_actions", []))
+    lora_block = "mpp2_lora_until_repaired_baseline_passes_guard"
+    rerun_block = "rerun_repaired_mpp1_5_before_lora"
+    if guard["status"] == "passed_allow_lora":
+        blocked = [item for item in blocked if item not in {lora_block, rerun_block}]
+    else:
+        if lora_block not in blocked:
+            blocked.append(lora_block)
+        if guard["status"] == "triggered_rerun_mpp1_5" and rerun_block not in blocked:
+            blocked.append(rerun_block)
+    state["blocked_actions"] = blocked
+    repair["baseline_guard"] = guard
+    state["mpp_repair"] = repair
+
+
+def validate_mpp_sequence_gate(root: Path, experiment: Mapping[str, Any]) -> None:
+    if experiment.get("repair_guard_role") != "mpp2_lora_r8_smoke":
+        return
+    state = read_json(root / "project_state" / "current_state.json")
+    status = (((state.get("mpp_repair") or {}).get("baseline_guard") or {}).get("status"))
+    if status != "passed_allow_lora":
+        raise ValueError(
+            f"MPP2 LoRA is blocked until the repaired frozen baseline passes the drift guard; status={status or 'missing'}"
+        )
+
+
 def validate_job_semantics(
     phase: str,
     command_id: str,
@@ -1987,6 +2076,7 @@ def create_job_manifest(
         raise ValueError(f"unknown path ids: {unknown}")
     safe_job_parameters(parameters)
     validate_job_semantics(phase, command_id, parameters, experiment=experiment, path_ids=path_ids)
+    validate_mpp_sequence_gate(root, experiment)
     approval = None
     if phase == "formal":
         if approval_path is None or not approval_path.exists():
@@ -2065,6 +2155,7 @@ def validate_job_manifest(root: Path, manifest: Mapping[str, Any], *, require_he
     experiment = next((item for item in registry.get("experiments", []) if item.get("id") == manifest["experiment_id"]), None)
     if experiment is None:
         raise ValueError("job references unknown experiment")
+    validate_mpp_sequence_gate(root, experiment)
     validate_job_semantics(
         str(manifest.get("phase")),
         str(manifest.get("command_id")),

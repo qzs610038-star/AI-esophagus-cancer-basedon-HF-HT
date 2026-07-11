@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-11T06:36:12+00:00",
-  "active_data_manifest_id": null,
+  "updated_at": "2026-07-11T06:52:24+00:00",
+  "active_data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
   "repairs": [
     {
       "evidence_id": "barcode-repair-20260711-d626ad8-v003",
       "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
-      "status": "verified_pending_gate_release",
+      "status": "active",
       "evidence_commit": "f947999fb1c0e0dbf5e99a363744ac32305e4892",
       "evidence_path": "automation/evidence/barcode-repair-20260711-d626ad8-v003",
       "source_commit": "d626ad887838cbda342507926e6cf9189df8a515",
@@ -15,7 +15,9 @@
       "generated_asset_count": 80,
       "source_asset_count": 36,
       "label_asset_count": 65,
-      "imported_at": "2026-07-11T06:36:12+00:00"
+      "imported_at": "2026-07-11T06:36:12+00:00",
+      "activated_at": "2026-07-11T06:52:24+00:00",
+      "gate_release_directive_id": "DIR-20260711-004"
     }
   ]
 }

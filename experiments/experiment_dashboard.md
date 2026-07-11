@@ -15,6 +15,7 @@
 | ID | Family | Status | Fold | Encoder | Tokens | Best Val PCC | Best Val Loss | Train-Val Gap | Epoch |
 |----|--------|--------|:----:|---------|:------:|:------------:|:-------------:|:-------------:|:-----:|
 | mpp2_std10val_xzy_ext_uni2h_mlp_20260706 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.7827 | 0.3984 | 0.0217 | 14 | ext_XZY_PCC=0.6489 |
+| mpp2_barcode_repair_v003_frozen_baseline_20260711 | mpp_uni2h_mlp | :large_blue_circle: planned | — |  | — | — | — | — | — |
 | online_tokens_gfnet_fold1_65t_legacy | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3914 | 0.3337 | 0.1683 | 2 |
 | smoke_gfnet_65t | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3933 | 0.3314 | 0.0935 | 1 |
 | online_tokens_transformer_fold1_65t | online_tokens | :warning: done_incomplete_data | 1 | transformer | 65 | 0.3821 | — | — | 4 |
@@ -41,6 +42,7 @@
 | Priority | ID | Status | Next Action |
 |:--------:|----|--------|-------------|
 | P0 | mpp2_std10val_xzy_ext_uni2h_mlp_20260706 | done | selected_for_mpp2_newdata_lora |
+| P0 | mpp2_barcode_repair_v003_frozen_baseline_20260711 | planned | run_before_lora |
 | baseline | online_tokens_gfnet_fold1_65t_legacy | done | archived_as_legacy_baseline |
 | baseline | smoke_gfnet_65t | done | archived |
 | baseline | online_tokens_transformer_fold1_65t | done_incomplete_data | archived |
@@ -67,6 +69,7 @@
 | Experiment | Gate |
 |------------|------|
 | mpp2_std10val_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: selected for follow-up because MPP2 matches the cohort/external-test sampling protocol. Next: MPP2 new-data LoRA r=8 vs same-batch frozen baseline. |
+| mpp2_barcode_repair_v003_frozen_baseline_20260711 | Compare with mpp2_std10val_xzy_ext_uni2h_mlp_20260706; any configured degradation threshold pauses LoRA and requires repaired MPP1-5 frozen reruns. |
 | C1_gfnet_lora_65t_fold1 | 2026-07-09 superseded: old 3-patient/JFX-affected Token+LoRA result is tuning reference only. Do not expand old Fold2/3 as evidence; rerun LoRA claims under MPP2/new-data protocol. |
 | mpp1_std10val_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |
 | mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |

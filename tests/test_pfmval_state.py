@@ -14,6 +14,7 @@ from scripts.pfmval_state import (
     build_result_envelope,
     create_job_manifest,
     compute_source_hashes,
+    evaluate_mpp2_baseline_guard,
     fold_directives,
     git_commit_exists,
     import_result_bundle,
@@ -30,6 +31,8 @@ from scripts.pfmval_state import (
     validate_result_envelope,
     validate_job_manifest,
     validate_job_semantics,
+    validate_mpp_sequence_gate,
+    update_mpp2_baseline_guard_from_result,
     ValidationReport,
     validate_server_paths,
     verify_mpp_repair_server_assets,
@@ -640,6 +643,108 @@ def test_smoke_job_epoch_budget_is_bounded():
         validate_job_semantics("smoke", "standard_training", {})
     with pytest.raises(ValueError, match="between 1 and 3"):
         validate_job_semantics("smoke", "standard_training", {"num_epochs": 4})
+
+
+def test_mpp2_repaired_baseline_guard_passes_only_within_all_thresholds():
+    guard = {
+        "reference_metrics": {
+            "external_xzy_pcc": 0.6489,
+            "external_xzy_mae_raw": 1209.9316,
+            "external_xzy_r2_raw": -0.1554,
+        },
+        "thresholds": {
+            "pcc_abs_drop": 0.05,
+            "raw_mae_relative_increase": 0.10,
+            "raw_r2_abs_drop": 0.10,
+        },
+    }
+
+    passed = evaluate_mpp2_baseline_guard(guard, {
+        "external_xzy_pcc": 0.61,
+        "external_xzy_mae_raw": 1250.0,
+        "external_xzy_r2_raw": -0.20,
+    })
+    assert passed["status"] == "passed_allow_lora"
+    assert passed["triggered_metrics"] == []
+
+    triggered = evaluate_mpp2_baseline_guard(guard, {
+        "external_xzy_pcc": 0.5989,
+        "external_xzy_mae_raw": 1209.9316,
+        "external_xzy_r2_raw": -0.1554,
+    })
+    assert triggered["status"] == "triggered_rerun_mpp1_5"
+    assert triggered["triggered_metrics"] == ["external_xzy_pcc"]
+
+
+def test_mpp2_repaired_baseline_guard_blocks_on_missing_metric():
+    guard = {
+        "reference_metrics": {
+            "external_xzy_pcc": 0.6489,
+            "external_xzy_mae_raw": 1209.9316,
+            "external_xzy_r2_raw": -0.1554,
+        },
+        "thresholds": {
+            "pcc_abs_drop": 0.05,
+            "raw_mae_relative_increase": 0.10,
+            "raw_r2_abs_drop": 0.10,
+        },
+    }
+    result = evaluate_mpp2_baseline_guard(guard, {"external_xzy_pcc": 0.64})
+    assert result["status"] == "incomplete_block_lora"
+    assert set(result["missing_metrics"]) == {"external_xzy_mae_raw", "external_xzy_r2_raw"}
+
+
+def test_lora_sequence_gate_requires_repaired_mpp2_baseline_pass(tmp_path):
+    root = make_minimal_project(tmp_path)
+    state_path = root / "project_state" / "current_state.json"
+    state = read_json(state_path)
+    state["mpp_repair"] = {"baseline_guard": {"status": "pending_repaired_mpp2_baseline"}}
+    write_json(state_path, state)
+    experiment = {"repair_guard_role": "mpp2_lora_r8_smoke"}
+
+    with pytest.raises(ValueError, match="LoRA is blocked"):
+        validate_mpp_sequence_gate(root, experiment)
+
+    state["mpp_repair"]["baseline_guard"]["status"] = "passed_allow_lora"
+    write_json(state_path, state)
+    validate_mpp_sequence_gate(root, experiment)
+
+
+def test_repaired_mpp2_result_trigger_adds_rerun_gate():
+    state = {
+        "blocked_actions": ["mpp2_lora_until_repaired_baseline_passes_guard"],
+        "mpp_repair": {"baseline_guard": {
+            "status": "pending_repaired_mpp2_baseline",
+            "reference_metrics": {
+                "external_xzy_pcc": 0.6489,
+                "external_xzy_mae_raw": 1209.9316,
+                "external_xzy_r2_raw": -0.1554,
+            },
+            "thresholds": {
+                "pcc_abs_drop": 0.05,
+                "raw_mae_relative_increase": 0.10,
+                "raw_r2_abs_drop": 0.10,
+            },
+        }},
+    }
+    update_mpp2_baseline_guard_from_result(
+        state,
+        {"repair_guard_role": "mpp2_repaired_frozen_baseline"},
+        {
+            "result_id": "repaired-mpp2",
+            "status": "success",
+            "phase": "formal",
+            "metrics": {
+                "external_xzy_pcc": 0.64,
+                "external_xzy_mae_raw": 1400.0,
+                "external_xzy_r2_raw": -0.16,
+            },
+        },
+    )
+    guard = state["mpp_repair"]["baseline_guard"]
+    assert guard["status"] == "triggered_rerun_mpp1_5"
+    assert guard["triggered_metrics"] == ["external_xzy_mae_raw"]
+    assert "rerun_repaired_mpp1_5_before_lora" in state["blocked_actions"]
 
 
 def test_mpp_job_requires_registered_paths_and_manifest_mode():

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 19,
-  "updated_at": "2026-07-11T06:40:28+00:00",
-  "source_commit": "d626ad887838cbda342507926e6cf9189df8a515",
+  "state_revision": 24,
+  "updated_at": "2026-07-11T06:57:05+00:00",
+  "source_commit": "07e4009de1093c4bb72843cef16225f03cb94468",
   "active_directive_ids": [
     "DIR-20260709-001",
     "DIR-20260710-001",
@@ -10,7 +10,8 @@
     "DIR-20260710-003",
     "DIR-20260711-001",
     "DIR-20260711-002",
-    "DIR-20260711-003"
+    "DIR-20260711-003",
+    "DIR-20260711-004"
   ],
   "active_plans": {
     "mpp_training": {
@@ -56,7 +57,7 @@
     "formal_training_without_user_approval",
     "implicit_mpp_asset_deletion_or_regeneration",
     "promote_pending_result_to_current_conclusion",
-    "new_mpp_training_until_conflicting_duplicate_barcodes_are_resolved"
+    "mpp2_lora_until_repaired_baseline_passes_guard"
   ],
   "superseded_conclusions": [
     "SSH, SCP, HTTP command service and Remote Tunnel are not active server channels.",
@@ -64,23 +65,41 @@
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
   "source_hashes": {
-    "experiment_registry_sha256": "be6dc3edb6d0e940efd71d02cd1c69f709cfbefbc442d77617d8414acabc8ca0",
-    "experiment_dashboard_sha256": "5419c6b17b6e09a76fb87d6c26f93727b9094575ff81a142fd32ba242537f596",
-    "document_registry_sha256": "5a514181969fadf7bc75489897a4705812e5a8069e366570e260e37de57ab036",
+    "experiment_registry_sha256": "25c01ca97bfefd8ed38a95d618ff4eab3f03bbd8c062adaa09ae560a7806b44b",
+    "experiment_dashboard_sha256": "b0369f89b1212002ef807c7653b4e727a35d4ff778333e6195af3f827775ab80",
+    "document_registry_sha256": "adcae7d68a4658d0d290af2eb352b7b43c73e4993f4188aeb83a39025ff259bc",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "66689f64be07d0dc28a8b52ce91dee8f969353171f039bf53815e95eaa59940f",
-    "mpp_repair_registry_sha256": "547d17e94de723c9045684a65d0bb318ab7734b662c0cf7f03e5c8622748f788"
+    "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"
   },
   "last_gitee_poll_at": null,
   "notes": [
     "Registry is the accepted experiment fact root; raw returned run artifacts take precedence until import completes.",
     "Automated repair watchers remain deferred to a separate task.",
-    "MPP label index currently reports conflicting duplicate barcodes; existing results remain recorded, but new training is blocked pending a separately approved data repair."
+    "The conflicting-barcode repair gate was released only for verified staging barcode-repair-20260711-d626ad8-v003; old MPP label assets remain protected and inactive.",
+    "Active MPP repaired-label data manifest: barcode-repair-20260711-d626ad8-v003:1204018178a4d355"
   ],
   "mpp_repair": {
     "verified_evidence_id": "barcode-repair-20260711-d626ad8-v003",
     "verified_data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
-    "active_data_manifest_id": null,
-    "status": "verified_pending_explicit_gate_release"
+    "active_data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+    "status": "active",
+    "gate_release_directive_id": "DIR-20260711-004",
+    "baseline_guard": {
+      "status": "pending_repaired_mpp2_baseline",
+      "reference_experiment_id": "mpp2_std10val_xzy_ext_uni2h_mlp_20260706",
+      "reference_metrics": {
+        "external_xzy_pcc": 0.6489,
+        "external_xzy_mae_raw": 1209.9316,
+        "external_xzy_r2_raw": -0.1554
+      },
+      "thresholds": {
+        "pcc_abs_drop": 0.05,
+        "raw_mae_relative_increase": 0.1,
+        "raw_r2_abs_drop": 0.1
+      },
+      "on_pass": "allow_lora_r8_smoke_max_3_epochs",
+      "on_trigger": "pause_lora_and_rerun_repaired_mpp1_5_frozen_baselines"
+    }
   }
 }
