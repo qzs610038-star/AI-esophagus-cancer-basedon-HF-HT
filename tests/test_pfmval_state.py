@@ -1,3 +1,4 @@
+import hashlib
 import json
 import subprocess
 from pathlib import Path
@@ -8,6 +9,7 @@ from scripts import finalize_experiment as finalize_module
 from scripts.finalize_experiment import build_dashboard
 from scripts.pfmval_state import (
     append_directive,
+    activate_mpp_repair_evidence,
     build_mpp_path_index,
     build_result_envelope,
     create_job_manifest,
@@ -15,6 +17,7 @@ from scripts.pfmval_state import (
     fold_directives,
     git_commit_exists,
     import_result_bundle,
+    import_mpp_repair_evidence_from_git,
     normalize_rel,
     read_json,
     read_directive_events,
@@ -29,6 +32,7 @@ from scripts.pfmval_state import (
     validate_job_semantics,
     ValidationReport,
     validate_server_paths,
+    verify_mpp_repair_server_assets,
 )
 from path_registry import get_registered_path
 from config_utils import load_config
@@ -76,6 +80,7 @@ def make_minimal_project(root: Path) -> Path:
     (root / "AGENTS.md").write_text("# agents\n", encoding="utf-8")
     (root / "README.md").write_text("# test repo\n", encoding="utf-8")
     write_json(root / "project_state" / "schemas" / "server_job.schema.json", {"type": "object"})
+    write_json(root / "project_state" / "schemas" / "mpp_repair_registry.schema.json", {"type": "object"})
     (root / "configs" / "server_paths.yaml").write_text(
         "schema_version: '1.0'\npaths:\n  mpp_standard_splits:\n    path: mpp_standard_splits\n    kind: repo_directory\n    status: active\n    required_on: both\n",
         encoding="utf-8",
@@ -779,3 +784,209 @@ def test_finalize_honors_custom_registry_and_keeps_unverified_result_pending(tmp
     assert experiment["evidence_status"] == "pending"
     assert experiment["provenance_complete"] is False
     assert (tmp_path / "experiment_dashboard.md").exists()
+
+
+def _commit_all(repo: Path, message: str) -> str:
+    subprocess.run(["git", "add", "-A"], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", message], cwd=repo, check=True, capture_output=True)
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=repo, check=True,
+        capture_output=True, text=True, encoding="utf-8",
+    ).stdout.strip()
+
+
+def _make_repair_evidence_repo(tmp_path: Path, *, tamper_summary_hash: bool = False):
+    root = make_minimal_project(tmp_path / "repo")
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "pfmval-test@example.invalid"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "PFmval Test"], cwd=root, check=True)
+    (root / ".gitattributes").write_text("* text=auto eol=lf\n", encoding="utf-8")
+    split_paths = []
+    for group in range(1, 6):
+        split = root / "mpp_standard_splits" / f"group_{group}" / "split_manifest.csv"
+        split.parent.mkdir(parents=True, exist_ok=True)
+        split.write_text("patient,patch_stem,split\nP1,patch_x1_y1,train\n", encoding="utf-8")
+        split_paths.append((group, split))
+    source_commit = _commit_all(root, "source")
+    source_assets = []
+    for group, split in split_paths:
+        relative = split.relative_to(root).as_posix()
+        split_blob = subprocess.check_output(["git", "show", f"{source_commit}:{relative}"], cwd=root)
+        source_assets.append({
+            "path": rf"D:\server\worktree\mpp_standard_splits\group_{group}\split_manifest.csv",
+            "size_bytes": len(split_blob),
+            "sha256": hashlib.sha256(split_blob).hexdigest(),
+        })
+
+    version = "barcode-repair-test-v001"
+    evidence_rel = Path("automation") / "evidence" / version
+    evidence_dir = root / evidence_rel
+    evidence_dir.mkdir(parents=True)
+    generated_assets = [
+        {
+            "path": f"group_{group}/labels/train/P1/P1_ssGSEA_zscore.csv",
+            "role": "standardized_label",
+            "size_bytes": 10,
+            "sha256": f"{group}" * 64,
+            "row_count": 1,
+            "unique_barcode_count": 1,
+            "duplicate_barcode_count": 0,
+        }
+        for group in range(1, 6)
+    ]
+    audit = {
+        "schema_version": "1.0",
+        "generated_at": "2026-07-11T00:00:00+00:00",
+        "staging_version": version,
+        "source_commit": source_commit,
+        "server_transport": "gitee_only",
+        "mpp_ids": [1, 2, 3, 4, 5],
+        "source_assets": source_assets,
+        "generated_assets": generated_assets,
+        "validation": {
+            "patient_barcode_one_to_one": True,
+            "dataset_labels_unique": True,
+            "existing_mpp_assets_modified": False,
+            "published_from_versioned_staging": True,
+        },
+        "training_gate": {"status": "blocked_pending_evidence_import_and_explicit_gate_release"},
+    }
+    write_json(evidence_dir / "server_asset_audit_manifest.json", audit)
+    summary = {
+        "schema_version": "1.0",
+        "status": "repair_staging_verified",
+        "source_commit": source_commit,
+        "staging_version": version,
+        "server_stage_path": rf"D:\staging\{version}",
+        "audit_sha256": "f" * 64,
+        "generated_asset_count": len(generated_assets),
+        "source_asset_count": len(source_assets),
+        "patient_barcode_one_to_one": True,
+        "dataset_labels_unique": True,
+        "training_gate": "blocked_pending_evidence_import_and_explicit_gate_release",
+    }
+    write_json(evidence_dir / "server_verification.json", summary)
+    _commit_all(root, "evidence")
+    audit_blob = subprocess.check_output(
+        ["git", "show", f"HEAD:{evidence_rel.as_posix()}/server_asset_audit_manifest.json"],
+        cwd=root,
+    )
+    audit_sha = hashlib.sha256(audit_blob).hexdigest()
+    summary["audit_sha256"] = "0" * 64 if tamper_summary_hash else audit_sha
+    write_json(evidence_dir / "server_verification.json", summary)
+    evidence_commit = _commit_all(root, "canonical hash")
+    return root, evidence_commit, evidence_rel.as_posix(), version, audit_sha
+
+
+def test_repair_evidence_import_records_verified_pending_state(tmp_path):
+    root, evidence_commit, evidence_path, version, audit_sha = _make_repair_evidence_repo(tmp_path)
+
+    result = import_mpp_repair_evidence_from_git(
+        root,
+        git_ref=evidence_commit,
+        evidence_path=evidence_path,
+        expected_audit_sha256=audit_sha,
+    )
+
+    assert result["status"] == "imported"
+    registry = read_json(root / "project_state" / "mpp_repair_registry.json")
+    record = registry["repairs"][0]
+    assert record["evidence_id"] == version
+    assert record["status"] == "verified_pending_gate_release"
+    state = read_json(root / "project_state" / "current_state.json")
+    assert state["mpp_repair"]["verified_evidence_id"] == version
+    assert state["mpp_repair"]["active_data_manifest_id"] is None
+
+
+def test_repair_evidence_import_rejects_tampered_summary_without_state_change(tmp_path):
+    root, evidence_commit, evidence_path, _, audit_sha = _make_repair_evidence_repo(
+        tmp_path, tamper_summary_hash=True
+    )
+    before = (root / "project_state" / "current_state.json").read_bytes()
+
+    with pytest.raises(ValueError, match="audit SHA-256"):
+        import_mpp_repair_evidence_from_git(
+            root,
+            git_ref=evidence_commit,
+            evidence_path=evidence_path,
+            expected_audit_sha256=audit_sha,
+        )
+
+    assert (root / "project_state" / "current_state.json").read_bytes() == before
+    assert not (root / "project_state" / "mpp_repair_registry.json").exists()
+
+
+def test_repair_activation_requires_explicit_release_directive_and_removes_only_barcode_gate(tmp_path):
+    root, evidence_commit, evidence_path, version, audit_sha = _make_repair_evidence_repo(tmp_path)
+    imported = import_mpp_repair_evidence_from_git(
+        root,
+        git_ref=evidence_commit,
+        evidence_path=evidence_path,
+        expected_audit_sha256=audit_sha,
+    )
+    state_path = root / "project_state" / "current_state.json"
+    state = read_json(state_path)
+    state["blocked_actions"] = [
+        "new_mpp_training_until_conflicting_duplicate_barcodes_are_resolved",
+        "formal_training_without_user_approval",
+    ]
+    write_json(state_path, state)
+
+    with pytest.raises(ValueError, match="gate-release directive"):
+        activate_mpp_repair_evidence(
+            root,
+            evidence_id=version,
+            directive_id="DIR-missing",
+        )
+
+    directive_id = append_directive(
+        root,
+        summary="Explicitly release the barcode repair gate after verified evidence import",
+        scope="mpp_data",
+        topic="barcode_repair_gate_release",
+        supersedes=[],
+        affected_files=["project_state/mpp_repair_registry.json"],
+    )
+    result = activate_mpp_repair_evidence(
+        root,
+        evidence_id=version,
+        directive_id=directive_id,
+    )
+
+    assert result["status"] == "active"
+    final_state = read_json(state_path)
+    assert final_state["mpp_repair"]["active_data_manifest_id"] == imported["data_manifest_id"]
+    assert "new_mpp_training_until_conflicting_duplicate_barcodes_are_resolved" not in final_state["blocked_actions"]
+    assert "formal_training_without_user_approval" in final_state["blocked_actions"]
+
+
+def test_server_revalidates_repaired_staging_bytes_before_training(tmp_path):
+    root = tmp_path / "repo"
+    stage = tmp_path / "stage"
+    generated = stage / "group_2" / "labels" / "train" / "P1" / "P1_ssGSEA_zscore.csv"
+    generated.parent.mkdir(parents=True)
+    generated.write_text("barcode,pathway\na,1\n", encoding="utf-8")
+    audit = {
+        "generated_assets": [{
+            "path": "group_2/labels/train/P1/P1_ssGSEA_zscore.csv",
+            "size_bytes": generated.stat().st_size,
+            "sha256": sha256_file(generated),
+        }],
+    }
+    canonical = root / "project_state" / "evidence" / "mpp" / "repair-v1" / "server_asset_audit_manifest.json"
+    write_json(canonical, audit)
+    stage_audit = stage / "server_asset_audit_manifest.json"
+    stage_audit.write_text(json.dumps(audit, separators=(",", ":")), encoding="utf-8")
+    assert sha256_file(stage_audit) != sha256_file(canonical)
+    record = {
+        "evidence_id": "repair-v1",
+        "audit_sha256": sha256_file(canonical),
+        "server_stage_path": str(stage),
+    }
+
+    result = verify_mpp_repair_server_assets(root, record)
+    assert result["verified_generated_assets"] == 1
+
+    generated.write_text("barcode,pathway\na,2\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="hash mismatch"):
+        verify_mpp_repair_server_assets(root, record)

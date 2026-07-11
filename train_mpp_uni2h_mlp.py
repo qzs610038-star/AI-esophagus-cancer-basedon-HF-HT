@@ -25,7 +25,7 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -49,6 +49,27 @@ signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 # ── 环境变量 ──
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
+
+
+def resolve_manifest_data_roots(
+    splits_root: str | Path,
+    labels_root: str | Path,
+    mpp_id: int,
+) -> Dict[str, Path]:
+    """Resolve immutable split metadata separately from versioned repaired labels."""
+    split_group = Path(splits_root) / f"group_{mpp_id}"
+    label_group = Path(labels_root) / f"group_{mpp_id}"
+    resolved = {
+        "split_manifest": split_group / "split_manifest.csv",
+        "split_info": split_group / "split_info.json",
+        "zscore_manifest": label_group / "zscore_manifest.json",
+        "zscore_params": label_group / "zscore_params_from_train.json",
+        "labels": label_group / "labels",
+    }
+    missing = [f"{name}={path}" for name, path in resolved.items() if not path.exists()]
+    if missing:
+        raise FileNotFoundError("manifest data roots are incomplete: " + ", ".join(missing))
+    return resolved
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -398,6 +419,8 @@ def main():
     parser.add_argument("--splits_root", default="mpp_standard_splits",
                         help="split_manifest + z-score 标签根目录 (val_strategy=manifest 时使用); "
                              "下含 group_{N}/split_manifest.csv + labels/")
+    parser.add_argument("--manifest_labels_root", default="",
+                        help="manifest 模式的版本化标签根；为空时兼容旧布局并使用 --splits_root")
     parser.add_argument("--flat_cache_root", default="mpp_uni2h_cache",
                         help="扁平缓存根 (含 /2/XZY 外部测试缓存 + /3/{patient} MPP-3 缓存); "
                              "manifest 模式下外部 XZY 从此加载 (移除 MPP1 硬编码)")
@@ -432,7 +455,7 @@ def main():
     # This check is intentionally inside the training script as well as the
     # dispatcher. Manual invocation must not bypass current-state, path-index,
     # transport or result-evidence gates.
-    from scripts.pfmval_state import validate_state
+    from scripts.pfmval_state import active_mpp_repair, validate_state, verify_mpp_repair_server_assets
     project_root = Path(__file__).resolve().parent
     state_report = validate_state(
         project_root,
@@ -508,6 +531,29 @@ def main():
     else:
         use_manifest = False
 
+    if use_manifest:
+        repair = active_mpp_repair(project_root)
+        if repair is None:
+            print("[BLOCKED] manifest training requires an explicitly activated repaired-label data manifest")
+            return 2
+        expected_labels_root = Path(str(repair["server_stage_path"])).resolve()
+        supplied_labels_root = Path(args.manifest_labels_root or args.splits_root).resolve()
+        if os.path.normcase(str(supplied_labels_root)) != os.path.normcase(str(expected_labels_root)):
+            print(
+                "[BLOCKED] --manifest_labels_root does not match active repaired-label staging: "
+                f"supplied={supplied_labels_root} active={expected_labels_root}"
+            )
+            return 2
+        try:
+            verified = verify_mpp_repair_server_assets(project_root, repair)
+        except ValueError as exc:
+            print(f"[BLOCKED] repaired-label staging verification failed: {exc}")
+            return 2
+        print(
+            "[PASS] repaired-label staging verified before direct training: "
+            f"assets={verified['verified_generated_assets']} audit={verified['audit_sha256']}"
+        )
+
     # ── CPU 线程限制 ──
     torch.set_num_threads(args.num_threads)
     os.environ["OMP_NUM_THREADS"] = str(args.num_threads)
@@ -571,16 +617,21 @@ def main():
         print(f"内部验证: patch 级各患者 10% (split_manifest 驱动)")
         print(f"外部测试患者: MPP-{args.external_mpp_id}/{args.external_patient}")
 
+        manifest_labels_root = args.manifest_labels_root or args.splits_root
+        manifest_roots = resolve_manifest_data_roots(
+            args.splits_root, manifest_labels_root, args.train_mpp_id
+        )
+        print(f"split metadata root: {Path(args.splits_root)}")
+        print(f"repaired label root: {Path(manifest_labels_root)}")
+
         # 读 split_manifest
-        manifest_path = (Path(args.splits_root) / f"group_{args.train_mpp_id}"
-                         / "split_manifest.csv")
+        manifest_path = manifest_roots["split_manifest"]
         manifest_df = pd.read_csv(manifest_path)
         print(f"split_manifest: {len(manifest_df)} 行, split 分布: "
               f"{manifest_df['split'].value_counts().to_dict()}")
 
         # manifest 模式 preflight: 检查 zscore_manifest.json + split_manifest split 完整性
-        zscore_manifest_path = (Path(args.splits_root) / f"group_{args.train_mpp_id}"
-                                / "zscore_manifest.json")
+        zscore_manifest_path = manifest_roots["zscore_manifest"]
         with open(zscore_manifest_path, "r", encoding="utf-8") as f:
             zscore_manifest = _json.load(f)
         fit_pats = set(zscore_manifest.get("fit_patients", []))
@@ -592,8 +643,7 @@ def main():
             print(f"[ERROR] external_patient 出现在 z-score fit_patients 中，不应参与拟合")
             sys.exit(1)
         # 检查 manifest 内 MPP-3/5 无泄漏 (leakage_pairs 应=0)
-        split_info_path = (Path(args.splits_root) / f"group_{args.train_mpp_id}"
-                           / "split_info.json")
+        split_info_path = manifest_roots["split_info"]
         with open(split_info_path, "r", encoding="utf-8") as f:
             split_info = _json.load(f)
         leakage = split_info.get("leakage_pairs", 0)
@@ -604,8 +654,7 @@ def main():
         print(f"manifest 模式 prelight 通过: z-score fit_patients={sorted(fit_pats)}, "
               f"leakage_pairs=0")
 
-        labels_root_manifest = (Path(args.splits_root) / f"group_{args.train_mpp_id}"
-                                / "labels")
+        labels_root_manifest = manifest_roots["labels"]
 
         # 构建三个数据集 (train + internal_val + external XZY)
         train_dataset, val_ds, external_ds = build_manifest_datasets(
@@ -632,8 +681,7 @@ def main():
         print(f"通路数: {len(pathway_cols)}")
 
         # z-score 参数 (供 raw-scale MAE/R² inverse transform)
-        zscore_params_json_path = (Path(args.splits_root) / f"group_{args.train_mpp_id}"
-                                  / "zscore_params_from_train.json")
+        zscore_params_json_path = manifest_roots["zscore_params"]
         with open(zscore_params_json_path, "r", encoding="utf-8") as f:
             zscore_params_for_inverse = _json.load(f)
         # z-score 审计打印

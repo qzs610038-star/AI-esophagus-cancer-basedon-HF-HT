@@ -43,6 +43,7 @@ MPP_TRAINING_PATH_PARAMETERS = {
     "mpp_root",
     "cache_root",
     "labels_root",
+    "manifest_labels_root",
     "splits_root",
     "flat_cache_root",
     "output_root",
@@ -192,6 +193,355 @@ def git_path_is_tracked(root: Path, relative_path: str) -> bool:
         ).returncode == 0
     except OSError:
         return False
+
+
+def _git_output(root: Path, args: Sequence[str], *, text: bool = False) -> bytes | str:
+    completed = subprocess.run(
+        ["git", *args], cwd=root, check=True, capture_output=True,
+        text=text, encoding="utf-8" if text else None,
+    )
+    return completed.stdout
+
+
+def _safe_evidence_path(value: str) -> str:
+    normalized = normalize_rel(value).strip("/")
+    path = PurePosixPath(normalized)
+    if not normalized or path.is_absolute() or ".." in path.parts:
+        raise ValueError(f"unsafe repair evidence path: {value}")
+    return normalized
+
+
+def _validate_repair_evidence_payload(
+    root: Path,
+    *,
+    evidence_commit: str,
+    evidence_path: str,
+    audit_raw: bytes,
+    summary_raw: bytes,
+    expected_audit_sha256: str,
+) -> Tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+    try:
+        audit = json.loads(audit_raw.decode("utf-8-sig"))
+        summary = json.loads(summary_raw.decode("utf-8-sig"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"repair evidence JSON is invalid: {exc}") from exc
+    actual_audit_sha = sha256_bytes(audit_raw)
+    if not re.fullmatch(r"[0-9a-f]{64}", expected_audit_sha256.lower()):
+        raise ValueError("expected audit SHA-256 is invalid")
+    if actual_audit_sha != expected_audit_sha256.lower() or summary.get("audit_sha256") != actual_audit_sha:
+        raise ValueError(
+            "repair evidence audit SHA-256 mismatch: "
+            f"expected={expected_audit_sha256} summary={summary.get('audit_sha256')} actual={actual_audit_sha}"
+        )
+    required_summary = {
+        "schema_version", "status", "source_commit", "staging_version", "server_stage_path",
+        "audit_sha256", "generated_asset_count", "source_asset_count",
+        "patient_barcode_one_to_one", "dataset_labels_unique", "training_gate",
+    }
+    missing_summary = sorted(required_summary - set(summary))
+    if missing_summary:
+        raise ValueError(f"repair evidence summary missing fields: {missing_summary}")
+    if summary.get("schema_version") != SCHEMA_VERSION or audit.get("schema_version") != SCHEMA_VERSION:
+        raise ValueError("repair evidence schema_version must be 1.0")
+    if summary.get("status") != "repair_staging_verified":
+        raise ValueError("repair evidence summary is not verified")
+    if (
+        summary.get("patient_barcode_one_to_one") is not True
+        or summary.get("dataset_labels_unique") is not True
+        or summary.get("training_gate") != "blocked_pending_evidence_import_and_explicit_gate_release"
+    ):
+        raise ValueError("repair evidence summary validation flags are not satisfied")
+    if audit.get("server_transport") != "gitee_only":
+        raise ValueError("repair evidence transport is not gitee_only")
+    if audit.get("mpp_ids") != [1, 2, 3, 4, 5]:
+        raise ValueError("repair evidence must cover MPP1-5")
+    for field in ("source_commit", "staging_version"):
+        if audit.get(field) != summary.get(field):
+            raise ValueError(f"repair evidence audit/summary mismatch for {field}")
+    source_commit = str(audit.get("source_commit", ""))
+    if not re.fullmatch(r"[0-9a-f]{40}", source_commit) or not git_commit_exists(root, source_commit):
+        raise ValueError("repair evidence source_commit is unavailable")
+    if subprocess.run(
+        ["git", "merge-base", "--is-ancestor", source_commit, evidence_commit],
+        cwd=root, check=False, capture_output=True,
+    ).returncode != 0:
+        raise ValueError("repair evidence commit is not descended from source_commit")
+    changed_paths = set(str(_git_output(
+        root,
+        ["diff", "--name-only", source_commit, evidence_commit],
+        text=True,
+    )).splitlines())
+    allowed_evidence_paths = {
+        f"{evidence_path}/server_asset_audit_manifest.json",
+        f"{evidence_path}/server_verification.json",
+    }
+    if changed_paths != allowed_evidence_paths:
+        raise ValueError(f"repair evidence branch contains non-evidence changes: {sorted(changed_paths)}")
+    server_stage_path = str(summary.get("server_stage_path", ""))
+    if not re.match(r"^[A-Za-z]:[\\/]", server_stage_path):
+        raise ValueError("repair evidence server_stage_path is not absolute")
+    generated = audit.get("generated_assets")
+    sources = audit.get("source_assets")
+    if not isinstance(generated, list) or not isinstance(sources, list):
+        raise ValueError("repair evidence assets must be lists")
+    if len(generated) != int(summary["generated_asset_count"]) or len(sources) != int(summary["source_asset_count"]):
+        raise ValueError("repair evidence asset counts do not match summary")
+    generated_paths = [str(item.get("path", "")) for item in generated]
+    source_paths = [str(item.get("path", "")) for item in sources]
+    if len(set(generated_paths)) != len(generated_paths) or len(set(source_paths)) != len(source_paths):
+        raise ValueError("repair evidence contains duplicate asset paths")
+    for asset in [*generated, *sources]:
+        if not re.fullmatch(r"[0-9a-f]{64}", str(asset.get("sha256", "")).lower()):
+            raise ValueError(f"repair evidence asset has invalid SHA-256: {asset.get('path')}")
+        if int(asset.get("size_bytes", -1)) < 0:
+            raise ValueError(f"repair evidence asset has invalid size: {asset.get('path')}")
+    labels = [item for item in generated if item.get("role") == "standardized_label"]
+    if not labels:
+        raise ValueError("repair evidence contains no standardized labels")
+    for label in labels:
+        if (
+            int(label.get("duplicate_barcode_count", -1)) != 0
+            or int(label.get("row_count", -1)) != int(label.get("unique_barcode_count", -2))
+        ):
+            raise ValueError(f"repair evidence label uniqueness failed: {label.get('path')}")
+    label_groups = {
+        int(match.group(1))
+        for item in labels
+        if (match := re.match(r"group_([1-5])/", str(item.get("path", ""))))
+    }
+    if label_groups != {1, 2, 3, 4, 5}:
+        raise ValueError(f"repair evidence labels do not cover MPP1-5: {sorted(label_groups)}")
+    validation = audit.get("validation", {})
+    required_validation = {
+        "patient_barcode_one_to_one": True,
+        "dataset_labels_unique": True,
+        "existing_mpp_assets_modified": False,
+        "published_from_versioned_staging": True,
+    }
+    if any(validation.get(key) is not expected for key, expected in required_validation.items()):
+        raise ValueError("repair evidence validation flags are not all satisfied")
+    if audit.get("training_gate", {}).get("status") != "blocked_pending_evidence_import_and_explicit_gate_release":
+        raise ValueError("repair evidence was produced without the required training gate")
+    split_groups = set()
+    for asset in sources:
+        normalized = str(asset.get("path", "")).replace("\\", "/")
+        marker = "mpp_standard_splits/"
+        if marker not in normalized:
+            continue
+        relative = marker + normalized.split(marker, 1)[1]
+        match = re.fullmatch(r"mpp_standard_splits/group_([1-5])/split_manifest\.csv", relative)
+        if not match:
+            continue
+        blob = _git_output(root, ["show", f"{source_commit}:{relative}"])
+        if not isinstance(blob, bytes):
+            raise AssertionError("git blob read returned text unexpectedly")
+        if len(blob) != int(asset["size_bytes"]) or sha256_bytes(blob) != asset["sha256"]:
+            raise ValueError(f"repair evidence split manifest mismatch: {relative}")
+        split_groups.add(int(match.group(1)))
+    if split_groups != {1, 2, 3, 4, 5}:
+        raise ValueError(f"repair evidence split manifests are incomplete: {sorted(split_groups)}")
+    data_manifest_id = f"{audit['staging_version']}:{actual_audit_sha[:16]}"
+    record = {
+        "evidence_id": audit["staging_version"],
+        "data_manifest_id": data_manifest_id,
+        "status": "verified_pending_gate_release",
+        "evidence_commit": evidence_commit,
+        "evidence_path": evidence_path,
+        "source_commit": source_commit,
+        "audit_sha256": actual_audit_sha,
+        "server_stage_path": server_stage_path,
+        "generated_asset_count": len(generated),
+        "source_asset_count": len(sources),
+        "label_asset_count": len(labels),
+        "imported_at": utc_now(),
+    }
+    return audit, summary, record
+
+
+def import_mpp_repair_evidence_from_git(
+    root: Path,
+    *,
+    git_ref: str,
+    evidence_path: str,
+    expected_audit_sha256: str,
+) -> Dict[str, Any]:
+    safe_path = _safe_evidence_path(evidence_path)
+    evidence_commit = str(_git_output(root, ["rev-parse", f"{git_ref}^{{commit}}"], text=True)).strip()
+    tree_paths = str(_git_output(root, ["ls-tree", "-r", "--name-only", evidence_commit, "--", safe_path], text=True)).splitlines()
+    expected_paths = {
+        f"{safe_path}/server_asset_audit_manifest.json",
+        f"{safe_path}/server_verification.json",
+    }
+    if set(tree_paths) != expected_paths:
+        raise ValueError(f"repair evidence directory must contain exactly audit and summary: {tree_paths}")
+    audit_raw = _git_output(root, ["show", f"{evidence_commit}:{safe_path}/server_asset_audit_manifest.json"])
+    summary_raw = _git_output(root, ["show", f"{evidence_commit}:{safe_path}/server_verification.json"])
+    if not isinstance(audit_raw, bytes) or not isinstance(summary_raw, bytes):
+        raise AssertionError("git evidence blob read returned text unexpectedly")
+    audit, summary, record = _validate_repair_evidence_payload(
+        root,
+        evidence_commit=evidence_commit,
+        evidence_path=safe_path,
+        audit_raw=audit_raw,
+        summary_raw=summary_raw,
+        expected_audit_sha256=expected_audit_sha256,
+    )
+    registry_path = root / "project_state" / "mpp_repair_registry.json"
+    with state_lock(root):
+        registry = read_json(registry_path) if registry_path.exists() else {
+            "schema_version": SCHEMA_VERSION,
+            "updated_at": utc_now(),
+            "active_data_manifest_id": None,
+            "repairs": [],
+        }
+        existing = next((item for item in registry.get("repairs", []) if item.get("evidence_id") == record["evidence_id"]), None)
+        if existing:
+            if existing.get("audit_sha256") != record["audit_sha256"]:
+                raise ValueError("repair evidence id is already bound to a different audit")
+            return {**existing, "evidence_status": existing["status"], "status": "already_imported"}
+        destination = root / "project_state" / "evidence" / "mpp" / record["evidence_id"]
+        if destination.exists() and any(destination.iterdir()):
+            raise ValueError(f"repair evidence destination is not empty: {destination}")
+        write_text_atomic(destination / "server_asset_audit_manifest.json", audit_raw.decode("utf-8-sig"))
+        write_text_atomic(destination / "server_verification.json", summary_raw.decode("utf-8-sig"))
+        if sha256_file(destination / "server_asset_audit_manifest.json") != record["audit_sha256"]:
+            raise ValueError("canonical repair audit hash changed during local import")
+        registry["repairs"].append(record)
+        registry["updated_at"] = utc_now()
+        write_json_atomic(registry_path, registry)
+        state_path = root / "project_state" / "current_state.json"
+        state = read_json(state_path)
+        state["mpp_repair"] = {
+            "verified_evidence_id": record["evidence_id"],
+            "verified_data_manifest_id": record["data_manifest_id"],
+            "active_data_manifest_id": None,
+            "status": "verified_pending_explicit_gate_release",
+        }
+        write_json_atomic(state_path, state)
+        sync_state(root, force_revision=True)
+        write_json_atomic(root / "project_state" / "document_registry.json", scan_documents(root))
+        sync_state(root)
+    return {**record, "evidence_status": record["status"], "status": "imported"}
+
+
+def active_mpp_repair(root: Path) -> Optional[Dict[str, Any]]:
+    registry_path = root / "project_state" / "mpp_repair_registry.json"
+    state_path = root / "project_state" / "current_state.json"
+    if not registry_path.exists() or not state_path.exists():
+        return None
+    registry = read_json(registry_path)
+    state = read_json(state_path)
+    active_id = (state.get("mpp_repair") or {}).get("active_data_manifest_id")
+    if not active_id or registry.get("active_data_manifest_id") != active_id:
+        return None
+    record = next(
+        (item for item in registry.get("repairs", []) if item.get("data_manifest_id") == active_id and item.get("status") == "active"),
+        None,
+    )
+    if record is None:
+        return None
+    canonical = (
+        root / "project_state" / "evidence" / "mpp" / str(record.get("evidence_id"))
+        / "server_asset_audit_manifest.json"
+    )
+    if not canonical.is_file() or sha256_file(canonical) != record.get("audit_sha256"):
+        return None
+    return record
+
+
+def verify_mpp_repair_server_assets(root: Path, record: Mapping[str, Any]) -> Dict[str, Any]:
+    evidence_id = str(record.get("evidence_id", ""))
+    canonical_audit = (
+        root / "project_state" / "evidence" / "mpp" / evidence_id
+        / "server_asset_audit_manifest.json"
+    )
+    if not canonical_audit.is_file():
+        raise ValueError(f"canonical MPP repair audit is missing: {canonical_audit}")
+    expected_audit_sha = str(record.get("audit_sha256", "")).lower()
+    if sha256_file(canonical_audit) != expected_audit_sha:
+        raise ValueError("canonical MPP repair audit hash mismatch")
+    stage = Path(str(record.get("server_stage_path", "")))
+    if not stage.is_dir():
+        raise ValueError(f"MPP repaired-label staging directory is missing: {stage}")
+    stage_audit = stage / "server_asset_audit_manifest.json"
+    audit = read_json(canonical_audit)
+    if not stage_audit.is_file() or read_json(stage_audit) != audit:
+        raise ValueError("server staging audit content does not match canonical evidence")
+    stage_resolved = stage.resolve()
+    verified = 0
+    for asset in audit.get("generated_assets", []):
+        raw_path = str(asset.get("path", ""))
+        relative = PurePosixPath(raw_path)
+        if not raw_path or relative.is_absolute() or ".." in relative.parts:
+            raise ValueError(f"unsafe repaired-label asset path: {raw_path}")
+        path = stage.joinpath(*relative.parts).resolve()
+        if not path.is_relative_to(stage_resolved) or not path.is_file():
+            raise ValueError(f"repaired-label asset is missing: {raw_path}")
+        if path.stat().st_size != int(asset.get("size_bytes", -1)):
+            raise ValueError(f"repaired-label asset size mismatch: {raw_path}")
+        if sha256_file(path) != str(asset.get("sha256", "")).lower():
+            raise ValueError(f"repaired-label asset hash mismatch: {raw_path}")
+        verified += 1
+    if verified == 0:
+        raise ValueError("MPP repair audit contains no generated assets")
+    return {"verified_generated_assets": verified, "audit_sha256": expected_audit_sha}
+
+
+def activate_mpp_repair_evidence(
+    root: Path,
+    *,
+    evidence_id: str,
+    directive_id: str,
+) -> Dict[str, Any]:
+    directives = active_directives(root)
+    directive = directives.get(directive_id)
+    if not directive or (
+        directive.get("scope") != "mpp_data"
+        or directive.get("topic") != "barcode_repair_gate_release"
+        or directive.get("source") != "explicit_user_instruction"
+    ):
+        raise ValueError("activation requires an active explicit gate-release directive")
+    registry_path = root / "project_state" / "mpp_repair_registry.json"
+    if not registry_path.exists():
+        raise ValueError("MPP repair evidence registry is missing")
+    with state_lock(root):
+        registry = read_json(registry_path)
+        record = next((item for item in registry.get("repairs", []) if item.get("evidence_id") == evidence_id), None)
+        if not record:
+            raise ValueError(f"MPP repair evidence is not imported: {evidence_id}")
+        if record.get("status") not in {"verified_pending_gate_release", "active"}:
+            raise ValueError(f"MPP repair evidence is not activatable: {record.get('status')}")
+        state_path = root / "project_state" / "current_state.json"
+        state = read_json(state_path)
+        repair_state = state.get("mpp_repair") or {}
+        if repair_state.get("verified_evidence_id") != evidence_id:
+            raise ValueError("current state does not bind the requested repair evidence")
+        record["status"] = "active"
+        record["activated_at"] = utc_now()
+        record["gate_release_directive_id"] = directive_id
+        registry["active_data_manifest_id"] = record["data_manifest_id"]
+        registry["updated_at"] = utc_now()
+        write_json_atomic(registry_path, registry)
+        repair_state.update({
+            "active_data_manifest_id": record["data_manifest_id"],
+            "status": "active",
+            "gate_release_directive_id": directive_id,
+        })
+        state["mpp_repair"] = repair_state
+        state["blocked_actions"] = [
+            item for item in state.get("blocked_actions", [])
+            if item != "new_mpp_training_until_conflicting_duplicate_barcodes_are_resolved"
+        ]
+        notes = list(state.get("notes", []))
+        note = f"Active MPP repaired-label data manifest: {record['data_manifest_id']}"
+        if note not in notes:
+            notes.append(note)
+        state["notes"] = notes
+        write_json_atomic(state_path, state)
+        sync_state(root, force_revision=True)
+        write_json_atomic(root / "project_state" / "document_registry.json", scan_documents(root))
+        sync_state(root)
+    return {**record}
 
 
 @contextmanager
@@ -722,6 +1072,17 @@ def render_current_state(root: Path, state: Mapping[str, Any], registry: Mapping
     if state.get("pending_result_ids"):
         lines.extend(["", "## Pending result imports", ""])
         lines.extend(f"- `{item}`" for item in state["pending_result_ids"])
+    repair = state.get("mpp_repair")
+    if repair:
+        lines.extend([
+            "",
+            "## MPP repair evidence",
+            "",
+            f"- Verified evidence: `{repair.get('verified_evidence_id')}`.",
+            f"- Verified data manifest: `{repair.get('verified_data_manifest_id')}`.",
+            f"- Active data manifest: `{repair.get('active_data_manifest_id') or 'none'}`.",
+            f"- Gate status: **{repair.get('status', 'unknown')}**.",
+        ])
     lines.extend(["", "## Hard blocks", ""])
     lines.extend(f"- `{item}`" for item in state.get("blocked_actions", []))
     lines.extend(["", "## Superseded conclusions", ""])
@@ -804,6 +1165,7 @@ def compute_source_hashes(root: Path) -> Dict[str, str]:
         "document_registry_sha256": root / "project_state" / "document_registry.json",
         "mpp_path_index_sha256": root / "mpp_standard_splits" / "path_index.json",
         "server_paths_sha256": root / "configs" / "server_paths.yaml",
+        "mpp_repair_registry_sha256": root / "project_state" / "mpp_repair_registry.json",
     }
     hashes = {key: sha256_file(path) if path.exists() else "" for key, path in files.items()}
     document_registry = files["document_registry_sha256"]
@@ -950,8 +1312,14 @@ def validate_server_paths(
         index = read_json(index_path)
         if not index.get("labels_validated", False):
             message = "MPP standardized labels contain duplicate/conflicting barcodes; regeneration requires a separate approved task"
-            if task == "training":
+            repair = active_mpp_repair(root) if task == "training" else None
+            if task == "training" and repair is None:
                 report.fail(message)
+            elif task == "training":
+                report.warn(
+                    "legacy standardized labels remain conflicted; training is bound to active repaired staging "
+                    f"{repair['data_manifest_id']}"
+                )
             else:
                 report.warn(message)
         else:
@@ -1004,6 +1372,40 @@ def validate_state(
         report.fail("current_state schema_version must be 1.0")
     else:
         report.passed("current_state required fields")
+
+    repair_state = state.get("mpp_repair")
+    repair_registry_path = root / "project_state" / "mpp_repair_registry.json"
+    if repair_state:
+        if not repair_registry_path.exists():
+            report.fail("current_state references MPP repair evidence but registry is missing")
+        else:
+            repair_registry = read_json(repair_registry_path)
+            try:
+                validate_against_schema(
+                    repair_registry,
+                    schema_root / "mpp_repair_registry.schema.json",
+                    "MPP repair registry",
+                )
+            except (FileNotFoundError, ValueError) as exc:
+                report.fail(str(exc))
+            verified_id = repair_state.get("verified_evidence_id")
+            verified = next(
+                (item for item in repair_registry.get("repairs", []) if item.get("evidence_id") == verified_id),
+                None,
+            )
+            if not verified:
+                report.fail("current_state verified MPP repair evidence is absent from registry")
+            elif repair_state.get("verified_data_manifest_id") != verified.get("data_manifest_id"):
+                report.fail("current_state MPP repair data manifest does not match registry")
+            else:
+                canonical_audit = (
+                    root / "project_state" / "evidence" / "mpp" / str(verified.get("evidence_id"))
+                    / "server_asset_audit_manifest.json"
+                )
+                if not canonical_audit.is_file() or sha256_file(canonical_audit) != verified.get("audit_sha256"):
+                    report.fail("canonical MPP repair audit hash does not match registry")
+                else:
+                    report.passed("MPP repair evidence registry matches current state")
 
     if state.get("active_directive_ids") != list(directives):
         report.fail("current_state active_directive_ids does not match folded directive log")

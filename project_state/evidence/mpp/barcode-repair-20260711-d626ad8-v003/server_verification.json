@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "status": "repair_staging_verified",
+  "source_commit": "d626ad887838cbda342507926e6cf9189df8a515",
+  "staging_version": "barcode-repair-20260711-d626ad8-v003",
+  "server_stage_path": "D:\\AIPatho\\Patch\\mpp_zscore_repair_staging\\barcode-repair-20260711-d626ad8-v003",
+  "audit_sha256": "1204018178a4d355c2aa03314d0fafa9f0151457b9edcef3a0df9b5946c306e2",
+  "generated_asset_count": 80,
+  "source_asset_count": 36,
+  "patient_barcode_one_to_one": true,
+  "dataset_labels_unique": true,
+  "training_gate": "blocked_pending_evidence_import_and_explicit_gate_release"
+}

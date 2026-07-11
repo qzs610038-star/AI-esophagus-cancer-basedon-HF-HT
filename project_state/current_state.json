@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 16,
-  "updated_at": "2026-07-11T05:51:52+00:00",
-  "source_commit": "1a35e0b8da85648601416a7033a95cbe07d439eb",
+  "state_revision": 19,
+  "updated_at": "2026-07-11T06:40:28+00:00",
+  "source_commit": "d626ad887838cbda342507926e6cf9189df8a515",
   "active_directive_ids": [
     "DIR-20260709-001",
     "DIR-20260710-001",
@@ -66,14 +66,21 @@
   "source_hashes": {
     "experiment_registry_sha256": "be6dc3edb6d0e940efd71d02cd1c69f709cfbefbc442d77617d8414acabc8ca0",
     "experiment_dashboard_sha256": "5419c6b17b6e09a76fb87d6c26f93727b9094575ff81a142fd32ba242537f596",
-    "document_registry_sha256": "b2e1f3c465a915a27ce6d4df2fa5560306bf3f1d671b84ae4b969b2fd504de22",
+    "document_registry_sha256": "5a514181969fadf7bc75489897a4705812e5a8069e366570e260e37de57ab036",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
-    "server_paths_sha256": "66689f64be07d0dc28a8b52ce91dee8f969353171f039bf53815e95eaa59940f"
+    "server_paths_sha256": "66689f64be07d0dc28a8b52ce91dee8f969353171f039bf53815e95eaa59940f",
+    "mpp_repair_registry_sha256": "547d17e94de723c9045684a65d0bb318ab7734b662c0cf7f03e5c8622748f788"
   },
   "last_gitee_poll_at": null,
   "notes": [
     "Registry is the accepted experiment fact root; raw returned run artifacts take precedence until import completes.",
     "Automated repair watchers remain deferred to a separate task.",
     "MPP label index currently reports conflicting duplicate barcodes; existing results remain recorded, but new training is blocked pending a separately approved data repair."
-  ]
+  ],
+  "mpp_repair": {
+    "verified_evidence_id": "barcode-repair-20260711-d626ad8-v003",
+    "verified_data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+    "active_data_manifest_id": null,
+    "status": "verified_pending_explicit_gate_release"
+  }
 }

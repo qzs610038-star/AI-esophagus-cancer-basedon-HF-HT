@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/mpp_repair_registry.schema.json",
+  "title": "PFMval MPP repair evidence registry",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "active_data_manifest_id", "repairs"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "updated_at": {"type": "string"},
+    "active_data_manifest_id": {"type": ["string", "null"]},
+    "repairs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "evidence_id", "data_manifest_id", "status", "evidence_commit",
+          "source_commit", "audit_sha256", "server_stage_path", "imported_at"
+        ],
+        "properties": {
+          "status": {"enum": ["verified_pending_gate_release", "active"]},
+          "audit_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    }
+  }
+}

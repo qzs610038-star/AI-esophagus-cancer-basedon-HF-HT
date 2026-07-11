@@ -87,3 +87,25 @@ before they can become accepted evidence. Smoke jobs require an explicit budget
 of at most 3 epochs and never enter `latest_accepted_result_ids`; only a validated
 formal result can become the latest accepted result.
 Automated polling/repair is intentionally deferred to a separate task.
+
+## MPP repaired-label evidence
+
+Repair evidence is not a training result envelope. Import it directly from the
+fetched Gitee evidence ref; import records a verified data manifest but does not
+release the training gate:
+
+```powershell
+python deploy/pfmval_ops.py mpp repair import --git-ref <gitee-evidence-ref> --evidence-path <automation/evidence/path> --expected-audit-sha256 <sha256>
+```
+
+Activation is a separate operation and requires a new active directive with
+`scope=mpp_data`, `topic=barcode_repair_gate_release`, and
+`source=explicit_user_instruction`:
+
+```powershell
+python deploy/pfmval_ops.py mpp repair activate --evidence-id <staging-version> --directive-id <DIR-id>
+```
+
+After activation, MPP jobs keep split metadata pinned to the Git worktree while
+the runner injects the activated versioned staging directory as
+`--manifest-labels-root`. The legacy path index remains unchanged for audit.

@@ -1,0 +1,894 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-11T05:59:24.624805+00:00",
+  "staging_version": "barcode-repair-20260711-d626ad8-v003",
+  "source_commit": "d626ad887838cbda342507926e6cf9189df8a515",
+  "server_transport": "gitee_only",
+  "mpp_ids": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "source_assets": [
+    {
+      "path": "D:\\AIPatho\\qzs\\pfmval_automation\\barcode-repair-d626ad8\\mpp_standard_splits\\group_1\\split_manifest.csv",
+      "size_bytes": 1268166,
+      "sha256": "6b0a7b4464de307dc15d9e6b65fea27e6e6900b9069845a90a7aa67cf638381c"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\1\\HYZ15040\\HYZ15040_ssGSEA.csv",
+      "size_bytes": 1803654,
+      "sha256": "6729cc761db4e70354cc598153383679e9c489b8f70fb4feaa6dd5f9a87a8b76"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\1\\JFX\\JFX_ssGSEA.csv",
+      "size_bytes": 4534011,
+      "sha256": "3dbaac248b1a52cf35d88b80058987bcf8103b26fffca88304363a366058d6d5"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\1\\LMZ12939\\LMZ12939_ssGSEA.csv",
+      "size_bytes": 4265000,
+      "sha256": "cbf5b7fa9aadf9e918239a5990d1227b560e2d0f7b33c43ece08355e79794fe9"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\1\\TGC\\TGC_ssGSEA.csv",
+      "size_bytes": 640637,
+      "sha256": "23a5179f8eda1475c90eeae56ac6eaae5af679656b725a5ad2e70855cbdebfe9"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\1\\XSL\\XSL_ssGSEA.csv",
+      "size_bytes": 884838,
+      "sha256": "dd6045aba77c2bf9d6789c5bf45ca1f3b7e270b8fd67a616f3ccbff2c985b911"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\1\\ZHZ\\ZHZ_ssGSEA.csv",
+      "size_bytes": 615625,
+      "sha256": "dc2d19c218dfda4de45db112759e19536c18597a74bcbcb851a94441a9c7fa5d"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XZY\\XZY_ssGSEA.csv",
+      "size_bytes": 594498,
+      "sha256": "9e81bf338a9db5cadffdaac4130015726b70c23373d4c126b4061d4fe5494149"
+    },
+    {
+      "path": "D:\\AIPatho\\qzs\\pfmval_automation\\barcode-repair-d626ad8\\mpp_standard_splits\\group_2\\split_manifest.csv",
+      "size_bytes": 606044,
+      "sha256": "babfa2b1d9aa7d7b2e56ac0ac18b95dcb006f66a41e4a86761bbe8a746d2f824"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\HYZ15040\\HYZ15040_ssGSEA.csv",
+      "size_bytes": 852029,
+      "sha256": "2b04864a99a8c1b6debf041fe9f4b0a7a702aeb52d62638137a9800a6c6805b2"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\JFX\\JFX_ssGSEA.csv",
+      "size_bytes": 1172642,
+      "sha256": "a56f2ff42b5abde4a4e55d233b90c7b1a58f5c487bd786e3512edad0e76a9327"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\LMZ12939\\LMZ12939_ssGSEA.csv",
+      "size_bytes": 1958186,
+      "sha256": "6b17fe50ed3f2027d3cefe1265fb03e7b020f3ba638a05a31494b597390cb4bd"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\TGC\\TGC_ssGSEA.csv",
+      "size_bytes": 640637,
+      "sha256": "23a5179f8eda1475c90eeae56ac6eaae5af679656b725a5ad2e70855cbdebfe9"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XSL\\XSL_ssGSEA.csv",
+      "size_bytes": 884838,
+      "sha256": "dd6045aba77c2bf9d6789c5bf45ca1f3b7e270b8fd67a616f3ccbff2c985b911"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\ZHZ\\ZHZ_ssGSEA.csv",
+      "size_bytes": 615625,
+      "sha256": "dc2d19c218dfda4de45db112759e19536c18597a74bcbcb851a94441a9c7fa5d"
+    },
+    {
+      "path": "D:\\AIPatho\\qzs\\pfmval_automation\\barcode-repair-d626ad8\\mpp_standard_splits\\group_3\\split_manifest.csv",
+      "size_bytes": 2411032,
+      "sha256": "b455ed46eb0b6faf24550a64ec0cb3d0c6cb79801f85b443256501df0ea50c4f"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\3\\HYZ15040\\HYZ15040_ssGSEA.csv",
+      "size_bytes": 3402147,
+      "sha256": "8fdcb053fa9f37d63eeea2ced1493e43a567f3b6614b646b51828da09b94f07e"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\3\\JFX\\JFX_ssGSEA.csv",
+      "size_bytes": 4689084,
+      "sha256": "079c4f4f797d9e653d6bd8ae6e0dba367664c2916986d29b7dd07932b599126b"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\3\\LMZ12939\\LMZ12939_ssGSEA.csv",
+      "size_bytes": 7813466,
+      "sha256": "66c93e484263daa3a93d8b896be0a4f440ebc4e95dcb236ba4ea6316734d06bd"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\3\\TGC\\TGC_ssGSEA.csv",
+      "size_bytes": 2568330,
+      "sha256": "0a60e7d11d55643ad17e8d40b30690fb3e2af2cd230b1e21ed8a4bf772d4709e"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\3\\XSL\\XSL_ssGSEA.csv",
+      "size_bytes": 3531620,
+      "sha256": "f30f817b14ee41f122181b01cd0c0aff2ff9190910ab49f54710563b98b59ab2"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\3\\ZHZ\\ZHZ_ssGSEA.csv",
+      "size_bytes": 2439124,
+      "sha256": "5d6a261ed0b47c9fd3c9b41bafcbba5f3a8284e698b5a8d7004a887104041db9"
+    },
+    {
+      "path": "D:\\AIPatho\\qzs\\pfmval_automation\\barcode-repair-d626ad8\\mpp_standard_splits\\group_4\\split_manifest.csv",
+      "size_bytes": 163690,
+      "sha256": "762e37a7ba709601b8371784ce0ba9bfd26832ffbed2b31f355f11424f8706ec"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\4\\HYZ15040\\HYZ15040_ssGSEA.csv",
+      "size_bytes": 250720,
+      "sha256": "ed83a4711370a97643d476c02bc1dcfd662be9c35e04727cd244ec69f051bfba"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\4\\JFX\\JFX_ssGSEA.csv",
+      "size_bytes": 310878,
+      "sha256": "68be650840ad5e4293b48d0d3434e24be7b50e0f8e4ccd174a43df675917cc95"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\4\\LMZ12939\\LMZ12939_ssGSEA.csv",
+      "size_bytes": 515882,
+      "sha256": "731b7b1b9a97ba60698ec422270a74a19ea09652b35e7f9515df7b0e941c39c9"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\4\\TGC\\TGC_ssGSEA.csv",
+      "size_bytes": 176282,
+      "sha256": "8d636ac1fed8eafc6933601b9232bcd5ee6f6ab243a677a4f7c26ac7e4fe91f7"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\4\\XSL\\XSL_ssGSEA.csv",
+      "size_bytes": 228324,
+      "sha256": "4141974a07d108cebc7515c5c4742f41bed6d6243fb1e1ee9c26260d9a8f87f8"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\4\\ZHZ\\ZHZ_ssGSEA.csv",
+      "size_bytes": 161441,
+      "sha256": "090b241a281312adf37551bbfc052a451274828c6379a1430a5b3415094ef1b6"
+    },
+    {
+      "path": "D:\\AIPatho\\qzs\\pfmval_automation\\barcode-repair-d626ad8\\mpp_standard_splits\\group_5\\split_manifest.csv",
+      "size_bytes": 647948,
+      "sha256": "2e8ac541b7687306b074949052e24c6d7fa9ebcbf41e27e9c1381c718e2fc8a5"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\5\\HYZ15040\\HYZ15040_ssGSEA.csv",
+      "size_bytes": 1005292,
+      "sha256": "c12b466129638c98ef5d426dc2ad9da29cfae611baec5a0f9cc2592cc9c9a37c"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\5\\JFX\\JFX_ssGSEA.csv",
+      "size_bytes": 1241475,
+      "sha256": "c92ab16c986a7288ab27aa7f731464bfde03d60a3f35748858d9009ce14eab34"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\5\\LMZ12939\\LMZ12939_ssGSEA.csv",
+      "size_bytes": 2058706,
+      "sha256": "4a356e9f050a269d8d67a6e9a7ba28ffa23e2f1d64749fc7bbd65daef36032fd"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\5\\TGC\\TGC_ssGSEA.csv",
+      "size_bytes": 689125,
+      "sha256": "8dc72494602c5a7fe9ab0deefd5f125538db8018796ed92198914af53014aa73"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\5\\XSL\\XSL_ssGSEA.csv",
+      "size_bytes": 920901,
+      "sha256": "c71f9aa715c56beeed5b7600d52cccea4274903107c9678b3f5a715b6f2ab6b1"
+    },
+    {
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\5\\ZHZ\\ZHZ_ssGSEA.csv",
+      "size_bytes": 646704,
+      "sha256": "8380fe30709b396529d27a852d0d04cab5991d39cdd5d71527434be3b8045807"
+    }
+  ],
+  "generated_assets": [
+    {
+      "path": "group_1/labels/external/XZY/XZY_ssGSEA_zscore_by_group_1_train.csv",
+      "role": "standardized_label",
+      "size_bytes": 613400,
+      "sha256": "0bc12e1fe7b7c0b44d24d145da9d792a6e02e39950639f1959dd165441ba183f",
+      "row_count": 1039,
+      "unique_barcode_count": 1039,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/train/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 1707300,
+      "sha256": "1147e0157e6c514b98fecc5c4cba614ffc07b8d01aa28c370ca0b0995242fcd6",
+      "row_count": 2764,
+      "unique_barcode_count": 2764,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/train/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 4272374,
+      "sha256": "99bb91a97f5944e34277f870d1ffd476687b5bc15e449da31d4ba44fcb9e9966",
+      "row_count": 7006,
+      "unique_barcode_count": 7006,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/train/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 4040741,
+      "sha256": "a894132be6f558279aa18b314709b2e075c2021abffa6215b3656d6540c246b4",
+      "row_count": 6547,
+      "unique_barcode_count": 6547,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/train/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 592093,
+      "sha256": "0d92b2af68b3c2bc7309a8506de089aa6ef7188da6b6f981569573970dd5694a",
+      "row_count": 998,
+      "unique_barcode_count": 998,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/train/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 823523,
+      "sha256": "363e9adcc81b89633c0d33cac4c3c06374811dd1977143e3057de7f1b3bf779a",
+      "row_count": 1365,
+      "unique_barcode_count": 1365,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/train/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 569318,
+      "sha256": "35f814bbfb3cfcb43a82d1f9abd603e930d4d0cd9d7c7c9c9f4bc6ddebede02e",
+      "row_count": 960,
+      "unique_barcode_count": 960,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/val/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 190031,
+      "sha256": "91a0a932f221aa961c2ac84c043f2cd1731403f73303b8a71262a15d4b9fb58a",
+      "row_count": 307,
+      "unique_barcode_count": 307,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/val/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 477999,
+      "sha256": "330ee110c23ccaef2275cab90479156030366e9ee874ffa82925cd8980935504",
+      "row_count": 782,
+      "unique_barcode_count": 782,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/val/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 449474,
+      "sha256": "4cc9dc2a05a4c52a859a44e1cf49e3037e76f99cadb7c7c9af7a1e6791b17cfb",
+      "row_count": 728,
+      "unique_barcode_count": 728,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/val/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 70385,
+      "sha256": "9173bd30527ae598d03c9c52c6f9b4b6d75375a01b480fa254b981f703fa06eb",
+      "row_count": 118,
+      "unique_barcode_count": 118,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/val/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 97530,
+      "sha256": "183784ea577a07d1cc388ac23f169dc748dd528ecbf4a2ee73fb32e98dde01f6",
+      "row_count": 161,
+      "unique_barcode_count": 161,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/labels/val/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 67687,
+      "sha256": "244bf9642fa88e7e90aaf52192b711d5201a58ae509886e75807b947b4b09e30",
+      "row_count": 114,
+      "unique_barcode_count": 114,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_1/zscore_manifest.json",
+      "role": "zscore_manifest",
+      "size_bytes": 1988,
+      "sha256": "4ade131472231ba8658c1f3dbf23dec2254d6d79fc30e56fd3c8b36ab5e2fe3a"
+    },
+    {
+      "path": "group_1/zscore_params_from_train.csv",
+      "role": "zscore_params",
+      "size_bytes": 1742,
+      "sha256": "9c1baa164ad354b49180f7e09b34c23bf70adc22b99609f1176903207f3eb17b"
+    },
+    {
+      "path": "group_1/zscore_params_from_train.json",
+      "role": "zscore_params",
+      "size_bytes": 4117,
+      "sha256": "359b68bc408053a30c61881486a9070f2bb2f3d9b628a7356381c3b15806a599"
+    },
+    {
+      "path": "group_2/labels/external/XZY/XZY_ssGSEA_zscore_by_group_2_train.csv",
+      "role": "standardized_label",
+      "size_bytes": 618364,
+      "sha256": "c526fb9094fcfc85c1f34811dc525a9e1c896abb1aefaeff8253096e2b1a5ed7",
+      "row_count": 1039,
+      "unique_barcode_count": 1039,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/train/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 806201,
+      "sha256": "7402b5a5147e025550b06e9938966f89dca7f9b64a0bb185276d2bd51c09ced7",
+      "row_count": 1309,
+      "unique_barcode_count": 1309,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/train/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 1105164,
+      "sha256": "4ae8f73d7f1991e1abcbff49551338b78bf735104683446ff6146048d05318b4",
+      "row_count": 1826,
+      "unique_barcode_count": 1826,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/train/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 1855988,
+      "sha256": "1eab25d190d81185c601b553c4454979d5a9b7106112d939ebade222bd5f8e22",
+      "row_count": 3014,
+      "unique_barcode_count": 3014,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/train/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 597341,
+      "sha256": "b568cc184918eaf408997b3edd643066d5980705732247f09a77ef43604e5383",
+      "row_count": 998,
+      "unique_barcode_count": 998,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/train/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 829741,
+      "sha256": "18fdcc7be7072b8d3bef723f1b646daa27f70298f1539276410074a864dc82de",
+      "row_count": 1365,
+      "unique_barcode_count": 1365,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/train/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 573986,
+      "sha256": "e156e402d5a018041d344e183897e55ba8f78fbc1c08485a1f499dbfb1165e88",
+      "row_count": 960,
+      "unique_barcode_count": 960,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/val/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 89765,
+      "sha256": "02319468345cc32674a10c5dd5cc67da918e05983d5640ee25e1a78a6a8a3b1c",
+      "row_count": 145,
+      "unique_barcode_count": 145,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/val/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 123041,
+      "sha256": "1e415faa111716275e415f91c913662dc916f62678ca7dde0bd33056d90f4f5d",
+      "row_count": 203,
+      "unique_barcode_count": 203,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/val/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 207893,
+      "sha256": "e14f3d2a16187a94ed007ef54711adb076b9851c76607941baba5aa5c38acf7a",
+      "row_count": 337,
+      "unique_barcode_count": 337,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/val/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 70978,
+      "sha256": "70a3e6cfd440fe910cb593086ed62372a49d16bcb0398a9194919b231d6a6fd0",
+      "row_count": 118,
+      "unique_barcode_count": 118,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/val/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 98353,
+      "sha256": "a81f9911075aabfc4f1ee6902969f6dcbcfd6414d8231dfa6703157480bbabe4",
+      "row_count": 161,
+      "unique_barcode_count": 161,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/labels/val/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 68381,
+      "sha256": "adfd3078ec9d7abc0977dec6bc931dfe9b695046180c403c35e82175e177b0f0",
+      "row_count": 114,
+      "unique_barcode_count": 114,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_2/zscore_manifest.json",
+      "role": "zscore_manifest",
+      "size_bytes": 1985,
+      "sha256": "16a59c191de784d73f50b7212278becf2cea4c5b3772cb27cc0aa1275be90cff"
+    },
+    {
+      "path": "group_2/zscore_params_from_train.csv",
+      "role": "zscore_params",
+      "size_bytes": 1704,
+      "sha256": "2dd230969399b7d1f55f54405280889d571c12f8abc2af584e7ef49e1c3e2a38"
+    },
+    {
+      "path": "group_2/zscore_params_from_train.json",
+      "role": "zscore_params",
+      "size_bytes": 4078,
+      "sha256": "fd65f6ab3a2dda2d8d9f8f17babe59818ea7d93f2480c5da2bcd6384ca37b2c8"
+    },
+    {
+      "path": "group_3/labels/external/XZY/XZY_ssGSEA_zscore_by_group_3_train.csv",
+      "role": "standardized_label",
+      "size_bytes": 618232,
+      "sha256": "9b84448c35e380147feb74db2db33d471fdf261d0e6976195f7def0755eb8882",
+      "row_count": 1039,
+      "unique_barcode_count": 1039,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/train/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 3002155,
+      "sha256": "5f14dd0e5b64198befb257ba9eb93d887abdb04ca854ed0d5f1b3ff4c9404009",
+      "row_count": 4873,
+      "unique_barcode_count": 4873,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/train/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 4005036,
+      "sha256": "008ee49e598e2a2cb835f7b086398264957b0cea8e56d2e6e5df4c6a94bae5cc",
+      "row_count": 6615,
+      "unique_barcode_count": 6615,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/train/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 6920654,
+      "sha256": "12e4771837cb775b215f763fc2875deee2bd31b5ae31c29d360c495dea51b8fd",
+      "row_count": 11241,
+      "unique_barcode_count": 11241,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/train/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 2264403,
+      "sha256": "633189223e5245e716dd8d5c233c5a132d505eadc85f73884b810ff7593e7fa7",
+      "row_count": 3784,
+      "unique_barcode_count": 3784,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/train/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 3135492,
+      "sha256": "d779a950bfb899637d464bf57a65789a3c61b8005bb8397fe86d72f6f39315c0",
+      "row_count": 5159,
+      "unique_barcode_count": 5159,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/train/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 2123517,
+      "sha256": "1cf387f3c5f5682c3d1b61a8033e2a9d9417116c765fb2be9d40579b4952e098",
+      "row_count": 3555,
+      "unique_barcode_count": 3555,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/val/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 370766,
+      "sha256": "fcf977c26f5abc24641528373d9bffec9d5d8b0f4ba6ecfc93557f25ee6e698a",
+      "row_count": 602,
+      "unique_barcode_count": 602,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/val/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 490613,
+      "sha256": "4c622c3389709fddb85942e96b10291c1f183ed33b5340289d0cdd778b867c02",
+      "row_count": 812,
+      "unique_barcode_count": 812,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/val/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 837399,
+      "sha256": "f325e0182a5bbfcc754fe50d443631451eae6b5621103600c876d19308bf2c9b",
+      "row_count": 1359,
+      "unique_barcode_count": 1359,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/val/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 299179,
+      "sha256": "594a1f699072738c00a873ae8d324d8301f6a98132509dd922133bbe1dc3bc52",
+      "row_count": 501,
+      "unique_barcode_count": 501,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/val/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 386974,
+      "sha256": "8198f7e79d4fb94f94fe2f96b6ec78241a84be289082b00e0c4277cc759e883e",
+      "row_count": 636,
+      "unique_barcode_count": 636,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/labels/val/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 289723,
+      "sha256": "5d2c7a6e9d1ee9c258e5264edb620a09aefa59df8db04dd46db6ce42e52fcdc1",
+      "row_count": 485,
+      "unique_barcode_count": 485,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_3/zscore_manifest.json",
+      "role": "zscore_manifest",
+      "size_bytes": 1981,
+      "sha256": "fff03f71371476f200bb43f08f46456498429602ec2a48b0b4d19165f7dc3fa0"
+    },
+    {
+      "path": "group_3/zscore_params_from_train.csv",
+      "role": "zscore_params",
+      "size_bytes": 1736,
+      "sha256": "f75df91a87d5b88951c304a8c7155732a13ff4752347bf02262aee7a8036b66c"
+    },
+    {
+      "path": "group_3/zscore_params_from_train.json",
+      "role": "zscore_params",
+      "size_bytes": 4111,
+      "sha256": "6f777e174c78f1470f68d3a753a0810aa61e2fb06a6a76a9f14efa43bdf3a805"
+    },
+    {
+      "path": "group_4/labels/external/XZY/XZY_ssGSEA_zscore_by_group_4_train.csv",
+      "role": "standardized_label",
+      "size_bytes": 624055,
+      "sha256": "2e1c5a9c85fd9b419953641697821265d0cc7b80c2b281110ed871d7a7332402",
+      "row_count": 1039,
+      "unique_barcode_count": 1039,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/train/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 237169,
+      "sha256": "c866527d7666501125c9676e55a21e7876cb78f1bb6d2400388c834e065e9c99",
+      "row_count": 386,
+      "unique_barcode_count": 386,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/train/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 294143,
+      "sha256": "4376edcb307a6008e73f515fcccb6cbe01e69516304b1d27cdd25156b581f70c",
+      "row_count": 487,
+      "unique_barcode_count": 487,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/train/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 490488,
+      "sha256": "09cdd97434bb6897af87e532d826a2138c253a99eccf964870b91d2dad69b38c",
+      "row_count": 800,
+      "unique_barcode_count": 800,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/train/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 164629,
+      "sha256": "73112899d29c7a7c813ddb2a64224d153e1c6c832fca2b3e48dae1a4036e8949",
+      "row_count": 274,
+      "unique_barcode_count": 274,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/train/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 213864,
+      "sha256": "a8ef10e3bacc66c68e26ea10e5ac3706654f42aa951753ae808c579813122695",
+      "row_count": 353,
+      "unique_barcode_count": 353,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/train/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 151790,
+      "sha256": "28ded65435c14a47365f12bbfb5f6a0c6da9eb7852bc76253a0425af8d1ff6fb",
+      "row_count": 253,
+      "unique_barcode_count": 253,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/val/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 26822,
+      "sha256": "c3ab4ab7f5338bb4887a7c6385dfa769c1f4b9607706ba0763b983295e0a0a9d",
+      "row_count": 43,
+      "unique_barcode_count": 43,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/val/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 32964,
+      "sha256": "865a998a0bd8fdbbd5e6b6e2cef6fe3d8e4f81011c945e92790fb22d021e2e1f",
+      "row_count": 54,
+      "unique_barcode_count": 54,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/val/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 54848,
+      "sha256": "0a8c9387e68c1d7183783b847ca307831f7731805841da654856804e1652d1c8",
+      "row_count": 89,
+      "unique_barcode_count": 89,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/val/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 20837,
+      "sha256": "d0f735ba26256c0a790e58121f883cff2b68c1f893d88fed26c915efab98e4dd",
+      "row_count": 34,
+      "unique_barcode_count": 34,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/val/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 26574,
+      "sha256": "a2f8631ef52a5b5ea74ce260543b9cda21df34c246bb63d0a04b10ed6a2378cd",
+      "row_count": 43,
+      "unique_barcode_count": 43,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/labels/val/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 17738,
+      "sha256": "8bde7ec0be0d9443b461ad96bdd56c40d8516a3e043a00e48df27e0b37e3934b",
+      "row_count": 29,
+      "unique_barcode_count": 29,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_4/zscore_manifest.json",
+      "role": "zscore_manifest",
+      "size_bytes": 1985,
+      "sha256": "d30a34bbe431933714f514fb70a7c98851757bca8e05d1a714712f2d7bd7dd03"
+    },
+    {
+      "path": "group_4/zscore_params_from_train.csv",
+      "role": "zscore_params",
+      "size_bytes": 1702,
+      "sha256": "8fbc619f788ff88ae34124d8a78da1f9118d3dfcec2de1fea5f03a7bc789e4f1"
+    },
+    {
+      "path": "group_4/zscore_params_from_train.json",
+      "role": "zscore_params",
+      "size_bytes": 4076,
+      "sha256": "4fb904e75294eab198db39b7a0bd6166c3af8e7a58bc1fb6ec524c5a7339dc1b"
+    },
+    {
+      "path": "group_5/labels/external/XZY/XZY_ssGSEA_zscore_by_group_5_train.csv",
+      "role": "standardized_label",
+      "size_bytes": 623953,
+      "sha256": "1826d44ba2af686b6f174acbcc2f3cad32f87768f878dff3b3b13e588bd11ff3",
+      "row_count": 1039,
+      "unique_barcode_count": 1039,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/train/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 854052,
+      "sha256": "809d7b2832ef4bbb41c58b29e6223143b60f46dfeff221caaf93fd26fb653d46",
+      "row_count": 1391,
+      "unique_barcode_count": 1391,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/train/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 1006363,
+      "sha256": "610da4079cbffbb0d5c10bb14c3e9429a2197f7be9cb7d94255caa9b3d556e2e",
+      "row_count": 1669,
+      "unique_barcode_count": 1669,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/train/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 1753450,
+      "sha256": "f384d595dd35d8951357ed79fbf9ae390dde49696f9c069f4202d1dd3cecce86",
+      "row_count": 2862,
+      "unique_barcode_count": 2862,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/train/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 601871,
+      "sha256": "9f1df2cfd3fd8708116f48b84b9331af25fb9dac229c1a4eaf12a682e655d114",
+      "row_count": 1004,
+      "unique_barcode_count": 1004,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/train/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 794698,
+      "sha256": "708f43083383578b48948f3bb2aa2c52a8c2b721042afeb506180a9a81bfaf05",
+      "row_count": 1311,
+      "unique_barcode_count": 1311,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/train/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 555930,
+      "sha256": "64327fc2f6ce39e55ebce1e5f6492e2a8314d802b48c8e3517fce225f7611ea3",
+      "row_count": 929,
+      "unique_barcode_count": 929,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/val/HYZ15040/HYZ15040_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 116318,
+      "sha256": "9dac1059a58cd916d8b378a23a209c995fab7bb35371f6322843028bc9f22070",
+      "row_count": 189,
+      "unique_barcode_count": 189,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/val/JFX/JFX_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 131470,
+      "sha256": "4cfa7bfebd1aa2a616ad315e212947ea826224233b44b5fe06719c15589008f6",
+      "row_count": 217,
+      "unique_barcode_count": 217,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/val/LMZ12939/LMZ12939_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 226869,
+      "sha256": "984d60d50662ddaf8917eecd5ddf623838a32caeecadadc80c9c658a73fcbb87",
+      "row_count": 370,
+      "unique_barcode_count": 370,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/val/TGC/TGC_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 73707,
+      "sha256": "01fe04744d85c60e38274d9a28bdd51ba30e6e2d25cb388e3ba8591788ecec4d",
+      "row_count": 122,
+      "unique_barcode_count": 122,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/val/XSL/XSL_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 107435,
+      "sha256": "0e2e22689f3e12189b5d3b44b8f159af1abe828ead28b70bfdb7ea2faab4e41a",
+      "row_count": 178,
+      "unique_barcode_count": 178,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/labels/val/ZHZ/ZHZ_ssGSEA_zscore.csv",
+      "role": "standardized_label",
+      "size_bytes": 78220,
+      "sha256": "a5d261e14dd08e1f80457ec636ca1e53c55757e93c3dbe004d9542045023fbc3",
+      "row_count": 130,
+      "unique_barcode_count": 130,
+      "duplicate_barcode_count": 0
+    },
+    {
+      "path": "group_5/zscore_manifest.json",
+      "role": "zscore_manifest",
+      "size_bytes": 1981,
+      "sha256": "d3e759571a66597974662bd56cd3cd91e2b4d6d64fe13bb41f7c915cb62115dd"
+    },
+    {
+      "path": "group_5/zscore_params_from_train.csv",
+      "role": "zscore_params",
+      "size_bytes": 1702,
+      "sha256": "217b0842487fedb3e004b4f2aaa56543bf8329a00bd9097e3a33f20fd7f4f24d"
+    },
+    {
+      "path": "group_5/zscore_params_from_train.json",
+      "role": "zscore_params",
+      "size_bytes": 4076,
+      "sha256": "772a32a98750eed8948de8d0e51cc110dac2e9afb9b59802e171946befc88f35"
+    }
+  ],
+  "validation": {
+    "patient_barcode_one_to_one": true,
+    "dataset_labels_unique": true,
+    "existing_mpp_assets_modified": false,
+    "published_from_versioned_staging": true
+  },
+  "training_gate": {
+    "status": "blocked_pending_evidence_import_and_explicit_gate_release",
+    "allowed_before_release": [
+      "mpp2_lora_implementation",
+      "mpp2_lora_tests"
+    ],
+    "forbidden_before_release": [
+      "smoke_training",
+      "formal_training"
+    ],
+    "post_release_sequence": [
+      "same_batch_mpp2_frozen_baseline",
+      "lora_r8_smoke_max_3_epochs"
+    ]
+  }
+}

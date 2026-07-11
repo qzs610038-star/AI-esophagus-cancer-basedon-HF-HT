@@ -26,7 +26,18 @@
     "latest_accepted_result_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "blocked_actions": {"type": "array", "items": {"type": "string"}},
     "superseded_conclusions": {"type": "array", "items": {"type": "string"}},
-    "source_hashes": {"type": "object"}
+    "source_hashes": {"type": "object"},
+    "mpp_repair": {
+      "type": "object",
+      "required": ["verified_evidence_id", "verified_data_manifest_id", "active_data_manifest_id", "status"],
+      "properties": {
+        "verified_evidence_id": {"type": "string"},
+        "verified_data_manifest_id": {"type": "string"},
+        "active_data_manifest_id": {"type": ["string", "null"]},
+        "status": {"enum": ["verified_pending_explicit_gate_release", "active"]},
+        "gate_release_directive_id": {"type": "string"}
+      }
+    }
   },
   "$defs": {
     "plan": {

@@ -21,10 +21,13 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.pfmval_state import (  # noqa: E402
+    activate_mpp_repair_evidence,
+    active_mpp_repair,
     append_directive,
     build_mpp_path_index,
     build_result_envelope,
     create_job_manifest,
+    import_mpp_repair_evidence_from_git,
     import_result_bundle,
     migrate_experiment_provenance,
     read_json,
@@ -35,6 +38,7 @@ from scripts.pfmval_state import (  # noqa: E402
     validate_job_manifest,
     validate_server_paths,
     validate_state,
+    verify_mpp_repair_server_assets,
     ValidationReport,
     write_json_atomic,
 )
@@ -102,6 +106,14 @@ def bound_job_parameter_argv(work_root: Path, manifest: Dict[str, Any], experime
     parameters = dict(manifest.get("parameters", {}))
     script = str(experiment.get("script", "")).replace("\\", "/")
     if script.endswith("train_mpp_uni2h_mlp.py"):
+        repair = active_mpp_repair(work_root)
+        if repair is None:
+            raise ValueError("MPP training requires an explicitly activated repaired-label data manifest")
+        if manifest.get("data_manifest_id") != repair.get("data_manifest_id"):
+            raise ValueError(
+                "MPP job data_manifest_id does not match active repaired labels: "
+                f"job={manifest.get('data_manifest_id')} active={repair.get('data_manifest_id')}"
+            )
         registry_path = work_root / "configs" / "server_paths.yaml"
         parameters.update({
             "mpp_root": str(get_registered_path("mpp_data_root", registry_path=registry_path, project_root=work_root)),
@@ -110,6 +122,7 @@ def bound_job_parameter_argv(work_root: Path, manifest: Dict[str, Any], experime
             # Standard splits are committed assets and must come from the pinned
             # worktree, not from a mutable checkout at the registered server path.
             "splits_root": str((work_root / "mpp_standard_splits").resolve()),
+            "manifest_labels_root": str(repair["server_stage_path"]),
             "output_root": str(get_registered_path("server_mpp_results", registry_path=registry_path, project_root=work_root)),
         })
     return safe_job_parameters(parameters)
@@ -198,6 +211,29 @@ def command_result(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_mpp(args: argparse.Namespace) -> int:
+    if args.mpp_command == "repair" and args.repair_command == "import":
+        result = import_mpp_repair_evidence_from_git(
+            PROJECT_ROOT,
+            git_ref=args.git_ref,
+            evidence_path=args.evidence_path,
+            expected_audit_sha256=args.expected_audit_sha256,
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        print("[BLOCKED] Repair evidence is verified but still requires an explicit gate-release directive")
+        return 0
+    if args.mpp_command == "repair" and args.repair_command == "activate":
+        result = activate_mpp_repair_evidence(
+            PROJECT_ROOT,
+            evidence_id=args.evidence_id,
+            directive_id=args.directive_id,
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        print("[PASS] Barcode repair gate released; formal training approval remains required")
+        return 0
+    raise ValueError("unknown MPP command")
+
+
 def command_agent(args: argparse.Namespace) -> int:
     action = "general" if args.task == "server" else args.task
     host_scope = args.host_scope or ("server" if args.task == "server" else "local")
@@ -279,6 +315,15 @@ def command_job(args: argparse.Namespace) -> int:
         if not report.ok:
             print("[BLOCKED] Server job preflight failed")
             return 1
+        if is_mpp_training:
+            repair = active_mpp_repair(work_root)
+            if repair is None:
+                raise ValueError("MPP training has no active repaired-label evidence")
+            verified = verify_mpp_repair_server_assets(work_root, repair)
+            print(
+                "[PASS] repaired-label staging revalidated: "
+                f"assets={verified['verified_generated_assets']} audit={verified['audit_sha256']}"
+            )
         if args.dry_run:
             print(f"[PASS] pinned detached-worktree dry-run complete: {work_root}")
             return 0
@@ -364,6 +409,18 @@ def build_parser() -> argparse.ArgumentParser:
     result_import = result_sub.add_parser("import")
     result_import.add_argument("--bundle", required=True)
 
+    mpp = sub.add_parser("mpp")
+    mpp_sub = mpp.add_subparsers(dest="mpp_command", required=True)
+    repair = mpp_sub.add_parser("repair")
+    repair_sub = repair.add_subparsers(dest="repair_command", required=True)
+    repair_import = repair_sub.add_parser("import")
+    repair_import.add_argument("--git-ref", required=True)
+    repair_import.add_argument("--evidence-path", required=True)
+    repair_import.add_argument("--expected-audit-sha256", required=True)
+    repair_activate = repair_sub.add_parser("activate")
+    repair_activate.add_argument("--evidence-id", required=True)
+    repair_activate.add_argument("--directive-id", required=True)
+
     agent = sub.add_parser("agent")
     agent_sub = agent.add_subparsers(dest="agent_command", required=True)
     start = agent_sub.add_parser("start-check")
@@ -413,6 +470,8 @@ def main() -> int:
             return command_paths(args)
         if args.command == "result":
             return command_result(args)
+        if args.command == "mpp":
+            return command_mpp(args)
         if args.command == "agent":
             return command_agent(args)
         if args.command == "job":
