@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 26,
-  "updated_at": "2026-07-11T07:43:19+00:00",
-  "source_commit": "1fa33e09967f8dde9764ba4cbf47da653e01b081",
+  "state_revision": 29,
+  "updated_at": "2026-07-11T08:06:12+00:00",
+  "source_commit": "295cdca237156f3dfe2b58e1db69d18d08689126",
   "active_directive_ids": [
     "DIR-20260709-001",
     "DIR-20260710-001",
@@ -68,7 +68,7 @@
   "source_hashes": {
     "experiment_registry_sha256": "25c01ca97bfefd8ed38a95d618ff4eab3f03bbd8c062adaa09ae560a7806b44b",
     "experiment_dashboard_sha256": "b0369f89b1212002ef807c7653b4e727a35d4ff778333e6195af3f827775ab80",
-    "document_registry_sha256": "33521bf38a268f1586bfd4b82b9e1a0a1bf4dae31d574165aaf8a9e3a3de27f1",
+    "document_registry_sha256": "a5b8727e7d1ffad7318e7f009dbdab93a7126fb01fb76de06e802f13b46e12db",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "66689f64be07d0dc28a8b52ce91dee8f969353171f039bf53815e95eaa59940f",
     "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"

@@ -59,6 +59,7 @@ def test_server_job_injects_only_the_activated_repaired_label_root(tmp_path):
     (tmp_path / "configs" / "server_paths.yaml").write_text(
         "schema_version: '1.0'\npaths:\n"
         "  mpp_data_root: {path: 'D:\\raw', required_on: server}\n"
+        "  server_mpp_partner_cache: {path: 'D:\\partner', required_on: server}\n"
         "  server_mpp_flat_cache: {path: 'D:\\cache', required_on: server}\n"
         "  server_mpp_results: {path: 'D:\\results', required_on: server}\n",
         encoding="utf-8",
@@ -70,8 +71,12 @@ def test_server_job_injects_only_the_activated_repaired_label_root(tmp_path):
 
     manifest_index = argv.index("--manifest_labels_root")
     splits_index = argv.index("--splits_root")
+    cache_index = argv.index("--cache_root")
+    flat_cache_index = argv.index("--flat_cache_root")
     assert argv[manifest_index + 1] == stage
     assert Path(argv[splits_index + 1]) == (tmp_path / "mpp_standard_splits").resolve()
+    assert argv[cache_index + 1] == r"D:\partner"
+    assert argv[flat_cache_index + 1] == r"D:\cache"
 
     with pytest.raises(ValueError, match="does not match active repaired labels"):
         bound_job_parameter_argv(

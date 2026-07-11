@@ -117,7 +117,9 @@ def bound_job_parameter_argv(work_root: Path, manifest: Dict[str, Any], experime
         registry_path = work_root / "configs" / "server_paths.yaml"
         parameters.update({
             "mpp_root": str(get_registered_path("mpp_data_root", registry_path=registry_path, project_root=work_root)),
-            "cache_root": str(get_registered_path("server_mpp_flat_cache", registry_path=registry_path, project_root=work_root)),
+            # MPP2-5 training features live in the partner-style MPP{N}_UNI
+            # cache. The flat cache remains reserved for external XZY lookup.
+            "cache_root": str(get_registered_path("server_mpp_partner_cache", registry_path=registry_path, project_root=work_root)),
             "flat_cache_root": str(get_registered_path("server_mpp_flat_cache", registry_path=registry_path, project_root=work_root)),
             # Standard splits are committed assets and must come from the pinned
             # worktree, not from a mutable checkout at the registered server path.

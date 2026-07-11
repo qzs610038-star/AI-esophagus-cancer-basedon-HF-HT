@@ -36,6 +36,7 @@ SMOKE_MAX_EPOCHS = 3
 MPP_TRAINING_PATH_IDS = {
     "mpp_data_root",
     "mpp_standard_splits",
+    "server_mpp_partner_cache",
     "server_mpp_flat_cache",
     "server_mpp_results",
 }

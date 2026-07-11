@@ -785,13 +785,27 @@ def test_mpp_job_requires_registered_paths_and_manifest_mode():
     parameters = {"num_epochs": 2, "train_mpp_id": 2, "val_strategy": "manifest"}
     with pytest.raises(ValueError, match="missing required path ids"):
         validate_job_semantics("smoke", "standard_training", parameters, experiment=experiment)
+    with pytest.raises(ValueError, match="server_mpp_partner_cache"):
+        validate_job_semantics(
+            "smoke",
+            "standard_training",
+            parameters,
+            experiment=experiment,
+            path_ids=["mpp_data_root", "mpp_standard_splits", "server_mpp_flat_cache", "server_mpp_results"],
+        )
     with pytest.raises(ValueError, match="cannot be overridden"):
         validate_job_semantics(
             "smoke",
             "standard_training",
             {**parameters, "cache_root": "elsewhere"},
             experiment=experiment,
-            path_ids=["mpp_data_root", "mpp_standard_splits", "server_mpp_flat_cache", "server_mpp_results"],
+            path_ids=[
+                "mpp_data_root",
+                "mpp_standard_splits",
+                "server_mpp_partner_cache",
+                "server_mpp_flat_cache",
+                "server_mpp_results",
+            ],
         )
 
 

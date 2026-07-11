@@ -52,7 +52,10 @@ detached worktree under path id `server_automation_worktrees` at the pinned
 accepts only validated flag/value parameters; arbitrary shell command strings
 are unsupported. MPP path flags cannot be supplied by the job: the runner
 injects them from registered path IDs, while standard splits come from the
-pinned worktree.
+pinned worktree. For manifest MPP training, `cache_root` resolves to
+`server_mpp_partner_cache` (`uni2h_cache/MPP{N}_UNI/...`) and `flat_cache_root`
+resolves to `server_mpp_flat_cache` (`mpp_uni2h_cache`, including external
+MPP2/XZY).
 
 ### Training argument spelling contract
 
