@@ -119,7 +119,7 @@ $pythonProcs = Get-Process python -ErrorAction SilentlyContinue
 if ($pythonProcs) {
     Write-Host "[WARN] Found $($pythonProcs.Count) lingering python.exe process(es):"
     $pythonProcs | ForEach-Object { Write-Host "  PID=$($_.Id) CPU=$($_.CPU) WS=$([math]::Round($_.WorkingSet64/1MB, 1))MB" }
-    Write-Host "[INFO] If GPU memory is low, run: taskkill /F /IM python.exe"
+    Write-Host "[INFO] No process will be terminated automatically. Verify process ownership and GPU usage before any manual action."
 }
 
 # ------------------------------------------------------------
@@ -196,6 +196,12 @@ Write-Host "============================================================"
 $fullArgs = "-u `"$scriptPath`" $Arguments --num_threads 8"
 
 # Execute and tee to log
+$outSourceIdentifier = "pfmval.$PID.$timestamp.stdout"
+$errSourceIdentifier = "pfmval.$PID.$timestamp.stderr"
+$logStream = $null
+$proc = $null
+$launchFailed = $false
+$exitCode = 1
 try {
     $procInfo = New-Object System.Diagnostics.ProcessStartInfo
     $procInfo.FileName = $pythonPath
@@ -215,7 +221,7 @@ try {
     $outputBuilder = New-Object System.Text.StringBuilder
     $errorBuilder = New-Object System.Text.StringBuilder
 
-    $outEvent = Register-ObjectEvent -InputObject $proc -EventName OutputDataReceived -Action {
+    Register-ObjectEvent -InputObject $proc -EventName OutputDataReceived -SourceIdentifier $outSourceIdentifier -Action {
         $line = $EventArgs.Data
         if ($line -ne $null) {
             Write-Host $line
@@ -224,7 +230,7 @@ try {
         }
     } | Out-Null
 
-    $errEvent = Register-ObjectEvent -InputObject $proc -EventName ErrorDataReceived -Action {
+    Register-ObjectEvent -InputObject $proc -EventName ErrorDataReceived -SourceIdentifier $errSourceIdentifier -Action {
         $line = $EventArgs.Data
         if ($line -ne $null) {
             Write-Host "[STDERR] $line" -ForegroundColor Red
@@ -240,14 +246,27 @@ try {
 
     $exitCode = $proc.ExitCode
 
-    $logStream.Close()
-    $logStream.Dispose()
-
-    Unregister-Event -SourceIdentifier $outEvent.Name -ErrorAction SilentlyContinue
-    Unregister-Event -SourceIdentifier $errEvent.Name -ErrorAction SilentlyContinue
-
 } catch {
+    $launchFailed = $true
     Write-Host "[FAIL] Failed to start training process: $_"
+} finally {
+    # Cleanup must never replace the Python exit code or hide argparse stderr.
+    # Use explicit non-empty identifiers instead of capturing a pipeline whose
+    # output is discarded by Out-Null.
+    Unregister-Event -SourceIdentifier $outSourceIdentifier -ErrorAction SilentlyContinue
+    Unregister-Event -SourceIdentifier $errSourceIdentifier -ErrorAction SilentlyContinue
+    Get-Job -Name $outSourceIdentifier -ErrorAction SilentlyContinue | Remove-Job -Force -ErrorAction SilentlyContinue
+    Get-Job -Name $errSourceIdentifier -ErrorAction SilentlyContinue | Remove-Job -Force -ErrorAction SilentlyContinue
+    if ($logStream) {
+        $logStream.Close()
+        $logStream.Dispose()
+    }
+    if ($proc) {
+        $proc.Dispose()
+    }
+}
+
+if ($launchFailed) {
     exit 1
 }
 

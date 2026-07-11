@@ -1885,7 +1885,11 @@ def safe_job_parameters(parameters: Mapping[str, Any]) -> List[str]:
         if not key_pattern.fullmatch(key):
             raise ValueError(f"unsafe job parameter name: {key}")
         value = parameters[key]
-        flag = "--" + key.replace("_", "-")
+        # Job keys are the training script's argparse option names. Preserve
+        # underscores exactly; silent style conversion previously produced
+        # syntactically safe but invalid argv (for example --batch-size when
+        # the script declares --batch_size).
+        flag = "--" + key
         if isinstance(value, bool):
             if value:
                 argv.append(flag)

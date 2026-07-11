@@ -68,8 +68,8 @@ def test_server_job_injects_only_the_activated_repaired_label_root(tmp_path):
 
     argv = bound_job_parameter_argv(tmp_path, manifest, experiment)
 
-    manifest_index = argv.index("--manifest-labels-root")
-    splits_index = argv.index("--splits-root")
+    manifest_index = argv.index("--manifest_labels_root")
+    splits_index = argv.index("--splits_root")
     assert argv[manifest_index + 1] == stage
     assert Path(argv[splits_index + 1]) == (tmp_path / "mpp_standard_splits").resolve()
 

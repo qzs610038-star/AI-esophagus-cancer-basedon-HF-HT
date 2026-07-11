@@ -12,6 +12,9 @@
 - 本地验证服务器回传包后，才更新 accepted 结果和当前状态。
 - 作业清单绑定已提交的 `source_commit`；服务器在 path id `server_automation_worktrees` 下建立只读语义的干净 detached worktree，复用前同时核对 HEAD 和工作区清洁度。
 - MPP 作业的输入、缓存、标准划分和输出根只能由已登记 path id 注入，作业参数不得覆盖路径；标准划分固定读取 pinned worktree 内的受 Git 跟踪资产。
+- 作业参数 key 必须原样映射为 Python `--<key>`，不得自动在下划线与连字符之间转换；历史拼写兼容只能在训练脚本的 `argparse` 中显式声明别名并由回归测试覆盖。
+- 启动器清理 stdout/stderr 事件时必须使用显式、非空的 SourceIdentifier；清理异常不得覆盖 Python 原始 stderr 或退出码。
+- 旧作业 `mpp2-repair-v003-frozen-20260711` 在 Python 参数解析阶段失败、未开始训练，不得打包结果或复用；修复后必须绑定新提交并生成新 job_id。
 
 ## 状态链
 

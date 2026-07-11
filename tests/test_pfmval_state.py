@@ -1,3 +1,4 @@
+import ast
 import hashlib
 import json
 import subprocess
@@ -8,6 +9,7 @@ import pytest
 from scripts import finalize_experiment as finalize_module
 from scripts.finalize_experiment import build_dashboard
 from scripts.pfmval_state import (
+    MPP_TRAINING_ALLOWED_PARAMETERS,
     append_directive,
     activate_mpp_repair_evidence,
     build_mpp_path_index,
@@ -273,9 +275,40 @@ def test_manual_dashboard_edit_is_detected(tmp_path):
 
 
 def test_job_parameters_are_argv_safe():
-    assert safe_job_parameters({"fold": 1, "allow_missing": True}) == ["--allow-missing", "--fold", "1"]
+    assert safe_job_parameters({"batch_size": 32, "fold": 1}) == ["--batch_size", "32", "--fold", "1"]
     with pytest.raises(ValueError, match="unsafe job parameter value"):
         safe_job_parameters({"fold": "1;Remove-Item"})
+
+
+def test_mpp_job_parameter_names_match_argparse_flags_exactly():
+    project_root = Path(__file__).resolve().parent.parent
+    script = (project_root / "train_mpp_uni2h_mlp.py").read_text(encoding="utf-8")
+    tree = ast.parse(script)
+    declared_flags = {
+        argument.value
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "add_argument"
+        for argument in node.args
+        if isinstance(argument, ast.Constant)
+        and isinstance(argument.value, str)
+        and argument.value.startswith("--")
+    }
+    missing = sorted(key for key in MPP_TRAINING_ALLOWED_PARAMETERS if f"--{key}" not in declared_flags)
+    assert missing == []
+
+
+def test_powershell_launcher_keeps_event_identifiers_for_cleanup():
+    project_root = Path(__file__).resolve().parent.parent
+    launcher = (project_root / "deploy" / "run_experiment.ps1").read_text(encoding="utf-8")
+    assert "-SourceIdentifier $outSourceIdentifier" in launcher
+    assert "-SourceIdentifier $errSourceIdentifier" in launcher
+    assert "Unregister-Event -SourceIdentifier $outSourceIdentifier" in launcher
+    assert "Unregister-Event -SourceIdentifier $errSourceIdentifier" in launcher
+    assert "$outEvent = Register-ObjectEvent" not in launcher
+    assert "$errEvent = Register-ObjectEvent" not in launcher
+    assert "taskkill /F /IM python.exe" not in launcher
 
 
 def test_path_registry_resolves_relative_path_and_rejects_escape(tmp_path):

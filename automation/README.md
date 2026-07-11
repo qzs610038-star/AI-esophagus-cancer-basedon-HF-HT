@@ -54,6 +54,18 @@ are unsupported. MPP path flags cannot be supplied by the job: the runner
 injects them from registered path IDs, while standard splits come from the
 pinned worktree.
 
+### Training argument spelling contract
+
+- A job parameter key maps exactly to the Python option `--<key>`; underscores
+  are preserved and must never be silently converted to hyphens.
+- If a training script retains an older hyphenated CLI option, declare that
+  spelling as an explicit `argparse` alias with the same destination.
+- Tests compare the allowlisted MPP job keys with
+  `train_mpp_uni2h_mlp.py`; a mismatch is a release blocker.
+- `mpp2-repair-v003-frozen-20260711` is a failed pre-training launch bound to
+  source `1fa33e0`; do not reuse, overwrite, package, or treat it as a result.
+  A repaired dispatch must use a new source commit and a new job ID.
+
 ## Server result package
 
 ```powershell

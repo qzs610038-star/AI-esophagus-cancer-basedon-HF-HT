@@ -439,7 +439,7 @@ def main():
                         help="MLP 隐藏层维度")
     parser.add_argument("--output_root", default="checkpoints/mpp_uni2h_mlp",
                         help="输出根目录")
-    parser.add_argument("--allow-missing", action="store_true",
+    parser.add_argument("--allow_missing", "--allow-missing", dest="allow_missing", action="store_true",
                         help="允许缺失患者数据（smoke 测试用，默认报错）")
     parser.add_argument("--patience", type=int, default=10,
                         help="早停 patience：训练 loss 连续 N 个 epoch 无改善则停止（默认 10）")
