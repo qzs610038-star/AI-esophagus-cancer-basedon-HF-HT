@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 29,
-  "updated_at": "2026-07-11T08:06:12+00:00",
-  "source_commit": "295cdca237156f3dfe2b58e1db69d18d08689126",
+  "state_revision": 30,
+  "updated_at": "2026-07-11T08:42:23+00:00",
+  "source_commit": "5649ca0fc2ba9de1fea8fc607bcef8ec1a617628",
   "active_directive_ids": [
     "DIR-20260709-001",
     "DIR-20260710-001",
@@ -51,14 +51,14 @@
     "mpp2_std10val_xzy_ext_uni2h_mlp_20260706",
     "mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
     "mpp4_std10val_xzy_ext_uni2h_mlp_20260706",
-    "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706"
+    "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
+    "mpp2_barcode_repair_v003_frozen_baseline_20260711"
   ],
   "blocked_actions": [
     "direct_server_connection",
     "formal_training_without_user_approval",
     "implicit_mpp_asset_deletion_or_regeneration",
-    "promote_pending_result_to_current_conclusion",
-    "mpp2_lora_until_repaired_baseline_passes_guard"
+    "promote_pending_result_to_current_conclusion"
   ],
   "superseded_conclusions": [
     "SSH, SCP, HTTP command service and Remote Tunnel are not active server channels.",
@@ -66,8 +66,8 @@
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
   "source_hashes": {
-    "experiment_registry_sha256": "25c01ca97bfefd8ed38a95d618ff4eab3f03bbd8c062adaa09ae560a7806b44b",
-    "experiment_dashboard_sha256": "b0369f89b1212002ef807c7653b4e727a35d4ff778333e6195af3f827775ab80",
+    "experiment_registry_sha256": "a40a06d3276bea80ce69f48cd8c4b83fdb48115320e53b041df429145b6c9c33",
+    "experiment_dashboard_sha256": "dcf8035da1c3021e7e87a6073a7407de52f25a21e8af8a1b87f334789efb5d91",
     "document_registry_sha256": "a5b8727e7d1ffad7318e7f009dbdab93a7126fb01fb76de06e802f13b46e12db",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "66689f64be07d0dc28a8b52ce91dee8f969353171f039bf53815e95eaa59940f",
@@ -87,7 +87,7 @@
     "status": "active",
     "gate_release_directive_id": "DIR-20260711-004",
     "baseline_guard": {
-      "status": "pending_repaired_mpp2_baseline",
+      "status": "passed_allow_lora",
       "reference_experiment_id": "mpp2_std10val_xzy_ext_uni2h_mlp_20260706",
       "reference_metrics": {
         "external_xzy_pcc": 0.6489,
@@ -100,7 +100,21 @@
         "raw_r2_abs_drop": 0.1
       },
       "on_pass": "allow_lora_r8_smoke_max_3_epochs",
-      "on_trigger": "pause_lora_and_rerun_repaired_mpp1_5_frozen_baselines"
+      "on_trigger": "pause_lora_and_rerun_repaired_mpp1_5_frozen_baselines",
+      "observed_result_id": "mpp2-repair-v003-frozen-20260711-r002-result-20260711164140-f2b1b51d",
+      "evaluated_at": "2026-07-11T08:42:23+00:00",
+      "missing_metrics": [],
+      "triggered_metrics": [],
+      "observed_metrics": {
+        "external_xzy_pcc": 0.6549,
+        "external_xzy_mae_raw": 1176.2114,
+        "external_xzy_r2_raw": -0.088
+      },
+      "deltas": {
+        "pcc_drop": -0.006000000000000005,
+        "raw_mae_relative_increase": -0.027869509317716812,
+        "raw_r2_drop": -0.06740000000000002
+      }
     }
   }
 }
