@@ -294,12 +294,29 @@ def test_server_task_skips_missing_local_only_legacy_path(tmp_path):
     )
 
     server_report = ValidationReport()
-    validate_server_paths(root, server_report, task="server")
+    validate_server_paths(root, server_report, task="general", host_scope="server")
     assert not any("legacy_partner_labels_local" in item for item in server_report.fail_items)
 
     local_report = ValidationReport()
     validate_server_paths(root, local_report, task="general")
     assert any("legacy_partner_labels_local" in item for item in local_report.fail_items)
+
+
+def test_server_scope_still_requires_missing_both_path(tmp_path):
+    root = make_minimal_project(tmp_path)
+    (root / "configs" / "server_paths.yaml").write_text(
+        (root / "configs" / "server_paths.yaml").read_text(encoding="utf-8")
+        + "\n  required_on_both_missing:\n"
+        + "    path: server_required_asset\n"
+        + "    kind: repo_directory\n"
+        + "    status: active\n"
+        + "    required_on: both\n",
+        encoding="utf-8",
+    )
+
+    report = ValidationReport()
+    validate_server_paths(root, report, task="training", host_scope="server")
+    assert any("required_on_both_missing" in item for item in report.fail_items)
 
 
 def test_repository_declares_lf_checkout_policy():

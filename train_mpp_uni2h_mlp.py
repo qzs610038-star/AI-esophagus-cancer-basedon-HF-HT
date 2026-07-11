@@ -434,7 +434,12 @@ def main():
     # transport or result-evidence gates.
     from scripts.pfmval_state import validate_state
     project_root = Path(__file__).resolve().parent
-    state_report = validate_state(project_root, strict=True, task="training")
+    state_report = validate_state(
+        project_root,
+        strict=True,
+        task="training",
+        host_scope="server",
+    )
     if not state_report.ok:
         state_report.emit()
         print("[BLOCKED] MPP training is blocked by the authoritative project state")

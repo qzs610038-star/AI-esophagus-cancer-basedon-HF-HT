@@ -95,8 +95,8 @@ if (-not (Test-Path $opsScript)) {
     Write-Host "[FAIL] Durable state CLI missing: $opsScript"
     exit 1
 }
-$stateTask = if ($Script -like "*mpp*") { "training" } else { "server" }
-& $pythonPath $opsScript agent start-check --strict --task $stateTask
+$stateTask = if ($Script -like "*mpp*") { "training" } else { "general" }
+& $pythonPath $opsScript agent start-check --strict --task $stateTask --host-scope server
 if ($LASTEXITCODE -ne 0) {
     Write-Host "[FAIL] Project state/training gate rejected this launch."
     exit 1

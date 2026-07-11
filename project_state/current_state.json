@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 15,
-  "updated_at": "2026-07-11T05:42:51+00:00",
-  "source_commit": "f9d0d51ce6063236b21a8069ee407cb416ed0967",
+  "state_revision": 16,
+  "updated_at": "2026-07-11T05:51:52+00:00",
+  "source_commit": "1a35e0b8da85648601416a7033a95cbe07d439eb",
   "active_directive_ids": [
     "DIR-20260709-001",
     "DIR-20260710-001",
@@ -66,7 +66,7 @@
   "source_hashes": {
     "experiment_registry_sha256": "be6dc3edb6d0e940efd71d02cd1c69f709cfbefbc442d77617d8414acabc8ca0",
     "experiment_dashboard_sha256": "5419c6b17b6e09a76fb87d6c26f93727b9094575ff81a142fd32ba242537f596",
-    "document_registry_sha256": "97802abdcc1ce05204de6d500232b5ad2f9576fdc68aa4fd3d1ed568ff65e456",
+    "document_registry_sha256": "b2e1f3c465a915a27ce6d4df2fa5560306bf3f1d671b84ae4b969b2fd504de22",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "66689f64be07d0dc28a8b52ce91dee8f969353171f039bf53815e95eaa59940f"
   },

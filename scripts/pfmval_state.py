@@ -889,7 +889,13 @@ class ValidationReport:
         print(f"[SUMMARY] PASS={len(self.pass_items)} WARN={len(self.warn_items)} FAIL={len(self.fail_items)}")
 
 
-def validate_server_paths(root: Path, report: ValidationReport, *, task: str = "general") -> None:
+def validate_server_paths(
+    root: Path,
+    report: ValidationReport,
+    *,
+    task: str = "general",
+    host_scope: Optional[str] = None,
+) -> None:
     try:
         registry = load_server_paths(root)
     except Exception as exc:
@@ -901,19 +907,24 @@ def validate_server_paths(root: Path, report: ValidationReport, *, task: str = "
     if not isinstance(paths, dict) or not paths:
         report.fail("server path registry contains no paths")
         return
+    if host_scope is None:
+        # Backward-compatible alias: task=server historically meant a server
+        # host check. New callers should pass host_scope explicitly.
+        host_scope = "server" if task == "server" else "local"
+    if host_scope not in {"local", "server"}:
+        report.fail(f"invalid host scope: {host_scope}")
+        return
+    required_scopes = {"local", "both"} if host_scope == "local" else {"server", "both"}
+
     for path_id, entry in paths.items():
         if entry.get("status") not in {"active", "legacy", "deprecated"}:
             report.fail(f"path {path_id} has invalid status")
         if not entry.get("path"):
             report.fail(f"path {path_id} has no path value")
-        # Server worktrees must not require local-only legacy assets. The
-        # default/general task keeps local validation; explicit server checks
-        # validate server/both paths without demanding local-only directories.
-        check_local_path = task != "server" and entry.get("required_on") in {"local", "both"}
-        if check_local_path and not re.match(r"^[A-Za-z]:[\\/]", str(entry["path"])):
-            local_path = root / str(entry["path"])
-            if not local_path.exists():
-                report.fail(f"required local path missing: {path_id} -> {entry['path']}")
+        if entry.get("required_on") in required_scopes and not re.match(r"^[A-Za-z]:[\\/]", str(entry["path"])):
+            scoped_path = root / str(entry["path"])
+            if not scoped_path.exists():
+                report.fail(f"required {host_scope} path missing: {path_id} -> {entry['path']}")
     active_path_files = [
         "extract_uni2h_mpp.py",
         "prepare_mpp_zscore.py",
@@ -949,7 +960,13 @@ def validate_server_paths(root: Path, report: ValidationReport, *, task: str = "
         report.warn("mpp_standard_splits/path_index.json is missing")
 
 
-def validate_state(root: Path, *, strict: bool = False, task: str = "general") -> ValidationReport:
+def validate_state(
+    root: Path,
+    *,
+    strict: bool = False,
+    task: str = "general",
+    host_scope: Optional[str] = None,
+) -> ValidationReport:
     report = ValidationReport()
     try:
         state = read_json(root / "project_state" / "current_state.json")
@@ -1097,7 +1114,7 @@ def validate_state(root: Path, *, strict: bool = False, task: str = "general") -
     elif local_pending:
         report.warn(f"pending results must be imported before model conclusions: {local_pending}")
 
-    validate_server_paths(root, report, task=task)
+    validate_server_paths(root, report, task=task, host_scope=host_scope)
     if not report.fail_items:
         report.passed("state package validation completed")
     return report

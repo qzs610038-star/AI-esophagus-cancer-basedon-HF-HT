@@ -35,15 +35,15 @@ For a formal job, create an approval JSON that binds the exact `job_id` and
 After manually fetching the first job branch, validate before execution:
 
 ```powershell
-python deploy/pfmval_ops.py agent start-check --strict --task server
-python deploy/pfmval_ops.py paths validate --task server
+python deploy/pfmval_ops.py agent start-check --strict --task general --host-scope server
+python deploy/pfmval_ops.py paths validate --task general --host-scope server
 python deploy/pfmval_ops.py job validate --manifest automation/jobs/<id>/job.json
 python deploy/pfmval_ops.py job run --manifest automation/jobs/<id>/job.json --dry-run
 ```
 
-The `server` task deliberately skips `required_on: local` legacy paths. Do not
-copy local partner-label directories into a server worktree to satisfy that
-check.
+The server host scope skips `required_on: local` legacy paths but still checks
+`required_on: both`. Do not copy local partner-label directories into a server
+worktree to satisfy that check.
 
 Remove `--dry-run` only after preflight passes. Actual execution creates a
 detached worktree under path id `server_automation_worktrees` at the pinned

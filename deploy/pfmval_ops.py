@@ -149,7 +149,14 @@ def command_state(args: argparse.Namespace) -> int:
         print(f"[PASS] initial state/document/provenance migration complete; revision={state['state_revision']}")
         return 0
     if args.state_command == "validate":
-        report = validate_state(PROJECT_ROOT, strict=args.strict, task=args.task)
+        action = "general" if args.task == "server" else args.task
+        host_scope = args.host_scope or ("server" if args.task == "server" else "local")
+        report = validate_state(
+            PROJECT_ROOT,
+            strict=args.strict,
+            task=action,
+            host_scope=host_scope,
+        )
         report.emit()
         return 0 if report.ok else 1
     raise ValueError(f"unknown state command: {args.state_command}")
@@ -178,7 +185,8 @@ def command_paths(args: argparse.Namespace) -> int:
     if args.paths_command == "validate":
         report = ValidationReport()
         task = "training" if args.training else args.task
-        validate_server_paths(PROJECT_ROOT, report, task=task)
+        host_scope = args.host_scope or ("server" if args.task == "server" else "local")
+        validate_server_paths(PROJECT_ROOT, report, task=task, host_scope=host_scope)
         report.emit()
         return 0 if report.ok else 1
     raise ValueError(f"unknown paths command: {args.paths_command}")
@@ -191,7 +199,14 @@ def command_result(args: argparse.Namespace) -> int:
 
 
 def command_agent(args: argparse.Namespace) -> int:
-    report = validate_state(PROJECT_ROOT, strict=args.strict, task=args.task)
+    action = "general" if args.task == "server" else args.task
+    host_scope = args.host_scope or ("server" if args.task == "server" else "local")
+    report = validate_state(
+        PROJECT_ROOT,
+        strict=args.strict,
+        task=action,
+        host_scope=host_scope,
+    )
     report.emit()
     if not report.ok:
         print("[BLOCKED] Resolve critical state conflicts before continuing.")
@@ -208,7 +223,12 @@ def command_job(args: argparse.Namespace) -> int:
         is_mpp_training = args.command_id == "standard_training" and experiment and (
             str(experiment.get("family", "")).startswith("mpp") or "mpp" in str(experiment.get("script", "")).lower()
         )
-        report = validate_state(PROJECT_ROOT, strict=True, task="training" if is_mpp_training else "general")
+        report = validate_state(
+            PROJECT_ROOT,
+            strict=True,
+            task="training" if is_mpp_training else "general",
+            host_scope="local",
+        )
         if not report.ok:
             report.emit()
             raise ValueError("job dispatch blocked by current project state")
@@ -249,7 +269,12 @@ def command_job(args: argparse.Namespace) -> int:
         is_mpp_training = manifest["command_id"] == "standard_training" and (
             str(experiment.get("family", "")).startswith("mpp") or "mpp" in str(experiment.get("script", "")).lower()
         )
-        report = validate_state(work_root, strict=True, task="training" if is_mpp_training else "server")
+        report = validate_state(
+            work_root,
+            strict=True,
+            task="training" if is_mpp_training else "general",
+            host_scope="server",
+        )
         report.emit()
         if not report.ok:
             print("[BLOCKED] Server job preflight failed")
@@ -319,6 +344,7 @@ def build_parser() -> argparse.ArgumentParser:
     validate = state_sub.add_parser("validate")
     validate.add_argument("--strict", action="store_true")
     validate.add_argument("--task", choices=["general", "server", "training"], default="general")
+    validate.add_argument("--host-scope", choices=["local", "server"], default=None)
 
     docs = sub.add_parser("docs")
     docs_sub = docs.add_subparsers(dest="docs_command", required=True)
@@ -331,6 +357,7 @@ def build_parser() -> argparse.ArgumentParser:
     path_validate = paths_sub.add_parser("validate")
     path_validate.add_argument("--training", action="store_true")
     path_validate.add_argument("--task", choices=["general", "server", "training"], default="general")
+    path_validate.add_argument("--host-scope", choices=["local", "server"], default=None)
 
     result = sub.add_parser("result")
     result_sub = result.add_subparsers(dest="result_command", required=True)
@@ -342,6 +369,7 @@ def build_parser() -> argparse.ArgumentParser:
     start = agent_sub.add_parser("start-check")
     start.add_argument("--strict", action="store_true")
     start.add_argument("--task", choices=["general", "server", "training"], default="general")
+    start.add_argument("--host-scope", choices=["local", "server"], default=None)
 
     job = sub.add_parser("job")
     job_sub = job.add_subparsers(dest="job_command", required=True)
