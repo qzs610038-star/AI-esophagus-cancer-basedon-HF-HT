@@ -127,6 +127,29 @@ def bound_job_parameter_argv(work_root: Path, manifest: Dict[str, Any], experime
             "manifest_labels_root": str(repair["server_stage_path"]),
             "output_root": str(get_registered_path("server_mpp_results", registry_path=registry_path, project_root=work_root)),
         })
+    elif script.endswith("scripts/check_mpp_online_cache_parity.py"):
+        repair = active_mpp_repair(work_root)
+        if repair is None:
+            raise ValueError("MPP cache parity requires an active repaired-label data manifest")
+        if manifest.get("data_manifest_id") != repair.get("data_manifest_id"):
+            raise ValueError(
+                "cache parity data_manifest_id does not match active repaired labels: "
+                f"job={manifest.get('data_manifest_id')} active={repair.get('data_manifest_id')}"
+            )
+        registry_path = work_root / "configs" / "server_paths.yaml"
+        result_root = get_registered_path(
+            "server_mpp_results", registry_path=registry_path, project_root=work_root,
+        )
+        parameters.update({
+            "data_manifest_id": str(repair["data_manifest_id"]),
+            "manifest_labels_root": str(repair["server_stage_path"]),
+            "resource_release_ack": "MPP1_3_4_5_IDLE",
+            "splits_root": str((work_root / "mpp_standard_splits").resolve()),
+            "mpp_root": str(get_registered_path("mpp_data_root", registry_path=registry_path, project_root=work_root)),
+            "cache_root": str(get_registered_path("server_mpp_partner_cache", registry_path=registry_path, project_root=work_root)),
+            "flat_cache_root": str(get_registered_path("server_mpp_flat_cache", registry_path=registry_path, project_root=work_root)),
+            "output": str(result_root / "cache_parity" / manifest["job_id"] / "cache_parity.csv"),
+        })
     return safe_job_parameters(parameters)
 
 
@@ -258,13 +281,13 @@ def command_job(args: argparse.Namespace) -> int:
         parameters = parse_key_values(args.param)
         registry = read_json(PROJECT_ROOT / "experiments" / "experiment_registry.json")
         experiment = next((item for item in registry["experiments"] if item["id"] == args.experiment_id), None)
-        is_mpp_training = args.command_id == "standard_training" and experiment and (
+        is_mpp_task = args.command_id in {"cache_parity", "standard_training"} and experiment and (
             str(experiment.get("family", "")).startswith("mpp") or "mpp" in str(experiment.get("script", "")).lower()
         )
         report = validate_state(
             PROJECT_ROOT,
             strict=True,
-            task="training" if is_mpp_training else "general",
+            task="training" if is_mpp_task else "general",
             host_scope="local",
         )
         if not report.ok:
@@ -304,20 +327,20 @@ def command_job(args: argparse.Namespace) -> int:
             raise ValueError("job state_revision does not match the pinned source commit")
         registry = read_json(work_root / "experiments" / "experiment_registry.json")
         experiment = next(item for item in registry["experiments"] if item["id"] == manifest["experiment_id"])
-        is_mpp_training = manifest["command_id"] == "standard_training" and (
+        is_mpp_task = manifest["command_id"] in {"cache_parity", "standard_training"} and (
             str(experiment.get("family", "")).startswith("mpp") or "mpp" in str(experiment.get("script", "")).lower()
         )
         report = validate_state(
             work_root,
             strict=True,
-            task="training" if is_mpp_training else "general",
+            task="training" if is_mpp_task else "general",
             host_scope="server",
         )
         report.emit()
         if not report.ok:
             print("[BLOCKED] Server job preflight failed")
             return 1
-        if is_mpp_training:
+        if is_mpp_task:
             repair = active_mpp_repair(work_root)
             if repair is None:
                 raise ValueError("MPP training has no active repaired-label evidence")
@@ -345,7 +368,7 @@ def command_job(args: argparse.Namespace) -> int:
             "-Arguments", argument_string,
             "-CheckRegistry",
         ]
-        print("[INFO] launching allowlisted standard training entry")
+        print(f"[INFO] launching allowlisted experiment entry: {manifest['command_id']}")
         completed = subprocess.run(command, cwd=work_root, check=False)
         return int(completed.returncode)
 
@@ -436,7 +459,7 @@ def build_parser() -> argparse.ArgumentParser:
     dispatch.add_argument("--job-id", required=True)
     dispatch.add_argument("--experiment-id", required=True)
     dispatch.add_argument("--phase", choices=["preflight", "smoke", "formal"], required=True)
-    dispatch.add_argument("--command-id", choices=["state_preflight", "standard_training"], required=True)
+    dispatch.add_argument("--command-id", choices=["state_preflight", "cache_parity", "standard_training"], required=True)
     dispatch.add_argument("--path-id", action="append", default=[])
     dispatch.add_argument("--param", action="append", default=[])
     dispatch.add_argument("--approval")

@@ -100,3 +100,58 @@ def test_server_job_injects_only_the_activated_repaired_label_root(tmp_path):
             {"data_manifest_id": "wrong", "parameters": {"num_epochs": 2}},
             experiment,
         )
+
+
+def test_cache_parity_job_injects_all_paths_and_resource_ack(tmp_path):
+    stage = r"D:\staging\barcode-repair-v003"
+    canonical_audit = (
+        tmp_path / "project_state" / "evidence" / "mpp" / "repair-v003"
+        / "server_asset_audit_manifest.json"
+    )
+    _write_json(canonical_audit, {"generated_assets": []})
+    import hashlib
+    audit_sha = hashlib.sha256(canonical_audit.read_bytes()).hexdigest()
+    _write_json(tmp_path / "project_state" / "current_state.json", {
+        "mpp_repair": {"active_data_manifest_id": "repair-v003:abc"},
+    })
+    _write_json(tmp_path / "project_state" / "mpp_repair_registry.json", {
+        "active_data_manifest_id": "repair-v003:abc",
+        "repairs": [{
+            "evidence_id": "repair-v003",
+            "data_manifest_id": "repair-v003:abc",
+            "status": "active",
+            "server_stage_path": stage,
+            "audit_sha256": audit_sha,
+        }],
+    })
+    (tmp_path / "configs").mkdir()
+    (tmp_path / "configs" / "server_paths.yaml").write_text(
+        "schema_version: '1.0'\npaths:\n"
+        "  mpp_data_root: {path: 'D:\\raw', required_on: server}\n"
+        "  server_mpp_partner_cache: {path: 'D:\\partner', required_on: server}\n"
+        "  server_mpp_flat_cache: {path: 'D:\\cache', required_on: server}\n"
+        "  server_mpp_results: {path: 'D:\\results', required_on: server}\n",
+        encoding="utf-8",
+    )
+    manifest = {
+        "job_id": "mpp2-cache-parity-v003",
+        "data_manifest_id": "repair-v003:abc",
+        "parameters": {"samples_per_patient": 8},
+    }
+    experiment = {"script": "scripts/check_mpp_online_cache_parity.py"}
+
+    argv = bound_job_parameter_argv(tmp_path, manifest, experiment)
+
+    def value(name):
+        index = argv.index(name)
+        return argv[index + 1]
+
+    assert value("--data_manifest_id") == "repair-v003:abc"
+    assert value("--manifest_labels_root") == stage
+    assert value("--resource_release_ack") == "MPP1_3_4_5_IDLE"
+    assert value("--mpp_root") == r"D:\raw"
+    assert value("--cache_root") == r"D:\partner"
+    assert value("--flat_cache_root") == r"D:\cache"
+    assert value("--output").endswith(
+        r"cache_parity\mpp2-cache-parity-v003\cache_parity.csv"
+    )

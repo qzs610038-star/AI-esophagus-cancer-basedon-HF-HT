@@ -809,6 +809,42 @@ def test_mpp_job_requires_registered_paths_and_manifest_mode():
         )
 
 
+def test_mpp_cache_parity_job_is_preflight_only_and_registry_bound():
+    experiment = {
+        "family": "mpp_preflight",
+        "script": "scripts/check_mpp_online_cache_parity.py",
+    }
+    path_ids = [
+        "mpp_data_root",
+        "mpp_standard_splits",
+        "server_mpp_partner_cache",
+        "server_mpp_flat_cache",
+        "server_mpp_results",
+    ]
+    validate_job_semantics(
+        "preflight",
+        "cache_parity",
+        {"samples_per_patient": 8, "device": "cuda"},
+        experiment=experiment,
+        path_ids=path_ids,
+    )
+    with pytest.raises(ValueError, match="only valid for phase=preflight"):
+        validate_job_semantics(
+            "smoke", "cache_parity", {"samples_per_patient": 8},
+            experiment=experiment, path_ids=path_ids,
+        )
+    with pytest.raises(ValueError, match="cannot be overridden"):
+        validate_job_semantics(
+            "preflight", "cache_parity", {"mpp_root": "elsewhere"},
+            experiment=experiment, path_ids=path_ids,
+        )
+    with pytest.raises(ValueError, match="between 1 and 64"):
+        validate_job_semantics(
+            "preflight", "cache_parity", {"samples_per_patient": 65},
+            experiment=experiment, path_ids=path_ids,
+        )
+
+
 def test_smoke_result_is_accepted_but_not_latest_formal_result(tmp_path):
     root = make_minimal_project(tmp_path)
     bundle = root / "bundle"

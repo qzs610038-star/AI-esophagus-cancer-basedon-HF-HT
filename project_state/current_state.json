@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 33,
-  "updated_at": "2026-07-11T09:02:51+00:00",
-  "source_commit": "b50cae20c1577444cd94d8f82abab14060731432",
+  "state_revision": 42,
+  "updated_at": "2026-07-11T13:18:58+00:00",
+  "source_commit": "e630489944f7003da9f79c586fcc206ff862f45c",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -12,7 +12,9 @@
     "DIR-20260711-003",
     "DIR-20260711-004",
     "DIR-20260711-005",
-    "DIR-20260711-006"
+    "DIR-20260711-006",
+    "DIR-20260711-007",
+    "DIR-20260711-008"
   ],
   "active_plans": {
     "mpp_training": {
@@ -52,7 +54,11 @@
     "mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
     "mpp4_std10val_xzy_ext_uni2h_mlp_20260706",
     "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
-    "mpp2_barcode_repair_v003_frozen_baseline_20260711"
+    "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+    "mpp1_barcode_repair_v003_frozen_recheck_20260711",
+    "mpp3_barcode_repair_v003_frozen_recheck_20260711",
+    "mpp4_barcode_repair_v003_frozen_recheck_20260711",
+    "mpp5_barcode_repair_v003_frozen_recheck_20260711"
   ],
   "blocked_actions": [
     "direct_server_connection",
@@ -66,9 +72,9 @@
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
   "source_hashes": {
-    "experiment_registry_sha256": "984a76aad3a410e2aafec871138490ed97bf2c378d828f3fc19bea1f143e4144",
-    "experiment_dashboard_sha256": "576c4412f3d35bdf8e0c162dea17a951cd650d8c19da7274ae2fa32511be810d",
-    "document_registry_sha256": "aa7f654719eda576ee4f5dcedaa80858dcecaaadc5e95f374ff33cc239b5dc84",
+    "experiment_registry_sha256": "4f105f7fafcf0a01ffc113fc5f67789d8a9f18cb758a64f0f351ee94f63a2ac1",
+    "experiment_dashboard_sha256": "340885e02dcd74726a3b0cf039d6d66a575c3656aec08b629509cff5005c15f9",
+    "document_registry_sha256": "db591573250de9216c96b4a05155cde5206a58622c131b47e1cac5dc20e23ce3",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "66689f64be07d0dc28a8b52ce91dee8f969353171f039bf53815e95eaa59940f",
     "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"

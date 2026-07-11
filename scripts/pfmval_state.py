@@ -68,12 +68,32 @@ MPP_TRAINING_ALLOWED_PARAMETERS = {
     "patience",
     "min_delta",
 }
+MPP_CACHE_PARITY_PATH_IDS = {
+    "mpp_data_root",
+    "mpp_standard_splits",
+    "server_mpp_partner_cache",
+    "server_mpp_flat_cache",
+    "server_mpp_results",
+}
+MPP_CACHE_PARITY_PATH_PARAMETERS = {
+    "mpp_root",
+    "splits_root",
+    "manifest_labels_root",
+    "cache_root",
+    "flat_cache_root",
+    "output",
+    "resource_release_ack",
+    "data_manifest_id",
+}
+MPP_CACHE_PARITY_ALLOWED_PARAMETERS = {"samples_per_patient", "device"}
 ALLOWED_RESULT_FILES = {
     "training_history.csv",
     "training_summary.txt",
     "per_pathway_pcc.csv",
     "best_epoch.txt",
     "metrics.json",
+    "cache_parity.csv",
+    "cache_parity.json",
     "stderr_tail.txt",
     "stderr_tail.txt.gz",
     "stdout_tail.txt",
@@ -2007,6 +2027,33 @@ def validate_job_semantics(
         if parameters:
             raise ValueError("state_preflight does not accept training parameters")
         return
+    if command_id == "cache_parity":
+        if phase != "preflight":
+            raise ValueError("cache_parity command is only valid for phase=preflight")
+        script = str((experiment or {}).get("script", "")).replace("\\", "/")
+        if not script.endswith("scripts/check_mpp_online_cache_parity.py"):
+            raise ValueError("cache_parity requires the registered MPP parity script")
+        provided_ids = set(path_ids)
+        missing_ids = sorted(MPP_CACHE_PARITY_PATH_IDS - provided_ids)
+        if missing_ids:
+            raise ValueError(f"cache parity job is missing required path ids: {missing_ids}")
+        path_overrides = sorted(MPP_CACHE_PARITY_PATH_PARAMETERS & set(parameters))
+        if path_overrides:
+            raise ValueError(
+                f"cache parity paths and gates are registry-bound and cannot be overridden: {path_overrides}"
+            )
+        unknown_parameters = sorted(set(parameters) - MPP_CACHE_PARITY_ALLOWED_PARAMETERS)
+        if unknown_parameters:
+            raise ValueError(f"cache parity parameters are not allowlisted: {unknown_parameters}")
+        try:
+            sample_count = int(parameters.get("samples_per_patient", 8))
+        except (TypeError, ValueError) as exc:
+            raise ValueError("samples_per_patient must be an integer") from exc
+        if sample_count < 1 or sample_count > 64:
+            raise ValueError("samples_per_patient must be between 1 and 64")
+        if parameters.get("device", "cuda") not in {"cuda", "cpu"}:
+            raise ValueError("cache parity device must be cuda or cpu")
+        return
     if command_id != "standard_training":
         raise ValueError("command_id is not allowlisted")
     if phase not in {"smoke", "formal"}:
@@ -2069,7 +2116,7 @@ def create_job_manifest(
         raise ValueError("job_id contains unsafe characters")
     if phase not in {"preflight", "smoke", "formal"}:
         raise ValueError("invalid job phase")
-    if command_id not in {"state_preflight", "standard_training"}:
+    if command_id not in {"state_preflight", "cache_parity", "standard_training"}:
         raise ValueError("command_id is not allowlisted")
     registry = read_json(root / "experiments" / "experiment_registry.json")
     experiment = next((item for item in registry.get("experiments", []) if item.get("id") == experiment_id), None)
