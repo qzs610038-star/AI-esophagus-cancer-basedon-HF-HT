@@ -26,23 +26,29 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 REGISTRY_PATH = PROJECT_ROOT / "experiments" / "experiment_registry.json"
 DASHBOARD_PATH = PROJECT_ROOT / "experiments" / "experiment_dashboard.md"
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 
-def load_registry():
+def load_registry(registry_path=REGISTRY_PATH):
     """Load experiment registry JSON."""
-    if not REGISTRY_PATH.exists():
-        print(f"[FAIL] Registry not found: {REGISTRY_PATH}")
+    registry_path = Path(registry_path)
+    if not registry_path.exists():
+        print(f"[FAIL] Registry not found: {registry_path}")
         sys.exit(1)
-    with open(REGISTRY_PATH, "r", encoding="utf-8") as f:
+    with open(registry_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def save_registry(registry):
+def save_registry(registry, registry_path=REGISTRY_PATH):
     """Save experiment registry JSON."""
+    registry_path = Path(registry_path)
     registry["updated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
-    with open(REGISTRY_PATH, "w", encoding="utf-8") as f:
+    temp_path = registry_path.with_name(f".{registry_path.name}.tmp")
+    with open(temp_path, "w", encoding="utf-8", newline="\n") as f:
         json.dump(registry, f, indent=2, ensure_ascii=False)
         f.write("\n")
+    os.replace(temp_path, registry_path)
 
 
 def load_training_history(run_dir):
@@ -64,8 +70,8 @@ def find_best_epoch(rows, metric_column="val_loss"):
     return best, train_val_gap
 
 
-def generate_dashboard(registry):
-    """Generate experiment_dashboard.md from registry."""
+def build_dashboard(registry):
+    """Return the deterministic experiment dashboard derived from registry."""
     experiments = registry.get("experiments", [])
 
     status_icon = {
@@ -105,6 +111,22 @@ def generate_dashboard(registry):
                 "> 🚨 **JFX0729 数据状态**：registry 标记尚未完成闭环。"
                 f"下一步：{next_action}。"
             )
+    mpp_policy = registry.get("current_mpp_policy", {})
+    if mpp_policy:
+        lines.append(">")
+        selected_mpp = mpp_policy.get("selected_mpp", "unknown")
+        decision = mpp_policy.get("decision", "")
+        next_experiment = mpp_policy.get("next_recommended_experiment", "")
+        lines.append(f"> ✅ **当前 MPP 主线（{mpp_policy.get('effective_date', 'current')}）**：MPP{selected_mpp}。{decision}")
+        if next_experiment:
+            lines.append(f"> 下一步推荐：{next_experiment}。")
+    three_patient_policy = registry.get("three_patient_evidence_policy", {})
+    if three_patient_policy:
+        lines.append(">")
+        lines.append(
+            "> ⚠️ **旧三患者实验结论**："
+            f"{three_patient_policy.get('decision', 'tuning reference only')}"
+        )
     lines.append("")
 
     # Status overview table
@@ -149,7 +171,14 @@ def generate_dashboard(registry):
     lines.append("")
 
     # Decision gates
-    gates = [e for e in experiments_sorted if e.get("decision_gate")]
+    gates = [
+        e for e in experiments_sorted
+        if e.get("decision_gate")
+        and not (
+            e.get("priority") == "historical"
+            and "2026-07-09" not in e.get("decision_gate", "")
+        )
+    ]
     if gates:
         lines.append("## Decision Gates")
         lines.append("")
@@ -159,10 +188,18 @@ def generate_dashboard(registry):
             lines.append(f"| {exp['id']} | {exp['decision_gate']} |")
         lines.append("")
 
-    with open(DASHBOARD_PATH, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+    return "\n".join(lines).rstrip() + "\n"
 
-    print(f"[INFO] Dashboard regenerated: {DASHBOARD_PATH}")
+
+def generate_dashboard(registry, dashboard_path=DASHBOARD_PATH):
+    """Generate experiment_dashboard.md from registry using atomic replacement."""
+    dashboard_path = Path(dashboard_path)
+    temp_path = dashboard_path.with_name(f".{dashboard_path.name}.tmp")
+    with open(temp_path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(build_dashboard(registry))
+    os.replace(temp_path, dashboard_path)
+
+    print(f"[INFO] Dashboard regenerated: {dashboard_path}")
 
 
 def main():
@@ -177,7 +214,19 @@ def main():
                         help="Strategy A: use final epoch (no val_loss column in CSV)")
     parser.add_argument("--external-xzy-pcc", type=float, default=None,
                         help="External XZY mean PCC (Strategy A, manually added after training)")
+    parser.add_argument("--source-commit", default=None,
+                        help="Git source commit for provenance (defaults to current HEAD when available)")
+    parser.add_argument("--job-id", default=None, help="Optional originating job id")
+    parser.add_argument("--result-id", default=None, help="Optional result envelope id")
+    parser.add_argument("--data-manifest-id", default=None, help="Data/split manifest identifier")
+    parser.add_argument("--path-index-version", default=None, help="MPP path index version")
+    parser.add_argument("--result-manifest-sha256", default=None, help="Verified result envelope SHA-256")
     args = parser.parse_args()
+
+    registry_path = Path(args.registry)
+    if not registry_path.is_absolute():
+        registry_path = PROJECT_ROOT / registry_path
+    dashboard_path = DASHBOARD_PATH if registry_path.resolve() == REGISTRY_PATH.resolve() else registry_path.with_name("experiment_dashboard.md")
 
     run_dir = Path(args.run_dir)
     if not run_dir.is_absolute():
@@ -259,7 +308,13 @@ def main():
     # ----------------------------------------------------------
     # Step 3: Update registry
     # ----------------------------------------------------------
-    registry = load_registry()
+    registry = load_registry(registry_path)
+    try:
+        from scripts.pfmval_state import git_head, migrate_experiment_provenance
+        migrate_experiment_provenance(registry)
+        default_source_commit = git_head(PROJECT_ROOT)
+    except ImportError:
+        default_source_commit = "unknown"
     experiments = registry.get("experiments", [])
     target = None
     for exp in experiments:
@@ -280,9 +335,27 @@ def main():
         target["external_xzy_pcc"] = round(args.external_xzy_pcc, 6)
     target["completed_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
     target["next_action"] = "review_results"
+    target["source_commit"] = args.source_commit or default_source_commit
+    target["job_id"] = args.job_id
+    target["result_id"] = args.result_id or f"local-finalize-{args.experiment_id}-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
+    target["data_manifest_id"] = args.data_manifest_id
+    target["path_index_version"] = args.path_index_version
+    target["result_manifest_sha256"] = args.result_manifest_sha256
+    target["imported_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+    target["provenance_complete"] = bool(
+        args.result_manifest_sha256
+        and target["source_commit"] not in {None, "", "unknown"}
+        and args.data_manifest_id
+        and args.path_index_version
+    )
+    target["evidence_status"] = "accepted" if target["provenance_complete"] else "pending"
+    target.setdefault("supersedes_results", [])
 
-    save_registry(registry)
+    save_registry(registry, registry_path)
     print(f"[PASS] Registry updated: {args.experiment_id} -> done")
+    if not target["provenance_complete"]:
+        print("[WARN] Result remains evidence_status=pending because a complete verified envelope/data provenance was not supplied.")
+        print("[INFO] Canonical accepted-result path: python deploy/pfmval_ops.py result import --bundle <bundle>")
 
     # ----------------------------------------------------------
     # Step 4: Baseline comparison (optional)
@@ -319,20 +392,24 @@ def main():
     # ----------------------------------------------------------
     # Step 5: Regenerate dashboard
     # ----------------------------------------------------------
-    generate_dashboard(registry)
+    generate_dashboard(registry, dashboard_path)
+
+    if registry_path.resolve() == REGISTRY_PATH.resolve():
+        try:
+            from scripts.pfmval_state import sync_state
+            sync_state(PROJECT_ROOT)
+            print("[PASS] CURRENT_STATE and local agent views synchronized")
+        except (FileNotFoundError, ValueError) as exc:
+            print(f"[WARN] project_state sync skipped: {exc}")
 
     # ----------------------------------------------------------
     # Step 6: Sync suggestions (human-in-the-loop)
     # ----------------------------------------------------------
     print(f"\n{'='*60}")
-    print(f"[INFO] Suggested manual sync actions:")
-    print(f"  1. Update CLAUDE.md if best-PCC ranking changed")
-    print(f"  2. Update .qoder/experience.md performance baseline table")
-    print(f"  3. Update .claude/next-steps.md priority queue")
-    print(f"  4. Update .claude/session-brief.md current task status")
-    print(f"  5. Run: python scripts/check_project_state.py --mode local")
-    print(f"  6. Commit registry + dashboard if results should sync to server:")
-    print(f"     git add experiments/experiment_registry.json experiments/experiment_dashboard.md")
+    print(f"[INFO] Required follow-up:")
+    print(f"  1. For accepted evidence, import a verified job/result envelope with deploy/pfmval_ops.py")
+    print(f"  2. Run: python deploy/pfmval_ops.py state validate --strict")
+    print(f"  3. Review Registry, Dashboard and CURRENT_STATE together before committing")
     print(f"{'='*60}")
 
 

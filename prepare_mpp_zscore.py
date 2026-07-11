@@ -22,6 +22,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from path_registry import get_registered_path
+
 
 def load_raw_labels(mpp_root: str, mpp_id: int, patient: str) -> pd.DataFrame:
     """加载 MPP 患者原始 ssGSEA CSV。"""
@@ -56,8 +58,8 @@ def classify_columns(df: pd.DataFrame) -> tuple:
 
 def main():
     parser = argparse.ArgumentParser(description="MPP z-score 标准化标签准备")
-    parser.add_argument("--mpp_root", default=r"D:\AIPatho\Patch\visiumhd_patch",
-                        help="MPP 数据根目录")
+    parser.add_argument("--mpp_root", default=str(get_registered_path("mpp_data_root")),
+                        help="MPP 数据根目录（由 path id mpp_data_root 解析）")
     parser.add_argument("--train_mpp_id", type=int, required=True,
                         help="训练集 MPP 编号")
     parser.add_argument("--train_patients", required=True,

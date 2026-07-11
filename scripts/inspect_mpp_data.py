@@ -5,11 +5,14 @@
 # 用法:
 #   cmd.exe /c "set PYTHONIOENCODING=utf-8 && python scripts/inspect_mpp_data.py"
 
-import pandas as pd
+import argparse
 import pathlib
 import sys
 
-ROOT = pathlib.Path(r"D:\AIPatho\Patch\visiumhd_patch")
+import pandas as pd
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
+from path_registry import get_registered_path
 
 CHECKS = [
     (3, "HYZ15040"), (3, "JFX"), (3, "LMZ12939"),
@@ -17,38 +20,50 @@ CHECKS = [
     (2, "XZY"),
 ]
 
-missing = []
-for mpp_id, patient in CHECKS:
-    d = ROOT / str(mpp_id) / patient
-    if not d.exists():
-        print(f"MISSING DIR: {d}")
-        missing.append(str(d))
-        continue
+def main() -> int:
+    parser = argparse.ArgumentParser(description="MPP server data preflight (read-only)")
+    parser.add_argument(
+        "--mpp-root",
+        default=str(get_registered_path("mpp_data_root")),
+        help="MPP data root resolved from path id mpp_data_root by default",
+    )
+    args = parser.parse_args()
+    root = pathlib.Path(args.mpp_root)
 
-    pdir = d / "patch_images"
-    if not pdir.exists():
-        print(f"MISSING patch_images: {pdir}")
-        missing.append(str(pdir))
-        png = -1
-    else:
-        png = len(list(pdir.glob("*.png")))
+    missing = []
+    for mpp_id, patient in CHECKS:
+        directory = root / str(mpp_id) / patient
+        if not directory.exists():
+            print(f"MISSING DIR: {directory}")
+            missing.append(str(directory))
+            continue
 
-    csv = d / f"{patient}_ssGSEA.csv"
-    if not csv.exists():
-        print(f"MISSING CSV: {csv}")
-        missing.append(str(csv))
-        continue
+        patches = directory / "patch_images"
+        if not patches.exists():
+            print(f"MISSING patch_images: {patches}")
+            missing.append(str(patches))
+            png_count = -1
+        else:
+            png_count = len(list(patches.glob("*.png")))
 
-    df = pd.read_csv(csv)
-    cols = list(df.columns)
-    ncol = len(cols)
-    print(f"MPP={mpp_id} {patient}: png={png}  csv_cols={cols[:3]}...  ncol={ncol}")
+        label_csv = directory / f"{patient}_ssGSEA.csv"
+        if not label_csv.exists():
+            print(f"MISSING CSV: {label_csv}")
+            missing.append(str(label_csv))
+            continue
 
-print(f"\nMISSING_TOTAL={len(missing)}")
-if missing:
-    for m in missing:
-        print(f"  MISSING: {m}")
-    sys.exit(1)
-else:
+        frame = pd.read_csv(label_csv)
+        columns = list(frame.columns)
+        print(f"MPP={mpp_id} {patient}: png={png_count}  csv_cols={columns[:3]}...  ncol={len(columns)}")
+
+    print(f"\nMISSING_TOTAL={len(missing)}")
+    if missing:
+        for item in missing:
+            print(f"  MISSING: {item}")
+        return 1
     print("All checks passed.")
-    sys.exit(0)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

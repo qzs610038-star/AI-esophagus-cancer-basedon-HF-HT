@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/server_job.schema.json",
+  "title": "PFMval Gitee server job",
+  "type": "object",
+  "required": ["schema_version", "job_id", "experiment_id", "source_commit", "state_revision", "phase", "command_id", "path_ids", "parameters", "created_at", "artifact_policy"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "job_id": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+$"},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-fA-F]{7,40}$"},
+    "state_revision": {"type": "integer", "minimum": 1},
+    "phase": {"enum": ["preflight", "smoke", "formal"]},
+    "command_id": {"enum": ["state_preflight", "standard_training"]},
+    "path_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "parameters": {"type": "object"},
+    "created_at": {"type": "string"},
+    "artifact_policy": {"type": "object"}
+  },
+  "additionalProperties": true
+}

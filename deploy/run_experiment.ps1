@@ -21,6 +21,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = Split-Path -Parent $ScriptDir
+$pythonPath = (Get-Command python -ErrorAction SilentlyContinue).Source
+if (-not $pythonPath) {
+    $pythonPath = "python"
+}
 
 # ------------------------------------------------------------
 # Help
@@ -38,7 +42,7 @@ Parameters:
   -ExperimentId    Unique experiment ID (must exist in experiment_registry.json)
   -Script          Python training script name (e.g. train_online_tokens.py)
   -Arguments       Arguments to pass to the training script (quoted string)
-  -CheckRegistry   Run preflight registry check before launching
+  -CheckRegistry   Deprecated compatibility switch; registry check is always mandatory
   -Help            Show this help message
 
 Preflight checks:
@@ -81,6 +85,22 @@ if ($CurrentDir.Path -ne $ProjectRoot) {
     Set-Location $ProjectRoot
 }
 Write-Host "[PASS] Working directory: $ProjectRoot"
+
+# ------------------------------------------------------------
+# Preflight 1b: durable project state gate
+# ------------------------------------------------------------
+Write-Host "=== Preflight: Durable Project State ==="
+$opsScript = Join-Path $ProjectRoot "deploy\pfmval_ops.py"
+if (-not (Test-Path $opsScript)) {
+    Write-Host "[FAIL] Durable state CLI missing: $opsScript"
+    exit 1
+}
+$stateTask = if ($Script -like "*mpp*") { "training" } else { "server" }
+& $pythonPath $opsScript agent start-check --strict --task $stateTask
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[FAIL] Project state/training gate rejected this launch."
+    exit 1
+}
 
 # ------------------------------------------------------------
 # Preflight 2: verify nvidia-smi
@@ -133,27 +153,24 @@ if (-not (Test-Path $scriptPath)) {
 Write-Host "[PASS] Training script: $scriptPath"
 
 # ------------------------------------------------------------
-# Optional: CheckRegistry
+# Mandatory: CheckRegistry
 # ------------------------------------------------------------
-if ($CheckRegistry) {
-    Write-Host "=== CheckRegistry: Verifying experiment in registry ==="
+if ($true) {
+    Write-Host "=== CheckRegistry: Verifying experiment in registry (mandatory) ==="
     $checkScript = Join-Path $ProjectRoot "scripts\check_project_state.py"
     if (Test-Path $checkScript) {
-        $pythonPath = (Get-Command python -ErrorAction SilentlyContinue).Source
-        if (-not $pythonPath) {
-            $pythonPath = "python"
-        }
         $checkArgs = @($checkScript, "--mode", "server", "--check-registry-only", "--experiment-id", $ExperimentId)
         $checkResult = & $pythonPath $checkArgs 2>&1
         $checkExit = $LASTEXITCODE
         Write-Host $checkResult
         if ($checkExit -ne 0) {
-            Write-Host "[WARN] Registry check returned non-zero (exit=$checkExit)."
-            Write-Host "[INFO] Please register experiment '$ExperimentId' in experiment_registry.json before running."
-            Write-Host "[INFO] Continuing anyway (v1 does not auto-register)..."
+            Write-Host "[FAIL] Registry check returned non-zero (exit=$checkExit)."
+            Write-Host "[FAIL] Register experiment '$ExperimentId' before running."
+            exit 1
         }
     } else {
-        Write-Host "[WARN] check_project_state.py not found; skipping registry check."
+        Write-Host "[FAIL] check_project_state.py not found; mandatory registry check cannot run."
+        exit 1
     }
 }
 
@@ -176,11 +193,6 @@ Write-Host "=== Time   : $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
 Write-Host "============================================================"
 
 # Build the full command
-$pythonPath = (Get-Command python -ErrorAction SilentlyContinue).Source
-if (-not $pythonPath) {
-    $pythonPath = "python"
-}
-
 $fullArgs = "-u `"$scriptPath`" $Arguments --num_threads 8"
 
 # Execute and tee to log

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PFMval 远程命令客户端
+PFMval 远程命令客户端（历史实现，已禁用）
 =======================
 向服务器发送命令并获取结果。支持交互模式和单次模式。
 
@@ -64,7 +64,7 @@ def is_long_running(cmd):
     return False
 
 
-def main():
+def legacy_main():
     parser = argparse.ArgumentParser(description="PFMval 远程命令客户端")
     parser.add_argument("--host", default=os.environ.get("CMD_SERVER_HOST", "localhost"))
     parser.add_argument("--port", type=int, default=int(os.environ.get("CMD_SERVER_PORT", 8080)))
@@ -128,6 +128,13 @@ def main():
             run_command(args.host, args.port, token, cmd)
 
 
+def main():
+    print("[BLOCKED] deploy/cmd_client.py uses a deprecated direct HTTP server channel.")
+    print("[BLOCKED] Current project policy permits server exchange only through the configured Gitee remote.")
+    print("[INFO] Use deploy/pfmval_ops.py job/result envelopes instead.")
+    return 2
+
+
 def upload_file(host, port, token, local_path):
     """上传单个文件到服务器的项目目录"""
     local = Path(local_path)
@@ -176,4 +183,4 @@ def run_command(host, port, token, cmd):
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

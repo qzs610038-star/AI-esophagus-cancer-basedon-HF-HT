@@ -208,8 +208,8 @@ def check_workflow_hook_files(checker):
 
 
 def check_doc_registry_coverage(checker):
-    """Check 5: doc-registry.json covers all md files in 01_指南与解读/ and 02_组会汇报/."""
-    registry_path = PROJECT_ROOT / ".claude" / "doc-registry.json"
+    """Check 5: tracked document registry covers all managed Markdown files."""
+    registry_path = PROJECT_ROOT / "project_state" / "document_registry.json"
     if not registry_path.exists():
         checker.skip("doc-registry:coverage", "doc-registry.json not found")
         return
@@ -408,6 +408,28 @@ def main():
     check_experiment_registry_schema(checker)
     check_run_dir_existence(checker)
     check_done_experiments_loss(checker)
+
+    # Durable state gate. Its WARN class remains non-blocking even when this
+    # legacy checker runs in strict mode; the new validator already decides
+    # which freshness conditions are hard failures.
+    try:
+        if str(PROJECT_ROOT) not in sys.path:
+            sys.path.insert(0, str(PROJECT_ROOT))
+        from scripts.pfmval_state import validate_state
+
+        state_report = validate_state(
+            PROJECT_ROOT,
+            strict=args.strict,
+            task="server" if args.mode == "server" else "general",
+        )
+        for index, message in enumerate(state_report.pass_items, 1):
+            checker.ok(f"project_state:{index}", message)
+        for index, message in enumerate(state_report.warn_items, 1):
+            checker.add("WARN", f"project_state:warn:{index}", message)
+        for index, message in enumerate(state_report.fail_items, 1):
+            checker.fail(f"project_state:fail:{index}", message)
+    except Exception as exc:
+        checker.fail("project_state", f"durable state validation crashed: {exc}")
 
     exit_code = checker.summary()
     sys.exit(exit_code)

@@ -20,11 +20,12 @@ from pathlib import Path
 import torch
 from PIL import Image
 
+from path_registry import get_registered_path
 from uni2h.uni2h_utils import load_uni2h_backbone
 
 # ── 显式离线 + HF 缓存路径（服务器共享缓存） ──
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
-os.environ.setdefault("HF_HOME", "D:\\AIPatho\\shared\\.cache\\huggingface")
+os.environ.setdefault("HF_HOME", str(get_registered_path("shared_huggingface_cache")))
 
 
 def extract_cls_for_split(
@@ -92,8 +93,8 @@ def extract_cls_for_split(
 
 def main():
     parser = argparse.ArgumentParser(description="MPP UNI2-h CLS token 特征提取")
-    parser.add_argument("--mpp_root", default=r"D:\AIPatho\Patch\visiumhd_patch",
-                        help="MPP 数据根目录（默认服务器路径；迁移时改此值或传参）")
+    parser.add_argument("--mpp_root", default=str(get_registered_path("mpp_data_root")),
+                        help="MPP 数据根目录（默认由 configs/server_paths.yaml 的 mpp_data_root 解析）")
     parser.add_argument("--mpp_id", type=int, required=True,
                         help="MPP 划分编号 (1-5)")
     parser.add_argument("--patient", nargs="+", required=True,

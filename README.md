@@ -1,5 +1,16 @@
 # PFMval_new — 食管癌病理空间转录组预测
 
+<!-- project-state:start -->
+## 当前项目状态（自动生成）
+
+- 状态版本：`14`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
+- 当前 MPP 主线：**MPP2**；其它统一重跑结果保留为背景/方法参考。
+- 服务器通信：**Gitee-only**；SSH、SCP、HTTP 远程命令和 Tunnel 均非 active 通道。
+- 实验事实源：`experiments/experiment_registry.json`；Dashboard 为派生视图。
+
+<!-- project-state:end -->
+
+
 > 基于食管癌 H&E 病理切片，使用深度学习模型预测 30 条基因通路的 ssGSEA 活性评分（Z-score 标准化）。
 
 ---
@@ -42,9 +53,11 @@
 
 ## 🏆 当前最优结果
 
+> ✅ **2026-07-09 当前主线**：团队讨论后决定，后续 MPP 方案只使用 **MPP2**；MPP1 / MPP3 / MPP4 / MPP5 暂时弃用，仅作背景对照。旧三患者 LoRA / Token+LoRA / 频域实验不再作为正式证据，只能作为 MPP2 新数据 LoRA 调参参考。详见 `01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md`。
+>
 > 🚨 **JFX0729 数据错误（2026-06-30 更新）**：JFX 更正数据已于 2026-06-16 同步到本地并完成 split+z-score 验证（7010 train / 778 val, 7/7 checks passed）。旧数据已归档。**下表跨患者结果仍为历史参考**。JFX token cache 重建暂缓：后续会先统一处理新的数据变换，再重建缓存并启动 P0 重跑矩阵。详见 `01_指南与解读/分析报告/JFX0729数据替换后重跑实验清单.md`。
 > 
-> ⚠️ 本表同时过时于 Phase 2-4 旧离线 Token 体系。当前最强结果来自 **在线训练体系**（UNI2-h LoRA + GFNet Token+LoRA），详见 **[CLAUDE.md](CLAUDE.md)**。9 患者数据此前预计 2026 年 7 月初到齐；截至 2026-06-30，本仓库尚未确认全量数据到齐。
+> ⚠️ 本表同时过时于 Phase 2-4 旧离线 Token 体系。旧在线训练体系（UNI2-h LoRA + GFNet Token+LoRA）已降级为调参参考，当前口径以 **[CURRENT_STATE.md](CURRENT_STATE.md)** 为准。9 患者数据此前预计 2026 年 7 月初到齐；截至 2026-06-30，本仓库尚未确认全量数据到齐。
 
 | 场景 | 模型 | PCC | JFX影响 |
 |------|------|-----|:---:|
@@ -58,7 +71,7 @@
 
 ## ⚡ 快速启动
 
-### 环境一：在线训练（当前主力，UNI2-h LoRA / GFNet Token）
+### 环境一：在线训练（历史 LoRA 调参入口，需按 MPP2 新数据重新验证）
 
 ```powershell
 # Python 3.13, PyTorch 2.6.0+cu118
@@ -168,7 +181,8 @@ PFMval_new/
 ## 📚 文档索引
 
 ### AI 自动加载（每次会话必读）
-- [`CLAUDE.md`](CLAUDE.md) — Claude Code 项目指南（含模型体系、铁律、环境、路径）
+- [`CURRENT_STATE.md`](CURRENT_STATE.md) — 当前用户指令、活跃方案、最新已验收结果与阻塞项（自动生成）
+- [`AGENTS.md`](AGENTS.md) — 跨 agent 固定安全边界与读取顺序
 - [`.qoder/basic_rule.md`](.qoder/basic_rule.md) — 项目硬性规则
 - [`.qoder/experience.md`](.qoder/experience.md) — 经验索引 + 踩坑记录
 

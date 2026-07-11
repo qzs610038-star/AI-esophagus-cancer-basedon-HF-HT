@@ -1,0 +1,140 @@
+schema_version: "1.0"
+updated_at: "2026-07-11T00:19:25+08:00"
+inventory:
+  source: '01_指南与解读\部署方案\服务器路径索引_20260701.md'
+  generated_at: "2026-07-01"
+  live_verification_required: true
+policy:
+  deletion_requires_user_approval: true
+  lifecycle: [active, legacy, deprecated]
+  active_scripts_must_use_registered_roots: true
+paths:
+  server_qzs_root:
+    path: 'D:\AIPatho\qzs'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+  server_repo_worktree:
+    path: 'D:\AIPatho\qzs\pfmval_deploy_git'
+    kind: git_worktree
+    status: active
+    required_on: server
+    stability: medium_low
+  server_automation_worktrees:
+    path: 'D:\AIPatho\qzs\pfmval_automation'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+  server_config:
+    path: 'D:\AIPatho\qzs\pfmval_deploy_git\configs\config.server.yaml'
+    kind: file
+    status: active
+    required_on: server
+    stability: medium_low
+  phase2_patch_root:
+    path: 'D:\AIPatho\qzs\data-phase2\patch'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium
+  phase2_ssgsea_zscore_root:
+    path: 'D:\AIPatho\qzs\data-phase2\ssGSEA_zscore'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium
+  shared_cache_root:
+    path: 'D:\AIPatho\shared\.cache'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium
+    sensitive_children_excluded: true
+  shared_huggingface_cache:
+    path: 'D:\AIPatho\shared\.cache\huggingface'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium
+    sensitive_children_excluded: true
+  shared_torch_cache:
+    path: 'D:\AIPatho\shared\.cache\torch'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium
+  mpp_data_root:
+    path: 'D:\AIPatho\Patch\visiumhd_patch'
+    kind: directory
+    status: active
+    required_on: server
+    stability: high
+  mpp_external_xzy_raw_ssgsea:
+    path: 'D:\AIPatho\Patch\visiumhd_patch\2\XZY\XZY_ssGSEA.csv'
+    kind: file
+    status: active
+    required_on: server
+    stability: high
+    protected: true
+  mpp_standard_splits:
+    path: mpp_standard_splits
+    kind: repo_directory
+    status: active
+    required_on: both
+    stability: high
+    protected: true
+  server_mpp_standard_splits:
+    path: 'D:\AIPatho\qzs\pfmval_deploy_git\mpp_standard_splits'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+    protected: true
+  server_mpp_flat_cache:
+    path: 'D:\AIPatho\qzs\pfmval_deploy_git\mpp_uni2h_cache'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+  server_mpp_partner_cache:
+    path: 'D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+  server_mpp_results:
+    path: 'D:\AIPatho\qzs\pfmval_deploy_git\checkpoints\mpp_uni2h_mlp'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+  legacy_partner_labels_local:
+    path: 'parter_ljk_MPP1&4_patch_split_zscore'
+    kind: repo_directory
+    status: legacy
+    required_on: local
+    stability: unknown
+    protected: true
+  legacy_server_repo:
+    path: 'D:\AIPatho\qzs\pfmval_deploy'
+    kind: directory
+    status: legacy
+    required_on: server
+    stability: unknown
+  legacy_partner_labels:
+    path: 'D:\AIPatho\ljx\MPP1_4_uni\patch_split_zscore'
+    kind: directory
+    status: legacy
+    required_on: server
+    stability: unknown
+templates:
+  mpp_patient_raw_ssgsea:
+    path: 'D:\AIPatho\Patch\visiumhd_patch\{group}\{patient}\{patient}_ssGSEA.csv'
+    status: active
+    protected: true
+  mpp_patient_patch_images:
+    path: 'D:\AIPatho\Patch\visiumhd_patch\{group}\{patient}\patch_images'
+    status: active
+    protected: true

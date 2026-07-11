@@ -1,0 +1,3111 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-07-11T05:04:24+00:00",
+  "state_revision": 13,
+  "documents": [
+    {
+      "doc_id": "doc-975997916045",
+      "path": ".claude/agents/code-reviewer.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "76ef84c3a5d07912368ceafe227169f34d70fb62981f2bd76d44fea59faf3caf",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f7b1e2850c57",
+      "path": ".claude/deployment-gotchas.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "df149d98f996fdbc449eb97d66c4f634ca8a418747c3be090759009e2a4ce575",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-872d775dd6d4",
+      "path": ".claude/git-cloud-sync-options.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "473a943cae834446284083145b8ed8305efa6ba0fb58e93df76f724bab48faaf",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-4d82a45da166",
+      "path": ".claude/he-ssgsea-greedy-river.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "3bb9d82775edeff8473cecd88a831dd8818b7ac0f444a360cbe727e65efe8254",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-71283d40f6a5",
+      "path": ".claude/maintenance-plan.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "d4099cc6c1e9fde9cad96600553fc5382c3fe28739423c2d8b7261a55280e992",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-db8538d7cd90",
+      "path": ".claude/next-steps.md",
+      "category": "配置参考",
+      "scope": "project_summary",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "f3fd5824eb9f72615063a30bb6da03c81af1eb57a7d9bbb837593abbe2656375",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-06ca1fc82608",
+      "path": ".claude/session-brief.md",
+      "category": "配置参考",
+      "scope": "project_summary",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "b656a6fa295fc2cdef2afaf80ca4da215ddd7a0d83f5b0d7053ba716fa2e4105",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-40b8c02101e6",
+      "path": ".claude/skills/compare/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "0735a3c32c0911eeb9372205cb082cc93f5a2936e73585b65e6fa7d967755f4c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-0e1a3889f557",
+      "path": ".claude/skills/data-guide/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "33cba3365421cbf7f8b914825be81529898f5a0e1c6600bcee5e166bb5be4d69",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-65976615ce59",
+      "path": ".claude/skills/doc-registry/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "038793affa14cac1b81abe06eaebc1282bba663979af661c28232dc3e4bfbd9a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-65b117d327e2",
+      "path": ".claude/skills/experiment-log/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "31210736a12479e7af25fb6a341618bf8d57c4b68d1b3b1f22ab6376f710f725",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-d5381553a8e6",
+      "path": ".claude/skills/extract/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "0a757867d8413104f8471cdcec67f38cd511c1151c1c17d502e18375bd811cf9",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-4b40912dde0b",
+      "path": ".claude/skills/git-rescue/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "921b769d7adad2dd0cb7c47073b71e0f72207de0afc45c79d3831c4ca2485a2a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f72705822783",
+      "path": ".claude/skills/health/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "7e3a08f41d24008e8e66f705af5a2cd2414a779adbb6bacff0ae79e2f1fbe31f",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-36672b1d149c",
+      "path": ".claude/skills/meeting-report/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "d0c8ee521d29a15d16536248232d873e22f17e1beadd229eec0021a9605a9500",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-e0f1ea89a226",
+      "path": ".claude/skills/onboard/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "da83376a0fa56f02edef5a89fcb9042d7f1b603d582eabcdd31da5bc6a408b37",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-b089dd676e8f",
+      "path": ".claude/skills/parallel-extract/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "4df5c325b1cb4a338ff4c78045361d9a62a5ec69daa8afd58814bd615c36c0c0",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-1e2cda77a042",
+      "path": ".claude/skills/post-train/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "4118dd630c6b8fd019a2e03aae06481451818a522736dd5709995723f10a19d5",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-298d98c90723",
+      "path": ".claude/skills/sync-server/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "34b4efcd46c4728c7ac436b53116d76bb23f2f8df8106d41b306bb74f63542b8",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-6ed04f28f7c0",
+      "path": ".claude/skills/train-guide/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "56c417938eb28f155dc040aca58d967f023f131c89ddf5008a878c6dc25d1051",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-0f428d649623",
+      "path": ".claude/skills/train/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "d8e5bc73a17d204fd0bb8369ba8efc4fbb97af15b7e923cbaaa3fcc48e606a75",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-654351a24cf0",
+      "path": ".claude/skills/update-ranking/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "43e93facc90f1865af00ded208dfcc62e121b2ea2cfb25aa851383552a591bd2",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-87b54df9f6ab",
+      "path": ".claude/skills/viz-guide/SKILL.md",
+      "category": "配置参考",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "4010962355394c61796423d488b145319965122ec9f8d0b872a1f051c7f288e2",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-0955e2964a17",
+      "path": ".qoder/basic_rule.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-eed3e9604b8a",
+      "path": ".qoder/experience.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-260b066ed872",
+      "path": ".qoder/plans/UNI_Patch_Token方案_9195a132.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-7e70f2994371",
+      "path": ".qoder/repowiki/zh/content/推理评估/推理与评估.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-3d01e2ff51b0",
+      "path": ".qoder/repowiki/zh/content/故障排除.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-3596b63ebabf",
+      "path": ".qoder/repowiki/zh/content/数据系统.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-4fb7dc15cde9",
+      "path": ".qoder/repowiki/zh/content/模型体系/模型体系.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-a3e74f116dc9",
+      "path": ".qoder/repowiki/zh/content/环境与配置.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-18c16e57b36c",
+      "path": ".qoder/repowiki/zh/content/训练系统/训练指南.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-723e7935b5cc",
+      "path": ".qoder/repowiki/zh/content/项目概述.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-9680320b3826",
+      "path": ".qoder/skills/README.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-8ceb3f7c9b87",
+      "path": ".qoder/skills/可视化与输出规范.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-bd1d1ca1085e",
+      "path": ".qoder/skills/数据处理经验.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-43952d75c73c",
+      "path": ".qoder/skills/组会汇报撰写指南.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-7fb90335ecb1",
+      "path": ".qoder/skills/训练工程经验.md",
+      "category": "技术参考",
+      "scope": "missing_local_adapter",
+      "authority": "reference",
+      "lifecycle": "missing",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-af1018facf20",
+      "path": "01_指南与解读/01_README.md",
+      "category": "未分类",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "1b25b6f7678a09b0b913b77fb0803f356b91df14d83c7ccccfad72b1fb822f73",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-dcade5200ce3",
+      "path": "01_指南与解读/分析报告/2026-06-30_数据最新情报_完整提取.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "131263c94a153f6fc0618c29b69079fc24ea4e750b94011636697dd43f387a50",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-b4b14aed4452",
+      "path": "01_指南与解读/分析报告/5.16修复记录.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "f6446c14931245ec807485ba8ed96435917e5deb7250b3d8bd2e51dea0af1208",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-ad0270f260ab",
+      "path": "01_指南与解读/分析报告/AugMix实验评估报告_20260515.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "034a0ca296ef48932f28284b018a8d162456de384ddf83263cf16e0d968f91b9",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "AugMix 数据增强在 UNI Token 模型上的消融实验评估，含 PCC 对比与过拟合分析",
+      "created": "2026-05-15",
+      "tags": [
+        "AugMix",
+        "数据增强",
+        "消融实验",
+        "过拟合",
+        "PCC"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f170b2048c9f",
+      "path": "01_指南与解读/分析报告/CVNN与新型架构可行性调研_2026-06-05.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "b8a42f643509b7ae2f3987f736dd1c63270d401e4d1716bec43c750223bee263",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "复值神经网络（CVNN）+ 7 类新型架构在 PFMval 的可行性评估与初学者学习指南",
+      "created": "2026-06-05",
+      "tags": [
+        "CVNN",
+        "架构调研",
+        "可行性评估",
+        "初学者"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-aa1f5a70c671",
+      "path": "01_指南与解读/分析报告/EGNv2_实验分析与建议.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "f1b5d2cc9f8b57726a7eb0c59fd11fed86c7253f03886b5b8ea295ac3c07c83d",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-6219876457ef",
+      "path": "01_指南与解读/分析报告/HisToGene_UNI训练结果对比分析.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "262348967ce45569309cffea199318b3fc051430469a279db08b3af65e285d2c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "HisToGene-UNI Token vs CLS 两种特征提取方式的跨患者训练结果对比分析",
+      "created": "2026-05-17",
+      "tags": [
+        "HisToGene",
+        "UNI",
+        "Token",
+        "CLS",
+        "对比分析",
+        "跨患者"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-a4682a464e68",
+      "path": "01_指南与解读/分析报告/HisToGene应用规划.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "02259448124bbbdf25feded792e6f299b04ec76f69f09509bb2a7c7c34fca0cc",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-8e602e15a033",
+      "path": "01_指南与解读/分析报告/JFX0729数据替换后重跑实验清单.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "67a6e42cf5de3545fa608a20f3e416b55523f2c5543e51da7a37582f2c23c9f9",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-682cad4c0cc1",
+      "path": "01_指南与解读/分析报告/MPP-V3bis内部验证集二次实验方案_20260704.md",
+      "category": "分析报告",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "d71e2c14c623fcb23954ed646567a52c258728b43b40088c6e11c3db0468d761",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-mpp-training"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-c2d325598121",
+      "path": "01_指南与解读/分析报告/MPP-V3bis正式训练日志_20260704.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "798dbd1af907f3aa1ecc1e3fea6929d0ffe9e6698611cd24ff32fa519199a1e4",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-12f7b32ededd",
+      "path": "01_指南与解读/分析报告/MPP1-5统一标准划分结果快照_20260708.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "04f3a8932810d7b7aae9b3c60da61c2e323b7fa7a7b29ecddbc1f0a46b543f60",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-23cf869fac6c",
+      "path": "01_指南与解读/分析报告/MPP1_4冒烟训练总结与排错经验_20260704.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "81c15640cb6127c91a6282c2b01f684f922d552a4f41ecde7a0afa7722454a87",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-7e63204560b9",
+      "path": "01_指南与解读/分析报告/MPP1_MPP4训练执行方案_20260704.md",
+      "category": "分析报告",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "95577dcd2a7dd405285cf6683eb86befd16e0bb7e346fb71d8ef457ce52903b6",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-mpp-training"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-9328df98eb69",
+      "path": "01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md",
+      "category": "分析报告",
+      "scope": "mpp_training_reference",
+      "authority": "reference",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "500825bf67104765d07b7bf54abdc6436cca171a9e7ea515eb37ec5e7bd11ca0",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-5735d8901a5d",
+      "path": "01_指南与解读/分析报告/MPP五划分UNI2h_MLP执行框架_Claude评审版_20260702.md",
+      "category": "分析报告",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "bba1d3f407a05d0c624972fa75ff8f29828557749ce121f3d62ba37ec5c7ab23",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-mpp-training"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-943290bcd1e6",
+      "path": "01_指南与解读/分析报告/MPP五划分训练分工与微信通知模板_20260701.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "d99546e3a93ef60fe0ed45a7da49cc04a52a63830c5e8b4a430a601136fc0a0b",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-ac85f5635eb4",
+      "path": "01_指南与解读/分析报告/MPP显微倍率与医学解释依据_20260708.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "41e1b98d41675fa7555b265329dd84a48afeac9a7d5f0ca3e184094ecdf7541c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-d5ac37d94c3e",
+      "path": "01_指南与解读/分析报告/Mamba与频域模块迁移调研_20260609.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "bb8f563dc62af2fad5a12b3243664651c251c001ad6da9ffe524b8e203f5a942",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "Mamba 系列（ConvSSM/MambaIR）和频域系列（GFNet/AFNO/AFFNet/SpectFormer 等）11 个模块迁移至 PFMval 的可行性评估，含优先级排序、代码模板与实验路线图",
+      "created": "2026-06-09",
+      "tags": [
+        "Mamba",
+        "频域",
+        "SSM",
+        "GFNet",
+        "AFNO",
+        "FTT",
+        "架构迁移",
+        "TokenEncoder",
+        "可行性评估"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-8fe357c9bfac",
+      "path": "01_指南与解读/分析报告/PEaRL通路增强改进方案.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "ca90ba4887876bf4c00d63aa86ebdc87842a3368fd257a199696e458cc49e7ed",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-54de45fef40e",
+      "path": "01_指南与解读/分析报告/PFMval_PCC优化建议报告_附论文推荐_20260513.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "a8094d01884841bc58413f38d6bd82b3a4b3d670bbcc43a58d59e1917a945379",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "PCC 优化系统性建议报告，含 37 篇文献综述与论文推荐",
+      "created": "2026-05-13",
+      "tags": [
+        "PCC优化",
+        "文献综述",
+        "论文推荐",
+        "改进方向"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f09cdbaf0403",
+      "path": "01_指南与解读/分析报告/PFMval本地状态与Gitee维护实施日志_20260711.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "33376b2e308b7752c4776ff3aff377eba218ba60e5178dc75e5a7ff18373e1d3",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-09f2221baaab",
+      "path": "01_指南与解读/分析报告/Phase2模型改进建议_0507.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "4e9dfcf5e1304ec689f59afb4481965b3d1a578bfb1b273ae04cca6ffc706759",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "Phase 2 模型改进建议：损失加权、编码器深度优化、特征天花板分析与 Virchow2 替代方案",
+      "created": "2026-05-07",
+      "tags": [
+        "Phase2",
+        "改进建议",
+        "损失加权",
+        "编码器",
+        "特征天花板"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-e27e5de180af",
+      "path": "01_指南与解读/分析报告/UNI2h_LoRA冒烟测试报告_20260530.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "4559d2e0e0d9318621b7a9a4b58d59a26acfbd26322ce7b0695a714b018f0ab5",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "UNI2-h 在线 LoRA 渐进解冻代码落地冒烟测试报告（单患者验证，PCC=0.5462）",
+      "created": "2026-05-30",
+      "tags": [
+        "UNI2-H",
+        "LoRA",
+        "冒烟测试",
+        "渐进式解冻",
+        "在线训练"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f3092657ca03",
+      "path": "01_指南与解读/分析报告/he-ssgsea-greedy-river.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "3bb9d82775edeff8473cecd88a831dd8818b7ac0f444a360cbe727e65efe8254",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "H&E 图像 → ssGSEA 通路预测的 Greedy River 方法探索与实验分析",
+      "created": "2026-05-24",
+      "tags": [
+        "GreedyRiver",
+        "ssGSEA",
+        "通路预测",
+        "HE"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-ed7fb303d91d",
+      "path": "01_指南与解读/分析报告/下一步改进操作建议_0516.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "c6b1431caf88d8a587f84b63b8bc0a5e0a838d6768557b592f114aa8a704e035",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "0516 组会后整理的下一步实验操作建议：P1 实验完成后的 P2-P4 优先级排序",
+      "created": "2026-05-16",
+      "tags": [
+        "改进建议",
+        "操作建议",
+        "P2",
+        "优先级",
+        "实验规划"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-b33f15dd0971",
+      "path": "01_指南与解读/分析报告/全模型训练总结与研究方向分析.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "421685c444c70b72f4f749339b5c5ec4dc16876766e248d26df634bc2a65eb00",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "HisToGene/EGN-v2/UNI/Virchow2 全模型训练结果总结与后续研究方向研判",
+      "created": "2026-05-18",
+      "tags": [
+        "训练总结",
+        "模型对比",
+        "研究方向",
+        "综述"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-fce62ad81714",
+      "path": "01_指南与解读/分析报告/历史参考与多中心MPP(1-5)外部测试的综合对比分析报告_20260704.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "e7e7aea0a7382327911bd9e2e9a49a32502fec9d1b47fed8d48b901e26713987",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-a66d838cd4b0",
+      "path": "01_指南与解读/分析报告/执行计划_MPP1-5统一标准重跑_20260706.md",
+      "category": "分析报告",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "2f40b83a97789be24c4d7dcd970283199915e8b3ffdf7542619bf5b82df3b8ee",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-mpp-training"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-905f1ffbb3af",
+      "path": "01_指南与解读/分析报告/执行计划_MPP五划分验证_20260701.md",
+      "category": "分析报告",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "a641036fd89ddfbe477dce5c5ade029af077cf4b4402b38ef7b0e57afc9d6954",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-mpp-training"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-9739aa4b7aeb",
+      "path": "01_指南与解读/分析报告/教师-学生架构改进方案_20260522.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "2483eebb4cf8a19c74648e5dfd3035454d3541549453fe95d32bfd1cac40c658",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "教师-学生架构在病理图像→通路预测任务上的改进方案设计与可行性分析",
+      "created": "2026-05-22",
+      "tags": [
+        "教师-学生",
+        "知识蒸馏",
+        "改进方案",
+        "架构设计"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-cf69a7bdaf91",
+      "path": "01_指南与解读/分析报告/文献整理报告_模型选型建议.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "ccb58711b9798ae4271b004affa720d913d1fd1fcf9f5fb820ce4993d53d5f0a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-30e164b2d426",
+      "path": "01_指南与解读/分析报告/新数据集3ST分析报告.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "24ca7f5d13d15c6b9a58f3233ef559673be87cb3c91e6923970dd7ca7456f65a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "3 位食管癌患者空间转录组数据集（3ST）的统计分析报告，含通路分布与患者差异",
+      "created": "2026-05-08",
+      "tags": [
+        "3ST",
+        "数据集",
+        "统计分析",
+        "ssGSEA",
+        "通路分布"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-088b1ab72e4c",
+      "path": "01_指南与解读/分析报告/模型评估与选型分析.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "9ad7498629fdd0f6f71c1334e9fbf11b5abca6e678efbea2c3ff56d3541df543",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "HisToGene/EGN-v2/UNI/Virchow2 等多模型性能对比与选型分析",
+      "created": "2026-05-15",
+      "tags": [
+        "模型对比",
+        "选型",
+        "PCC",
+        "评估"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-02d2881f162c",
+      "path": "01_指南与解读/分析报告/训练加速方法调研_20260610.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "bf1cddca986c58402dc6c6d995a867f73cedd100db36a6c94f1e6cb44f777627",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "RTX 4080 16GB 训练加速方案：BF16/torch.compile/TF32/fused AdamW/DataLoader 四级安全方案与代码改动清单",
+      "created": "2026-06-10",
+      "tags": [
+        "训练加速",
+        "BF16",
+        "torch.compile",
+        "TF32",
+        "DataLoader",
+        "RTX4080"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-b3a0045b24d7",
+      "path": "01_指南与解读/学习指南/5.16改进建议原因分析_初学者版.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "59431d8934835be67ad34df4cb56145c20942b98db07267c585136d1780536c5",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-d61539f485f0",
+      "path": "01_指南与解读/学习指南/Codex与ClaudeCode协作方案_20260615.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "fe0487f63794d1746ae59de9a70b17238c0dc942d90d8f2bb73ab5ef0995e076",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "定义 Codex 与 Claude Code 在 VSCode 双插件开发中的分工、交接模板、审查闭环和跨项目迁移方法。",
+      "created": "2026-06-15",
+      "tags": [
+        "Codex",
+        "Claude Code",
+        "协作流程",
+        "VSCode",
+        "交接模板"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-44aabc89d933",
+      "path": "01_指南与解读/学习指南/Codex与ClaudeCode双边协作快速命令指南_20260616.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "e017ac19fcceb22bfbd3d8bea9db7bc3e2d0df1766d51ca4382a94b03358b65e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "提供 Codex 与 Claude Code 双边协作的可复制触发口令、交接模板、审查口令、常见场景命令和跨项目复制模板。",
+      "created": "2026-06-16",
+      "tags": [
+        "Codex",
+        "Claude Code",
+        "快速命令",
+        "协作流程",
+        "Review Packet",
+        "Implementation Packet"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-b66bfc74b3e2",
+      "path": "01_指南与解读/学习指南/Mamba与频域模块学习指南_20260609.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "72672e9d611b54fb4ab5e6ad3b22e1dd530360b7582840ad27693f6cef48823e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "GFNet/AFNO/MambaIR 概念详解、论文逻辑、适配本项目原因，面向初学者的频域/SSM 入门",
+      "created": "2026-06-09",
+      "tags": [
+        "Mamba",
+        "频域",
+        "GFNet",
+        "AFNO",
+        "MambaIR",
+        "SSM",
+        "FTT",
+        "初学者",
+        "学习指南"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-ce20d727038e",
+      "path": "01_指南与解读/学习指南/PFMval学习指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "462b6e07cbd5bcce3c8a0e1ddc4c64521f2d810310e3d744b3ed591c0eb54cfe",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-bece8ee254c0",
+      "path": "01_指南与解读/学习指南/RL方法选择_初学者指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "b7836b48de52e286c1048cfefc848f4ea2d0cdf3cbab3d1a1b847e123e775b67",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "RL 四种方案（DQN调度/PPO/BO通路选择/多臂老虎机）的可行性分析与选择指南",
+      "created": "2026-05-24",
+      "tags": [
+        "RL",
+        "强化学习",
+        "DQN",
+        "BO",
+        "初学者",
+        "方案选择"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-5c6f3862cc1e",
+      "path": "01_指南与解读/学习指南/SSH远程操作_初学者指南.md",
+      "category": "学习指南",
+      "scope": "historical_connectivity",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "06c0e9e007af725c0057f0567f2d7f4b2b6090a38562f10884cdb8392ea538e5",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "SSH 远程连接服务器的操作指南，含端口转发与免密登录",
+      "created": "2026-05-30",
+      "tags": [
+        "SSH",
+        "远程",
+        "服务器",
+        "初学者"
+      ],
+      "connectivity_modes": [
+        "ssh"
+      ],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-204c5e1dcc4e",
+      "path": "01_指南与解读/学习指南/SSH远程连接实战排障_初学者指南_20260616.md",
+      "category": "学习指南",
+      "scope": "historical_connectivity",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "0d60c871743fec00b4966f258d7ada1e60592e221159441b5220037ceb150121",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "SSH 七层排查法详解 + PFMval 服务器排障实战案例 + AI Agent 远程操作原理 + Windows SSH 特殊坑点 + 可复用排障清单",
+      "created": "2026-06-16",
+      "tags": [
+        "SSH",
+        "排障",
+        "初学者",
+        "学习指南",
+        "AI Agent",
+        "远程",
+        "Windows",
+        "案例教学"
+      ],
+      "connectivity_modes": [
+        "ssh"
+      ],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-417d1e19e6f9",
+      "path": "01_指南与解读/学习指南/UNI2-H_渐进式解冻训练_初学者指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "e3bd0bf56ea382d2998a44b059368d3a5996f1dcc456efa815580350d1cc42a1",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "UNI2-H 在线 LoRA + 渐进式解冻三阶段训练全流程指南",
+      "created": "2026-05-30",
+      "tags": [
+        "UNI2-H",
+        "LoRA",
+        "渐进式解冻",
+        "在线训练",
+        "初学者"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-35b99c569e2c",
+      "path": "01_指南与解读/学习指南/infer_解读指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "a6050273ae520d3f5c2ca032ca8e3d735c96ef4bfc1ad71de1a8424d98eeaf01",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-2c7136131bbe",
+      "path": "01_指南与解读/学习指南/split_解读指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "14373d69a81a65acbf02cded812080b5d3c9a68165e9ddcbbeb2937d3e5165f2",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-980a6556fda8",
+      "path": "01_指南与解读/学习指南/train_解读指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "fba2687db5380ac3123fe7823fcbfe866411489209f4962fa45335c5aaac4a5c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-bda7a76d46b7",
+      "path": "01_指南与解读/学习指南/uni2h_utils_解读指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "6e2868d53415ba40e245376917de3c9013651dba50acc8162c64fe421f70d7e7",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-af2d1a9d78d6",
+      "path": "01_指南与解读/学习指南/zscore_解读指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "298993934780d2eb8cf769a03d214f3226a7adf324abd5bb58bddebd90013441",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f6001397634d",
+      "path": "01_指南与解读/学习指南/医学数据预处理_ssGSEA标签标准化_初学者指南_20260616.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "615dbe1e498b175209401afa773737d0d4c3e0a33fbfcd2bf547d2487409af2c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-7adf61389868",
+      "path": "01_指南与解读/学习指南/数据泄露与三层分离科普_20260704.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "76ffae444c478767da6c369dffaafac04969ac842d3c5a9196eade5fbf46d2ac",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-97be16e8d4b6",
+      "path": "01_指南与解读/学习指南/服务器迁移指南_初学者版.md",
+      "category": "学习指南",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "9a9d532e83ab1e93524c7359d9f55fb431fa34f45b7fa3d9c878f999c336db76",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-server-maintenance"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "PFMval 项目从本地迁移至 Windows 服务器的完整操作指南",
+      "created": "2026-05-22",
+      "tags": [
+        "服务器",
+        "迁移",
+        "部署",
+        "初学者"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-093592103841",
+      "path": "01_指南与解读/学习指南/训练进度查看指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "3ec394afb420a819f22ed77b755a7c0041a1c923e78068053e8e425b7492a820",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "如何查看训练进度、理解训练日志输出、判断模型是否正常收敛",
+      "created": "2026-05-17",
+      "tags": [
+        "训练",
+        "监控",
+        "日志",
+        "初学者"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-80dd9010dc70",
+      "path": "01_指南与解读/学习指南/项目全貌与迁移指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "1d9b60b33aaf8b5a049442e82f59a4a769454a33563bd1002d7fb4358ca5bd0d",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "项目整体架构、技术栈与服务器迁移方法总览",
+      "created": "2026-05-19",
+      "tags": [
+        "项目概览",
+        "迁移",
+        "架构"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-5b97bb4672c9",
+      "path": "01_指南与解读/部署方案/EGNv1_部署方案.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "b3f6002e637bbcbb2e050bc87f9dad73c2ad1072286e27f74ac4c4fdfad2f253",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-7dac00a3b364",
+      "path": "01_指南与解读/部署方案/EGNv2_UNI集成方案.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "6f0875bd4457a421442d5e2eb552d5d3eae81e739846006c7bc50e1a80a3eb0b",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-c152680e6a3a",
+      "path": "01_指南与解读/部署方案/EGNv2_部署方案.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "d12447637071b9a364e9eeb827c4922a7186a6aafb3d2f700fbd889849eebdf8",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-c7d6b9f304a2",
+      "path": "01_指南与解读/部署方案/HisToGene_UNI特征集成方案.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "0933d9bc096733cf0be94f612edc32f6d012f84103cd6006bca7954701669d05",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-931fb38fe2d8",
+      "path": "01_指南与解读/部署方案/Loki_OmiCLIP_安装指南.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "26b0f85de1eb88d8a768191c9bd34c9bc2455af34889e1e08a0277d959496c53",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-6124b85413ab",
+      "path": "01_指南与解读/部署方案/MPP1-5重跑服务器操作排错与踩坑汇总.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "48be2f9f4ace8d50b9c5b1504c17b8d4ebb330910e2429f913a62f23f116cfde",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-b1dee7a99232",
+      "path": "01_指南与解读/部署方案/MPP1_MPP5模型获取与预测指南.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "cf74ad2a88f6b84b0ec70514464f444753b324988a921ffe474ddb4822b47474",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-bf1e3b39e68c",
+      "path": "01_指南与解读/部署方案/Mamba与频域模块实验部署方案_20260609.md",
+      "category": "部署方案",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "d1af9f488d8c2ef05d0a4eda18417e2416c3f17ce8d3e8f3a390e3df45ef6c09",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-server-maintenance"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "GFNet/AFNO 频域 TokenEncoder 实验的精确部署步骤、命令模板、代码改动清单与实验路线图",
+      "created": "2026-06-09",
+      "tags": [
+        "Mamba",
+        "频域",
+        "GFNet",
+        "AFNO",
+        "TokenEncoder",
+        "部署方案",
+        "实验"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-a8af2d7e8bbf",
+      "path": "01_指南与解读/部署方案/OmiCLIP_部署方案.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "fa612db9ee92e874aa7156464fb7dc896728b8f3eed0e7e3cea9d3b278e2bbaa",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-a90dfe973942",
+      "path": "01_指南与解读/部署方案/RL方案B与方案D_部署实现策略.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "cb7a363edf112405ff5f79c2e4142c2d499d1ef3bc45e511aba9658490681892",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "RL 方案 B（DQN训练调度）与方案 D（BO通路选择）的 MDP 设计、训练策略与风险评估",
+      "created": "2026-05-24",
+      "tags": [
+        "RL",
+        "DQN",
+        "BO",
+        "部署",
+        "MDP",
+        "训练调度",
+        "通路选择"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-c6d1332d60a1",
+      "path": "01_指南与解读/部署方案/SSH远程连接排障与部署方案_20260616.md",
+      "category": "部署方案",
+      "scope": "historical_connectivity",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "cf7e3daa810dd96721da17159da1f0b1b32ccc224ffa5d36faec1edca66230c8",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "SSH 远程连接完整部署方案：15项逐层排查、根因（NAT端口映射错误）、8方案对比矩阵（含VS Code Tunnel/Cloudflare/GH Runner/schtasks）、安全加固章节、最终验收命令。2026-06-17 经 Codex 审查修正（7处修正+4新方案）",
+      "created": "2026-06-16",
+      "tags": [
+        "SSH",
+        "排障",
+        "部署方案",
+        "NAT",
+        "端口映射",
+        "服务器",
+        "Codex审查",
+        "VS Code Tunnel",
+        "Cloudflare",
+        "安全加固"
+      ],
+      "connectivity_modes": [
+        "ssh"
+      ],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-40e205e92e9d",
+      "path": "01_指南与解读/部署方案/UNI2-h服务器离线加载排障记录_20260703.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "e0989b61c76058bd7c45faf835fcaa2a8f551a9421a22fd111540f02938c1f20",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-822053816e9a",
+      "path": "01_指南与解读/部署方案/VS Code Remote Tunnels远程连接部署方案_20260617.md",
+      "category": "部署方案",
+      "scope": "historical_connectivity",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "8cec90401fc4fd9137fcf1385cbec1522d57f91b5eada33aa1c0ed0d598e595c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [
+        "remote_tunnel"
+      ],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-d03361d527e6",
+      "path": "01_指南与解读/部署方案/Virchow2_部署方案.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "9b2720cd8af01a99b4aeb499021ce77e42493f6d578c131ab1219cc988926d65",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "Virchow2 (ViT-H/14, 632M, 1280-dim) 的部署、特征提取与训练流程（方向已关闭）",
+      "created": "2026-05-19",
+      "tags": [
+        "Virchow2",
+        "部署",
+        "特征提取",
+        "已关闭"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-058364e7c37b",
+      "path": "01_指南与解读/部署方案/ssGSEA标签预处理与JFX修复数据部署方案_20260616.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "8c12ab4ad634c7c341f07c9c4dd027dc36e03abdf970fdef06d1e99283502e57",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "JFX fixed data 的 no-filter 划分、30通路标准 z-score 主线、Yeo-Johnson/Quantile-normal 标签变换对照和 Claude 可执行验收清单",
+      "created": "2026-06-16",
+      "tags": [
+        "JFX0729",
+        "fixed data",
+        "ssGSEA",
+        "z-score",
+        "Yeo-Johnson",
+        "标签预处理",
+        "部署方案"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-e3de1edd8875",
+      "path": "01_指南与解读/部署方案/服务器手动部署速查手册.md",
+      "category": "部署方案",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "8be03de0107cbafae90307ba6c886d2bb7644add14b88f74cee31f4fb7f7299a",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-server-maintenance"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "Windows 服务器手动部署 PFMval 的快速操作步骤速查",
+      "created": "2026-05-30",
+      "tags": [
+        "服务器",
+        "部署",
+        "速查",
+        "手动"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-8908905b102c",
+      "path": "01_指南与解读/部署方案/服务器训练操作手册.md",
+      "category": "部署方案",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "b8c62f4f2cdfc4da9434787a96bffa28027e6fc8238ac2b753777b8bbbbb59e6",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-server-maintenance"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "服务器端训练全流程操作手册：环境确认、代码同步、启动命令、监控与结果回收",
+      "created": "2026-06-10",
+      "tags": [
+        "服务器",
+        "训练",
+        "操作手册",
+        "部署",
+        "监控"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-2a8751c5530f",
+      "path": "01_指南与解读/部署方案/服务器路径索引_20260701.md",
+      "category": "部署方案",
+      "scope": "server_paths",
+      "authority": "normative",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "52b96c0dc2c49d35776256eb8226a94ac0de9ef125b85b5c6e9e03a47890b103",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-c9b5dcee616a",
+      "path": "01_指南与解读/部署方案/服务器部署指南.md",
+      "category": "部署方案",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "b107b05a11965f3ebaea55b72e4a34db7b7a0484fa108a14809738e32836bac7",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-server-maintenance"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "Windows 服务器部署 PFMval 项目的完整操作手册，含环境搭建与依赖安装",
+      "created": "2026-05-22",
+      "tags": [
+        "服务器",
+        "部署",
+        "环境搭建",
+        "Windows"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-2733f1449740",
+      "path": "01_指南与解读/部署方案/空间信息修复方案_20260613.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "8cdec793068a1f42d80a5c3b162ebc7b96bdd81f1bb977435a6ab22f8d6d1145",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "2026-06-13",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-47c2f8b8395b",
+      "path": "01_指南与解读/部署方案/融合空间组学执行方案_20260522.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "f120e22e28e7db203af8a21f4a816172b38c2c18536e4f4da5fde76707f09209",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "空间转录组数据融合至病理图像分析的完整执行方案",
+      "created": "2026-05-22",
+      "tags": [
+        "空间转录组",
+        "数据融合",
+        "执行方案"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-3ba844a84b95",
+      "path": "02_组会汇报/02_README.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "e39832a8d25d2a9e42cf8af3f8915508baba25d424014c3ac33325e12859de08",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-b059eaec8307",
+      "path": "02_组会汇报/服务器部署问题提问清单_20260530.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "93af1b296d2c639e2061cfab1436a2ce3ac69f4c66836ee19defc940cfd6c067",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "2026-05-30 组会向老师咨询服务器配置与权限问题的提问清单",
+      "created": "2026-05-30",
+      "tags": [
+        "服务器",
+        "部署",
+        "提问清单",
+        "组会",
+        "权限",
+        "网络通道"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-4c9dc9320139",
+      "path": "02_组会汇报/组会汇报_0418_HisToGene训练.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "c556e0e13276fba61a3a6f0b92d8bc4e6912821d39bce6879152336de82c920c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-c8aa1aa25c35",
+      "path": "02_组会汇报/组会汇报_0424_模型训练结果.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "b4f12a809105cd5dace7205dd11c82bc96caeb34bb9f12619b1301bd4946cef0",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-344dc7e07c9a",
+      "path": "02_组会汇报/组会汇报_0429_W17周报.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "1a096368701444215f33bf26588d761650b97e8ae502b82787a1382dff3d2bcf",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-337e14634b32",
+      "path": "02_组会汇报/组会汇报_0507_文献与Phase2.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "92d7e0c79e692f21099df63183a571c505d9d597bdfd2495dd7457017aac1d10",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f5e9f0be4915",
+      "path": "02_组会汇报/组会汇报_0516_P1实验与下一步.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "0a8dac1978c431f5e33a809ac64e848f69c4c6200332987eb5557c3e80c746ed",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-97edf96fc8e6",
+      "path": "02_组会汇报/组会汇报_0523_W21周报.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "f0e4a32fbfe9f0b722414fd9a2f8f6e3bc10ff38275ff22a170b0aa4a9af71ae",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-bc240626561c",
+      "path": "02_组会汇报/组会汇报_0530_W22周报.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "bb03e574700cf9da2be99a7a1416d91859664fd0bde6abefac949be3580d4eb2",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "W22 周报：UNI2-h LoRA 渐进解冻单患者验证完成、服务器部署进展、项目审查关键结论",
+      "created": "2026-05-30",
+      "tags": [
+        "周报",
+        "LoRA",
+        "UNI2-H",
+        "服务器",
+        "项目审查",
+        "W22"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-90fdd451d07c",
+      "path": "02_组会汇报/组会汇报_0604_解冻训练分析与九例策略.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "079c67b03578e71c3ac12935b8cbc80c9cd58bde086c991e9bc552aec865b36c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f5e0fc1e50ec",
+      "path": "02_组会汇报/组会汇报_0612_频域方向关闭与Token+LoRA确立.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "03043228f7c2cadf03a21c8186c84a5119a76b368bb0a9dc2da76b521b146924",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-d3277b2759f7",
+      "path": "02_组会汇报/组会汇报_0704_MPP1-5泛化能力对比.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "722371569c3c5af7d0815db3c599265372653b27899d1da95ac9fb0c431e957a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "agent-entry",
+      "path": "AGENTS.md",
+      "category": "项目入口",
+      "scope": "agent_entry",
+      "authority": "normative",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "32901ea3bbabf6237ff73c8059f8f9c80c06c320b0704515b01fec05561b5821",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-2d5d10cfc503",
+      "path": "CLAUDE.md",
+      "category": "项目核心",
+      "scope": "agent_adapter",
+      "authority": "reference",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "dc01db79baf1c5ab86fbe1dbfb7ffb6df97d77b375bea0f3c84b199eff620236",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "AI Agent 项目指南：模型体系、核心铁律、运行环境、路径配置、Git 规则",
+      "created": "2026-04-18",
+      "tags": [
+        "CLAUDE.md",
+        "AI指南",
+        "核心铁律",
+        "环境配置"
+      ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "view-current-state",
+      "path": "CURRENT_STATE.md",
+      "category": "项目入口",
+      "scope": "current_state",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "e0ff3bf25bd302cd2813654e5a84f168a60ac6ce60f3dbf58d662512b870be0e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-8ec9a00bfd09",
+      "path": "README.md",
+      "category": "项目核心",
+      "scope": "project_summary",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "503821467062350dfbb773945de0fe5f9a5a805609fa920cedd0173bd91c0005",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "项目门面文档，面向人类读者的项目概览与快速入门",
+      "created": "2026-04-18",
+      "tags": [
+        "README",
+        "项目概览",
+        "快速入门"
+      ],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-f4e7bea90c0b",
+      "path": "automation/README.md",
+      "category": "项目入口",
+      "scope": "gitee_job_protocol",
+      "authority": "normative",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "6406bab422ac22725a854cf8cf629aa959c4e29c83c0343dbcb104f68fa23d2e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-916d4b92af63",
+      "path": "deploy/SYNC_GUIDE.md",
+      "category": "项目入口",
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "e515976cff91440650ccd78ca22afd1e2634385a2d96e056b955ed980f13787f",
+      "supersedes": [],
+      "superseded_by": [
+        "plan-server-maintenance"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-9e8fc4dbabef",
+      "path": "experiments/decision_log.md",
+      "category": "项目入口",
+      "scope": "project_decisions",
+      "authority": "reference",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "640bd1ce2e5bb86efd51778fd24caa2d3c8aef3a42e197da806c4a9bfe1cd958",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-cab153659acd",
+      "path": "experiments/experiment_dashboard.md",
+      "category": "项目入口",
+      "scope": "project_summary",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "5419c6b17b6e09a76fb87d6c26f93727b9094575ff81a142fd32ba242537f596",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "plan-mpp-training",
+      "path": "project_state/plans/mpp_training.md",
+      "category": "状态方案",
+      "scope": "mpp_training",
+      "authority": "normative",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "05157e3969c67951c91170ff8c5cb84c94a168356dd3b07cef6048e632ec35d4",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "plan-server-maintenance",
+      "path": "project_state/plans/server_maintenance.md",
+      "category": "状态方案",
+      "scope": "server_maintenance",
+      "authority": "normative",
+      "lifecycle": "active",
+      "verified_at": "2026-07-11T05:04:24+00:00",
+      "state_revision": 13,
+      "content_sha256": "f250133a254faa2e74172b85849814391d077bdd618d88c940fb4941c1c1736c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    }
+  ],
+  "summary": {
+    "total": 135,
+    "live": 120,
+    "missing": 15,
+    "active": 13,
+    "superseded": 11,
+    "historical": 96
+  }
+}

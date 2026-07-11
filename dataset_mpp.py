@@ -63,6 +63,30 @@ class MPPFeatureDataset(Dataset):
         # 识别坐标列
         coord_cols = [c for c in ["x", "y", "X", "Y"] if c in all_cols]
 
+        # 重复匹配键会被 dict/set_index 静默覆盖，必须在任何匹配前硬失败。
+        possible_id_cols = ["patch", "filename", "spot", "id", "patch_id",
+                            "spot_id", "barcode"]
+        id_col = next((c for c in possible_id_cols if c in all_cols), None)
+        duplicate_checks = []
+        if len(coord_cols) >= 2:
+            duplicate_checks.append((coord_cols[:2], self.labels_df.duplicated(coord_cols[:2], keep=False)))
+        if id_col:
+            normalized_id = self.labels_df[id_col].astype(str).apply(lambda value: Path(value).stem)
+            duplicate_checks.append(([id_col], normalized_id.duplicated(keep=False)))
+        duplicate_key = pd.Series(False, index=self.labels_df.index)
+        duplicate_key_names = []
+        for names, duplicate in duplicate_checks:
+            if duplicate.any():
+                duplicate_key |= duplicate
+                duplicate_key_names.extend(names)
+        if duplicate_key.any():
+            duplicate_key_names = list(dict.fromkeys(duplicate_key_names))
+            examples = self.labels_df.loc[duplicate_key, duplicate_key_names].head(5).to_dict("records")
+            raise ValueError(
+                f"duplicate label key hard gate: labels_csv={labels_csv}, "
+                f"key={duplicate_key_names}, examples={examples}"
+            )
+
         # 识别目标通路列
         if target_cols is not None:
             self.target_cols = target_cols

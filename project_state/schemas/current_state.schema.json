@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/current_state.schema.json",
+  "title": "PFMval current state",
+  "type": "object",
+  "required": [
+    "schema_version", "state_revision", "updated_at", "source_commit",
+    "active_directive_ids", "active_plans", "server_transport",
+    "active_training_jobs", "pending_result_ids", "latest_accepted_result_ids",
+    "blocked_actions", "superseded_conclusions", "source_hashes"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "state_revision": {"type": "integer", "minimum": 1},
+    "updated_at": {"type": "string"},
+    "source_commit": {"type": "string", "minLength": 7},
+    "active_directive_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "active_plans": {"type": "object", "additionalProperties": {"$ref": "#/$defs/plan"}},
+    "server_transport": {
+      "type": "object",
+      "required": ["mode", "remote_name", "allowed_operations", "forbidden_direct_connections"],
+      "properties": {"mode": {"const": "gitee_only"}}
+    },
+    "active_training_jobs": {"type": "array"},
+    "pending_result_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "latest_accepted_result_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "blocked_actions": {"type": "array", "items": {"type": "string"}},
+    "superseded_conclusions": {"type": "array", "items": {"type": "string"}},
+    "source_hashes": {"type": "object"}
+  },
+  "$defs": {
+    "plan": {
+      "type": "object",
+      "required": ["doc_id", "path", "status", "approved_at"],
+      "properties": {"status": {"const": "active"}}
+    }
+  }
+}

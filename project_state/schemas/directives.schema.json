@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/directives.schema.json",
+  "title": "PFMval directive event",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["event_type", "directive_id", "issued_at", "summary", "scope", "topic", "status", "supersedes", "effective_from_revision", "affected_files", "source"],
+      "properties": {
+        "event_type": {"const": "directive"},
+        "status": {"enum": ["active", "superseded", "cancelled"]},
+        "source": {"const": "explicit_user_instruction"}
+      }
+    },
+    {
+      "type": "object",
+      "required": ["event_type", "directive_id", "status", "changed_at"],
+      "properties": {
+        "event_type": {"const": "status_update"},
+        "status": {"enum": ["superseded", "cancelled"]}
+      }
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "state_revision": 14,
+  "updated_at": "2026-07-11T05:04:24+00:00",
+  "source_commit": "73db0ef5e3221686467bee54ebad63316cbea1d1",
+  "active_directive_ids": [
+    "DIR-20260709-001",
+    "DIR-20260710-001",
+    "DIR-20260710-002",
+    "DIR-20260710-003",
+    "DIR-20260711-001",
+    "DIR-20260711-002",
+    "DIR-20260711-003"
+  ],
+  "active_plans": {
+    "mpp_training": {
+      "doc_id": "plan-mpp-training",
+      "path": "project_state/plans/mpp_training.md",
+      "status": "active",
+      "approved_at": "2026-07-09T00:00:00+08:00"
+    },
+    "server_maintenance": {
+      "doc_id": "plan-server-maintenance",
+      "path": "project_state/plans/server_maintenance.md",
+      "status": "active",
+      "approved_at": "2026-07-11T00:00:00+08:00"
+    }
+  },
+  "server_transport": {
+    "mode": "gitee_only",
+    "remote_name": "gitee",
+    "allowed_operations": [
+      "git_ls_remote",
+      "git_fetch",
+      "git_pull",
+      "git_push"
+    ],
+    "forbidden_direct_connections": [
+      "ssh",
+      "scp",
+      "http_remote_command",
+      "remote_tunnel"
+    ]
+  },
+  "active_training_jobs": [],
+  "pending_result_ids": [],
+  "latest_accepted_result_ids": [
+    "mpp1_std10val_xzy_ext_uni2h_mlp_20260706",
+    "mpp2_std10val_xzy_ext_uni2h_mlp_20260706",
+    "mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
+    "mpp4_std10val_xzy_ext_uni2h_mlp_20260706",
+    "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706"
+  ],
+  "blocked_actions": [
+    "direct_server_connection",
+    "formal_training_without_user_approval",
+    "implicit_mpp_asset_deletion_or_regeneration",
+    "promote_pending_result_to_current_conclusion",
+    "new_mpp_training_until_conflicting_duplicate_barcodes_are_resolved"
+  ],
+  "superseded_conclusions": [
+    "SSH, SCP, HTTP command service and Remote Tunnel are not active server channels.",
+    "Old three-patient LoRA, Token, frequency and spatial-repair results are tuning references only.",
+    "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
+  ],
+  "source_hashes": {
+    "experiment_registry_sha256": "be6dc3edb6d0e940efd71d02cd1c69f709cfbefbc442d77617d8414acabc8ca0",
+    "experiment_dashboard_sha256": "5419c6b17b6e09a76fb87d6c26f93727b9094575ff81a142fd32ba242537f596",
+    "document_registry_sha256": "d1b0c4ef9ce265f20c14fd11912cec8985277e750c5e2889ae3850d46d17da70",
+    "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
+    "server_paths_sha256": "66689f64be07d0dc28a8b52ce91dee8f969353171f039bf53815e95eaa59940f"
+  },
+  "last_gitee_poll_at": null,
+  "notes": [
+    "Registry is the accepted experiment fact root; raw returned run artifacts take precedence until import completes.",
+    "Automated repair watchers remain deferred to a separate task.",
+    "MPP label index currently reports conflicting duplicate barcodes; existing results remain recorded, but new training is blocked pending a separately approved data repair."
+  ]
+}

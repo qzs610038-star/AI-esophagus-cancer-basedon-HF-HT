@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PFMval 远程命令服务（服务器端）
+PFMval 远程命令服务（服务器端，历史实现，已禁用）
 =======================
 安全的 HTTP 命令执行服务，带 Token 鉴权 + 命令白名单 + IP 过滤。
 
@@ -249,7 +249,7 @@ class CommandHandler(BaseHTTPRequestHandler):
         return False
 
 
-def main():
+def legacy_main():
     global TOKEN_HASH, ALLOWED_IP
 
     parser = argparse.ArgumentParser(description="PFMval 远程命令服务")
@@ -283,5 +283,12 @@ def main():
         server.server_close()
 
 
+def main():
+    print("[BLOCKED] deploy/cmd_server.py is a historical HTTP direct-transport implementation.")
+    print("[BLOCKED] Current project policy permits server exchange only through the configured Gitee remote.")
+    print("[INFO] Use deploy/pfmval_ops.py job/result envelopes instead.")
+    return 2
+
+
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

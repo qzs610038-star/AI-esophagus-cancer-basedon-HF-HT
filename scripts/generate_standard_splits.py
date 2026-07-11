@@ -59,8 +59,11 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from path_registry import get_registered_path
+
 # ── 常量 ──
-DEFAULT_MPP_ROOT = r"D:\AIPatho\Patch\visiumhd_patch"
+DEFAULT_MPP_ROOT = str(get_registered_path("mpp_data_root"))
 DEFAULT_OUTPUT_ROOT = "mpp_standard_splits"
 
 # 方案 §二 六例非 XZY 训练患者 + 外部测试

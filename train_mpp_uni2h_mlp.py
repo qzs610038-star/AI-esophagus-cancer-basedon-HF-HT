@@ -373,9 +373,11 @@ def _load_zscore_params(labels_root: str, mpp_id: int,
 # ═══════════════════════════════════════════════════════════════
 
 def main():
+    from path_registry import get_registered_path
+
     parser = argparse.ArgumentParser(description="MPP UNI2-h frozen + 2-layer MLP 训练")
-    parser.add_argument("--mpp_root", default=r"D:\AIPatho\Patch\visiumhd_patch",
-                        help="MPP 数据根目录")
+    parser.add_argument("--mpp_root", default=str(get_registered_path("mpp_data_root")),
+                        help="MPP 数据根目录（由 path id mpp_data_root 解析）")
     parser.add_argument("--train_mpp_id", type=int, required=True,
                         help="训练集 MPP 编号")
     parser.add_argument("--train_patients", default="",
@@ -427,6 +429,17 @@ def main():
                         help="自动从 split_info.json 覆盖 --train_patients 和 --val_patient")
     args = parser.parse_args()
 
+    # This check is intentionally inside the training script as well as the
+    # dispatcher. Manual invocation must not bypass current-state, path-index,
+    # transport or result-evidence gates.
+    from scripts.pfmval_state import validate_state
+    project_root = Path(__file__).resolve().parent
+    state_report = validate_state(project_root, strict=True, task="training")
+    if not state_report.ok:
+        state_report.emit()
+        print("[BLOCKED] MPP training is blocked by the authoritative project state")
+        return 2
+
     # ── train_patients 来源校验 ──
     # manifest 模式: train_patients 固定六例患者, 自动从 split_manifest 推断, 不需用户传
     if args.val_strategy == "manifest":
@@ -438,9 +451,9 @@ def main():
     # ── partner 模式：默认路径覆盖 ──
     if args.use_partner_paths:
         if args.cache_root == "mpp_uni2h_cache":
-            args.cache_root = r"D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache"
+            args.cache_root = str(get_registered_path("server_mpp_partner_cache"))
         if args.labels_root == "mpp_uni2h_cache/labels":
-            args.labels_root = r"D:\AIPatho\ljx\MPP1_4_uni\patch_split_zscore"
+            args.labels_root = str(get_registered_path("legacy_partner_labels"))
         print(f"[INFO] use_partner_paths=True")
         print(f"       cache_root  -> {args.cache_root}")
         print(f"       labels_root -> {args.labels_root}")
@@ -1076,4 +1089,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

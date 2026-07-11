@@ -101,7 +101,16 @@ def _read_yaml(filepath):
     with open(filepath, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
     # safe_load 在文件为空时返回 None
-    return config if config is not None else {}
+    config = config if config is not None else {}
+    path_ids = config.get("path_ids", {}) or {}
+    if path_ids:
+        from path_registry import get_registered_path
+
+        paths = config.get("paths") or {}
+        config["paths"] = paths
+        for config_key, path_id in path_ids.items():
+            paths[config_key] = str(get_registered_path(str(path_id)))
+    return config
 
 
 # ============================================================

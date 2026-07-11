@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/document_registry.schema.json",
+  "title": "PFMval document registry",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "state_revision", "documents"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "state_revision": {"type": "integer", "minimum": 1},
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["doc_id", "path", "category", "scope", "authority", "lifecycle", "availability", "verified_at", "state_revision", "content_sha256", "supersedes", "superseded_by", "truth_sources"],
+        "properties": {
+          "authority": {"enum": ["normative", "derived", "reference"]},
+          "lifecycle": {"enum": ["draft", "active", "superseded", "historical", "missing"]},
+          "availability": {"enum": ["tracked", "local_only"]}
+        }
+      }
+    }
+  }
+}

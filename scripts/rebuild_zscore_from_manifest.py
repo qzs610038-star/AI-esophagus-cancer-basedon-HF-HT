@@ -37,28 +37,37 @@ raw-scale 反归一化 (方案 §4.3 P1 必交付):
     cd D:\\AIPatho\\qzs\\pfmval_deploy_git
     "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe" scripts/rebuild_zscore_from_manifest.py \\
         --splits-root mpp_standard_splits \\
-        --mpp-root D:\\AIPatho\\Patch\\visiumhd_patch
+        --mpp-root D:\\AIPatho\\Patch\\visiumhd_patch \\
+        --staging-root D:\\AIPatho\\Patch\\mpp_zscore_repair_staging \\
+        --staging-version barcode-repair-20260711-v001
 
 本地验证 (用 partner raw 副本模拟):
     "C:\\Program Files\\Python313\\python.exe" scripts/rebuild_zscore_from_manifest.py \\
         --splits-root tmp/test_splits \\
         --mpp-root parter_ljk_MPP1&4_patch_split_zscore \\
-        --use-partner-labels --mpp-id-override 1
+        --use-partner-labels --mpp-id-override 1 \\
+        --staging-root tmp/rebuild_staging --staging-version local-v001
 """
 
 import argparse
+import hashlib
 import json
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
+from uuid import uuid4
 
 import numpy as np
 import pandas as pd
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from path_registry import get_registered_path
+
 # ── 常量 ──
 DEFAULT_SPLITS_ROOT = "mpp_standard_splits"
-DEFAULT_MPP_ROOT = r"D:\AIPatho\Patch\visiumhd_patch"
+DEFAULT_MPP_ROOT = str(get_registered_path("mpp_data_root"))
 
 TRAIN_PATIENTS = ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"]
 EXTERNAL_PATIENT = "XZY"
@@ -72,6 +81,68 @@ CLIP_AFTER_TRANSFORM = True
 REF_PATHWAYS = None  # 首次读取 raw CSV 时从列名推断, 验证跨 MPP 一致
 
 COORD_RE = re.compile(r'x(\d+)_y(\d+)')
+STAGING_VERSION_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}")
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def validate_patient_barcode_one_to_one(
+    df: pd.DataFrame,
+    patient: str,
+    source: Path | str,
+) -> None:
+    """Hard-fail unless one patient has exactly one row per normalized barcode."""
+    if "barcode" not in df.columns:
+        raise ValueError(f"patient+barcode validation failed: barcode column missing in {source}")
+    barcodes = df["barcode"].astype(str).map(lambda value: Path(value).stem)
+    blank = barcodes.str.strip().eq("")
+    duplicated = barcodes.duplicated(keep=False)
+    if blank.any() or duplicated.any():
+        examples = sorted(barcodes[blank | duplicated].unique().tolist())[:5]
+        raise ValueError(
+            "patient+barcode one-to-one validation failed: "
+            f"patient={patient}, source={source}, duplicate_or_blank={examples}"
+        )
+
+
+def validate_split_manifest(manifest: pd.DataFrame, manifest_path: Path) -> None:
+    required = {"patient", "patch_stem", "split"}
+    missing = sorted(required - set(manifest.columns))
+    if missing:
+        raise ValueError(f"split manifest missing columns {missing}: {manifest_path}")
+    normalized = manifest.copy()
+    normalized["patient"] = normalized["patient"].astype(str)
+    normalized["patch_stem"] = normalized["patch_stem"].astype(str).map(lambda value: Path(value).stem)
+    invalid = normalized["patient"].str.strip().eq("") | normalized["patch_stem"].str.strip().eq("")
+    duplicate_pairs = normalized.duplicated(["patient", "patch_stem"], keep=False)
+    if invalid.any() or duplicate_pairs.any():
+        examples = (
+            normalized.loc[invalid | duplicate_pairs, ["patient", "patch_stem", "split"]]
+            .head(5)
+            .to_dict("records")
+        )
+        raise ValueError(
+            "patient+barcode one-to-one validation failed in split manifest: "
+            f"{manifest_path}; examples={examples}"
+        )
+    manifest["patient"] = normalized["patient"]
+    manifest["patch_stem"] = normalized["patch_stem"]
+
+
+def validate_dataset_label_uniqueness(df: pd.DataFrame, dataset_name: str) -> None:
+    key_cols = ["patient", "barcode"] if "patient" in df.columns else ["barcode"]
+    if any(column not in df.columns for column in key_cols):
+        raise ValueError(f"dataset duplicate-label gate cannot find key columns: {dataset_name}")
+    duplicate = df.duplicated(key_cols, keep=False)
+    if duplicate.any():
+        examples = df.loc[duplicate, key_cols].head(5).to_dict("records")
+        raise ValueError(f"dataset duplicate label key hard gate: {dataset_name}; examples={examples}")
 
 
 def parse_xy(stem: str):
@@ -101,7 +172,9 @@ def load_raw_label(label_csv: Path, patient: str) -> pd.DataFrame:
     first_col = df.columns[0]
     if first_col != "barcode":
         df = df.rename(columns={first_col: "barcode"})
-    df["barcode"] = df["barcode"].astype(str)
+    df["barcode"] = df["barcode"].astype(str).map(lambda value: Path(value).stem)
+    validate_patient_barcode_one_to_one(df, patient, label_csv)
+    df["patient"] = patient
 
     # 解析坐标
     coords = df["barcode"].apply(parse_xy)
@@ -109,7 +182,7 @@ def load_raw_label(label_csv: Path, patient: str) -> pd.DataFrame:
     df["y"] = [c[1] for c in coords]
 
     # 通路列 = 除 barcode/x/y 外的数值列
-    skip = {"barcode", "x", "y"}
+    skip = {"patient", "barcode", "x", "y"}
     pathway_cols = [c for c in df.columns if c not in skip and pd.api.types.is_numeric_dtype(df[c])]
     return df, pathway_cols
 
@@ -139,11 +212,13 @@ def load_partner_raw(patient: str, partner_root: Path, mpp_id: int) -> tuple:
     first_col = df.columns[0]
     if first_col != "barcode":
         df = df.rename(columns={first_col: "barcode"})
-    df["barcode"] = df["barcode"].astype(str)
+    df["barcode"] = df["barcode"].astype(str).map(lambda value: Path(value).stem)
+    validate_patient_barcode_one_to_one(df, patient, f"partner group_{mpp_id}")
+    df["patient"] = patient
     coords = df["barcode"].apply(parse_xy)
     df["x"] = [c[0] for c in coords]
     df["y"] = [c[1] for c in coords]
-    skip = {"barcode", "x", "y"}
+    skip = {"patient", "barcode", "x", "y"}
     if pathway_cols is None:
         pathway_cols = [c for c in df.columns if c not in skip and pd.api.types.is_numeric_dtype(df[c])]
     return df, pathway_cols
@@ -215,17 +290,19 @@ def verify_fit_no_leakage(train_df: pd.DataFrame, val_df: pd.DataFrame,
 # 单 MPP 处理
 # ═══════════════════════════════════════════════════════════════
 
-def process_mpp(mpp_id: int, splits_root: Path, mpp_root: Path,
+def process_mpp(mpp_id: int, splits_root: Path, output_root: Path, mpp_root: Path,
                 label_source: str) -> tuple:
     """为单 MPP 重建 train-only z-score 标签。"""
     banner(f"MPP-{mpp_id} z-score 重建 (label_source={label_source})")
 
-    group_dir = splits_root / f"group_{mpp_id}"
-    manifest_path = group_dir / "split_manifest.csv"
+    source_group_dir = splits_root / f"group_{mpp_id}"
+    group_dir = output_root / f"group_{mpp_id}"
+    manifest_path = source_group_dir / "split_manifest.csv"
     if not manifest_path.exists():
         return False, f"split_manifest.csv 不存在: {manifest_path}"
 
     manifest = pd.read_csv(manifest_path)
+    validate_split_manifest(manifest, manifest_path)
     print(f"  split_manifest: {len(manifest)} 行, "
           f"split 分布: {manifest['split'].value_counts().to_dict()}")
 
@@ -300,11 +377,13 @@ def process_mpp(mpp_id: int, splits_root: Path, mpp_root: Path,
             df_tmp = pd.read_csv(ext_partner)
             first_col = df_tmp.columns[0]
             df_tmp = df_tmp.rename(columns={first_col: "barcode"})
-            df_tmp["barcode"] = df_tmp["barcode"].astype(str)
+            df_tmp["barcode"] = df_tmp["barcode"].astype(str).map(lambda value: Path(value).stem)
+            validate_patient_barcode_one_to_one(df_tmp, EXTERNAL_PATIENT, ext_partner)
+            df_tmp["patient"] = EXTERNAL_PATIENT
             coords = df_tmp["barcode"].apply(parse_xy)
             df_tmp["x"] = [c[0] for c in coords]
             df_tmp["y"] = [c[1] for c in coords]
-            skip = {"barcode", "x", "y"}
+            skip = {"patient", "barcode", "x", "y"}
             ext_p_cols = [c for c in df_tmp.columns if c not in skip and pd.api.types.is_numeric_dtype(df_tmp[c])]
             ext_df = df_tmp
             raw_label_sources[EXTERNAL_PATIENT] = str(ext_partner)
@@ -319,6 +398,10 @@ def process_mpp(mpp_id: int, splits_root: Path, mpp_root: Path,
     train_z = apply_zscore(train_all, pathway_cols, zscore_params)
     val_z = {p: apply_zscore(vdf, pathway_cols, zscore_params) for p, vdf in per_patient_val_raw.items()}
     ext_z = apply_zscore(ext_df, pathway_cols, zscore_params)
+    validate_dataset_label_uniqueness(train_z, f"MPP-{mpp_id} train")
+    for patient, frame in val_z.items():
+        validate_dataset_label_uniqueness(frame, f"MPP-{mpp_id} val/{patient}")
+    validate_dataset_label_uniqueness(ext_z, f"MPP-{mpp_id} external/{EXTERNAL_PATIENT}")
 
     # ── 写文件 ──
     labels_root = group_dir / "labels"
@@ -330,8 +413,13 @@ def process_mpp(mpp_id: int, splits_root: Path, mpp_root: Path,
     for patient in TRAIN_PATIENTS:
         p_dir = train_out / patient
         p_dir.mkdir(exist_ok=True)
-        pat_train_z = train_z[train_z["barcode"].isin(
-            manifest[(manifest["patient"] == patient) & (manifest["split"] == "train")]["patch_stem"])]
+        patient_train_stems = manifest[
+            (manifest["patient"] == patient) & (manifest["split"] == "train")
+        ]["patch_stem"].astype(str).map(lambda value: Path(value).stem)
+        pat_train_z = train_z[
+            (train_z["patient"] == patient) & train_z["barcode"].isin(patient_train_stems)
+        ]
+        validate_dataset_label_uniqueness(pat_train_z, f"MPP-{mpp_id} train/{patient}")
         # 写 barcode + 30 通路 (不写 x/y, 与现有 partner 格式一致)
         out_cols = ["barcode"] + pathway_cols
         pat_train_z[out_cols].to_csv(p_dir / f"{patient}_ssGSEA_zscore.csv", index=False, encoding="utf-8-sig")
@@ -411,6 +499,85 @@ def process_mpp(mpp_id: int, splits_root: Path, mpp_root: Path,
     return True, "OK"
 
 
+def asset_role(path: Path) -> str:
+    name = path.name.lower()
+    if name.endswith("_ssgsea_zscore.csv") or "ssgsea_zscore_by_group" in name:
+        return "standardized_label"
+    if name.startswith("zscore_params"):
+        return "zscore_params"
+    if name == "zscore_manifest.json":
+        return "zscore_manifest"
+    return "staging_asset"
+
+
+def build_server_asset_audit_manifest(
+    build_root: Path,
+    splits_root: Path,
+    staging_version: str,
+    mpp_ids: List[int],
+) -> dict:
+    generated_assets = []
+    for path in sorted(item for item in build_root.rglob("*") if item.is_file()):
+        entry = {
+            "path": path.relative_to(build_root).as_posix(),
+            "role": asset_role(path),
+            "size_bytes": path.stat().st_size,
+            "sha256": sha256_file(path),
+        }
+        if entry["role"] == "standardized_label":
+            label_frame = pd.read_csv(path, usecols=["barcode"])
+            entry.update({
+                "row_count": int(len(label_frame)),
+                "unique_barcode_count": int(label_frame["barcode"].astype(str).nunique()),
+                "duplicate_barcode_count": int(label_frame["barcode"].astype(str).duplicated().sum()),
+            })
+            if entry["duplicate_barcode_count"]:
+                raise ValueError(f"dataset duplicate label key hard gate during asset audit: {path}")
+        generated_assets.append(entry)
+
+    source_assets = []
+    seen_sources = set()
+    for mpp_id in mpp_ids:
+        split_manifest = splits_root / f"group_{mpp_id}" / "split_manifest.csv"
+        sources = [split_manifest]
+        zscore_manifest = build_root / f"group_{mpp_id}" / "zscore_manifest.json"
+        if zscore_manifest.exists():
+            raw_sources = json.loads(zscore_manifest.read_text(encoding="utf-8")).get("raw_label_source", {})
+            sources.extend(Path(value) for value in raw_sources.values() if not str(value).startswith("partner:"))
+        for source in sources:
+            resolved = source.resolve()
+            if not resolved.is_file() or str(resolved) in seen_sources:
+                continue
+            seen_sources.add(str(resolved))
+            source_assets.append({
+                "path": str(resolved),
+                "size_bytes": resolved.stat().st_size,
+                "sha256": sha256_file(resolved),
+            })
+
+    return {
+        "schema_version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "staging_version": staging_version,
+        "server_transport": "gitee_only",
+        "mpp_ids": mpp_ids,
+        "source_assets": source_assets,
+        "generated_assets": generated_assets,
+        "validation": {
+            "patient_barcode_one_to_one": True,
+            "dataset_labels_unique": True,
+            "existing_mpp_assets_modified": False,
+            "published_from_versioned_staging": True,
+        },
+        "training_gate": {
+            "status": "blocked_pending_evidence_import_and_explicit_gate_release",
+            "allowed_before_release": ["mpp2_lora_implementation", "mpp2_lora_tests"],
+            "forbidden_before_release": ["smoke_training", "formal_training"],
+            "post_release_sequence": ["same_batch_mpp2_frozen_baseline", "lora_r8_smoke_max_3_epochs"],
+        },
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="按 split_manifest 重建 train-only z-score")
     parser.add_argument("--splits-root", default=DEFAULT_SPLITS_ROOT,
@@ -422,6 +589,10 @@ def main():
     parser.add_argument("--use-partner-labels", action="store_true",
                         help="本地验证: mpp-root 指向 partner 根")
     parser.add_argument("--mpp-id-override", type=int, default=None)
+    parser.add_argument("--staging-root", required=True,
+                        help="独立 staging 根目录；不得指向现有 mpp_standard_splits")
+    parser.add_argument("--staging-version", required=True,
+                        help="不可复用的版本名，例如 barcode-repair-20260711-v001")
     args = parser.parse_args()
 
     splits_root = Path(args.splits_root)
@@ -431,24 +602,48 @@ def main():
         mpp_ids = [args.mpp_id_override]
 
     label_source = "partner" if args.use_partner_labels else "raw"
+    if not STAGING_VERSION_RE.fullmatch(args.staging_version):
+        parser.error("--staging-version must match [A-Za-z0-9][A-Za-z0-9._-]{0,63}")
+    staging_root = Path(args.staging_root)
+    staging_resolved = staging_root.resolve()
+    splits_resolved = splits_root.resolve()
+    if staging_resolved == splits_resolved or staging_resolved.is_relative_to(splits_resolved):
+        parser.error("--staging-root must be separate from and outside --splits-root")
+    version_dir = staging_root / args.staging_version
+    if version_dir.exists():
+        parser.error(f"staging version already exists; refusing overwrite: {version_dir}")
+    build_dir = staging_root / f".{args.staging_version}.building-{uuid4().hex}"
+    build_dir.mkdir(parents=True, exist_ok=False)
     print(f"splits_root: {splits_root}")
     print(f"mpp_root:    {mpp_root}")
     print(f"label source: {label_source}")
+    print(f"staging:    {version_dir}")
 
     all_ok = True
     for mpp_id in mpp_ids:
-        ok, msg = process_mpp(mpp_id, splits_root, mpp_root, label_source)
+        try:
+            ok, msg = process_mpp(mpp_id, splits_root, build_dir, mpp_root, label_source)
+        except (ValueError, OSError) as exc:
+            ok, msg = False, str(exc)
         print(f"  MPP-{mpp_id}: {msg}")
         if not ok:
             all_ok = False
 
     print(f"\n{'=' * 70}")
     if all_ok:
+        audit = build_server_asset_audit_manifest(
+            build_dir, splits_root, args.staging_version, mpp_ids
+        )
+        audit_path = build_dir / "server_asset_audit_manifest.json"
+        audit_path.write_text(json.dumps(audit, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        build_dir.rename(version_dir)
         print("  z-score 重建完成")
+        print(f"  已发布 staging: {version_dir}")
     else:
         print("  部分 MPP 失败, 见上方")
     print(f"{'=' * 70}")
+    return 0 if all_ok else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

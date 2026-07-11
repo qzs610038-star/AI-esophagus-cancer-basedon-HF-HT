@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/result_envelope.schema.json",
+  "title": "PFMval server result envelope",
+  "type": "object",
+  "required": ["schema_version", "result_id", "job_id", "experiment_id", "source_commit", "phase", "status", "created_at", "artifacts", "metrics"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "result_id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]+$"},
+    "job_id": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+$"},
+    "experiment_id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]+$"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-fA-F]{7,40}$"},
+    "phase": {"enum": ["preflight", "smoke", "formal"]},
+    "status": {"enum": ["success", "failed", "incomplete"]},
+    "formal_training_approved": {"type": "boolean"},
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "kind", "size_bytes", "sha256"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^(?!.*\\\\)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+          "kind": {"type": "string"},
+          "size_bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "metrics": {"type": "object"}
+  },
+  "additionalProperties": true
+}

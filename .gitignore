@@ -205,6 +205,23 @@ Ai病理项目文献汇总/
 docs/
 archive/
 
+# Canonical current references that must travel through Gitee.
+!01_指南与解读/
+01_指南与解读/*
+!01_指南与解读/部署方案/
+01_指南与解读/部署方案/*
+!01_指南与解读/部署方案/服务器路径索引_20260701.md
+!01_指南与解读/分析报告/
+01_指南与解读/分析报告/*
+!01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md
+
+# Tracked project state lives in project_state/. Runtime state is local-only.
+project_state/.state.lock
+project_state/.transactions/
+project_state/inbox/
+project_state/outbox/
+project_state/worktrees/
+
 # --------------------------------------------
 # 14. 分析与报告产物（2026-06-04）
 # --------------------------------------------

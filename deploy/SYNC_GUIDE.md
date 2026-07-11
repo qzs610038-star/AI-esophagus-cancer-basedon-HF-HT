@@ -1,5 +1,7 @@
 # PFMval 手动同步操作指南
 
+> ⚠️ **historical / superseded**：本文中的共享盘、旧目录或非 Gitee 流程不再是当前执行方案。当前使用 `automation/README.md` 与 `deploy/pfmval_ops.py`，服务器仅通过 Gitee 交换代码、状态和小型结果。
+
 > 网络不通时的替代方案：本地开发 + 手动复制代码到服务器训练 + 回收结果。
 
 ---

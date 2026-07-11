@@ -4,20 +4,22 @@
 # 使用方式: 服务器上设置持久化环境变量 PFMVAL_CONFIG 指向此文件
 #   setx PFMVAL_CONFIG "D:\AIPatho\qzs\pfmval_deploy_git\configs\config.server.yaml"
 #
-# 此文件通过 paths.patch_base + paths.ssgsea_base 覆盖数据根目录，
+# 此文件通过稳定 path id 覆盖数据根目录，
 # config_utils.py 的 get_patient_paths() 会自动拼接患者子目录。
 #
-# ⚠️ 数据路径变更时: 只需修改此文件中的 patch_base / ssgsea_base，
+# ⚠️ 数据路径变更时: 只修改 configs/server_paths.yaml 中对应 path id，
 #    然后 git commit + push，服务器 pull 后即刻生效。
 
 # ── 训练设备 ──
 training:
   device: "auto"
 
-# ── 数据根目录覆盖（服务器上数据不在项目目录下）──
+# ── 数据根目录覆盖（机器路径由统一注册表解析）──
+path_ids:
+  patch_base: phase2_patch_root
+  ssgsea_base: phase2_ssgsea_zscore_root
+
 paths:
-  patch_base: "D:/AIPatho/qzs/data-phase2/patch"
-  ssgsea_base: "D:/AIPatho/qzs/data-phase2/ssGSEA_zscore"
 
   # 特征缓存（可选覆盖，不设则用项目相对路径）
   # caches:

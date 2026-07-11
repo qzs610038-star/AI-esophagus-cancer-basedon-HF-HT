@@ -39,10 +39,13 @@ from pathlib import Path
 
 import pandas as pd
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from path_registry import get_registered_path
+
 # ── 常量 ──
-DEFAULT_MPP_ROOT = r"D:\AIPatho\Patch\visiumhd_patch"
-DEFAULT_CACHE_ROOT = r"D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache"  # partner: MPP{N}_UNI/
-DEFAULT_FLAT_CACHE_ROOT = r"D:\AIPatho\qzs\pfmval_deploy_git\mpp_uni2h_cache"  # 扁平: {N}/{patient}/
+DEFAULT_MPP_ROOT = str(get_registered_path("mpp_data_root"))
+DEFAULT_CACHE_ROOT = str(get_registered_path("server_mpp_partner_cache"))  # partner: MPP{N}_UNI/
+DEFAULT_FLAT_CACHE_ROOT = str(get_registered_path("server_mpp_flat_cache"))  # 扁平: {N}/{patient}/
 
 # 方案 §二 固定的六例非 XZY 训练患者 + 外部测试
 TRAIN_PATIENTS = ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"]
