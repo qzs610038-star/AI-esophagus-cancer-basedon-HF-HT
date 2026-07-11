@@ -5,8 +5,8 @@
 >
 > 🟢 **JFX0729 数据更正状态**：更正数据已同步、本地处理并通过 7/7 checks passed；旧 JFX 相关结果仅作历史参考。下一步：defer JFX token-cache rebuild; a new data transformation is planned and caches/retraining should be rebuilt only after that transform is finalized and applied consistently。
 >
-> ✅ **当前 MPP 主线（2026-07-09）**：MPP2。MPP2 is the only follow-up MPP scheme. MPP1/3/4/5 are temporarily abandoned and retained only as background or method controls.
-> 下一步推荐：MPP2 new-data LoRA r=8 versus same-batch MPP2 frozen baseline。
+> ✅ **当前 MPP 主线（2026-07-09）**：MPP2。MPP2 remains the downstream follow-up scheme. A single user-approved repaired-data MPP1/3/4/5 frozen-baseline parallel recheck is active solely to measure the impact of contaminated historical results before cross-MPP conclusions.
+> 下一步推荐：Dispatch and import the four repaired MPP1/3/4/5 frozen rechecks, then compare them with their historical counterparts before continuing MPP2 LoRA r=8.。
 >
 > ⚠️ **旧三患者实验结论**：Old 3-patient LoRA/Token/frequency/spatial-repair conclusions must not be used as formal evidence. They may only seed hyperparameters and risk checks for new MPP2 experiments.
 
@@ -16,6 +16,10 @@
 |----|--------|--------|:----:|---------|:------:|:------------:|:-------------:|:-------------:|:-----:|
 | mpp2_std10val_xzy_ext_uni2h_mlp_20260706 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.7827 | 0.3984 | 0.0217 | 14 | ext_XZY_PCC=0.6489 |
 | mpp2_barcode_repair_v003_frozen_baseline_20260711 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.7971 | 0.3749 | — | 15 | ext_XZY_PCC=0.6549 |
+| mpp1_barcode_repair_v003_frozen_recheck_20260711 | mpp_uni2h_mlp | :large_blue_circle: planned | — |  | — | — | — | — | — |
+| mpp3_barcode_repair_v003_frozen_recheck_20260711 | mpp_uni2h_mlp | :large_blue_circle: planned | — |  | — | — | — | — | — |
+| mpp4_barcode_repair_v003_frozen_recheck_20260711 | mpp_uni2h_mlp | :large_blue_circle: planned | — |  | — | — | — | — | — |
+| mpp5_barcode_repair_v003_frozen_recheck_20260711 | mpp_uni2h_mlp | :large_blue_circle: planned | — |  | — | — | — | — | — |
 | online_tokens_gfnet_fold1_65t_legacy | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3914 | 0.3337 | 0.1683 | 2 |
 | smoke_gfnet_65t | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3933 | 0.3314 | 0.0935 | 1 |
 | online_tokens_transformer_fold1_65t | online_tokens | :warning: done_incomplete_data | 1 | transformer | 65 | 0.3821 | — | — | 4 |
@@ -43,6 +47,10 @@
 |:--------:|----|--------|-------------|
 | P0 | mpp2_std10val_xzy_ext_uni2h_mlp_20260706 | done | selected_for_mpp2_newdata_lora |
 | P0 | mpp2_barcode_repair_v003_frozen_baseline_20260711 | done | run_before_lora |
+| P0 | mpp1_barcode_repair_v003_frozen_recheck_20260711 | planned | dispatch_formal_parallel_recheck |
+| P0 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | planned | dispatch_formal_parallel_recheck |
+| P0 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | planned | dispatch_formal_parallel_recheck |
+| P0 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | planned | dispatch_formal_parallel_recheck |
 | baseline | online_tokens_gfnet_fold1_65t_legacy | done | archived_as_legacy_baseline |
 | baseline | smoke_gfnet_65t | done | archived |
 | baseline | online_tokens_transformer_fold1_65t | done_incomplete_data | archived |
@@ -70,6 +78,10 @@
 |------------|------|
 | mpp2_std10val_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: selected for follow-up because MPP2 matches the cohort/external-test sampling protocol. Next: MPP2 new-data LoRA r=8 vs same-batch frozen baseline. |
 | mpp2_barcode_repair_v003_frozen_baseline_20260711 | Compare with mpp2_std10val_xzy_ext_uni2h_mlp_20260706; any configured degradation threshold pauses LoRA and requires repaired MPP1-5 frozen reruns. |
+| mpp1_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: compare validated return against mpp1_std10val_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
+| mpp3_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: preserve bbox embargo and compare validated return against mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
+| mpp4_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: compare validated return against mpp4_std10val_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
+| mpp5_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: preserve bbox embargo and compare validated return against mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
 | C1_gfnet_lora_65t_fold1 | 2026-07-09 superseded: old 3-patient/JFX-affected Token+LoRA result is tuning reference only. Do not expand old Fold2/3 as evidence; rerun LoRA claims under MPP2/new-data protocol. |
 | mpp1_std10val_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |
 | mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |

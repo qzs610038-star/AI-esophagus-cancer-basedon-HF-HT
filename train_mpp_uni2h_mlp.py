@@ -413,7 +413,7 @@ def main():
                         help="标准化标签目录")
     parser.add_argument("--val_strategy", default="none", choices=["none", "internal", "manifest"],
                         help="验证策略：none=无内部验证(旧V3模式), internal=患者级内部验证(V3bis模式), "
-                             "manifest=split_manifest 驱动的 patch 级各患者 10% val (20260706 统一标准)")
+                             "manifest=split_manifest 驱动的 patch 级各患者 10%% val (20260706 统一标准)")
     parser.add_argument("--val_patient", default=None,
                         help="内部验证患者（val_strategy=internal 时必需，如 ZHZ）")
     parser.add_argument("--splits_root", default="mpp_standard_splits",

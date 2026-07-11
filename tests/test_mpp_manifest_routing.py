@@ -1,10 +1,26 @@
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
 
 from deploy.pfmval_ops import bound_job_parameter_argv
 from train_mpp_uni2h_mlp import resolve_manifest_data_roots
+
+
+def test_mpp_training_help_renders_successfully():
+    project_root = Path(__file__).resolve().parent.parent
+    completed = subprocess.run(
+        [sys.executable, "train_mpp_uni2h_mlp.py", "--help"],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert "--val_strategy" in completed.stdout
 
 
 def _write_json(path: Path, value):
