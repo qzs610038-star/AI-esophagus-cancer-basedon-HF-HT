@@ -39,14 +39,16 @@ raw-scale 反归一化 (方案 §4.3 P1 必交付):
         --splits-root mpp_standard_splits \\
         --mpp-root D:\\AIPatho\\Patch\\visiumhd_patch \\
         --staging-root D:\\AIPatho\\Patch\\mpp_zscore_repair_staging \\
-        --staging-version barcode-repair-20260711-v001
+        --staging-version barcode-repair-20260711-v001 \\
+        --source-commit 0123456789abcdef0123456789abcdef01234567
 
 本地验证 (用 partner raw 副本模拟):
     "C:\\Program Files\\Python313\\python.exe" scripts/rebuild_zscore_from_manifest.py \\
         --splits-root tmp/test_splits \\
         --mpp-root parter_ljk_MPP1&4_patch_split_zscore \\
         --use-partner-labels --mpp-id-override 1 \\
-        --staging-root tmp/rebuild_staging --staging-version local-v001
+        --staging-root tmp/rebuild_staging --staging-version local-v001 \\
+        --source-commit 0123456789abcdef0123456789abcdef01234567
 """
 
 import argparse
@@ -514,6 +516,7 @@ def build_server_asset_audit_manifest(
     build_root: Path,
     splits_root: Path,
     staging_version: str,
+    source_commit: str,
     mpp_ids: List[int],
 ) -> dict:
     generated_assets = []
@@ -559,6 +562,7 @@ def build_server_asset_audit_manifest(
         "schema_version": "1.0",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "staging_version": staging_version,
+        "source_commit": source_commit,
         "server_transport": "gitee_only",
         "mpp_ids": mpp_ids,
         "source_assets": source_assets,
@@ -593,6 +597,8 @@ def main():
                         help="独立 staging 根目录；不得指向现有 mpp_standard_splits")
     parser.add_argument("--staging-version", required=True,
                         help="不可复用的版本名，例如 barcode-repair-20260711-v001")
+    parser.add_argument("--source-commit", required=True,
+                        help="执行代码对应的 40 位 Git commit，用于绑定服务器审计证据")
     args = parser.parse_args()
 
     splits_root = Path(args.splits_root)
@@ -604,6 +610,8 @@ def main():
     label_source = "partner" if args.use_partner_labels else "raw"
     if not STAGING_VERSION_RE.fullmatch(args.staging_version):
         parser.error("--staging-version must match [A-Za-z0-9][A-Za-z0-9._-]{0,63}")
+    if not re.fullmatch(r"[0-9a-fA-F]{40}", args.source_commit):
+        parser.error("--source-commit must be a full 40-character Git commit")
     staging_root = Path(args.staging_root)
     staging_resolved = staging_root.resolve()
     splits_resolved = splits_root.resolve()
@@ -632,7 +640,7 @@ def main():
     print(f"\n{'=' * 70}")
     if all_ok:
         audit = build_server_asset_audit_manifest(
-            build_dir, splits_root, args.staging_version, mpp_ids
+            build_dir, splits_root, args.staging_version, args.source_commit.lower(), mpp_ids
         )
         audit_path = build_dir / "server_asset_audit_manifest.json"
         audit_path.write_text(json.dumps(audit, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

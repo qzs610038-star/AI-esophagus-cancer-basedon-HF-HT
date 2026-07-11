@@ -64,6 +64,8 @@ def _run_rebuild(tmp_path: Path, *, version: str, duplicate_raw: bool = False):
             str(staging_root),
             "--staging-version",
             version,
+            "--source-commit",
+            "a" * 40,
         ],
         capture_output=True,
         text=True,
@@ -84,6 +86,7 @@ def test_cli_keeps_same_barcode_isolated_by_patient_and_emits_asset_audit(tmp_pa
     audit_path = version_dir / "server_asset_audit_manifest.json"
     audit = json.loads(audit_path.read_text(encoding="utf-8"))
     assert audit["staging_version"] == "repair-v001"
+    assert audit["source_commit"] == "a" * 40
     assert audit["server_transport"] == "gitee_only"
     assert audit["validation"]["patient_barcode_one_to_one"] is True
     assert audit["validation"]["dataset_labels_unique"] is True
