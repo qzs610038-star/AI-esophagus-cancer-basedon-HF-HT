@@ -187,13 +187,18 @@ $logFile = Join-Path $logDir "${ExperimentId}_${timestamp}.log"
 Write-Host "============================================================"
 Write-Host "=== Starting Experiment: $ExperimentId"
 Write-Host "=== Script : $Script"
-Write-Host "=== Args   : $Arguments --num_threads 8"
+$threadArgument = ""
+if ($Script -notlike "*check_mpp_online_cache_parity.py") {
+    $threadArgument = "--num_threads 8"
+}
+$effectiveArguments = (@($Arguments, $threadArgument) | Where-Object { $_ -and $_.Trim() }) -join " "
+Write-Host "=== Args   : $effectiveArguments"
 Write-Host "=== Log    : $logFile"
 Write-Host "=== Time   : $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
 Write-Host "============================================================"
 
 # Build the full command
-$fullArgs = "-u `"$scriptPath`" $Arguments --num_threads 8"
+$fullArgs = "-u `"$scriptPath`" $effectiveArguments"
 
 # Execute and tee to log
 $outSourceIdentifier = "pfmval.$PID.$timestamp.stdout"

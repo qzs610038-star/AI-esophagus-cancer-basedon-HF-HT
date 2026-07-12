@@ -311,6 +311,14 @@ def test_powershell_launcher_keeps_event_identifiers_for_cleanup():
     assert "taskkill /F /IM python.exe" not in launcher
 
 
+def test_powershell_launcher_does_not_inject_num_threads_into_cache_parity():
+    project_root = Path(__file__).resolve().parent.parent
+    launcher = (project_root / "deploy" / "run_experiment.ps1").read_text(encoding="utf-8")
+    assert '$Script -notlike "*check_mpp_online_cache_parity.py"' in launcher
+    assert '$fullArgs = "-u `"$scriptPath`" $effectiveArguments"' in launcher
+    assert '$fullArgs = "-u `"$scriptPath`" $Arguments --num_threads 8"' not in launcher
+
+
 def test_path_registry_resolves_relative_path_and_rejects_escape(tmp_path):
     registry_path = tmp_path / "server_paths.yaml"
     registry_path.write_text(
