@@ -46,19 +46,55 @@ S1 在 epoch 1 达到最优 internal val；随后 train loss 持续下降，而 
 3. 复跑 `python deploy/pfmval_ops.py agent start-check --strict`，得到 `PASS=6 / WARN=6 / FAIL=0`。
 4. 从不可变导入提交 `997c1fb` 创建独立补充证据分支，未合并当前脏主工作区。
 
-## 5. 尚待补充的证据
+## 5. Prediction supplement 回传与完整性
 
-已验收 S0/S1 result envelope 未包含：
+原始已验收 S0/S1 result envelope 未包含：
 
 - `predictions_internal_val.csv`
 - `predictions_external_xzy.csv`
 
-这些文件是原方案要求的诊断交付物。不得修改已经验收的 result bundle；应通过独立 Gitee supplement branch 回传，并在本地验证 SHA-256 后用于 bootstrap、患者切片和误差分析。服务器操作说明见：
+这些文件已通过独立 Gitee supplement branch 回传，未修改已经验收的 result bundle：
+
+- result branch：`automation/server/mpp2-paired-smoke-prediction-supplement-20260712-r001`
+- result commit：`4477e1d`
+- external：S0/S1 各 `1039` 行；internal val：S0/S1 各 `1078` 行
+- 每份 CSV 为 `66` 列，包含 6 个样本键/元数据列和 30 对 true/pred pathway 列
+- manifest 中 4/4 文件大小与 SHA-256 均匹配
+- S0/S1 样本键、行顺序和 true labels 完全一致；重复键为 0；数值全部有限
+
+服务器操作说明保留于：
 
 `automation/jobs/mpp2-paired-smoke-prediction-supplement-20260712/README.md`
 
-## 6. 后续门禁
+## 6. 补充诊断
 
-补充预测文件只用于诊断，不会自动改变当前 NO-GO。若诊断不能证明收益具有患者/通路一致性，则关闭当前 LoRA r=8 配置。若仍要继续，只允许在新显式批准下设计一个依据 internal val 的单因素 exploratory smoke，不得利用 external XZY 选择超参数。
+### 6.1 Internal val 患者切片
+
+Internal val 覆盖 6 位患者。S1 相对 S0：
+
+- PCC：仅 TGC、ZHZ 小幅上升，其余 4/6 下降；
+- MAE：6/6 患者全部变差；
+- 以患者为聚类单元的 5000 次 bootstrap（仅 6 个 cluster，结论需保守解释）：
+  - `delta PCC` 95% CI `[-0.00405, -0.00008]`；
+  - `delta standardized MAE` 95% CI `[+0.00178, +0.00490]`；
+  - `delta mean-per-target R2` 95% CI `[-0.00676, -0.00067]`。
+
+这与 S1 epoch 1 后 internal val 持续恶化一致，表明 LoRA 的训练拟合提升没有转化为 internal 泛化提升。
+
+### 6.2 External XZY 空间敏感性分析
+
+XZY 的 `block_id` 在全部 1039 行中为同一值，无法直接做预设 block bootstrap。为避免把相邻 patch 当作独立样本，按 patch 坐标使用固定 `1024/2048/4096` 像素网格进行 5000 次 cluster bootstrap；分别得到 67/21/8 个空间 cluster。
+
+- `delta PCC=+0.00189`：三个网格的 95% CI 均跨 0；1024 网格为 `[-0.00190,+0.00599]`，2048 为 `[-0.00291,+0.00729]`，4096 为 `[-0.00350,+0.00691]`。
+- `delta raw MAE=-8.45`：三个网格均保持平均改善；95% CI 分别约 `[-14.94,-2.09]`、`[-17.79,-0.42]`、`[-19.91,-1.77]`。
+- `delta mean-per-target R2=+0.00902`：空间修正后的三个 95% CI 均跨 0。
+- 逐通路 PCC 为 `4/30` 改善、`26/30` 下降，中位变化 `-0.0140`。
+- 逐通路 raw MAE 为 `14/30` 改善、`16/30` 变差，中位变化约 `+9.12`；平均 raw MAE 改善主要由 Complement、E2F Targets、Mitotic Spindle、DNA Damage Response 等高量级通路拉动，同时 IL6/JAK/STAT3、P53 等通路明显恶化。
+
+因此，external 平均 raw MAE 存在局部收益，但 PCC 与 R2 不确定、逐通路方向多数不一致，且 internal val 一致变差，不能支持稳定泛化增益。
+
+## 7. 最终门禁
+
+Prediction supplement 未证明收益具有患者/通路一致性，当前 LoRA r=8 配置关闭为 `engineering_pass / candidate_effectiveness_fail / no_go_formal`。不启动相同配置正式 seed 42、多 seed 或超参搜索。若未来仍要继续，只允许在新显式批准下提出一个依据 internal val 的单因素 exploratory smoke，不得利用 external XZY 选择超参数。
 
 状态指令：`DIR-20260712-002`。

@@ -1285,7 +1285,7 @@
       "paired_role": "S1_lora_r8",
       "selection_metric": "val_loss_min_internal_val_manifest",
       "external_eval_policy": "after_internal_checkpoint_selection_only",
-      "next_action": "candidate_effectiveness_failed_no_auto_formal_training",
+      "next_action": "close_current_lora_r8_configuration_after_prediction_diagnostics",
       "decision_gate": "Run paired with S0 using identical repaired manifest, head checkpoint, seed, sample order and validation split; smoke only.",
       "evidence_status": "accepted",
       "provenance_complete": true,
@@ -1305,7 +1305,20 @@
       "external_xzy_r2_raw": -0.13589107857979327,
       "best_val_loss": 0.38231998772821724,
       "test_loss": 0.6846016862136567,
-      "external_xzy_r2": -0.13589107857978847
+      "external_xzy_r2": -0.13589107857978847,
+      "prediction_supplement": {
+        "branch": "automation/server/mpp2-paired-smoke-prediction-supplement-20260712-r001",
+        "commit": "4477e1d",
+        "sha256_manifest_verified": true,
+        "paired_keys_and_truth_exact": true,
+        "external_rows": 1039,
+        "internal_val_rows": 1078,
+        "external_pathway_pcc_improved": 4,
+        "external_pathway_pcc_declined": 26,
+        "internal_patient_mae_improved": 0,
+        "internal_patient_mae_declined": 6,
+        "decision": "engineering_pass_candidate_effectiveness_fail_no_go_formal"
+      }
     },
     {
       "id": "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
