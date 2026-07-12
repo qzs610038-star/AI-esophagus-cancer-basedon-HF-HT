@@ -1,8 +1,8 @@
 # MPP2 paired S0/S1 smoke 复核与后续操作记录
 
-> 日期：2026-07-12  
-> 性质：historical audit record；不替代 `CURRENT_STATE.md` 或 active plan  
-> 基线提交：`997c1fb`  
+> 日期：2026-07-12
+> 性质：historical audit record；不替代 `CURRENT_STATE.md` 或 active plan
+> 基线提交：`997c1fb`
 > 复核状态：工程门通过；候选有效性门未通过；正式训练未批准
 
 ## 1. 已验收结果
