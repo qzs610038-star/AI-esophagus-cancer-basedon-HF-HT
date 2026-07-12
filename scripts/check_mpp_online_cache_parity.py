@@ -88,6 +88,31 @@ def resolve_unique_cache_path(
     return matches[0]
 
 
+def extract_online_cls_feature(
+    backbone: torch.nn.Module,
+    images: torch.Tensor,
+    feature_dim: int,
+) -> torch.Tensor:
+    """Return UNI2-h CLS features using the same path as cache extraction.
+
+    UNI2-h ``forward_features`` returns all patch/register tokens with shape
+    ``[B, N, D]``.  The accepted cache stores only ``[:, 0, :]``.  Some
+    backbones may already return ``[B, D]``; both forms are accepted, while
+    other shapes fail before similarity is computed.
+    """
+    features = backbone.forward_features(images)
+    if features.ndim == 3:
+        features = features[:, 0, :]
+    elif features.ndim != 2:
+        raise ValueError(f"online UNI2-h output must be [B,D] or [B,N,D], got {tuple(features.shape)}")
+    if features.shape[-1] != feature_dim:
+        raise ValueError(
+            f"online UNI2-h feature shape mismatch: expected last dim {feature_dim}, "
+            f"got {tuple(features.shape)}"
+        )
+    return features
+
+
 def _validate_state_and_repair(args: argparse.Namespace) -> dict:
     if args.resource_release_ack != RESOURCE_RELEASE_ACK:
         raise RuntimeError(
@@ -157,8 +182,10 @@ def main() -> int:
                 raise ValueError(f"cache feature shape mismatch: {cache_path} {cached.shape}")
 
             with Image.open(image_path) as image:
-                online = backbone(
-                    transform(image.convert("RGB")).unsqueeze(0).to(device)
+                online = extract_online_cls_feature(
+                    backbone,
+                    transform(image.convert("RGB")).unsqueeze(0).to(device),
+                    feature_dim,
                 ).squeeze(0).detach().cpu().float()
             difference = (online - cached).abs()
             cosine = float(functional.cosine_similarity(online, cached, dim=0))

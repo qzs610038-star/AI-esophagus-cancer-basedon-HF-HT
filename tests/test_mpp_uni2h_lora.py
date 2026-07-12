@@ -19,7 +19,10 @@ from model_mpp_uni2h_lora import (
 )
 from train_mpp_uni2h_mlp import MPPMLPHead
 from train_mpp_uni2h_lora import evaluate, train_one_epoch
-from scripts.check_mpp_online_cache_parity import resolve_unique_cache_path
+from scripts.check_mpp_online_cache_parity import (
+    extract_online_cls_feature,
+    resolve_unique_cache_path,
+)
 
 
 TARGETS = [f"pathway_{index}" for index in range(30)]
@@ -243,6 +246,18 @@ def test_cache_parity_resolver_rejects_missing_and_duplicate_cache(tmp_path):
     torch.save(torch.zeros(4), second)
     with pytest.raises(FileNotFoundError, match="exactly one cache"):
         resolve_unique_cache_path(cache_root, flat_root, 2, "P1", "patch_x1_y2")
+
+
+def test_cache_parity_extracts_cls_from_online_token_sequence():
+    class TokenBackbone:
+        def forward_features(self, images):
+            batch = images.shape[0]
+            return torch.arange(batch * 3 * 4, dtype=torch.float32).reshape(batch, 3, 4)
+
+    images = torch.zeros(2, 3, 4, 4)
+    cls = extract_online_cls_feature(TokenBackbone(), images, feature_dim=4)
+    assert cls.shape == (2, 4)
+    assert torch.equal(cls, torch.tensor([[0., 1., 2., 3.], [12., 13., 14., 15.]]))
 
 
 def test_cache_parity_help_requires_resource_release_acknowledgement():
