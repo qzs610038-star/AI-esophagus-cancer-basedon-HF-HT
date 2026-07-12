@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "job_id": "mpp2-online-cache-parity-v003-20260712-r002",
+  "experiment_id": "mpp2_online_cache_parity_v003_20260711",
+  "source_commit": "028c7eb3c576993520c263c24412c2841753d2cc",
+  "state_revision": 42,
+  "phase": "preflight",
+  "command_id": "cache_parity",
+  "path_ids": [
+    "mpp_data_root",
+    "mpp_standard_splits",
+    "server_mpp_partner_cache",
+    "server_mpp_flat_cache",
+    "server_mpp_results"
+  ],
+  "parameters": {
+    "samples_per_patient": "8",
+    "device": "cuda"
+  },
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "path_index_version": "1.0",
+  "created_at": "2026-07-12T04:29:12+00:00",
+  "dispatch_branch": "automation/local/mpp2-online-cache-parity-v003-20260712-r002",
+  "result_branch": "automation/server/mpp2-online-cache-parity-v003-20260712-r002",
+  "formal_training_approval": null,
+  "artifact_policy": {
+    "max_file_bytes": 20971520,
+    "max_total_bytes": 52428800,
+    "large_artifacts": "server_path_size_sha256_only"
+  }
+}
