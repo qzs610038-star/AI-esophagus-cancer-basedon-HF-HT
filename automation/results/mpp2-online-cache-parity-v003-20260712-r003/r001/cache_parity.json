@@ -1,0 +1,9 @@
+{
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "repair_evidence_id": "barcode-repair-20260711-d626ad8-v003",
+  "sample_count": 48,
+  "all_passed": true,
+  "min_cosine_similarity": 0.999995231628418,
+  "max_absolute_error": 0.0038390755653381348,
+  "result_csv": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\checkpoints\\mpp_uni2h_mlp\\cache_parity\\mpp2-online-cache-parity-v003-20260712-r003\\cache_parity.csv"
+}
