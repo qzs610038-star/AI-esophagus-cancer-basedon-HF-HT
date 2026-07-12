@@ -41,7 +41,7 @@ S1 在 epoch 1 达到最优 internal val；随后 train loss 持续下降，而 
 
 已执行：
 
-1. 将导入工作树的 legacy 路径临时 junction 到主工作区现有只读标签目录；未复制、删除或重建受保护资产。
+1. 将导入工作树的 legacy 路径 junction 到主工作区现有只读标签目录；未复制、删除或重建受保护资产。该机器本地路径已加入 `.git/info/exclude`，避免误提交受保护标签。
 2. 执行 `python deploy/pfmval_ops.py docs scan --write`，将 document registry 对齐 revision 48。
 3. 复跑 `python deploy/pfmval_ops.py agent start-check --strict`，得到 `PASS=6 / WARN=6 / FAIL=0`。
 4. 从不可变导入提交 `997c1fb` 创建独立补充证据分支，未合并当前脏主工作区。
