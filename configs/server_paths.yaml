@@ -110,6 +110,13 @@ paths:
     status: active
     required_on: server
     stability: medium_low
+  server_mpp2_frozen_baseline_checkpoint:
+    path: 'D:\AIPatho\qzs\pfmval_deploy_git\checkpoints\mpp_uni2h_mlp\mpp2_barcode_repair_v003_frozen_baseline_20260711\best_checkpoint.pth'
+    kind: file
+    status: active
+    required_on: server
+    stability: medium_low
+    protected: true
   legacy_partner_labels_local:
     path: 'parter_ljk_MPP1&4_patch_split_zscore'
     kind: repo_directory

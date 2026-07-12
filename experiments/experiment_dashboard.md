@@ -20,7 +20,9 @@
 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.8225 | 0.3488 | — | 11 | ext_XZY_PCC=0.6436 |
 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.8209 | 0.3198 | — | 12 | ext_XZY_PCC=0.6151 |
 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | mpp_uni2h_mlp | :white_check_mark: done | — |  | — | 0.8347 | 0.3166 | — | 10 | ext_XZY_PCC=0.6072 |
-| mpp2_online_cache_parity_v003_20260711 | mpp_preflight | :large_blue_circle: planned | — |  | — | — | — | — | — |
+| mpp2_online_cache_parity_v003_20260711 | mpp_preflight | :white_check_mark: done | — |  | — | — | — | — | — |
+| mpp2_paired_s0_frozen_continue_smoke_20260712 | mpp_uni2h_lora | :large_blue_circle: planned | — |  | — | — | — | — | — |
+| mpp2_paired_s1_lora_r8_smoke_20260712 | mpp_uni2h_lora | :large_blue_circle: planned | — |  | — | — | — | — | — |
 | online_tokens_gfnet_fold1_65t_legacy | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3914 | 0.3337 | 0.1683 | 2 |
 | smoke_gfnet_65t | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3933 | 0.3314 | 0.0935 | 1 |
 | online_tokens_transformer_fold1_65t | online_tokens | :warning: done_incomplete_data | 1 | transformer | 65 | 0.3821 | — | — | 4 |
@@ -52,7 +54,9 @@
 | P0 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | done | dispatch_formal_parallel_recheck |
 | P0 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | done | dispatch_formal_parallel_recheck |
 | P0 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | done | dispatch_formal_parallel_recheck |
-| P0 | mpp2_online_cache_parity_v003_20260711 | planned | dispatch_cache_parity_preflight |
+| P0 | mpp2_online_cache_parity_v003_20260711 | done | prepare_paired_smoke |
+| P0 | mpp2_paired_s0_frozen_continue_smoke_20260712 | planned | dispatch_s0_smoke |
+| P0 | mpp2_paired_s1_lora_r8_smoke_20260712 | planned | dispatch_s1_smoke_after_s0_ready |
 | baseline | online_tokens_gfnet_fold1_65t_legacy | done | archived_as_legacy_baseline |
 | baseline | smoke_gfnet_65t | done | archived |
 | baseline | online_tokens_transformer_fold1_65t | done_incomplete_data | archived |
@@ -84,7 +88,9 @@
 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: preserve bbox embargo and compare validated return against mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: compare validated return against mpp4_std10val_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: preserve bbox embargo and compare validated return against mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
-| mpp2_online_cache_parity_v003_20260711 | DIR-20260711-008: parity must return through Gitee and pass before any MPP2 LoRA smoke job is created. |
+| mpp2_online_cache_parity_v003_20260711 | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. |
+| mpp2_paired_s0_frozen_continue_smoke_20260712 | Run paired with S1 using identical repaired manifest, head checkpoint, seed, sample order and validation split; smoke only. |
+| mpp2_paired_s1_lora_r8_smoke_20260712 | Run paired with S0 using identical repaired manifest, head checkpoint, seed, sample order and validation split; smoke only. |
 | C1_gfnet_lora_65t_fold1 | 2026-07-09 superseded: old 3-patient/JFX-affected Token+LoRA result is tuning reference only. Do not expand old Fold2/3 as evidence; rerun LoRA claims under MPP2/new-data protocol. |
 | mpp1_std10val_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |
 | mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |

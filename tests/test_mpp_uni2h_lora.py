@@ -64,6 +64,17 @@ class DummyBackbone(nn.Module):
         return value
 
 
+class TokenBackbone(nn.Module):
+    def __init__(self, dim: int = 4):
+        super().__init__()
+        self.projection = nn.Linear(3 * 4 * 4, dim)
+
+    def forward_features(self, images):
+        cls = self.projection(images.flatten(1))
+        register = torch.zeros_like(cls)
+        return torch.stack([cls, register], dim=1)
+
+
 def _manifest(rows):
     return pd.DataFrame(rows, columns=[
         "mpp_id", "patient", "patch_stem", "x", "y", "split", "block_id",
@@ -258,6 +269,15 @@ def test_cache_parity_extracts_cls_from_online_token_sequence():
     cls = extract_online_cls_feature(TokenBackbone(), images, feature_dim=4)
     assert cls.shape == (2, 4)
     assert torch.equal(cls, torch.tensor([[0., 1., 2., 3.], [12., 13., 14., 15.]]))
+
+
+def test_online_mpp_model_extracts_cls_from_token_backbone():
+    model = OnlineMPPModel(
+        backbone=TokenBackbone(), feature_dim=4, hidden_dim=8,
+        output_dim=3, dropout=0.0,
+    )
+    output = model(torch.zeros(2, 3, 4, 4))
+    assert output.shape == (2, 3)
 
 
 def test_cache_parity_help_requires_resource_release_acknowledgement():

@@ -127,6 +127,28 @@ def bound_job_parameter_argv(work_root: Path, manifest: Dict[str, Any], experime
             "manifest_labels_root": str(repair["server_stage_path"]),
             "output_root": str(get_registered_path("server_mpp_results", registry_path=registry_path, project_root=work_root)),
         })
+    elif script.endswith("train_mpp_uni2h_lora.py"):
+        repair = active_mpp_repair(work_root)
+        if repair is None:
+            raise ValueError("MPP2 LoRA requires an explicitly activated repaired-label data manifest")
+        if manifest.get("data_manifest_id") != repair.get("data_manifest_id"):
+            raise ValueError(
+                "MPP2 LoRA data_manifest_id does not match active repaired labels: "
+                f"job={manifest.get('data_manifest_id')} active={repair.get('data_manifest_id')}"
+            )
+        registry_path = work_root / "configs" / "server_paths.yaml"
+        parameters.update({
+            "data_manifest_id": str(repair["data_manifest_id"]),
+            "manifest_labels_root": str(repair["server_stage_path"]),
+            "mpp_root": str(get_registered_path("mpp_data_root", registry_path=registry_path, project_root=work_root)),
+            "splits_root": str((work_root / "mpp_standard_splits").resolve()),
+            "head_checkpoint": str(get_registered_path(
+                "server_mpp2_frozen_baseline_checkpoint",
+                registry_path=registry_path,
+                project_root=work_root,
+            )),
+            "output_root": str(get_registered_path("server_mpp_results", registry_path=registry_path, project_root=work_root)),
+        })
     elif script.endswith("scripts/check_mpp_online_cache_parity.py"):
         repair = active_mpp_repair(work_root)
         if repair is None:

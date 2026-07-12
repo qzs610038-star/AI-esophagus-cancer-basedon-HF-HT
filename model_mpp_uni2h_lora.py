@@ -42,9 +42,17 @@ class OnlineMPPModel(nn.Module):
         )
 
     def forward(self, images: torch.Tensor) -> torch.Tensor:
-        features = self.backbone(images)
+        # UNI2-h exposes the same token sequence used by the accepted cache
+        # extractor through ``forward_features``.  Select CLS before the MLP;
+        # calling the module directly returns all tokens for the real backbone.
+        if hasattr(self.backbone, "forward_features"):
+            features = self.backbone.forward_features(images)
+        else:
+            features = self.backbone(images)
         if isinstance(features, (tuple, list)):
             features = features[0]
+        if isinstance(features, torch.Tensor) and features.ndim == 3:
+            features = features[:, 0, :]
         if not isinstance(features, torch.Tensor) or features.ndim != 2:
             shape = getattr(features, "shape", None)
             raise RuntimeError(f"UNI2-h backbone must return [B,D] CLS features, got {shape}")

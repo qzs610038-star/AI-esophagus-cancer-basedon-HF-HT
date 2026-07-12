@@ -155,3 +155,56 @@ def test_cache_parity_job_injects_all_paths_and_resource_ack(tmp_path):
     assert value("--output").endswith(
         r"cache_parity\mpp2-cache-parity-v003\cache_parity.csv"
     )
+
+
+def test_lora_job_injects_repaired_paths_and_baseline_head(tmp_path):
+    stage = r"D:\staging\barcode-repair-v003"
+    canonical_audit = (
+        tmp_path / "project_state" / "evidence" / "mpp" / "repair-v003"
+        / "server_asset_audit_manifest.json"
+    )
+    _write_json(canonical_audit, {"generated_assets": []})
+    import hashlib
+    audit_sha = hashlib.sha256(canonical_audit.read_bytes()).hexdigest()
+    _write_json(tmp_path / "project_state" / "current_state.json", {
+        "mpp_repair": {"active_data_manifest_id": "repair-v003:abc"},
+    })
+    _write_json(tmp_path / "project_state" / "mpp_repair_registry.json", {
+        "active_data_manifest_id": "repair-v003:abc",
+        "repairs": [{
+            "evidence_id": "repair-v003",
+            "data_manifest_id": "repair-v003:abc",
+            "status": "active",
+            "server_stage_path": stage,
+            "audit_sha256": audit_sha,
+        }],
+    })
+    (tmp_path / "configs").mkdir()
+    (tmp_path / "configs" / "server_paths.yaml").write_text(
+        "schema_version: '1.0'\npaths:\n"
+        "  mpp_data_root: {path: 'D:\\raw', required_on: server}\n"
+        "  server_mpp_results: {path: 'D:\\results', required_on: server}\n"
+        "  server_mpp2_frozen_baseline_checkpoint: {path: 'D:\\head.pth', required_on: server}\n",
+        encoding="utf-8",
+    )
+    manifest = {
+        "job_id": "mpp2-lora-s0-smoke",
+        "data_manifest_id": "repair-v003:abc",
+        "parameters": {
+            "mode": "frozen", "dataset_name": "s0", "num_epochs": 3,
+            "seed": 42, "head_checkpoint_sha256": "a" * 64,
+        },
+    }
+    experiment = {"script": "train_mpp_uni2h_lora.py"}
+
+    argv = bound_job_parameter_argv(tmp_path, manifest, experiment)
+
+    def value(name):
+        index = argv.index(name)
+        return argv[index + 1]
+
+    assert value("--manifest_labels_root") == stage
+    assert Path(value("--mpp_root")) == Path(r"D:\raw")
+    assert Path(value("--head_checkpoint")) == Path(r"D:\head.pth")
+    assert Path(value("--output_root")) == Path(r"D:\results")
+    assert value("--data_manifest_id") == "repair-v003:abc"

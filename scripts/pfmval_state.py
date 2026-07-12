@@ -86,6 +86,47 @@ MPP_CACHE_PARITY_PATH_PARAMETERS = {
     "data_manifest_id",
 }
 MPP_CACHE_PARITY_ALLOWED_PARAMETERS = {"samples_per_patient", "device"}
+MPP_LORA_PATH_IDS = {
+    "mpp_data_root",
+    "mpp_standard_splits",
+    "server_mpp_results",
+    "server_mpp2_frozen_baseline_checkpoint",
+}
+MPP_LORA_PATH_PARAMETERS = {
+    "mpp_root",
+    "splits_root",
+    "manifest_labels_root",
+    "head_checkpoint",
+    "output_root",
+    "data_manifest_id",
+}
+MPP_LORA_ALLOWED_PARAMETERS = {
+    "mode",
+    "train_mpp_id",
+    "external_mpp_id",
+    "external_patient",
+    "dataset_name",
+    "num_epochs",
+    "batch_size",
+    "grad_accum_steps",
+    "head_lr",
+    "lora_lr",
+    "weight_decay",
+    "patience",
+    "min_delta",
+    "gradient_clip",
+    "seed",
+    "num_workers",
+    "num_threads",
+    "amp",
+    "grad_checkpointing",
+    "lora_rank",
+    "lora_alpha",
+    "lora_dropout",
+    "head_checkpoint_sha256",
+    "hidden_dim",
+    "dropout",
+}
 ALLOWED_RESULT_FILES = {
     "training_history.csv",
     "training_summary.txt",
@@ -2075,6 +2116,36 @@ def validate_job_semantics(
             raise ValueError("formal training requires a positive integer num_epochs") from exc
         if epochs < 1:
             raise ValueError("formal training requires a positive integer num_epochs")
+
+    script_name = str((experiment or {}).get("script", "")).replace("\\", "/")
+    if script_name.endswith("train_mpp_uni2h_lora.py"):
+        if phase != "smoke":
+            raise ValueError("MPP2 LoRA trainer is currently restricted to phase=smoke")
+        provided_ids = set(path_ids)
+        missing_ids = sorted(MPP_LORA_PATH_IDS - provided_ids)
+        if missing_ids:
+            raise ValueError(f"MPP2 LoRA job is missing required path ids: {missing_ids}")
+        path_overrides = sorted(MPP_LORA_PATH_PARAMETERS & set(parameters))
+        if path_overrides:
+            raise ValueError(f"MPP2 LoRA paths are registry-bound and cannot be overridden: {path_overrides}")
+        unknown_parameters = sorted(set(parameters) - MPP_LORA_ALLOWED_PARAMETERS)
+        if unknown_parameters:
+            raise ValueError(f"MPP2 LoRA parameters are not allowlisted: {unknown_parameters}")
+        required = {"mode", "dataset_name", "seed", "head_checkpoint_sha256"}
+        missing = sorted(required - set(parameters))
+        if missing:
+            raise ValueError(f"MPP2 LoRA job is missing required parameters: {missing}")
+        if parameters.get("mode") not in {"frozen", "lora"}:
+            raise ValueError("MPP2 LoRA mode must be frozen or lora")
+        if int(parameters.get("seed")) != 42:
+            raise ValueError("MPP2 paired smoke is fixed to seed=42")
+        if int(parameters.get("train_mpp_id", 2)) != 2 or int(parameters.get("external_mpp_id", 2)) != 2:
+            raise ValueError("MPP2 paired smoke is fixed to train_mpp_id=2 and external_mpp_id=2")
+        if str(parameters.get("external_patient", "XZY")) != "XZY":
+            raise ValueError("MPP2 paired smoke is fixed to external_patient=XZY")
+        if int(parameters.get("lora_rank", 8)) != 8 or float(parameters.get("lora_alpha", 16.0)) != 16.0:
+            raise ValueError("MPP2 paired smoke is fixed to LoRA rank=8 and alpha=16")
+        return
 
     if experiment and str(experiment.get("script", "")).replace("\\", "/").endswith("train_mpp_uni2h_mlp.py"):
         provided_ids = set(path_ids)

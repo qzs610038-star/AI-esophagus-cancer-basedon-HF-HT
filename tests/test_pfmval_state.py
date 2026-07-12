@@ -853,6 +853,42 @@ def test_mpp_cache_parity_job_is_preflight_only_and_registry_bound():
         )
 
 
+def test_mpp2_lora_smoke_requires_paired_seed_and_registered_paths():
+    experiment = {
+        "family": "mpp_uni2h_lora",
+        "script": "train_mpp_uni2h_lora.py",
+    }
+    path_ids = [
+        "mpp_data_root",
+        "mpp_standard_splits",
+        "server_mpp_results",
+        "server_mpp2_frozen_baseline_checkpoint",
+    ]
+    parameters = {
+        "mode": "lora",
+        "dataset_name": "mpp2_s1_lora_smoke",
+        "num_epochs": 3,
+        "seed": 42,
+        "head_checkpoint_sha256": "a" * 64,
+        "lora_rank": 8,
+        "lora_alpha": 16.0,
+    }
+    validate_job_semantics(
+        "smoke", "standard_training", parameters,
+        experiment=experiment, path_ids=path_ids,
+    )
+    with pytest.raises(ValueError, match="seed=42"):
+        validate_job_semantics(
+            "smoke", "standard_training", {**parameters, "seed": 43},
+            experiment=experiment, path_ids=path_ids,
+        )
+    with pytest.raises(ValueError, match="phase=smoke"):
+        validate_job_semantics(
+            "formal", "standard_training", {**parameters, "num_epochs": 1},
+            experiment=experiment, path_ids=path_ids,
+        )
+
+
 def test_smoke_result_is_accepted_but_not_latest_formal_result(tmp_path):
     root = make_minimal_project(tmp_path)
     bundle = root / "bundle"
