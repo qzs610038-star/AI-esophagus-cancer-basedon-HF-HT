@@ -1,12 +1,14 @@
 import copy
 import subprocess
 import sys
+import warnings
 from pathlib import Path
 
 import pandas as pd
 import pytest
 import torch
 import torch.nn as nn
+import numpy as np
 from PIL import Image
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -18,7 +20,7 @@ from model_mpp_uni2h_lora import (
     load_accepted_mpp_head,
 )
 from train_mpp_uni2h_mlp import MPPMLPHead
-from train_mpp_uni2h_lora import evaluate, train_one_epoch
+from train_mpp_uni2h_lora import _metrics, evaluate, train_one_epoch
 from scripts.check_mpp_online_cache_parity import (
     extract_online_cls_feature,
     resolve_unique_cache_path,
@@ -278,6 +280,16 @@ def test_online_mpp_model_extracts_cls_from_token_backbone():
     )
     output = model(torch.zeros(2, 3, 4, 4))
     assert output.shape == (2, 3)
+
+
+def test_metrics_promote_amp_float16_before_numpy_statistics():
+    values = np.full((48, 30), 100.0, dtype=np.float16)
+    with warnings.catch_warnings(record=True) as captured:
+        warnings.simplefilter("always")
+        metrics = _metrics(values, values)
+    assert not [warning for warning in captured if issubclass(warning.category, RuntimeWarning)]
+    assert np.isfinite(metrics["mse"])
+    assert np.isfinite(metrics["pcc"])
 
 
 def test_cache_parity_help_requires_resource_release_acknowledgement():

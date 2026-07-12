@@ -167,6 +167,11 @@ def _collect_metadata(dataset) -> List[dict]:
 
 
 def _metrics(labels: np.ndarray, predictions: np.ndarray) -> dict:
+    # AMP inference commonly leaves predictions in float16.  NumPy's default
+    # reductions then accumulate in float16 and overflow even for values clipped
+    # to +/-100 (48 samples are already enough).  Promote before all metrics.
+    labels = np.asarray(labels, dtype=np.float64)
+    predictions = np.asarray(predictions, dtype=np.float64)
     safe_predictions = np.clip(
         np.nan_to_num(predictions, nan=0.0, posinf=10.0, neginf=-10.0),
         -100.0, 100.0,
@@ -273,6 +278,8 @@ def _raw_scale_metrics(
     labels: np.ndarray,
     params_path: Path,
 ) -> dict:
+    predictions = np.asarray(predictions, dtype=np.float64)
+    labels = np.asarray(labels, dtype=np.float64)
     params = json.loads(params_path.read_text(encoding="utf-8"))
     pathway_params = params.get("pathways", {})
     rows = []
