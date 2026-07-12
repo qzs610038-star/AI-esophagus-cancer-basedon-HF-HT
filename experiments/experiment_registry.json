@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-11T12:51:02+00:00",
+  "updated_at": "2026-07-12T05:39:19+00:00",
   "current_mpp_policy": {
     "effective_date": "2026-07-09",
     "selected_mpp": 2,
@@ -1206,7 +1206,15 @@
       "decision_gate": "DIR-20260711-008: parity must return through Gitee and pass before any MPP2 LoRA smoke job is created.",
       "evidence_status": "planned",
       "provenance_complete": false,
-      "supersedes_results": []
+      "supersedes_results": [],
+      "last_preflight": {
+        "result_id": "mpp2-online-cache-parity-v003-20260712-r003-result-20260712133446-52393829",
+        "job_id": "mpp2-online-cache-parity-v003-20260712-r003",
+        "source_commit": "f8443fe13987098e4ac3138554cc674d231063df",
+        "status": "success",
+        "imported_at": "2026-07-12T05:39:19+00:00",
+        "result_manifest_sha256": "4a4853cd296fda7a9d9b2aed8e8a9bc02184533e6eba02105dea049cbe5d8273"
+      }
     },
     {
       "id": "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
