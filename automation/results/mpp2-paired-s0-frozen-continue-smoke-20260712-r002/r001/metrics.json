@@ -1,0 +1,46 @@
+{
+  "mode": "frozen",
+  "best_epoch": 3,
+  "best_val_loss": 0.3789220998402346,
+  "best_val_pcc": 0.7947915972170376,
+  "external_xzy_pcc": 0.6445460400559437,
+  "external_xzy_mae": 0.6385390487781701,
+  "external_xzy_r2": -0.14491348988905142,
+  "test_loss": 0.6941838272353339,
+  "internal_val": {
+    "loss": 0.3789220998402346,
+    "mse": 0.37892207974548886,
+    "mae": 0.4560503156057371,
+    "r2": 0.6311653065683462,
+    "pcc": 0.7947915972170376
+  },
+  "external_xzy": {
+    "loss": 0.6941838272353339,
+    "mse": 0.6941837914162321,
+    "mae": 0.6385390487781701,
+    "r2": -0.14491348988905142,
+    "pcc": 0.6445460400559437
+  },
+  "external_xzy_mae_raw": 1215.2838609710755,
+  "external_xzy_r2_raw": -0.14491348988905617,
+  "train_samples": 9472,
+  "internal_val_samples": 1078,
+  "external_samples": 1039,
+  "target_count": 30,
+  "lora_parameter_count": 0,
+  "trainable_parameter_count": 1604638,
+  "trainable_parameter_names": [
+    "head.head.0.weight",
+    "head.head.0.bias",
+    "head.head.3.weight",
+    "head.head.3.bias"
+  ],
+  "head_checkpoint_sha256": "c69191d4a67939724988bc3656c3cd2e0b173d9c871456a5fb900ab446e86a98",
+  "head_checkpoint_epoch": 15,
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "repair_evidence_id": "barcode-repair-20260711-d626ad8-v003",
+  "elapsed_seconds": 1216.5584580898285,
+  "peak_cuda_memory_bytes": 2834467840,
+  "gradient_checkpointing": false,
+  "external_evaluated_after_checkpoint_selection": true
+}

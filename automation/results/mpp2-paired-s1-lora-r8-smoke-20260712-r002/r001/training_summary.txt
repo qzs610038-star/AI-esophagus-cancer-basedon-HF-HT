@@ -1,0 +1,12 @@
+Experiment: mpp2_repaired_s1_lora_r8_smoke_20260712_r002
+Mode: lora
+Data manifest: barcode-repair-20260711-d626ad8-v003:1204018178a4d355
+Train samples: 9472 {'HYZ15040': 1309, 'JFX': 1826, 'LMZ12939': 3014, 'TGC': 998, 'XSL': 1365, 'ZHZ': 960}
+Internal val samples: 1078
+External XZY samples: 1039
+Best epoch: 1
+Best val loss: 0.38231999
+External XZY PCC: 0.646439
+External XZY MAE raw: 1206.826299
+External XZY R2 raw: -0.135891
+External XZY evaluated only after internal checkpoint selection.
