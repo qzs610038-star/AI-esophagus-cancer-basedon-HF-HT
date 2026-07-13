@@ -49,14 +49,14 @@
 | Priority | ID | Status | Next Action |
 |:--------:|----|--------|-------------|
 | P0 | mpp2_std10val_xzy_ext_uni2h_mlp_20260706 | done | selected_for_mpp2_newdata_lora |
-| P0 | mpp2_barcode_repair_v003_frozen_baseline_20260711 | done | run_before_lora |
-| P0 | mpp1_barcode_repair_v003_frozen_recheck_20260711 | done | dispatch_formal_parallel_recheck |
-| P0 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | done | dispatch_formal_parallel_recheck |
-| P0 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | done | dispatch_formal_parallel_recheck |
-| P0 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | done | dispatch_formal_parallel_recheck |
+| P0 | mpp2_barcode_repair_v003_frozen_baseline_20260711 | done | closed_use_accepted_repaired_result_for_reporting |
+| P0 | mpp1_barcode_repair_v003_frozen_recheck_20260711 | done | closed_use_accepted_repaired_result_for_reporting |
+| P0 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | done | closed_use_accepted_repaired_result_for_reporting |
+| P0 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | done | closed_use_accepted_repaired_result_for_reporting |
+| P0 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | done | closed_use_accepted_repaired_result_for_reporting |
 | P0 | mpp2_online_cache_parity_v003_20260711 | done | prepare_paired_smoke |
-| P0 | mpp2_paired_s0_frozen_continue_smoke_20260712 | done | dispatch_s0_smoke |
-| P0 | mpp2_paired_s1_lora_r8_smoke_20260712 | done | dispatch_s1_smoke_after_s0_ready |
+| P0 | mpp2_paired_s0_frozen_continue_smoke_20260712 | done | paired_smoke_completed_reviewed_no_redispatch |
+| P0 | mpp2_paired_s1_lora_r8_smoke_20260712 | done | close_current_lora_r8_configuration_after_prediction_diagnostics |
 | baseline | online_tokens_gfnet_fold1_65t_legacy | done | archived_as_legacy_baseline |
 | baseline | smoke_gfnet_65t | done | archived |
 | baseline | online_tokens_transformer_fold1_65t | done_incomplete_data | archived |
@@ -83,11 +83,11 @@
 | Experiment | Gate |
 |------------|------|
 | mpp2_std10val_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: selected for follow-up because MPP2 matches the cohort/external-test sampling protocol. Next: MPP2 new-data LoRA r=8 vs same-batch frozen baseline. |
-| mpp2_barcode_repair_v003_frozen_baseline_20260711 | Compare with mpp2_std10val_xzy_ext_uni2h_mlp_20260706; any configured degradation threshold pauses LoRA and requires repaired MPP1-5 frozen reruns. |
-| mpp1_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: compare validated return against mpp1_std10val_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
-| mpp3_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: preserve bbox embargo and compare validated return against mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
-| mpp4_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: compare validated return against mpp4_std10val_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
-| mpp5_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006: preserve bbox embargo and compare validated return against mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706; do not promote until result import. |
+| mpp2_barcode_repair_v003_frozen_baseline_20260711 | Safety guard was evaluated and led to the completed repaired MPP1/3/4/5 rechecks; use this accepted repaired baseline for reporting and do not redispatch automatically. |
+| mpp1_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006 satisfied by validated result import; use this repaired formal result for reporting and do not redispatch automatically. |
+| mpp3_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006 satisfied by validated result import with bbox embargo preserved; use this repaired formal result for reporting and do not redispatch automatically. |
+| mpp4_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006 satisfied by validated result import; use this repaired formal result for reporting and do not redispatch automatically. |
+| mpp5_barcode_repair_v003_frozen_recheck_20260711 | DIR-20260711-006 satisfied by validated result import with bbox embargo preserved; use this repaired formal result for reporting and do not redispatch automatically. |
 | mpp2_online_cache_parity_v003_20260711 | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. |
 | mpp2_paired_s0_frozen_continue_smoke_20260712 | Run paired with S1 using identical repaired manifest, head checkpoint, seed, sample order and validation split; smoke only. |
 | mpp2_paired_s1_lora_r8_smoke_20260712 | Run paired with S0 using identical repaired manifest, head checkpoint, seed, sample order and validation split; smoke only. |

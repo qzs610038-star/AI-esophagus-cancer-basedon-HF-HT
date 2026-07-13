@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-12T11:11:46+00:00",
-  "state_revision": 53,
+  "updated_at": "2026-07-13T07:06:42+00:00",
+  "state_revision": 58,
   "documents": [
     {
       "doc_id": "doc-975997916045",
@@ -3204,9 +3204,9 @@
       "scope": "mpp_training",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-12T11:11:46+00:00",
-      "state_revision": 53,
-      "content_sha256": "147a4b7a95d945325611d2d6f916be3a8b5914cfe633146eb1bb3fcde96d319c",
+      "verified_at": "2026-07-13T07:06:42+00:00",
+      "state_revision": 58,
+      "content_sha256": "f2cafd18f36b71330de7b6b414f9f83b686555559b7d4b8aed7af649078cbda3",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
