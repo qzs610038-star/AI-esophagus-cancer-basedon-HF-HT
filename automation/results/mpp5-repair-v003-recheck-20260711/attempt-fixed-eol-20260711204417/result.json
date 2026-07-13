@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "result_id": "mpp5-repair-v003-recheck-20260711-result-20260711204418-eef816b8",
+  "job_id": "mpp5-repair-v003-recheck-20260711",
+  "experiment_id": "mpp5_barcode_repair_v003_frozen_recheck_20260711",
+  "source_commit": "cc979d4747429015499478b44befa4eb8ad8fdd8",
+  "phase": "formal",
+  "status": "success",
+  "created_at": "2026-07-11T12:44:18+00:00",
+  "formal_training_approved": true,
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "path_index_version": "1.0",
+  "artifacts": [
+    {
+      "path": "training_history.csv",
+      "kind": "csv",
+      "size_bytes": 1328,
+      "sha256": "87fec7555d0fd5eb77788aac693ad9f51fc0cf0882713d348b6849c879be74b7"
+    },
+    {
+      "path": "training_summary.txt",
+      "kind": "txt",
+      "size_bytes": 1077,
+      "sha256": "e9296c1d0d3d8634de179595f5a2f3cec80f52e0d3696728c024beb9b57aff6b"
+    },
+    {
+      "path": "best_epoch.txt",
+      "kind": "txt",
+      "size_bytes": 113,
+      "sha256": "887ac43fc736c1828710acca32c6d689e368a552a501acbe8bccc6e625ab8d48"
+    },
+    {
+      "path": "metrics.json",
+      "kind": "json",
+      "size_bytes": 273,
+      "sha256": "6f5f977187d973017077b757090a3235b5807ef0af21774dc9681f5611c3d58e"
+    }
+  ],
+  "metrics": {
+    "best_epoch": 10,
+    "best_val_loss": 0.316594,
+    "best_val_pcc": 0.834697,
+    "external_xzy_pcc": 0.6072,
+    "external_xzy_mae": 0.5082,
+    "external_xzy_r2": 0.0811,
+    "external_xzy_mae_raw": 1045.6602,
+    "external_xzy_r2_raw": 0.0811,
+    "test_loss": 0.4723
+  },
+  "large_artifacts": [
+    {
+      "server_path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\checkpoints\\mpp_uni2h_mlp\\mpp5_barcode_repair_v003_frozen_recheck_20260711\\best_checkpoint.pth",
+      "size_bytes": 6420688,
+      "sha256": "1aac92bd5a11f08b01ea244bef604be10175cc0322118251aff4a410f940f125"
+    }
+  ],
+  "supersedes_results": []
+}

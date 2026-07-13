@@ -1,0 +1,11 @@
+{
+  "best_epoch": 12,
+  "best_val_loss": 0.319827,
+  "best_val_pcc": 0.820883,
+  "external_xzy_pcc": 0.6151,
+  "external_xzy_mae": 0.5094,
+  "external_xzy_r2": 0.109,
+  "external_xzy_mae_raw": 1053.1715,
+  "external_xzy_r2_raw": 0.109,
+  "test_loss": 0.4635
+}

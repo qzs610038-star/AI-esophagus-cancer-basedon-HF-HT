@@ -1,0 +1,29 @@
+Experiment: mpp3_barcode_repair_v003_frozen_recheck_20260711
+Model: UNI2-h frozen features + 2-layer MLP
+Training strategy: val_strategy=manifest
+Early stopping: signal=val_loss, patience=10, min_delta=0.0001
+Training budget: 50 epochs max
+  actual_epochs=21, best_epoch=11, best_val_loss=0.348771
+
+Signal separation:
+- train: MPP-3 / HYZ15040,JFX,LMZ12939,TGC,XSL,ZHZ
+- internal_val: split_manifest patch级各患者10% (manifest), used for val_loss early stopping only
+- external_test: MPP-2 / XZY, evaluated once after checkpoint selection
+
+XZY used for: test ONLY (not training, not z-score fit, not epoch selection)
+Report: best checkpoint selected by val_loss minimum; external XZY evaluated once.
+
+--- External XZY Results ---
+Mean PCC: 0.6436
+Mean MAE: 0.6383 (z-score space)
+Mean R2:  -0.1265
+Mean MAE_raw: 1209.3894 (raw ssGSEA scale, 跨MPP可比)
+Mean R2_raw:  -0.1265
+Test Loss: 0.6880
+
+--- Internal Val Results (best ckpt) ---
+Mean PCC: 0.8225
+Mean MAE: 0.4269
+Mean R2:  0.6715
+Val Loss: 0.3488
+Completed at: 2026-07-11T19:43:18.444512
