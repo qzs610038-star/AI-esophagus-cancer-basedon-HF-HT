@@ -23,6 +23,7 @@
 | mpp2_online_cache_parity_v003_20260711 | mpp_preflight | :white_check_mark: done | — |  | — | — | — | — | — |
 | mpp2_paired_s0_frozen_continue_smoke_20260712 | mpp_uni2h_lora | :white_check_mark: done | — |  | — | 0.7948 | 0.3789 | — | 3 | ext_XZY_PCC=0.6445 |
 | mpp2_paired_s1_lora_r8_smoke_20260712 | mpp_uni2h_lora | :white_check_mark: done | — |  | — | 0.7930 | 0.3823 | — | 1 | ext_XZY_PCC=0.6464 |
+| mpp2_lora_r8_dropout10_smoke_20260714 | mpp_uni2h_lora | :question: pending | — |  | — | — | — | — | — |
 | online_tokens_gfnet_fold1_65t_legacy | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3914 | 0.3337 | 0.1683 | 2 |
 | smoke_gfnet_65t | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3933 | 0.3314 | 0.0935 | 1 |
 | online_tokens_transformer_fold1_65t | online_tokens | :warning: done_incomplete_data | 1 | transformer | 65 | 0.3821 | — | — | 4 |
@@ -57,6 +58,7 @@
 | P0 | mpp2_online_cache_parity_v003_20260711 | done | prepare_paired_smoke |
 | P0 | mpp2_paired_s0_frozen_continue_smoke_20260712 | done | paired_smoke_completed_reviewed_no_redispatch |
 | P0 | mpp2_paired_s1_lora_r8_smoke_20260712 | done | close_current_lora_r8_configuration_after_prediction_diagnostics |
+| P0 | mpp2_lora_r8_dropout10_smoke_20260714 | pending | dispatch_one_approved_smoke_after_manifest_validation_and_server_dry_run |
 | baseline | online_tokens_gfnet_fold1_65t_legacy | done | archived_as_legacy_baseline |
 | baseline | smoke_gfnet_65t | done | archived |
 | baseline | online_tokens_transformer_fold1_65t | done_incomplete_data | archived |
@@ -91,6 +93,7 @@
 | mpp2_online_cache_parity_v003_20260711 | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. |
 | mpp2_paired_s0_frozen_continue_smoke_20260712 | Run paired with S1 using identical repaired manifest, head checkpoint, seed, sample order and validation split; smoke only. |
 | mpp2_paired_s1_lora_r8_smoke_20260712 | Run paired with S0 using identical repaired manifest, head checkpoint, seed, sample order and validation split; smoke only. |
+| mpp2_lora_r8_dropout10_smoke_20260714 | Single-factor dropout=0.10 only; compare against accepted S0 after internal checkpoint selection; do not retry or tune from XZY. |
 | C1_gfnet_lora_65t_fold1 | 2026-07-09 superseded: old 3-patient/JFX-affected Token+LoRA result is tuning reference only. Do not expand old Fold2/3 as evidence; rerun LoRA claims under MPP2/new-data protocol. |
 | mpp1_std10val_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |
 | mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |
