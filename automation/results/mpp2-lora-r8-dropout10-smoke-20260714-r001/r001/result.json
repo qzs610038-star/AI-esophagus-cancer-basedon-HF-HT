@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "result_id": "mpp2-lora-r8-dropout10-smoke-20260714-r001-result-20260714182052-ba080eda",
+  "job_id": "mpp2-lora-r8-dropout10-smoke-20260714-r001",
+  "experiment_id": "mpp2_lora_r8_dropout10_smoke_20260714",
+  "source_commit": "9e7bb64a54b396d5bc95dd5c694e23ae6209b922",
+  "phase": "smoke",
+  "status": "success",
+  "created_at": "2026-07-14T10:20:52+00:00",
+  "formal_training_approved": false,
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "path_index_version": "1.0",
+  "artifacts": [
+    {
+      "path": "metrics.json",
+      "kind": "json",
+      "size_bytes": 6343,
+      "sha256": "62812c580a3342384c6182cd2cb7ba7b4a7f8257337110f37de9e0269e0aafa0"
+    },
+    {
+      "path": "training_history.csv",
+      "kind": "csv",
+      "size_bytes": 436,
+      "sha256": "970ddba57f36b440152adaf8efea04d858b17786736e28fa2fecb3bae18dbcf1"
+    },
+    {
+      "path": "per_pathway_pcc.csv",
+      "kind": "csv",
+      "size_bytes": 2170,
+      "sha256": "51b6e59552b5c9bb34bf4d094de04c0ed9523c3abdf419f4724f9573d7cdcf34"
+    },
+    {
+      "path": "training_summary.txt",
+      "kind": "txt",
+      "size_bytes": 505,
+      "sha256": "61e19cdd05f9a2ccfaa072491448dad31637b1a552fe2d3b773c18416fdafa6d"
+    },
+    {
+      "path": "best_epoch.txt",
+      "kind": "txt",
+      "size_bytes": 40,
+      "sha256": "0793871834d685980cc93e9084b5883477ac72a4511daaedebc32f06e343e38f"
+    }
+  ],
+  "metrics": {},
+  "large_artifacts": [
+    {
+      "server_path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\checkpoints\\mpp_uni2h_mlp\\mpp2_lora_r8_dropout10_smoke_20260714_r001\\best_checkpoint.pth",
+      "size_bytes": 13529450,
+      "sha256": "a95c185e8bd2586df7162552d04ea8072701cb762762ed5477dfa1ff782b6a32"
+    }
+  ],
+  "supersedes_results": []
+}
