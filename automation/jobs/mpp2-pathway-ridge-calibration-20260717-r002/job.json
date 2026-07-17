@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "job_id": "mpp2-pathway-ridge-calibration-20260717-r002",
+  "experiment_id": "mpp2_pathway_ridge_calibration_v001_20260717",
+  "source_commit": "1cb75a33999dda9ed942107c068f8b5cdbc89a40",
+  "state_revision": 78,
+  "phase": "formal",
+  "command_id": "mpp_pathway_ridge_calibration",
+  "path_ids": [
+    "mpp_standard_splits",
+    "server_mpp_partner_cache",
+    "server_mpp_flat_cache",
+    "server_mpp_results",
+    "server_mpp2_frozen_baseline_checkpoint"
+  ],
+  "parameters": {},
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "path_index_version": "1.0",
+  "created_at": "2026-07-17T14:51:19+00:00",
+  "dispatch_branch": "automation/local/mpp2-pathway-ridge-calibration-20260717-r002",
+  "result_branch": "automation/server/mpp2-pathway-ridge-calibration-20260717-r002",
+  "formal_training_approval": {
+    "approved": true,
+    "source": "explicit_user_instruction",
+    "directive_id": "DIR-20260717-002",
+    "job_id": "mpp2-pathway-ridge-calibration-20260717-r002",
+    "source_commit": "1cb75a33999dda9ed942107c068f8b5cdbc89a40",
+    "approved_at": "2026-07-17T22:00:00+08:00",
+    "scope": "Replacement for unexecuted r001 after launcher-contract fixes: one formal frozen MPP2 epoch-15 pathway-wise Ridge calibration run; internal-only fitting and freeze before one XZY evaluation; Gitee-only return."
+  },
+  "artifact_policy": {
+    "max_file_bytes": 20971520,
+    "max_total_bytes": 52428800,
+    "large_artifacts": "server_path_size_sha256_only"
+  }
+}

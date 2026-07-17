@@ -1,0 +1,9 @@
+{
+  "approved": true,
+  "source": "explicit_user_instruction",
+  "directive_id": "DIR-20260717-002",
+  "job_id": "mpp2-pathway-ridge-calibration-20260717-r002",
+  "source_commit": "1cb75a33999dda9ed942107c068f8b5cdbc89a40",
+  "approved_at": "2026-07-17T22:00:00+08:00",
+  "scope": "Replacement for unexecuted r001 after launcher-contract fixes: one formal frozen MPP2 epoch-15 pathway-wise Ridge calibration run; internal-only fitting and freeze before one XZY evaluation; Gitee-only return."
+}
