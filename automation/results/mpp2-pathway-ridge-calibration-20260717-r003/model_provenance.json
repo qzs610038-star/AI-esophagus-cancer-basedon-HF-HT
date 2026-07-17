@@ -1,0 +1,11 @@
+{
+  "experiment_id": "mpp2_pathway_ridge_calibration_v001_20260717",
+  "execution_directive_id": "DIR-20260717-003",
+  "base_checkpoint_sha256": "c69191d4a67939724988bc3656c3cd2e0b173d9c871456a5fb900ab446e86a98",
+  "base_checkpoint_epoch": 15,
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "zscore_params_sha256": "fd65f6ab3a2dda2d8d9f8f17babe59818ea7d93f2480c5da2bcd6384ca37b2c8",
+  "pathway_order_sha256": "966f80e24559b25e51641f169d9c773362e0d23bbf00c9480a94a86bae5e98f2",
+  "internal_predictions_sha256": "6153040d1c31e8299409c8e4c131c19b1578344cf3afa525d6e82428d9996a18",
+  "calibrator_sha256": "0b496a95363011cfcd4a083fa161a22724e9e72021605d037e22558c9f1a7c70"
+}

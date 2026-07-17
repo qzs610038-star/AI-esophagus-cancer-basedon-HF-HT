@@ -1,0 +1,46 @@
+{
+  "grids": [
+    {
+      "grid_pixels": 1024,
+      "cluster_count": 67,
+      "bootstrap_replicates": 5000,
+      "seed": 42,
+      "delta_mean_raw_r2_ci95": [
+        -3.2502566936606264e-05,
+        -8.368036845129644e-06
+      ],
+      "delta_mean_raw_mae_ci95": [
+        0.004100260013802881,
+        0.02346530363404894
+      ]
+    },
+    {
+      "grid_pixels": 2048,
+      "cluster_count": 21,
+      "bootstrap_replicates": 5000,
+      "seed": 42,
+      "delta_mean_raw_r2_ci95": [
+        -3.262784680443751e-05,
+        -7.002725121641781e-06
+      ],
+      "delta_mean_raw_mae_ci95": [
+        0.0018153486752282792,
+        0.02600333100440934
+      ]
+    },
+    {
+      "grid_pixels": 4096,
+      "cluster_count": 8,
+      "bootstrap_replicates": 5000,
+      "seed": 42,
+      "delta_mean_raw_r2_ci95": [
+        -3.289759795944911e-05,
+        -9.569119731445144e-06
+      ],
+      "delta_mean_raw_mae_ci95": [
+        -0.00025159663272233935,
+        0.025602687638189535
+      ]
+    }
+  ]
+}
