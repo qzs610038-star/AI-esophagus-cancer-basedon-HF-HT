@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "result_id": "mpp2-pathway-ridge-calibration-20260717-r002-result-20260717230507-c56518a2",
+  "job_id": "mpp2-pathway-ridge-calibration-20260717-r002",
+  "experiment_id": "mpp2_pathway_ridge_calibration_v001_20260717",
+  "source_commit": "1cb75a33999dda9ed942107c068f8b5cdbc89a40",
+  "phase": "formal",
+  "status": "failed",
+  "created_at": "2026-07-17T15:05:07+00:00",
+  "formal_training_approved": true,
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "path_index_version": "1.0",
+  "artifacts": [
+    {
+      "path": "nested_lopo_metrics.json",
+      "kind": "json",
+      "size_bytes": 21008,
+      "sha256": "657851567c706b57f6dadea65bdc6ec7819664f5593dba6a61825a3571da4a76"
+    },
+    {
+      "path": "pathway_decisions.csv",
+      "kind": "csv",
+      "size_bytes": 10288,
+      "sha256": "483a7132b2e09266752a4d645388789c610ee16bf873e38adf705c30eb6b20ba"
+    }
+  ],
+  "metrics": {},
+  "large_artifacts": [],
+  "supersedes_results": []
+}
