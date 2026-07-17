@@ -1,11 +1,11 @@
 # MPP2 逐通路 Ridge 校准第一次实验方案
 
 > experiment_id: `mpp2_pathway_ridge_calibration_v001_20260717`
-> status: `execution_approved_pending_bound_job`
+> status: `execution_approved_pending_bound_replacement_job`
 > lifecycle: `active`
 > created_at: `2026-07-17`
 > owner: `PFMval MPP2`
-> directive_id: `DIR-20260717-001`（方案登记） + `DIR-20260717-002`（一次正式执行）
+> directive_id: `DIR-20260717-001`（方案登记） + `DIR-20260717-003`（r002 门控语义修正后的一次替代正式执行；取代 `DIR-20260717-002`）
 > execution_authority: `state directive + experiment registry + approved job manifest`
 
 ## 1. 目标与交付定义
@@ -193,7 +193,7 @@ XZY 只能用于最终一次性评估，不得参与任何参数或通路选择�
 - nested-LOPO 患者平衡 MAE 不恶化并优先下降；
 - mean-per-pathway raw R2 改善；
 - 每个启用通路满足 4/6 患者稳定性条件；
-- mean-per-pathway PCC 的逐通路最大绝对变化小于 `1e-10`（仅作实现不变量检查）；
+- 对最终单一冻结的 `k,b,mask` 应用时，mean-per-pathway PCC 的逐通路最大绝对变化小于 `1e-10`（仅作实现不变量检查）；嵌套 LOPO 的跨折 OOF 拼接使用折特异映射，必须报告其 PCC 差异但不得将其作为不变量或放行门；
 - 报告外层各折选择的 `lambda`；若选择高度不一致，内部稳定性门失败。
 
 ### C. 外部交付门

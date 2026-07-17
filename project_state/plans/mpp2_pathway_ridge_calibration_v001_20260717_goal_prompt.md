@@ -32,7 +32,7 @@
 6. 只有满足 `Var(pred_z)>=1e-6`、k>0、至少4/6患者 z-MSE 不恶化、患者中位数 raw MAE 下降、该通路外层 raw R2 改善且 `std(k)/(abs(mean(k))+1e-8)<=0.5` 的通路才启用；其余回退到 k=1,b=0。
 7. 通过 internal stability gate 后，冻结最终 lambda、30组 k/b、pathway mask 和校准器 SHA。冻结之前不得加载或使用 XZY。
 8. 冻结后对 XZY 做一次性 baseline-vs-calibrated 对照。XZY 不得参与任何参数、通路、checkpoint 或阈值选择。
-9. 指标契约必须分开：`legacy_pooled_pcc` 用于复现 accepted 0.6549、允许校准后变化；`mean_per_pathway_pcc` 及逐通路最大delta用于正斜率实现不变量检查，最大绝对变化必须小于 `1e-10`；主要有效性指标是 mean-per-pathway raw R2、mean raw MAE、CCC。不得改成 pooled R2，必须报告逐通路 delta R2/MAE 的中位数、IQR和最差3条。
+9. 指标契约必须分开：`legacy_pooled_pcc` 用于复现 accepted 0.6549、允许校准后变化；`mean_per_pathway_pcc` 及逐通路最大delta仅在最终单一冻结校准器上用于正斜率实现不变量检查，最大绝对变化必须小于 `1e-10`。嵌套 LOPO 的跨折 OOF 拼接使用折特异映射，应报告 PCC 差异但不得作为不变量或放行门；主要有效性指标是 mean-per-pathway raw R2、mean raw MAE、CCC。不得改成 pooled R2，必须报告逐通路 delta R2/MAE 的中位数、IQR和最差3条。
 10. 只有外部最低门通过才可交付：mean raw R2 > -0.088、raw MAE <1176.2114、mean-per-pathway PCC保持不变、至少18/30通路 raw R2 不恶化。legacy pooled PCC只报告、不设不变门。建议交付门为 delta mean raw R2 >=0.03 且 raw MAE 下降。
 11. 通过后将校准和 train-only inverse z-score 集成到 CalibratedMPP2 推理包装，直接输出 raw calibrated 30列；交付 checkpoint、calibrator.json、zscore_params_from_train.json、pathway_order.json、provenance 和 SHA manifest。
 
@@ -78,7 +78,7 @@
 - lambda、k、b 或 pathway mask 需要依赖 XZY 选择；
 - internal nested-LOPO gate 失败；
 - lambda跨外层折高度不稳定、`0.1` 缺乏跨折一致性，或病态通路未按 `Var(pred_z)<1e-6` 回退；
-- `mean_per_pathway_pcc` 最大绝对变化不小于 `1e-10`；
+- 最终单一冻结校准器的 `mean_per_pathway_pcc` 最大绝对变化不小于 `1e-10`；不得把嵌套 LOPO 跨折 OOF 拼接的差异误作该不变量；
 - 空间 bootstrap 的强证据门被误报为跨患者泛化证明；
 - 需要修改 protected 资产或新增未批准权限；
 - 缺少 directive、experiment、job_id、source_commit、批准文件或 Gitee 回传路径；

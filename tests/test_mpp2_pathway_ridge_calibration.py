@@ -7,6 +7,8 @@ from scripts.fit_mpp2_pathway_ridge_calibration import parser
 from scripts.mpp2_pathway_ridge_calibration import (
     choose_lambda_one_se,
     fit_positive_affine,
+    frozen_calibrator_pcc_invariance,
+    nested_lopo,
     patient_balanced_mse,
 )
 
@@ -62,3 +64,21 @@ def test_one_se_rule_prefers_stronger_regularization_when_eligible():
     selected, evidence = choose_lambda_one_se(truth, prediction, patients)
     assert selected == max(evidence["one_se_eligible"])
     assert selected in {0.1, 1.0, 10.0}
+
+
+def test_only_one_frozen_calibrator_is_subject_to_pcc_invariance():
+    """Fold-specific OOF maps are not one global affine transformation."""
+    patients = np.repeat(np.array(["A", "B", "C", "D", "E", "F"]), 5)
+    prediction = np.tile(np.linspace(-2.0, 2.0, 5), 6)[:, None]
+    patient_offsets = np.repeat(np.linspace(-0.8, 0.8, 6), 5)[:, None]
+    truth = 1.4 * prediction + patient_offsets
+
+    oof = nested_lopo(truth, prediction, patients)["oof_prediction"]
+    fold_specific = frozen_calibrator_pcc_invariance(truth, prediction, oof)
+    assert fold_specific["max_abs_delta"] > 1e-10
+    assert fold_specific["invariant"] is False
+
+    frozen = 1.4 * prediction - 0.2
+    single_map = frozen_calibrator_pcc_invariance(truth, prediction, frozen)
+    assert single_map["max_abs_delta"] < 1e-10
+    assert single_map["invariant"] is True

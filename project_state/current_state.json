@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 80,
-  "updated_at": "2026-07-17T15:15:55+00:00",
-  "source_commit": "b2d60a1fecf936376c215f87c8ecec876427c1ea",
+  "state_revision": 82,
+  "updated_at": "2026-07-17T15:27:23+00:00",
+  "source_commit": "78089b019565ba2fceece0e9064fab502c99bd66",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -22,7 +22,7 @@
     "DIR-20260714-003",
     "DIR-20260714-004",
     "DIR-20260717-001",
-    "DIR-20260717-002"
+    "DIR-20260717-003"
   ],
   "active_plans": {
     "mpp_training": {
@@ -86,9 +86,9 @@
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
   "source_hashes": {
-    "experiment_registry_sha256": "69870ee37abdca52bfc1ef558dddc6cfea32204591e2c36dab635d9eb1749b64",
+    "experiment_registry_sha256": "89d10af28cab5f48d341fb153c03e7cdfb1db22f6a261bacda7cae71bd927df5",
     "experiment_dashboard_sha256": "f2962be4b0ac69b757fd3132956c1b2f0206c21215d30eedd3415087a5fd2697",
-    "document_registry_sha256": "22b8e303fbc69af284f1097f7ab07475a7662062a9f93a4256d748cacee45aa0",
+    "document_registry_sha256": "6bc807f2012690b8711ac2e503d709ee7309a0c101f6b8bc1a5b1dede50479e9",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "eeb5f05d5ced9d4900ebffc1af4307bf6cbab5fe8a708be1b1ae10b447597d9d",
     "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"

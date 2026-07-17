@@ -162,6 +162,40 @@ def per_pathway_metrics(
     return rows
 
 
+def frozen_calibrator_pcc_invariance(
+    truth: np.ndarray,
+    base_prediction: np.ndarray,
+    calibrated_prediction: np.ndarray,
+) -> Dict[str, Any]:
+    """Check PCC invariance only for one shared, already-frozen calibrator.
+
+    Nested-LOPO out-of-fold predictions intentionally use a different fitted
+    affine map in each held-out-patient fold, so their concatenation is not one
+    affine transformation and cannot satisfy this identity.
+    """
+    truth = np.asarray(truth, dtype=np.float64)
+    base_prediction = np.asarray(base_prediction, dtype=np.float64)
+    calibrated_prediction = np.asarray(calibrated_prediction, dtype=np.float64)
+    if truth.ndim != 2 or truth.shape != base_prediction.shape or truth.shape != calibrated_prediction.shape:
+        raise ValueError("PCC invariance requires equally shaped finite [N, P] arrays")
+    if not np.isfinite(truth).all() or not np.isfinite(base_prediction).all() or not np.isfinite(calibrated_prediction).all():
+        raise ValueError("PCC invariance inputs must be finite")
+    deltas = []
+    for index in range(truth.shape[1]):
+        if np.std(truth[:, index]) == 0 or np.std(base_prediction[:, index]) == 0 or np.std(calibrated_prediction[:, index]) == 0:
+            deltas.append(float("nan"))
+            continue
+        base_pcc = float(np.corrcoef(truth[:, index], base_prediction[:, index])[0, 1])
+        calibrated_pcc = float(np.corrcoef(truth[:, index], calibrated_prediction[:, index])[0, 1])
+        deltas.append(calibrated_pcc - base_pcc)
+    max_abs_delta = float(np.nanmax(np.abs(np.asarray(deltas, dtype=np.float64))))
+    return {
+        "per_pathway_delta": deltas,
+        "max_abs_delta": max_abs_delta,
+        "invariant": bool(max_abs_delta < 1e-10),
+    }
+
+
 def nested_lopo(
     truth: np.ndarray,
     prediction: np.ndarray,

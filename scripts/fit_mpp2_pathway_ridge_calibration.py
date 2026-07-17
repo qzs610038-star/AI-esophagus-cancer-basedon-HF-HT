@@ -31,6 +31,7 @@ from scripts.mpp2_pathway_ridge_calibration import (
     lambda_stability,
     nested_lopo,
     fit_all_pathways,
+    frozen_calibrator_pcc_invariance,
     pathway_decisions,
     per_pathway_metrics,
     patient_balanced_mse,
@@ -84,7 +85,7 @@ def read_registry() -> dict[str, Any]:
         raise RuntimeError("approved calibration experiment is absent from registry")
     if not entry.get("execution_approved"):
         raise RuntimeError("registry does not authorize calibration execution")
-    if entry.get("execution_directive_id") != "DIR-20260717-002":
+    if entry.get("execution_directive_id") != "DIR-20260717-003":
         raise RuntimeError("registry execution directive binding is unexpected")
     return entry
 
@@ -249,18 +250,17 @@ def main() -> int:
     oof[:, ~mask] = base_prediction[:, ~mask]
     oof_metrics = summary_metrics(truth, oof, means, stds, patients)
     stability = lambda_stability(nested["folds"])
-    pcc_delta = np.asarray([a["pcc"] - b["pcc"] for a, b in zip(oof_metrics["per_pathway"], baseline["per_pathway"])])
+    oof_pcc_delta = np.asarray([a["pcc"] - b["pcc"] for a, b in zip(oof_metrics["per_pathway"], baseline["per_pathway"])])
     internal_gate = {
         "lambda_stability": stability,
         "patient_balanced_z_mse_nonworse": oof_metrics["patient_balanced_z_mse"] <= baseline["patient_balanced_z_mse"] + 1e-12,
         "mean_per_pathway_raw_r2_improved": oof_metrics["mean_per_pathway_raw_r2"] > baseline["mean_per_pathway_raw_r2"] + 1e-12,
-        "pcc_max_abs_delta": float(np.nanmax(np.abs(pcc_delta))),
-        "pcc_invariant": bool(np.nanmax(np.abs(pcc_delta)) < 1e-10),
+        "oof_fold_heterogeneous_pcc_max_abs_delta": float(np.nanmax(np.abs(oof_pcc_delta))),
         "enabled_pathways": int(mask.sum()),
     }
     internal_gate["passed"] = bool(
         stability["passed"] and internal_gate["patient_balanced_z_mse_nonworse"] and
-        internal_gate["mean_per_pathway_raw_r2_improved"] and internal_gate["pcc_invariant"]
+        internal_gate["mean_per_pathway_raw_r2_improved"]
     )
     nested_payload = {
         "experiment_id": EXPERIMENT_ID,
@@ -278,6 +278,13 @@ def main() -> int:
     final_k, final_b, final_reasons = fit_all_pathways(truth, base_prediction, patients, final_lambda)
     final_k[~mask] = 1.0
     final_b[~mask] = 0.0
+    final_internal_prediction = base_prediction * final_k + final_b
+    final_pcc_invariance = frozen_calibrator_pcc_invariance(truth, base_prediction, final_internal_prediction)
+    internal_gate["final_frozen_pcc_max_abs_delta"] = final_pcc_invariance["max_abs_delta"]
+    internal_gate["final_frozen_pcc_invariant"] = final_pcc_invariance["invariant"]
+    write_json(output / "nested_lopo_metrics.json", nested_payload)
+    if not final_pcc_invariance["invariant"]:
+        raise RuntimeError("final frozen calibrator violated the per-pathway PCC invariance check")
     pathway_order_sha = canonical_sha256(pathway_order)
     provenance = {
         "experiment_id": EXPERIMENT_ID,
