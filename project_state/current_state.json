@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 82,
-  "updated_at": "2026-07-17T15:27:23+00:00",
-  "source_commit": "78089b019565ba2fceece0e9064fab502c99bd66",
+  "state_revision": 83,
+  "updated_at": "2026-07-17T16:07:20+00:00",
+  "source_commit": "502aeb8313f451692a4484b912eb3843cab7f7ac",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -86,8 +86,8 @@
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
   "source_hashes": {
-    "experiment_registry_sha256": "89d10af28cab5f48d341fb153c03e7cdfb1db22f6a261bacda7cae71bd927df5",
-    "experiment_dashboard_sha256": "f2962be4b0ac69b757fd3132956c1b2f0206c21215d30eedd3415087a5fd2697",
+    "experiment_registry_sha256": "4d6ec2919a52b91bf9927310da435e8bdf49a0be68a41a4c8cf9bdb3bec2c892",
+    "experiment_dashboard_sha256": "a70f091043dcf96a46474708a451731108f7a4c3acafe1699ab3dd4e507f39dd",
     "document_registry_sha256": "6bc807f2012690b8711ac2e503d709ee7309a0c101f6b8bc1a5b1dede50479e9",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "eeb5f05d5ced9d4900ebffc1af4307bf6cbab5fe8a708be1b1ae10b447597d9d",

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-17T15:15:38+00:00",
+  "updated_at": "2026-07-17T16:07:20+00:00",
   "current_mpp_policy": {
     "effective_date": "2026-07-09",
     "selected_mpp": 2,
@@ -1376,7 +1376,7 @@
     {
       "id": "mpp2_pathway_ridge_calibration_v001_20260717",
       "family": "mpp_posthoc_pathway_calibration",
-      "status": "execution_approved_pending_bound_replacement_job",
+      "status": "failed",
       "priority": "P0",
       "phase": "formal",
       "script": "scripts/fit_mpp2_pathway_ridge_calibration.py",
@@ -1427,8 +1427,8 @@
       "superseded_execution_directive_id": "DIR-20260717-002",
       "next_action": "validate gate-correction regression then create one bound replacement formal job manifest",
       "decision_gate": "DIR-20260717-003 authorizes exactly one replacement execution after r002's gate-semantic failure. Internal nested-LOPO must pass before calibrator freeze and external evaluation; fold-specific OOF PCC differences are diagnostic only, while PCC invariance is checked on the final single frozen calibrator. XZY must remain unread until that freeze is recorded.",
-      "evidence_status": "planned",
-      "provenance_complete": false,
+      "evidence_status": "rejected",
+      "provenance_complete": true,
       "supersedes_results": [],
       "prior_rejected_attempt": {
         "source_commit": "1cb75a33999dda9ed942107c068f8b5cdbc89a40",
@@ -1439,7 +1439,14 @@
         "imported_at": "2026-07-17T15:15:38+00:00",
         "result_phase": "formal",
         "reason": "fold-specific nested-LOPO OOF predictions were incorrectly subjected to the single-frozen-calibrator PCC invariance check; XZY was not read"
-      }
+      },
+      "source_commit": "f1a26fa71a37808f3515af87dd7e255a31144743",
+      "job_id": "mpp2-pathway-ridge-calibration-20260717-r003",
+      "result_id": "mpp2-pathway-ridge-calibration-20260717-r003-result-20260718000516-8f133e77",
+      "path_index_version": "1.0",
+      "result_manifest_sha256": "9fa873a5d857a6919f18aa20f76e5cb7fcca8120c41410bb3327f73ff622ef91",
+      "imported_at": "2026-07-17T16:07:20+00:00",
+      "result_phase": "formal"
     },
     {
       "id": "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
