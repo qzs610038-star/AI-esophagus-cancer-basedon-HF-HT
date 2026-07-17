@@ -1,10 +1,39 @@
 import numpy as np
+import subprocess
+import sys
+from pathlib import Path
 
+from scripts.fit_mpp2_pathway_ridge_calibration import parser
 from scripts.mpp2_pathway_ridge_calibration import (
     choose_lambda_one_se,
     fit_positive_affine,
     patient_balanced_mse,
 )
+
+
+def test_runner_accepts_launcher_num_threads_argument():
+    args = parser().parse_args([
+        "--splits_root", "splits",
+        "--manifest_labels_root", "labels",
+        "--cache_root", "cache",
+        "--flat_cache_root", "flat-cache",
+        "--head_checkpoint", "checkpoint.pth",
+        "--output_dir", "out",
+        "--num_threads", "8",
+    ])
+    assert args.num_threads == 8
+
+
+def test_runner_supports_direct_script_invocation_from_project_root():
+    root = Path(__file__).resolve().parents[1]
+    completed = subprocess.run(
+        [sys.executable, "scripts/fit_mpp2_pathway_ridge_calibration.py", "--help"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
 
 
 def test_positive_affine_recovers_known_patient_balanced_relation():

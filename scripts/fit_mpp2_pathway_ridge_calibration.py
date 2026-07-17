@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import shutil
+import sys
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -18,6 +19,10 @@ import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from dataset_mpp_manifest import ManifestMPPDataset, build_manifest_external, parse_xy
 from scripts.mpp2_pathway_ridge_calibration import (
@@ -34,7 +39,6 @@ from scripts.pfmval_state import active_mpp_repair, sha256_file, validate_state
 from train_mpp_uni2h_mlp import MPPMLPHead, resolve_manifest_data_roots
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
 EXPERIMENT_ID = "mpp2_pathway_ridge_calibration_v001_20260717"
 PATIENTS = ("HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ")
 EXPECTED_CHECKPOINT_SHA = "c69191d4a67939724988bc3656c3cd2e0b173d9c871456a5fb900ab446e86a98"
@@ -68,6 +72,8 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--output_dir", required=True)
     result.add_argument("--device", default="cuda")
     result.add_argument("--batch_size", type=int, default=64)
+    # deploy/run_experiment.ps1 appends this launcher-wide resource limit.
+    result.add_argument("--num_threads", type=int, default=8)
     return result
 
 
@@ -168,6 +174,9 @@ def spatial_bootstrap(truth: np.ndarray, base: np.ndarray, calibrated: np.ndarra
 
 def main() -> int:
     args = parser().parse_args()
+    if args.num_threads < 1:
+        raise ValueError("num_threads must be positive")
+    torch.set_num_threads(args.num_threads)
     entry = read_registry()
     report = validate_state(PROJECT_ROOT, strict=True, task="training", host_scope="server")
     report.emit()
