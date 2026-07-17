@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-17T12:19:30+00:00",
+  "updated_at": "2026-07-17T15:15:38+00:00",
   "current_mpp_policy": {
     "effective_date": "2026-07-09",
     "selected_mpp": 2,
@@ -1376,7 +1376,7 @@
     {
       "id": "mpp2_pathway_ridge_calibration_v001_20260717",
       "family": "mpp_posthoc_pathway_calibration",
-      "status": "execution_approved_pending_bound_job",
+      "status": "failed",
       "priority": "P0",
       "phase": "formal",
       "script": "scripts/fit_mpp2_pathway_ridge_calibration.py",
@@ -1387,8 +1387,8 @@
       "baseline_internal_validation": {
         "reference_val_loss": 0.374886,
         "reference_val_pcc": 0.797126,
-        "loss_tolerance": 0.00001,
-        "pcc_tolerance": 0.00001,
+        "loss_tolerance": 1e-05,
+        "pcc_tolerance": 1e-05,
         "source": "automation/results/mpp2-repair-v003-frozen-20260711-r002/attempt-003/training_history.csv epoch=15"
       },
       "mpp_train_id": 2,
@@ -1426,9 +1426,16 @@
       "created_at": "2026-07-17",
       "next_action": "implement_and_test_calibration_then_create_bound_formal_job_manifest",
       "decision_gate": "DIR-20260717-002 authorizes exactly one execution. Internal nested-LOPO must pass before calibrator freeze and external evaluation; XZY must remain unread until that freeze is recorded.",
-      "evidence_status": "planned",
-      "provenance_complete": false,
-      "supersedes_results": []
+      "evidence_status": "rejected",
+      "provenance_complete": true,
+      "supersedes_results": [],
+      "source_commit": "1cb75a33999dda9ed942107c068f8b5cdbc89a40",
+      "job_id": "mpp2-pathway-ridge-calibration-20260717-r002",
+      "result_id": "mpp2-pathway-ridge-calibration-20260717-r002-result-20260717230507-c56518a2",
+      "path_index_version": "1.0",
+      "result_manifest_sha256": "426d3982e340d73152b577ac54642239286a60efbd177a1d23d236284fb07674",
+      "imported_at": "2026-07-17T15:15:38+00:00",
+      "result_phase": "formal"
     },
     {
       "id": "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
