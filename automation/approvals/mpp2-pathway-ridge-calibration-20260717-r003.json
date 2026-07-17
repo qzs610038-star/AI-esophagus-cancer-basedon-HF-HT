@@ -1,0 +1,9 @@
+{
+  "approved": true,
+  "source": "explicit_user_instruction",
+  "directive_id": "DIR-20260717-003",
+  "job_id": "mpp2-pathway-ridge-calibration-20260717-r003",
+  "source_commit": "f1a26fa71a37808f3515af87dd7e255a31144743",
+  "approved_at": "2026-07-17T23:30:00+08:00",
+  "scope": "One replacement formal MPP2 epoch-15 pathway-wise Ridge calibration after the r002 PCC-gate semantic correction: fold-specific nested-LOPO OOF PCC is diagnostic only; final single frozen calibrator PCC invariance remains mandatory; internal-only fitting and freeze before one XZY evaluation; Gitee-only return."
+}

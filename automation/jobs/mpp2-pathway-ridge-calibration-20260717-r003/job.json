@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "job_id": "mpp2-pathway-ridge-calibration-20260717-r003",
+  "experiment_id": "mpp2_pathway_ridge_calibration_v001_20260717",
+  "source_commit": "f1a26fa71a37808f3515af87dd7e255a31144743",
+  "state_revision": 82,
+  "phase": "formal",
+  "command_id": "mpp_pathway_ridge_calibration",
+  "path_ids": [
+    "mpp_standard_splits",
+    "server_mpp_partner_cache",
+    "server_mpp_flat_cache",
+    "server_mpp_results",
+    "server_mpp2_frozen_baseline_checkpoint"
+  ],
+  "parameters": {},
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "path_index_version": "1.0",
+  "created_at": "2026-07-17T15:28:47+00:00",
+  "dispatch_branch": "automation/local/mpp2-pathway-ridge-calibration-20260717-r003",
+  "result_branch": "automation/server/mpp2-pathway-ridge-calibration-20260717-r003",
+  "formal_training_approval": {
+    "approved": true,
+    "source": "explicit_user_instruction",
+    "directive_id": "DIR-20260717-003",
+    "job_id": "mpp2-pathway-ridge-calibration-20260717-r003",
+    "source_commit": "f1a26fa71a37808f3515af87dd7e255a31144743",
+    "approved_at": "2026-07-17T23:30:00+08:00",
+    "scope": "One replacement formal MPP2 epoch-15 pathway-wise Ridge calibration after the r002 PCC-gate semantic correction: fold-specific nested-LOPO OOF PCC is diagnostic only; final single frozen calibrator PCC invariance remains mandatory; internal-only fitting and freeze before one XZY evaluation; Gitee-only return."
+  },
+  "artifact_policy": {
+    "max_file_bytes": 20971520,
+    "max_total_bytes": 52428800,
+    "large_artifacts": "server_path_size_sha256_only"
+  }
+}
