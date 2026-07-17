@@ -21,20 +21,30 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.pfmval_state import (  # noqa: E402
+    DIAGNOSTIC_COMMANDS,
     activate_mpp_repair_evidence,
     active_mpp_repair,
     append_directive,
     build_mpp_path_index,
     build_result_envelope,
+    create_diagnostic_request,
+    create_exploration_session,
+    directive_lifecycle_candidates,
     create_job_manifest,
     import_mpp_repair_evidence_from_git,
     import_result_bundle,
+    exploration_cleanup_candidates,
+    list_exploration_sessions,
     migrate_experiment_provenance,
+    promote_exploration_script,
+    record_diagnostic_outputs,
     read_json,
     safe_job_parameters,
     scan_documents,
     state_lock,
     sync_state,
+    transition_directive,
+    validate_diagnostic_state,
     validate_job_manifest,
     validate_server_paths,
     validate_state,
@@ -149,6 +159,25 @@ def bound_job_parameter_argv(work_root: Path, manifest: Dict[str, Any], experime
             )),
             "output_root": str(get_registered_path("server_mpp_results", registry_path=registry_path, project_root=work_root)),
         })
+    elif script.endswith("scripts/fit_mpp2_pathway_ridge_calibration.py"):
+        repair = active_mpp_repair(work_root)
+        if repair is None:
+            raise ValueError("MPP2 pathway Ridge calibration requires active repaired-label evidence")
+        if manifest.get("data_manifest_id") != repair.get("data_manifest_id"):
+            raise ValueError(
+                "MPP2 pathway Ridge calibration data_manifest_id does not match active repaired labels: "
+                f"job={manifest.get('data_manifest_id')} active={repair.get('data_manifest_id')}"
+            )
+        registry_path = work_root / "configs" / "server_paths.yaml"
+        result_root = get_registered_path("server_mpp_results", registry_path=registry_path, project_root=work_root)
+        parameters.update({
+            "splits_root": str((work_root / "mpp_standard_splits").resolve()),
+            "manifest_labels_root": str(repair["server_stage_path"]),
+            "cache_root": str(get_registered_path("server_mpp_partner_cache", registry_path=registry_path, project_root=work_root)),
+            "flat_cache_root": str(get_registered_path("server_mpp_flat_cache", registry_path=registry_path, project_root=work_root)),
+            "head_checkpoint": str(get_registered_path("server_mpp2_frozen_baseline_checkpoint", registry_path=registry_path, project_root=work_root)),
+            "output_dir": str(result_root / manifest["job_id"]),
+        })
     elif script.endswith("scripts/check_mpp_online_cache_parity.py"):
         repair = active_mpp_repair(work_root)
         if repair is None:
@@ -185,9 +214,30 @@ def command_state(args: argparse.Namespace) -> int:
                 topic=args.topic,
                 supersedes=args.supersedes,
                 affected_files=args.affected_file,
+                related_experiment_ids=args.related_experiment_id,
+                review_after=args.review_after,
+                completion_evidence=args.completion_evidence,
             )
             state = sync_state(PROJECT_ROOT, force_revision=True)
         print(f"[PASS] recorded {directive_id}; state_revision={state['state_revision']}")
+        return 0
+    if args.state_command == "directives":
+        candidates = directive_lifecycle_candidates(PROJECT_ROOT, older_than_days=args.older_than_days)
+        print(json.dumps(candidates, ensure_ascii=False, indent=2))
+        print("[INFO] Review-only output; no directive status was changed.")
+        return 0
+    if args.state_command == "directive":
+        with state_lock(PROJECT_ROOT):
+            event = transition_directive(
+                PROJECT_ROOT,
+                directive_id=args.directive_id,
+                status=args.status,
+                reason=args.reason,
+                completion_evidence=args.evidence_ref,
+                superseded_by=args.superseded_by,
+            )
+            state = sync_state(PROJECT_ROOT, force_revision=True)
+        print(f"[PASS] transitioned {event['directive_id']} to {event['status']}; state_revision={state['state_revision']}")
         return 0
     if args.state_command == "sync":
         with state_lock(PROJECT_ROOT):
@@ -282,6 +332,14 @@ def command_mpp(args: argparse.Namespace) -> int:
 
 
 def command_agent(args: argparse.Namespace) -> int:
+    if args.task == "diagnostic":
+        report = validate_diagnostic_state(PROJECT_ROOT)
+        report.emit()
+        if not report.ok:
+            print("[BLOCKED] Resolve diagnostic safety-boundary failures before continuing.")
+            return 1
+        print("[PASS] Diagnostic start gate passed. Only allowlisted, non-evidence diagnostics are permitted.")
+        return 0
     action = "general" if args.task == "server" else args.task
     host_scope = args.host_scope or ("server" if args.task == "server" else "local")
     report = validate_state(
@@ -298,12 +356,59 @@ def command_agent(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_diagnostic(args: argparse.Namespace) -> int:
+    if args.diagnostic_command == "request":
+        request_path = create_diagnostic_request(
+            PROJECT_ROOT,
+            diagnostic_id=args.diagnostic_id,
+            source_commit=args.source_commit,
+            command_id=args.command_id,
+            source_branch=args.source_branch,
+            return_branch=args.return_branch,
+        )
+        print(f"[PASS] wrote non-evidence diagnostic request: {request_path}")
+        print("[INFO] Push the request through Gitee; no server command was executed.")
+        return 0
+    if args.diagnostic_command == "record":
+        event = record_diagnostic_outputs(
+            PROJECT_ROOT, diagnostic_id=args.diagnostic_id, outputs=args.output,
+        )
+        print(json.dumps(event, ensure_ascii=False, indent=2))
+        print("[PASS] recorded non-evidence diagnostic output hashes.")
+        return 0
+    raise ValueError(f"unknown diagnostic command: {args.diagnostic_command}")
+
+
+def command_explore(args: argparse.Namespace) -> int:
+    if args.explore_command == "new":
+        manifest_path = create_exploration_session(PROJECT_ROOT, session_id=args.session_id, purpose=args.purpose)
+        print(f"[PASS] created local-only exploration session: {manifest_path}")
+        return 0
+    if args.explore_command == "list":
+        sessions = list_exploration_sessions(PROJECT_ROOT)
+        print(json.dumps(sessions, ensure_ascii=False, indent=2))
+        return 0
+    if args.explore_command == "candidates":
+        candidates = exploration_cleanup_candidates(PROJECT_ROOT, older_than_days=args.older_than_days)
+        print(json.dumps(candidates, ensure_ascii=False, indent=2))
+        print("[INFO] Review-only output; no files were deleted.")
+        return 0
+    if args.explore_command == "promote":
+        target_path = promote_exploration_script(
+            PROJECT_ROOT, source=args.script, target=args.target, directive_id=args.directive,
+        )
+        print(f"[PASS] wrote promotion candidate: {target_path}")
+        print("[INFO] Register an experiment and dispatch smoke/formal separately; this is not evidence.")
+        return 0
+    raise ValueError(f"unknown explore command: {args.explore_command}")
+
+
 def command_job(args: argparse.Namespace) -> int:
     if args.job_command == "dispatch":
         parameters = parse_key_values(args.param)
         registry = read_json(PROJECT_ROOT / "experiments" / "experiment_registry.json")
         experiment = next((item for item in registry["experiments"] if item["id"] == args.experiment_id), None)
-        is_mpp_task = args.command_id in {"cache_parity", "standard_training"} and experiment and (
+        is_mpp_task = args.command_id in {"cache_parity", "standard_training", "mpp_pathway_ridge_calibration"} and experiment and (
             str(experiment.get("family", "")).startswith("mpp") or "mpp" in str(experiment.get("script", "")).lower()
         )
         report = validate_state(
@@ -349,7 +454,7 @@ def command_job(args: argparse.Namespace) -> int:
             raise ValueError("job state_revision does not match the pinned source commit")
         registry = read_json(work_root / "experiments" / "experiment_registry.json")
         experiment = next(item for item in registry["experiments"] if item["id"] == manifest["experiment_id"])
-        is_mpp_task = manifest["command_id"] in {"cache_parity", "standard_training"} and (
+        is_mpp_task = manifest["command_id"] in {"cache_parity", "standard_training", "mpp_pathway_ridge_calibration"} and (
             str(experiment.get("family", "")).startswith("mpp") or "mpp" in str(experiment.get("script", "")).lower()
         )
         report = validate_state(
@@ -430,6 +535,20 @@ def build_parser() -> argparse.ArgumentParser:
     record.add_argument("--topic", required=True)
     record.add_argument("--supersedes", action="append", default=[])
     record.add_argument("--affected-file", action="append", default=[])
+    record.add_argument("--related-experiment-id", action="append", default=[])
+    record.add_argument("--review-after")
+    record.add_argument("--completion-evidence", action="append", default=[])
+    directives = state_sub.add_parser("directives")
+    directives.add_argument("--check-stale", action="store_true", required=True)
+    directives.add_argument("--older-than-days", type=int, default=14)
+    directive = state_sub.add_parser("directive")
+    directive_sub = directive.add_subparsers(dest="directive_command", required=True)
+    transition = directive_sub.add_parser("transition")
+    transition.add_argument("--id", dest="directive_id", required=True)
+    transition.add_argument("--status", choices=["completed", "superseded", "cancelled"], required=True)
+    transition.add_argument("--reason", required=True)
+    transition.add_argument("--evidence-ref", action="append", default=[])
+    transition.add_argument("--superseded-by")
     sync = state_sub.add_parser("sync")
     sync.add_argument("--force-revision", action="store_true")
     state_sub.add_parser("migrate", help="one-time initial migration of provenance and document lifecycle")
@@ -472,8 +591,33 @@ def build_parser() -> argparse.ArgumentParser:
     agent_sub = agent.add_subparsers(dest="agent_command", required=True)
     start = agent_sub.add_parser("start-check")
     start.add_argument("--strict", action="store_true")
-    start.add_argument("--task", choices=["general", "server", "training"], default="general")
+    start.add_argument("--task", choices=["general", "server", "training", "diagnostic"], default="general")
     start.add_argument("--host-scope", choices=["local", "server"], default=None)
+
+    diagnostic = sub.add_parser("diagnostic")
+    diagnostic_sub = diagnostic.add_subparsers(dest="diagnostic_command", required=True)
+    diagnostic_request = diagnostic_sub.add_parser("request")
+    diagnostic_request.add_argument("--diagnostic-id", required=True)
+    diagnostic_request.add_argument("--source-commit", required=True)
+    diagnostic_request.add_argument("--source-branch", required=True)
+    diagnostic_request.add_argument("--return-branch", default="automation/diagnostics")
+    diagnostic_request.add_argument("--command-id", choices=sorted(DIAGNOSTIC_COMMANDS), required=True)
+    diagnostic_record = diagnostic_sub.add_parser("record")
+    diagnostic_record.add_argument("--diagnostic-id", required=True)
+    diagnostic_record.add_argument("--output", action="append", required=True)
+
+    explore = sub.add_parser("explore")
+    explore_sub = explore.add_subparsers(dest="explore_command", required=True)
+    explore_new = explore_sub.add_parser("new")
+    explore_new.add_argument("--session-id", required=True)
+    explore_new.add_argument("--purpose", required=True)
+    explore_sub.add_parser("list")
+    explore_candidates = explore_sub.add_parser("candidates")
+    explore_candidates.add_argument("--older-than-days", type=int, default=30)
+    explore_promote = explore_sub.add_parser("promote")
+    explore_promote.add_argument("--script", required=True)
+    explore_promote.add_argument("--target", required=True)
+    explore_promote.add_argument("--directive", required=True)
 
     job = sub.add_parser("job")
     job_sub = job.add_subparsers(dest="job_command", required=True)
@@ -481,7 +625,7 @@ def build_parser() -> argparse.ArgumentParser:
     dispatch.add_argument("--job-id", required=True)
     dispatch.add_argument("--experiment-id", required=True)
     dispatch.add_argument("--phase", choices=["preflight", "smoke", "formal"], required=True)
-    dispatch.add_argument("--command-id", choices=["state_preflight", "cache_parity", "standard_training"], required=True)
+    dispatch.add_argument("--command-id", choices=["state_preflight", "cache_parity", "standard_training", "mpp_pathway_ridge_calibration"], required=True)
     dispatch.add_argument("--path-id", action="append", default=[])
     dispatch.add_argument("--param", action="append", default=[])
     dispatch.add_argument("--approval")
@@ -521,6 +665,10 @@ def main() -> int:
             return command_mpp(args)
         if args.command == "agent":
             return command_agent(args)
+        if args.command == "diagnostic":
+            return command_diagnostic(args)
+        if args.command == "explore":
+            return command_explore(args)
         if args.command == "job":
             return command_job(args)
         raise ValueError(f"unknown command: {args.command}")

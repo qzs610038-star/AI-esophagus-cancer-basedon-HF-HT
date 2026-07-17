@@ -68,6 +68,15 @@ MPP_TRAINING_ALLOWED_PARAMETERS = {
     "patience",
     "min_delta",
 }
+
+DIAGNOSTIC_COMMANDS = {
+    "python_help": "Display allowlisted tool help only.",
+    "environment_probe": "Collect interpreter, CUDA and disk environment metadata.",
+    "path_probe": "Verify configured registered paths without changing them.",
+    "cache_probe": "Inspect cache presence and readability without regeneration.",
+    "dry_run": "Run an allowlisted command in dry-run mode only.",
+    "single_batch_forward": "Run one non-training forward pass with no checkpoint selection.",
+}
 MPP_CACHE_PARITY_PATH_IDS = {
     "mpp_data_root",
     "mpp_standard_splits",
@@ -127,6 +136,22 @@ MPP_LORA_ALLOWED_PARAMETERS = {
     "hidden_dim",
     "dropout",
 }
+MPP_PATHWAY_CALIBRATION_PATH_IDS = {
+    "mpp_standard_splits",
+    "server_mpp_partner_cache",
+    "server_mpp_flat_cache",
+    "server_mpp_results",
+    "server_mpp2_frozen_baseline_checkpoint",
+}
+MPP_PATHWAY_CALIBRATION_PATH_PARAMETERS = {
+    "splits_root",
+    "manifest_labels_root",
+    "cache_root",
+    "flat_cache_root",
+    "head_checkpoint",
+    "output_dir",
+}
+MPP_PATHWAY_CALIBRATION_ALLOWED_PARAMETERS: set[str] = set()
 ALLOWED_RESULT_FILES = {
     "training_history.csv",
     "training_summary.txt",
@@ -139,6 +164,18 @@ ALLOWED_RESULT_FILES = {
     "stderr_tail.txt.gz",
     "stdout_tail.txt",
     "stdout_tail.txt.gz",
+    "calibrator.json",
+    "nested_lopo_metrics.json",
+    "pathway_decisions.csv",
+    "pathway_order.json",
+    "zscore_params_from_train.json",
+    "model_provenance.json",
+    "sha256_manifest.json",
+    "README_PHASE3_INPUT_CONTRACT.md",
+    "predictions_internal_val_base.csv",
+    "predictions_external_xzy.csv",
+    "per_pathway_metrics.csv",
+    "spatial_sensitivity.json",
 }
 
 
@@ -234,6 +271,277 @@ def git_commit_exists(root: Path, commit: str) -> bool:
         return True
     except (OSError, subprocess.CalledProcessError):
         return False
+
+
+def _safe_branch_name(value: str, *, field: str) -> str:
+    branch = value.strip()
+    if (
+        not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]*", branch)
+        or ".." in branch
+        or "//" in branch
+        or "@{" in branch
+        or branch.endswith((".", "/", ".lock"))
+    ):
+        raise ValueError(f"unsafe {field}: {value}")
+    return branch
+
+
+def _append_jsonl_event(path: Path, event: Mapping[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(dict(event), ensure_ascii=False, separators=(",", ":")) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def create_diagnostic_request(
+    root: Path,
+    *,
+    diagnostic_id: str,
+    source_commit: str,
+    command_id: str,
+    source_branch: str,
+    return_branch: str,
+) -> Path:
+    """Create a non-executable, allowlisted diagnostic request and audit event.
+
+    A server-side runner may interpret only ``command_id``.  The request has no
+    arbitrary command text, experiment ID or training parameters by design.
+    """
+    if not re.fullmatch(r"diagnostic-[0-9]{8}-[A-Za-z0-9_.-]+", diagnostic_id):
+        raise ValueError("diagnostic_id must match diagnostic-YYYYMMDD-name")
+    if command_id not in DIAGNOSTIC_COMMANDS:
+        raise ValueError(f"diagnostic command is not allowlisted: {command_id}")
+    if not re.fullmatch(r"[0-9a-fA-F]{7,40}", source_commit) or not git_commit_exists(root, source_commit):
+        raise ValueError("diagnostic source_commit must name an existing local Git commit")
+    source_branch = _safe_branch_name(source_branch, field="source_branch")
+    return_branch = _safe_branch_name(return_branch, field="return_branch")
+    if not return_branch.startswith("automation/diagnostics"):
+        raise ValueError("diagnostic return_branch must be rooted at automation/diagnostics")
+
+    report = validate_diagnostic_state(root)
+    if not report.ok:
+        raise ValueError("diagnostic request blocked by safety-boundary validation: " + "; ".join(report.fail_items))
+    request_dir = root / "automation" / "diagnostics" / diagnostic_id
+    request_path = request_dir / "request.json"
+    if request_path.exists():
+        raise ValueError(f"diagnostic request already exists: {normalize_rel(request_path.relative_to(root))}")
+    request = {
+        "schema_version": SCHEMA_VERSION,
+        "diagnostic_id": diagnostic_id,
+        "created_at": utc_now(),
+        "source_commit": source_commit,
+        "source_branch": source_branch,
+        "return_branch": return_branch,
+        "command_id": command_id,
+        "command_description": DIAGNOSTIC_COMMANDS[command_id],
+        "execution_contract": {
+            "arbitrary_shell": False,
+            "training": False,
+            "experiment_registry_write": False,
+            "current_state_write": False,
+            "protected_asset_write": False,
+            "result_import": False,
+            "output_root": normalize_rel(request_dir.relative_to(root)),
+        },
+    }
+    write_json_atomic(request_path, request)
+    _append_jsonl_event(root / "project_state" / "diagnostics.jsonl", {
+        "event_type": "diagnostic_request",
+        "diagnostic_id": diagnostic_id,
+        "recorded_at": utc_now(),
+        "source_commit": source_commit,
+        "source_branch": source_branch,
+        "return_branch": return_branch,
+        "command_id": command_id,
+        "request_path": normalize_rel(request_path.relative_to(root)),
+    })
+    return request_path
+
+
+def _safe_project_relative_path(root: Path, value: str, *, field: str) -> Path:
+    normalized = normalize_rel(value).strip("/")
+    relative = PurePosixPath(normalized)
+    if not normalized or relative.is_absolute() or ".." in relative.parts:
+        raise ValueError(f"unsafe {field}: {value}")
+    candidate = (root / Path(*relative.parts)).resolve()
+    if not candidate.is_relative_to(root.resolve()):
+        raise ValueError(f"{field} escapes project root: {value}")
+    return candidate
+
+
+def _read_jsonl_events(path: Path) -> List[Dict[str, Any]]:
+    if not path.exists():
+        return []
+    events: List[Dict[str, Any]] = []
+    for line_number, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not raw.strip():
+            continue
+        try:
+            event = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"invalid JSONL at {path}:{line_number}: {exc}") from exc
+        if not isinstance(event, dict):
+            raise ValueError(f"JSONL event must be an object at {path}:{line_number}")
+        events.append(event)
+    return events
+
+
+def create_exploration_session(root: Path, *, session_id: str, purpose: str) -> Path:
+    if not re.fullmatch(r"explore-[0-9]{8}-[A-Za-z0-9_.-]+", session_id):
+        raise ValueError("session_id must match explore-YYYYMMDD-name")
+    if not purpose.strip():
+        raise ValueError("exploration purpose must not be empty")
+    output_dir = root / "experiments" / "explorations" / session_id
+    manifest_path = output_dir / "manifest.json"
+    if output_dir.exists():
+        raise ValueError(f"exploration session already exists: {normalize_rel(output_dir.relative_to(root))}")
+    manifest = {
+        "schema_version": SCHEMA_VERSION,
+        "session_id": session_id,
+        "created_at": utc_now(),
+        "purpose": purpose.strip(),
+        "scope": "local_explore_only",
+        "restrictions": {
+            "server_execution": False,
+            "training_data": False,
+            "comparable_metrics": False,
+            "experiment_registry_write": False,
+            "protected_asset_write": False,
+        },
+    }
+    write_json_atomic(manifest_path, manifest)
+    _append_jsonl_event(root / "project_state" / "exploration_log.jsonl", {
+        "event_type": "exploration_created",
+        "session_id": session_id,
+        "recorded_at": utc_now(),
+        "purpose": purpose.strip(),
+        "manifest_path": normalize_rel(manifest_path.relative_to(root)),
+    })
+    return manifest_path
+
+
+def record_diagnostic_outputs(
+    root: Path,
+    *,
+    diagnostic_id: str,
+    outputs: Sequence[str],
+) -> Dict[str, Any]:
+    if not re.fullmatch(r"diagnostic-[0-9]{8}-[A-Za-z0-9_.-]+", diagnostic_id):
+        raise ValueError("diagnostic_id must match diagnostic-YYYYMMDD-name")
+    request_dir = (root / "automation" / "diagnostics" / diagnostic_id).resolve()
+    request_path = request_dir / "request.json"
+    if not request_path.is_file():
+        raise ValueError(f"diagnostic request is missing: {normalize_rel(request_path.relative_to(root))}")
+    request = read_json(request_path)
+    if request.get("diagnostic_id") != diagnostic_id or request.get("command_id") not in DIAGNOSTIC_COMMANDS:
+        raise ValueError("diagnostic request is malformed or not allowlisted")
+    if not outputs:
+        raise ValueError("diagnostic completion requires at least one output file")
+    artifacts: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    for raw_output in outputs:
+        output_path = _safe_project_relative_path(root, raw_output, field="diagnostic output")
+        if not output_path.is_relative_to(request_dir) or output_path == request_path:
+            raise ValueError("diagnostic output must be a returned file beneath its diagnostic output root")
+        if not output_path.is_file():
+            raise ValueError(f"diagnostic output is missing: {raw_output}")
+        relative = normalize_rel(output_path.relative_to(root))
+        if relative in seen:
+            raise ValueError(f"duplicate diagnostic output: {relative}")
+        seen.add(relative)
+        size_bytes = output_path.stat().st_size
+        if size_bytes > MAX_RESULT_FILE_BYTES:
+            raise ValueError(f"diagnostic output exceeds {MAX_RESULT_FILE_BYTES} bytes: {relative}")
+        artifacts.append({"path": relative, "size_bytes": size_bytes, "sha256": sha256_file(output_path)})
+    event = {
+        "event_type": "diagnostic_completed",
+        "diagnostic_id": diagnostic_id,
+        "recorded_at": utc_now(),
+        "source_commit": request["source_commit"],
+        "command_id": request["command_id"],
+        "server_write": False,
+        "outputs": artifacts,
+    }
+    _append_jsonl_event(root / "project_state" / "diagnostics.jsonl", event)
+    return event
+
+
+def list_exploration_sessions(root: Path) -> List[Dict[str, Any]]:
+    sessions: Dict[str, Dict[str, Any]] = {}
+    for event in _read_jsonl_events(root / "project_state" / "exploration_log.jsonl"):
+        session_id = event.get("session_id")
+        if not session_id:
+            continue
+        current = sessions.setdefault(str(session_id), {"session_id": str(session_id), "status": "unknown"})
+        current.update(event)
+        if event.get("event_type") == "exploration_created":
+            current["status"] = "active"
+        elif event.get("event_type") == "exploration_promoted":
+            current["status"] = "promoted"
+    return [sessions[key] for key in sorted(sessions)]
+
+
+def exploration_cleanup_candidates(root: Path, *, older_than_days: int) -> List[Dict[str, Any]]:
+    if older_than_days < 1:
+        raise ValueError("older_than_days must be at least 1")
+    now = datetime.now(timezone.utc)
+    candidates: List[Dict[str, Any]] = []
+    for session in list_exploration_sessions(root):
+        if session.get("status") != "active":
+            continue
+        try:
+            created_at = datetime.fromisoformat(str(session["recorded_at"]).replace("Z", "+00:00"))
+        except (KeyError, ValueError):
+            continue
+        age_days = (now - created_at.astimezone(timezone.utc)).days
+        if age_days >= older_than_days:
+            candidates.append({
+                "session_id": session["session_id"],
+                "age_days": age_days,
+                "manifest_path": session.get("manifest_path"),
+                "action": "review_only_no_deletion",
+            })
+    return candidates
+
+
+def promote_exploration_script(
+    root: Path,
+    *,
+    source: str,
+    target: str,
+    directive_id: str,
+) -> Path:
+    directives = active_directives(root)
+    if directive_id not in directives:
+        raise ValueError("exploration promotion requires an active explicit directive")
+    source_path = _safe_project_relative_path(root, source, field="exploration source")
+    target_path = _safe_project_relative_path(root, target, field="promotion target")
+    exploration_root = (root / "scripts" / "explorations").resolve()
+    scripts_root = (root / "scripts").resolve()
+    if not source_path.is_relative_to(exploration_root):
+        raise ValueError("exploration source must be under scripts/explorations")
+    if not target_path.is_relative_to(scripts_root) or target_path.is_relative_to(exploration_root):
+        raise ValueError("promotion target must be under scripts/ but outside scripts/explorations")
+    if not source_path.is_file():
+        raise ValueError(f"exploration source is missing: {source}")
+    if target_path.exists():
+        raise ValueError(f"promotion target already exists: {target}")
+    source_text = source_path.read_text(encoding="utf-8")
+    if "PFMVAL_EXPLORE" not in source_text:
+        raise ValueError("exploration source lacks required PFMVAL_EXPLORE marker")
+    target_text = "\n".join(line for line in source_text.splitlines() if "PFMVAL_EXPLORE" not in line) + "\n"
+    write_text_atomic(target_path, target_text)
+    _append_jsonl_event(root / "project_state" / "exploration_log.jsonl", {
+        "event_type": "exploration_promoted",
+        "session_id": None,
+        "recorded_at": utc_now(),
+        "directive_id": directive_id,
+        "source": normalize_rel(source_path.relative_to(root)),
+        "target": normalize_rel(target_path.relative_to(root)),
+        "note": "candidate_only_requires_commit_registry_and_smoke_or_formal_dispatch",
+    })
+    return target_path
 
 
 def git_tracked_changes(root: Path) -> bool:
@@ -675,6 +983,9 @@ def fold_directives(events: Sequence[Mapping[str, Any]]) -> Dict[str, Dict[str, 
                 superseded_by[str(old_id)] = directive_id
         else:
             directives[directive_id]["status"] = event["status"]
+            for field in ("changed_at", "reason", "completion_evidence"):
+                if field in event:
+                    directives[directive_id][field] = event[field]
             if event.get("superseded_by"):
                 superseded_by[directive_id] = str(event["superseded_by"])
     for old_id, new_id in superseded_by.items():
@@ -708,6 +1019,9 @@ def append_directive(
     topic: str,
     supersedes: Sequence[str],
     affected_files: Sequence[str],
+    related_experiment_ids: Sequence[str] = (),
+    review_after: Optional[str] = None,
+    completion_evidence: Sequence[str] = (),
 ) -> str:
     events = read_directive_events(root)
     folded = fold_directives(events)
@@ -734,6 +1048,16 @@ def append_directive(
         "affected_files": [normalize_rel(item) for item in affected_files],
         "source": "explicit_user_instruction",
     }
+    if review_after:
+        try:
+            datetime.fromisoformat(review_after.replace("Z", "+00:00"))
+        except ValueError as exc:
+            raise ValueError("review_after must be an ISO-8601 date or datetime") from exc
+        new_event["review_after"] = review_after
+    if related_experiment_ids:
+        new_event["related_experiment_ids"] = [str(item).strip() for item in related_experiment_ids if str(item).strip()]
+    if completion_evidence:
+        new_event["completion_evidence"] = [str(item).strip() for item in completion_evidence if str(item).strip()]
     append_events: List[Dict[str, Any]] = []
     for old_id in supersedes:
         append_events.append({
@@ -751,6 +1075,91 @@ def append_directive(
         handle.flush()
         os.fsync(handle.fileno())
     return directive_id
+
+
+def transition_directive(
+    root: Path,
+    *,
+    directive_id: str,
+    status: str,
+    reason: str,
+    completion_evidence: Sequence[str] = (),
+    superseded_by: Optional[str] = None,
+) -> Dict[str, Any]:
+    if status not in {"completed", "superseded", "cancelled"}:
+        raise ValueError("directive transition status must be completed, superseded or cancelled")
+    if not reason.strip():
+        raise ValueError("directive transition requires a reason")
+    events = read_directive_events(root)
+    directives = fold_directives(events)
+    directive = directives.get(directive_id)
+    if directive is None:
+        raise ValueError(f"unknown directive: {directive_id}")
+    if directive.get("status") != "active":
+        raise ValueError(f"only active directives can transition: {directive_id}")
+    event: Dict[str, Any] = {
+        "event_type": "status_update",
+        "directive_id": directive_id,
+        "status": status,
+        "changed_at": utc_now(),
+        "reason": reason.strip(),
+        "source": "explicit_user_instruction",
+    }
+    if completion_evidence:
+        event["completion_evidence"] = [str(item).strip() for item in completion_evidence if str(item).strip()]
+    if status == "superseded":
+        if not superseded_by or superseded_by == directive_id or superseded_by not in directives:
+            raise ValueError("superseded transition requires another existing directive via superseded_by")
+        event["superseded_by"] = superseded_by
+    elif superseded_by:
+        raise ValueError("superseded_by is only valid for a superseded transition")
+    _append_jsonl_event(root / "project_state" / "directives.jsonl", event)
+    return event
+
+
+def directive_lifecycle_candidates(root: Path, *, older_than_days: int) -> List[Dict[str, Any]]:
+    """Return review candidates only; this function never changes directive status."""
+    if older_than_days < 1:
+        raise ValueError("older_than_days must be at least 1")
+    now = datetime.now(timezone.utc)
+    experiments = {
+        str(item.get("id")): item
+        for item in read_json(root / "experiments" / "experiment_registry.json").get("experiments", [])
+        if item.get("id")
+    }
+    terminal_statuses = {"completed", "closed", "done", "failed", "cancelled", "rejected"}
+    candidates: List[Dict[str, Any]] = []
+    for directive_id, directive in active_directives(root).items():
+        reasons: List[str] = []
+        try:
+            issued_at = datetime.fromisoformat(str(directive["issued_at"]).replace("Z", "+00:00"))
+            if (now - issued_at.astimezone(timezone.utc)).days >= older_than_days:
+                reasons.append("age_threshold")
+        except (KeyError, ValueError):
+            reasons.append("issued_at_unparseable")
+        review_after = directive.get("review_after")
+        if review_after:
+            try:
+                review_at = datetime.fromisoformat(str(review_after).replace("Z", "+00:00"))
+                if review_at.astimezone(timezone.utc) <= now:
+                    reasons.append("review_after_due")
+            except ValueError:
+                reasons.append("review_after_unparseable")
+        related_ids = [str(item) for item in directive.get("related_experiment_ids", [])]
+        if related_ids and all(
+            experiment_id in experiments and str(experiments[experiment_id].get("status", "")).lower() in terminal_statuses
+            for experiment_id in related_ids
+        ):
+            reasons.append("related_experiments_terminal")
+        if reasons:
+            candidates.append({
+                "directive_id": directive_id,
+                "reasons": reasons,
+                "review_after": review_after,
+                "related_experiment_ids": related_ids,
+                "action": "review_only_no_automatic_transition",
+            })
+    return candidates
 
 
 def _stable_doc_id(path: str) -> str:
@@ -1584,6 +1993,98 @@ def validate_state(
     return report
 
 
+def validate_diagnostic_state(root: Path) -> ValidationReport:
+    """Validate only the safety boundary required for a non-evidence diagnostic.
+
+    This deliberately does not call :func:`validate_state`: document freshness,
+    experiment provenance and MPP training-path checks are not prerequisites for
+    a read-only, allowlisted server diagnostic.  It still treats unreadable state,
+    invalid schemas, unfinished transactions and non-Gitee transport as blockers.
+    """
+    report = ValidationReport()
+    try:
+        state = read_json(root / "project_state" / "current_state.json")
+        documents = read_json(root / "project_state" / "document_registry.json")
+        events = read_directive_events(root)
+        directives = fold_directives(events)
+    except Exception as exc:
+        report.fail(f"diagnostic state package unreadable: {exc}")
+        return report
+
+    schema_root = root / "project_state" / "schemas"
+    try:
+        checked = (
+            validate_against_schema(state, schema_root / "current_state.schema.json", "current_state")
+            and validate_against_schema(documents, schema_root / "document_registry.schema.json", "document_registry")
+            and all(
+                validate_against_schema(event, schema_root / "directives.schema.json", f"directive event {index}")
+                for index, event in enumerate(events, 1)
+            )
+        )
+        if checked:
+            report.passed("diagnostic state schemas validate")
+        else:
+            report.warn("jsonschema package unavailable; diagnostic state uses manual validation")
+    except (FileNotFoundError, ValueError) as exc:
+        report.fail(str(exc))
+
+    required = {
+        "schema_version", "state_revision", "updated_at", "source_commit", "active_directive_ids",
+        "active_plans", "server_transport", "active_training_jobs", "pending_result_ids",
+        "latest_accepted_result_ids", "blocked_actions", "superseded_conclusions", "source_hashes",
+    }
+    missing = sorted(required - set(state))
+    if missing:
+        report.fail(f"current_state missing fields: {', '.join(missing)}")
+    elif state.get("schema_version") != SCHEMA_VERSION:
+        report.fail("current_state schema_version must be 1.0")
+    else:
+        report.passed("diagnostic current_state required fields")
+
+    if state.get("active_directive_ids") != [directive_id for directive_id, value in directives.items() if value.get("status") == "active"]:
+        report.fail("current_state active_directive_ids does not match folded directive log")
+    else:
+        report.passed("diagnostic directive index matches append-only log")
+
+    topics: Dict[Tuple[str, str], List[str]] = {}
+    for directive_id, directive in directives.items():
+        if directive.get("status") == "active":
+            topics.setdefault((str(directive.get("scope", "")), str(directive.get("topic", ""))), []).append(directive_id)
+    conflicts = {key: ids for key, ids in topics.items() if len(ids) > 1}
+    if conflicts:
+        report.fail(f"unresolved active directive conflicts: {conflicts}")
+
+    transport = state.get("server_transport", {})
+    if transport.get("mode") != "gitee_only":
+        report.fail("server transport is not gitee_only")
+    elif not transport.get("remote_name"):
+        report.fail("server transport has no configured remote name")
+    else:
+        report.passed("diagnostic transport remains Gitee-only")
+    forbidden = set(transport.get("forbidden_direct_connections", []))
+    for document in documents.get("documents", []):
+        if document.get("lifecycle") == "active" and forbidden.intersection(document.get("connectivity_modes", [])):
+            report.fail(f"active document conflicts with Gitee-only transport: {document.get('path')}")
+
+    transaction_root = root / "project_state" / ".transactions"
+    if transaction_root.exists() and any(transaction_root.iterdir()):
+        report.fail("unfinished state transaction exists")
+    if (root / "project_state" / ".state.lock").exists():
+        report.fail("state lock exists; a writer may have been interrupted")
+
+    # These checks remain visible to the operator but do not block diagnostic-only work.
+    if int(state.get("state_revision", 0)) - int(documents.get("state_revision", 0)) > 1:
+        report.warn("document registry is more than one state revision behind; diagnostic only")
+    current_view = root / "CURRENT_STATE.md"
+    if not current_view.exists():
+        report.warn("CURRENT_STATE.md missing; diagnostic only")
+    elif sha256_bytes(canonical_json_bytes(state)) not in current_view.read_text(encoding="utf-8"):
+        report.warn("CURRENT_STATE.md is stale; diagnostic only")
+    if not report.fail_items:
+        report.passed("diagnostic safety boundary validation completed")
+    return report
+
+
 def validate_result_envelope(bundle_dir: Path, manifest: Mapping[str, Any]) -> None:
     project_root = Path(__file__).resolve().parent.parent
     validate_against_schema(
@@ -2095,6 +2596,26 @@ def validate_job_semantics(
         if parameters.get("device", "cuda") not in {"cuda", "cpu"}:
             raise ValueError("cache parity device must be cuda or cpu")
         return
+    if command_id == "mpp_pathway_ridge_calibration":
+        if phase != "formal":
+            raise ValueError("MPP2 pathway Ridge calibration requires phase=formal")
+        script = str((experiment or {}).get("script", "")).replace("\\", "/")
+        if not script.endswith("scripts/fit_mpp2_pathway_ridge_calibration.py"):
+            raise ValueError("MPP2 pathway Ridge calibration requires its registered script")
+        if not bool((experiment or {}).get("execution_approved")):
+            raise ValueError("MPP2 pathway Ridge calibration is not execution-approved")
+        if not (experiment or {}).get("execution_directive_id"):
+            raise ValueError("MPP2 pathway Ridge calibration lacks an execution directive binding")
+        missing_ids = sorted(MPP_PATHWAY_CALIBRATION_PATH_IDS - set(path_ids))
+        if missing_ids:
+            raise ValueError(f"MPP2 pathway Ridge calibration is missing required path ids: {missing_ids}")
+        overrides = sorted(MPP_PATHWAY_CALIBRATION_PATH_PARAMETERS & set(parameters))
+        if overrides:
+            raise ValueError(f"MPP2 pathway Ridge calibration paths are registry-bound: {overrides}")
+        unknown = sorted(set(parameters) - MPP_PATHWAY_CALIBRATION_ALLOWED_PARAMETERS)
+        if unknown:
+            raise ValueError(f"MPP2 pathway Ridge calibration parameters are not allowlisted: {unknown}")
+        return
     if command_id != "standard_training":
         raise ValueError("command_id is not allowlisted")
     if phase not in {"smoke", "formal"}:
@@ -2187,7 +2708,7 @@ def create_job_manifest(
         raise ValueError("job_id contains unsafe characters")
     if phase not in {"preflight", "smoke", "formal"}:
         raise ValueError("invalid job phase")
-    if command_id not in {"state_preflight", "cache_parity", "standard_training"}:
+    if command_id not in {"state_preflight", "cache_parity", "standard_training", "mpp_pathway_ridge_calibration"}:
         raise ValueError("command_id is not allowlisted")
     registry = read_json(root / "experiments" / "experiment_registry.json")
     experiment = next((item for item in registry.get("experiments", []) if item.get("id") == experiment_id), None)

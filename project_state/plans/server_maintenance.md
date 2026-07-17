@@ -21,6 +21,19 @@
 `directives.jsonl` → `current_state.json` → `CURRENT_STATE.md`
 服务器运行目录 → Gitee result envelope → 本地 inbox → `result import` → Registry → Dashboard/Current State
 
+## 诊断与探索的分级边界
+
+- `agent start-check --task diagnostic` 仅用于 allowlisted 的非证据性故障排查。它仍要求状态包可读、schema 有效、无未完成事务/锁以及 Gitee-only transport；文档新鲜度与无关 MPP 路径问题仅 WARN，不得阻断只读诊断。
+- 诊断请求必须由 `diagnostic request` 生成，并由 `diagnostic record` 记录回传输出的路径、大小和 SHA-256；请求固定 source commit、source/return branch 和 command id，不含任意 shell 文本、训练参数、experiment id 或 result import。诊断回传分支固定在 `automation/diagnostics*` 下，不与 smoke/formal 结果流混用。
+- 本地 `explore` 仅限 `scripts/explorations/` 与 `experiments/explorations/`。它不得访问服务器、训练数据或输出可比较指标；候选清理只报告，不执行删除。探索脚本升级只生成候选，仍须 directive、提交、experiment 登记与独立 smoke/formal 调度才能成为正式证据链的一部分。
+- smoke/formal 的固定 source commit、干净 detached worktree、path/data manifest、Gitee 回传和结果导入规则不因 diagnostic/explore 放宽而改变。
+
+## 指令生命周期
+
+- 指令可从 `active` 显式追加转换为 `completed`、`superseded` 或 `cancelled`。完成不同于被替代，所有历史事件保留在 `directives.jsonl`。
+- `state directives --check-stale` 只按 `review_after`、年龄阈值和关联实验终态输出人工复核候选，绝不自动归档或关闭。
+- 新指令可携带 `related_experiment_ids`、`review_after` 和 `completion_evidence`；转换必须提供理由，替代还必须指向新的 directive ID。
+
 ## 路径与产物
 
 - 服务器绝对路径通过 `configs/server_paths.yaml` 的稳定 path id 引用，不直接删除。

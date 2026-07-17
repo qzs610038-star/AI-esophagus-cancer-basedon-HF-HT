@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-14T10:25:16+00:00",
+  "updated_at": "2026-07-17T12:19:30+00:00",
   "current_mpp_policy": {
     "effective_date": "2026-07-09",
     "selected_mpp": 2,
@@ -1372,6 +1372,63 @@
       "external_xzy_mae": 0.6348646362521172,
       "test_loss": 0.6842559663591417,
       "external_xzy_r2_raw": -0.12927803244157082
+    },
+    {
+      "id": "mpp2_pathway_ridge_calibration_v001_20260717",
+      "family": "mpp_posthoc_pathway_calibration",
+      "status": "execution_approved_pending_bound_job",
+      "priority": "P0",
+      "phase": "formal",
+      "script": "scripts/fit_mpp2_pathway_ridge_calibration.py",
+      "base_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "base_result_id": "mpp2-repair-v003-frozen-20260711-r002-result-20260711164140-f2b1b51d",
+      "base_checkpoint_epoch": 15,
+      "base_checkpoint_sha256": "c69191d4a67939724988bc3656c3cd2e0b173d9c871456a5fb900ab446e86a98",
+      "baseline_internal_validation": {
+        "reference_val_loss": 0.374886,
+        "reference_val_pcc": 0.797126,
+        "loss_tolerance": 0.00001,
+        "pcc_tolerance": 0.00001,
+        "source": "automation/results/mpp2-repair-v003-frozen-20260711-r002/attempt-003/training_history.csv epoch=15"
+      },
+      "mpp_train_id": 2,
+      "calibration_split": "internal_val_manifest",
+      "calibration_patients": [
+        "HYZ15040",
+        "JFX",
+        "LMZ12939",
+        "TGC",
+        "XSL",
+        "ZHZ"
+      ],
+      "calibration_samples": 1078,
+      "external_mpp_id": 2,
+      "external_patient": "XZY",
+      "external_samples": 1039,
+      "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+      "method": "positive-slope per-pathway ridge affine calibration in train-z space with patient-balanced nested LOPO and identity fallback",
+      "lambda_grid": [
+        0.1,
+        1.0,
+        10.0
+      ],
+      "selection_metric": "nested_lopo_patient_balanced_z_mse_with_per_pathway_raw_r2_guard",
+      "headline_external_metric": "mean_per_pathway_raw_r2",
+      "legacy_metric_note": "accepted external_xzy_pcc=0.6549 is pooled over N*30 z values; report separately from mean per-pathway PCC",
+      "external_eval_policy": "freeze lambda pathway mask k b and calibrator sha before one-shot XZY evaluation",
+      "phase3_output_contract": "CalibratedMPP2 returns final raw ssGSEA 30-pathway scores; no second inverse-z, recalibration, within-patient zscore, rank or quantile normalization",
+      "plan_ref": "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md",
+      "goal_prompt_ref": "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717_goal_prompt.md",
+      "plan_registration_directive_id": "DIR-20260717-001",
+      "execution_approved": true,
+      "execution_directive_id": "DIR-20260717-002",
+      "execution_approved_at": "2026-07-17T20:59:49+08:00",
+      "created_at": "2026-07-17",
+      "next_action": "implement_and_test_calibration_then_create_bound_formal_job_manifest",
+      "decision_gate": "DIR-20260717-002 authorizes exactly one execution. Internal nested-LOPO must pass before calibrator freeze and external evaluation; XZY must remain unread until that freeze is recorded.",
+      "evidence_status": "planned",
+      "provenance_complete": false,
+      "supersedes_results": []
     },
     {
       "id": "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
