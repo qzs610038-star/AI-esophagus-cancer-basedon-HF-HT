@@ -1,7 +1,7 @@
 # PFMval 治理 v3 结构性重构审查包
 
 > document role: `refactor-framework-and-index`
-> review package revision: `003`
+> review package revision: `004`
 > lifecycle: `pending_review`
 > state scope: `workflow_governance_v3_refactor_review`
 > authorization: `DIR-20260726-002`, `DIR-20260726-003`, `DIR-20260726-004`, `DIR-20260726-005`
@@ -345,6 +345,7 @@ pending_review
 | 2026-07-26 | 001 | DIR-20260726-002/003 | 初版影响面、R0–R9 步骤与编号工作树协议 |
 | 2026-07-26 | 002 | DIR-20260726-004 | 改为总控框架；新增 P0A/P0B；R0–R9 拆为独立可扩展模块 |
 | 2026-07-26 | 003 | DIR-20260726-005 | 补充科研灵活性审查、五类后续工作流和“优先适配成熟开源方案”策略 |
+| 2026-07-26 | 004 | DIR-20260726-005 | 完成外部开源方案只读调研并关联适配建议与官方资料 |
 
 详细服务器状态机、单写者、冲突恢复和 W 编号规则继续以
 `project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md`
@@ -396,6 +397,8 @@ P0A 已覆盖实验执行与证据链的主要骨架，但尚未完整覆盖：
 
 - 优先检索、比较和适配成熟开源科研工作流、实验追踪、可复现文档与研究对象
   元数据方案；仅对缺失能力做本地补充。
+- 本轮只读调研结果、推荐组合、明确不采用项和官方原始链接见
+  [外部开源科研工作流调研与适配建议](workflow_governance_v3_refactor/REFERENCE_open_source_research_workflow_adaptation_20260726.md)。
 - 外部方案只作为设计输入，不因列入调研而自动成为依赖或事实源。
 - 引入任何框架前必须比较：维护活跃度、Windows/本地优先适配、与 Git/Gitee
   及现有 Registry 的职责重叠、迁移成本、离线可用性和退出成本。
