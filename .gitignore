@@ -232,6 +232,10 @@ experiments/
 !experiments/experiment_registry.json
 !experiments/experiment_dashboard.md
 !experiments/decision_log.md
+!experiments/explorations/
+experiments/explorations/*
+!experiments/explorations/.gitkeep
+!experiments/explorations/README.md
 experiments/analysis/
 experiments/results/
 experiments/sweeps/

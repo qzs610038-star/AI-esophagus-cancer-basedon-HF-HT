@@ -16,19 +16,28 @@ from scripts.pfmval_state import (
     build_result_envelope,
     create_job_manifest,
     compute_source_hashes,
+    create_diagnostic_request,
+    create_exploration_session,
+    directive_lifecycle_candidates,
     evaluate_mpp2_baseline_guard,
     fold_directives,
+    exploration_cleanup_candidates,
     git_commit_exists,
     import_result_bundle,
     import_mpp_repair_evidence_from_git,
+    list_exploration_sessions,
     normalize_rel,
+    promote_exploration_script,
     read_json,
     read_directive_events,
+    record_diagnostic_outputs,
     recover_incomplete_result_transactions,
     safe_job_parameters,
     scan_documents,
     sha256_file,
     sync_state,
+    transition_directive,
+    validate_diagnostic_state,
     validate_state,
     validate_result_envelope,
     validate_job_manifest,
@@ -230,6 +239,138 @@ def test_state_validation_rejects_unresolved_same_topic_directives(tmp_path):
     )
     report = validate_state(root)
     assert any("directive conflicts" in message for message in report.fail_items)
+
+
+def test_diagnostic_gate_allows_document_freshness_drift_but_keeps_transport_hard(tmp_path):
+    root = make_minimal_project(tmp_path)
+    # The production diagnostic profile validates the same three state schemas.
+    # This focused fixture only needs permissive schema shells; schema semantics
+    # are covered by the production schema tests.
+    for schema_name in ("current_state.schema.json", "document_registry.schema.json", "directives.schema.json"):
+        write_json(root / "project_state" / "schemas" / schema_name, {"type": "object"})
+    # Full validation treats this as a normative-document failure; a read-only
+    # diagnostic must surface it as a warning instead of blocking triage.
+    (root / "project_state" / "plans" / "mpp_training.md").write_text("# changed\n", encoding="utf-8")
+    full_report = validate_state(root)
+    assert any("normative document hash is stale" in message for message in full_report.fail_items)
+
+    diagnostic_report = validate_diagnostic_state(root)
+    assert diagnostic_report.ok
+
+    state_path = root / "project_state" / "current_state.json"
+    state = read_json(state_path)
+    state["server_transport"]["mode"] = "ssh"
+    write_json(state_path, state)
+    blocked_report = validate_diagnostic_state(root)
+    assert not blocked_report.ok
+    assert "server transport is not gitee_only" in blocked_report.fail_items
+
+
+def test_diagnostic_request_is_allowlisted_non_evidence_audit(tmp_path):
+    root = tmp_path / "diagnostic-repo"
+    root.mkdir()
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "pfmval-test@example.invalid"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "PFMval Test"], cwd=root, check=True)
+    make_minimal_project(root)
+    for schema_name in ("current_state.schema.json", "document_registry.schema.json", "directives.schema.json"):
+        write_json(root / "project_state" / "schemas" / schema_name, {"type": "object"})
+    subprocess.run(["git", "add", "."], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-m", "diagnostic fixture"], cwd=root, check=True, capture_output=True)
+    commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, check=True, capture_output=True, text=True, encoding="utf-8",
+    ).stdout.strip()
+
+    request_path = create_diagnostic_request(
+        root,
+        diagnostic_id="diagnostic-20260714-cache-probe",
+        source_commit=commit,
+        command_id="cache_probe",
+        source_branch="main",
+        return_branch="automation/diagnostics",
+    )
+    request = read_json(request_path)
+    assert request["command_id"] == "cache_probe"
+    assert request["execution_contract"]["arbitrary_shell"] is False
+    assert request["execution_contract"]["training"] is False
+    returned_output = request_path.parent / "stdout.txt"
+    returned_output.write_text("cache readable\n", encoding="utf-8")
+    completion = record_diagnostic_outputs(
+        root,
+        diagnostic_id="diagnostic-20260714-cache-probe",
+        outputs=["automation/diagnostics/diagnostic-20260714-cache-probe/stdout.txt"],
+    )
+    assert completion["server_write"] is False
+    assert completion["outputs"][0]["sha256"] == sha256_file(returned_output)
+    events = (root / "project_state" / "diagnostics.jsonl").read_text(encoding="utf-8")
+    assert "diagnostic_request" in events
+    assert "diagnostic_completed" in events
+    with pytest.raises(ValueError, match="not allowlisted"):
+        create_diagnostic_request(
+            root,
+            diagnostic_id="diagnostic-20260714-bad-command",
+            source_commit=commit,
+            command_id="arbitrary_shell",
+            source_branch="main",
+            return_branch="automation/diagnostics",
+        )
+
+
+def test_explore_session_is_local_only_and_candidates_never_delete(tmp_path):
+    root = make_minimal_project(tmp_path)
+    manifest_path = create_exploration_session(
+        root, session_id="explore-20260714-cache-layout", purpose="inspect local cache layout",
+    )
+    manifest = read_json(manifest_path)
+    assert manifest["restrictions"]["server_execution"] is False
+    assert manifest["restrictions"]["training_data"] is False
+    assert list_exploration_sessions(root)[0]["status"] == "active"
+    assert exploration_cleanup_candidates(root, older_than_days=1) == []
+    assert manifest_path.exists()
+
+
+def test_explore_promotion_requires_marker_and_active_directive(tmp_path):
+    root = make_minimal_project(tmp_path)
+    source = root / "scripts" / "explorations" / "probe_explore.py"
+    source.parent.mkdir(parents=True)
+    source.write_text("# PFMVAL_EXPLORE\nprint('probe')\n", encoding="utf-8")
+    target = promote_exploration_script(
+        root,
+        source="scripts/explorations/probe_explore.py",
+        target="scripts/probe.py",
+        directive_id="DIR-20260711-001",
+    )
+    assert target.read_text(encoding="utf-8") == "print('probe')\n"
+    assert source.exists()
+
+
+def test_directive_completion_is_append_only_and_lifecycle_is_review_only(tmp_path):
+    root = make_minimal_project(tmp_path)
+    event = transition_directive(
+        root,
+        directive_id="DIR-20260711-001",
+        status="completed",
+        reason="the route close-out was recorded",
+        completion_evidence=["experiments/decision_log.md"],
+    )
+    assert event["status"] == "completed"
+    assert fold_directives(read_directive_events(root))["DIR-20260711-001"]["status"] == "completed"
+    assert directive_lifecycle_candidates(root, older_than_days=1) == []
+    with pytest.raises(ValueError, match="only active"):
+        transition_directive(
+            root,
+            directive_id="DIR-20260711-001",
+            status="cancelled",
+            reason="must not rewrite history",
+        )
+
+
+def test_directive_lifecycle_candidate_does_not_change_active_status(tmp_path):
+    root = make_minimal_project(tmp_path)
+    candidates = directive_lifecycle_candidates(root, older_than_days=1)
+    assert candidates[0]["directive_id"] == "DIR-20260711-001"
+    assert candidates[0]["action"] == "review_only_no_automatic_transition"
+    assert fold_directives(read_directive_events(root))["DIR-20260711-001"]["status"] == "active"
 
 
 def test_document_scan_preserves_hidden_paths_and_marks_only_missing_qoder(tmp_path):
