@@ -16,6 +16,8 @@
     "source_commit": {"type": "string", "minLength": 7},
     "active_directive_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "active_plans": {"type": "object", "additionalProperties": {"$ref": "#/$defs/plan"}},
+    "active_skills": {"type": "object", "additionalProperties": {"$ref": "#/$defs/skill"}},
+    "pending_plan_reviews": {"type": "object", "additionalProperties": {"$ref": "#/$defs/plan_review"}},
     "server_transport": {
       "type": "object",
       "required": ["mode", "remote_name", "allowed_operations", "forbidden_direct_connections"],
@@ -63,6 +65,25 @@
       "type": "object",
       "required": ["doc_id", "path", "status", "approved_at"],
       "properties": {"status": {"const": "active"}}
+    },
+    "skill": {
+      "type": "object",
+      "required": ["canonical_path", "adapter_paths", "status", "approved_at"],
+      "properties": {
+        "canonical_path": {"type": "string"},
+        "adapter_paths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "status": {"enum": ["canonical", "compatibility_router", "reference_router"]},
+        "approved_at": {"type": "string"}
+      }
+    },
+    "plan_review": {
+      "type": "object",
+      "required": ["path", "status"],
+      "properties": {
+        "path": {"type": "string"},
+        "status": {"enum": ["pending_review", "approved_design"]},
+        "approved_at": {"type": "string"}
+      }
     }
   }
 }

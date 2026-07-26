@@ -79,6 +79,8 @@ mpp_uni2h_cache/
 # --------------------------------------------
 __pycache__/
 **/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
 *.pyc
 *.pyo
 *.pyd
@@ -191,7 +193,10 @@ scripts/download_omiclip.py
 # --------------------------------------------
 # 12. AI Agent 文件（仅本地 Claude Code 使用，2026-06-04）
 # --------------------------------------------
-.claude/
+.claude/**
+!.claude/skills/
+!.claude/skills/*/
+!.claude/skills/*/SKILL.md
 .qoder/
 codex_memory/
 CLAUDE.md

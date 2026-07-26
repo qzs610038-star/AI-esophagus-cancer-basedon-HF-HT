@@ -1175,6 +1175,8 @@ def _stable_doc_id(path: str) -> str:
 def _document_category(path: str) -> str:
     if path.startswith("project_state/plans/"):
         return "状态方案"
+    if path.startswith(".agents/skills/"):
+        return "Agent Skill"
     if "分析报告/" in path:
         return "分析报告"
     if "部署方案/" in path:
@@ -1193,6 +1195,21 @@ def _document_category(path: str) -> str:
 def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, str, List[str]]:
     lower = path.lower()
     active_plan_paths = {normalize_rel(item["path"]): scope for scope, item in state.get("active_plans", {}).items()}
+    canonical_skill_paths: Dict[str, str] = {}
+    adapter_skill_paths: Dict[str, str] = {}
+    for skill_name, skill in state.get("active_skills", {}).items():
+        canonical_path = normalize_rel(str(skill.get("canonical_path", "")))
+        if canonical_path:
+            canonical_skill_paths[canonical_path] = str(skill_name)
+        for adapter_path in skill.get("adapter_paths", []):
+            normalized_adapter = normalize_rel(str(adapter_path))
+            if normalized_adapter:
+                adapter_skill_paths[normalized_adapter] = str(skill_name)
+    pending_plan_paths = {
+        normalize_rel(str(item.get("path", ""))): (str(review_id), str(item.get("status", "pending_review")))
+        for review_id, item in state.get("pending_plan_reviews", {}).items()
+        if item.get("path")
+    }
     connectivity: List[str] = []
     if re.search(r"ssh|scp", lower):
         connectivity.append("ssh")
@@ -1203,6 +1220,14 @@ def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, s
 
     if path in active_plan_paths:
         return active_plan_paths[path], "normative", "active", connectivity
+    if path in canonical_skill_paths:
+        return f"skill:{canonical_skill_paths[path]}", "normative", "active", connectivity
+    if path in adapter_skill_paths:
+        return f"skill_adapter:{adapter_skill_paths[path]}", "reference", "active", connectivity
+    if path in pending_plan_paths:
+        review_id, status = pending_plan_paths[path]
+        lifecycle = "approved_design" if status == "approved_design" else "pending_review"
+        return f"plan_review:{review_id}", "reference", lifecycle, connectivity
     if path == "AGENTS.md":
         return "agent_entry", "normative", "active", connectivity
     if path == "CLAUDE.md":
@@ -1244,7 +1269,10 @@ def scan_documents(root: Path) -> Dict[str, Any]:
         old_entries = {normalize_rel(item["path"]): item for item in old.get("documents", [])}
 
     live_paths: set[str] = set()
-    for directory in ("01_指南与解读", "02_组会汇报", "project_state/plans", "deploy", "automation"):
+    for directory in (
+        "01_指南与解读", "02_组会汇报", "project_state/plans", "deploy",
+        "automation", ".agents/skills", ".claude/skills",
+    ):
         base = root / directory
         if base.exists():
             live_paths.update(normalize_rel(path.relative_to(root)) for path in base.rglob("*.md"))
@@ -1289,7 +1317,13 @@ def scan_documents(root: Path) -> Dict[str, Any]:
                 "tracked"
                 if not (
                     rel_path == "CLAUDE.md"
-                    or rel_path.startswith(".claude/")
+                    or (
+                        rel_path.startswith(".claude/")
+                        and not (
+                            rel_path.startswith(".claude/skills/")
+                            and rel_path.endswith("/SKILL.md")
+                        )
+                    )
                     or rel_path.startswith(".qoder/")
                     or rel_path.startswith("02_组会汇报/")
                     or (
@@ -1320,6 +1354,8 @@ def scan_documents(root: Path) -> Dict[str, Any]:
             "active": sum(1 for item in documents if item["lifecycle"] == "active"),
             "superseded": sum(1 for item in documents if item["lifecycle"] == "superseded"),
             "historical": sum(1 for item in documents if item["lifecycle"] == "historical"),
+            "pending_review": sum(1 for item in documents if item["lifecycle"] == "pending_review"),
+            "approved_design": sum(1 for item in documents if item["lifecycle"] == "approved_design"),
         },
     }
 
@@ -1922,6 +1958,40 @@ def validate_state(
             report.fail(f"active plan {scope} is absent from document registry")
         elif document.get("lifecycle") != "active" or document.get("path") != normalize_rel(plan.get("path", "")):
             report.fail(f"active plan {scope} points to non-active or mismatched document")
+    doc_by_path = {
+        normalize_rel(str(item.get("path", ""))).lower(): item
+        for item in document_list
+    }
+    for skill_name, skill in state.get("active_skills", {}).items():
+        canonical_path = normalize_rel(str(skill.get("canonical_path", "")))
+        canonical = doc_by_path.get(canonical_path.lower())
+        if not canonical:
+            report.fail(f"active skill {skill_name} canonical path is absent from document registry")
+        elif (
+            canonical.get("lifecycle") != "active"
+            or canonical.get("authority") != "normative"
+            or canonical.get("scope") != f"skill:{skill_name}"
+        ):
+            report.fail(f"active skill {skill_name} canonical document classification is invalid")
+        for adapter_path in skill.get("adapter_paths", []):
+            normalized_adapter = normalize_rel(str(adapter_path))
+            adapter = doc_by_path.get(normalized_adapter.lower())
+            if not adapter:
+                report.fail(f"active skill {skill_name} adapter path is absent from document registry: {normalized_adapter}")
+            elif (
+                adapter.get("lifecycle") != "active"
+                or adapter.get("authority") != "reference"
+                or adapter.get("scope") != f"skill_adapter:{skill_name}"
+            ):
+                report.fail(f"active skill {skill_name} adapter classification is invalid: {normalized_adapter}")
+    for review_id, review in state.get("pending_plan_reviews", {}).items():
+        review_path = normalize_rel(str(review.get("path", "")))
+        document = doc_by_path.get(review_path.lower())
+        expected_lifecycle = "approved_design" if review.get("status") == "approved_design" else "pending_review"
+        if not document:
+            report.fail(f"plan review {review_id} is absent from document registry")
+        elif document.get("lifecycle") != expected_lifecycle:
+            report.fail(f"plan review {review_id} lifecycle does not match current state")
     forbidden = set(state.get("server_transport", {}).get("forbidden_direct_connections", []))
     if state.get("server_transport", {}).get("mode") != "gitee_only":
         report.fail("server transport is not gitee_only")

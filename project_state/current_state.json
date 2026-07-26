@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 87,
-  "updated_at": "2026-07-26T09:36:18+00:00",
-  "source_commit": "ac6c8c88a22081837323aed3a7e859f6e5b6275a",
+  "state_revision": 104,
+  "updated_at": "2026-07-26T15:32:49+00:00",
+  "source_commit": "a96bac88adaac97239c7149f6edb217fc1ce76ec",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -23,7 +23,11 @@
     "DIR-20260714-004",
     "DIR-20260717-001",
     "DIR-20260717-003",
-    "DIR-20260726-001"
+    "DIR-20260726-001",
+    "DIR-20260726-002",
+    "DIR-20260726-003",
+    "DIR-20260726-004",
+    "DIR-20260726-005"
   ],
   "active_plans": {
     "mpp_training": {
@@ -43,6 +47,213 @@
       "path": "project_state/plans/server_maintenance.md",
       "status": "active",
       "approved_at": "2026-07-11T00:00:00+08:00"
+    },
+    "workflow_governance_v3": {
+      "doc_id": "doc-a567a7562613",
+      "path": "project_state/plans/workflow_governance_v3_20260726.md",
+      "status": "active",
+      "approved_at": "2026-07-26T18:26:19+08:00"
+    }
+  },
+  "active_skills": {
+    "compare": {
+      "canonical_path": ".agents/skills/compare/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/compare/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "data-guide": {
+      "canonical_path": ".agents/skills/data-guide/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/data-guide/SKILL.md"
+      ],
+      "status": "reference_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "doc-registry": {
+      "canonical_path": ".agents/skills/doc-registry/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/doc-registry/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "experiment-log": {
+      "canonical_path": ".agents/skills/experiment-log/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/experiment-log/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "extract": {
+      "canonical_path": ".agents/skills/extract/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/extract/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "git-rescue": {
+      "canonical_path": ".agents/skills/git-rescue/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/git-rescue/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "health": {
+      "canonical_path": ".agents/skills/health/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/health/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "meeting-report": {
+      "canonical_path": ".agents/skills/meeting-report/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/meeting-report/SKILL.md"
+      ],
+      "status": "reference_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "onboard": {
+      "canonical_path": ".agents/skills/onboard/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/onboard/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "parallel-extract": {
+      "canonical_path": ".agents/skills/parallel-extract/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/parallel-extract/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "pfmval-audit": {
+      "canonical_path": ".agents/skills/pfmval-audit/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/pfmval-audit/SKILL.md"
+      ],
+      "status": "canonical",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "post-train": {
+      "canonical_path": ".agents/skills/post-train/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/post-train/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "sync-server": {
+      "canonical_path": ".agents/skills/sync-server/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/sync-server/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "train": {
+      "canonical_path": ".agents/skills/train/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/train/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "train-guide": {
+      "canonical_path": ".agents/skills/train-guide/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/train-guide/SKILL.md"
+      ],
+      "status": "reference_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "update-ranking": {
+      "canonical_path": ".agents/skills/update-ranking/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/update-ranking/SKILL.md"
+      ],
+      "status": "compatibility_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "viz-guide": {
+      "canonical_path": ".agents/skills/viz-guide/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/viz-guide/SKILL.md"
+      ],
+      "status": "reference_router",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    }
+  },
+  "pending_plan_reviews": {
+    "gitee_numbered_workspace_protocol_v001": {
+      "path": "project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md",
+      "status": "approved_design",
+      "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "workflow_governance_v3_refactor_review": {
+      "path": "project_state/plans/workflow_governance_v3_refactor_review_20260726.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_p0a": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_p0b": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r0": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r1": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R1_workspace_registry_shadow.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r2": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R2_persistent_experiment_workspace.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r3": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R3_protocol_approval_and_run_budget.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r4": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R4_critical_contract_and_gate_tiering.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r5": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R5_result_artifact_tiering.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r5b": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R5b_document_registry_and_state_gates.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r6": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R6_asset_registry_shadow.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r7": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R7_shared_dependency_extraction.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r8": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r9": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md",
+      "status": "pending_review"
     }
   },
   "server_transport": {
@@ -51,9 +262,12 @@
     "allowed_operations": [
       "git_ls_remote",
       "git_fetch",
-      "git_pull",
       "git_push"
     ],
+    "experiment_worktree_update_mode": "fetch_exact_commit_only",
+    "canonical_code_writer": "local_numbered_workspace",
+    "return_mode": "server_owned_attempt_ref",
+    "force_push_allowed": false,
     "forbidden_direct_connections": [
       "ssh",
       "scp",
@@ -89,7 +303,7 @@
   "source_hashes": {
     "experiment_registry_sha256": "591506737fc071927302295169941f3b39fe561a4e93b69bcc39a69e3f3e0a5d",
     "experiment_dashboard_sha256": "a70f091043dcf96a46474708a451731108f7a4c3acafe1699ab3dd4e507f39dd",
-    "document_registry_sha256": "6a5872091f4cff08638e3bcd88eb2069fba377502456e1ad1194f2bd5613ff5f",
+    "document_registry_sha256": "d700ba0679e4723058da60be6f0cac62651dc1f75be385eab757c85080cc9576",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "eeb5f05d5ced9d4900ebffc1af4307bf6cbab5fe8a708be1b1ae10b447597d9d",
     "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"

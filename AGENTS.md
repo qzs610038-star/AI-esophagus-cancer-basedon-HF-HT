@@ -9,6 +9,7 @@
 3. 涉及实验状态、性能或下一步决策时，读取 `experiments/experiment_registry.json`；`experiments/experiment_dashboard.md` 仅为派生视图。
 4. 涉及服务器训练、缓存、路径或同步时，读取 `configs/server_paths.yaml` 和 `01_指南与解读/部署方案/服务器路径索引_20260701.md`。
 5. 只使用 `project_state/document_registry.json` 中 `lifecycle=active` 的方案作为执行依据；`superseded`、`historical`、`missing` 文档不得作为当前结论。
+6. 涉及方案、完成声明、实验结果或 GO/NO-GO 独立校验时，读取 `.agents/skills/pfmval-audit/SKILL.md`；`.agents/skills/` 是项目 Skill 权威源，`.claude/skills/<name>/SKILL.md` 只能作为直接引用同名权威 Skill 的薄适配器，不得复制或覆盖规则。
 
 开始训练、修改服务器路径或生成项目结论前，运行：
 
@@ -35,6 +36,15 @@ python deploy/pfmval_ops.py agent start-check --task diagnostic
 - MPP 原始 ssGSEA、标准划分、z-score 参数、manifest 和 group 3/5 embargo 审计为受保护资产；重新生成必须另开任务并比较输入、参数和校验值。
 - 监督学习预处理必须在训练集上拟合，再应用到验证集和外部测试集；不得用 external XZY 拟合 z-score 或选择 checkpoint。
 - `CLAUDE.md`、`.claude/` 等本地适配文件只能补充工具特定说明，不得覆盖受跟踪状态包。
+
+## 对话与实验工作树绑定
+
+- 每个实验工作树使用永久、不复用的 `W###` 编号；可附短名帮助记忆，但权威身份始终是编号。
+- 新对话开始实验代码写入前，用户需指定 `本对话工作树：W###`。Agent 必须核对其 experiment、路径、branch、HEAD 和 dirty 状态并回执；未绑定时只允许只读定位，不得默认写 `main`。
+- 绑定后，本对话后续修改、测试、提交和 job 生成均默认限于该工作树。切换工作树必须由用户显式指定并重新核验，不得使用全局“当前工作树”文件代替逐对话绑定。
+- 一个 experiment 在服务器只对应一个持久工作树；protocol revision、job 和 attempt 不新建工作树。attempt 输出必须写到注册的工作树外运行目录。
+- 服务器与本地代码默认由本地单写者维护；服务器简单兼容适配通过 Gitee 返回 patch/记录，由本地工作树接纳后再下发新 commit，禁止两端同时修改同一代码分支。
+- 编号、次数预算、传输、lease 和关闭规范见 `project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md`。该规范在相应 CLI/schema 完成前不得被解读为已具备自动执行能力。
 
 ## 状态更新规则
 

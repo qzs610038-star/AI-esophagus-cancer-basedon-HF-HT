@@ -1,0 +1,4 @@
+interface:
+  display_name: "PFMval 独立审计"
+  short_description: "独立核验 PFMval 方案、代码、实验结果、状态声明与证据边界"
+  default_prompt: "请使用 $pfmval-audit 对当前 PFMval 声明执行只读独立审计，并给出证据分级与 GO/NO-GO 结论。"

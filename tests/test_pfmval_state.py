@@ -390,6 +390,78 @@ def test_document_scan_preserves_hidden_paths_and_marks_only_missing_qoder(tmp_p
     assert "claude/next-steps.md" not in entries
 
 
+def test_document_scan_registers_canonical_skills_adapters_and_review_lifecycle(tmp_path):
+    root = make_minimal_project(tmp_path)
+    state_path = root / "project_state" / "current_state.json"
+    state = json.loads(state_path.read_text(encoding="utf-8"))
+    state["active_skills"] = {
+        "train": {
+            "canonical_path": ".agents/skills/train/SKILL.md",
+            "adapter_paths": [".claude/skills/train/SKILL.md"],
+            "status": "compatibility_router",
+            "approved_at": "2026-07-26T00:00:00+08:00",
+        }
+    }
+    state["pending_plan_reviews"] = {
+        "workspace_protocol": {
+            "path": "project_state/plans/workspace_protocol.md",
+            "status": "approved_design",
+            "approved_at": "2026-07-26T00:00:00+08:00",
+        },
+        "asset_refactor": {
+            "path": "project_state/plans/asset_refactor.md",
+            "status": "pending_review",
+        },
+    }
+    write_json(state_path, state)
+    canonical = root / ".agents" / "skills" / "train" / "SKILL.md"
+    adapter = root / ".claude" / "skills" / "train" / "SKILL.md"
+    approved_design = root / "project_state" / "plans" / "workspace_protocol.md"
+    pending_review = root / "project_state" / "plans" / "asset_refactor.md"
+    for path in (canonical, adapter, approved_design, pending_review):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("# fixture\n", encoding="utf-8")
+
+    registry = scan_documents(root)
+    entries = {item["path"]: item for item in registry["documents"]}
+
+    canonical_entry = entries[".agents/skills/train/SKILL.md"]
+    assert canonical_entry["scope"] == "skill:train"
+    assert canonical_entry["authority"] == "normative"
+    assert canonical_entry["lifecycle"] == "active"
+    assert canonical_entry["availability"] == "tracked"
+    adapter_entry = entries[".claude/skills/train/SKILL.md"]
+    assert adapter_entry["scope"] == "skill_adapter:train"
+    assert adapter_entry["authority"] == "reference"
+    assert adapter_entry["lifecycle"] == "active"
+    assert adapter_entry["availability"] == "tracked"
+    assert entries["project_state/plans/workspace_protocol.md"]["lifecycle"] == "approved_design"
+    assert entries["project_state/plans/asset_refactor.md"]["lifecycle"] == "pending_review"
+
+
+def test_state_validation_rejects_missing_active_skill_canonical_path(tmp_path):
+    root = make_minimal_project(tmp_path)
+    state_path = root / "project_state" / "current_state.json"
+    state = json.loads(state_path.read_text(encoding="utf-8"))
+    state["active_skills"] = {
+        "train": {
+            "canonical_path": ".agents/skills/train/SKILL.md",
+            "adapter_paths": [".claude/skills/train/SKILL.md"],
+            "status": "compatibility_router",
+            "approved_at": "2026-07-26T00:00:00+08:00",
+        }
+    }
+    write_json(state_path, state)
+    adapter = root / ".claude" / "skills" / "train" / "SKILL.md"
+    adapter.parent.mkdir(parents=True)
+    adapter.write_text("# adapter\n", encoding="utf-8")
+    write_json(root / "project_state" / "document_registry.json", scan_documents(root))
+
+    report = validate_state(root)
+
+    assert any("active skill train canonical path is absent" in item for item in report.fail_items)
+
+
 def test_mpp_index_reports_conflicting_duplicate_barcodes(tmp_path):
     split_root = tmp_path / "mpp_standard_splits"
     label = split_root / "group_1" / "labels" / "train" / "P1" / "P1_ssGSEA_zscore.csv"
