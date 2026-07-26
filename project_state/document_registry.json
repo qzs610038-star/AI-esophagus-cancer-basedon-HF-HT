@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-26T19:25:56+00:00",
-  "state_revision": 119,
+  "updated_at": "2026-07-26T20:31:46+00:00",
+  "state_revision": 124,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -298,6 +298,27 @@
       "availability": "tracked"
     },
     {
+      "doc_id": "doc-caaf0fece4e6",
+      "path": ".agents/skills/pfmval-governance/SKILL.md",
+      "category": "Agent Skill",
+      "scope": "skill:pfmval-governance",
+      "authority": "normative",
+      "lifecycle": "active",
+      "verified_at": "2026-07-26T20:27:56+00:00",
+      "state_revision": 121,
+      "content_sha256": "2ee159d9320f30841f3ab1bd1ac9693f212b0119cc179907fd73839b94f3c9a4",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
       "doc_id": "doc-beb5a9361ddf",
       "path": ".agents/skills/post-train/SKILL.md",
       "category": "Agent Skill",
@@ -535,9 +556,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T19:25:48+00:00",
-      "state_revision": 119,
-      "content_sha256": "b5c4d88cfb80e1f298033984f3940321ed44e8f043da2d98a96f4a88e11bdbf8",
+      "verified_at": "2026-07-26T20:31:46+00:00",
+      "state_revision": 124,
+      "content_sha256": "717cfe0b57092889bca23eaaa4420e11f5b1044ffd7a2e3b1d46cac872f5fa20",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -556,9 +577,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T19:25:48+00:00",
-      "state_revision": 119,
-      "content_sha256": "b2a368b9ebd4c298b6d39774c34635f27479c9deafbec0eef0907d170208fcc3",
+      "verified_at": "2026-07-26T20:31:46+00:00",
+      "state_revision": 124,
+      "content_sha256": "cfb8a8eb698144c52f03d37faaefaf6d0eca284c2cdc78db14a64c89c2c243f1",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -811,6 +832,27 @@
       "verified_at": "2026-07-26T16:52:20+00:00",
       "state_revision": 109,
       "content_sha256": "8a8780f3bf264212461d0ab1c78f5dd1378618467c8823636714ab7af9138bb2",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-46398de15079",
+      "path": ".claude/skills/pfmval-governance/SKILL.md",
+      "category": "本地Agent视图",
+      "scope": "skill_adapter:pfmval-governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "verified_at": "2026-07-26T20:31:46+00:00",
+      "state_revision": 123,
+      "content_sha256": "48ad9ac8b2ec8eef384eb9b7d00f77a034ddc7276555eb92b5fd31f572961bb9",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3751,9 +3793,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T19:25:48+00:00",
-      "state_revision": 119,
-      "content_sha256": "a2eb9662f5b8b81e8dd7343de164c8dac7b2a60f9f726a19701ad5431bc7ab71",
+      "verified_at": "2026-07-26T20:31:46+00:00",
+      "state_revision": 124,
+      "content_sha256": "2b49531073a35b8bd33d993c6f36d1fd8383bdef6c8e3823f1317e73d20bae7f",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3772,9 +3814,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T19:25:56+00:00",
-      "state_revision": 119,
-      "content_sha256": "2be728323a5c4a92b08008385bb09ffe0df4a8bbc4889c28b557bd57dfc022be",
+      "verified_at": "2026-07-26T20:31:46+00:00",
+      "state_revision": 123,
+      "content_sha256": "a9209e0b9a7afbd5ccb3d889b85e79a4ff68ea44a531f3141ab934d4e8b5687f",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3794,9 +3836,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T19:25:48+00:00",
-      "state_revision": 119,
-      "content_sha256": "5f5e07eb6571c4680f0d6772041e2d74a833f104a5cafbbb87204a14f28ed09c",
+      "verified_at": "2026-07-26T20:31:46+00:00",
+      "state_revision": 124,
+      "content_sha256": "e14cbdbdb11cf65670fd803fb3f78cec1ec6cd4437b316aa39a0b523ea7fd38e",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4199,9 +4241,30 @@
       "scope": "workflow_governance_v3",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T19:25:27+00:00",
-      "state_revision": 118,
-      "content_sha256": "c1780aa1d00abe7785b789f4c291214f5bda88cf4280769ec3fb7f5bf6154138",
+      "verified_at": "2026-07-26T20:27:56+00:00",
+      "state_revision": 121,
+      "content_sha256": "c1106dcf40b6746e01f828e06212f5a97fe907106206eeb76a312462b4fda10a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-92f924374faa",
+      "path": "project_state/plans/workflow_governance_v3_g08_local_completion_approval_20260727.md",
+      "category": "状态方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-26T20:30:47+00:00",
+      "state_revision": 122,
+      "content_sha256": "49d4ae4e0549851172a7226703ba0703c4dde7c0cca5848f575ddb4ae273c36b",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4593,12 +4656,12 @@
     }
   ],
   "summary": {
-    "total": 206,
-    "live": 190,
+    "total": 209,
+    "live": 193,
     "missing": 16,
-    "active": 51,
+    "active": 53,
     "superseded": 11,
-    "historical": 110,
+    "historical": 111,
     "pending_review": 0,
     "approved_design": 18
   }

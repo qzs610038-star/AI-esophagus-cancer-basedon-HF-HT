@@ -1,0 +1,18 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "experiment_id": null,
+  "workspace_id": null,
+  "question": "synthetic experiment question",
+  "hypothesis": "synthetic hypothesis",
+  "independent_variables": [],
+  "controlled_variables": [],
+  "run_limit": null,
+  "evidence_tier": null,
+  "stop_rule": null,
+  "required_user_decisions": [
+    "explicit experiment approval",
+    "W### workspace binding",
+    "run budget"
+  ]
+}

@@ -3,8 +3,8 @@
 > lifecycle: active
 > state scope: `workflow_governance_v3`
 > effective date: 2026-07-26
-> authorization: `DIR-20260726-002`, `DIR-20260726-003`
-> execution boundary: 低风险 Skill 清理、同名跨 Agent 适配器和编号工作树/Gitee 往返规范已获批准；服务器、job/result、workspace/asset schema 等结构性代码仍须分步实现与验收。
+> authorization: `DIR-20260726-002`, `DIR-20260726-003`, `DIR-20260727-004`
+> execution boundary: R0–R11 与 P0A/P0B/P0C 的本地 D/I 已接受；G08 已批准并收口 S1 canonical Skill、六个本地用户工作流和 manifest 驱动 Catalog 准入。真实 O 运行、高风险迁移、解禁、清理、服务器、训练和结果接纳仍保持原门禁。
 
 ## 1. 目标
 
@@ -24,6 +24,9 @@
 - Explore 仍受 `DIR-20260726-001` 限制：未经后续明确批准不得成为 accepted evidence。
 - 本方案不授权训练、服务器操作、结果接纳、受保护资产改写、工作树删除或缓存清理。
 - `histogene/`、`egnv1/`、`egnv2/` 在完成依赖抽取、资产登记和迁移验证前继续保持现有保护。
+- P0C/R10/R11 的本地 D/I 已接受；G08 只完成无需真实用户内容或服务器的本地入口、
+  fixture、preview 与 Catalog 准入。六个用户 workflow 的真实 O 均为
+  `NOT RUN`，维护类科学证据等级均为 `S=N/A`。
 
 ## 3. 目标架构
 
@@ -320,7 +323,7 @@ registered
 | S0 | 总方案、指令、审计 Skill、legacy 原始实现隔离、安全提示修复 | 已完成 |
 | S0b | 16 个安全 router、17 个 `.claude` 同名薄适配器 | 已完成并通过本轮验收 |
 | S0c | active Skill / review 文档最小生命周期登记与门禁 | 已完成并通过 2 项 TDD 测试 |
-| S1 | canonical `pfmval-governance` Skill 与模板 | 暂缓 |
+| S1 | canonical `pfmval-governance` Skill、模板、六个用户入口/七条技术路由与初始 Workflow Catalog | G08 本地 D/I 已实现；六项 active、`standardized=false`；fixture O=PASS，真实 O=NOT RUN；S=N/A |
 | S1a | P0A 实验全生命周期闭环、P0B 用户导航与实验进度双视图 | 本地 D/I 已接受；P0A O=NOT RUN、P0B O=PASS；S=N/A；真实实验闭环未运行 |
 | S2 | workspace registry shadow、W### 对话绑定与外部 run root | 本地 D/I 已接受；O=NOT RUN；S=N/A；真实 workspace/attempt/run root 未运行 |
 | S3 | job/result schema v2、次数预算、适配记录与兼容读取 | 本地 D/I 已接受；O=NOT RUN；S=N/A；真实 v2 dispatch/attempt 未运行 |

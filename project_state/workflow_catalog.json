@@ -1,6 +1,412 @@
 {
-  "entries": [],
-  "scans": [],
+  "entries": [
+    {
+      "approval_requirement": "Lifecycle transitions and directive closure require separate explicit user decisions.",
+      "authorization_ref": "DIR-20260727-004",
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/document_lifecycle_review_intake.json"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "inputs": [
+        "document lifecycle review intake"
+      ],
+      "last_verified_at": "2026-07-26T20:26:56.590353+00:00",
+      "lifecycle": "active",
+      "outputs": [
+        "freshness preview",
+        "impact preview"
+      ],
+      "purpose": "Preview document and constraint freshness, dependency impact, and review_due status without automatic lifecycle changes.",
+      "real_operation_status": "NOT RUN",
+      "registration_digest": "6c58d16959ed7c1e0e030332365113faea9f65c9c17535b4c1b15ae9927fd890",
+      "registration_manifest": "project_state/workflow_manifests/g08_approved_workflows.json",
+      "registration_manifest_sha256": "9e67360979c2594902f17ab732999b810950e3d124c0b146cfac727a97f90fa0",
+      "replacement_workflow_ids": [],
+      "risk": "medium",
+      "schema_refs": [],
+      "scientific_evidence_tier": "N/A",
+      "stable_version": false,
+      "standardized": false,
+      "supersedes": [],
+      "technical_routes": [
+        "lifecycle_review"
+      ],
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "trigger": "The user asks whether a governed document or constraint needs review.",
+      "user_entry": "document_lifecycle",
+      "version": "0.1.0",
+      "workflow_id": "WF-DOCUMENT-LIFECYCLE"
+    },
+    {
+      "approval_requirement": "Content rewrite and cloud backup require later explicit approval.",
+      "authorization_ref": "DIR-20260727-004",
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/learning_guide_intake.json"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "inputs": [
+        "learning guide intake"
+      ],
+      "last_verified_at": "2026-07-26T20:26:56.301244+00:00",
+      "lifecycle": "active",
+      "outputs": [
+        "interface_reserved"
+      ],
+      "purpose": "Reserve a versioned source and experiment linkage interface for learning guides without rewriting existing guide content.",
+      "real_operation_status": "NOT RUN",
+      "registration_digest": "99160a53d65cccd57cec99cd5200bb407abd8103b482938b6a951857d7d6aedd",
+      "registration_manifest": "project_state/workflow_manifests/g08_approved_workflows.json",
+      "registration_manifest_sha256": "9e67360979c2594902f17ab732999b810950e3d124c0b146cfac727a97f90fa0",
+      "replacement_workflow_ids": [],
+      "risk": "low",
+      "schema_refs": [],
+      "scientific_evidence_tier": "N/A",
+      "stable_version": false,
+      "standardized": false,
+      "supersedes": [],
+      "technical_routes": [
+        "learning_guide"
+      ],
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "trigger": "The user asks to create or maintain a learning guide.",
+      "user_entry": "learning_guide",
+      "version": "0.1.0",
+      "workflow_id": "WF-LEARNING-GUIDE"
+    },
+    {
+      "approval_requirement": "Real content and source references must be supplied by the user or current repositories.",
+      "authorization_ref": "DIR-20260727-004",
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/meeting_brief_intake.json",
+        ".agents/skills/pfmval-governance/templates/research_path_intake.json"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "inputs": [
+        "meeting brief intake",
+        "research path intake"
+      ],
+      "last_verified_at": "2026-07-26T20:26:56.031641+00:00",
+      "lifecycle": "active",
+      "outputs": [
+        "meeting_brief draft",
+        "research_path draft"
+      ],
+      "purpose": "Create a brief meeting summary or a longer research path while preserving evidence classes, negative results, stop rules, and uncertainty.",
+      "real_operation_status": "NOT RUN",
+      "registration_digest": "ea6e33319c256972118cd98e5f2284c57a084acf12761b7b2537e251ce220ab4",
+      "registration_manifest": "project_state/workflow_manifests/g08_approved_workflows.json",
+      "registration_manifest_sha256": "9e67360979c2594902f17ab732999b810950e3d124c0b146cfac727a97f90fa0",
+      "replacement_workflow_ids": [],
+      "risk": "low",
+      "schema_refs": [],
+      "scientific_evidence_tier": "N/A",
+      "stable_version": false,
+      "standardized": false,
+      "supersedes": [],
+      "technical_routes": [
+        "meeting_brief",
+        "research_path"
+      ],
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "trigger": "The user asks to preserve meeting or long-term research context.",
+      "user_entry": "longterm_docs",
+      "version": "0.1.0",
+      "workflow_id": "WF-LONGTERM-DOCS"
+    },
+    {
+      "approval_requirement": "A real senior-author template and writing authorization are required before drafting.",
+      "authorization_ref": "DIR-20260727-004",
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/paper_output_intake.json"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "inputs": [
+        "paper output intake"
+      ],
+      "last_verified_at": "2026-07-26T20:26:57.208746+00:00",
+      "lifecycle": "active",
+      "outputs": [
+        "template_pending material index"
+      ],
+      "purpose": "Index project-local materials and claim references for a future senior-author template without drafting manuscript text.",
+      "real_operation_status": "NOT RUN",
+      "registration_digest": "bc51f0d230f2769e0f13e0372ce38debe5d3407fa17c085f66835adaccd114b0",
+      "registration_manifest": "project_state/workflow_manifests/g08_approved_workflows.json",
+      "registration_manifest_sha256": "9e67360979c2594902f17ab732999b810950e3d124c0b146cfac727a97f90fa0",
+      "replacement_workflow_ids": [],
+      "risk": "low",
+      "schema_refs": [],
+      "scientific_evidence_tier": "N/A",
+      "stable_version": false,
+      "standardized": false,
+      "supersedes": [],
+      "technical_routes": [
+        "paper_output"
+      ],
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "trigger": "The user asks to prepare project materials for later paper writing.",
+      "user_entry": "paper_output",
+      "version": "0.1.0",
+      "workflow_id": "WF-PAPER-OUTPUT"
+    },
+    {
+      "approval_requirement": "Each real fact requires a separate explicit user confirmation.",
+      "authorization_ref": "DIR-20260727-004",
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/project_fact_intake.json"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "inputs": [
+        "project fact intake"
+      ],
+      "last_verified_at": "2026-07-26T20:26:55.766294+00:00",
+      "lifecycle": "active",
+      "outputs": [
+        "confirmation preview",
+        "conflict preview"
+      ],
+      "purpose": "Maintain non-experimental project facts through preview, conflict review, and per-fact confirmation.",
+      "real_operation_status": "NOT RUN",
+      "registration_digest": "d6f517bf1e112c642b6be55569ba81d07aa56ab2b4460cc9f9ce1c38e509351c",
+      "registration_manifest": "project_state/workflow_manifests/g08_approved_workflows.json",
+      "registration_manifest_sha256": "9e67360979c2594902f17ab732999b810950e3d124c0b146cfac727a97f90fa0",
+      "replacement_workflow_ids": [],
+      "risk": "medium",
+      "schema_refs": [],
+      "scientific_evidence_tier": "N/A",
+      "stable_version": false,
+      "standardized": false,
+      "supersedes": [],
+      "technical_routes": [
+        "project_fact"
+      ],
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "trigger": "The user asks to add, correct, or inspect a non-experimental project fact.",
+      "user_entry": "project_fact",
+      "version": "0.1.0",
+      "workflow_id": "WF-PROJECT-FACT"
+    },
+    {
+      "approval_requirement": "Future candidates require separate review and activation.",
+      "authorization_ref": "DIR-20260727-004",
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/workflow_discovery_scope.json"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_workflows.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "inputs": [
+        "workflow discovery scope manifest"
+      ],
+      "last_verified_at": "2026-07-26T20:26:56.906993+00:00",
+      "lifecycle": "active",
+      "outputs": [
+        "discovery preview",
+        "candidate entries"
+      ],
+      "purpose": "Discover repeated workflow descriptors only in an explicit tracked scope and keep new discoveries at candidate.",
+      "real_operation_status": "NOT RUN",
+      "registration_digest": "46ebf93abdd8defaba570778dcb6896213e05f82b76ccb4c04148d8f928b383c",
+      "registration_manifest": "project_state/workflow_manifests/g08_approved_workflows.json",
+      "registration_manifest_sha256": "9e67360979c2594902f17ab732999b810950e3d124c0b146cfac727a97f90fa0",
+      "replacement_workflow_ids": [],
+      "risk": "medium",
+      "schema_refs": [],
+      "scientific_evidence_tier": "N/A",
+      "stable_version": false,
+      "standardized": false,
+      "supersedes": [],
+      "technical_routes": [
+        "workflow_discovery"
+      ],
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_workflow_catalog.py"
+      ],
+      "trigger": "The user explicitly asks to inspect a named tracked scope for workflow candidates.",
+      "user_entry": "workflow_discovery",
+      "version": "0.1.0",
+      "workflow_id": "WF-WORKFLOW-DISCOVERY"
+    }
+  ],
+  "scans": [
+    {
+      "content_hashes": {
+        ".agents/skills/compare/SKILL.md": "5baf556033243e082a325e0f3ad0a8d598fa90def0f785e9b3e3b6721f872cd6",
+        ".agents/skills/data-guide/SKILL.md": "157760a2019b80e54268f65d7b789b7f1dbb7e520d8bc648b0367daede61955c",
+        ".agents/skills/doc-registry/SKILL.md": "4729233521bb7c8f3c19c6c3bbc1b18b1125375351c3090015bd6a3ae414fba0",
+        ".agents/skills/experiment-log/SKILL.md": "52171ae0fc39468c3f0e029e41115c67a5c374cf296d5303646a1c4904b8a542",
+        ".agents/skills/extract/SKILL.md": "1a8a5cd829ea37b1e3047090329dd0eda2f1ff3481caf879b1b54cb96b123b36",
+        ".agents/skills/git-rescue/SKILL.md": "6e95002a30c41a2302187ad99d720827b9214f962cdc155a710b5fbf4a5b7ced",
+        ".agents/skills/health/SKILL.md": "97dd78e738ee3462c1ff202c424228d98bba18c5f30b52b4b64490534be7c963",
+        ".agents/skills/meeting-report/SKILL.md": "afc2afe905ed3f13f1890528180152d271c376f012ff3b93dd00034f94effb9e",
+        ".agents/skills/onboard/SKILL.md": "e727a2ea5471bd7355bf44fc5388390c572eebc3fec3aded42bf7cd2090338d1",
+        ".agents/skills/parallel-extract/SKILL.md": "7a61cceba177b32732d1699068b8a9c261670b64da5f7a4f5d216d8b55b5891f",
+        ".agents/skills/pfmval-audit/SKILL.md": "43b06a3d677f17fcf659e58ff256f27c1157e8ffd8546e9ef628de76ddcb34c9",
+        ".agents/skills/pfmval-governance/SKILL.md": "2ee159d9320f30841f3ab1bd1ac9693f212b0119cc179907fd73839b94f3c9a4",
+        ".agents/skills/post-train/SKILL.md": "2a4b8b4d10d507d0244781859d3b8f0f7269372ea42671a87c68d0d93207b64e",
+        ".agents/skills/sync-server/SKILL.md": "77abc0a98ceee53981d44fe4d2def7093194953887145672d8a89c00f48fdbda",
+        ".agents/skills/train-guide/SKILL.md": "868722f4dd2a6dcfb9cc0558d38650805c8f77335aaf0e7ca15c5f9de31b8366",
+        ".agents/skills/train/SKILL.md": "c187dc3ce9141c4eb783682aa4f0fefcff658c72d16df8bb5f12d449c7af1517",
+        ".agents/skills/update-ranking/SKILL.md": "4c51cf3cd122c9267e9a68af88e92704c37cd8fb90d96c69467e40364d89ba90",
+        ".agents/skills/viz-guide/SKILL.md": "4bbd69855ffcd9b6d61a68daa82a2be5cb941ce2e80a577b721988f280f62ddf",
+        ".claude/skills/compare/SKILL.md": "f42ef24cee052cc5b767f57495d60115a1a7b98df636f7b06b9e0d260c2296e7",
+        ".claude/skills/data-guide/SKILL.md": "9ecc3b533c8507c3b2ce2871ec430c74ec5b1ad838e3b6c9aab2de0b319a9c49",
+        ".claude/skills/doc-registry/SKILL.md": "d60d33a1506db794395efa106f55d84665894b3ac27a7c946cf0e03937e87f06",
+        ".claude/skills/experiment-log/SKILL.md": "c5a355ee96e02243a485c523661ee448c2884d91ee190131cb5b46e0120d78c0",
+        ".claude/skills/extract/SKILL.md": "efed89c0f8bc145b32f32e491694890da1743cef952c1e1541c0df53684fa089",
+        ".claude/skills/git-rescue/SKILL.md": "8b84bb27fd51eecbc317a8e6d69b0396cbc4fe0d098cf722f8d8d0e422b4c1bd",
+        ".claude/skills/health/SKILL.md": "be3e7e22161c906f67bf00ef50b5d5db49e2bdbdb731624ec5e29107bc31717a",
+        ".claude/skills/meeting-report/SKILL.md": "35f0e64fba7c705670c96b57719212d00c7c6fb06e4658b9ec2bff7bc47b69c6",
+        ".claude/skills/onboard/SKILL.md": "3ebcf1103e8a3eb1c993a0eda6c279f47c144f4b33e09f48428e2cfd0bde28d4",
+        ".claude/skills/parallel-extract/SKILL.md": "511b14f3e76039db4d86dd177f39833b31cda709eb14ecf3bd570d7106019deb",
+        ".claude/skills/pfmval-audit/SKILL.md": "8a8780f3bf264212461d0ab1c78f5dd1378618467c8823636714ab7af9138bb2",
+        ".claude/skills/pfmval-governance/SKILL.md": "da5509dd81cb134d3b595a3c9b3febbef6b903754d02d1cf7097674dd5985558",
+        ".claude/skills/post-train/SKILL.md": "6e3d3e0d501d8e5ce83083e4a53dcd266714dee1e72cbbc57177b5546a30947c",
+        ".claude/skills/sync-server/SKILL.md": "64e3c172b8f77beebf534d7cd6b1df80487de31b7ce99df311e44c896169dbc4",
+        ".claude/skills/train-guide/SKILL.md": "1d6dfaa05b7162fa076bffa311b2d3cc81a9ac2f6f42f582c67683622ed1f87c",
+        ".claude/skills/train/SKILL.md": "c8872376dc83b20464a4b01ff0830e5164c81e76152659c3fae7487c7136e4eb",
+        ".claude/skills/update-ranking/SKILL.md": "ff21863bbd45373e452822d49fe5960c0d2ae7bda2e1272e45c55ba0caa257e9",
+        ".claude/skills/viz-guide/SKILL.md": "79052e1b778ef8c2bd63be16796cb765934f7addd6363defeeb52d221059e3b4",
+        "PROJECT_GUIDE.md": "2be728323a5c4a92b08008385bb09ffe0df4a8bbc4889c28b557bd57dfc022be",
+        "README.md": "322c35a02c29a0c08aaf75a5080f3b8791581443423be65abf3465664d9c5f48",
+        "automation/README.md": "ab6ce17537949f3555ed7a826c4812d99029d83e8046d55cc5d913330f59dcdc",
+        "deploy/pfmval_ops.py": "80b232b7bb6b8d90682f81a372c6338eb3c8a3b8db0f465654286199f118776d",
+        "project_state/plans/workflow_governance_v3_20260726.md": "c1780aa1d00abe7785b789f4c291214f5bda88cf4280769ec3fb7f5bf6154138",
+        "project_state/plans/workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md": "56728ddc508634476cef88219432b4eb1818b9c02b07de87e052942755c8748d",
+        "project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md": "32388eb3c7b9ae6059e681aa8d18ac041a9d333a880aeec659fba448ab06d44b",
+        "project_state/plans/workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md": "e6adab4d977eb5734295f0bb9b0e30b1313eb66cc598af4156fcc091de29434d",
+        "project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md": "921b9bd9a4768334299705bdbda03feb39460f5aaa3cf422621b39a629c7fafa",
+        "project_state/plans/workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md": "9b8cb5f43bb1812585b0d019a7903d8ba6b11a6b5259b8f7db0f3d6178298247",
+        "project_state/plans/workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md": "199e5bec3b3ec5ee61a6e36fa635c263175570962ea5685d98a5638aad1254ee",
+        "project_state/plans/workflow_governance_v3_refactor/R1_workspace_registry_shadow.md": "fc99e7523af2d93d7db7485f8ec71f21ebf7b10d53aef40fc5b1cd3b0db51095",
+        "project_state/plans/workflow_governance_v3_refactor/R2_persistent_experiment_workspace.md": "36ee5d672528a0122794f4438280b2c82a816f44119bb8393d00aa5b756c0ea3",
+        "project_state/plans/workflow_governance_v3_refactor/R3_protocol_approval_and_run_budget.md": "81fbfecc6cf11977734fd7d8e26932dc88dbe7a4a644244606256422e8ce8371",
+        "project_state/plans/workflow_governance_v3_refactor/R4_critical_contract_and_gate_tiering.md": "238d10e6fd47611e7496b75044ea7b53d65c95f1bb7435ec66121f83f0bfe00e",
+        "project_state/plans/workflow_governance_v3_refactor/R5_result_artifact_tiering.md": "8b98620183d11e1a5d8f2f6ce642dc3a716340ddd6b4d317116a396ab8a3c7ad",
+        "project_state/plans/workflow_governance_v3_refactor/R5b_document_registry_and_state_gates.md": "58fd113bedd3b284ad1ae9d0c1d3c22d76518da86935cea4d23117fa337a2264",
+        "project_state/plans/workflow_governance_v3_refactor/R6_asset_registry_shadow.md": "3688a051aacc8fc31ee3b6c061342b2f7019ce806252dac5996e200bdb882929",
+        "project_state/plans/workflow_governance_v3_refactor/R7_shared_dependency_extraction.md": "5ae7e9e18d1a338df89b9279c22f8a0c8a54c03db565e6a4e45b217ba0b4e8bf",
+        "project_state/plans/workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md": "e3cb91cbfbdc35be87a74b277fca99c736621993770c713656a292f89d5cffd4",
+        "project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md": "f0c74cc5ec6dbd396f7e6f34d8a68c1d6dadc42a9a129c46b74f536cd1c4018c",
+        "project_state/plans/workflow_governance_v3_refactor/REFERENCE_open_source_research_workflow_adaptation_20260726.md": "813a84768d74f8c1606949b881e3462f7453333183616d16f4ad1dcb6da546b5",
+        "project_state/plans/workflow_governance_v3_refactor_review_20260726.md": "c3db124088b6ea3aa1b09f987c04591f1fb7e21d02433a3264fc8427f8622a29",
+        "scripts/pfmval_assets.py": "c6779ce3cbe6e9a22d1f3fc4e88a5ab9efb3ece2d39ed329a043a6a507bffee2",
+        "scripts/pfmval_governance.py": "0f5bdfb30ca2b197b6e2236b09769d1d8941a96e141adb3afd4b16b5522efa80",
+        "scripts/pfmval_knowledge.py": "1562570a4eed1e6a4f867dd4d5e14762adca702cf1918ad1021da14393a9e2e9",
+        "scripts/pfmval_science.py": "7382c9f72e6b01c1f9ec49db2385ef602de69c7a8ab2653699fc464eac9b4c4a",
+        "scripts/pfmval_state.py": "1ab6a7e97bd3900736de21e4ab24d78ac39b68d9e6ce6bd2735808902480ce45",
+        "scripts/pfmval_views.py": "2e9e9ee8580f681fbad336933ee032e4a61c2fb51a56629bedf49d66a7e808c6",
+        "scripts/pfmval_workflows.py": "5f40837e8f94d744c11c7d19b1d235b471bc6adc124c2613e03a9cb5c17f0749"
+      },
+      "scan_id": "SCAN-A25814AAE8084F59",
+      "selected_paths": [
+        ".agents/skills/compare/SKILL.md",
+        ".agents/skills/data-guide/SKILL.md",
+        ".agents/skills/doc-registry/SKILL.md",
+        ".agents/skills/experiment-log/SKILL.md",
+        ".agents/skills/extract/SKILL.md",
+        ".agents/skills/git-rescue/SKILL.md",
+        ".agents/skills/health/SKILL.md",
+        ".agents/skills/meeting-report/SKILL.md",
+        ".agents/skills/onboard/SKILL.md",
+        ".agents/skills/parallel-extract/SKILL.md",
+        ".agents/skills/pfmval-audit/SKILL.md",
+        ".agents/skills/pfmval-governance/SKILL.md",
+        ".agents/skills/post-train/SKILL.md",
+        ".agents/skills/sync-server/SKILL.md",
+        ".agents/skills/train-guide/SKILL.md",
+        ".agents/skills/train/SKILL.md",
+        ".agents/skills/update-ranking/SKILL.md",
+        ".agents/skills/viz-guide/SKILL.md",
+        ".claude/skills/compare/SKILL.md",
+        ".claude/skills/data-guide/SKILL.md",
+        ".claude/skills/doc-registry/SKILL.md",
+        ".claude/skills/experiment-log/SKILL.md",
+        ".claude/skills/extract/SKILL.md",
+        ".claude/skills/git-rescue/SKILL.md",
+        ".claude/skills/health/SKILL.md",
+        ".claude/skills/meeting-report/SKILL.md",
+        ".claude/skills/onboard/SKILL.md",
+        ".claude/skills/parallel-extract/SKILL.md",
+        ".claude/skills/pfmval-audit/SKILL.md",
+        ".claude/skills/pfmval-governance/SKILL.md",
+        ".claude/skills/post-train/SKILL.md",
+        ".claude/skills/sync-server/SKILL.md",
+        ".claude/skills/train-guide/SKILL.md",
+        ".claude/skills/train/SKILL.md",
+        ".claude/skills/update-ranking/SKILL.md",
+        ".claude/skills/viz-guide/SKILL.md",
+        "PROJECT_GUIDE.md",
+        "README.md",
+        "automation/README.md",
+        "deploy/pfmval_ops.py",
+        "project_state/plans/workflow_governance_v3_20260726.md",
+        "project_state/plans/workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md",
+        "project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md",
+        "project_state/plans/workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md",
+        "project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md",
+        "project_state/plans/workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md",
+        "project_state/plans/workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md",
+        "project_state/plans/workflow_governance_v3_refactor/R1_workspace_registry_shadow.md",
+        "project_state/plans/workflow_governance_v3_refactor/R2_persistent_experiment_workspace.md",
+        "project_state/plans/workflow_governance_v3_refactor/R3_protocol_approval_and_run_budget.md",
+        "project_state/plans/workflow_governance_v3_refactor/R4_critical_contract_and_gate_tiering.md",
+        "project_state/plans/workflow_governance_v3_refactor/R5_result_artifact_tiering.md",
+        "project_state/plans/workflow_governance_v3_refactor/R5b_document_registry_and_state_gates.md",
+        "project_state/plans/workflow_governance_v3_refactor/R6_asset_registry_shadow.md",
+        "project_state/plans/workflow_governance_v3_refactor/R7_shared_dependency_extraction.md",
+        "project_state/plans/workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md",
+        "project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md",
+        "project_state/plans/workflow_governance_v3_refactor/REFERENCE_open_source_research_workflow_adaptation_20260726.md",
+        "project_state/plans/workflow_governance_v3_refactor_review_20260726.md",
+        "scripts/pfmval_assets.py",
+        "scripts/pfmval_governance.py",
+        "scripts/pfmval_knowledge.py",
+        "scripts/pfmval_science.py",
+        "scripts/pfmval_state.py",
+        "scripts/pfmval_views.py",
+        "scripts/pfmval_workflows.py"
+      ]
+    }
+  ],
   "schema_version": "1.0",
-  "updated_at": null
+  "updated_at": "2026-07-26T20:27:03.871547+00:00"
 }

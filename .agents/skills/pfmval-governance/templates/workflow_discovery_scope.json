@@ -1,0 +1,8 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "selected_paths": [
+    "docs/fixture-a.md",
+    "docs/fixture-b.md"
+  ]
+}

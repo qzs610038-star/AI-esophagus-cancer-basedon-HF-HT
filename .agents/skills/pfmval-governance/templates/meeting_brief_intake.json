@@ -1,0 +1,24 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "document_id": "fixture-meeting-brief",
+  "title": "Synthetic meeting brief",
+  "accepted_result_refs": [
+    "fixture-accepted:result-accepted"
+  ],
+  "explore_refs": [
+    "explore:fixture-only"
+  ],
+  "failed_refs": [
+    "fixture-failed:result-failed"
+  ],
+  "recent_work": [
+    "local fixture validation"
+  ],
+  "difficulties": [
+    "no real project content supplied"
+  ],
+  "next_steps": [
+    "wait for user content"
+  ]
+}

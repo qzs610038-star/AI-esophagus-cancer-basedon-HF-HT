@@ -24,6 +24,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from scripts.pfmval_state import (  # noqa: E402
     DIAGNOSTIC_COMMANDS,
     activate_mpp_repair_evidence,
+    active_directives,
     active_mpp_repair,
     append_directive,
     build_mpp_path_index,
@@ -102,6 +103,7 @@ from scripts.pfmval_workflows import (  # noqa: E402
     discover_workflows,
     list_workflows,
     merge_workflows,
+    register_workflow_manifest,
     review_workflow,
     revise_workflow,
     validate_workflow_catalog,
@@ -760,6 +762,31 @@ def command_knowledge(args: argparse.Namespace) -> int:
 
 
 def command_workflow(args: argparse.Namespace) -> int:
+    if args.workflow_command == "register":
+        tracked = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(PROJECT_ROOT),
+                "ls-files",
+                "--error-unmatch",
+                "--",
+                args.manifest,
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        ).stdout.splitlines()
+        result = register_workflow_manifest(
+            PROJECT_ROOT,
+            manifest_path=args.manifest,
+            authorization_ref=args.authorization_ref,
+            tracked_paths=tracked,
+            active_authorization_refs=active_directives(PROJECT_ROOT),
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
     if args.workflow_command == "discover":
         scope = read_json(Path(args.scope_manifest).resolve())
         selected_paths = scope.get("selected_paths", [])
@@ -1287,6 +1314,9 @@ def build_parser() -> argparse.ArgumentParser:
     workflow_discover = workflow_sub.add_parser("discover")
     workflow_discover.add_argument("--scope-manifest", required=True)
     workflow_discover.add_argument("--record", action="store_true")
+    workflow_register = workflow_sub.add_parser("register")
+    workflow_register.add_argument("--manifest", required=True)
+    workflow_register.add_argument("--authorization-ref", required=True)
     workflow_sub.add_parser("list")
     workflow_review = workflow_sub.add_parser("review")
     workflow_review.add_argument("--workflow-id", required=True)

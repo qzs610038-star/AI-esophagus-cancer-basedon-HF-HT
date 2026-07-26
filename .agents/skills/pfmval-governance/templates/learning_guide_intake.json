@@ -1,0 +1,19 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "document_id": "fixture-learning-guide",
+  "title": "Synthetic learning guide interface",
+  "topic": "workflow governance",
+  "audience": "project learner",
+  "prerequisites": [],
+  "source_refs": [
+    {
+      "commit": "0000000000000000000000000000000000000000",
+      "file": "scripts/pfmval_knowledge.py",
+      "symbol": "build_document_profile"
+    }
+  ],
+  "experiment_refs": [],
+  "last_verified_commit": "0000000000000000000000000000000000000000",
+  "supersedes": []
+}

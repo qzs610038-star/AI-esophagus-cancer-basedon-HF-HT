@@ -1,0 +1,8 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "document_id": "fixture-active-document",
+  "current_fingerprints": {
+    "source": "fixture-new"
+  }
+}

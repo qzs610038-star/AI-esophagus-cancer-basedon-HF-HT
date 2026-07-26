@@ -1,0 +1,14 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "document_id": "fixture-paper-output",
+  "title": "Synthetic paper material interface",
+  "template_ref": null,
+  "material_refs": [
+    "file:fixture-material.md"
+  ],
+  "claim_refs": [],
+  "section_mapping": {},
+  "output_path": "papers/template-pending.md",
+  "review_status": "not_started"
+}

@@ -11,6 +11,7 @@ from scripts.pfmval_workflows import (
     discover_workflows,
     list_workflows,
     merge_workflows,
+    register_workflow_manifest,
     review_workflow,
     revise_workflow,
 )
@@ -202,3 +203,218 @@ def test_r11_t07_catalog_is_offline_and_cli_is_explicitly_scoped(tmp_path, monke
     )
     assert args.command == "workflow"
     assert args.workflow_command == "discover"
+
+
+def test_g08_register_manifest_creates_candidates_and_same_content_is_noop(tmp_path):
+    root = tmp_path / "repo"
+    manifest_path = "project_state/workflows/g08-approved.json"
+    manifest = {
+        "schema_version": "1.0",
+        "authorization_ref": "DIR-G08",
+        "workflows": [
+            {
+                "workflow_id": "WF-PROJECT-FACT",
+                "purpose": "Maintain non-experimental project facts",
+                "trigger": "user requests a project fact update",
+                "inputs": ["project fact intake"],
+                "outputs": ["confirmation preview"],
+                "implementation_locations": [
+                    ".agents/skills/pfmval-governance/SKILL.md",
+                    "scripts/pfmval_knowledge.py",
+                ],
+                "risk": "medium",
+                "approval_requirement": "each fact requires explicit confirmation",
+                "version": "0.1.0",
+                "user_entry": "project_fact",
+                "technical_routes": ["project_fact"],
+            }
+        ],
+    }
+    _write(root / manifest_path, json.dumps(manifest))
+
+    first = register_workflow_manifest(
+        root,
+        manifest_path=manifest_path,
+        authorization_ref="DIR-G08",
+        tracked_paths=[manifest_path],
+        active_authorization_refs=["DIR-G08"],
+    )
+    before = (root / "project_state" / "workflow_catalog.json").read_bytes()
+    second = register_workflow_manifest(
+        root,
+        manifest_path=manifest_path,
+        authorization_ref="DIR-G08",
+        tracked_paths=[manifest_path],
+        active_authorization_refs=["DIR-G08"],
+    )
+    after = (root / "project_state" / "workflow_catalog.json").read_bytes()
+
+    assert first == {
+        "status": "registered",
+        "writes": 1,
+        "candidate_ids": ["WF-PROJECT-FACT"],
+    }
+    assert second == {
+        "status": "noop",
+        "writes": 0,
+        "candidate_ids": ["WF-PROJECT-FACT"],
+    }
+    assert before == after
+    stored = list_workflows(root)
+    assert stored[0]["lifecycle"] == "candidate"
+    assert stored[0]["standardized"] is False
+    assert stored[0]["authorization_ref"] == "DIR-G08"
+
+
+def test_g08_cli_exposes_manifest_and_authorization_bound_register():
+    parser = pfmval_ops.build_parser()
+    args = parser.parse_args(
+        [
+            "workflow",
+            "register",
+            "--manifest",
+            "project_state/workflows/g08-approved.json",
+            "--authorization-ref",
+            "DIR-G08",
+        ]
+    )
+    assert args.workflow_command == "register"
+    assert args.manifest == "project_state/workflows/g08-approved.json"
+    assert args.authorization_ref == "DIR-G08"
+
+
+def test_g08_register_reuses_same_entry_when_manifest_adds_another_candidate(tmp_path):
+    root = tmp_path / "repo"
+    manifest_path = "project_state/workflows/g08-approved.json"
+    first_entry = {
+        "workflow_id": "WF-PROJECT-FACT",
+        "purpose": "Maintain non-experimental project facts",
+        "trigger": "user requests a project fact update",
+        "inputs": ["project fact intake"],
+        "outputs": ["confirmation preview"],
+        "implementation_locations": ["scripts/pfmval_knowledge.py"],
+        "risk": "medium",
+        "approval_requirement": "each fact requires explicit confirmation",
+        "version": "0.1.0",
+        "user_entry": "project_fact",
+        "technical_routes": ["project_fact"],
+    }
+    manifest = {
+        "schema_version": "1.0",
+        "authorization_ref": "DIR-G08",
+        "workflows": [first_entry],
+    }
+    _write(root / manifest_path, json.dumps(manifest))
+    common = {
+        "manifest_path": manifest_path,
+        "authorization_ref": "DIR-G08",
+        "tracked_paths": [manifest_path],
+        "active_authorization_refs": ["DIR-G08"],
+    }
+    register_workflow_manifest(root, **common)
+
+    manifest["workflows"].append(
+        {
+            **first_entry,
+            "workflow_id": "WF-LEARNING-GUIDE",
+            "purpose": "Maintain learning guide interfaces",
+            "user_entry": "learning_guide",
+            "technical_routes": ["learning_guide"],
+        }
+    )
+    _write(root / manifest_path, json.dumps(manifest))
+    result = register_workflow_manifest(root, **common)
+
+    assert result["status"] == "registered"
+    assert result["writes"] == 1
+    assert [item["workflow_id"] for item in list_workflows(root)] == [
+        "WF-LEARNING-GUIDE",
+        "WF-PROJECT-FACT",
+    ]
+
+
+def test_g08_register_conflict_fails_before_adding_any_manifest_entry(tmp_path):
+    root = tmp_path / "repo"
+    manifest_path = "project_state/workflows/g08-approved.json"
+    entry = {
+        "workflow_id": "WF-PROJECT-FACT",
+        "purpose": "Maintain project facts",
+        "trigger": "user requests a fact update",
+        "inputs": ["fact intake"],
+        "outputs": ["confirmation preview"],
+        "implementation_locations": ["scripts/pfmval_knowledge.py"],
+        "risk": "medium",
+        "approval_requirement": "explicit confirmation",
+        "version": "0.1.0",
+        "user_entry": "project_fact",
+        "technical_routes": ["project_fact"],
+    }
+    manifest = {
+        "schema_version": "1.0",
+        "authorization_ref": "DIR-G08",
+        "workflows": [entry],
+    }
+    _write(root / manifest_path, json.dumps(manifest))
+    common = {
+        "manifest_path": manifest_path,
+        "authorization_ref": "DIR-G08",
+        "tracked_paths": [manifest_path],
+        "active_authorization_refs": ["DIR-G08"],
+    }
+    register_workflow_manifest(root, **common)
+    before = (root / "project_state" / "workflow_catalog.json").read_bytes()
+
+    manifest["workflows"] = [
+        {**entry, "purpose": "Conflicting replacement"},
+        {
+            **entry,
+            "workflow_id": "WF-PAPER-OUTPUT",
+            "purpose": "Reserve paper output interface",
+            "user_entry": "paper_output",
+            "technical_routes": ["paper_output"],
+        },
+    ]
+    _write(root / manifest_path, json.dumps(manifest))
+    with pytest.raises(ValueError, match="different content"):
+        register_workflow_manifest(root, **common)
+
+    assert (root / "project_state" / "workflow_catalog.json").read_bytes() == before
+    assert [item["workflow_id"] for item in list_workflows(root)] == [
+        "WF-PROJECT-FACT"
+    ]
+
+
+@pytest.mark.parametrize(
+    ("tracked_paths", "active_refs", "message"),
+    [
+        ([], ["DIR-G08"], "not tracked"),
+        (["project_state/workflows/g08-approved.json"], [], "not active"),
+    ],
+)
+def test_g08_register_requires_tracked_manifest_and_active_authorization(
+    tmp_path,
+    tracked_paths,
+    active_refs,
+    message,
+):
+    root = tmp_path / "repo"
+    manifest_path = "project_state/workflows/g08-approved.json"
+    _write(
+        root / manifest_path,
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "authorization_ref": "DIR-G08",
+                "workflows": [{}],
+            }
+        ),
+    )
+    with pytest.raises(ValueError, match=message):
+        register_workflow_manifest(
+            root,
+            manifest_path=manifest_path,
+            authorization_ref="DIR-G08",
+            tracked_paths=tracked_paths,
+            active_authorization_refs=active_refs,
+        )
+    assert not (root / "project_state" / "workflow_catalog.json").exists()

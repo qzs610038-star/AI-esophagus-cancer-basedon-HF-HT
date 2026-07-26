@@ -1,0 +1,24 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "document_id": "fixture-research-path",
+  "title": "Synthetic research path",
+  "confirmed_conclusions": [
+    "fixture conclusion only"
+  ],
+  "interpretations": [
+    {
+      "statement": "synthetic interpretation",
+      "uncertainty": "not backed by a real experiment"
+    }
+  ],
+  "negative_routes": [
+    {
+      "route": "synthetic rejected route",
+      "stop_reason": "fixture stop rule"
+    }
+  ],
+  "open_hypotheses": [
+    "synthetic open hypothesis"
+  ]
+}

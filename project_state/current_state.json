@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 120,
-  "updated_at": "2026-07-26T19:44:12+00:00",
-  "source_commit": "6b8f698559b71ef1f6c36359339de26fdf198a86",
+  "state_revision": 124,
+  "updated_at": "2026-07-26T20:31:46+00:00",
+  "source_commit": "06dac933c8aaafc5cfba565df14d2a86f974d0e5",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -27,7 +27,8 @@
     "DIR-20260726-002",
     "DIR-20260726-003",
     "DIR-20260726-004",
-    "DIR-20260727-001"
+    "DIR-20260727-001",
+    "DIR-20260727-004"
   ],
   "active_plans": {
     "mpp_training": {
@@ -143,6 +144,14 @@
       ],
       "status": "canonical",
       "approved_at": "2026-07-26T20:02:02+08:00"
+    },
+    "pfmval-governance": {
+      "canonical_path": ".agents/skills/pfmval-governance/SKILL.md",
+      "adapter_paths": [
+        ".claude/skills/pfmval-governance/SKILL.md"
+      ],
+      "status": "canonical",
+      "approved_at": "2026-07-27T04:26:57+08:00"
     },
     "post-train": {
       "canonical_path": ".agents/skills/post-train/SKILL.md",
@@ -333,10 +342,10 @@
     "experiment_registry_sha256": "591506737fc071927302295169941f3b39fe561a4e93b69bcc39a69e3f3e0a5d",
     "experiment_dashboard_sha256": "a70f091043dcf96a46474708a451731108f7a4c3acafe1699ab3dd4e507f39dd",
     "experiment_progress_sha256": "ab89563a1127dfffeb4bea1b591fb9283647be80a5c87b1c8685c796101d480e",
-    "document_registry_sha256": "717248ecef4e77ad159198ba8fea0d9f1666c70d3ced91b8fc99bb9e2a692a06",
+    "document_registry_sha256": "122b3df8e3f9640e0368b3a90c5da9f71d2ed594184f9108a07c364c0769033a",
     "asset_registry_sha256": "e30959ff4af1c99af4ddb1f8ffac5fdad84902da42c8baa84443e4ecb1a4501d",
     "workspace_registry_sha256": "a1b7fcfa70284bd427169dc4ec33fb52ae551a94a72a99cab305bb8230c9b972",
-    "workflow_catalog_sha256": "edb83c1f5f89d533304debaffae854daa4d6ef58796a004a1cea6d69d6426ed6",
+    "workflow_catalog_sha256": "b08d9d253c09ccd96c03a8269b3e63f4553c557582c21b47e159aeb61e88ba34",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "eeb5f05d5ced9d4900ebffc1af4307bf6cbab5fe8a708be1b1ae10b447597d9d",
     "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"

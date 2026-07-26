@@ -1,0 +1,206 @@
+{
+  "schema_version": "1.0",
+  "authorization_ref": "DIR-20260727-004",
+  "source_package": "project_state/plans/workflow_governance_v3_g08_local_completion_approval_20260727.md",
+  "workflows": [
+    {
+      "workflow_id": "WF-PROJECT-FACT",
+      "purpose": "Maintain non-experimental project facts through preview, conflict review, and per-fact confirmation.",
+      "trigger": "The user asks to add, correct, or inspect a non-experimental project fact.",
+      "inputs": [
+        "project fact intake"
+      ],
+      "outputs": [
+        "confirmation preview",
+        "conflict preview"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "risk": "medium",
+      "approval_requirement": "Each real fact requires a separate explicit user confirmation.",
+      "version": "0.1.0",
+      "user_entry": "project_fact",
+      "technical_routes": [
+        "project_fact"
+      ],
+      "real_operation_status": "NOT RUN",
+      "scientific_evidence_tier": "N/A",
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/project_fact_intake.json"
+      ]
+    },
+    {
+      "workflow_id": "WF-LONGTERM-DOCS",
+      "purpose": "Create a brief meeting summary or a longer research path while preserving evidence classes, negative results, stop rules, and uncertainty.",
+      "trigger": "The user asks to preserve meeting or long-term research context.",
+      "inputs": [
+        "meeting brief intake",
+        "research path intake"
+      ],
+      "outputs": [
+        "meeting_brief draft",
+        "research_path draft"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "risk": "low",
+      "approval_requirement": "Real content and source references must be supplied by the user or current repositories.",
+      "version": "0.1.0",
+      "user_entry": "longterm_docs",
+      "technical_routes": [
+        "meeting_brief",
+        "research_path"
+      ],
+      "real_operation_status": "NOT RUN",
+      "scientific_evidence_tier": "N/A",
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/meeting_brief_intake.json",
+        ".agents/skills/pfmval-governance/templates/research_path_intake.json"
+      ]
+    },
+    {
+      "workflow_id": "WF-LEARNING-GUIDE",
+      "purpose": "Reserve a versioned source and experiment linkage interface for learning guides without rewriting existing guide content.",
+      "trigger": "The user asks to create or maintain a learning guide.",
+      "inputs": [
+        "learning guide intake"
+      ],
+      "outputs": [
+        "interface_reserved"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "risk": "low",
+      "approval_requirement": "Content rewrite and cloud backup require later explicit approval.",
+      "version": "0.1.0",
+      "user_entry": "learning_guide",
+      "technical_routes": [
+        "learning_guide"
+      ],
+      "real_operation_status": "NOT RUN",
+      "scientific_evidence_tier": "N/A",
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/learning_guide_intake.json"
+      ]
+    },
+    {
+      "workflow_id": "WF-DOCUMENT-LIFECYCLE",
+      "purpose": "Preview document and constraint freshness, dependency impact, and review_due status without automatic lifecycle changes.",
+      "trigger": "The user asks whether a governed document or constraint needs review.",
+      "inputs": [
+        "document lifecycle review intake"
+      ],
+      "outputs": [
+        "freshness preview",
+        "impact preview"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "risk": "medium",
+      "approval_requirement": "Lifecycle transitions and directive closure require separate explicit user decisions.",
+      "version": "0.1.0",
+      "user_entry": "document_lifecycle",
+      "technical_routes": [
+        "lifecycle_review"
+      ],
+      "real_operation_status": "NOT RUN",
+      "scientific_evidence_tier": "N/A",
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/document_lifecycle_review_intake.json"
+      ]
+    },
+    {
+      "workflow_id": "WF-WORKFLOW-DISCOVERY",
+      "purpose": "Discover repeated workflow descriptors only in an explicit tracked scope and keep new discoveries at candidate.",
+      "trigger": "The user explicitly asks to inspect a named tracked scope for workflow candidates.",
+      "inputs": [
+        "workflow discovery scope manifest"
+      ],
+      "outputs": [
+        "discovery preview",
+        "candidate entries"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_workflows.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "risk": "medium",
+      "approval_requirement": "Future candidates require separate review and activation.",
+      "version": "0.1.0",
+      "user_entry": "workflow_discovery",
+      "technical_routes": [
+        "workflow_discovery"
+      ],
+      "real_operation_status": "NOT RUN",
+      "scientific_evidence_tier": "N/A",
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_workflow_catalog.py"
+      ],
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/workflow_discovery_scope.json"
+      ]
+    },
+    {
+      "workflow_id": "WF-PAPER-OUTPUT",
+      "purpose": "Index project-local materials and claim references for a future senior-author template without drafting manuscript text.",
+      "trigger": "The user asks to prepare project materials for later paper writing.",
+      "inputs": [
+        "paper output intake"
+      ],
+      "outputs": [
+        "template_pending material index"
+      ],
+      "implementation_locations": [
+        ".agents/skills/pfmval-governance/SKILL.md",
+        "scripts/pfmval_knowledge.py",
+        "deploy/pfmval_ops.py"
+      ],
+      "risk": "low",
+      "approval_requirement": "A real senior-author template and writing authorization are required before drafting.",
+      "version": "0.1.0",
+      "user_entry": "paper_output",
+      "technical_routes": [
+        "paper_output"
+      ],
+      "real_operation_status": "NOT RUN",
+      "scientific_evidence_tier": "N/A",
+      "test_refs": [
+        "tests/test_pfmval_governance_skill.py",
+        "tests/test_pfmval_knowledge_documents.py"
+      ],
+      "example_refs": [
+        ".agents/skills/pfmval-governance/templates/paper_output_intake.json"
+      ]
+    }
+  ]
+}

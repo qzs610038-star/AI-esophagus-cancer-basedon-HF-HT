@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `031cb72e4779a1c3babf9d371c469c30a3df5243c9d0b72f459c6932e403e695`
+> source_sha256: `353c6ddd5817f5bdbf21b4836781ab4cd7263d6c300daa67f4c8f07ccccd187b`
 
 ## 我要找什么
 
@@ -40,6 +40,7 @@
 - [doc-64713fd9ae4e](.agents/skills/onboard/SKILL.md)
 - [doc-492cd9b1883b](.agents/skills/parallel-extract/SKILL.md)
 - [doc-99b982a5eb8c](.agents/skills/pfmval-audit/SKILL.md)
+- [doc-caaf0fece4e6](.agents/skills/pfmval-governance/SKILL.md)
 - [doc-beb5a9361ddf](.agents/skills/post-train/SKILL.md)
 - [doc-bbcfcbdf94e6](.agents/skills/sync-server/SKILL.md)
 - [doc-df6a61266d27](.agents/skills/train-guide/SKILL.md)
@@ -59,6 +60,7 @@
 - [doc-e0f1ea89a226](.claude/skills/onboard/SKILL.md)
 - [doc-b089dd676e8f](.claude/skills/parallel-extract/SKILL.md)
 - [doc-31b571198b27](.claude/skills/pfmval-audit/SKILL.md)
+- [doc-46398de15079](.claude/skills/pfmval-governance/SKILL.md)
 - [doc-1e2cda77a042](.claude/skills/post-train/SKILL.md)
 - [doc-298d98c90723](.claude/skills/sync-server/SKILL.md)
 - [doc-6ed04f28f7c0](.claude/skills/train-guide/SKILL.md)
@@ -202,6 +204,7 @@
 - [doc-30d6cd0aae35](automation/report_inputs/gemini_mpp_report_handoff_20260713.md)
 - [doc-916d4b92af63](deploy/SYNC_GUIDE.md)
 - [doc-ce94fd42b6c4](project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717_goal_prompt.md)
+- [doc-92f924374faa](project_state/plans/workflow_governance_v3_g08_local_completion_approval_20260727.md)
 - [doc-542d6960864e](project_state/plans/workflow_governance_v3_refactor/REFERENCE_open_source_research_workflow_adaptation_20260726.md)
 
 > historical 不等于 deleted；不得把本节资料作为当前执行依据。

@@ -252,6 +252,130 @@ def apply_workflow_discovery(
     }
 
 
+def register_workflow_manifest(
+    root: Path,
+    *,
+    manifest_path: str,
+    authorization_ref: str,
+    tracked_paths: Iterable[str],
+    active_authorization_refs: Iterable[str],
+) -> dict[str, Any]:
+    """Register explicitly approved manifest entries as candidates only."""
+
+    relative, resolved = _relative_selected_path(root, manifest_path)
+    tracked = {Path(item).as_posix() for item in tracked_paths}
+    if relative not in tracked:
+        raise ValueError(f"workflow manifest is not tracked: {relative}")
+    active_refs = {str(item) for item in active_authorization_refs}
+    if authorization_ref not in active_refs:
+        raise ValueError(
+            f"workflow authorization is not active: {authorization_ref}"
+        )
+    manifest_bytes = resolved.read_bytes()
+    manifest = json.loads(manifest_bytes.decode("utf-8"))
+    if not isinstance(manifest, dict):
+        raise ValueError("workflow manifest must be an object")
+    if manifest.get("authorization_ref") != authorization_ref:
+        raise ValueError("workflow manifest authorization_ref does not match")
+    workflows = manifest.get("workflows")
+    if not isinstance(workflows, list) or not workflows:
+        raise ValueError("workflow manifest workflows must be a non-empty array")
+
+    required = {
+        "workflow_id",
+        "purpose",
+        "trigger",
+        "inputs",
+        "outputs",
+        "implementation_locations",
+        "risk",
+        "approval_requirement",
+        "version",
+        "user_entry",
+        "technical_routes",
+    }
+    manifest_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
+    candidates: list[dict[str, Any]] = []
+    manifest_ids: set[str] = set()
+    for raw in workflows:
+        if not isinstance(raw, dict):
+            raise ValueError("workflow manifest entry must be an object")
+        missing = sorted(required - set(raw))
+        if missing:
+            raise ValueError(
+                f"workflow manifest entry missing {', '.join(missing)}"
+            )
+        workflow_id = str(raw["workflow_id"])
+        if workflow_id in manifest_ids:
+            raise ValueError(f"duplicate workflow_id in manifest: {workflow_id}")
+        manifest_ids.add(workflow_id)
+        candidate = deepcopy(raw)
+        candidate.update(
+            {
+                "workflow_id": workflow_id,
+                "lifecycle": "candidate",
+                "replacement_workflow_ids": [],
+                "supersedes": list(raw.get("supersedes", [])),
+                "standardized": False,
+                "stable_version": bool(raw.get("stable_version", False)),
+                "schema_refs": list(raw.get("schema_refs", [])),
+                "test_refs": list(raw.get("test_refs", [])),
+                "example_refs": list(raw.get("example_refs", [])),
+                "last_verified_at": None,
+                "authorization_ref": authorization_ref,
+                "registration_manifest": relative,
+                "registration_manifest_sha256": manifest_sha256,
+            }
+        )
+        registration_material = {
+            key: value
+            for key, value in candidate.items()
+            if key
+            not in {
+                "lifecycle",
+                "standardized",
+                "last_verified_at",
+                "registration_manifest",
+                "registration_manifest_sha256",
+                "registration_digest",
+            }
+        }
+        candidate["registration_digest"] = hashlib.sha256(
+            _canonical(registration_material).encode("utf-8")
+        ).hexdigest()
+        candidates.append(candidate)
+
+    catalog = _read_catalog(root)
+    existing = {
+        str(item.get("workflow_id")): item for item in catalog["entries"]
+    }
+    new_candidates: list[dict[str, Any]] = []
+    for candidate in candidates:
+        current = existing.get(candidate["workflow_id"])
+        if current is None:
+            new_candidates.append(candidate)
+            continue
+        if current.get("registration_digest") != candidate["registration_digest"]:
+            raise ValueError(
+                "workflow_id is already bound to different content: "
+                f"{candidate['workflow_id']}"
+            )
+    candidate_ids = [item["workflow_id"] for item in candidates]
+    if not new_candidates:
+        return {
+            "status": "noop",
+            "writes": 0,
+            "candidate_ids": candidate_ids,
+        }
+    catalog["entries"].extend(new_candidates)
+    _commit_catalog(root, catalog)
+    return {
+        "status": "registered",
+        "writes": 1,
+        "candidate_ids": candidate_ids,
+    }
+
+
 def list_workflows(root: Path) -> list[dict[str, Any]]:
     return deepcopy(_read_catalog(root)["entries"])
 

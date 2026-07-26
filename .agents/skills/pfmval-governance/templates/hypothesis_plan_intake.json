@@ -1,0 +1,18 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "problem": "synthetic research question",
+  "known_facts": [],
+  "assumptions": [],
+  "claims": [
+    {
+      "claim": "synthetic claim",
+      "evidence_refs": [],
+      "uncertainty": "not evaluated"
+    }
+  ],
+  "candidate_routes": [],
+  "negative_results": [],
+  "stop_rules": [],
+  "decision_required": null
+}

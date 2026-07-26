@@ -1,0 +1,11 @@
+{
+  "fixture_only": true,
+  "real_operation": "NOT RUN",
+  "fact_id": "fixture-project-fact",
+  "kind": "team_decision",
+  "statement": "synthetic fact requiring explicit confirmation",
+  "source": "fixture:g08",
+  "observed_at": "2026-07-27T00:00:00+00:00",
+  "status": "active",
+  "supersedes": []
+}
