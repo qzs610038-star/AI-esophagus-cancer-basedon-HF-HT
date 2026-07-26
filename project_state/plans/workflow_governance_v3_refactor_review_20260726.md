@@ -1,12 +1,12 @@
 # PFMval 治理 v3 结构性重构审查包
 
 > document role: `refactor-framework-and-index`
-> review package revision: `004`
+> review package revision: `005`
 > lifecycle: `pending_review`
 > state scope: `workflow_governance_v3_refactor_review`
-> authorization: `DIR-20260726-002`, `DIR-20260726-003`, `DIR-20260726-004`, `DIR-20260726-005`
+> authorization: `DIR-20260726-002`, `DIR-20260726-003`, `DIR-20260726-004`, `DIR-20260727-001`
 > implementation status: `framework_landed_modules_pending_review_code_pending`
-> audit baseline: code `main@a96bac88`
+> audit baseline: code `main@9d8cc7a4`
 > prohibition: 本审查包及其模块不是服务器执行、训练、结果接纳、资产迁移、目录解禁或清理批准。
 
 ## 0. 本文件的职责
@@ -94,13 +94,14 @@ P0 是贯穿多个 R 阶段的验收合同，不是第三套实现入口。
 |---|---|---|---|
 | P0A | [实验全生命周期可执行闭环](workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md) | Agent 无需临时拼装实验流程 | 注册到 close preview 的 CLI happy path、异常恢复与幂等测试 |
 | P0B | [用户仓库导航与实验进度双视图](workflow_governance_v3_refactor/P0B_user_views_and_navigation.md) | 用户能快速定位文件、看懂实验进展 | tracked 导航、Registry 生成的简洁进度、current/history 分区与一致性测试 |
+| P0C | [科研推理与扩展维护工作流横向验收](workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md) | 探索保持轻量，结论/阴性结果/冲突可追溯 | 证据分层、claim/negative/stop、冲突裁决、离线与模块隔离测试 |
 
 门禁规则：
 
-- 在任何 R 阶段从 `pending_review` 转入实际实现前，P0A/P0B 中与该阶段有关
+- 在任何 R 阶段从 `pending_review` 转入实际实现前，P0A/P0B/P0C 中与该阶段有关
   的接口、输出和测试必须已审查。
-- 单个 R 阶段通过，不代表 P0A/P0B 完成。
-- 整套结构性重构不得在 P0A/P0B 功能验收未通过时宣称完成。
+- 单个 R 阶段通过，不代表 P0A/P0B/P0C 完成。
+- 整套结构性重构不得在 P0A/P0B/P0C 相关功能验收未通过时宣称完成。
 
 ## 4. 分阶段模块与依赖
 
@@ -108,6 +109,7 @@ P0 是贯穿多个 R 阶段的验收合同，不是第三套实现入口。
 flowchart TD
     P0A["P0A 实验全生命周期闭环"]
     P0B["P0B 用户导航与实验进度"]
+    P0C["P0C 科研推理与扩展维护验收"]
     R0["R0 冻结基线"]
     R1["R1 Workspace Registry shadow"]
     R2["R2 单持久工作树 / 外部 run root"]
@@ -119,6 +121,8 @@ flowchart TD
     R7["R7 共享依赖抽取"]
     R8["R8 Lifecycle / Hook / 解禁"]
     R9["R9 Closeout / Cleanup"]
+    R10["R10 项目知识 / 文档生命周期"]
+    R11["R11 Workflow 目录 / 演化"]
 
     R0 --> R1
     R1 --> R2
@@ -135,6 +139,8 @@ flowchart TD
     R5 --> R9
     R6 --> R9
     R8 --> R9
+    R5B --> R10
+    R5B --> R11
 
     P0A -.约束.-> R1
     P0A -.约束.-> R2
@@ -146,6 +152,8 @@ flowchart TD
     P0B -.约束.-> R6
     P0B -.约束.-> R8
     P0B -.约束.-> R9
+    P0C -.约束.-> R10
+    P0C -.约束.-> R11
 ```
 
 ### 4.1 模块索引
@@ -163,6 +171,8 @@ flowchart TD
 | R7 | [共享依赖抽取](workflow_governance_v3_refactor/R7_shared_dependency_extraction.md) | pending_review | 中性核心、兼容 shim |
 | R8 | [生命周期迁移与分级解禁](workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md) | pending_review | asset policy、shadow Hook、用户导航刷新 |
 | R9 | [正式关闭与 Cleanup](workflow_governance_v3_refactor/R9_closeout_and_cleanup.md) | pending_review | close preview、精确批准、tombstone |
+| R10 | [项目知识与文档生命周期](workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md) | pending_review | 项目事实、简述、指南/论文接口、生命周期 |
+| R11 | [工作流目录、发现与演化](workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md) | pending_review | 本地 manifest、候选准入、版本/合并/弃用 |
 
 ## 5. 高层影响面
 
@@ -176,12 +186,16 @@ flowchart TD
 | 资产与路径 | shadow inventory → policy | R6–R8 | 误分类、误解禁 |
 | protected dirs | 依赖抽取后分级维护 | R7–R8 | 数值漂移、提前解禁 |
 | closeout | preview 与 execute 分离 | R9 | 误删工作树或外部资产 |
+| 项目知识/文档 | 共用本地来源、版本和 lifecycle | P0C、R10 | 解释冒充事实、模块膨胀 |
+| 工作流目录 | 用户触发的本地候选与准入 | P0C、R11 | 自动启用、采集越界 |
 
 详细符号、字段、步骤和测试只在对应模块维护。
 
-## 6. 统一重构流程
+## 6. 按风险分轨的重构流程
 
-每个模块必须经过以下状态，不得跨越：
+### 6.1 高风险执行轨
+
+适用于 P0A、R1–R9 以及 R11 中会生成可执行入口的部分：
 
 ```text
 pending_review
@@ -195,31 +209,46 @@ pending_review
 → accepted / rejected / superseded
 ```
 
-说明：
+### 6.2 文档/元数据轻量轨
+
+适用于 P0C、R10 以及 R11 的只读目录部分：
+
+```text
+pending_review
+→ approved_design
+→ implementation_authorized
+→ implemented
+→ verified
+→ accepted / rejected / superseded
+```
+
+轻量轨仍必须有负向、幂等、冲突和回退验证；只有涉及 schema 迁移、writer、
+可执行行为或兼容风险时，才增加 tests-red/green 和 shadow 阶段。不得为了
+流程形式要求每次简述、事实口述或接口预留都走完整九阶段门禁。
+
+共同说明：
 
 - `approved_design` 只批准设计，不等于代码实施授权。
-- `tests_red` 证明测试能捕获目标缺口。
-- `tests_green` 只证明被测试行为，不等于服务器或实验成功。
-- 涉及服务器、训练、结果接纳、资产迁移、目录解禁或删除时，仍需精确独立
-  用户批准。
+- 测试只证明被覆盖的实现行为，不等于服务器运行、实验成功或 scientific
+  evidence accepted。
+- 涉及服务器、训练、结果接纳、平台接入、资产迁移、目录解禁或删除时，仍需
+  精确独立用户批准。
 
-### 6.1 每个模块固定模板
+### 6.3 模块最小模板
 
-独立模块至少包含：
+每个模块至少维护：
 
-1. module metadata、revision、status、dependencies；
-2. 目标、范围和明确不包含事项；
-3. 当前实现证据与影响面；
-4. 分步修改，每一步紧跟检验和通过条件；
-5. 兼容迁移策略；
-6. 风险与逐步回退；
-7. 产生的证据和最终验收；
-8. 用户待决项；
-9. append-only 补充记录。
+1. metadata、依赖、目的与明确边界；
+2. 输入、输出和事实源优先级；
+3. 本地接口/状态及外部方案只借鉴点；
+4. PASS/FAIL/NOT RUN/N/A 验收、证据等级和退出条件；
+5. 排除项、风险、回退、用户待决项和追加记录。
+
+高风险模块再补充分步实施、兼容迁移、tests-red/green、shadow 和独立审计。
 
 ## 7. 推荐审批与实施顺序
 
-1. 审查 P0A、P0B 的接口和验收，不实施服务器行为。
+1. 审查 P0A、P0B、P0C 的接口和验收，不实施服务器行为。
 2. 实施并审查 R0。
 3. 实施 R1 shadow；不得创建/删除 worktree。
 4. 先完成 R2 的外部 run root，再启用单持久工作树。
@@ -229,6 +258,8 @@ pending_review
 8. 实施 R7，确认现役依赖迁出。
 9. 经用户逐项批准后实施 R8。
 10. 最后审查 R9；preview 和 execute 分别批准。
+11. 原有闭环稳定后实施 R10 的本地知识/文档轻量轨。
+12. 最后实施 R11；发现只读部分先验收，任何可执行入口继续走高风险轨。
 
 任何阶段失败或用户未审查，停止在该阶段，不为“完成整套重构”跨越门禁。
 
@@ -302,7 +333,7 @@ pending_review
 6. 严格限定 E1 适配可免重复批准。
 7. 关键合同、实际输入和结论结果保持严格指纹。
 8. 总控包只维护框架；每个大环节维护独立文件。
-9. P0A/P0B 是整套重构硬验收。
+9. P0A/P0B/P0C 是整套重构硬验收。
 
 ## 12. 暂缓与待用户审查
 
@@ -314,6 +345,11 @@ pending_review
 - pre-MPP lifecycle 迁移；
 - protected dirs 解禁；
 - 真实服务器实验、结果接纳和 cleanup。
+- 任何外部科研/文档/云端平台、服务、CLI、SDK 或数据库接入；
+- 组会字数、图片、表格、模板和渲染格式规范；
+- 学习指南内容体系重构与云端备份；
+- 论文模板、章节、图表、引用格式、署名、投稿和发布；
+- 外部调研缺失项 3–8 的新增字段、门禁与验收。
 
 跨模块待审查：
 
@@ -324,19 +360,28 @@ pending_review
 - [ ] ignored checkpoint 的 hash 策略。
 - [ ] `histogene/egnv1/egnv2` 依赖抽取后的维护权限。
 - [ ] 任何物理归档/删除仍须单独批准。
+- [ ] R10 六类 document profile 是否共用一个知识/文档生命周期引擎。
+- [ ] R11 首版是否只扫描用户选择的 tracked CLI/Skill/文档清单。
 
 ## 13. 总体验收
 
 只有全部满足才能把整套重构提交为用户验收候选：
 
-- P0A 端到端闭环通过，Agent 正常路径无需临时设计命令。
+- P0A 的本地 schema/CLI/fixture 端到端 D/I 验收通过，Agent 正常路径无需临时
+  设计命令；真实服务器/训练 O 在无单独授权时保持 NOT RUN。
 - P0B tracked 导航与 Registry 生成进度表通过一致性测试。
-- R0–R9 各自退出条件满足或被明确标记为不适用。
+- P0C 的证据分层、阴性结果、冲突裁决和解释责任测试通过。
+- R0–R11 已授权的 D/I 退出条件满足；未授权 O 明确为 NOT RUN，不适用 S 为
+  N/A。
 - v1 job/result 可只读验证和 import。
 - Workspace/Asset/Document/Experiment Registry 不复制职责。
+- R10 复用现有 Document Registry，R11 candidate 不会自动成为 active。
 - local/server 单写者和 Gitee-only 边界保持。
+- 外部平台/工具的安装、调用、联网和运行时依赖均为零。
 - 无未授权服务器操作、训练、结果接纳、资产迁移、解禁或删除。
+- 每项验收标明 D/I/O/S 证据等级及 PASS/FAIL/NOT RUN/N/A。
 - 独立 `pfmval-audit` 给出相应阶段的有界结论。
+- 只有全部 Goal 完成后才生成并交付一份最终重构审核包。
 
 ## 14. 变更记录
 
@@ -346,6 +391,7 @@ pending_review
 | 2026-07-26 | 002 | DIR-20260726-004 | 改为总控框架；新增 P0A/P0B；R0–R9 拆为独立可扩展模块 |
 | 2026-07-26 | 003 | DIR-20260726-005 | 补充科研灵活性审查、五类后续工作流和“优先适配成熟开源方案”策略 |
 | 2026-07-26 | 004 | DIR-20260726-005 | 完成外部开源方案只读调研并关联适配建议与官方资料 |
+| 2026-07-27 | 005 | DIR-20260727-001 | 外部方案改为只借鉴；组会格式暂缓；增加论文接口；仅采纳缺失项 1/2/9/10；新增 P0C/R10/R11 与 Goal 验收 |
 
 详细服务器状态机、单写者、冲突恢复和 W 编号规则继续以
 `project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md`
@@ -375,32 +421,61 @@ P0A 已覆盖实验执行与证据链的主要骨架，但尚未完整覆盖：
 探索留最小可复现记录；候选实验明确晋级理由；只有可产生项目结论的正式实验
 进入完整批准、执行、导入和关闭闭环。
 
-### 15.2 后续待设计的五类工作流
+### 15.2 扩展工作流与最小模块
 
-1. **非实验项目事实维护**：目标、分工、任务、队友成果和沟通结论由用户口述，
-   Agent 做冲突检查、变更预览和准确更新；不得写入 Experiment Registry。
-2. **长期文档沉淀**：组会材料控制为 500 字以内正文、2–3 张图和关键数据表；
-   另维护每周重要结论与探索路径文档。飞书 CLI 后续只作为可校验备份出口，
-   本轮不实施。
-3. **学习指南接口**：本轮仅保留生成、更新、关联源码/实验事实、校验链接和
-   未来云备份的接口；不开展内容体系重构。
-4. **文档与约束生命周期**：单独建立 review 工作流，并与实验事件挂钩；
-   区分内容是否过时（freshness）和是否仍适用（lifecycle），修复或显式弃置，
-   不自动删除。
-5. **工作流发现与演化**：用户主动触发常用操作检索，候选工作流必须经过
-   `candidate → review → active → revise/merge/deprecate`；高风险流程不得自动启用。
+扩展工作流包括：
 
-候选落点为 P0C“科研推理闭环”以及 R10–R13，但编号、边界和依赖须在外部方案
-调研后再定，不在本补充中提前固化。
+1. 科研问题、假设、探索、正式实验、解释、主张和停止的渐进式闭环；
+2. 用户口述的非实验项目事实维护；
+3. 组会简述与长期结论/探索路径文档；
+4. 学习指南维护接口；
+5. 文档与约束 lifecycle/freshness 复核；
+6. 用户触发的工作流发现与演化；
+7. 论文撰写与产出接口，等待学长提供模板。
 
-### 15.3 方案复用原则与当前边界
+为避免过度模块化，落点收敛为：
 
-- 优先检索、比较和适配成熟开源科研工作流、实验追踪、可复现文档与研究对象
-  元数据方案；仅对缺失能力做本地补充。
-- 本轮只读调研结果、推荐组合、明确不采用项和官方原始链接见
-  [外部开源科研工作流调研与适配建议](workflow_governance_v3_refactor/REFERENCE_open_source_research_workflow_adaptation_20260726.md)。
-- 外部方案只作为设计输入，不因列入调研而自动成为依赖或事实源。
-- 引入任何框架前必须比较：维护活跃度、Windows/本地优先适配、与 Git/Gitee
-  及现有 Registry 的职责重叠、迁移成本、离线可用性和退出成本。
-- 本次落盘只记录审查结论与调研策略，不批准新增模块实施、服务器操作、训练、
-  结果接纳、资产迁移、目录解禁或清理。
+- [P0C](workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md)：
+  科研推理与扩展工作流横向验收；
+- [R10](workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md)：
+  六类本地知识/文档 profile 共用一个生命周期引擎；
+- [R11](workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md)：
+  因可能影响可执行行为而独立维护的工作流目录与演化。
+
+组会当前只生成简短 Markdown；不再保留 500 字、2–3 张图、固定数据表等硬
+要求。`interface_reserved`/`template_pending` 只是学习指南/论文接口状态机的
+合法设计终态，不代表整个工作流实现或运行完成。
+
+### 15.3 外部方案只借鉴原则
+
+- 调研结论与官方原始链接见
+  [外部开源科研工作流设计借鉴记录](workflow_governance_v3_refactor/REFERENCE_open_source_research_workflow_adaptation_20260726.md)。
+- Calkit、eLabFTW、DVC、Snakemake、WorkflowHub、PROV/RO-Crate、Diátaxis、
+  The Turing Way 等只提供架构、数据关系、状态机、检查表和测试思想。
+- 不安装、不部署、不调用、不试点、不联网，不新增外部 SDK/CLI/数据库，
+  不形成第二事实源或未来自动接入代码。
+- 后续实施只能“提取设计模式 → 改写为本地最小合同 → 断网 fixture 验证”，
+  外部调用次数必须为零。
+
+### 15.4 本轮采纳与暂缓
+
+仅采纳：
+
+1. 主张—证据—不确定性；
+2. 阴性结果与停止规则；
+9. 事实冲突裁决顺序；
+10. 可访问性与解释责任。
+
+外部调研缺失项 3–8 继续保留在参考文档中，本轮不形成字段、门禁、实现或验收
+义务。
+
+### 15.5 新对话 Goal 交付方式
+
+用户批准本 revision 后，实际重构必须在新对话创建一个总 Goal，按 P0C 的
+G00–G06 `stage_id` 顺序逐模块推进。任何模块未通过退出条件时 Goal 不得标记
+完成；未授权服务器、训练、迁移、解禁或清理必须保持 O=NOT RUN。中间回执
+只供最终汇总。全部已授权实现、回归与独立审计结束后，只向用户提交一份最终
+重构结果审核包。
+
+本 revision 仍只授权设计文档和状态更新，不批准代码重构、外部接入、服务器、
+训练、结果接纳、云同步、资产迁移、目录解禁或清理。

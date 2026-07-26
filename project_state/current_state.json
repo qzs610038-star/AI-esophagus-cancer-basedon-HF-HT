@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 105,
-  "updated_at": "2026-07-26T15:53:55+00:00",
-  "source_commit": "427c3d644613772e9bd3bfcb40296d1eff081ec1",
+  "state_revision": 110,
+  "updated_at": "2026-07-26T16:52:27+00:00",
+  "source_commit": "9d8cc7a4343b06e6372d63c3594dc4d0aab81d06",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -27,7 +27,7 @@
     "DIR-20260726-002",
     "DIR-20260726-003",
     "DIR-20260726-004",
-    "DIR-20260726-005"
+    "DIR-20260727-001"
   ],
   "active_plans": {
     "mpp_training": {
@@ -211,6 +211,10 @@
       "path": "project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md",
       "status": "pending_review"
     },
+    "workflow_governance_v3_refactor_p0c": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md",
+      "status": "pending_review"
+    },
     "workflow_governance_v3_refactor_r0": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md",
       "status": "pending_review"
@@ -253,6 +257,14 @@
     },
     "workflow_governance_v3_refactor_r9": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r10": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md",
+      "status": "pending_review"
+    },
+    "workflow_governance_v3_refactor_r11": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md",
       "status": "pending_review"
     }
   },
@@ -303,7 +315,7 @@
   "source_hashes": {
     "experiment_registry_sha256": "591506737fc071927302295169941f3b39fe561a4e93b69bcc39a69e3f3e0a5d",
     "experiment_dashboard_sha256": "a70f091043dcf96a46474708a451731108f7a4c3acafe1699ab3dd4e507f39dd",
-    "document_registry_sha256": "013cca1879730c97bafffe1c4a424975bcbb65fedee810bd32f59a601901057a",
+    "document_registry_sha256": "5eabe9b5468c46fbb50a0a2f453073951aa39fe65b7c94a113d63ac243356b00",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "eeb5f05d5ced9d4900ebffc1af4307bf6cbab5fe8a708be1b1ae10b447597d9d",
     "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"
