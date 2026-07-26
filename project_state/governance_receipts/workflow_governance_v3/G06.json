@@ -6,7 +6,7 @@
   "accepted_at": "2026-07-26T18:38:33Z",
   "status": "passed",
   "overall_verdict": "GO",
-  "decision_scope": "accept the authorized local structural refactor in the current uncommitted working tree",
+  "decision_scope": "accept the authorized local structural refactor at the local implementation commit",
   "modules": {
     "integration_compatibility": {
       "D": "PASS",
@@ -28,8 +28,8 @@
     }
   },
   "baseline_head": "be7ac120642fd3ee627239e4d829b651eff3de65",
-  "final_commit": null,
-  "final_locus": "baseline HEAD plus current uncommitted working-tree diff",
+  "final_commit": "db092c267460b98b71bacfb26ef4470e42eabfd9",
+  "final_locus": "local implementation commit db092c267460b98b71bacfb26ef4470e42eabfd9",
   "verification": [
     {
       "command": "python -m pytest -q tests --basetemp C:\\t\\g06_final",
@@ -76,12 +76,13 @@
     "destructive rollback execution was not run because cleanup/deletion was excluded"
   ],
   "known_warnings": [
-    "The implementation is uncommitted because stage/commit/push was not authorized.",
+    "The implementation is committed locally but was not pushed; no remote SHA was verified.",
     "A long pytest basetemp triggered one Windows path-length failure; the exact test and full suite passed under C:\\t.",
     "Five accepted 2026-07-06 legacy results lack complete result envelopes.",
     "Standardized MPP labels retain known duplicate/conflicting barcodes.",
     "The configured pfmval_py310 directory is absent; tests used Python 3.13.1.",
-    "codebase-memory remained stale after its re-index crash; actual files and fresh tests were used."
+    "codebase-memory remained stale after its re-index crash; actual files and fresh tests were used.",
+    "The master review package and P0A/P0B/P0C/R0-R11 headers still carry design-era pending_review/code-pending/not-started labels and need a separate lifecycle/status refresh."
   ],
   "not_run": [
     "server or Gitee runtime operations",

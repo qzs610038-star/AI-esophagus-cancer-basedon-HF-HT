@@ -8,9 +8,9 @@
   或清理。
 - 请求决策：是否接受当前工作树中的已授权本地重构实现。
 - 基线 commit：`be7ac120642fd3ee627239e4d829b651eff3de65`。
-- 最终 commit：`NOT CREATED`。本任务未授权 Git stage/commit/push；最终实现由
-  上述 HEAD 加当前 55 个变更路径共同定义。
-- 指令：`DIR-20260727-002`。
+- 最终实现 commit：`db092c267460b98b71bacfb26ef4470e42eabfd9`。
+- 指令：`DIR-20260727-002`，已在用户确认接受后 append-only 转为
+  `completed`。
 
 ## 总结论
 
@@ -19,7 +19,7 @@
   PASS=7、WARN=6、FAIL=0；v1 样本与 job validator 兼容；七个生成视图/状态
   文件连续两轮字节稳定；受保护目录无变更；所有未获授权的 O/S 项均按
   `NOT RUN` / `N/A` 保留。
-- Evidence scope：只接受当前未提交工作树中的本地结构实现，不表示真实
+- Evidence scope：只接受上述本地 commit 中的结构实现，不表示真实
   workspace/experiment/attempt/result、服务器运行、训练、迁移、清理、工作流
   扫描或科学结论已经运行或通过。
 
@@ -89,8 +89,8 @@
 - 用户视图：新增 `PROJECT_GUIDE.md` 与
   `experiments/experiment_progress.md`，并纳入既有生成链。
 - 测试/证据：新增 R0 fixture、阶段测试和 G00–G06 收据。
-- Git locus：10 个 tracked 文件修改、45 个 untracked 文件新增；没有 stage、
-  commit 或 push。
+- Git locus：55 个实现路径已提交到
+  `db092c267460b98b71bacfb26ef4470e42eabfd9`；未 push。
 
 ## 兼容与回退证据
 
@@ -108,8 +108,8 @@
 
 ## WARN
 
-- 当前实现未提交，`source_commit` 仍是基线 HEAD；提交、推送及远端 SHA
-  核验需要用户另行授权。
+- 当前实现已本地提交，`source_commit` 为
+  `db092c267460b98b71bacfb26ef4470e42eabfd9`；未 push，远端 SHA 未核验。
 - 五个 2026-07-06 legacy accepted result 缺完整 result envelope；这是既有
   WARN，本轮未伪造修复。
 - 标准化 MPP 标签仍有已知重复/冲突 barcode；重新生成属于受保护资产任务，
@@ -117,6 +117,9 @@
 - `pfmval_py310` 目录不存在；测试实际使用 Python 3.13.1。
 - codebase-memory 重建曾崩溃且图谱陈旧；本轮以实际文件、CLI 和测试回退验证，
   记为非阻塞 WARN。
+- 总控审查包、P0A/P0B/P0C 与 R0–R11 模块头仍保留设计期
+  `pending_review/code-pending/not-started` 标签；实现事实由 G00–G06 收据和
+  本 commit 证明，文档 lifecycle/status 需要另行刷新，避免后续 Agent 误读。
 
 ## 明确 NOT RUN / N/A
 
@@ -128,6 +131,7 @@
 
 ## Next authorized action
 
-当前本地实现可接受。若需要形成不可变交付点，下一步应由用户明确授权后再对
-这 55 个变更路径进行限定 staging、commit 和可选 push；在此之前不得把基线
-HEAD 表述为包含本次重构。
+当前本地实现已形成不可变 commit。下一步优先刷新总控审查包、模块头和
+`pending_plan_reviews` 的设计期状态；真实工作流扫描、workspace/asset 迁移、
+Hook enforce、目录解禁、close execute 与清理仍分别需要用户明确批准。可选
+push 也需用户另行授权。
