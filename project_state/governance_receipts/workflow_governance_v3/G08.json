@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_g08_local_completion",
+  "stage_id": "G08",
+  "directive_id": "DIR-20260727-004",
+  "status": "passed",
+  "overall_verdict": "GO",
+  "baseline_head": "06dac933c8aaafc5cfba565df14d2a86f974d0e5",
+  "implementation_commit": "eeacad23a3d52432e0251b2780e99acc71de2076",
+  "state_revision_before_closeout": 122,
+  "state_revision_after_closeout": 126,
+  "scope": {
+    "implementation": "local_D/I_accepted",
+    "fixture_operation": "PASS",
+    "real_operation": "NOT RUN",
+    "scientific_evidence": "N/A"
+  },
+  "skill": {
+    "canonical": ".agents/skills/pfmval-governance/SKILL.md",
+    "adapter": ".claude/skills/pfmval-governance/SKILL.md",
+    "template_count": 9,
+    "user_entry_count": 6,
+    "technical_route_count": 7
+  },
+  "workflow_catalog": {
+    "entry_count": 6,
+    "workflow_ids": [
+      "WF-DOCUMENT-LIFECYCLE",
+      "WF-LEARNING-GUIDE",
+      "WF-LONGTERM-DOCS",
+      "WF-PAPER-OUTPUT",
+      "WF-PROJECT-FACT",
+      "WF-WORKFLOW-DISCOVERY"
+    ],
+    "lifecycle": "active",
+    "version": "0.1.0",
+    "standardized": false,
+    "authorization_ref": "DIR-20260727-004",
+    "register_replay": "noop_zero_writes",
+    "conflict_behavior": "atomic_failure_before_write"
+  },
+  "discovery": {
+    "scan_id": "SCAN-A25814AAE8084F59",
+    "selected_tracked_paths": 66,
+    "candidate_count": 0,
+    "additional_active_count": 0,
+    "replay": "noop_zero_writes"
+  },
+  "freshness_preview": {
+    "document_id": "doc-a567a7562613",
+    "result": "review_due",
+    "writes": 0,
+    "deletes": 0,
+    "directive_closures": 0
+  },
+  "verification": [
+    {
+      "command": "python -m pytest -q -p no:cacheprovider tests",
+      "result": "PASS_WITH_EXPECTED_WARNINGS",
+      "summary": "141 passed, 2 expected sklearn single-sample R2 warnings"
+    },
+    {
+      "command": "python -m pytest -q targeted G08 workflow, Skill and knowledge tests",
+      "result": "PASS",
+      "summary": "28 passed"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_EXISTING_WARNINGS",
+      "summary": "PASS=7 WARN=6 FAIL=0; no new project WARN"
+    },
+    {
+      "command": "docs scan; views refresh; state sync; repeat with SHA-256 comparison",
+      "result": "PASS",
+      "summary": "nine authoritative/generated files byte-stable after one required convergence warm-up"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py workflow validate",
+      "result": "PASS",
+      "summary": "entry_count=6"
+    },
+    {
+      "command": "python -m py_compile deploy/pfmval_ops.py scripts/pfmval_workflows.py; git diff --check",
+      "result": "PASS",
+      "summary": "syntax and whitespace checks passed"
+    }
+  ],
+  "protected_boundaries": {
+    "experiment_registry": "UNCHANGED",
+    "workspace_registry": "UNCHANGED",
+    "asset_registry": "UNCHANGED",
+    "histogene": "UNCHANGED",
+    "egnv1": "UNCHANGED",
+    "egnv2": "UNCHANGED"
+  },
+  "not_run": [
+    "server access or server test",
+    "Gitee dispatch, fetch, return, push, or remote SHA verification",
+    "training, real attempt, result import, acceptance, or scientific promotion",
+    "real project-fact confirmation or formal meeting/research document creation",
+    "worktree or asset creation, migration, unprotection, close execute, or deletion",
+    "external platform integration, cloud synchronization, or manuscript drafting",
+    "activation or standardization of any workflow outside the six approved IDs"
+  ],
+  "warnings": [
+    "Five accepted legacy results still lack complete result envelopes.",
+    "Protected standardized MPP labels still contain known duplicate or conflicting barcodes.",
+    "codebase-memory index refresh failed non-blockingly; live files, CLI, and tests were used for verification."
+  ]
+}

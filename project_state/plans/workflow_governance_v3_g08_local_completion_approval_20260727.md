@@ -1,10 +1,11 @@
 # 治理 v3：G08 本地剩余重构一次性批准包与 Goal
 
-> 状态：`approved_execution_passed`
+> 状态：`completed_local`
 > 基线：`main@06dac933c8aaafc5cfba565df14d2a86f974d0e5`
 > 批准指令：`DIR-20260727-004`
-> 执行结果：本地 D/I 与 synthetic fixture O 已通过；真实工作流 O 保持
-> `NOT RUN`，S=`N/A`；等待限定本地 commit 与 append-only closeout。
+> 执行结果：本地 D/I 与 synthetic fixture O 已通过；实现 commit 为
+> `eeacad23a3d52432e0251b2780e99acc71de2076`；`DIR-20260727-004` 已
+> append-only 转为 `completed`。真实工作流 O 保持 `NOT RUN`，S=`N/A`。
 > 用途：供用户一次性批准后，在用户离线期间完成所有安全、确定性的本地非服务器重构。
 > 权限边界：本文件本身不构成执行授权；只有用户明确回复批准文本后才能创建并执行 Goal。
 
