@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/critical_contract.schema.json",
+  "title": "PFMval critical experiment contract",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "protocol_revision",
+    "source_commit",
+    "critical_code",
+    "resolved_hyperparameters",
+    "loss_contract",
+    "regularization_contract",
+    "feature_flags",
+    "data_manifest_id",
+    "data_manifest_sha256",
+    "input_artifacts",
+    "selection_policy",
+    "external_eval_policy",
+    "canonical_sha256"
+  ],
+  "properties": {
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "critical_code": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "resolved_hyperparameters": {
+      "type": "object"
+    },
+    "loss_contract": {
+      "type": "object"
+    },
+    "regularization_contract": {
+      "type": "object"
+    },
+    "feature_flags": {
+      "type": "object"
+    },
+    "data_manifest_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "input_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifact_id",
+          "sha256"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "selection_policy": {
+      "type": "object"
+    },
+    "external_eval_policy": {
+      "type": "object"
+    },
+    "canonical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/asset_shadow_inventory.schema.json",
+  "title": "PFMval read-only asset shadow inventory",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "mode",
+    "content_hashes_computed",
+    "candidates",
+    "conflicts",
+    "side_effects"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "mode": {
+      "const": "shadow"
+    },
+    "content_hashes_computed": {
+      "type": "integer",
+      "const": 0
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "kind",
+          "size_bytes",
+          "hash_policy",
+          "era",
+          "custody",
+          "asset_class",
+          "lifecycle",
+          "mutability",
+          "evidence_role"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "file",
+              "directory"
+            ]
+          },
+          "size_bytes": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "hash_policy": {
+            "const": "metadata_only"
+          },
+          "era": {
+            "enum": [
+              "pre_mpp",
+              "mpp_active",
+              "mpp_historical",
+              "shared_dependency",
+              "uncertain",
+              "legacy_mixed"
+            ]
+          },
+          "custody": {
+            "enum": [
+              "user",
+              "project",
+              "agent",
+              "external"
+            ]
+          },
+          "asset_class": {
+            "type": "string"
+          },
+          "lifecycle": {
+            "type": "string"
+          },
+          "mutability": {
+            "type": "string"
+          },
+          "evidence_role": {
+            "type": "string"
+          },
+          "lineage": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "replacement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "conflicts": {
+      "type": "array"
+    },
+    "side_effects": {
+      "const": "none"
+    }
+  },
+  "additionalProperties": false
+}

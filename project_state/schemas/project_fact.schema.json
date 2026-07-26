@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/project_fact.schema.json",
+  "title": "PFMval append-only project fact",
+  "type": "object",
+  "required": [
+    "fact_id",
+    "kind",
+    "statement",
+    "source",
+    "observed_at",
+    "status",
+    "supersedes",
+    "confirmation_source"
+  ],
+  "properties": {
+    "fact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observed_at": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "active",
+        "superseded",
+        "historical"
+      ]
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "confirmation_source": {
+      "const": "explicit_user_confirmation"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/workflow_catalog.schema.json",
+  "title": "PFMval workflow catalog",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "entries", "scans"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "updated_at": {"type": ["string", "null"]},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "workflow_id",
+          "purpose",
+          "trigger",
+          "inputs",
+          "outputs",
+          "implementation_locations",
+          "risk",
+          "approval_requirement",
+          "version",
+          "lifecycle",
+          "replacement_workflow_ids",
+          "supersedes",
+          "standardized",
+          "last_verified_at"
+        ],
+        "properties": {
+          "workflow_id": {"type": "string", "minLength": 1},
+          "purpose": {"type": "string", "minLength": 1},
+          "trigger": {"type": "string", "minLength": 1},
+          "inputs": {"type": "array"},
+          "outputs": {"type": "array"},
+          "implementation_locations": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "risk": {"enum": ["low", "medium", "high", "critical", "unknown"]},
+          "approval_requirement": {"type": "string"},
+          "version": {"type": "string", "minLength": 1},
+          "lifecycle": {
+            "enum": ["candidate", "reviewed", "active", "deprecated"]
+          },
+          "replacement_workflow_ids": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "supersedes": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "standardized": {"type": "boolean"},
+          "last_verified_at": {"type": ["string", "null"]}
+        },
+        "additionalProperties": true
+      }
+    },
+    "scans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["scan_id", "selected_paths", "content_hashes"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

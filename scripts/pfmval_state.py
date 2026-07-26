@@ -29,7 +29,15 @@ except ImportError:  # pragma: no cover - server preflight reports this cleanly
     yaml = None
 
 
-SCHEMA_VERSION = "1.0"
+STATE_SCHEMA_VERSION = "1.0"
+DOCUMENT_REGISTRY_SCHEMA_VERSION = "1.0"
+SERVER_PATHS_SCHEMA_VERSION = "1.0"
+REPAIR_SCHEMA_VERSION = "1.0"
+DIAGNOSTIC_SCHEMA_VERSION = "1.0"
+EXPLORATION_SCHEMA_VERSION = "1.0"
+MPP_INDEX_SCHEMA_VERSION = "1.0"
+JOB_SCHEMA_VERSION = "1.0"
+RESULT_SCHEMA_VERSION = "1.0"
 MAX_RESULT_FILE_BYTES = 20 * 1024 * 1024
 MAX_RESULT_TOTAL_BYTES = 50 * 1024 * 1024
 SMOKE_MAX_EPOCHS = 3
@@ -327,7 +335,7 @@ def create_diagnostic_request(
     if request_path.exists():
         raise ValueError(f"diagnostic request already exists: {normalize_rel(request_path.relative_to(root))}")
     request = {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": DIAGNOSTIC_SCHEMA_VERSION,
         "diagnostic_id": diagnostic_id,
         "created_at": utc_now(),
         "source_commit": source_commit,
@@ -397,7 +405,7 @@ def create_exploration_session(root: Path, *, session_id: str, purpose: str) -> 
     if output_dir.exists():
         raise ValueError(f"exploration session already exists: {normalize_rel(output_dir.relative_to(root))}")
     manifest = {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": EXPLORATION_SCHEMA_VERSION,
         "session_id": session_id,
         "created_at": utc_now(),
         "purpose": purpose.strip(),
@@ -611,7 +619,7 @@ def _validate_repair_evidence_payload(
     missing_summary = sorted(required_summary - set(summary))
     if missing_summary:
         raise ValueError(f"repair evidence summary missing fields: {missing_summary}")
-    if summary.get("schema_version") != SCHEMA_VERSION or audit.get("schema_version") != SCHEMA_VERSION:
+    if summary.get("schema_version") != REPAIR_SCHEMA_VERSION or audit.get("schema_version") != REPAIR_SCHEMA_VERSION:
         raise ValueError("repair evidence schema_version must be 1.0")
     if summary.get("status") != "repair_staging_verified":
         raise ValueError("repair evidence summary is not verified")
@@ -759,7 +767,7 @@ def import_mpp_repair_evidence_from_git(
     registry_path = root / "project_state" / "mpp_repair_registry.json"
     with state_lock(root):
         registry = read_json(registry_path) if registry_path.exists() else {
-            "schema_version": SCHEMA_VERSION,
+            "schema_version": REPAIR_SCHEMA_VERSION,
             "updated_at": utc_now(),
             "active_data_manifest_id": None,
             "repairs": [],
@@ -1234,7 +1242,15 @@ def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, s
         return "agent_adapter", "reference", "active", connectivity
     if path == "automation/README.md":
         return "gitee_job_protocol", "normative", "active", connectivity
-    if path in {"CURRENT_STATE.md", "README.md", "experiments/experiment_dashboard.md", ".claude/next-steps.md", ".claude/session-brief.md"}:
+    if path in {
+        "CURRENT_STATE.md",
+        "README.md",
+        "PROJECT_GUIDE.md",
+        "experiments/experiment_dashboard.md",
+        "experiments/experiment_progress.md",
+        ".claude/next-steps.md",
+        ".claude/session-brief.md",
+    }:
         scope = "current_state" if path == "CURRENT_STATE.md" else "project_summary"
         return scope, "derived", "active", connectivity
     if path == "experiments/decision_log.md":
@@ -1263,10 +1279,14 @@ def scan_documents(root: Path) -> Dict[str, Any]:
     state = read_json(root / "project_state" / "current_state.json")
     tracked_path = root / "project_state" / "document_registry.json"
     old_path = tracked_path if tracked_path.exists() else root / ".claude" / "doc-registry.json"
+    old_registry: Dict[str, Any] = {}
     old_entries: Dict[str, Dict[str, Any]] = {}
     if old_path.exists():
-        old = read_json(old_path)
-        old_entries = {normalize_rel(item["path"]): item for item in old.get("documents", [])}
+        old_registry = read_json(old_path)
+        old_entries = {
+            normalize_rel(item["path"]): item
+            for item in old_registry.get("documents", [])
+        }
 
     live_paths: set[str] = set()
     for directory in (
@@ -1277,9 +1297,10 @@ def scan_documents(root: Path) -> Dict[str, Any]:
         if base.exists():
             live_paths.update(normalize_rel(path.relative_to(root)) for path in base.rglob("*.md"))
     for path in (
-        "README.md", "AGENTS.md", "CURRENT_STATE.md", "CLAUDE.md",
+        "README.md", "PROJECT_GUIDE.md", "AGENTS.md", "CURRENT_STATE.md", "CLAUDE.md",
         ".claude/next-steps.md", ".claude/session-brief.md", ".claude/maintenance-plan.md",
-        "experiments/experiment_dashboard.md", "experiments/decision_log.md",
+        "experiments/experiment_dashboard.md", "experiments/experiment_progress.md",
+        "experiments/decision_log.md",
     ):
         if (root / path).exists():
             live_paths.add(path)
@@ -1306,9 +1327,29 @@ def scan_documents(root: Path) -> Dict[str, Any]:
             "verified_at": verified_at,
             "state_revision": int(state["state_revision"]),
             "content_sha256": digest,
-            "supersedes": [],
-            "superseded_by": [],
-            "truth_sources": ["project_state/current_state.json"],
+            "supersedes": list(old.get("supersedes", [])),
+            "superseded_by": list(old.get("superseded_by", [])),
+            "truth_sources": list(
+                old.get(
+                    "truth_sources",
+                    (
+                        [
+                            "project_state/document_registry.json",
+                            "project_state/asset_registry.json",
+                        ]
+                        if rel_path == "PROJECT_GUIDE.md"
+                        else (
+                            ["experiments/experiment_registry.json"]
+                            if rel_path
+                            in {
+                                "experiments/experiment_dashboard.md",
+                                "experiments/experiment_progress.md",
+                            }
+                            else ["project_state/current_state.json"]
+                        )
+                    ),
+                )
+            ),
             "purpose": old.get("purpose", ""),
             "created": old.get("created", ""),
             "tags": list(old.get("tags", [])),
@@ -1340,10 +1381,26 @@ def scan_documents(root: Path) -> Dict[str, Any]:
                 entry["superseded_by"] = ["plan-mpp-training"]
             elif scope == "historical_guidance":
                 entry["superseded_by"] = ["plan-server-maintenance"]
+        if old:
+            stable_fields = {
+                key: value
+                for key, value in entry.items()
+                if key not in {"verified_at", "state_revision"}
+            }
+            old_stable_fields = {
+                key: value
+                for key, value in old.items()
+                if key not in {"verified_at", "state_revision"}
+            }
+            if stable_fields == old_stable_fields:
+                entry["verified_at"] = old.get("verified_at", verified_at)
+                entry["state_revision"] = int(
+                    old.get("state_revision", state["state_revision"])
+                )
         documents.append(entry)
 
-    return {
-        "schema_version": SCHEMA_VERSION,
+    registry = {
+        "schema_version": DOCUMENT_REGISTRY_SCHEMA_VERSION,
         "updated_at": verified_at,
         "state_revision": int(state["state_revision"]),
         "documents": documents,
@@ -1358,6 +1415,23 @@ def scan_documents(root: Path) -> Dict[str, Any]:
             "approved_design": sum(1 for item in documents if item["lifecycle"] == "approved_design"),
         },
     }
+    if old_registry:
+        stable_registry = {
+            key: value
+            for key, value in registry.items()
+            if key not in {"updated_at", "state_revision"}
+        }
+        old_stable_registry = {
+            key: value
+            for key, value in old_registry.items()
+            if key not in {"updated_at", "state_revision"}
+        }
+        if stable_registry == old_stable_registry:
+            registry["updated_at"] = old_registry.get("updated_at", verified_at)
+            registry["state_revision"] = int(
+                old_registry.get("state_revision", state["state_revision"])
+            )
+    return registry
 
 
 def load_server_paths(root: Path) -> Dict[str, Any]:
@@ -1486,7 +1560,7 @@ def build_mpp_path_index(root: Path) -> Dict[str, Any]:
         if not group_summary.get(str(group), {}).get("embargo_audit_present"):
             labels_validated = False
     return {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": MPP_INDEX_SCHEMA_VERSION,
         "generated_at": utc_now(),
         "source_root": "mpp_standard_splits",
         "raw_ssgsea_template": r"D:\AIPatho\Patch\visiumhd_patch\{group}\{patient}\{patient}_ssGSEA.csv",
@@ -1513,7 +1587,7 @@ def migrate_experiment_provenance(registry: MutableMapping[str, Any]) -> bool:
             "job_id": None,
             "result_id": f"legacy-import-{experiment_id}" if done else None,
             "data_manifest_id": "mpp-standard-splits-v1" if experiment_id in standardized_ids else None,
-            "path_index_version": SCHEMA_VERSION if experiment_id in standardized_ids else None,
+            "path_index_version": MPP_INDEX_SCHEMA_VERSION if experiment_id in standardized_ids else None,
             "result_manifest_sha256": None,
             "imported_at": experiment.get("completed_at") if done else None,
             "evidence_status": default_evidence,
@@ -1647,6 +1721,7 @@ def _readme_state_block(state: Mapping[str, Any], registry: Mapping[str, Any]) -
         "## 当前项目状态（自动生成）",
         "",
         f"- 状态版本：`{state['state_revision']}`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。",
+        "- 用户导航：[PROJECT_GUIDE.md](PROJECT_GUIDE.md)；简洁实验进度：[experiments/experiment_progress.md](experiments/experiment_progress.md)。",
         f"- 当前 MPP 主线：**MPP{policy.get('selected_mpp', 'unknown')}**；其它统一重跑结果保留为背景/方法参考。",
         "- 服务器通信：**Gitee-only**；SSH、SCP、HTTP 远程命令和 Tunnel 均非 active 通道。",
         "- 实验事实源：`experiments/experiment_registry.json`；Dashboard 为派生视图。",
@@ -1669,7 +1744,11 @@ def compute_source_hashes(root: Path) -> Dict[str, str]:
     files = {
         "experiment_registry_sha256": root / "experiments" / "experiment_registry.json",
         "experiment_dashboard_sha256": root / "experiments" / "experiment_dashboard.md",
+        "experiment_progress_sha256": root / "experiments" / "experiment_progress.md",
         "document_registry_sha256": root / "project_state" / "document_registry.json",
+        "asset_registry_sha256": root / "project_state" / "asset_registry.json",
+        "workspace_registry_sha256": root / "project_state" / "workspace_registry.json",
+        "workflow_catalog_sha256": root / "project_state" / "workflow_catalog.json",
         "mpp_path_index_sha256": root / "mpp_standard_splits" / "path_index.json",
         "server_paths_sha256": root / "configs" / "server_paths.yaml",
         "mpp_repair_registry_sha256": root / "project_state" / "mpp_repair_registry.json",
@@ -1770,7 +1849,7 @@ def validate_server_paths(
     except Exception as exc:
         report.fail(f"server path registry unreadable: {exc}")
         return
-    if registry.get("schema_version") != SCHEMA_VERSION:
+    if registry.get("schema_version") != SERVER_PATHS_SCHEMA_VERSION:
         report.fail("server path registry schema_version must be 1.0")
     paths = registry.get("paths")
     if not isinstance(paths, dict) or not paths:
@@ -1835,6 +1914,172 @@ def validate_server_paths(
         report.warn("mpp_standard_splits/path_index.json is missing")
 
 
+def validate_governance_v3_state(
+    root: Path,
+    report: ValidationReport,
+) -> None:
+    schema_root = root / "project_state" / "schemas"
+    workspace_path = root / "project_state" / "workspace_registry.json"
+    if not workspace_path.exists():
+        report.fail("workflow governance v3 workspace registry is missing")
+        return
+    try:
+        workspace_registry = read_json(workspace_path)
+        validate_against_schema(
+            workspace_registry,
+            schema_root / "workspace_registry.schema.json",
+            "workspace registry",
+        )
+        workspace_ids: set[str] = set()
+        experiment_ids: set[str] = set()
+        workspace_numbers: list[int] = []
+        for workspace in workspace_registry.get("workspaces", []):
+            workspace_id = str(workspace.get("workspace_id", ""))
+            match = re.fullmatch(r"W([0-9]{3,})", workspace_id)
+            if not match:
+                raise ValueError(
+                    f"invalid workspace registry id: {workspace_id}"
+                )
+            if workspace_id in workspace_ids:
+                raise ValueError(
+                    f"duplicate workspace registry id: {workspace_id}"
+                )
+            experiment_id = str(workspace.get("experiment_id", ""))
+            if experiment_id in experiment_ids:
+                raise ValueError(
+                    "one experiment is bound to multiple workspaces: "
+                    f"{experiment_id}"
+                )
+            workspace_ids.add(workspace_id)
+            experiment_ids.add(experiment_id)
+            workspace_numbers.append(int(match.group(1)))
+            for host in workspace.get("hosts", {}).values():
+                relative_path = Path(str(host.get("relative_path", "")))
+                if relative_path.is_absolute() or ".." in relative_path.parts:
+                    raise ValueError(
+                        "workspace path escapes registered root: "
+                        f"{relative_path}"
+                    )
+        next_number = int(workspace_registry.get("next_workspace_number", 0))
+        if next_number <= max(workspace_numbers, default=0):
+            raise ValueError(
+                "workspace next number would reuse an allocated identity"
+            )
+
+        asset_registry = read_json(
+            root / "project_state" / "asset_registry.json"
+        )
+        validate_against_schema(
+            asset_registry,
+            schema_root / "asset_registry.schema.json",
+            "asset registry",
+        )
+        asset_ids: set[str] = set()
+        asset_paths: set[str] = set()
+        for asset in asset_registry.get("assets", []):
+            asset_id = str(asset.get("asset_id", ""))
+            asset_path = normalize_rel(str(asset.get("path", ""))).lower()
+            if asset_id in asset_ids:
+                raise ValueError(f"duplicate asset id: {asset_id}")
+            if asset_path in asset_paths:
+                raise ValueError(f"duplicate asset path: {asset_path}")
+            if Path(asset_path).is_absolute() or ".." in Path(asset_path).parts:
+                raise ValueError(f"asset path escapes repository: {asset_path}")
+            asset_ids.add(asset_id)
+            asset_paths.add(asset_path)
+
+        for index, approval in enumerate(
+            _read_jsonl_events(
+                root / "project_state" / "experiment_approvals.jsonl"
+            ),
+            1,
+        ):
+            validate_against_schema(
+                approval,
+                schema_root / "experiment_approval_v2.schema.json",
+                f"experiment approval {index}",
+            )
+        for index, event in enumerate(
+            _read_jsonl_events(
+                root / "project_state" / "attempt_events.jsonl"
+            ),
+            1,
+        ):
+            validate_against_schema(
+                event,
+                schema_root / "attempt_event_v2.schema.json",
+                f"attempt event {index}",
+            )
+        for index, record in enumerate(
+            _read_jsonl_events(
+                root / "project_state" / "scientific_records.jsonl"
+            ),
+            1,
+        ):
+            validate_against_schema(
+                record,
+                schema_root / "scientific_record.schema.json",
+                f"scientific record {index}",
+            )
+        for index, fact in enumerate(
+            _read_jsonl_events(
+                root / "project_state" / "project_facts.jsonl"
+            ),
+            1,
+        ):
+            validate_against_schema(
+                fact,
+                schema_root / "project_fact.schema.json",
+                f"project fact {index}",
+            )
+        workflow_catalog_path = (
+            root / "project_state" / "workflow_catalog.json"
+        )
+        workflow_catalog_schema = (
+            schema_root / "workflow_catalog.schema.json"
+        )
+        if workflow_catalog_path.exists() != workflow_catalog_schema.exists():
+            raise ValueError(
+                "workflow catalog and schema must either both exist or both be absent"
+            )
+        if workflow_catalog_path.exists():
+            workflow_catalog = read_json(workflow_catalog_path)
+            validate_against_schema(
+                workflow_catalog,
+                workflow_catalog_schema,
+                "workflow catalog",
+            )
+            workflow_ids = [
+                str(item.get("workflow_id", ""))
+                for item in workflow_catalog.get("entries", [])
+            ]
+            if len(workflow_ids) != len(set(workflow_ids)):
+                raise ValueError("duplicate workflow catalog id")
+            known_workflow_ids = set(workflow_ids)
+            for item in workflow_catalog.get("entries", []):
+                workflow_id = str(item.get("workflow_id", ""))
+                if item.get("standardized") and item.get("lifecycle") != "active":
+                    raise ValueError(
+                        "standardized workflow is not active: "
+                        f"{workflow_id}"
+                    )
+                missing_replacements = sorted(
+                    set(item.get("replacement_workflow_ids", []))
+                    - known_workflow_ids
+                )
+                if missing_replacements:
+                    raise ValueError(
+                        "workflow replacement is not registered: "
+                        f"{workflow_id} -> {missing_replacements}"
+                    )
+    except (FileNotFoundError, ValueError, TypeError) as exc:
+        report.fail(f"workflow governance v3 state invalid: {exc}")
+        return
+    report.passed(
+        "workflow governance v3 workspace/asset/approval/attempt/science/fact/workflow state validates"
+    )
+
+
 def validate_state(
     root: Path,
     *,
@@ -1875,7 +2120,7 @@ def validate_state(
     missing = sorted(required - set(state))
     if missing:
         report.fail(f"current_state missing fields: {', '.join(missing)}")
-    elif state.get("schema_version") != SCHEMA_VERSION:
+    elif state.get("schema_version") != STATE_SCHEMA_VERSION:
         report.fail("current_state schema_version must be 1.0")
     else:
         report.passed("current_state required fields")
@@ -2058,6 +2303,7 @@ def validate_state(
         report.warn(f"pending results must be imported before model conclusions: {local_pending}")
 
     validate_server_paths(root, report, task=task, host_scope=host_scope)
+    validate_governance_v3_state(root, report)
     if not report.fail_items:
         report.passed("state package validation completed")
     return report
@@ -2106,7 +2352,7 @@ def validate_diagnostic_state(root: Path) -> ValidationReport:
     missing = sorted(required - set(state))
     if missing:
         report.fail(f"current_state missing fields: {', '.join(missing)}")
-    elif state.get("schema_version") != SCHEMA_VERSION:
+    elif state.get("schema_version") != STATE_SCHEMA_VERSION:
         report.fail("current_state schema_version must be 1.0")
     else:
         report.passed("diagnostic current_state required fields")
@@ -2157,6 +2403,92 @@ def validate_diagnostic_state(root: Path) -> ValidationReport:
 
 def validate_result_envelope(bundle_dir: Path, manifest: Mapping[str, Any]) -> None:
     project_root = Path(__file__).resolve().parent.parent
+    if manifest.get("schema_version") == "2.0":
+        from scripts.pfmval_governance import validate_result_v2
+
+        validate_against_schema(
+            manifest,
+            project_root / "project_state" / "schemas" / "result_envelope_v2.schema.json",
+            "result envelope v2",
+        )
+        validate_result_v2(manifest)
+        total = 0
+        for artifact in manifest.get("artifacts", []):
+            raw_path = str(artifact.get("path", ""))
+            if "\\" in raw_path:
+                raise ValueError(
+                    f"artifact path must use bundle-relative POSIX separators: {raw_path}"
+                )
+            rel = PurePosixPath(raw_path)
+            if not raw_path or rel.is_absolute() or ".." in rel.parts:
+                raise ValueError(f"unsafe artifact path: {rel}")
+            path = bundle_dir / Path(*rel.parts)
+            if path.name not in ALLOWED_RESULT_FILES:
+                raise ValueError(f"artifact is not allowlisted: {rel}")
+            if not path.exists() or not path.is_file():
+                raise ValueError(f"artifact missing: {rel}")
+            size = path.stat().st_size
+            if size != int(artifact.get("size_bytes", -1)):
+                raise ValueError(f"artifact size mismatch: {rel}")
+            if size > MAX_RESULT_FILE_BYTES:
+                raise ValueError(f"artifact exceeds {MAX_RESULT_FILE_BYTES} bytes: {rel}")
+            digest = str(artifact.get("sha256", "")).lower()
+            if digest and sha256_file(path) != digest:
+                raise ValueError(f"artifact hash mismatch: {rel}")
+            total += size
+        if total > MAX_RESULT_TOTAL_BYTES:
+            raise ValueError(f"result bundle exceeds {MAX_RESULT_TOTAL_BYTES} bytes")
+        expected_files = {
+            "result.json",
+            *(str(item.get("path", "")) for item in manifest.get("artifacts", [])),
+        }
+        actual_files = {
+            normalize_rel(path.relative_to(bundle_dir))
+            for path in bundle_dir.rglob("*")
+            if path.is_file()
+        }
+        unexpected_files = sorted(actual_files - expected_files)
+        if unexpected_files:
+            raise ValueError(
+                f"result bundle contains unlisted files: {unexpected_files}"
+            )
+
+        def check_finite_v2(value: Any, location: str) -> None:
+            if isinstance(value, float) and not math.isfinite(value):
+                raise ValueError(f"non-finite metric at {location}")
+            if isinstance(value, dict):
+                for key, item in value.items():
+                    check_finite_v2(item, f"{location}.{key}")
+            elif isinstance(value, list):
+                for index, item in enumerate(value):
+                    check_finite_v2(item, f"{location}[{index}]")
+
+        check_finite_v2(manifest.get("metrics", {}), "metrics")
+        for artifact in manifest.get("large_artifacts", []):
+            server_path = str(artifact.get("server_path", ""))
+            if not re.match(r"^[A-Za-z]:[\\/]", server_path):
+                raise ValueError(
+                    f"large artifact is not an absolute Windows server path: {server_path}"
+                )
+            if int(artifact.get("size_bytes", -1)) < 0:
+                raise ValueError(
+                    f"large artifact has invalid size: {server_path}"
+                )
+            if not re.fullmatch(
+                r"[0-9a-f]{64}",
+                str(artifact.get("sha256", "")).lower(),
+            ):
+                raise ValueError(
+                    f"large artifact has invalid SHA-256: {server_path}"
+                )
+            if not artifact.get("retention") and not artifact.get(
+                "recompute_policy"
+            ):
+                raise ValueError(
+                    f"large artifact has no retention or recompute policy: {server_path}"
+                )
+        return
+
     validate_against_schema(
         manifest,
         project_root / "project_state" / "schemas" / "result_envelope.schema.json",
@@ -2166,7 +2498,7 @@ def validate_result_envelope(bundle_dir: Path, manifest: Mapping[str, Any]) -> N
     missing = sorted(required - set(manifest))
     if missing:
         raise ValueError(f"result envelope missing fields: {', '.join(missing)}")
-    if manifest["schema_version"] != SCHEMA_VERSION:
+    if manifest["schema_version"] != RESULT_SCHEMA_VERSION:
         raise ValueError(f"unsupported result envelope version: {manifest['schema_version']}")
     if manifest["phase"] not in {"preflight", "smoke", "formal"}:
         raise ValueError("invalid result phase")
@@ -2243,6 +2575,104 @@ def validate_result_envelope(bundle_dir: Path, manifest: Mapping[str, Any]) -> N
             raise ValueError(f"large artifact has invalid SHA-256: {server_path}")
 
 
+def _validate_job_v2_governance_binding(
+    root: Path,
+    job: Mapping[str, Any],
+) -> None:
+    workspace_registry_path = root / "project_state" / "workspace_registry.json"
+    if not workspace_registry_path.exists():
+        raise ValueError("job v2 has no workspace registry")
+    workspace_registry = read_json(workspace_registry_path)
+    workspace = next(
+        (
+            item
+            for item in workspace_registry.get("workspaces", [])
+            if item.get("workspace_id") == job.get("workspace_id")
+        ),
+        None,
+    )
+    if workspace is None:
+        raise ValueError("job v2 references an unknown workspace")
+    if workspace.get("experiment_id") != job.get("experiment_id"):
+        raise ValueError("job v2 workspace/experiment binding mismatch")
+
+    registry = read_json(root / "experiments" / "experiment_registry.json")
+    experiment = next(
+        (
+            item
+            for item in registry.get("experiments", [])
+            if item.get("id") == job.get("experiment_id")
+        ),
+        None,
+    )
+    if experiment is None:
+        raise ValueError("job v2 references an unknown experiment")
+    experiment_comparisons = {
+        "workspace_id": job.get("workspace_id"),
+        "protocol_revision": job.get("protocol_revision"),
+        "critical_contract_sha256": job.get("critical_contract_sha256"),
+    }
+    for field, expected in experiment_comparisons.items():
+        if experiment.get(field) != expected:
+            raise ValueError(f"job v2 experiment binding mismatch for {field}")
+
+    approvals = _read_jsonl_events(
+        root / "project_state" / "experiment_approvals.jsonl"
+    )
+    approval = next(
+        (
+            item
+            for item in approvals
+            if item.get("approval_id") == job.get("approval_id")
+            and item.get("status") == "active"
+        ),
+        None,
+    )
+    if approval is None:
+        raise ValueError("job v2 references a missing or inactive approval")
+    approval_comparisons = {
+        "experiment_id": job.get("experiment_id"),
+        "protocol_revision": job.get("protocol_revision"),
+        "phase": job.get("phase"),
+        "critical_contract_sha256": job.get("critical_contract_sha256"),
+    }
+    for field, expected in approval_comparisons.items():
+        if approval.get(field) != expected:
+            raise ValueError(f"job v2 approval binding mismatch for {field}")
+
+    attempts = _read_jsonl_events(
+        root / "project_state" / "attempt_events.jsonl"
+    )
+    prepared = next(
+        (
+            item
+            for item in attempts
+            if item.get("event_type") == "ATTEMPT_PREPARED"
+            and item.get("workspace_id") == job.get("workspace_id")
+            and item.get("attempt_id") == job.get("attempt_id")
+        ),
+        None,
+    )
+    if prepared is None:
+        raise ValueError("job v2 has no prepared attempt")
+    attempt_comparisons = {
+        "job_id": job.get("job_id"),
+        "experiment_id": job.get("experiment_id"),
+        "approval_id": job.get("approval_id"),
+        "protocol_revision": job.get("protocol_revision"),
+        "phase": job.get("phase"),
+        "run_units": job.get("run_units"),
+        "critical_contract_sha256": job.get("critical_contract_sha256"),
+        "workspace_branch": job.get("workspace_branch"),
+    }
+    for field, expected in attempt_comparisons.items():
+        if prepared.get(field) != expected:
+            raise ValueError(f"job v2 attempt binding mismatch for {field}")
+    if not job.get("adaptation_record_id"):
+        if prepared.get("source_commit") != job.get("source_commit"):
+            raise ValueError("job v2 attempt binding mismatch for source_commit")
+
+
 def validate_result_job_binding(root: Path, manifest: Mapping[str, Any]) -> Dict[str, Any]:
     job_id = str(manifest.get("job_id", ""))
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", job_id):
@@ -2251,6 +2681,46 @@ def validate_result_job_binding(root: Path, manifest: Mapping[str, Any]) -> Dict
     if not job_path.exists():
         raise ValueError(f"result has no dispatched job envelope: {normalize_rel(job_path.relative_to(root))}")
     job = read_json(job_path)
+    if job.get("schema_version") == "2.0":
+        from scripts.pfmval_governance import validate_job_v2
+
+        validate_against_schema(
+            job,
+            root / "project_state" / "schemas" / "server_job_v2.schema.json",
+            "bound server job v2",
+        )
+        validate_job_v2(job)
+        comparisons = {
+            "job_id": job.get("job_id"),
+            "experiment_id": job.get("experiment_id"),
+            "workspace_id": job.get("workspace_id"),
+            "attempt_id": job.get("attempt_id"),
+            "protocol_revision": job.get("protocol_revision"),
+            "approval_id": job.get("approval_id"),
+            "critical_contract_sha256": job.get(
+                "critical_contract_sha256"
+            ),
+            "source_commit": job.get("source_commit"),
+            "phase": job.get("phase"),
+            "run_units": job.get("run_units"),
+        }
+        for field, expected in comparisons.items():
+            if manifest.get(field) != expected:
+                raise ValueError(
+                    f"result/job binding mismatch for {field}: "
+                    f"result={manifest.get(field)!r} job={expected!r}"
+                )
+        _validate_job_v2_governance_binding(root, job)
+        if git_head(root) != "unknown" and not git_commit_exists(
+            root,
+            str(job.get("source_commit", "")),
+        ):
+            raise ValueError(
+                "bound job source_commit is unavailable locally: "
+                f"{job.get('source_commit')}"
+            )
+        return job
+
     validate_against_schema(
         job,
         root / "project_state" / "schemas" / "server_job.schema.json",
@@ -2297,6 +2767,7 @@ def recover_incomplete_result_transactions(root: Path) -> List[str]:
     targets = {
         "experiment_registry.json": root / "experiments" / "experiment_registry.json",
         "experiment_dashboard.md": root / "experiments" / "experiment_dashboard.md",
+        "experiment_progress.md": root / "experiments" / "experiment_progress.md",
         "current_state.json": root / "project_state" / "current_state.json",
         "CURRENT_STATE.md": root / "CURRENT_STATE.md",
     }
@@ -2316,7 +2787,16 @@ def recover_incomplete_result_transactions(root: Path) -> List[str]:
         else:
             # prepared, explicitly interrupted, or a partial committing set:
             # restore the complete previous generation from backups.
-            required_backups = [name for name in targets if name != "CURRENT_STATE.md"]
+            required_backups = [
+                name
+                for name in (
+                    "experiment_registry.json",
+                    "experiment_dashboard.md",
+                    "current_state.json",
+                )
+            ]
+            if metadata.get("before", {}).get("progress_sha256"):
+                required_backups.append("experiment_progress.md")
             missing = [name for name in required_backups if not (backup_dir / name).exists()]
             if missing:
                 raise ValueError(f"unrecoverable transaction backups are missing: {missing}")
@@ -2324,6 +2804,12 @@ def recover_incomplete_result_transactions(root: Path) -> List[str]:
                 backup = backup_dir / name
                 if backup.exists():
                     shutil.copy2(backup, target)
+                elif (
+                    name == "experiment_progress.md"
+                    and target.exists()
+                    and not metadata.get("before", {}).get("progress_sha256")
+                ):
+                    target.unlink()
             action = "rolled_back"
         recovered.append(f"{transaction_dir.name}:{action}")
         shutil.rmtree(transaction_dir)
@@ -2351,9 +2837,11 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
         raise FileNotFoundError(manifest_path)
     manifest = read_json(manifest_path)
     validate_result_envelope(bundle_dir, manifest)
-    validate_result_job_binding(root, manifest)
+    bound_job = validate_result_job_binding(root, manifest)
+    manifest_sha256 = sha256_file(manifest_path)
     registry_path = root / "experiments" / "experiment_registry.json"
     dashboard_path = root / "experiments" / "experiment_dashboard.md"
+    progress_path = root / "experiments" / "experiment_progress.md"
     state_path = root / "project_state" / "current_state.json"
     transaction_root = root / "project_state" / ".transactions"
     transaction_id = f"txn-{uuid.uuid4().hex}"
@@ -2381,6 +2869,15 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
         if duplicate_owner:
             raise ValueError(f"result_id is already bound to another experiment: {duplicate_owner}")
         if target.get("result_id") == manifest["result_id"] or (target.get("last_preflight") or {}).get("result_id") == manifest["result_id"]:
+            existing_record = (
+                target
+                if target.get("result_id") == manifest["result_id"]
+                else target.get("last_preflight") or {}
+            )
+            if existing_record.get("result_manifest_sha256") != manifest_sha256:
+                raise ValueError(
+                    "result_id is already bound to a different bundle SHA"
+                )
             return {"status": "already_imported", "result_id": manifest["result_id"]}
         if git_head(root) != "unknown" and not git_commit_exists(root, str(manifest["source_commit"])):
             raise ValueError(f"result source_commit is unavailable locally: {manifest['source_commit']}")
@@ -2388,7 +2885,6 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
         if manifest["phase"] != "preflight" and existing_commit and existing_commit != manifest["source_commit"]:
             raise ValueError(f"source_commit mismatch: registry={existing_commit} result={manifest['source_commit']}")
         imported_at = utc_now()
-        manifest_sha256 = sha256_file(manifest_path)
         promotable_success = manifest["status"] == "success" and manifest["phase"] in {"smoke", "formal"}
         if manifest["phase"] == "preflight":
             target["last_preflight"] = {
@@ -2404,8 +2900,19 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
             target["source_commit"] = manifest["source_commit"]
             target["job_id"] = manifest["job_id"]
             target["result_id"] = manifest["result_id"]
-            target["data_manifest_id"] = manifest.get("data_manifest_id")
-            target["path_index_version"] = manifest.get("path_index_version")
+            input_binding = (
+                bound_job.get("input_binding", {})
+                if bound_job.get("schema_version") == "2.0"
+                else {}
+            )
+            target["data_manifest_id"] = (
+                manifest.get("data_manifest_id")
+                or input_binding.get("data_manifest_id")
+            )
+            target["path_index_version"] = (
+                manifest.get("path_index_version")
+                or input_binding.get("path_index_version")
+            )
             target["result_manifest_sha256"] = manifest_sha256
             target["imported_at"] = imported_at
             target["evidence_status"] = "accepted" if promotable_success else ("rejected" if manifest["status"] == "failed" else "pending")
@@ -2431,8 +2938,10 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
 
         # Import lazily to avoid a module cycle when finalize_experiment calls state sync.
         from scripts.finalize_experiment import build_dashboard
+        from scripts.pfmval_views import build_experiment_progress
 
         dashboard_text = build_dashboard(registry)
+        progress_text = build_experiment_progress(registry)
         accepted_ids = list(state.get("latest_accepted_result_ids", []))
         if manifest["phase"] != "preflight":
             if target["evidence_status"] == "accepted" and target["id"] not in accepted_ids:
@@ -2455,6 +2964,11 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
             "before": {
                 "registry_sha256": sha256_file(registry_path),
                 "dashboard_sha256": sha256_file(dashboard_path),
+                "progress_sha256": (
+                    sha256_file(progress_path)
+                    if progress_path.exists()
+                    else None
+                ),
                 "state_sha256": sha256_file(state_path),
             },
         }
@@ -2463,15 +2977,21 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
         backup_dir.mkdir()
         shutil.copy2(registry_path, backup_dir / "experiment_registry.json")
         shutil.copy2(dashboard_path, backup_dir / "experiment_dashboard.md")
+        if progress_path.exists():
+            shutil.copy2(progress_path, backup_dir / "experiment_progress.md")
         shutil.copy2(state_path, backup_dir / "current_state.json")
         if (root / "CURRENT_STATE.md").exists():
             shutil.copy2(root / "CURRENT_STATE.md", backup_dir / "CURRENT_STATE.md")
         write_json_atomic(transaction_dir / "experiment_registry.json", registry)
         write_text_atomic(transaction_dir / "experiment_dashboard.md", dashboard_text)
+        write_text_atomic(transaction_dir / "experiment_progress.md", progress_text)
 
         staged_hashes = compute_source_hashes(root)
         staged_hashes["experiment_registry_sha256"] = sha256_file(transaction_dir / "experiment_registry.json")
         staged_hashes["experiment_dashboard_sha256"] = sha256_file(transaction_dir / "experiment_dashboard.md")
+        staged_hashes["experiment_progress_sha256"] = sha256_file(
+            transaction_dir / "experiment_progress.md"
+        )
         state["source_hashes"] = staged_hashes
         write_json_atomic(transaction_dir / "current_state.json", state)
         write_text_atomic(transaction_dir / "CURRENT_STATE.md", render_current_state(root, state, registry))
@@ -2484,6 +3004,7 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
         try:
             os.replace(transaction_dir / "experiment_registry.json", registry_path)
             os.replace(transaction_dir / "experiment_dashboard.md", dashboard_path)
+            os.replace(transaction_dir / "experiment_progress.md", progress_path)
             os.replace(transaction_dir / "current_state.json", state_path)
             os.replace(transaction_dir / "CURRENT_STATE.md", root / "CURRENT_STATE.md")
         except Exception:
@@ -2491,6 +3012,13 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
             write_json_atomic(transaction_dir / "transaction.json", transaction_manifest)
             shutil.copy2(backup_dir / "experiment_registry.json", registry_path)
             shutil.copy2(backup_dir / "experiment_dashboard.md", dashboard_path)
+            if (backup_dir / "experiment_progress.md").exists():
+                shutil.copy2(
+                    backup_dir / "experiment_progress.md",
+                    progress_path,
+                )
+            elif progress_path.exists():
+                progress_path.unlink()
             shutil.copy2(backup_dir / "current_state.json", state_path)
             if (backup_dir / "CURRENT_STATE.md").exists():
                 shutil.copy2(backup_dir / "CURRENT_STATE.md", root / "CURRENT_STATE.md")
@@ -2815,7 +3343,7 @@ def create_job_manifest(
     if missing_tracked:
         raise ValueError(f"job dispatch source commit does not contain required files: {missing_tracked}")
     return {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": JOB_SCHEMA_VERSION,
         "job_id": job_id,
         "experiment_id": experiment_id,
         "source_commit": git_head(root),
@@ -2839,6 +3367,28 @@ def create_job_manifest(
 
 
 def validate_job_manifest(root: Path, manifest: Mapping[str, Any], *, require_head: bool = True) -> None:
+    if manifest.get("schema_version") == "2.0":
+        from scripts.pfmval_governance import validate_job_v2
+
+        validate_against_schema(
+            manifest,
+            root / "project_state" / "schemas" / "server_job_v2.schema.json",
+            "server job v2",
+        )
+        validate_job_v2(manifest)
+        if not git_commit_exists(root, str(manifest["source_commit"])):
+            raise ValueError(
+                "job source commit is unavailable locally: "
+                f"{manifest['source_commit']}"
+            )
+        if require_head and manifest["source_commit"] != git_head(root):
+            raise ValueError(
+                f"job source commit {manifest['source_commit']} "
+                f"does not match HEAD {git_head(root)}"
+            )
+        _validate_job_v2_governance_binding(root, manifest)
+        return
+
     validate_against_schema(
         manifest,
         root / "project_state" / "schemas" / "server_job.schema.json",
@@ -2848,7 +3398,7 @@ def validate_job_manifest(root: Path, manifest: Mapping[str, Any], *, require_he
     missing = sorted(required - set(manifest))
     if missing:
         raise ValueError(f"job manifest missing fields: {', '.join(missing)}")
-    if manifest["schema_version"] != SCHEMA_VERSION:
+    if manifest["schema_version"] != JOB_SCHEMA_VERSION:
         raise ValueError("unsupported job manifest version")
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", str(manifest.get("job_id", ""))):
         raise ValueError("job manifest contains an unsafe job_id")
@@ -2922,7 +3472,7 @@ def build_result_envelope(
                 "sha256": sha256_file(source),
             })
         envelope = {
-            "schema_version": SCHEMA_VERSION,
+            "schema_version": RESULT_SCHEMA_VERSION,
             "result_id": result_id,
             "job_id": job["job_id"],
             "experiment_id": job["experiment_id"],
@@ -2932,7 +3482,7 @@ def build_result_envelope(
             "created_at": utc_now(),
             "formal_training_approved": bool((job.get("formal_training_approval") or {}).get("approved")),
             "data_manifest_id": job.get("data_manifest_id"),
-            "path_index_version": job.get("path_index_version") or SCHEMA_VERSION,
+            "path_index_version": job.get("path_index_version") or MPP_INDEX_SCHEMA_VERSION,
             "artifacts": artifacts,
             "metrics": dict(metrics),
             "large_artifacts": large_artifacts,

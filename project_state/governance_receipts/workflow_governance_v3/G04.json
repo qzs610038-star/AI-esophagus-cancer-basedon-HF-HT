@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_revision_005_local_refactor",
+  "stage_id": "G04",
+  "directive_id": "DIR-20260727-002",
+  "accepted_at": "2026-07-26T18:20:53Z",
+  "status": "passed",
+  "modules": {
+    "R10": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    }
+  },
+  "implemented": [
+    "One local knowledge/document engine with six profiles: project_fact, meeting_brief, research_path, learning_guide, paper_output and lifecycle_review.",
+    "Project facts use a separate append-only JSONL source and never overload Document Registry.",
+    "Unconfirmed facts remain previews; corrections append with supersedes; unresolved same-kind conflicts require review.",
+    "Meeting brief explicitly separates accepted, explore and failed material without format or rendering gates.",
+    "Research path preserves confirmed conclusions, uncertainty, negative routes, stop reasons and open hypotheses.",
+    "Learning guide remains interface_reserved and expresses commit/file/symbol and experiment references without touching existing guides.",
+    "Paper output stops at template_pending, accepts only local project material prefixes and creates no draft without a later template design approval.",
+    "Freshness changes produce review_due preview only and do not alter lifecycle, delete documents or close directives.",
+    "Knowledge CLI exposes preview/confirm/list/profile/freshness local-only entrypoints."
+  ],
+  "verification": [
+    {
+      "command": "python -m pytest tests/test_pfmval_knowledge_documents.py ... prior-stage regression tests -q",
+      "result": "PASS_WITH_WARN",
+      "summary": "114 passed, 2 expected sklearn single-sample R2 warnings in 45.68s"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py knowledge --help",
+      "result": "PASS",
+      "summary": "fact-preview, fact-confirm, fact-list, profile and freshness exposed"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=7 WARN=6 FAIL=0"
+    },
+    {
+      "command": "Test-Path project_state/project_facts.jsonl",
+      "result": "PASS",
+      "summary": "file absent; no real project fact was created"
+    },
+    {
+      "command": "python -m py_compile scripts/pfmval_knowledge.py deploy/pfmval_ops.py scripts/pfmval_state.py; git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "r10_tests": {
+    "R10-T01": "PASS",
+    "R10-T02": "PASS",
+    "R10-T03": "PASS",
+    "R10-T04": "PASS",
+    "R10-T05": "PASS",
+    "R10-T06": "PASS",
+    "R10-T07": "PASS",
+    "R10-T08": "PASS",
+    "R10-T09": "PASS"
+  },
+  "known_warnings": [
+    "No real user-triggered fact or document-profile run occurred; O remains NOT RUN.",
+    "Learning-guide content migration and paper drafting remain intentionally disabled.",
+    "Five accepted 2026-07-06 legacy results lack complete result envelopes.",
+    "Standardized MPP labels retain known duplicate/conflicting barcodes; regeneration is outside this Goal.",
+    "Tests used current Python 3.13.1 because the configured pfmval_py310 directory was absent."
+  ],
+  "not_run": [
+    "real project fact confirmation or append",
+    "real meeting brief, research path or learning guide generation",
+    "paper template receipt, mapping, draft, review, submission or publication",
+    "document lifecycle mutation, deletion or directive closure",
+    "external team, document, cloud, literature or research-management platform integration",
+    "automatic training based on a document or paper gap"
+  ],
+  "rollback": [
+    "Remove knowledge schemas, local module, CLI routes, tests and G04 receipt.",
+    "No existing document, Document Registry entry, Experiment Registry row or external system requires restoration."
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 110,
-  "updated_at": "2026-07-26T16:52:27+00:00",
-  "source_commit": "9d8cc7a4343b06e6372d63c3594dc4d0aab81d06",
+  "state_revision": 116,
+  "updated_at": "2026-07-26T18:29:22+00:00",
+  "source_commit": "be7ac120642fd3ee627239e4d829b651eff3de65",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -27,7 +27,8 @@
     "DIR-20260726-002",
     "DIR-20260726-003",
     "DIR-20260726-004",
-    "DIR-20260727-001"
+    "DIR-20260727-001",
+    "DIR-20260727-002"
   ],
   "active_plans": {
     "mpp_training": {
@@ -315,7 +316,11 @@
   "source_hashes": {
     "experiment_registry_sha256": "591506737fc071927302295169941f3b39fe561a4e93b69bcc39a69e3f3e0a5d",
     "experiment_dashboard_sha256": "a70f091043dcf96a46474708a451731108f7a4c3acafe1699ab3dd4e507f39dd",
-    "document_registry_sha256": "5eabe9b5468c46fbb50a0a2f453073951aa39fe65b7c94a113d63ac243356b00",
+    "experiment_progress_sha256": "ab89563a1127dfffeb4bea1b591fb9283647be80a5c87b1c8685c796101d480e",
+    "document_registry_sha256": "b5e0b7b0188c08a0613ece8af92eef08da4be5bea70b2033c090029554cc0e43",
+    "asset_registry_sha256": "e30959ff4af1c99af4ddb1f8ffac5fdad84902da42c8baa84443e4ecb1a4501d",
+    "workspace_registry_sha256": "a1b7fcfa70284bd427169dc4ec33fb52ae551a94a72a99cab305bb8230c9b972",
+    "workflow_catalog_sha256": "edb83c1f5f89d533304debaffae854daa4d6ef58796a004a1cea6d69d6426ed6",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "eeb5f05d5ced9d4900ebffc1af4307bf6cbab5fe8a708be1b1ae10b447597d9d",
     "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"

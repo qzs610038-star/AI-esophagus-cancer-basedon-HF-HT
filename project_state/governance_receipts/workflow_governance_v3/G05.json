@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_revision_005_local_refactor",
+  "stage_id": "G05",
+  "directive_id": "DIR-20260727-002",
+  "accepted_at": "2026-07-26T18:28:58Z",
+  "status": "passed",
+  "modules": {
+    "R11": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    }
+  },
+  "implemented": [
+    "Offline workflow catalog with candidate, reviewed, active and deprecated lifecycle states.",
+    "standardized is an active-workflow property and never a separate lifecycle state.",
+    "Discovery requires an explicit selected path list and verifies every path against the local Git tracked set.",
+    "Discovery reads only selected files, recognizes explicit metadata markers and records duplicate structures as review-required candidates.",
+    "Exact scan replay is byte-stable and performs zero writes.",
+    "Candidate activation requires review; high-risk activation requires approval, schema and tests.",
+    "Standardization additionally requires a stable version, examples, schema and tests.",
+    "Revision, merge and deprecation preserve immutable workflow IDs, supersedes links and replacements.",
+    "Catalog validation is integrated into the strict local state gate.",
+    "Workflow CLI exposes discover/list/review/activate/revise/merge/deprecate/validate without external catalog or network access."
+  ],
+  "verification": [
+    {
+      "command": "python -m pytest -q tests/test_pfmval_workflow_catalog.py",
+      "result": "PASS",
+      "summary": "7 passed in 0.20s"
+    },
+    {
+      "command": "python -m pytest -q G00-G05 targeted regression set",
+      "result": "PASS_WITH_WARN",
+      "summary": "104 passed, 2 expected sklearn single-sample R2 warnings in 22.10s"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py workflow validate",
+      "result": "PASS",
+      "summary": "empty real catalog is valid; entry_count=0"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=7 WARN=6 FAIL=0"
+    },
+    {
+      "command": "python -m py_compile scripts/pfmval_workflows.py scripts/pfmval_state.py deploy/pfmval_ops.py; git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "r11_tests": {
+    "R11-T01": "PASS",
+    "R11-T02": "PASS",
+    "R11-T03": "PASS",
+    "R11-T04": "PASS",
+    "R11-T05": "PASS",
+    "R11-T06": "PASS",
+    "R11-T07": "PASS"
+  },
+  "known_warnings": [
+    "No user-selected real workflow scan was supplied; the tracked catalog remains empty and O remains NOT RUN.",
+    "Five accepted 2026-07-06 legacy results lack complete result envelopes.",
+    "Standardized MPP labels retain known duplicate/conflicting barcodes; regeneration is outside this Goal.",
+    "Tests used current Python 3.13.1 because the configured pfmval_py310 directory was absent."
+  ],
+  "not_run": [
+    "real repository workflow discovery or candidate recording",
+    "real workflow review, activation, standardization, revision, merge or deprecation",
+    "session history, terminal history, stdout, environment, credential or raw parameter scanning",
+    "external workflow catalog, platform, database, SDK, network or server integration",
+    "training, result import, evidence acceptance or safety-boundary relaxation"
+  ],
+  "rollback": [
+    "Remove the workflow catalog schema, empty catalog, local module, CLI routes, strict-gate integration, tests and G05 receipt.",
+    "No real workflow entry, Experiment Registry row, accepted result or external system requires restoration."
+  ]
+}

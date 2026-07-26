@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0",
+  "mode": "shadow",
+  "content_hashes_computed": 0,
+  "candidates": [
+    {
+      "path": "egnv1",
+      "kind": "directory",
+      "size_bytes": null,
+      "hash_policy": "metadata_only",
+      "era": "legacy_mixed",
+      "custody": "project",
+      "asset_class": "code_root",
+      "lifecycle": "protected",
+      "mutability": "approval_required",
+      "evidence_role": "mixed"
+    },
+    {
+      "path": "egnv2",
+      "kind": "directory",
+      "size_bytes": null,
+      "hash_policy": "metadata_only",
+      "era": "legacy_mixed",
+      "custody": "project",
+      "asset_class": "code_root",
+      "lifecycle": "protected",
+      "mutability": "approval_required",
+      "evidence_role": "mixed"
+    },
+    {
+      "path": "histogene",
+      "kind": "directory",
+      "size_bytes": null,
+      "hash_policy": "metadata_only",
+      "era": "legacy_mixed",
+      "custody": "project",
+      "asset_class": "code_root",
+      "lifecycle": "protected",
+      "mutability": "approval_required",
+      "evidence_role": "mixed"
+    },
+    {
+      "path": "histogene/utils.py",
+      "kind": "file",
+      "size_bytes": 1082,
+      "hash_policy": "metadata_only",
+      "era": "legacy_mixed",
+      "custody": "project",
+      "asset_class": "compatibility_module",
+      "lifecycle": "protected",
+      "mutability": "approval_required",
+      "evidence_role": "compatibility",
+      "replacement": "pfmval_core/metrics.py"
+    },
+    {
+      "path": "openmidnight/best_mlp_regressor.pth",
+      "kind": "file",
+      "size_bytes": 1584715,
+      "hash_policy": "metadata_only",
+      "era": "uncertain",
+      "custody": "project",
+      "asset_class": "large_local_artifact",
+      "lifecycle": "protected",
+      "mutability": "approval_required",
+      "evidence_role": "unknown"
+    },
+    {
+      "path": "openmidnight/best_mlp_regressor_with_scheduler.pth",
+      "kind": "file",
+      "size_bytes": 3684941,
+      "hash_policy": "metadata_only",
+      "era": "uncertain",
+      "custody": "project",
+      "asset_class": "large_local_artifact",
+      "lifecycle": "protected",
+      "mutability": "approval_required",
+      "evidence_role": "unknown"
+    },
+    {
+      "path": "pfmval_core/metrics.py",
+      "kind": "file",
+      "size_bytes": 1307,
+      "hash_policy": "metadata_only",
+      "era": "shared_dependency",
+      "custody": "project",
+      "asset_class": "python_module",
+      "lifecycle": "active",
+      "mutability": "workflow_managed",
+      "evidence_role": "runtime_dependency",
+      "lineage": [
+        "train_mpp_uni2h_lora.py",
+        "train_mpp_uni2h_mlp.py"
+      ]
+    },
+    {
+      "path": "pretrained_omiclip/checkpoint.pt",
+      "kind": "file",
+      "size_bytes": 7662370634,
+      "hash_policy": "metadata_only",
+      "era": "uncertain",
+      "custody": "project",
+      "asset_class": "large_local_artifact",
+      "lifecycle": "protected",
+      "mutability": "approval_required",
+      "evidence_role": "unknown"
+    },
+    {
+      "path": "train_mpp_uni2h_lora.py",
+      "kind": "file",
+      "size_bytes": 21228,
+      "hash_policy": "metadata_only",
+      "era": "mpp_active",
+      "custody": "project",
+      "asset_class": "training_entrypoint",
+      "lifecycle": "active",
+      "mutability": "workflow_managed",
+      "evidence_role": "runtime_code"
+    },
+    {
+      "path": "train_mpp_uni2h_mlp.py",
+      "kind": "file",
+      "size_bytes": 55935,
+      "hash_policy": "metadata_only",
+      "era": "mpp_active",
+      "custody": "project",
+      "asset_class": "training_entrypoint",
+      "lifecycle": "active",
+      "mutability": "workflow_managed",
+      "evidence_role": "runtime_code"
+    }
+  ],
+  "conflicts": [],
+  "side_effects": "none"
+}

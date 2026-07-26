@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/experiment_approval_v2.schema.json",
+  "title": "PFMval experiment protocol approval v2",
+  "type": "object",
+  "required": [
+    "event_type",
+    "approval_id",
+    "experiment_id",
+    "protocol_revision",
+    "phase",
+    "run_limit",
+    "critical_contract_sha256",
+    "adaptation_policy",
+    "source",
+    "status",
+    "approved_at"
+  ],
+  "properties": {
+    "event_type": {
+      "const": "protocol_approval"
+    },
+    "approval_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "phase": {
+      "enum": [
+        "preflight",
+        "smoke",
+        "formal"
+      ]
+    },
+    "run_limit": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "critical_contract_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "adaptation_policy": {
+      "const": "e1_allowlist_only"
+    },
+    "source": {
+      "const": "explicit_user_instruction"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "superseded",
+        "cancelled",
+        "exhausted"
+      ]
+    },
+    "approved_at": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

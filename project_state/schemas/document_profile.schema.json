@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/document_profile.schema.json",
+  "title": "PFMval document profile artifact",
+  "type": "object",
+  "required": [
+    "document_id",
+    "profile",
+    "status",
+    "lifecycle"
+  ],
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profile": {
+      "enum": [
+        "project_fact",
+        "meeting_brief",
+        "research_path",
+        "learning_guide",
+        "paper_output",
+        "lifecycle_review"
+      ]
+    },
+    "status": {
+      "type": "string"
+    },
+    "lifecycle": {
+      "enum": [
+        "draft",
+        "active",
+        "superseded",
+        "historical"
+      ]
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "body": {
+      "type": "string"
+    },
+    "interface": {
+      "type": "object"
+    },
+    "writes": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true
+}

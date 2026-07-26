@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-26T16:52:20+00:00",
-  "state_revision": 109,
+  "updated_at": "2026-07-26T18:39:09+00:00",
+  "state_revision": 116,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -535,9 +535,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "60a29eadd2b0c4fe0e48ff990b709953d61c25fb2e9d1796c1333b3f95b85d11",
+      "verified_at": "2026-07-26T18:38:01+00:00",
+      "state_revision": 116,
+      "content_sha256": "ebc5d734c77c95e093d3f35e325ef5c9b41024e174b1e7852d7e344dfac0e8c9",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -556,9 +556,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "a4a86af86b7ad91601b29b32ffa1c0d6f844686dd715cbe1d2d085ee215daff1",
+      "verified_at": "2026-07-26T18:38:01+00:00",
+      "state_revision": 116,
+      "content_sha256": "fa49c49327a7c461c959b7bc3e77741d290a268c9138afbce7cfea0a2e165d5f",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3751,13 +3751,35 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "d30ec77ca453abd3c200833bd197b2e03faf18e7e88dcd4e2fcea5ba364770f9",
+      "verified_at": "2026-07-26T18:38:01+00:00",
+      "state_revision": 116,
+      "content_sha256": "54f22b5b87c0a5ade6b4f6da3e8c902ea915aa535ac1de11b3b900cdbf93cdd4",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
         "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-a1c5cb1e1e09",
+      "path": "PROJECT_GUIDE.md",
+      "category": "项目入口",
+      "scope": "project_summary",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-07-26T18:39:09+00:00",
+      "state_revision": 116,
+      "content_sha256": "49e387e83d066c2383e2db3ec1c18ac1a3326996752662725fef788a97e56988",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/document_registry.json",
+        "project_state/asset_registry.json"
       ],
       "purpose": "",
       "created": "",
@@ -3772,9 +3794,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "bd2377bb8290ce8af01369b6453e7dc1df9f9e845c4ab5b44900bae6255eb65e",
+      "verified_at": "2026-07-26T18:38:01+00:00",
+      "state_revision": 116,
+      "content_sha256": "3c9d5ef388b3498b611a4723c7408f2b205e76d795c5aa389a339f4f170a4575",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4037,6 +4059,27 @@
       "superseded_by": [],
       "truth_sources": [
         "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-97369b0611f5",
+      "path": "experiments/experiment_progress.md",
+      "category": "项目入口",
+      "scope": "project_summary",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-07-26T18:07:51+00:00",
+      "state_revision": 115,
+      "content_sha256": "ab89563a1127dfffeb4bea1b591fb9283647be80a5c87b1c8685c796101d480e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "experiments/experiment_registry.json"
       ],
       "purpose": "",
       "created": "",
@@ -4550,10 +4593,10 @@
     }
   ],
   "summary": {
-    "total": 204,
-    "live": 188,
+    "total": 206,
+    "live": 190,
     "missing": 16,
-    "active": 49,
+    "active": 51,
     "superseded": 11,
     "historical": 110,
     "pending_review": 17,

@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/workspace_registry.schema.json",
+  "title": "PFMval workspace registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "updated_at",
+    "next_workspace_number",
+    "workspaces"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "next_workspace_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "workspaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "display_name",
+          "experiment_id",
+          "protocol_revision",
+          "status",
+          "active_attempt_id",
+          "lease",
+          "opened_at",
+          "last_verified_at",
+          "close_eligibility",
+          "retention_policy",
+          "hosts"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "pattern": "^W[0-9]{3,}$"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "experiment_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "protocol_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "status": {
+            "enum": [
+              "shadow",
+              "registered",
+              "workspace_open",
+              "close_ready",
+              "tombstoned",
+              "archived"
+            ]
+          },
+          "active_attempt_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lease": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "opened_at": {
+            "type": "string"
+          },
+          "last_verified_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "close_eligibility": {
+            "type": "string"
+          },
+          "retention_policy": {
+            "type": "string"
+          },
+          "hosts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "host_scope",
+                "branch",
+                "path_id",
+                "relative_path",
+                "current_source_commit"
+              ],
+              "properties": {
+                "host_scope": {
+                  "enum": [
+                    "local",
+                    "server"
+                  ]
+                },
+                "branch": {
+                  "type": "string"
+                },
+                "path_id": {
+                  "type": "string"
+                },
+                "relative_path": {
+                  "type": "string"
+                },
+                "current_source_commit": {
+                  "type": "string",
+                  "pattern": "^$|^[0-9a-f]{40}$"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_revision_005_local_refactor",
+  "stage_id": "G00",
+  "directive_id": "DIR-20260727-002",
+  "status": "passed",
+  "baseline": {
+    "branch": "main",
+    "head": "be7ac120642fd3ee627239e4d829b651eff3de65",
+    "state_revision": 111,
+    "initial_worktree_clean": true,
+    "local_worktree_count": 13,
+    "job_directory_count": 15,
+    "result_directory_count": 12,
+    "worktree_inventory_scope": "local observation summary only; no paths promoted to cross-machine facts"
+  },
+  "modules": {
+    "R0": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "PASS",
+      "S": "N/A",
+      "evidence": [
+        "tests/fixtures/workflow_governance_v3/r0_baseline_manifest.json",
+        "test_r0_baseline_manifest_freezes_v1_compatibility_samples"
+      ]
+    },
+    "R5b": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "PASS",
+      "S": "N/A",
+      "evidence": [
+        "test_document_scan_is_byte_stable_when_inputs_are_unchanged",
+        "test_document_scan_preserves_manually_curated_lineage",
+        "two consecutive docs scan --write and state sync cycles"
+      ]
+    }
+  },
+  "verification": [
+    {
+      "command": "python -m pytest tests/test_pfmval_state.py -q",
+      "result": "PASS",
+      "summary": "55 passed in 18.74s",
+      "environment_note": "pytest basetemp was outside the repository; Windows Git fixture enabled local core.longpaths"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=6 WARN=6 FAIL=0"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py paths validate",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=0 WARN=1 FAIL=0"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py job validate --manifest automation/jobs/mpp1-repair-v003-recheck-20260711/job.json",
+      "result": "PASS",
+      "summary": "v1 formal job manifest remains valid"
+    },
+    {
+      "command": "docs scan --write -> state sync, repeated twice",
+      "result": "PASS",
+      "summary": "document registry and current state hashes were byte-stable on the second cycle",
+      "document_registry_sha256": "684784bfebd9f187fad98f19d9d0fda957bcf0b8043510daf285ef5b5be0757b",
+      "current_state_sha256": "366f8c2b80a25f4a298bcb7ac7d0e705ed2fcd7d4a2194c10eac12789ba9d78f"
+    }
+  ],
+  "known_warnings": [
+    "Five accepted 2026-07-06 legacy results lack complete result envelopes.",
+    "Standardized MPP labels retain known duplicate/conflicting barcodes; regeneration is outside this Goal.",
+    "codebase-memory fast re-index crashed; exact-file fallback was used.",
+    "The configured pfmval_py310 environment directory was not present; tests used current Python 3.13.1."
+  ],
+  "not_run": [
+    "server access",
+    "training",
+    "result acceptance",
+    "worktree creation, adoption, migration or deletion",
+    "asset migration or protected-directory changes",
+    "external platform or network integration"
+  ],
+  "rollback": [
+    "Remove the R0 manifest and G00 receipt.",
+    "Revert the scan_documents metadata-stability change and its tests.",
+    "No original job, result, Registry history or worktree was modified."
+  ]
+}

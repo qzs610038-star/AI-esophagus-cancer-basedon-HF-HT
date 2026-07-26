@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/result_envelope_v2.schema.json",
+  "title": "PFMval result envelope v2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "result_id",
+    "job_id",
+    "experiment_id",
+    "workspace_id",
+    "attempt_id",
+    "protocol_revision",
+    "approval_id",
+    "critical_contract_sha256",
+    "source_commit",
+    "phase",
+    "status",
+    "created_at",
+    "run_units",
+    "artifacts",
+    "metrics",
+    "metric_artifact_ids",
+    "large_artifacts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "result_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^W[0-9]{3,}-A[0-9]{3,}$"
+    },
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^W[0-9]{3,}$"
+    },
+    "attempt_id": {
+      "type": "string",
+      "pattern": "^A[0-9]{3,}$"
+    },
+    "protocol_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "approval_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "critical_contract_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "phase": {
+      "enum": [
+        "preflight",
+        "smoke",
+        "formal"
+      ]
+    },
+    "status": {
+      "enum": [
+        "success",
+        "failed",
+        "incomplete"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "run_units": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifact_id",
+          "path",
+          "kind",
+          "size_bytes",
+          "evidence_role",
+          "retention",
+          "source_attempt_id"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^$|^[0-9a-f]{64}$"
+          },
+          "evidence_role": {
+            "enum": [
+              "critical",
+              "supporting",
+              "diagnostic"
+            ]
+          },
+          "retention": {
+            "type": "string"
+          },
+          "source_attempt_id": {
+            "type": "string",
+            "pattern": "^A[0-9]{3,}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "metric_artifact_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "large_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifact_id",
+          "server_path",
+          "size_bytes",
+          "sha256"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "server_path": {
+            "type": "string",
+            "pattern": "^[A-Za-z]:[\\\\/]"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "retention": {
+            "type": "string",
+            "minLength": 1
+          },
+          "recompute_policy": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "retention"
+            ]
+          },
+          {
+            "required": [
+              "recompute_policy"
+            ]
+          }
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

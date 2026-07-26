@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_revision_005_local_refactor",
+  "stage_id": "G03",
+  "directive_id": "DIR-20260727-002",
+  "accepted_at": "2026-07-26T18:14:27Z",
+  "status": "passed",
+  "modules": {
+    "P0C": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    }
+  },
+  "implemented": [
+    "Append-only local records for idea, explore, candidate, claim, negative result, conflict and explanation.",
+    "Idea/explore/candidate records cannot become accepted evidence or bypass P0A.",
+    "Formal claims and explanations must resolve to an accepted Experiment Registry result.",
+    "Negative routes retain stop and continue conditions across later appends.",
+    "Deterministic fact-domain adjudication rejects generated views as authority and preserves unresolved same-domain conflicts.",
+    "Observation, interpretation and recommendation are machine-distinct with unit, statistic and text description.",
+    "Atomic JSONL rewrite makes exact replay a no-op and rejects same ID with different content without partial writes.",
+    "Science records do not write Experiment, Workspace or Document registries.",
+    "Local science record/list/adjudicate CLI has no external runtime dependency."
+  ],
+  "verification": [
+    {
+      "command": "python -m pytest tests/test_pfmval_scientific_workflows.py ... P0A/P0B regression tests -q",
+      "result": "PASS_WITH_WARN",
+      "summary": "104 passed, 2 expected sklearn single-sample R2 warnings in 45.32s"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py science --help",
+      "result": "PASS",
+      "summary": "record, list and adjudicate local-only subcommands exposed"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=7 WARN=6 FAIL=0"
+    },
+    {
+      "command": "python -m py_compile scripts/pfmval_science.py deploy/pfmval_ops.py scripts/pfmval_state.py; git diff --check",
+      "result": "PASS"
+    },
+    {
+      "command": "Test-Path project_state/scientific_records.jsonl",
+      "result": "PASS",
+      "summary": "file absent; no real scientific reasoning record was created"
+    }
+  ],
+  "p0c_tests": {
+    "P0C-T01": "PASS",
+    "P0C-T02": "PASS",
+    "P0C-T03": "PASS",
+    "P0C-T04": "PASS",
+    "P0C-T05": "PASS",
+    "P0C-T06": "PASS",
+    "P0C-T07": "PASS",
+    "P0C-T08": "PASS"
+  },
+  "known_warnings": [
+    "Five accepted 2026-07-06 legacy results lack complete result envelopes.",
+    "Standardized MPP labels retain known duplicate/conflicting barcodes; regeneration is outside this Goal.",
+    "No real user-triggered inference record exists, so operational evidence remains NOT RUN.",
+    "No scientific claim was newly evaluated; S is N/A.",
+    "Tests used current Python 3.13.1 because the configured pfmval_py310 directory was absent."
+  ],
+  "not_run": [
+    "real idea, explore, candidate, claim, negative-result or explanation recording",
+    "server access or training",
+    "new result import or evidence acceptance",
+    "external platform, service, CLI, SDK, database or cloud integration",
+    "scientific claim evaluation"
+  ],
+  "rollback": [
+    "Remove the science schema, local module, CLI routes, tests and G03 receipt.",
+    "No Experiment Registry, accepted result or external system requires rollback."
+  ]
+}

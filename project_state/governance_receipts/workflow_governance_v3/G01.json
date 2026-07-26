@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_revision_005_local_refactor",
+  "stage_id": "G01",
+  "directive_id": "DIR-20260727-002",
+  "accepted_at": "2026-07-26T17:50:26Z",
+  "status": "passed",
+  "baseline": {
+    "branch": "main",
+    "head": "be7ac120642fd3ee627239e4d829b651eff3de65",
+    "workspace_registry_mode": "empty shadow registry",
+    "observed_local_worktree_count": 13,
+    "real_workspace_allocation_count": 0
+  },
+  "modules": {
+    "P0A": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    },
+    "R1": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    },
+    "R2": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    },
+    "R3": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    },
+    "R4": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    },
+    "R5": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    }
+  },
+  "implemented": [
+    "Monotonic W### workspace identities with no reuse and one experiment per workspace.",
+    "Read-only local workspace shadow scan and explicit locus validation.",
+    "Persistent workspace leases and attempt-specific external run-root resolution.",
+    "Append-only protocol approval, attempt lifecycle and run-unit accounting at EXPERIMENT_STARTED.",
+    "Strict E1 engineering adaptation allowlist with unchanged critical contract.",
+    "Canonical critical contract digest and independently versioned schemas.",
+    "Server Job v2 and Result Envelope v2 with v1/v2 dual-read validation.",
+    "Critical/supporting/diagnostic artifact tiers and formal selection-proof gate.",
+    "Same result ID plus same SHA is idempotent; same ID plus different SHA hard-fails.",
+    "Local CLI happy path for contract, experiment, approval, attempt, job and result records."
+  ],
+  "verification": [
+    {
+      "command": "python -m pytest tests/test_pfmval_governance_v3.py tests/test_pfmval_state.py -q",
+      "result": "PASS",
+      "summary": "65 passed in 21.90s",
+      "environment_note": "pytest basetemp was outside the repository"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=7 WARN=6 FAIL=0"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py workspace scan --host local",
+      "result": "PASS_WITH_WARN",
+      "summary": "13 pre-existing unregistered local worktrees observed; no registry or worktree mutation"
+    },
+    {
+      "command": "python -m py_compile scripts/pfmval_state.py scripts/pfmval_governance.py deploy/pfmval_ops.py",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "known_warnings": [
+    "Five accepted 2026-07-06 legacy results lack complete result envelopes.",
+    "Standardized MPP labels retain known duplicate/conflicting barcodes; regeneration is outside this Goal.",
+    "The 13 pre-existing local worktrees remain unregistered shadow observations; no adoption was authorized.",
+    "codebase-memory did not return current function symbols after its re-index crash; exact-file fallback was used.",
+    "The configured pfmval_py310 environment directory was not present; tests used current Python 3.13.1."
+  ],
+  "not_run": [
+    "server access or server-side preflight",
+    "Gitee dispatch, fetch, return-ref or remote-SHA verification",
+    "training or EXPERIMENT_STARTED on a real attempt",
+    "real result import or evidence acceptance",
+    "worktree creation, adoption, migration or deletion",
+    "asset migration or protected-directory changes",
+    "external platform or network integration"
+  ],
+  "rollback": [
+    "Remove the G01 receipt, governance schemas, empty workspace registry and local governance module.",
+    "Revert the added CLI routes and v1/v2 compatibility branches in pfmval_state.py.",
+    "No original job, result, experiment, worktree or protected asset was changed."
+  ]
+}

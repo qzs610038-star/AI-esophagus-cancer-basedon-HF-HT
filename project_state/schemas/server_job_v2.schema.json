@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/server_job_v2.schema.json",
+  "title": "PFMval Gitee server job v2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "job_id",
+    "experiment_id",
+    "workspace_id",
+    "attempt_id",
+    "protocol_revision",
+    "approval_id",
+    "critical_contract_sha256",
+    "source_commit",
+    "phase",
+    "command_id",
+    "path_ids",
+    "resolved_argv",
+    "input_binding",
+    "run_units",
+    "workspace_branch",
+    "dispatch_revision",
+    "created_at",
+    "dispatch_branch",
+    "result_branch",
+    "artifact_policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^W[0-9]{3,}-A[0-9]{3,}$"
+    },
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^W[0-9]{3,}$"
+    },
+    "attempt_id": {
+      "type": "string",
+      "pattern": "^A[0-9]{3,}$"
+    },
+    "protocol_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "approval_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "critical_contract_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "phase": {
+      "enum": [
+        "preflight",
+        "smoke",
+        "formal"
+      ]
+    },
+    "command_id": {
+      "enum": [
+        "state_preflight",
+        "cache_parity",
+        "standard_training",
+        "mpp_pathway_ridge_calibration"
+      ]
+    },
+    "path_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "resolved_argv": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "input_binding": {
+      "type": "object"
+    },
+    "run_units": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "workspace_branch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dispatch_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "adaptation_record_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "dispatch_branch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "result_branch": {
+      "type": "string",
+      "pattern": "^automation/server/W[0-9]{3,}/A[0-9]{3,}$"
+    },
+    "artifact_policy": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

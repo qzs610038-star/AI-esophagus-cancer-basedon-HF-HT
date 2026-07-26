@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_revision_005_local_refactor",
+  "stage_id": "G02",
+  "directive_id": "DIR-20260727-002",
+  "accepted_at": "2026-07-26T18:09:15Z",
+  "status": "passed",
+  "modules": {
+    "P0B": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "PASS",
+      "S": "N/A"
+    },
+    "R6": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "PASS",
+      "S": "N/A"
+    },
+    "R7": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "PASS",
+      "S": "N/A"
+    },
+    "R8": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "PASS_SHADOW_ONLY",
+      "S": "N/A"
+    },
+    "R9": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    }
+  },
+  "implemented": [
+    "Tracked user navigation PROJECT_GUIDE.md derived from Document and Asset registries.",
+    "Concise experiment_progress.md derived from all 31 Experiment Registry rows with current, accepted and historical separation.",
+    "Result ID is visible beside experiment ID for conclusion-to-evidence traceability.",
+    "Result import transaction now stages, commits and recovers Experiment Registry, full Dashboard, concise progress view and current-state views as one generation.",
+    "Asset Registry schema and empty shadow Registry with metadata-only local inventory.",
+    "Asset shadow identifies protected mixed roots, uncertain large local assets, active MPP entrypoints and neutral shared metrics lineage without content hashing.",
+    "Neutral pfmval_core.metrics implementation is numerically compatible with protected histogene.utils for supported and edge fixtures.",
+    "Active MPP MLP and LoRA callers now import neutral metrics; protected histogene/egnv1/egnv2 remain unchanged.",
+    "Asset policy compiles fixed protected/immutable boundaries in shadow mode and reports path escapes without blocking or writing.",
+    "Lifecycle preview writes no events and performs no move, protection change or deletion.",
+    "Workspace close preview is deterministic and side-effect free; close execute remains unavailable without separate approval."
+  ],
+  "verification": [
+    {
+      "command": "python -m pytest tests/test_user_project_guide.py tests/test_experiment_progress_view.py tests/test_asset_registry.py tests/test_metrics_compatibility.py tests/test_pfmval_asset_policy.py tests/test_workspace_close.py tests/test_pfmval_governance_v3.py tests/test_pfmval_state.py tests/test_mpp_manifest_routing.py tests/test_mpp_uni2h_lora.py -q",
+      "result": "PASS_WITH_WARN",
+      "summary": "95 passed, 2 expected sklearn single-sample R2 warnings in 44.35s"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=7 WARN=6 FAIL=0"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py asset inventory --mode shadow --output project_state/asset_shadow_inventory.json",
+      "result": "PASS",
+      "summary": "10 candidates; 0 content hashes; no move, rewrite or unprotect",
+      "sha256": "f98c33cc2f157a6fd39e75bab441f4fb31d8ab3cbe00afd884073359b37336b7"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py asset policy --path histogene/utils.py --path mpp_standard_splits/path_index.json --path ../outside.txt",
+      "result": "PASS_SHADOW_ONLY",
+      "summary": "reported approval_required, immutable and path_escape; registry SHA unchanged"
+    },
+    {
+      "command": "docs scan --write -> views refresh -> state sync, repeated",
+      "result": "PASS",
+      "summary": "state revision remained 115 and generated view hashes were stable",
+      "project_guide_sha256": "404a8843dfacde0095903c2b77a39539688ac38653af791d2c856865a30ee026",
+      "experiment_progress_sha256": "ab89563a1127dfffeb4bea1b591fb9283647be80a5c87b1c8685c796101d480e"
+    },
+    {
+      "command": "git diff -- histogene egnv1 egnv2",
+      "result": "PASS",
+      "summary": "no protected-directory changes"
+    },
+    {
+      "command": "python -m py_compile ... and git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "known_warnings": [
+    "Five accepted 2026-07-06 legacy results lack complete result envelopes.",
+    "Standardized MPP labels retain known duplicate/conflicting barcodes; regeneration is outside this Goal.",
+    "Large local checkpoint candidates were inventoried by path and size only; their contents were not read or hashed.",
+    "histogene/utils.py remains protected as a compatibility module; no deprecation shim was written because protected-directory modification was not authorized.",
+    "No real W### exists in the empty shadow Workspace Registry, so close preview operational execution was not run against an existing workspace.",
+    "codebase-memory remained stale after its re-index crash; exact-file fallback was used.",
+    "Tests used current Python 3.13.1 because the configured pfmval_py310 directory was absent."
+  ],
+  "not_run": [
+    "server or Gitee inventory retrieval",
+    "training or real result acceptance",
+    "asset lifecycle migration",
+    "asset movement, archival or deletion",
+    "directory unprotection or asset-policy enforce mode",
+    "Hook enforce activation",
+    "close execute, worktree deletion or global prune",
+    "checkpoint, run-root, cache or data cleanup"
+  ],
+  "rollback": [
+    "Switch the two active MPP imports back to histogene.utils and remove pfmval_core after compatibility verification.",
+    "Remove generated user views, asset shadow files, schemas, CLI routes and the G02 receipt.",
+    "Revert result-import progress-view transaction integration.",
+    "No protected asset, worktree or physical asset location requires restoration."
+  ]
+}

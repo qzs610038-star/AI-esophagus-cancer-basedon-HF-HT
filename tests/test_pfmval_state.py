@@ -8,6 +8,7 @@ import pytest
 
 from scripts import finalize_experiment as finalize_module
 from scripts.finalize_experiment import build_dashboard
+from scripts.pfmval_governance import build_job_v2, build_result_v2
 from scripts.pfmval_state import (
     MPP_TRAINING_ALLOWED_PARAMETERS,
     append_directive,
@@ -390,6 +391,90 @@ def test_document_scan_preserves_hidden_paths_and_marks_only_missing_qoder(tmp_p
     assert "claude/next-steps.md" not in entries
 
 
+def test_document_scan_is_byte_stable_when_inputs_are_unchanged(tmp_path, monkeypatch):
+    root = make_minimal_project(tmp_path)
+    registry_path = root / "project_state" / "document_registry.json"
+    timestamps = iter([
+        "2026-07-27T00:00:00+00:00",
+        "2026-07-27T00:01:00+00:00",
+    ])
+    monkeypatch.setattr("scripts.pfmval_state.utc_now", lambda: next(timestamps))
+    first = scan_documents(root)
+    write_json(registry_path, first)
+
+    second = scan_documents(root)
+
+    assert second == first
+
+
+def test_document_scan_preserves_manually_curated_lineage(tmp_path):
+    root = make_minimal_project(tmp_path)
+    registry_path = root / "project_state" / "document_registry.json"
+    registry = scan_documents(root)
+    entry = next(item for item in registry["documents"] if item["path"] == "AGENTS.md")
+    entry["supersedes"] = ["doc-old-agents"]
+    entry["superseded_by"] = ["doc-next-agents"]
+    entry["truth_sources"] = ["project_state/directives.jsonl"]
+    write_json(registry_path, registry)
+
+    rescanned = scan_documents(root)
+    rescanned_entry = next(
+        item for item in rescanned["documents"] if item["path"] == "AGENTS.md"
+    )
+
+    assert rescanned_entry["supersedes"] == ["doc-old-agents"]
+    assert rescanned_entry["superseded_by"] == ["doc-next-agents"]
+    assert rescanned_entry["truth_sources"] == ["project_state/directives.jsonl"]
+
+
+def test_r0_baseline_manifest_freezes_v1_compatibility_samples():
+    root = Path(__file__).resolve().parents[1]
+    manifest_path = (
+        root
+        / "tests"
+        / "fixtures"
+        / "workflow_governance_v3"
+        / "r0_baseline_manifest.json"
+    )
+    manifest = read_json(manifest_path)
+    samples = {item["class"]: item for item in manifest["samples"]}
+
+    assert set(samples) == {
+        "preflight",
+        "smoke",
+        "formal",
+        "success",
+        "failed",
+        "incomplete",
+        "legacy_accepted_without_envelope",
+    }
+    for sample in samples.values():
+        source = root / sample["source_path"]
+        assert source.is_file()
+        assert sha256_file(source) == sample["source_sha256"]
+        assert sample["schema_version"] == "1.0"
+        assert sample["evidence_boundary"] in {
+            "current_compatibility_fixture",
+            "accepted_legacy_measurement_incomplete_provenance",
+        }
+
+    incomplete = samples["incomplete"]
+    assert not (root / incomplete["expected_result_path"]).exists()
+
+    legacy = samples["legacy_accepted_without_envelope"]
+    registry = read_json(root / legacy["source_path"])
+    experiment = next(
+        item
+        for item in registry["experiments"]
+        if item["id"] == legacy["selector"]["experiment_id"]
+    )
+    assert experiment["evidence_status"] == "accepted"
+    assert experiment["provenance_complete"] is False
+    assert experiment["source_commit"] is None
+    assert experiment["job_id"] is None
+    assert experiment["result_manifest_sha256"] is None
+
+
 def test_document_scan_registers_canonical_skills_adapters_and_review_lifecycle(tmp_path):
     root = make_minimal_project(tmp_path)
     state_path = root / "project_state" / "current_state.json"
@@ -639,7 +724,161 @@ def test_result_import_updates_registry_dashboard_and_state(tmp_path):
     assert registry["experiments"][0]["evidence_status"] == "accepted"
     assert "exp1" in state["latest_accepted_result_ids"]
     assert "exp1" in (root / "experiments" / "experiment_dashboard.md").read_text(encoding="utf-8")
+    assert "result-1" in (root / "experiments" / "experiment_progress.md").read_text(encoding="utf-8")
     assert not (root / "project_state" / ".transactions").exists()
+
+
+def test_result_import_dual_reads_v2_and_rejects_same_id_with_different_sha(
+    tmp_path,
+):
+    root = make_minimal_project(tmp_path)
+    source_commit = "a" * 40
+    contract_sha = "b" * 64
+    data_sha = "c" * 64
+    registry_path = root / "experiments" / "experiment_registry.json"
+    registry = read_json(registry_path)
+    registry["experiments"][0].update(
+        {
+            "workspace_id": "W001",
+            "protocol_revision": 1,
+            "critical_contract_sha256": contract_sha,
+            "source_commit": source_commit,
+        }
+    )
+    write_json(registry_path, registry)
+    workspace_registry = {
+        "schema_version": "1.0",
+        "updated_at": "2026-07-27T00:00:00+00:00",
+        "next_workspace_number": 2,
+        "workspaces": [
+            {
+                "workspace_id": "W001",
+                "display_name": "fixture",
+                "experiment_id": "exp1",
+                "protocol_revision": 1,
+                "status": "registered",
+                "active_attempt_id": None,
+                "lease": None,
+                "opened_at": "2026-07-27T00:00:00+00:00",
+                "last_verified_at": None,
+                "close_eligibility": "not_evaluated",
+                "retention_policy": "retain_until_explicit_close_approval",
+                "hosts": {
+                    "local": {
+                        "host_scope": "local",
+                        "branch": "automation/local/W001/A001",
+                        "path_id": "local_experiment_workspaces",
+                        "relative_path": "workspaces/W001",
+                        "current_source_commit": source_commit,
+                    }
+                },
+            }
+        ],
+    }
+    write_json(
+        root / "project_state" / "workspace_registry.json",
+        workspace_registry,
+    )
+    approval = {
+        "event_type": "protocol_approval",
+        "approval_id": "APR-exp1-r001",
+        "experiment_id": "exp1",
+        "protocol_revision": 1,
+        "phase": "formal",
+        "run_limit": 1,
+        "critical_contract_sha256": contract_sha,
+        "adaptation_policy": "e1_allowlist_only",
+        "source": "explicit_user_instruction",
+        "status": "active",
+        "approved_at": "2026-07-27T00:00:00+00:00",
+    }
+    (root / "project_state" / "experiment_approvals.jsonl").write_text(
+        json.dumps(approval) + "\n",
+        encoding="utf-8",
+    )
+    prepared = {
+        "event_type": "ATTEMPT_PREPARED",
+        "event_id": "prepare-W001-A001",
+        "recorded_at": "2026-07-27T00:00:00+00:00",
+        "experiment_id": "exp1",
+        "workspace_id": "W001",
+        "attempt_id": "A001",
+        "job_id": "W001-A001",
+        "approval_id": "APR-exp1-r001",
+        "protocol_revision": 1,
+        "phase": "formal",
+        "run_units": 1,
+        "source_commit": source_commit,
+        "critical_contract_sha256": contract_sha,
+        "workspace_branch": "automation/local/W001/A001",
+    }
+    (root / "project_state" / "attempt_events.jsonl").write_text(
+        json.dumps(prepared) + "\n",
+        encoding="utf-8",
+    )
+    job = build_job_v2(
+        prepared,
+        command_id="standard_training",
+        path_ids=["mpp_standard_splits"],
+        resolved_argv=["python", "train.py"],
+        input_binding={
+            "data_manifest_id": "fixture-v2",
+            "data_manifest_sha256": data_sha,
+            "path_index_version": "2.0",
+            "artifacts": [],
+        },
+    )
+    job_path = root / "automation" / "jobs" / job["job_id"] / "job.json"
+    write_json(job_path, job)
+    project_root = Path(__file__).resolve().parent.parent
+    (root / "project_state" / "schemas" / "server_job_v2.schema.json").write_text(
+        (
+            project_root
+            / "project_state"
+            / "schemas"
+            / "server_job_v2.schema.json"
+        ).read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+
+    bundle = root / "bundle-v2"
+    bundle.mkdir()
+    artifact = bundle / "metrics.json"
+    artifact.write_text('{"best_epoch":2,"best_val_loss":0.2}\n', encoding="utf-8")
+    result_manifest = build_result_v2(
+        job,
+        result_id="RES-W001-A001",
+        status="success",
+        artifacts=[
+            {
+                "artifact_id": "selection-proof",
+                "path": artifact.name,
+                "kind": "selection_proof",
+                "size_bytes": artifact.stat().st_size,
+                "sha256": sha256_file(artifact),
+                "evidence_role": "critical",
+                "retention": "retain",
+            }
+        ],
+        metrics={"best_epoch": 2, "best_val_loss": 0.2},
+        metric_artifact_ids=["selection-proof"],
+    )
+    write_json(bundle / "result.json", result_manifest)
+
+    imported = import_result_bundle(root, bundle)
+    assert imported["status"] == "imported"
+    imported_registry = read_json(registry_path)
+    experiment = imported_registry["experiments"][0]
+    assert experiment["result_id"] == "RES-W001-A001"
+    assert experiment["data_manifest_id"] == "fixture-v2"
+    assert experiment["path_index_version"] == "2.0"
+
+    same = import_result_bundle(root, bundle)
+    assert same["status"] == "already_imported"
+    result_manifest["created_at"] = "2026-07-27T00:00:01+00:00"
+    write_json(bundle / "result.json", result_manifest)
+    with pytest.raises(ValueError, match="different bundle SHA"):
+        import_result_bundle(root, bundle)
 
 
 def test_invalid_result_hash_writes_nothing(tmp_path):
@@ -1245,6 +1484,7 @@ def _make_repair_evidence_repo(tmp_path: Path, *, tamper_summary_hash: bool = Fa
     subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
     subprocess.run(["git", "config", "user.email", "pfmval-test@example.invalid"], cwd=root, check=True)
     subprocess.run(["git", "config", "user.name", "PFmval Test"], cwd=root, check=True)
+    subprocess.run(["git", "config", "core.longpaths", "true"], cwd=root, check=True)
     (root / ".gitattributes").write_text("* text=auto eol=lf\n", encoding="utf-8")
     split_paths = []
     for group in range(1, 6):

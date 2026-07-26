@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "baseline_id": "workflow-governance-v3-r0-20260727",
+  "baseline_head": "be7ac120642fd3ee627239e4d829b651eff3de65",
+  "state_revision": 111,
+  "scope": "tracked v1 compatibility evidence only",
+  "samples": [
+    {
+      "class": "preflight",
+      "source_path": "automation/jobs/mpp2-online-cache-parity-v003-20260712-r003/job.json",
+      "source_sha256": "a75fce4816b0b45325ebf584a3b8790368f1023280ce50d7663f4f629cfe18be",
+      "source_commit": "f8443fe13987098e4ac3138554cc674d231063df",
+      "schema_version": "1.0",
+      "evidence_boundary": "current_compatibility_fixture"
+    },
+    {
+      "class": "smoke",
+      "source_path": "automation/jobs/mpp2-paired-s1-lora-r8-smoke-20260712/job.json",
+      "source_sha256": "fb4cec7c588694f9f666435768b066de7a6094a82a5a9c512d726a8e8b08637d",
+      "source_commit": "c99ab77cfc162e7621a99f9efd0b1d9bf76b0aab",
+      "schema_version": "1.0",
+      "evidence_boundary": "current_compatibility_fixture"
+    },
+    {
+      "class": "formal",
+      "source_path": "automation/jobs/mpp1-repair-v003-recheck-20260711/job.json",
+      "source_sha256": "5af7323da9f87ac5f5fbd93dddc39f96d316076a15565ac4bb113eaaadd734c3",
+      "source_commit": "cc979d4747429015499478b44befa4eb8ad8fdd8",
+      "schema_version": "1.0",
+      "evidence_boundary": "current_compatibility_fixture"
+    },
+    {
+      "class": "success",
+      "source_path": "automation/results/mpp2-repair-v003-frozen-20260711-r002/attempt-001/result.json",
+      "source_sha256": "e04382d814fb30fc8a0cf1c2f4fba02a30f3530605af78cc608c906142d5cfb9",
+      "source_commit": "8d6ba88c599af6e3c9480d9cd3500eea22c798f1",
+      "schema_version": "1.0",
+      "evidence_boundary": "current_compatibility_fixture"
+    },
+    {
+      "class": "failed",
+      "source_path": "automation/results/mpp2-pathway-ridge-calibration-20260717-r002/result.json",
+      "source_sha256": "426d3982e340d73152b577ac54642239286a60efbd177a1d23d236284fb07674",
+      "source_commit": "1cb75a33999dda9ed942107c068f8b5cdbc89a40",
+      "schema_version": "1.0",
+      "evidence_boundary": "current_compatibility_fixture"
+    },
+    {
+      "class": "incomplete",
+      "source_path": "automation/jobs/mpp2-online-cache-parity-v003-20260712-r002/job.json",
+      "source_sha256": "ccbd2ac0cd0246fc03f8252de309b56124cb38c033e29f09fcb747f0596a4ffe",
+      "source_commit": "028c7eb3c576993520c263c24412c2841753d2cc",
+      "schema_version": "1.0",
+      "expected_result_path": "automation/results/mpp2-online-cache-parity-v003-20260712-r002/result.json",
+      "evidence_boundary": "current_compatibility_fixture"
+    },
+    {
+      "class": "legacy_accepted_without_envelope",
+      "source_path": "experiments/experiment_registry.json",
+      "source_sha256": "591506737fc071927302295169941f3b39fe561a4e93b69bcc39a69e3f3e0a5d",
+      "source_commit": null,
+      "schema_version": "1.0",
+      "selector": {
+        "experiment_id": "mpp1_std10val_xzy_ext_uni2h_mlp_20260706"
+      },
+      "evidence_boundary": "accepted_legacy_measurement_incomplete_provenance"
+    }
+  ]
+}

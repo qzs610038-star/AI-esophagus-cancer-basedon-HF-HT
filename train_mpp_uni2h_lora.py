@@ -29,7 +29,7 @@ if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
 from dataset_mpp_online import build_online_manifest_datasets
-from histogene.utils import compute_metrics
+from pfmval_core.metrics import compute_metrics
 from lora_utils import freeze_all_parameters
 from model_mpp_uni2h_lora import (
     OnlineMPPModel,

@@ -34,7 +34,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, ConcatDataset
 
-from histogene.utils import compute_metrics
+from pfmval_core.metrics import compute_metrics
 
 # ── 项目根目录 ──
 _PROJECT_ROOT = Path(__file__).resolve().parent

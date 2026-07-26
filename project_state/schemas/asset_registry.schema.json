@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/asset_registry.schema.json",
+  "title": "PFMval asset registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "updated_at",
+    "assets"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "asset_id",
+          "path",
+          "era",
+          "custody",
+          "asset_class",
+          "lifecycle",
+          "mutability",
+          "evidence_role",
+          "tracking",
+          "hash_policy",
+          "owner_plan_id",
+          "owner_experiment_id",
+          "replacement",
+          "retention_policy"
+        ],
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "era": {
+            "enum": [
+              "pre_mpp",
+              "mpp_active",
+              "mpp_historical",
+              "shared_dependency",
+              "uncertain",
+              "legacy_mixed"
+            ]
+          },
+          "custody": {
+            "enum": [
+              "user",
+              "project",
+              "agent",
+              "external"
+            ]
+          },
+          "asset_class": {
+            "type": "string"
+          },
+          "lifecycle": {
+            "type": "string"
+          },
+          "mutability": {
+            "enum": [
+              "mutable",
+              "immutable",
+              "append_only",
+              "workflow_managed",
+              "approval_required"
+            ]
+          },
+          "evidence_role": {
+            "type": "string"
+          },
+          "tracking": {
+            "type": "string"
+          },
+          "hash_policy": {
+            "type": "string"
+          },
+          "owner_plan_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "owner_experiment_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "replacement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "retention_policy": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

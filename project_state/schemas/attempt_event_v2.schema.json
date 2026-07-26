@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/attempt_event_v2.schema.json",
+  "title": "PFMval attempt event v2",
+  "type": "object",
+  "required": [
+    "event_type",
+    "event_id",
+    "recorded_at",
+    "experiment_id",
+    "workspace_id",
+    "attempt_id",
+    "job_id",
+    "approval_id",
+    "run_units"
+  ],
+  "properties": {
+    "event_type": {
+      "enum": [
+        "ATTEMPT_PREPARED",
+        "PREFLIGHT_FAILED",
+        "VALIDATED",
+        "EXPERIMENT_STARTED",
+        "ATTEMPT_FAILED",
+        "RESULT_RETURNED",
+        "IMPORTED",
+        "REJECTED"
+      ]
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recorded_at": {
+      "type": "string"
+    },
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^W[0-9]{3,}$"
+    },
+    "attempt_id": {
+      "type": "string",
+      "pattern": "^A[0-9]{3,}$"
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approval_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_units": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "protocol_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "phase": {
+      "enum": [
+        "preflight",
+        "smoke",
+        "formal"
+      ]
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "critical_contract_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "workspace_branch": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_revision_005_local_refactor",
+  "stage_id": "G06",
+  "directive_id": "DIR-20260727-002",
+  "accepted_at": "2026-07-26T18:38:33Z",
+  "status": "passed",
+  "overall_verdict": "GO",
+  "decision_scope": "accept the authorized local structural refactor in the current uncommitted working tree",
+  "modules": {
+    "integration_compatibility": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "PASS_LOCAL_ONLY",
+      "S": "N/A"
+    },
+    "rollback": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "NOT RUN",
+      "S": "N/A"
+    },
+    "independent_audit": {
+      "D": "PASS",
+      "I": "PASS",
+      "O": "PASS",
+      "S": "N/A"
+    }
+  },
+  "baseline_head": "be7ac120642fd3ee627239e4d829b651eff3de65",
+  "final_commit": null,
+  "final_locus": "baseline HEAD plus current uncommitted working-tree diff",
+  "verification": [
+    {
+      "command": "python -m pytest -q tests --basetemp C:\\t\\g06_final",
+      "result": "PASS_WITH_WARN",
+      "summary": "130 passed, 2 expected sklearn single-sample R2 warnings in 46.31s"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=7 WARN=6 FAIL=0"
+    },
+    {
+      "command": "R0 frozen compatibility fixture and v1 Ridge r003 job validation",
+      "result": "PASS",
+      "summary": "seven fixture classes retain exact hashes; v1 job manifest valid"
+    },
+    {
+      "command": "views refresh and state sync repeated twice with SHA comparison",
+      "result": "PASS",
+      "summary": "all seven generated/state artifacts were byte-stable"
+    },
+    {
+      "command": "git diff/status -- histogene egnv1 egnv2",
+      "result": "PASS",
+      "summary": "no tracked or untracked protected-directory change"
+    },
+    {
+      "command": "python -m py_compile governance modules; git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "compatibility": [
+    "v1/v2 job and result dual-read remains active",
+    "frozen v1 baseline hashes remain unchanged",
+    "generated views are deterministic",
+    "empty shadow registries preserve existing worktrees, assets, experiments and results",
+    "protected histogene/egnv1/egnv2 directories are unchanged"
+  ],
+  "rollback_evidence": [
+    "all new governance layers are additive and have an explicit path inventory",
+    "legacy v1 validators pass without adopting the new empty registries",
+    "two active MPP callers can be returned to the legacy metrics import by a bounded patch",
+    "derived views can be regenerated from the authoritative registries after a bounded rollback",
+    "destructive rollback execution was not run because cleanup/deletion was excluded"
+  ],
+  "known_warnings": [
+    "The implementation is uncommitted because stage/commit/push was not authorized.",
+    "A long pytest basetemp triggered one Windows path-length failure; the exact test and full suite passed under C:\\t.",
+    "Five accepted 2026-07-06 legacy results lack complete result envelopes.",
+    "Standardized MPP labels retain known duplicate/conflicting barcodes.",
+    "The configured pfmval_py310 directory is absent; tests used Python 3.13.1.",
+    "codebase-memory remained stale after its re-index crash; actual files and fresh tests were used."
+  ],
+  "not_run": [
+    "server or Gitee runtime operations",
+    "training or real experiment/attempt execution",
+    "result import or evidence acceptance",
+    "asset migration or directory unprotection",
+    "Hook enforce or close execute",
+    "worktree, cache, checkpoint, data or asset cleanup",
+    "external platform, cloud or network integration",
+    "real project fact, document, scientific record or workflow discovery run",
+    "destructive rollback execution"
+  ],
+  "audit_artifact": "project_state/governance_receipts/workflow_governance_v3/FINAL_AUDIT.md"
+}
