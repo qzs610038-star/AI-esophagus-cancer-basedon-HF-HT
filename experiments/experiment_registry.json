@@ -1219,7 +1219,13 @@
         "status": "success",
         "imported_at": "2026-07-12T05:39:19+00:00",
         "result_manifest_sha256": "4a4853cd296fda7a9d9b2aed8e8a9bc02184533e6eba02105dea049cbe5d8273"
-      }
+      },
+      "source_commit": null,
+      "job_id": null,
+      "result_id": "legacy-import-mpp2_online_cache_parity_v003_20260711",
+      "path_index_version": null,
+      "result_manifest_sha256": null,
+      "imported_at": null
     },
     {
       "id": "mpp2_paired_s0_frozen_continue_smoke_20260712",

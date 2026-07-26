@@ -2,6 +2,8 @@
 
 本目录中的实际输出默认被 Git 忽略，仅保存本说明和目录哨兵文件。
 
+关联 directive：`DIR-20260726-001`。
+
 ## 证据边界
 
 - `authority`: `explicit_user_requested`（用户强制指定实验）
