@@ -321,12 +321,12 @@ registered
 | S0b | 16 个安全 router、17 个 `.claude` 同名薄适配器 | 已完成并通过本轮验收 |
 | S0c | active Skill / review 文档最小生命周期登记与门禁 | 已完成并通过 2 项 TDD 测试 |
 | S1 | canonical `pfmval-governance` Skill 与模板 | 暂缓 |
-| S1a | P0A 实验全生命周期闭环、P0B 用户导航与实验进度双视图 | 总控框架与独立审查模块已落盘，代码/用户视图实现待分步审查 |
-| S2 | workspace registry shadow、W### 对话绑定与外部 run root | 规范已批准，代码待分步审查 |
-| S3 | job/result schema v2、次数预算、适配记录与兼容读取 | 规范已批准，代码待分步审查 |
-| S4 | critical contract 与分级结果证据 | 原则已批准，代码待分步审查 |
-| S5 | asset registry、shadow inventory | 待用户审查 |
-| S6 | 共享依赖抽取、目录解禁与 lifecycle 迁移 | 待用户审查 |
+| S1a | P0A 实验全生命周期闭环、P0B 用户导航与实验进度双视图 | 本地 D/I 已接受；P0A O=NOT RUN、P0B O=PASS；S=N/A；真实实验闭环未运行 |
+| S2 | workspace registry shadow、W### 对话绑定与外部 run root | 本地 D/I 已接受；O=NOT RUN；S=N/A；真实 workspace/attempt/run root 未运行 |
+| S3 | job/result schema v2、次数预算、适配记录与兼容读取 | 本地 D/I 已接受；O=NOT RUN；S=N/A；真实 v2 dispatch/attempt 未运行 |
+| S4 | critical contract 与分级结果证据 | 本地 D/I 已接受；O=NOT RUN；S=N/A；真实 contract/result import 未运行 |
+| S5 | asset registry、shadow inventory | 本地 D/I 已接受；O=PASS（metadata-only shadow）；S=N/A；资产迁移未运行 |
+| S6 | 共享依赖抽取、目录解禁与 lifecycle 迁移 | 本地 D/I 已接受；O=PASS / PASS_SHADOW_ONLY；S=N/A；目录解禁与 lifecycle 迁移未运行 |
 | S7 | 经独立批准的 worktree/资产 cleanup | 未授权 |
 
 重构流程、统一框架、阶段依赖和模块索引见：

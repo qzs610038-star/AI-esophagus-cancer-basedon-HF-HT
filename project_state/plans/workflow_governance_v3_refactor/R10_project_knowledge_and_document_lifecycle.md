@@ -3,10 +3,10 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R10`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `P0C`, `R5b`
 > authorization: `DIR-20260727-001`
-> implementation: `code-pending-with-interface-only-profiles`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 复用现有本地状态与 Document Registry；不新增第二文档 Registry，
 > 不接入团队、文档、云备份、论文、文献或科研管理平台。
 

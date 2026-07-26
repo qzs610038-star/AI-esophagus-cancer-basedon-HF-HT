@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R0`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: none
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=PASS; S=N/A`
 > boundary: 只增加只读 fixture、inventory 和基线报告，不创建、迁移或删除工作树。
 
 ## 1. 目的

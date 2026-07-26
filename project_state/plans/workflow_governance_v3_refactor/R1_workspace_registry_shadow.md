@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R1`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R0`
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 本阶段只建立 schema、Registry 和只读 scan/status；不得创建、删除、收养或切换真实 worktree。
 
 ## 1. 目的

@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R6`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R0`, `R5b`
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=PASS; S=N/A`
 > boundary: 只做 inventory 和候选分类，不移动、删除、解禁或改变保护。
 
 ## 1. 目的

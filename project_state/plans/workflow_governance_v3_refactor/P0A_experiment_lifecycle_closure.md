@@ -3,10 +3,10 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `P0A`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: cross-cutting over `R0`–`R5b` and `R9`
 > authorization: `DIR-20260726-002`, `DIR-20260726-003`, `DIR-20260726-004`
-> implementation: `code-pending`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 本文是横向验收合同，不授权服务器操作、训练、结果接纳、工作树删除或受保护资产修改。
 
 ## 1. 目标

@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R4`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R0`; R3 enforcement waits for this module
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 哈希匹配只证明身份，不自动证明科学有效或接纳结果。
 
 ## 1. 目的

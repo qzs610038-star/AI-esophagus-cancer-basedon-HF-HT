@@ -3,10 +3,10 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `P0B`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: cross-cutting over `R0`, `R5b`, `R6`, `R8`, `R9`
 > authorization: `DIR-20260726-002`, `DIR-20260726-004`
-> implementation: `design-pending-review`
+> implementation: `local_D/I_accepted; O=PASS; S=N/A`
 > boundary: 本文定义用户信息架构与生成规则，不改变实验事实或接纳任何结果。
 
 ## 1. 目标

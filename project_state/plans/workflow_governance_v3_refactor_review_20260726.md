@@ -2,10 +2,10 @@
 
 > document role: `refactor-framework-and-index`
 > review package revision: `005`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > state scope: `workflow_governance_v3_refactor_review`
 > authorization: `DIR-20260726-002`, `DIR-20260726-003`, `DIR-20260726-004`, `DIR-20260727-001`
-> implementation status: `framework_landed_modules_pending_review_code_pending`
+> implementation status: `local_D/I_accepted; O=SEE_MODULE_MATRIX; S=N/A`
 > audit baseline: code `main@9d8cc7a4`
 > prohibition: 本审查包及其模块不是服务器执行、训练、结果接纳、资产迁移、目录解禁或清理批准。
 

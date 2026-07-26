@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R7`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R6`
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=PASS; S=N/A`
 > boundary: 在血缘与数值兼容测试完成前，不修改受保护目录策略。
 
 ## 1. 目的

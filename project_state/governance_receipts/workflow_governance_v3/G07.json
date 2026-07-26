@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "goal": "workflow_governance_v3_revision_005_post_acceptance_lifecycle_closeout",
+  "stage_id": "G07",
+  "directive_id": "DIR-20260727-003",
+  "accepted_at": "2026-07-27T03:32:23+08:00",
+  "status": "passed",
+  "overall_verdict": "GO",
+  "decision_scope": "close the design-era lifecycle/status drift after the accepted local G00-G06 implementation",
+  "baseline_head": "3f781ad8b26dabb770333328e2fc65140a82487d",
+  "implementation_commit": "db092c267460b98b71bacfb26ef4470e42eabfd9",
+  "documents": {
+    "count": 17,
+    "lifecycle": "approved_design",
+    "authority": "reference",
+    "implementation": "local_D/I_accepted",
+    "O": {
+      "PASS": ["P0B", "R0", "R5b", "R6", "R7"],
+      "PASS_SHADOW_ONLY": ["R8"],
+      "NOT RUN": ["P0A", "P0C", "R1", "R2", "R3", "R4", "R5", "R9", "R10", "R11"]
+    },
+    "S": "N/A"
+  },
+  "verification": [
+    {
+      "command": "python deploy/pfmval_ops.py docs scan --write",
+      "result": "PASS",
+      "summary": "total=206 live=190 missing=16 active=51 superseded=11 historical=110 pending_review=0 approved_design=18"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py views refresh; python deploy/pfmval_ops.py state sync",
+      "result": "PASS",
+      "summary": "continuous rounds are byte-stable; state revision=119"
+    },
+    {
+      "command": "python -m pytest -q targeted lifecycle/state/view/governance tests",
+      "result": "PASS",
+      "summary": "69 passed"
+    },
+    {
+      "command": "python -m pytest -q tests",
+      "result": "PASS_WITH_WARN",
+      "summary": "130 passed, 2 expected sklearn single-sample R2 warnings"
+    },
+    {
+      "command": "python deploy/pfmval_ops.py agent start-check --strict",
+      "result": "PASS_WITH_WARN",
+      "summary": "PASS=7 WARN=6 FAIL=0; no new WARN"
+    },
+    {
+      "command": "docs scan/views refresh/state sync repeated with SHA comparison",
+      "result": "PASS",
+      "summary": "current state, CURRENT_STATE, Document Registry, Dashboard, Progress, Project Guide, README and local summaries stable"
+    }
+  ],
+  "not_run": [
+    "server, training, real workflow scan or activation, result import/acceptance",
+    "workspace/asset migration, directory unprotection, Hook enforce, close execute or cleanup",
+    "push and remote SHA verification"
+  ],
+  "compatibility": [
+    "revision 005 design semantics unchanged",
+    "G00-G06 historical receipts unchanged",
+    "histogene/egnv1/egnv2 unchanged",
+    "Experiment, Workspace, Asset and Workflow Registry entries not increased"
+  ]
+}

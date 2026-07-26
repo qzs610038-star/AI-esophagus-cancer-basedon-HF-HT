@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R5b`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R0`
-> implementation: `partial-minimum-slice-only`
+> implementation: `local_D/I_accepted; O=PASS; S=N/A`
 > boundary: 已完成的 canonical/adapter/review 分类不代表本模块全部完成。
 
 ## 1. 目的

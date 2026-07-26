@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R5`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R3`, `R4`
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: pack 或返回不等于 import，import 不等于跨协议接纳。
 
 ## 1. 目的

@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R2`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R0`, `R1`
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 未经独立实施批准，不创建、迁移或删除本地/服务器工作树。
 
 ## 1. 目的

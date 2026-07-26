@@ -3,10 +3,10 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `P0C`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `P0A`, `P0B`, `R5b`
 > authorization: `DIR-20260727-001`
-> implementation: `code-pending`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 只借鉴外部方案的架构、数据模型和维护思路；不安装、部署、调用或
 > 接入任何外部平台、服务、CLI、SDK、数据库或云端接口。
 

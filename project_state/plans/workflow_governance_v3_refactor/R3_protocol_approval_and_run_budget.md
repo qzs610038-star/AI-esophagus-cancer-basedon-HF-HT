@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R3`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R0`, `R1`; enforcement depends on `R4`
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 本阶段设计不构成任何具体实验的训练批准。
 
 ## 1. 目的

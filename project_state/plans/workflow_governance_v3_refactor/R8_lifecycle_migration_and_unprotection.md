@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R8`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `R6`, `R7`, at least one shadow observation cycle
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=PASS_SHADOW_ONLY; S=N/A`
 > boundary: 目录解禁、资产 lifecycle 迁移和 Hook enforce 均需后续独立批准。
 
 ## 1. 目的

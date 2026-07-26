@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 117,
-  "updated_at": "2026-07-26T18:58:08+00:00",
-  "source_commit": "db092c267460b98b71bacfb26ef4470e42eabfd9",
+  "state_revision": 119,
+  "updated_at": "2026-07-26T19:25:37+00:00",
+  "source_commit": "3f781ad8b26dabb770333328e2fc65140a82487d",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -27,7 +27,8 @@
     "DIR-20260726-002",
     "DIR-20260726-003",
     "DIR-20260726-004",
-    "DIR-20260727-001"
+    "DIR-20260727-001",
+    "DIR-20260727-003"
   ],
   "active_plans": {
     "mpp_training": {
@@ -201,71 +202,88 @@
     },
     "workflow_governance_v3_refactor_review": {
       "path": "project_state/plans/workflow_governance_v3_refactor_review_20260726.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_p0a": {
       "path": "project_state/plans/workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_p0b": {
       "path": "project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_p0c": {
       "path": "project_state/plans/workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r0": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r1": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R1_workspace_registry_shadow.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r2": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R2_persistent_experiment_workspace.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r3": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R3_protocol_approval_and_run_budget.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r4": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R4_critical_contract_and_gate_tiering.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r5": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R5_result_artifact_tiering.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r5b": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R5b_document_registry_and_state_gates.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r6": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R6_asset_registry_shadow.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r7": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R7_shared_dependency_extraction.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r8": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r9": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r10": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     },
     "workflow_governance_v3_refactor_r11": {
       "path": "project_state/plans/workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md",
-      "status": "pending_review"
+      "status": "approved_design",
+      "approved_at": "2026-07-27T03:25:05+08:00"
     }
   },
   "server_transport": {
@@ -316,7 +334,7 @@
     "experiment_registry_sha256": "591506737fc071927302295169941f3b39fe561a4e93b69bcc39a69e3f3e0a5d",
     "experiment_dashboard_sha256": "a70f091043dcf96a46474708a451731108f7a4c3acafe1699ab3dd4e507f39dd",
     "experiment_progress_sha256": "ab89563a1127dfffeb4bea1b591fb9283647be80a5c87b1c8685c796101d480e",
-    "document_registry_sha256": "b5e0b7b0188c08a0613ece8af92eef08da4be5bea70b2033c090029554cc0e43",
+    "document_registry_sha256": "717248ecef4e77ad159198ba8fea0d9f1666c70d3ced91b8fc99bb9e2a692a06",
     "asset_registry_sha256": "e30959ff4af1c99af4ddb1f8ffac5fdad84902da42c8baa84443e4ecb1a4501d",
     "workspace_registry_sha256": "a1b7fcfa70284bd427169dc4ec33fb52ae551a94a72a99cab305bb8230c9b972",
     "workflow_catalog_sha256": "edb83c1f5f89d533304debaffae854daa4d6ef58796a004a1cea6d69d6426ed6",

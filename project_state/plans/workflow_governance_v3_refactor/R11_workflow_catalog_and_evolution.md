@@ -3,10 +3,10 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R11`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: `P0C`, `R5b`
 > authorization: `DIR-20260727-001`
-> implementation: `code-pending`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 只能由用户主动触发；候选不能自动启用、执行或放宽批准。
 
 ## 1. 为什么单独保留

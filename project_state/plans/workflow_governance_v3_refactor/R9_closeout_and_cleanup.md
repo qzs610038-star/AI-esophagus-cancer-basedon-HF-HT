@@ -3,9 +3,9 @@
 > parent review: `project_state/plans/workflow_governance_v3_refactor_review_20260726.md`
 > module id: `R9`
 > module revision: `001`
-> lifecycle: `pending_review`
+> lifecycle: `approved_design`
 > dependencies: preview requires `R1`, `R2`, `R5`, `R6`; execute also requires `R8` and separate approval
-> implementation: `not-started`
+> implementation: `local_D/I_accepted; O=NOT RUN; S=N/A`
 > boundary: 本文不批准删除任何现有 worktree、branch、checkpoint、缓存或数据。
 
 ## 1. 目的
