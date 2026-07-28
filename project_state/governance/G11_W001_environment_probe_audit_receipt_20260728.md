@@ -38,6 +38,7 @@
 ## 门禁与测试
 
 - `python deploy/pfmval_ops.py agent start-check --task diagnostic`：`PASS=5 WARN=0 FAIL=0`。
+- `python deploy/pfmval_ops.py agent start-check --strict`：exit 0，`PASS=7 WARN=6 FAIL=0`；六项均为既有 legacy result-envelope/MPP 条码债务，G11 的两次提交未触及其关联文件，故本 Goal 无新增 WARN/FAIL。
 - `workspace check-locus --workspace-id W001 --cwd <W001 source>`：PASS。
 - `job validate --manifest project_state/governance/g10_A0_job_prepared.json`：PASS。
 - `job validate --manifest project_state/governance/g10_A1_job_prepared.json`：PASS。
