@@ -55,3 +55,28 @@
 ## 完成界限
 
 服务器仅通过 Gitee 获取 exact source commit 并返回 allowlisted、非证据性的环境探针；本地仅 fetch、只读核验后记录 output hash。该诊断没有进入 Experiment Result，未改变训练预算或尝试状态。G11 到此结束，G12 不得自动开始。
+
+## 复盘与后续改善（2026-07-28；非规范性提案）
+
+### 用户体验记录
+
+1. 每次服务器同步命令过于繁琐；SHA-256 校验已多次失败并导致重试。期望定位根因，标准化服务器拉取、检测和回传命令，使常规往返可一次通过，或至少显著简化。
+2. 对话不应等到用户要求后才读取服务器配置并给出可用命令。对已授权的 Gitee 服务器往返，Agent 应主动完成配置读取、精确 ref 核验与可复制操作卡生成。
+
+### 本次可证实根因
+
+- **命令重复的系统性原因**：`sync-server` 当前是 retired compatibility router，编号工作树/Gitee 协议仍为 `code-pending`；仓库只有 `diagnostic request` 与 `diagnostic record`，没有可执行的服务器 `environment_probe` runner 或单一 roundtrip 命令。因此每次都需人工拼接路径、ref、工作树、解释器与回传步骤。
+- **首次 SHA-256 失败的直接原因**：服务器使用 Windows 默认 CRLF 写入 `environment_probe.json` 后立即计算了 `1369` bytes / `e7652f...`；Git 属性 `* text=auto eol=lf` 将同一文本规范化为 `1316` bytes / `86c836...` 后才写入 Gitee。文件有 53 个换行，字节差也恰为 53，证明每行发生一次 CRLF→LF 转换。修正回传 `486a9af...` 将 JSON 明确写为 UTF-8 无 BOM + LF，并追加规范化的 output hash record。
+
+### 建议固化的最小标准
+
+以下为**待单独批准实现**的改进，不改变本次 G11 的已验收边界。
+
+1. 新增一个受测试的 `environment_probe` server runner：只接受 request 中的 allowlisted `command_id`；固定生成 schema JSON，不接收任意 shell 文本、不读取训练结果、不触发模型或 checkpoint。
+2. 所有需回传并被哈希的文本产物必须使用 UTF-8 无 BOM + LF 写入；runner 在写入后、record 前计算 SHA-256，并对输出路径执行一次字节级 LF 断言。禁止在 `Set-Content` 的 Windows 默认换行上计算可回传哈希。
+3. 将 Gitee 往返收敛为三张固定操作卡：
+   - **server fetch card**：从 `configs/server_paths.yaml` 解析 `server_repo_worktree` / `server_automation_worktrees`，fetch exact ref、核对 SHA、创建 detached worktree；禁止 `pull/reset/clean`。
+   - **server diagnostic-return card**：运行 allowlisted runner、校验 canonical output SHA、append-only record、仅 fast-forward push `automation/diagnostics/*`。
+   - **local verify card**：fetch 到远端跟踪 ref、不 merge；核对父提交、文件白名单、output 字节/哈希、diagnostic event 与 `run_consumed=0`。
+4. 对话交互规则：用户一旦明确授权 Gitee-only server 往返，Agent 的第一轮操作卡必须主动读取服务器路径配置、显示已解析的路径/branch/SHA、列出预期输出和停止条件；不得要求用户额外提示“先自查服务器配置”。
+5. 在实现前维持当前安全边界：命令卡仍需逐次由实际 config、remote SHA 和 request 内容填充；不得把本文提案误当作已部署自动化，也不得扩大到训练、result import 或受保护资产操作。
