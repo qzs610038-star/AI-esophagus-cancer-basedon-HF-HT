@@ -72,6 +72,26 @@ def resolve_manifest_data_roots(
     return resolved
 
 
+def resolve_loss_metadata(loss_type: str, huber_delta: float) -> Dict[str, str | float | None]:
+    """Validate the frozen loss choice and return metadata for run artifacts."""
+    if loss_type == "mse":
+        return {"loss_type": "mse", "delta": None, "reduction": "mean"}
+    if loss_type != "huber":
+        raise ValueError("loss_type must be 'mse' or 'huber'")
+    if not isinstance(huber_delta, (int, float)) or not np.isfinite(huber_delta) or huber_delta <= 0:
+        raise ValueError("huber_delta must be a finite positive number")
+    return {"loss_type": "huber", "delta": float(huber_delta), "reduction": "mean"}
+
+
+def build_loss_criterion(loss_type: str, huber_delta: float) -> nn.Module:
+    """Create the unweighted mean-reduction loss used by the paired arms."""
+    metadata = resolve_loss_metadata(loss_type, huber_delta)
+    if metadata["loss_type"] == "mse":
+        # Keep the historical default constructor and its mean reduction behavior.
+        return nn.MSELoss()
+    return nn.HuberLoss(delta=float(metadata["delta"]), reduction="mean")
+
+
 # ═══════════════════════════════════════════════════════════════
 # 模型：两层 MLP 回归头
 # ═══════════════════════════════════════════════════════════════
@@ -445,12 +465,20 @@ def main():
                         help="早停 patience：训练 loss 连续 N 个 epoch 无改善则停止（默认 10）")
     parser.add_argument("--min_delta", type=float, default=1e-4,
                         help="早停最小改善阈值（默认 0.0001）")
+    parser.add_argument("--loss", choices=["mse", "huber"], default="mse",
+                        help="回归损失：mse（默认，兼容历史基线）或 huber")
+    parser.add_argument("--huber-delta", type=float, default=1.0,
+                        help="Huber 损失阈值；仅 --loss huber 时生效，必须为有限正数")
     # ── 路径布局选择 ──
     parser.add_argument("--use_partner_paths", action="store_true",
                         help="使用队友目录布局 (MPP{N}_UNI/ + group_{N}/train|val|external/)")
     parser.add_argument("--auto_split", action="store_true",
                         help="自动从 split_info.json 覆盖 --train_patients 和 --val_patient")
     args = parser.parse_args()
+    try:
+        loss_metadata = resolve_loss_metadata(args.loss, args.huber_delta)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     # This check is intentionally inside the training script as well as the
     # dispatcher. Manual invocation must not bypass current-state, path-index,
@@ -816,7 +844,7 @@ def main():
     n_params = sum(p.numel() for p in model.parameters())
     print(f"\n模型参数: {n_params:,}")
 
-    criterion = nn.MSELoss()
+    criterion = build_loss_criterion(args.loss, args.huber_delta)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
     # ── 保存参数和配置 ──
@@ -838,6 +866,9 @@ def main():
         f.write(f"dropout={args.dropout}, n_params={n_params}\n")
         f.write(f"num_epochs={args.num_epochs}, batch_size={args.batch_size}\n")
         f.write(f"lr={args.lr}, seed={args.seed}, num_threads={args.num_threads}\n")
+        f.write(f"loss_type={loss_metadata['loss_type']}\n")
+        f.write(f"loss_delta={loss_metadata['delta']}\n")
+        f.write(f"loss_reduction={loss_metadata['reduction']}\n")
         f.write(f"device={device}\n")
         f.write(f"created_at={datetime.now().isoformat()}\n")
 
@@ -1099,6 +1130,8 @@ def main():
         f.write(f"Experiment: {args.dataset_name}\n")
         f.write(f"Model: UNI2-h frozen features + 2-layer MLP\n")
         f.write(f"Training strategy: val_strategy={args.val_strategy}\n")
+        f.write(f"Loss: type={loss_metadata['loss_type']}, delta={loss_metadata['delta']}, "
+                f"reduction={loss_metadata['reduction']}\n")
         f.write(f"Early stopping: signal={early_stop_signal}, patience={args.patience}, "
                 f"min_delta={args.min_delta}\n")
         f.write(f"Training budget: {args.num_epochs} epochs max\n")

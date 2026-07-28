@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -143,6 +144,60 @@ def _workspace_registry_path(root: Path) -> Path:
     return root / "project_state" / "workspace_registry.json"
 
 
+def _registered_local_worktree(
+    root: Path,
+    *,
+    path: Path,
+    branch: str,
+    source_commit: str,
+) -> Path:
+    """Return a verified local linked-worktree path without contacting a remote."""
+    if not branch:
+        raise ValueError("external local worktree requires an explicit branch")
+    if not source_commit:
+        raise ValueError("external local worktree requires a source_commit")
+    completed = subprocess.run(
+        ["git", "-C", str(root), "worktree", "list", "--porcelain"],
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    records: list[Dict[str, str]] = []
+    current: Dict[str, str] = {}
+    for line in completed.stdout.splitlines():
+        if not line:
+            if current:
+                records.append(current)
+                current = {}
+            continue
+        key, _, value = line.partition(" ")
+        if key == "worktree":
+            current["path"] = value
+        elif key == "HEAD":
+            current["head"] = value
+        elif key == "branch":
+            current["branch"] = value.removeprefix("refs/heads/")
+    if current:
+        records.append(current)
+    resolved = path.resolve(strict=True)
+    match = next(
+        (
+            item
+            for item in records
+            if _normalized_path(Path(item.get("path", ""))) == _normalized_path(resolved)
+        ),
+        None,
+    )
+    if match is None:
+        raise ValueError("external path is not a local Git worktree of the registered repository")
+    if match.get("branch") != branch:
+        raise ValueError("external local worktree branch does not match requested branch")
+    if match.get("head") != source_commit:
+        raise ValueError("external local worktree HEAD does not match source_commit")
+    return resolved
+
+
 def initialize_workspace_registry(root: Path) -> Dict[str, Any]:
     path = _workspace_registry_path(root)
     if path.exists():
@@ -186,13 +241,23 @@ def allocate_workspace(
     ) + 1
     workspace_id = f"W{workspace_number:03d}"
 
-    relative_path = Path(local_relative_path)
-    if relative_path.is_absolute() or ".." in relative_path.parts:
-        raise ValueError("workspace path is outside registered root")
-    absolute_path = (root / relative_path).resolve(strict=False)
-    if not absolute_path.is_relative_to(root.resolve(strict=False)):
-        raise ValueError("workspace path is outside registered root")
-    if relative_path.name != workspace_id:
+    declared_path = Path(local_relative_path)
+    if declared_path.is_absolute():
+        absolute_path = _registered_local_worktree(
+            root,
+            path=declared_path,
+            branch=branch,
+            source_commit=source_commit,
+        )
+        stored_path = str(absolute_path)
+    else:
+        if ".." in declared_path.parts:
+            raise ValueError("workspace path is outside registered root")
+        absolute_path = (root / declared_path).resolve(strict=False)
+        if not absolute_path.is_relative_to(root.resolve(strict=False)):
+            raise ValueError("workspace path is outside registered root")
+        stored_path = declared_path.as_posix()
+    if absolute_path.name != workspace_id:
         raise ValueError(
             f"workspace physical path must end with allocated id {workspace_id}"
         )
@@ -217,7 +282,7 @@ def allocate_workspace(
                 "host_scope": "local",
                 "branch": branch,
                 "path_id": "local_experiment_workspaces",
-                "relative_path": relative_path.as_posix(),
+                "relative_path": stored_path,
                 "current_source_commit": source_commit,
             }
         },
@@ -249,8 +314,9 @@ def scan_workspace_registry(
         host = workspace.get("hosts", {}).get(host_scope)
         if not host:
             continue
-        absolute_path = (root / str(host["relative_path"])).resolve(strict=False)
-        if not absolute_path.is_relative_to(root.resolve(strict=False)):
+        declared_path = Path(str(host["relative_path"]))
+        absolute_path = (root / declared_path).resolve(strict=False)
+        if not declared_path.is_absolute() and not absolute_path.is_relative_to(root.resolve(strict=False)):
             failures.append(
                 {
                     "workspace_id": workspace["workspace_id"],
@@ -472,6 +538,7 @@ def register_governed_experiment(
     run_limit: int,
     critical_contract: Mapping[str, Any],
     local_relative_path: str,
+    workspace_branch: str = "",
 ) -> Dict[str, Any]:
     if run_limit < 1:
         raise ValueError("run_limit must be an explicit positive integer")
@@ -495,6 +562,7 @@ def register_governed_experiment(
         experiment_id=experiment_id,
         display_name=display_name,
         local_relative_path=local_relative_path,
+        branch=workspace_branch,
         source_commit=str(critical_contract["source_commit"]),
         protocol_revision=int(critical_contract["protocol_revision"]),
     )

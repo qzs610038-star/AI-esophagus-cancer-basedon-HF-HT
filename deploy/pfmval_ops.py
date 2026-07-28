@@ -872,7 +872,8 @@ def command_experiment(args: argparse.Namespace) -> int:
             phase=args.phase,
             run_limit=args.run_limit,
             critical_contract=contract,
-            local_relative_path=args.workspace_relative_path,
+            local_relative_path=args.workspace_path or args.workspace_relative_path,
+            workspace_branch=args.workspace_branch,
         )
         print(json.dumps(experiment, ensure_ascii=False, indent=2))
         return 0
@@ -1353,7 +1354,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     experiment_register.add_argument("--run-limit", type=int, required=True)
     experiment_register.add_argument("--critical-contract", required=True)
-    experiment_register.add_argument("--workspace-relative-path", required=True)
+    experiment_workspace = experiment_register.add_mutually_exclusive_group(required=True)
+    experiment_workspace.add_argument("--workspace-relative-path")
+    experiment_workspace.add_argument("--workspace-path")
+    experiment_register.add_argument("--workspace-branch", default="")
     experiment_approve = experiment_sub.add_parser("approve")
     experiment_approve.add_argument("--approval-id", required=True)
     experiment_approve.add_argument("--experiment-id", required=True)

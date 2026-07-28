@@ -1,4 +1,5 @@
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -134,6 +135,69 @@ def test_workspace_shadow_scan_and_locus_guard_have_no_filesystem_side_effects(t
             experiment_id="exp-escape",
             display_name="escape",
             local_relative_path="../outside/W004",
+        )
+
+
+def test_external_git_worktree_binding_requires_exact_path_branch_and_head(tmp_path):
+    root = tmp_path / "repo"
+    root.mkdir()
+    subprocess.run(["git", "init", str(root)], check=True, capture_output=True)
+    (root / "tracked.txt").write_text("baseline\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(root), "add", "tracked.txt"], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "-c",
+            "user.name=PFMval Test",
+            "-c",
+            "user.email=pfmval-test@example.invalid",
+            "commit",
+            "-m",
+            "baseline",
+        ],
+        check=True,
+        capture_output=True,
+    )
+    head = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    external = tmp_path / "W001"
+    subprocess.run(
+        ["git", "-C", str(root), "worktree", "add", "-b", "codex/exp-a", str(external)],
+        check=True,
+        capture_output=True,
+    )
+
+    workspace = allocate_workspace(
+        root,
+        experiment_id="exp-a",
+        display_name="external",
+        local_relative_path=str(external),
+        branch="codex/exp-a",
+        source_commit=head,
+    )
+    assert workspace["hosts"]["local"]["relative_path"] == str(external.resolve())
+    assert workspace["hosts"]["local"]["branch"] == "codex/exp-a"
+    assert_workspace_locus(
+        workspace,
+        cwd=external,
+        branch="codex/exp-a",
+        head=head,
+        dirty=False,
+    )
+    with pytest.raises(ValueError, match="branch"):
+        allocate_workspace(
+            root,
+            experiment_id="exp-b",
+            display_name="wrong-branch",
+            local_relative_path=str(external),
+            branch="codex/not-exp-a",
+            source_commit=head,
         )
 
 
