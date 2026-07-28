@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "diagnostic_id": "diagnostic-20260728-w001-g11-environment-probe",
+  "created_at": "2026-07-28T15:02:26+00:00",
+  "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+  "source_branch": "codex/w001-mpp2-huber-loss-20260728-bound",
+  "return_branch": "automation/diagnostics/w001-g11-environment-probe",
+  "command_id": "environment_probe",
+  "command_description": "Collect interpreter, CUDA and disk environment metadata.",
+  "execution_contract": {
+    "arbitrary_shell": false,
+    "training": false,
+    "experiment_registry_write": false,
+    "current_state_write": false,
+    "protected_asset_write": false,
+    "result_import": false,
+    "output_root": "automation/diagnostics/diagnostic-20260728-w001-g11-environment-probe"
+  }
+}
