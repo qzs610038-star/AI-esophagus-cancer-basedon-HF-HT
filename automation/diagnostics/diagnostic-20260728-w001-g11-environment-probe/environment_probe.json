@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "diagnostic_id": "diagnostic-20260728-w001-g11-environment-probe",
+  "command_id": "environment_probe",
+  "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+  "branch": null,
+  "detached_head": true,
+  "executed_at": "2026-07-28T15:40:37.1892593Z",
+  "exit_code": 0,
+  "python": {
+    "version": "Python 3.13.5",
+    "executable": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe"
+  },
+  "pytorch_cuda": {
+    "torch_version": "2.6.0+cu124",
+    "torch_cuda_version": "12.4",
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "cuda_device_names": [
+      "NVIDIA GeForce RTX 4080"
+    ]
+  },
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "disks": [
+      {
+        "Name": "C",
+        "Root": "C:\\",
+        "Used": 3339015356416,
+        "Free": 660817051648
+      },
+      {
+        "Name": "D",
+        "Root": "D:\\",
+        "Used": 3828292145152,
+        "Free": 172476178432
+      },
+      {
+        "Name": "E",
+        "Root": "E:\\",
+        "Used": 10310118244352,
+        "Free": 21690590453760
+      },
+      {
+        "Name": "Temp",
+        "Root": "C:\\Users\\AIPatho1\\AppData\\Local\\Temp\\",
+        "Used": 3339015356416,
+        "Free": 660817051648
+      }
+    ],
+    "hostname": "DESKTOP-HKP0IV0"
+  }
+}
