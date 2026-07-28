@@ -41,6 +41,7 @@ from scripts.pfmval_state import (  # noqa: E402
     promote_exploration_script,
     record_diagnostic_outputs,
     read_json,
+    run_allowlisted_diagnostic,
     safe_job_parameters,
     scan_documents,
     state_lock,
@@ -430,6 +431,11 @@ def command_diagnostic(args: argparse.Namespace) -> int:
         )
         print(json.dumps(event, ensure_ascii=False, indent=2))
         print("[PASS] recorded non-evidence diagnostic output hashes.")
+        return 0
+    if args.diagnostic_command == "run-allowlisted":
+        result = run_allowlisted_diagnostic(PROJECT_ROOT, diagnostic_id=args.diagnostic_id)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        print("[PASS] completed fixed allowlisted diagnostic with UTF-8/LF output.")
         return 0
     raise ValueError(f"unknown diagnostic command: {args.diagnostic_command}")
 
@@ -1207,6 +1213,8 @@ def build_parser() -> argparse.ArgumentParser:
     diagnostic_record = diagnostic_sub.add_parser("record")
     diagnostic_record.add_argument("--diagnostic-id", required=True)
     diagnostic_record.add_argument("--output", action="append", required=True)
+    diagnostic_run = diagnostic_sub.add_parser("run-allowlisted")
+    diagnostic_run.add_argument("--diagnostic-id", required=True)
 
     explore = sub.add_parser("explore")
     explore_sub = explore.add_subparsers(dest="explore_command", required=True)

@@ -33,6 +33,7 @@ from scripts.pfmval_state import (
     read_directive_events,
     record_diagnostic_outputs,
     recover_incomplete_result_transactions,
+    run_allowlisted_diagnostic,
     safe_job_parameters,
     scan_documents,
     sha256_file,
@@ -97,7 +98,23 @@ def make_minimal_project(root: Path) -> Path:
     write_json(root / "project_state" / "schemas" / "server_job.schema.json", {"type": "object"})
     write_json(root / "project_state" / "schemas" / "mpp_repair_registry.schema.json", {"type": "object"})
     (root / "configs" / "server_paths.yaml").write_text(
-        "schema_version: '1.0'\npaths:\n  mpp_standard_splits:\n    path: mpp_standard_splits\n    kind: repo_directory\n    status: active\n    required_on: both\n",
+        "schema_version: '1.0'\n"
+        "paths:\n"
+        "  mpp_standard_splits:\n"
+        "    path: mpp_standard_splits\n"
+        "    kind: repo_directory\n"
+        "    status: active\n"
+        "    required_on: both\n"
+        "  server_repo_worktree:\n"
+        "    path: server_repo\n"
+        "    kind: git_worktree\n"
+        "    status: active\n"
+        "    required_on: server\n"
+        "  server_automation_worktrees:\n"
+        "    path: server_automation\n"
+        "    kind: directory\n"
+        "    status: active\n"
+        "    required_on: server\n",
         encoding="utf-8",
     )
     write_json(root / "mpp_standard_splits" / "path_index.json", {"schema_version": "1.0", "labels_validated": True})
@@ -294,6 +311,13 @@ def test_diagnostic_request_is_allowlisted_non_evidence_audit(tmp_path):
     assert request["command_id"] == "cache_probe"
     assert request["execution_contract"]["arbitrary_shell"] is False
     assert request["execution_contract"]["training"] is False
+    cards = (request_path.parent / "operation_cards.md").read_text(encoding="utf-8")
+    assert "卡 1：本地发布请求" in cards
+    assert "卡 2：服务器受限执行与回传" in cards
+    assert "卡 3：本地取回与验证" in cards
+    assert "server_automation" in cards
+    assert "`BLOCKED`" in cards
+    assert "diagnostic run-allowlisted" not in cards
     returned_output = request_path.parent / "stdout.txt"
     returned_output.write_text("cache readable\n", encoding="utf-8")
     completion = record_diagnostic_outputs(
@@ -315,6 +339,85 @@ def test_diagnostic_request_is_allowlisted_non_evidence_audit(tmp_path):
             source_branch="main",
             return_branch="automation/diagnostics",
         )
+
+
+def test_environment_probe_runner_is_fixed_and_byte_stable(tmp_path):
+    root = tmp_path / "diagnostic-runner-repo"
+    root.mkdir()
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "pfmval-test@example.invalid"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "PFMval Test"], cwd=root, check=True)
+    make_minimal_project(root)
+    automation_root = tmp_path / "server-automation"
+    server_repo = tmp_path / "server-repo"
+    (root / "configs" / "server_paths.yaml").write_text(
+        "schema_version: '1.0'\n"
+        "paths:\n"
+        "  mpp_standard_splits:\n"
+        "    path: mpp_standard_splits\n"
+        "    kind: repo_directory\n"
+        "    status: active\n"
+        "    required_on: both\n"
+        "  server_repo_worktree:\n"
+        f"    path: '{server_repo.as_posix()}'\n"
+        "    kind: git_worktree\n"
+        "    status: active\n"
+        "    required_on: server\n"
+        "  server_automation_worktrees:\n"
+        f"    path: '{automation_root.as_posix()}'\n"
+        "    kind: directory\n"
+        "    status: active\n"
+        "    required_on: server\n",
+        encoding="utf-8",
+    )
+    for schema_name in ("current_state.schema.json", "document_registry.schema.json", "directives.schema.json"):
+        write_json(root / "project_state" / "schemas" / schema_name, {"type": "object"})
+    subprocess.run(["git", "add", "."], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-m", "diagnostic runner fixture"], cwd=root, check=True, capture_output=True)
+    commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout.strip()
+    request_path = create_diagnostic_request(
+        root,
+        diagnostic_id="diagnostic-20260729-environment-probe",
+        source_commit=commit,
+        command_id="environment_probe",
+        source_branch="main",
+        return_branch="automation/diagnostics/environment-probe",
+    )
+    cards = (request_path.parent / "operation_cards.md").read_text(encoding="utf-8")
+    assert "diagnostic run-allowlisted" in cards
+    assert commit in cards
+    assert automation_root.as_posix() in cards
+
+    result = run_allowlisted_diagnostic(root, diagnostic_id="diagnostic-20260729-environment-probe")
+    output_path = root / result["output"]["path"]
+    raw = output_path.read_bytes()
+    assert not raw.startswith(b"\xef\xbb\xbf")
+    assert b"\r" not in raw
+    assert raw.endswith(b"\n")
+    assert result["output"]["eol"] == "lf"
+    assert read_json(output_path)["source_commit"] == commit
+
+    output_path.write_bytes(raw.replace(b"\n", b"\r\n"))
+    with pytest.raises(ValueError, match="must use LF"):
+        record_diagnostic_outputs(
+            root,
+            diagnostic_id="diagnostic-20260729-environment-probe",
+            outputs=["automation/diagnostics/diagnostic-20260729-environment-probe/environment_probe.json"],
+        )
+    output_path.write_bytes(raw)
+    event = record_diagnostic_outputs(
+        root,
+        diagnostic_id="diagnostic-20260729-environment-probe",
+        outputs=["automation/diagnostics/diagnostic-20260729-environment-probe/environment_probe.json"],
+    )
+    assert event["outputs"][0]["byte_contract"]["eol"] == "lf"
 
 
 def test_explore_session_is_local_only_and_candidates_never_delete(tmp_path):

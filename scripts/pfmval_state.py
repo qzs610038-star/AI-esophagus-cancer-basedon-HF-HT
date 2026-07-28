@@ -13,9 +13,11 @@ import hashlib
 import json
 import math
 import os
+import platform
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import uuid
 from contextlib import contextmanager
@@ -85,6 +87,7 @@ DIAGNOSTIC_COMMANDS = {
     "dry_run": "Run an allowlisted command in dry-run mode only.",
     "single_batch_forward": "Run one non-training forward pass with no checkpoint selection.",
 }
+DIAGNOSTIC_RUNNER_COMMANDS = {"environment_probe"}
 MPP_CACHE_PARITY_PATH_IDS = {
     "mpp_data_root",
     "mpp_standard_splits",
@@ -353,7 +356,10 @@ def create_diagnostic_request(
             "output_root": normalize_rel(request_dir.relative_to(root)),
         },
     }
+    operation_cards = build_diagnostic_operation_cards(root, request)
     write_json_atomic(request_path, request)
+    operation_cards_path = request_dir / "operation_cards.md"
+    write_text_atomic(operation_cards_path, operation_cards)
     _append_jsonl_event(root / "project_state" / "diagnostics.jsonl", {
         "event_type": "diagnostic_request",
         "diagnostic_id": diagnostic_id,
@@ -363,6 +369,7 @@ def create_diagnostic_request(
         "return_branch": return_branch,
         "command_id": command_id,
         "request_path": normalize_rel(request_path.relative_to(root)),
+        "operation_cards_path": normalize_rel(operation_cards_path.relative_to(root)),
     })
     return request_path
 
@@ -393,6 +400,301 @@ def _read_jsonl_events(path: Path) -> List[Dict[str, Any]]:
             raise ValueError(f"JSONL event must be an object at {path}:{line_number}")
         events.append(event)
     return events
+
+
+def _powershell_literal(value: str) -> str:
+    return "'" + value.replace("'", "''") + "'"
+
+
+def build_diagnostic_operation_cards(root: Path, request: Mapping[str, Any]) -> str:
+    """Build copy-ready Gitee diagnostic cards from the registered server paths."""
+    if yaml is None:
+        raise RuntimeError("PyYAML is required to build diagnostic operation cards")
+    registry_path = root / "configs" / "server_paths.yaml"
+    registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
+    paths = registry.get("paths", {}) if isinstance(registry, dict) else {}
+    repo_entry = paths.get("server_repo_worktree", {})
+    automation_entry = paths.get("server_automation_worktrees", {})
+    server_repo = str(repo_entry.get("path", "")).strip()
+    automation_root = str(automation_entry.get("path", "")).strip()
+    if not server_repo or not automation_root:
+        raise ValueError("diagnostic cards require server_repo_worktree and server_automation_worktrees")
+
+    diagnostic_id = str(request["diagnostic_id"])
+    source_branch = str(request["source_branch"])
+    source_commit = str(request["source_commit"])
+    return_branch = str(request["return_branch"])
+    current_branch = subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout.strip()
+    if not current_branch:
+        current_branch = "<governance-branch>"
+
+    repo_ps = _powershell_literal(server_repo)
+    automation_ps = _powershell_literal(automation_root)
+    diagnostic_ps = _powershell_literal(diagnostic_id)
+    governance_ps = _powershell_literal(current_branch)
+    source_branch_ps = _powershell_literal(source_branch)
+    source_commit_ps = _powershell_literal(source_commit)
+    return_branch_ps = _powershell_literal(return_branch)
+    output_rel = f"automation/diagnostics/{diagnostic_id}/environment_probe.json"
+    if request["command_id"] not in DIAGNOSTIC_RUNNER_COMMANDS:
+        return f"""# {diagnostic_id} 操作卡
+
+> `{request["command_id"]}` 已在请求 allowlist 中，但当前没有固定 runner。
+> 固定传输通道：Gitee；不得把请求解释为任意 shell 授权。
+
+## 已解析参数
+
+- 治理请求分支：`{current_branch}`
+- 源码分支：`{source_branch}`
+- 源码提交：`{source_commit}`
+- 回传分支：`{return_branch}`
+- 服务器仓库：`{server_repo}`
+- 自动化工作树根：`{automation_root}`
+
+## 卡 1：本地发布请求
+
+```powershell
+git push gitee HEAD:{current_branch}
+git push gitee {source_branch}:{source_branch}
+```
+
+## 卡 2：服务器受限执行与回传
+
+`BLOCKED`：当前版本没有 `{request["command_id"]}` 的固定收集器；请另开治理任务实现并测试，不得手写服务器命令替代。
+
+## 卡 3：本地取回与验证
+
+`NOT APPLICABLE`：没有固定 runner 输出时，不得登记完成事件。
+"""
+
+    return f"""# {diagnostic_id} 操作卡
+
+> 仅适用于 allowlist 中的 `{request["command_id"]}` 诊断；不是训练、结果导入或实验结论。
+> 固定传输通道：Gitee。输出必须为 UTF-8（无 BOM）且使用 LF 换行。
+
+## 已解析参数
+
+- 治理请求分支：`{current_branch}`
+- 源码分支：`{source_branch}`
+- 源码提交：`{source_commit}`
+- 回传分支：`{return_branch}`
+- 服务器仓库：`{server_repo}`
+- 自动化工作树根：`{automation_root}`
+
+## 卡 1：本地发布请求
+
+```powershell
+git push gitee HEAD:{current_branch}
+git push gitee {source_branch}:{source_branch}
+```
+
+停止条件：任一 push 失败，或远端源码分支未包含 `{source_commit}`。
+
+## 卡 2：服务器受限执行与回传
+
+```powershell
+$repo = {repo_ps}
+$automationRoot = {automation_ps}
+$diagnosticId = {diagnostic_ps}
+$governanceBranch = {governance_ps}
+$sourceBranch = {source_branch_ps}
+$sourceCommit = {source_commit_ps}
+$returnBranch = {return_branch_ps}
+$requestWorktree = Join-Path $automationRoot ($diagnosticId + '-request')
+
+git -C $repo fetch gitee `
+  ('+refs/heads/' + $governanceBranch + ':refs/remotes/gitee/' + $governanceBranch) `
+  ('+refs/heads/' + $sourceBranch + ':refs/remotes/gitee/' + $sourceBranch)
+if ((git -C $repo rev-parse ('gitee/' + $sourceBranch)) -ne $sourceCommit) {{ throw 'source SHA mismatch' }}
+git -C $repo worktree add --detach $requestWorktree ('gitee/' + $governanceBranch)
+python (Join-Path $requestWorktree 'deploy/pfmval_ops.py') agent start-check --task diagnostic --host-scope server
+python (Join-Path $requestWorktree 'deploy/pfmval_ops.py') diagnostic run-allowlisted --diagnostic-id $diagnosticId
+git -C $requestWorktree switch -C $returnBranch
+git -C $requestWorktree add -- {output_rel}
+git -C $requestWorktree commit -m ('diagnostic: return ' + $diagnosticId)
+git -C $requestWorktree push gitee ('HEAD:' + $returnBranch)
+```
+
+停止条件：诊断门禁失败、源码 SHA 不一致、工作树非干净状态、输出字节契约失败，或 push 失败。
+
+## 卡 3：本地取回与验证
+
+```powershell
+git fetch gitee +refs/heads/{return_branch}:refs/remotes/gitee/{return_branch}
+git restore --source gitee/{return_branch} -- {output_rel}
+python deploy/pfmval_ops.py diagnostic record --diagnostic-id {diagnostic_id} --output {output_rel}
+python deploy/pfmval_ops.py agent start-check --strict
+```
+
+验收条件：`diagnostic record` 返回哈希且严格门禁 `FAIL=0`；不得创建 result envelope，不得消耗 run unit。
+"""
+
+
+def _assert_utf8_lf_json(path: Path) -> Dict[str, Any]:
+    raw = path.read_bytes()
+    if raw.startswith(b"\xef\xbb\xbf"):
+        raise ValueError(f"diagnostic JSON must be UTF-8 without BOM: {path.name}")
+    if b"\r" in raw:
+        raise ValueError(f"diagnostic JSON must use LF line endings: {path.name}")
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise ValueError(f"diagnostic JSON is not valid UTF-8: {path.name}") from exc
+    if not text.endswith("\n"):
+        raise ValueError(f"diagnostic JSON must end with LF: {path.name}")
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"diagnostic JSON is invalid: {path.name}: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise ValueError(f"diagnostic JSON root must be an object: {path.name}")
+    return payload
+
+
+def _diagnostic_git_output(root: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", *args],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout.strip()
+
+
+def _registered_server_path(root: Path, path_id: str) -> Path:
+    if yaml is None:
+        raise RuntimeError("PyYAML is required to resolve diagnostic worktrees")
+    registry = yaml.safe_load((root / "configs" / "server_paths.yaml").read_text(encoding="utf-8"))
+    entry = registry.get("paths", {}).get(path_id, {}) if isinstance(registry, dict) else {}
+    raw = str(entry.get("path", "")).strip()
+    if not raw:
+        raise ValueError(f"registered server path is missing: {path_id}")
+    path = Path(raw)
+    return path if path.is_absolute() else root / path
+
+
+def _prepare_diagnostic_source_worktree(root: Path, request: Mapping[str, Any]) -> Path:
+    automation_root = _registered_server_path(root, "server_automation_worktrees").resolve()
+    source_worktree = (automation_root / f'{request["diagnostic_id"]}-source').resolve()
+    if not source_worktree.is_relative_to(automation_root):
+        raise ValueError("diagnostic source worktree escapes the registered automation root")
+    source_commit = str(request["source_commit"])
+    if source_worktree.exists():
+        if _diagnostic_git_output(source_worktree, "rev-parse", "HEAD") != source_commit:
+            raise ValueError("existing diagnostic source worktree has the wrong commit")
+    else:
+        source_worktree.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(
+            ["git", "worktree", "add", "--detach", str(source_worktree), source_commit],
+            cwd=root,
+            check=True,
+        )
+    if _diagnostic_git_output(source_worktree, "status", "--porcelain", "--untracked-files=all"):
+        raise ValueError("diagnostic source worktree must be clean")
+    if _diagnostic_git_output(source_worktree, "branch", "--show-current"):
+        raise ValueError("diagnostic source worktree must use detached HEAD")
+    return source_worktree
+
+
+def _collect_environment_probe(source_worktree: Path, request: Mapping[str, Any]) -> Dict[str, Any]:
+    torch_info: Dict[str, Any]
+    try:
+        import torch
+
+        cuda_available = bool(torch.cuda.is_available())
+        torch_info = {
+            "torch_version": str(torch.__version__),
+            "cuda_runtime": str(torch.version.cuda),
+            "cuda_available": cuda_available,
+            "device_count": int(torch.cuda.device_count()) if cuda_available else 0,
+            "device_name": str(torch.cuda.get_device_name(0)) if cuda_available else None,
+        }
+    except Exception as exc:  # pragma: no cover - depends on server environment
+        torch_info = {
+            "available": False,
+            "error_type": type(exc).__name__,
+        }
+    usage = shutil.disk_usage(source_worktree)
+    return {
+        "schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+        "diagnostic_id": request["diagnostic_id"],
+        "command_id": request["command_id"],
+        "source_commit": request["source_commit"],
+        "source_branch": request["source_branch"],
+        "detached_head": True,
+        "executed_at": utc_now(),
+        "exit_code": 0,
+        "python": {
+            "executable": sys.executable,
+            "version": platform.python_version(),
+            "platform": platform.platform(),
+        },
+        "pytorch_cuda": torch_info,
+        "environment": {
+            "source_worktree": str(source_worktree),
+            "disk_total_bytes": usage.total,
+            "disk_free_bytes": usage.free,
+        },
+    }
+
+
+def run_allowlisted_diagnostic(root: Path, *, diagnostic_id: str) -> Dict[str, Any]:
+    """Execute one fixed diagnostic collector; arbitrary commands are impossible."""
+    if not re.fullmatch(r"diagnostic-[0-9]{8}-[A-Za-z0-9_.-]+", diagnostic_id):
+        raise ValueError("diagnostic_id must match diagnostic-YYYYMMDD-name")
+    request_dir = root / "automation" / "diagnostics" / diagnostic_id
+    request_path = request_dir / "request.json"
+    if not request_path.is_file():
+        raise ValueError(f"diagnostic request is missing: {request_path}")
+    request = read_json(request_path)
+    command_id = str(request.get("command_id", ""))
+    if command_id not in DIAGNOSTIC_RUNNER_COMMANDS:
+        raise ValueError(f"diagnostic command has no fixed runner: {command_id}")
+    contract = request.get("execution_contract", {})
+    forbidden = (
+        "arbitrary_shell",
+        "training",
+        "experiment_registry_write",
+        "current_state_write",
+        "protected_asset_write",
+        "result_import",
+    )
+    if any(contract.get(key) is not False for key in forbidden):
+        raise ValueError("diagnostic execution contract permits a forbidden action")
+    report = validate_diagnostic_state(root)
+    if not report.ok:
+        raise ValueError("diagnostic runner blocked by safety-boundary validation: " + "; ".join(report.fail_items))
+
+    source_worktree = _prepare_diagnostic_source_worktree(root, request)
+    if _diagnostic_git_output(source_worktree, "rev-parse", "HEAD") != request["source_commit"]:
+        raise ValueError("diagnostic source SHA mismatch")
+    payload = _collect_environment_probe(source_worktree, request)
+    output_path = request_dir / "environment_probe.json"
+    write_json_atomic(output_path, payload)
+    checked = _assert_utf8_lf_json(output_path)
+    if checked.get("source_commit") != request["source_commit"] or checked.get("exit_code") != 0:
+        raise ValueError("environment probe output does not match the request")
+    return {
+        "diagnostic_id": diagnostic_id,
+        "command_id": command_id,
+        "source_worktree": str(source_worktree),
+        "output": {
+            "path": normalize_rel(output_path.relative_to(root)),
+            "size_bytes": output_path.stat().st_size,
+            "sha256": sha256_file(output_path),
+            "encoding": "utf-8",
+            "bom": False,
+            "eol": "lf",
+        },
+    }
 
 
 def create_exploration_session(root: Path, *, session_id: str, purpose: str) -> Path:
@@ -446,6 +748,11 @@ def record_diagnostic_outputs(
         raise ValueError("diagnostic request is malformed or not allowlisted")
     if not outputs:
         raise ValueError("diagnostic completion requires at least one output file")
+    if request.get("command_id") == "environment_probe":
+        expected = f"automation/diagnostics/{diagnostic_id}/environment_probe.json"
+        normalized_outputs = [normalize_rel(item) for item in outputs]
+        if normalized_outputs != [expected]:
+            raise ValueError("environment_probe requires exactly its canonical environment_probe.json output")
     artifacts: List[Dict[str, Any]] = []
     seen: set[str] = set()
     for raw_output in outputs:
@@ -461,7 +768,17 @@ def record_diagnostic_outputs(
         size_bytes = output_path.stat().st_size
         if size_bytes > MAX_RESULT_FILE_BYTES:
             raise ValueError(f"diagnostic output exceeds {MAX_RESULT_FILE_BYTES} bytes: {relative}")
-        artifacts.append({"path": relative, "size_bytes": size_bytes, "sha256": sha256_file(output_path)})
+        artifact = {"path": relative, "size_bytes": size_bytes, "sha256": sha256_file(output_path)}
+        if request.get("command_id") == "environment_probe":
+            payload = _assert_utf8_lf_json(output_path)
+            if (
+                payload.get("diagnostic_id") != diagnostic_id
+                or payload.get("source_commit") != request.get("source_commit")
+                or payload.get("exit_code") != 0
+            ):
+                raise ValueError("environment_probe output identity or exit_code does not match the request")
+            artifact["byte_contract"] = {"encoding": "utf-8", "bom": False, "eol": "lf"}
+        artifacts.append(artifact)
     event = {
         "event_type": "diagnostic_completed",
         "diagnostic_id": diagnostic_id,
