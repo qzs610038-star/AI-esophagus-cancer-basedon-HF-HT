@@ -1,6 +1,29 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-27T00:00:00+00:00",
-  "next_workspace_number": 1,
-  "workspaces": []
+  "updated_at": "2026-07-28T14:18:14+00:00",
+  "next_workspace_number": 2,
+  "workspaces": [
+    {
+      "workspace_id": "W001",
+      "display_name": "MPP2 paired MSE vs Huber delta1",
+      "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+      "protocol_revision": 1,
+      "status": "shadow",
+      "active_attempt_id": null,
+      "lease": null,
+      "opened_at": "2026-07-28T14:18:14+00:00",
+      "last_verified_at": null,
+      "close_eligibility": "not_evaluated",
+      "retention_policy": "retain_until_explicit_close_approval",
+      "hosts": {
+        "local": {
+          "host_scope": "local",
+          "branch": "codex/w001-mpp2-huber-loss-20260728-bound",
+          "path_id": "local_experiment_workspaces",
+          "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W001",
+          "current_source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda"
+        }
+      }
+    }
+  ]
 }

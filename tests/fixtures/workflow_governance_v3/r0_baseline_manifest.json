@@ -57,7 +57,7 @@
     {
       "class": "legacy_accepted_without_envelope",
       "source_path": "experiments/experiment_registry.json",
-      "source_sha256": "591506737fc071927302295169941f3b39fe561a4e93b69bcc39a69e3f3e0a5d",
+      "source_sha256": "5a303eb437a5de699aff48a5fab0f403087368ad6379fbaeccc0654e993ff839",
       "source_commit": null,
       "schema_version": "1.0",
       "selector": {

@@ -1,0 +1,19 @@
+[
+  "python",
+  "train_mpp_uni2h_mlp.py",
+  "--train_mpp_id", "2",
+  "--external_mpp_id", "2",
+  "--external_patient", "XZY",
+  "--val_strategy", "manifest",
+  "--num_epochs", "50",
+  "--batch_size", "32",
+  "--lr", "0.0001",
+  "--seed", "42",
+  "--hidden_dim", "1024",
+  "--dropout", "0.3",
+  "--patience", "10",
+  "--min_delta", "0.0001",
+  "--loss", "huber",
+  "--huber-delta", "1.0",
+  "--dataset_name", "mpp2_huber_loss_paired_v001_20260728_A1"
+]

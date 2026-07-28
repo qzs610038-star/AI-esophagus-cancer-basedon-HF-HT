@@ -1,0 +1,85 @@
+{
+  "schema_version": "2.0",
+  "job_id": "W001-A001",
+  "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+  "workspace_id": "W001",
+  "attempt_id": "A001",
+  "protocol_revision": 1,
+  "approval_id": "APR-mpp2-huber-loss-paired-v001-20260728-r001",
+  "critical_contract_sha256": "569bb6d83dcc45ef77f900d92f58645211d05702aad6cb189e00131ae08d9962",
+  "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+  "phase": "formal",
+  "command_id": "standard_training",
+  "path_ids": [
+    "mpp_data_root",
+    "mpp_standard_splits",
+    "server_mpp_partner_cache",
+    "server_mpp_flat_cache",
+    "server_mpp_results"
+  ],
+  "resolved_argv": [
+    "python",
+    "train_mpp_uni2h_mlp.py",
+    "--train_mpp_id",
+    "2",
+    "--external_mpp_id",
+    "2",
+    "--external_patient",
+    "XZY",
+    "--val_strategy",
+    "manifest",
+    "--num_epochs",
+    "50",
+    "--batch_size",
+    "32",
+    "--lr",
+    "0.0001",
+    "--seed",
+    "42",
+    "--hidden_dim",
+    "1024",
+    "--dropout",
+    "0.3",
+    "--patience",
+    "10",
+    "--min_delta",
+    "0.0001",
+    "--loss",
+    "mse",
+    "--huber-delta",
+    "1.0",
+    "--dataset_name",
+    "mpp2_huber_loss_paired_v001_20260728_A0"
+  ],
+  "input_binding": {
+    "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+    "data_manifest_sha256": "1204018178a4d355c2aa03314d0fafa9f0151457b9edcef3a0df9b5946c306e2",
+    "artifacts": [
+      {
+        "artifact_id": "mpp2_split_manifest",
+        "sha256": "babfa2b1d9aa7d7b2e56ac0ac18b95dcb006f66a41e4a86761bbe8a746d2f824"
+      },
+      {
+        "artifact_id": "mpp2_training_entrypoint",
+        "sha256": "172c74366253349524ebafbe73b365049e457d7c34000b7baddbb2d1752f7e92"
+      }
+    ],
+    "arm_id": "A0",
+    "loss_type": "mse",
+    "loss_delta": null,
+    "loss_reduction": "mean"
+  },
+  "run_units": 1,
+  "workspace_branch": "codex/w001-mpp2-huber-loss-20260728-bound",
+  "dispatch_revision": 1,
+  "adaptation_record_id": null,
+  "created_at": "2026-07-28T14:19:56+00:00",
+  "dispatch_branch": "codex/w001-mpp2-huber-loss-20260728-bound",
+  "result_branch": "automation/server/W001/A001",
+  "artifact_policy": {
+    "critical": "sha256_required",
+    "supporting": "size_inventory_default",
+    "diagnostic": "non_evidence",
+    "large_artifacts": "registered_path_size_sha256_only"
+  }
+}

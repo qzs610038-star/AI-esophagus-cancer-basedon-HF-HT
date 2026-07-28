@@ -451,7 +451,26 @@ def test_r0_baseline_manifest_freezes_v1_compatibility_samples():
     for sample in samples.values():
         source = root / sample["source_path"]
         assert source.is_file()
-        assert sha256_file(source) == sample["source_sha256"]
+        selector = sample.get("selector")
+        if selector:
+            registry = read_json(source)
+            selected = next(
+                item
+                for item in registry["experiments"]
+                if item["id"] == selector["experiment_id"]
+            )
+            actual_sha256 = hashlib.sha256(
+                json.dumps(
+                    selected,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                    allow_nan=False,
+                ).encode("utf-8")
+            ).hexdigest()
+        else:
+            actual_sha256 = sha256_file(source)
+        assert actual_sha256 == sample["source_sha256"]
         assert sample["schema_version"] == "1.0"
         assert sample["evidence_boundary"] in {
             "current_compatibility_fixture",

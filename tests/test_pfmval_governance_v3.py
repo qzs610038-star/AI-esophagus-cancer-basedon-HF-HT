@@ -199,8 +199,6 @@ def test_external_git_worktree_binding_requires_exact_path_branch_and_head(tmp_p
             branch="codex/not-exp-a",
             source_commit=head,
         )
-
-
 def test_attempt_run_roots_are_external_and_workspace_lease_requires_explicit_release(
     tmp_path,
 ):
@@ -212,6 +210,8 @@ def test_attempt_run_roots_are_external_and_workspace_lease_requires_explicit_re
         experiment_id="exp-a",
         display_name="alpha",
         local_relative_path="workspaces/W001",
+        branch="codex/exp-a",
+        source_commit="a" * 40,
     )
     run_root = tmp_path / "runs"
     first_run = resolve_attempt_run_root(

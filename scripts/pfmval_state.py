@@ -1955,7 +1955,51 @@ def validate_governance_v3_state(
             workspace_numbers.append(int(match.group(1)))
             for host in workspace.get("hosts", {}).values():
                 relative_path = Path(str(host.get("relative_path", "")))
-                if relative_path.is_absolute() or ".." in relative_path.parts:
+                if relative_path.is_absolute():
+                    if host.get("host_scope") != "local":
+                        raise ValueError("only local workspace bindings may use absolute paths")
+                    expected_branch = str(host.get("branch", ""))
+                    expected_commit = str(host.get("current_source_commit", ""))
+                    completed = subprocess.run(
+                        ["git", "-C", str(root), "worktree", "list", "--porcelain"],
+                        check=True,
+                        capture_output=True,
+                        text=True,
+                        encoding="utf-8",
+                    )
+                    records: list[Dict[str, str]] = []
+                    current: Dict[str, str] = {}
+                    for line in completed.stdout.splitlines():
+                        if not line:
+                            if current:
+                                records.append(current)
+                                current = {}
+                            continue
+                        key, _, value = line.partition(" ")
+                        if key == "worktree":
+                            current["path"] = value
+                        elif key == "HEAD":
+                            current["head"] = value
+                        elif key == "branch":
+                            current["branch"] = value.removeprefix("refs/heads/")
+                    if current:
+                        records.append(current)
+                    registered = relative_path.resolve(strict=True)
+                    matched = next(
+                        (
+                            item
+                            for item in records
+                            if Path(item.get("path", "")).resolve(strict=True) == registered
+                        ),
+                        None,
+                    )
+                    if matched is None:
+                        raise ValueError(f"absolute workspace is not a local Git worktree: {registered}")
+                    if matched.get("branch") != expected_branch:
+                        raise ValueError("absolute workspace branch does not match registry")
+                    if matched.get("head") != expected_commit:
+                        raise ValueError("absolute workspace HEAD does not match registry")
+                elif ".." in relative_path.parts:
                     raise ValueError(
                         "workspace path escapes registered root: "
                         f"{relative_path}"

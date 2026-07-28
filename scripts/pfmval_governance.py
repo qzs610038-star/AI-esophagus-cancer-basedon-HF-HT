@@ -759,6 +759,11 @@ def prepare_attempt(
     )
     if workspace is None or workspace.get("experiment_id") != experiment_id:
         raise ValueError("attempt workspace binding mismatch")
+    local_binding = workspace.get("hosts", {}).get("local", {})
+    bound_commit = str(local_binding.get("current_source_commit", ""))
+    if bound_commit and bound_commit != source_commit:
+        raise ValueError("attempt source_commit does not match workspace binding")
+    bound_branch = str(local_binding.get("branch", ""))
     events_path = _attempt_log_path(root)
     events = _read_jsonl(events_path)
     budget = _attempt_budget(approvals, events, approval_id=approval_id)
@@ -786,7 +791,7 @@ def prepare_attempt(
         "run_units": int(run_units),
         "source_commit": source_commit,
         "critical_contract_sha256": critical_contract_sha256,
-        "workspace_branch": f"automation/local/{workspace_id}/{attempt_id}",
+        "workspace_branch": bound_branch or f"automation/local/{workspace_id}/{attempt_id}",
     }
     _append_jsonl(events_path, event)
     _update_experiment_lifecycle_view(
