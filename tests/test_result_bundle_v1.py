@@ -451,7 +451,7 @@ def test_publish_is_fast_forward_idempotent_and_verifies_remote_sha(tmp_path):
         )
 
 
-def test_g12r_operation_card_pins_server_python_and_uses_fresh_retry_root():
+def test_g12r_operation_card_selects_schema_capable_python_and_fresh_retry_root():
     card = (
         PROJECT_ROOT
         / "project_state"
@@ -462,8 +462,15 @@ def test_g12r_operation_card_pins_server_python_and_uses_fresh_retry_root():
     assert "git -C $Repo cat-file -e \"${ImplSha}^{commit}\"" in card
     assert "git -C $Repo merge-base --is-ancestor $ImplSha $ImplTip" in card
     assert "(git -C $Repo rev-parse $ImplRef).Trim() -ne $ImplSha" not in card
-    assert "$Python = 'C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe'" in card
-    assert "& $Python -c 'import jsonschema, sys; print(sys.executable)'" in card
+    assert "$PythonCandidates = @(" in card
+    assert "'C:\\Program Files\\Python313\\python.exe'" in card
+    assert "'C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe'" in card
+    assert "'D:\\miniconda\\python.exe'" in card
+    assert "foreach ($Candidate in $PythonCandidates)" in card
+    assert "& $Candidate -c 'import jsonschema, sys; print(sys.executable)'" in card
+    assert "$Python = $Candidate" in card
+    assert "$Python = 'C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe'" not in card
+    assert "no server Python candidate can import jsonschema" in card
     assert "python (Join-Path $Impl" not in card
     assert "$RunId = Get-Date -Format 'yyyyMMdd_HHmmss_fff'" in card
     assert "$Root = Join-Path $RootBase $RunId" in card

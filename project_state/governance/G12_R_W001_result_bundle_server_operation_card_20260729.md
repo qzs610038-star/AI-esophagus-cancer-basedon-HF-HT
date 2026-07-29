@@ -9,12 +9,12 @@
 ```powershell
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+$PSNativeCommandUseErrorActionPreference = $false
 
 $Repo = 'D:\AIPatho\qzs\pfmval_deploy_git'
 $RootBase = 'D:\AIPatho\qzs\pfmval_automation\g12r_result_bundle_20260729'
 $RunId = Get-Date -Format 'yyyyMMdd_HHmmss_fff'
 $Root = Join-Path $RootBase $RunId
-$Python = 'C:\Users\AIPatho1\pfmval_env\Scripts\python.exe'
 $ImplSha = '9840efe48003b66e3195eb0cafab4ec0752a3207'
 $A003Parent = 'd59221d650821796a561f65fc98561334f914757'
 $A004Parent = '445f72bd12c4409d775b8e147ff6d218c9711244'
@@ -22,11 +22,36 @@ $ImplRef = 'refs/remotes/gitee/codex/w001-mpp2-huber-loss-20260728'
 $A003Ref = 'refs/remotes/gitee/automation/server/W001/A003'
 $A004Ref = 'refs/remotes/gitee/automation/server/W001/A004'
 
-if (-not (Test-Path -LiteralPath $Python -PathType Leaf)) {
-    throw "registered server Python is missing: $Python"
+$PathPythonCommand = Get-Command python -ErrorAction SilentlyContinue
+$PathPython = if ($null -ne $PathPythonCommand) { $PathPythonCommand.Source } else { $null }
+$PythonCandidates = @(
+    $env:PFMVAL_PYTHON
+    'C:\Program Files\Python313\python.exe'
+    'C:\Users\AIPatho1\pfmval_env\Scripts\python.exe'
+    'D:\miniconda\python.exe'
+    $PathPython
+) | Where-Object { $_ } | Select-Object -Unique
+
+$Python = $null
+$PythonProbeFailures = @()
+foreach ($Candidate in $PythonCandidates) {
+    if (-not (Test-Path -LiteralPath $Candidate -PathType Leaf)) {
+        $PythonProbeFailures += "$Candidate [missing]"
+        continue
+    }
+    $ProbeOutput = @(& $Candidate -c 'import jsonschema, sys; print(sys.executable)' 2>&1)
+    $ProbeExit = $LASTEXITCODE
+    if ($ProbeExit -eq 0) {
+        $Python = $Candidate
+        $ProbeOutput | ForEach-Object { Write-Host $_ }
+        break
+    }
+    $PythonProbeFailures += "$Candidate [exit=$ProbeExit] $($ProbeOutput -join ' ')"
 }
-& $Python -c 'import jsonschema, sys; print(sys.executable)'
-if ($LASTEXITCODE -ne 0) { throw 'registered server Python/jsonschema probe failed' }
+if ($null -eq $Python) {
+    throw "no server Python candidate can import jsonschema:`n$($PythonProbeFailures -join "`n")"
+}
+Write-Host "result_bundle_python=$Python"
 
 New-Item -ItemType Directory -Path $RootBase -Force | Out-Null
 if (Test-Path -LiteralPath $Root) { throw "fresh run root collision: $Root" }
