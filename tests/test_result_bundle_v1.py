@@ -6,7 +6,6 @@ from pathlib import Path
 
 import pytest
 
-import scripts.pfmval_state as pfmval_state
 from scripts.pfmval_result_bundle import (
     build_result_bundle_v1,
     publish_result_bundle_v1,
@@ -198,11 +197,7 @@ def test_strict_schema_validation_uses_powershell_when_jsonschema_is_unavailable
     )
     result = json.loads((staging / "result.json").read_text(encoding="utf-8"))
     schema = PROJECT_ROOT / "project_state" / "schemas" / "result_envelope_v2.schema.json"
-    monkeypatch.setattr(
-        pfmval_state,
-        "validate_against_schema",
-        lambda instance, schema_path, label: False,
-    )
+    monkeypatch.setenv("PFMVAL_FORCE_POWERSHELL_SCHEMA", "1")
 
     backend = validate_against_schema_strict(result, schema, "result envelope v2")
     assert backend == "powershell-test-json"
@@ -489,7 +484,7 @@ def test_publish_is_fast_forward_idempotent_and_verifies_remote_sha(tmp_path):
         )
 
 
-def test_g12r_operation_card_selects_schema_capable_python_and_fresh_retry_root():
+def test_g12r_operation_card_uses_zero_install_schema_backend_and_fresh_root():
     card = (
         PROJECT_ROOT
         / "project_state"
@@ -500,15 +495,21 @@ def test_g12r_operation_card_selects_schema_capable_python_and_fresh_retry_root(
     assert "git -C $Repo cat-file -e \"${ImplSha}^{commit}\"" in card
     assert "git -C $Repo merge-base --is-ancestor $ImplSha $ImplTip" in card
     assert "(git -C $Repo rev-parse $ImplRef).Trim() -ne $ImplSha" not in card
+    assert "50fb973e4ce3092a408398c94310214a87ecdba0" in card
+    assert "Get-Command Test-Json -ErrorAction SilentlyContinue" in card
+    assert "PowerShell 7 Test-Json is unavailable" in card
     assert "$PythonCandidates = @(" in card
     assert "'C:\\Program Files\\Python313\\python.exe'" in card
     assert "'C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe'" in card
     assert "'D:\\miniconda\\python.exe'" in card
     assert "foreach ($Candidate in $PythonCandidates)" in card
-    assert "& $Candidate -c 'import jsonschema, sys; print(sys.executable)'" in card
+    assert (
+        "& $Candidate -c 'import sys; assert sys.version_info >= (3, 9); "
+        "print(sys.executable)'"
+    ) in card
     assert "$Python = $Candidate" in card
-    assert "$Python = 'C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe'" not in card
-    assert "no server Python candidate can import jsonschema" in card
+    assert "import jsonschema" not in card
+    assert "no compatible server Python candidate found" in card
     assert "python (Join-Path $Impl" not in card
     assert "$RunId = Get-Date -Format 'yyyyMMdd_HHmmss_fff'" in card
     assert "$Root = Join-Path $RootBase $RunId" in card

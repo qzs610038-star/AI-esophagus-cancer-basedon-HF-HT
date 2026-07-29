@@ -2,7 +2,7 @@
 
 > 作用：从不可变 A003/R003、A004/R001 构建 A003/R004、A004/R002，并仅经 Gitee fast-forward 回传。  
 > 禁止：训练、重试、创建新 attempt、`record-import`、result import/accept、修改指标或科学结论。  
-> 实现提交：`9840efe48003b66e3195eb0cafab4ec0752a3207`
+> 实现提交：`50fb973e4ce3092a408398c94310214a87ecdba0`
 
 在服务器 PowerShell 7 中一次性执行：
 
@@ -15,12 +15,16 @@ $Repo = 'D:\AIPatho\qzs\pfmval_deploy_git'
 $RootBase = 'D:\AIPatho\qzs\pfmval_automation\g12r_result_bundle_20260729'
 $RunId = Get-Date -Format 'yyyyMMdd_HHmmss_fff'
 $Root = Join-Path $RootBase $RunId
-$ImplSha = '9840efe48003b66e3195eb0cafab4ec0752a3207'
+$ImplSha = '50fb973e4ce3092a408398c94310214a87ecdba0'
 $A003Parent = 'd59221d650821796a561f65fc98561334f914757'
 $A004Parent = '445f72bd12c4409d775b8e147ff6d218c9711244'
 $ImplRef = 'refs/remotes/gitee/codex/w001-mpp2-huber-loss-20260728'
 $A003Ref = 'refs/remotes/gitee/automation/server/W001/A003'
 $A004Ref = 'refs/remotes/gitee/automation/server/W001/A004'
+
+if ($null -eq (Get-Command Test-Json -ErrorAction SilentlyContinue)) {
+    throw 'PowerShell 7 Test-Json is unavailable'
+}
 
 $PathPythonCommand = Get-Command python -ErrorAction SilentlyContinue
 $PathPython = if ($null -ne $PathPythonCommand) { $PathPythonCommand.Source } else { $null }
@@ -39,7 +43,7 @@ foreach ($Candidate in $PythonCandidates) {
         $PythonProbeFailures += "$Candidate [missing]"
         continue
     }
-    $ProbeOutput = @(& $Candidate -c 'import jsonschema, sys; print(sys.executable)' 2>&1)
+    $ProbeOutput = @(& $Candidate -c 'import sys; assert sys.version_info >= (3, 9); print(sys.executable)' 2>&1)
     $ProbeExit = $LASTEXITCODE
     if ($ProbeExit -eq 0) {
         $Python = $Candidate
@@ -49,7 +53,7 @@ foreach ($Candidate in $PythonCandidates) {
     $PythonProbeFailures += "$Candidate [exit=$ProbeExit] $($ProbeOutput -join ' ')"
 }
 if ($null -eq $Python) {
-    throw "no server Python candidate can import jsonschema:`n$($PythonProbeFailures -join "`n")"
+    throw "no compatible server Python candidate found:`n$($PythonProbeFailures -join "`n")"
 }
 Write-Host "result_bundle_python=$Python"
 
