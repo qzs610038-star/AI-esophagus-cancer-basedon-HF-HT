@@ -205,7 +205,13 @@ def _contains_option(argv: List[str], option: str) -> bool:
 
 
 def _validate_git_archive_bundle(bundle_root: Path, repo_root: Path, commit: str) -> None:
-    """Prove that a regular directory is an exact tracked-file Git archive."""
+    """Prove a regular directory matches tracked Git blobs.
+
+    Gitee archives on Windows may materialize a text blob with CRLF even when
+    the canonical Git blob uses LF.  Do not delegate this decision to the
+    host's Git filters: accept only that complete, text-only LF-to-CRLF
+    materialization; every other byte difference remains a hard failure.
+    """
     if not re.fullmatch(r"[0-9a-f]{40}", commit):
         raise ValueError("governance archive commit must be a full 40-character SHA")
     listing = subprocess.run(
@@ -224,16 +230,20 @@ def _validate_git_archive_bundle(bundle_root: Path, repo_root: Path, commit: str
         candidate = (bundle_root / relative_path).resolve()
         if not candidate.is_relative_to(bundle_root.resolve()) or not candidate.is_file():
             raise ValueError(f"governance archive is missing tracked file: {relative_path.as_posix()}")
-        actual_blob = subprocess.run(
-            [
-                "git", "-C", str(repo_root), "hash-object",
-                f"--path={relative_path.as_posix()}", "--stdin",
-            ],
+        expected_bytes = subprocess.run(
+            ["git", "-C", str(repo_root), "cat-file", "blob", blob_id.decode("ascii")],
             check=True,
             capture_output=True,
-            input=candidate.read_bytes(),
-        ).stdout.strip()
-        if actual_blob != blob_id:
+        ).stdout
+        candidate_bytes = candidate.read_bytes()
+        if candidate_bytes == expected_bytes:
+            continue
+        is_crlf_materialization = (
+            b"\x00" not in expected_bytes
+            and b"\r\n" not in expected_bytes
+            and candidate_bytes == expected_bytes.replace(b"\n", b"\r\n")
+        )
+        if not is_crlf_materialization:
             raise ValueError(f"governance archive file hash mismatch: {relative_path.as_posix()}")
 
 

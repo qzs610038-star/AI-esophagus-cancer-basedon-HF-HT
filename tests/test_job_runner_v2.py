@@ -283,3 +283,19 @@ def test_job_runner_v2_rejects_tampered_regular_governance_bundle(tmp_path, monk
         assert "file hash mismatch" in str(exc)
     else:
         raise AssertionError("tampered governance archive must be rejected")
+
+
+def test_job_runner_v2_accepts_only_full_text_crlf_archive_materialization(tmp_path):
+    ops = _load_ops()
+    governance_repo = tmp_path / "governance-repo"
+    governance_sha = _commit_repo(governance_repo, "README.md", "governance\n")
+    canonical = subprocess.run(
+        ["git", "cat-file", "blob", f"{governance_sha}:README.md"],
+        cwd=governance_repo, check=True, capture_output=True,
+    ).stdout
+    assert b"\x00" not in canonical and b"\r\n" not in canonical
+    bundle = tmp_path / "governance-bundle"
+    bundle.mkdir()
+    (bundle / "README.md").write_bytes(canonical.replace(b"\n", b"\r\n"))
+
+    ops._validate_git_archive_bundle(bundle, governance_repo, governance_sha)
