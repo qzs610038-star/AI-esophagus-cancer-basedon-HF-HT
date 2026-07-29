@@ -449,3 +449,18 @@ def test_publish_is_fast_forward_idempotent_and_verifies_remote_sha(tmp_path):
             expected_parent="f" * 40,
             commit_message="must not publish",
         )
+
+
+def test_g12r_operation_card_accepts_descendant_tip_and_empty_retry_root():
+    card = (
+        PROJECT_ROOT
+        / "project_state"
+        / "governance"
+        / "G12_R_W001_result_bundle_server_operation_card_20260729.md"
+    ).read_text(encoding="utf-8")
+
+    assert "git -C $Repo cat-file -e \"${ImplSha}^{commit}\"" in card
+    assert "git -C $Repo merge-base --is-ancestor $ImplSha $ImplTip" in card
+    assert "(git -C $Repo rev-parse $ImplRef).Trim() -ne $ImplSha" not in card
+    assert "$ExistingRootEntries = @(Get-ChildItem -LiteralPath $Root -Force)" in card
+    assert "$ExistingRootEntries.Count -ne 0" in card

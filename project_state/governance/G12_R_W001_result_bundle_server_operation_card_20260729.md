@@ -20,9 +20,13 @@ $A003Ref = 'refs/remotes/gitee/automation/server/W001/A003'
 $A004Ref = 'refs/remotes/gitee/automation/server/W001/A004'
 
 if (Test-Path -LiteralPath $Root) {
-    throw "G12-R staging root already exists; do not overwrite: $Root"
+    $ExistingRootEntries = @(Get-ChildItem -LiteralPath $Root -Force)
+    if ($ExistingRootEntries.Count -ne 0) {
+        throw "G12-R staging root is non-empty; do not overwrite: $Root"
+    }
+} else {
+    New-Item -ItemType Directory -Path $Root | Out-Null
 }
-New-Item -ItemType Directory -Path $Root | Out-Null
 
 git -C $Repo fetch --no-tags gitee `
   'refs/heads/codex/w001-mpp2-huber-loss-20260728:refs/remotes/gitee/codex/w001-mpp2-huber-loss-20260728' `
@@ -30,8 +34,12 @@ git -C $Repo fetch --no-tags gitee `
   'refs/heads/automation/server/W001/A004:refs/remotes/gitee/automation/server/W001/A004'
 if ($LASTEXITCODE -ne 0) { throw 'Gitee fetch failed' }
 
-if ((git -C $Repo rev-parse $ImplRef).Trim() -ne $ImplSha) {
-    throw 'implementation SHA mismatch'
+$ImplTip = (git -C $Repo rev-parse $ImplRef).Trim()
+git -C $Repo cat-file -e "${ImplSha}^{commit}"
+if ($LASTEXITCODE -ne 0) { throw 'implementation commit is unavailable' }
+git -C $Repo merge-base --is-ancestor $ImplSha $ImplTip
+if ($LASTEXITCODE -ne 0) {
+    throw "implementation SHA is not an ancestor of fetched branch tip: $ImplTip"
 }
 if ((git -C $Repo rev-parse $A003Ref).Trim() -ne $A003Parent) {
     throw 'A003 remote ref changed; stop without choosing or overwriting a revision'
