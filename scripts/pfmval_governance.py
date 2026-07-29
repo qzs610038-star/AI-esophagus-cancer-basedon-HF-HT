@@ -1126,6 +1126,14 @@ def validate_job_v2(job: Mapping[str, Any]) -> None:
         raise ValueError("job_id must bind workspace_id and attempt_id")
     if job["result_branch"] != f"automation/server/{workspace_id}/{attempt_id}":
         raise ValueError("result branch must be attempt-unique server-owned ref")
+    execution_binding = job.get("execution_binding")
+    if execution_binding is not None:
+        if not isinstance(execution_binding, Mapping):
+            raise ValueError("job execution_binding must be an object")
+        if execution_binding.get("mode") != "source_plus_governance_bundle":
+            raise ValueError("unsupported job execution binding mode")
+        if not FULL_COMMIT_RE.fullmatch(str(execution_binding.get("governance_commit", ""))):
+            raise ValueError("job execution binding requires governance_commit SHA")
 
 
 def _safe_artifact_path(value: str) -> bool:

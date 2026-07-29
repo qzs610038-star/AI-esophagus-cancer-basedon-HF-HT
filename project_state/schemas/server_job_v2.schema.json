@@ -125,6 +125,23 @@
     },
     "artifact_policy": {
       "type": "object"
+    },
+    "execution_binding": {
+      "type": "object",
+      "required": [
+        "mode",
+        "governance_commit"
+      ],
+      "properties": {
+        "mode": {
+          "const": "source_plus_governance_bundle"
+        },
+        "governance_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

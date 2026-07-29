@@ -13,6 +13,7 @@ import json
 import re
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -166,6 +167,109 @@ def ensure_job_worktree(manifest: Dict[str, Any]) -> Path:
     if status.stdout.strip():
         raise ValueError(f"job worktree is dirty and cannot be reused: {worktree}")
     return worktree
+
+
+def _git_text(cwd: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", "-C", str(cwd), *args],
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout.strip()
+
+
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def prepare_job_v2_execution(
+    manifest: Dict[str, Any],
+    *,
+    governance_root: Path,
+    source_worktree: Path,
+    run_root: Path,
+) -> Dict[str, Any]:
+    """Validate the split source/governance execution boundary without writing it.
+
+    `source_worktree` holds immutable training code; governance state is read from
+    `governance_root`; every attempt writes only below `run_root/W###/A###`.
+    """
+    if manifest.get("schema_version") != "2.0":
+        raise ValueError("job run-v2 only accepts schema_version=2.0")
+    validate_job_manifest(governance_root, manifest, require_head=False)
+    binding = manifest.get("execution_binding")
+    if not isinstance(binding, dict):
+        raise ValueError("job run-v2 requires an explicit execution_binding; regenerate the job after protocol approval")
+    if binding.get("mode") != "source_plus_governance_bundle":
+        raise ValueError("job run-v2 requires source_plus_governance_bundle binding")
+    expected_governance = str(binding.get("governance_commit", ""))
+    if _git_text(governance_root, "rev-parse", "HEAD") != expected_governance:
+        raise ValueError("governance bundle HEAD does not match execution_binding")
+    if _git_text(governance_root, "status", "--porcelain", "--untracked-files=all"):
+        raise ValueError("governance bundle is dirty")
+    source_worktree = source_worktree.resolve()
+    if _git_text(source_worktree, "rev-parse", "HEAD") != manifest["source_commit"]:
+        raise ValueError("registered source worktree HEAD does not match job source_commit")
+    if _git_text(source_worktree, "status", "--porcelain", "--untracked-files=all"):
+        raise ValueError("registered source worktree is dirty")
+    argv = list(manifest["resolved_argv"])
+    if len(argv) < 2 or argv[0] != "python":
+        raise ValueError("job run-v2 only permits a resolved Python entrypoint")
+    entrypoint = (source_worktree / argv[1]).resolve()
+    if not entrypoint.is_relative_to(source_worktree) or not entrypoint.is_file():
+        raise ValueError("job run-v2 entrypoint is missing or escapes source worktree")
+    artifacts = manifest.get("input_binding", {}).get("artifacts", [])
+    entrypoint_binding = next(
+        (item for item in artifacts if item.get("artifact_id") == "mpp2_training_entrypoint"),
+        None,
+    )
+    if not isinstance(entrypoint_binding, dict):
+        raise ValueError("job run-v2 requires a bound training entrypoint hash")
+    if _sha256_file(entrypoint) != entrypoint_binding.get("sha256"):
+        raise ValueError("source training entrypoint hash does not match the job binding")
+    target = (run_root.resolve() / manifest["workspace_id"] / manifest["attempt_id"]).resolve()
+    if not target.is_relative_to(run_root.resolve()):
+        raise ValueError("attempt run root escapes supplied run_root")
+    if target.exists():
+        raise ValueError("attempt run root already exists; implicit retry is forbidden")
+    return {
+        "governance_root": str(governance_root.resolve()),
+        "source_worktree": str(source_worktree),
+        "run_directory": str(target),
+        "command": [sys.executable, *argv[1:]],
+    }
+
+
+def write_job_v2_started_event(plan: Dict[str, Any], manifest: Dict[str, Any]) -> Path:
+    """Create the server-returnable start evidence immediately before execution."""
+    run_directory = Path(plan["run_directory"])
+    run_directory.mkdir(parents=True, exist_ok=False)
+    event = {
+        "event_type": "EXPERIMENT_STARTED",
+        "event_id": f"started-{manifest['job_id']}",
+        "recorded_at": _utc_now(),
+        "experiment_id": manifest["experiment_id"],
+        "workspace_id": manifest["workspace_id"],
+        "attempt_id": manifest["attempt_id"],
+        "job_id": manifest["job_id"],
+        "approval_id": manifest["approval_id"],
+        "source_commit": manifest["source_commit"],
+        "critical_contract_sha256": manifest["critical_contract_sha256"],
+        "run_units": manifest["run_units"],
+        "execution_binding": manifest["execution_binding"],
+    }
+    output = run_directory / "attempt_started.json"
+    write_json_atomic(output, event)
+    return output
 
 
 def bound_job_parameter_argv(work_root: Path, manifest: Dict[str, Any], experiment: Dict[str, Any]) -> List[str]:
@@ -1107,6 +1211,22 @@ def command_job(args: argparse.Namespace) -> int:
         completed = subprocess.run(command, cwd=work_root, check=False)
         return int(completed.returncode)
 
+    if args.job_command == "run-v2":
+        manifest = read_json(Path(args.manifest).resolve())
+        plan = prepare_job_v2_execution(
+            manifest,
+            governance_root=PROJECT_ROOT,
+            source_worktree=Path(args.source_worktree),
+            run_root=Path(args.run_root),
+        )
+        if args.dry_run:
+            print(json.dumps({"status": "validated", **plan}, ensure_ascii=False, indent=2))
+            return 0
+        started_path = write_job_v2_started_event(plan, manifest)
+        completed = subprocess.run(plan["command"], cwd=plan["source_worktree"], check=False)
+        print(f"[INFO] server-returnable started event: {started_path}")
+        return int(completed.returncode)
+
     if args.job_command == "pack":
         job = read_json(Path(args.manifest).resolve())
         validate_job_manifest(PROJECT_ROOT, job, require_head=False)
@@ -1479,6 +1599,11 @@ def build_parser() -> argparse.ArgumentParser:
     run = job_sub.add_parser("run")
     run.add_argument("--manifest", required=True)
     run.add_argument("--dry-run", action="store_true")
+    run_v2 = job_sub.add_parser("run-v2")
+    run_v2.add_argument("--manifest", required=True)
+    run_v2.add_argument("--source-worktree", required=True)
+    run_v2.add_argument("--run-root", required=True)
+    run_v2.add_argument("--dry-run", action="store_true")
     pack = job_sub.add_parser("pack")
     pack.add_argument("--manifest", required=True)
     pack.add_argument("--status", choices=["success", "failed", "incomplete"], required=True)
