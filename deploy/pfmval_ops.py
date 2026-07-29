@@ -213,8 +213,13 @@ def prepare_job_v2_execution(
     if binding.get("mode") != "source_plus_governance_bundle":
         raise ValueError("job run-v2 requires source_plus_governance_bundle binding")
     expected_governance = str(binding.get("governance_commit", ""))
-    if _git_text(governance_root, "rev-parse", "HEAD") != expected_governance:
-        raise ValueError("governance bundle HEAD does not match execution_binding")
+    ancestry = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", expected_governance, "HEAD"],
+        cwd=governance_root,
+        check=False,
+    )
+    if ancestry.returncode != 0:
+        raise ValueError("governance bundle does not contain execution_binding baseline")
     if _git_text(governance_root, "status", "--porcelain", "--untracked-files=all"):
         raise ValueError("governance bundle is dirty")
     source_worktree = source_worktree.resolve()
