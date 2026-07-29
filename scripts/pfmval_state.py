@@ -235,6 +235,73 @@ def validate_against_schema(instance: Any, schema_path: Path, label: str) -> boo
     return True
 
 
+def validate_against_schema_strict(instance: Any, schema_path: Path, label: str) -> str:
+    """Validate a complete JSON Schema without requiring a Python package install."""
+    if validate_against_schema(instance, schema_path, label):
+        return "python-jsonschema"
+
+    powershell = shutil.which("pwsh")
+    if powershell is None:
+        raise RuntimeError(
+            f"{label} requires jsonschema or PowerShell 7 Test-Json; neither is available"
+        )
+
+    validator_script = r"""
+param(
+    [Parameter(Mandatory = $true)][string]$InstancePath,
+    [Parameter(Mandatory = $true)][string]$SchemaPath
+)
+$ErrorActionPreference = 'Stop'
+$SchemaErrors = @()
+$Payload = Get-Content -LiteralPath $InstancePath -Raw -Encoding UTF8
+$IsValid = $Payload | Test-Json -SchemaFile $SchemaPath `
+    -ErrorAction SilentlyContinue -ErrorVariable +SchemaErrors
+if (-not $IsValid) {
+    $Detail = ($SchemaErrors | Out-String).Trim()
+    if (-not $Detail) { $Detail = 'Test-Json returned false' }
+    [Console]::Error.WriteLine($Detail)
+    exit 2
+}
+"""
+    with tempfile.TemporaryDirectory(prefix="pfmval-schema-") as temp_dir:
+        temp_root = Path(temp_dir)
+        instance_path = temp_root / "instance.json"
+        script_path = temp_root / "validate-schema.ps1"
+        instance_path.write_text(
+            json.dumps(instance, ensure_ascii=False),
+            encoding="utf-8",
+            newline="\n",
+        )
+        script_path.write_text(validator_script, encoding="utf-8", newline="\n")
+        completed = subprocess.run(
+            [
+                powershell,
+                "-NoProfile",
+                "-NonInteractive",
+                "-File",
+                str(script_path),
+                "-InstancePath",
+                str(instance_path),
+                "-SchemaPath",
+                str(schema_path),
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+    if completed.returncode != 0:
+        detail = (
+            completed.stderr.strip()
+            or completed.stdout.strip()
+            or f"PowerShell exit {completed.returncode}"
+        )
+        raise ValueError(
+            f"{label} schema violation via PowerShell Test-Json: {detail}"
+        )
+    return "powershell-test-json"
+
+
 def write_text_atomic(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     text = text.replace("\r\n", "\n")

@@ -17,7 +17,7 @@ from scripts.pfmval_state import (
     MAX_RESULT_FILE_BYTES,
     MAX_RESULT_TOTAL_BYTES,
     read_json,
-    validate_against_schema,
+    validate_against_schema_strict,
     write_json_atomic,
 )
 
@@ -127,7 +127,7 @@ def validate_result_manifest_v1(
     """Apply the complete v2 JSON Schema and semantic constraints."""
     _require_array(result, "artifacts")
     _require_array(result, "large_artifacts")
-    validate_against_schema(
+    validate_against_schema_strict(
         result,
         project_root / "project_state" / "schemas" / "result_envelope_v2.schema.json",
         "result envelope v2",

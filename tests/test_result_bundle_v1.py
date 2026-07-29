@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+import scripts.pfmval_state as pfmval_state
 from scripts.pfmval_result_bundle import (
     build_result_bundle_v1,
     publish_result_bundle_v1,
@@ -13,6 +14,7 @@ from scripts.pfmval_result_bundle import (
     validate_result_bundle_v1,
 )
 from scripts.pfmval_governance import validate_result_v2
+from scripts.pfmval_state import validate_against_schema_strict
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -173,6 +175,42 @@ def test_historical_g12_only_packaging_revision_passes_full_validator(
     assert report["bundle_sha256"] == validated["bundle_sha256"]
     assert result["result_id"] == new_result_id
     assert result["status"] == "success"
+
+
+def test_strict_schema_validation_uses_powershell_when_jsonschema_is_unavailable(
+    tmp_path,
+    monkeypatch,
+):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A004",
+        result_id="W001-A004-result-R001",
+        include_large_artifact_id=True,
+    )
+    staging = tmp_path / "staging"
+    build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        staging,
+        result_id="W001-A004-result-R002",
+        artifact_retention="retain_in_immutable_result_bundle",
+        created_at="2026-07-29T12:00:00+00:00",
+    )
+    result = json.loads((staging / "result.json").read_text(encoding="utf-8"))
+    schema = PROJECT_ROOT / "project_state" / "schemas" / "result_envelope_v2.schema.json"
+    monkeypatch.setattr(
+        pfmval_state,
+        "validate_against_schema",
+        lambda instance, schema_path, label: False,
+    )
+
+    backend = validate_against_schema_strict(result, schema, "result envelope v2")
+    assert backend == "powershell-test-json"
+
+    invalid = copy.deepcopy(result)
+    invalid.pop("approval_id")
+    with pytest.raises(ValueError, match="schema violation"):
+        validate_against_schema_strict(invalid, schema, "result envelope v2")
     assert isinstance(result["artifacts"], list)
     assert isinstance(result["large_artifacts"], list)
     assert all(item["artifact_id"] for item in result["artifacts"])
