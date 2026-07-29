@@ -11,7 +11,10 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 $Repo = 'D:\AIPatho\qzs\pfmval_deploy_git'
-$Root = 'D:\AIPatho\qzs\pfmval_automation\g12r_result_bundle_20260729'
+$RootBase = 'D:\AIPatho\qzs\pfmval_automation\g12r_result_bundle_20260729'
+$RunId = Get-Date -Format 'yyyyMMdd_HHmmss_fff'
+$Root = Join-Path $RootBase $RunId
+$Python = 'C:\Users\AIPatho1\pfmval_env\Scripts\python.exe'
 $ImplSha = '9840efe48003b66e3195eb0cafab4ec0752a3207'
 $A003Parent = 'd59221d650821796a561f65fc98561334f914757'
 $A004Parent = '445f72bd12c4409d775b8e147ff6d218c9711244'
@@ -19,14 +22,15 @@ $ImplRef = 'refs/remotes/gitee/codex/w001-mpp2-huber-loss-20260728'
 $A003Ref = 'refs/remotes/gitee/automation/server/W001/A003'
 $A004Ref = 'refs/remotes/gitee/automation/server/W001/A004'
 
-if (Test-Path -LiteralPath $Root) {
-    $ExistingRootEntries = @(Get-ChildItem -LiteralPath $Root -Force)
-    if ($ExistingRootEntries.Count -ne 0) {
-        throw "G12-R staging root is non-empty; do not overwrite: $Root"
-    }
-} else {
-    New-Item -ItemType Directory -Path $Root | Out-Null
+if (-not (Test-Path -LiteralPath $Python -PathType Leaf)) {
+    throw "registered server Python is missing: $Python"
 }
+& $Python -c 'import jsonschema, sys; print(sys.executable)'
+if ($LASTEXITCODE -ne 0) { throw 'registered server Python/jsonschema probe failed' }
+
+New-Item -ItemType Directory -Path $RootBase -Force | Out-Null
+if (Test-Path -LiteralPath $Root) { throw "fresh run root collision: $Root" }
+New-Item -ItemType Directory -Path $Root | Out-Null
 
 git -C $Repo fetch --no-tags gitee `
   'refs/heads/codex/w001-mpp2-huber-loss-20260728:refs/remotes/gitee/codex/w001-mpp2-huber-loss-20260728' `
@@ -58,6 +62,8 @@ $Src3 = Join-Path $Root 'source-a003'
 $Src4 = Join-Path $Root 'source-a004'
 $Bundle3 = Join-Path $Root 'bundle-a003-r004'
 $Bundle4 = Join-Path $Root 'bundle-a004-r002'
+$Build3Log = Join-Path $Root 'a003-r004-build.log'
+$Build4Log = Join-Path $Root 'a004-r002-build.log'
 
 try {
     git -C $Repo worktree add --detach $Impl $ImplSha
@@ -67,21 +73,27 @@ try {
     git -C $Repo worktree add --detach $Src4 $A004Parent
     if ($LASTEXITCODE -ne 0) { throw 'A004 source worktree creation failed' }
 
-    python (Join-Path $Impl 'deploy\pfmval_ops.py') governance result-bundle-v1 build `
+    & $Python (Join-Path $Impl 'deploy\pfmval_ops.py') governance result-bundle-v1 build `
       --source-bundle (Join-Path $Src3 'automation\returns\W001\A003\R003') `
       --staging $Bundle3 `
       --result-id 'W001-A003-result-R004' `
-      --artifact-retention 'retain_in_immutable_result_bundle'
-    if ($LASTEXITCODE -ne 0) { throw 'A003/R004 build failed' }
+      --artifact-retention 'retain_in_immutable_result_bundle' *>&1 | Tee-Object -FilePath $Build3Log
+    $Build3Exit = $LASTEXITCODE
+    if ($Build3Exit -ne 0) {
+        throw "A003/R004 build failed with exit $Build3Exit; log: $Build3Log"
+    }
 
-    python (Join-Path $Impl 'deploy\pfmval_ops.py') governance result-bundle-v1 build `
+    & $Python (Join-Path $Impl 'deploy\pfmval_ops.py') governance result-bundle-v1 build `
       --source-bundle (Join-Path $Src4 'automation\returns\W001\A004\R001') `
       --staging $Bundle4 `
       --result-id 'W001-A004-result-R002' `
-      --artifact-retention 'retain_in_immutable_result_bundle'
-    if ($LASTEXITCODE -ne 0) { throw 'A004/R002 build failed' }
+      --artifact-retention 'retain_in_immutable_result_bundle' *>&1 | Tee-Object -FilePath $Build4Log
+    $Build4Exit = $LASTEXITCODE
+    if ($Build4Exit -ne 0) {
+        throw "A004/R002 build failed with exit $Build4Exit; log: $Build4Log"
+    }
 
-    $P3 = python (Join-Path $Impl 'deploy\pfmval_ops.py') governance result-bundle-v1 publish `
+    $P3 = & $Python (Join-Path $Impl 'deploy\pfmval_ops.py') governance result-bundle-v1 publish `
       --bundle $Bundle3 `
       --remote gitee `
       --ref 'automation/server/W001/A003' `
@@ -91,7 +103,7 @@ try {
       Out-String | ConvertFrom-Json
     if ($LASTEXITCODE -ne 0) { throw 'A003/R004 publish failed' }
 
-    $P4 = python (Join-Path $Impl 'deploy\pfmval_ops.py') governance result-bundle-v1 publish `
+    $P4 = & $Python (Join-Path $Impl 'deploy\pfmval_ops.py') governance result-bundle-v1 publish `
       --bundle $Bundle4 `
       --remote gitee `
       --ref 'automation/server/W001/A004' `

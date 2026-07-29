@@ -451,7 +451,7 @@ def test_publish_is_fast_forward_idempotent_and_verifies_remote_sha(tmp_path):
         )
 
 
-def test_g12r_operation_card_accepts_descendant_tip_and_empty_retry_root():
+def test_g12r_operation_card_pins_server_python_and_uses_fresh_retry_root():
     card = (
         PROJECT_ROOT
         / "project_state"
@@ -462,5 +462,9 @@ def test_g12r_operation_card_accepts_descendant_tip_and_empty_retry_root():
     assert "git -C $Repo cat-file -e \"${ImplSha}^{commit}\"" in card
     assert "git -C $Repo merge-base --is-ancestor $ImplSha $ImplTip" in card
     assert "(git -C $Repo rev-parse $ImplRef).Trim() -ne $ImplSha" not in card
-    assert "$ExistingRootEntries = @(Get-ChildItem -LiteralPath $Root -Force)" in card
-    assert "$ExistingRootEntries.Count -ne 0" in card
+    assert "$Python = 'C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe'" in card
+    assert "& $Python -c 'import jsonschema, sys; print(sys.executable)'" in card
+    assert "python (Join-Path $Impl" not in card
+    assert "$RunId = Get-Date -Format 'yyyyMMdd_HHmmss_fff'" in card
+    assert "$Root = Join-Path $RootBase $RunId" in card
+    assert "*>&1 | Tee-Object -FilePath $Build3Log" in card
