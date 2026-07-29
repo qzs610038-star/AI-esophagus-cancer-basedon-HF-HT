@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-28T14:18:14+00:00",
+  "updated_at": "2026-07-29T02:35:18+00:00",
   "next_workspace_number": 2,
   "workspaces": [
     {
       "workspace_id": "W001",
       "display_name": "MPP2 paired MSE vs Huber delta1",
       "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
-      "protocol_revision": 1,
+      "protocol_revision": 2,
       "status": "shadow",
       "active_attempt_id": null,
       "lease": null,

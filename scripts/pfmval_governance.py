@@ -668,6 +668,38 @@ def approve_experiment_protocol(
     return approval
 
 
+def revise_experiment_protocol(
+    root: Path, *, experiment_id: str, critical_contract: Mapping[str, Any]
+) -> Dict[str, Any]:
+    """Atomically advance a planned experiment before any started attempt exists."""
+    registry = _read_json(root / "experiments" / "experiment_registry.json")
+    experiment = next((x for x in registry.get("experiments", []) if x.get("id") == experiment_id), None)
+    if experiment is None:
+        raise ValueError("revision references unknown experiment")
+    revision = int(critical_contract.get("protocol_revision", -1))
+    if critical_contract.get("experiment_id") != experiment_id or revision <= int(experiment.get("protocol_revision", 0)):
+        raise ValueError("protocol revision must strictly advance the registered experiment")
+    if critical_contract.get("source_commit") != experiment.get("source_commit"):
+        raise ValueError("protocol revision may not change the registered source_commit")
+    events = _read_jsonl(_attempt_log_path(root))
+    if any(e.get("experiment_id") == experiment_id and e.get("event_type") != "ATTEMPT_PREPARED" for e in events):
+        raise ValueError("protocol revision is forbidden after an attempt starts or terminates")
+    workspaces = initialize_workspace_registry(root)
+    workspace = next((x for x in workspaces.get("workspaces", []) if x.get("experiment_id") == experiment_id), None)
+    if workspace is None:
+        raise ValueError("protocol revision has no bound workspace")
+    workspace["protocol_revision"] = revision
+    workspaces["updated_at"] = _utc_now()
+    _write_json_atomic(_workspace_registry_path(root), workspaces)
+    _update_experiment_lifecycle_view(root, experiment_id=experiment_id, updates={
+        "protocol_revision": revision,
+        "critical_contract_sha256": critical_contract["canonical_sha256"],
+        "approval_id": None,
+        "next_action": "approve_protocol_revision",
+    })
+    return {"experiment_id": experiment_id, "protocol_revision": revision, "superseded_approval_id": experiment.get("approval_id")}
+
+
 def _attempt_log_path(root: Path) -> Path:
     return root / "project_state" / "attempt_events.jsonl"
 
@@ -750,6 +782,10 @@ def prepare_attempt(
         raise ValueError("attempt references missing or inactive approval")
     if approval.get("experiment_id") != experiment_id:
         raise ValueError("attempt experiment_id does not match approval")
+    registry = _read_json(root / "experiments" / "experiment_registry.json")
+    experiment = next((x for x in registry.get("experiments", []) if x.get("id") == experiment_id), None)
+    if experiment is None or approval.get("protocol_revision") != experiment.get("protocol_revision"):
+        raise ValueError("attempt approval is superseded by the current protocol revision")
     if approval.get("critical_contract_sha256") != critical_contract_sha256:
         raise ValueError("attempt critical contract does not match approval")
     workspaces = initialize_workspace_registry(root).get("workspaces", [])

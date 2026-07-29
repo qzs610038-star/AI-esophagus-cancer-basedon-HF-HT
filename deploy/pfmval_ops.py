@@ -72,6 +72,7 @@ from scripts.pfmval_governance import (  # noqa: E402
     record_attempt_event,
     record_result_import_v2,
     register_governed_experiment,
+    revise_experiment_protocol,
     scan_workspace_registry,
     validate_job_v2,
     validate_result_v2,
@@ -1001,6 +1002,11 @@ def command_experiment(args: argparse.Namespace) -> int:
         )
         print(json.dumps(approval, ensure_ascii=False, indent=2))
         return 0
+    if args.experiment_command == "revise":
+        revised = revise_experiment_protocol(PROJECT_ROOT, experiment_id=args.experiment_id,
+            critical_contract=read_json(Path(args.critical_contract).resolve()))
+        print(json.dumps(revised, ensure_ascii=False, indent=2))
+        return 0
     if args.experiment_command == "show":
         registry = read_json(PROJECT_ROOT / "experiments" / "experiment_registry.json")
         experiment = next(
@@ -1067,6 +1073,13 @@ def command_governance(args: argparse.Namespace) -> int:
                 adaptation_record_id=args.adaptation_record_id,
                 dispatch_revision=args.dispatch_revision,
             )
+            job["execution_binding"] = {
+                "mode": "source_plus_governance_bundle",
+                "governance_commit": subprocess.check_output(
+                    ["git", "rev-parse", "HEAD"], cwd=PROJECT_ROOT, text=True
+                ).strip(),
+            }
+            validate_job_v2(job)
             write_json_atomic(Path(args.output).resolve(), job)
             print(f"[PASS] wrote local job v2 envelope: {args.output}")
             print("[INFO] No Gitee push, server command or training was executed.")
@@ -1497,6 +1510,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     experiment_approve.add_argument("--run-limit", type=int, required=True)
     experiment_approve.add_argument("--critical-contract-sha256", required=True)
+    experiment_revise = experiment_sub.add_parser("revise")
+    experiment_revise.add_argument("--experiment-id", required=True)
+    experiment_revise.add_argument("--critical-contract", required=True)
     experiment_show = experiment_sub.add_parser("show")
     experiment_show.add_argument("--experiment-id", required=True)
 

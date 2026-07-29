@@ -1,0 +1,49 @@
+{
+  "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+  "protocol_revision": 2,
+  "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+  "critical_code": ["train_mpp_uni2h_mlp.py", "scripts/pfmval_governance.py", "deploy/pfmval_ops.py"],
+  "execution_binding_policy": {
+    "mode": "source_plus_governance_bundle",
+    "governance_commit": "f1babe47f131f8d417aff82d539f899032786058",
+    "source_worktree_must_be_clean": true,
+    "governance_bundle_must_be_clean": true,
+    "attempt_root": "external_run_root/W001/A001_or_A002",
+    "implicit_retry_allowed": false
+  },
+  "resolved_hyperparameters": {
+    "arms": ["A0_mse", "A1_huber_delta1"], "train_mpp_id": 2, "external_mpp_id": 2,
+    "external_patient": "XZY", "val_strategy": "manifest", "features": "UNI2-h frozen",
+    "model": "two_layer_mlp", "hidden_dim": 1024, "dropout": 0.3, "optimizer": "Adam",
+    "lr": 0.0001, "batch_size": 32, "seed": 42, "max_epochs": 50, "patience": 10, "min_delta": 0.0001
+  },
+  "loss_contract": {
+    "A0": {"loss_type": "mse", "torch_expression": "nn.MSELoss()", "reduction": "mean"},
+    "A1": {"loss_type": "huber", "torch_expression": "nn.HuberLoss(delta=1.0, reduction=mean)", "delta": 1.0, "reduction": "mean"},
+    "only_arm_difference": "loss_type"
+  },
+  "regularization_contract": {"pathway_weights": false, "composite_loss": false, "additional_loss_terms": []},
+  "feature_flags": {
+    "repaired_data_manifest_frozen": true, "split_frozen": true, "external_xzy_selection_allowed": false,
+    "run_retry_requires_engineering_failure_and_unchanged_contract": true, "implicit_retry_allowed": false
+  },
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "data_manifest_sha256": "1204018178a4d355c2aa03314d0fafa9f0151457b9edcef3a0df9b5946c306e2",
+  "input_artifacts": [
+    {"artifact_id": "mpp_repair_registry", "sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"},
+    {"artifact_id": "mpp2_split_manifest", "sha256": "babfa2b1d9aa7d7b2e56ac0ac18b95dcb006f66a41e4a86761bbe8a746d2f824"},
+    {"artifact_id": "mpp2_split_info", "sha256": "6d8eb6d995c3c47c3f34bb90e5db15a4322a516c860172ca5797a904514d56a9"},
+    {"artifact_id": "mpp2_training_entrypoint", "sha256": "172c74366253349524ebafbe73b365049e457d7c34000b7baddbb2d1752f7e92"},
+    {"artifact_id": "accepted_mpp2_baseline_job", "sha256": "5b8a5723a95dc916e007a48bdb227a23f8c428a41f93dff248d6a38f56880037"}
+  ],
+  "selection_policy": {
+    "checkpoint": "each_arm_own_minimum_internal_val_loss", "internal_comparison": "patient_clustered_comparison",
+    "pre_registered_metrics": ["legacy_pooled_pcc", "mean_per_pathway_pcc", "per_pathway_delta_pcc", "improved_pathway_count_and_proportion_descriptive_only", "raw_mae", "raw_r2"],
+    "gate_change_from_results_allowed": false
+  },
+  "external_eval_policy": {
+    "timing": "once_per_arm_after_checkpoint_freeze", "selection_or_tuning_allowed": false,
+    "comparison": "XZY_spatial_cluster_bootstrap", "bootstrap_design": "resample spatial clusters with replacement within XZY; preserve all pathways and calculate paired arm deltas per replicate",
+    "gate_change_from_xzy_allowed": false
+  }
+}

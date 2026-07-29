@@ -1,0 +1,24 @@
+{
+  "event_type": "ATTEMPT_PREPARED",
+  "event_id": "prepare-W001-A003",
+  "recorded_at": "2026-07-29T02:47:08+00:00",
+  "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+  "workspace_id": "W001",
+  "attempt_id": "A003",
+  "job_id": "W001-A003",
+  "approval_id": "APR-mpp2-huber-loss-paired-v001-20260728-r002",
+  "protocol_revision": 2,
+  "phase": "formal",
+  "run_units": 1,
+  "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+  "critical_contract_sha256": "df0c5df369a3049125d06b985683c7bf7c4027664fc48d8b86f103e0ad8044e5",
+  "workspace_branch": "codex/w001-mpp2-huber-loss-20260728-bound",
+  "budget": {
+    "run_limit": 4,
+    "consumed": 0,
+    "reserved": 0,
+    "remaining": 4,
+    "consumed_after_event": 0,
+    "remaining_after_prepare": 3
+  }
+}
