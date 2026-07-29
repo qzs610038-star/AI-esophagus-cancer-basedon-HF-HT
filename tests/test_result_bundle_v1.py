@@ -9,8 +9,10 @@ import pytest
 from scripts.pfmval_result_bundle import (
     build_result_bundle_v1,
     publish_result_bundle_v1,
+    record_result_bundle_import_v1,
     validate_result_bundle_v1,
 )
+from scripts.pfmval_governance import validate_result_v2
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -299,6 +301,70 @@ def test_validator_rejects_tampering_and_full_schema_violations(tmp_path):
     result_path.write_text(json.dumps(result), encoding="utf-8")
     with pytest.raises(ValueError, match="result envelope v2 schema"):
         validate_result_bundle_v1(PROJECT_ROOT, staging)
+    with pytest.raises(ValueError, match="result envelope v2 schema"):
+        validate_result_v2(result)
+
+
+def test_record_import_uses_complete_validator_and_is_side_effect_safe(tmp_path):
+    project = tmp_path / "project"
+    schema_dir = project / "project_state" / "schemas"
+    schema_dir.mkdir(parents=True)
+    schema_dir.joinpath("result_envelope_v2.schema.json").write_bytes(
+        PROJECT_ROOT.joinpath(
+            "project_state",
+            "schemas",
+            "result_envelope_v2.schema.json",
+        ).read_bytes()
+    )
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A004",
+        result_id="W001-A004-result-R001",
+        include_large_artifact_id=True,
+    )
+    bundle = tmp_path / "bundle"
+    report = build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        bundle,
+        result_id="W001-A004-result-R002",
+        artifact_retention="retain",
+    )
+    event_path = project / "project_state" / "result_import_events.jsonl"
+
+    with pytest.raises(ValueError, match="bundle_sha256 does not match"):
+        record_result_bundle_import_v1(
+            project,
+            bundle,
+            bundle_sha256="f" * 64,
+        )
+    assert not event_path.exists()
+
+    metrics_path = bundle / "artifacts" / "metrics.json"
+    original_metrics = metrics_path.read_bytes()
+    metrics_path.write_bytes(original_metrics + b" ")
+    with pytest.raises(ValueError, match="size mismatch"):
+        record_result_bundle_import_v1(
+            project,
+            bundle,
+            bundle_sha256=report["bundle_sha256"],
+        )
+    assert not event_path.exists()
+    metrics_path.write_bytes(original_metrics)
+
+    first = record_result_bundle_import_v1(
+        project,
+        bundle,
+        bundle_sha256=report["bundle_sha256"],
+    )
+    second = record_result_bundle_import_v1(
+        project,
+        bundle,
+        bundle_sha256=report["bundle_sha256"],
+    )
+    assert first["status"] == "recorded"
+    assert second["status"] == "already_recorded"
+    assert len(event_path.read_text(encoding="utf-8").splitlines()) == 1
 
 
 def _git(cwd: Path, *args: str) -> str:
