@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-29T02:47:08+00:00",
+  "updated_at": "2026-07-29T13:20:03+00:00",
   "current_mpp_policy": {
     "effective_date": "2026-07-09",
     "selected_mpp": 2,
@@ -1513,19 +1513,72 @@
       "id": "mpp2_huber_loss_paired_v001_20260728",
       "display_name": "MPP2 paired MSE vs Huber delta1",
       "family": "governed_v3",
-      "status": "planned",
+      "status": "done",
       "phase": "formal",
       "workspace_id": "W001",
       "protocol_revision": 2,
       "run_limit": 4,
       "critical_contract_sha256": "df0c5df369a3049125d06b985683c7bf7c4027664fc48d8b86f103e0ad8044e5",
       "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
-      "evidence_status": "pending",
+      "evidence_status": "accepted",
       "created_at": "2026-07-28T14:18:14+00:00",
-      "next_action": "validate_attempt",
+      "next_action": "closed_no_retry",
       "approval_id": "APR-mpp2-huber-loss-paired-v001-20260728-r002",
-      "updated_at": "2026-07-29T02:47:08+00:00",
-      "active_attempt_id": "A004"
+      "updated_at": "2026-07-29T13:20:03+00:00",
+      "active_attempt_id": "A004",
+      "job_id": "W001-A004",
+      "result_id": "W001-A004-result-R002",
+      "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+      "path_index_version": null,
+      "result_manifest_sha256": "686c8f5727c5e86678a6b2e5aa09b483a52d811bf032babd6954cb6b3d33d40d",
+      "imported_at": "2026-07-29T14:20:08+00:00",
+      "provenance_complete": true,
+      "result_phase": "formal",
+      "supersedes_results": [],
+      "paired_result": {
+        "schema_version": "1.0",
+        "pair_id": "PAIR-W001-A003-A004",
+        "workspace_id": "W001",
+        "member_results": [
+          {
+            "bundle_sha256": "f962f9a845e500648d147be6e2ea365be7de266fd0adb10dcedd20ad760c45e1",
+            "label": "MSE",
+            "result_id": "W001-A003-result-R004",
+            "role": "control",
+            "attempt_id": "A003",
+            "job_id": "W001-A003",
+            "import_event_id": "import-W001-A003-result-R004"
+          },
+          {
+            "bundle_sha256": "a2bfca4b0140e90c3c8ce7c90a34b0ad3d3266c7e1f5b9d885c4876494dc2c78",
+            "label": "Huber(delta=1)",
+            "result_id": "W001-A004-result-R002",
+            "role": "treatment",
+            "attempt_id": "A004",
+            "job_id": "W001-A004",
+            "import_event_id": "import-W001-A004-result-R002"
+          }
+        ],
+        "approval_id": "APR-mpp2-huber-loss-paired-v001-20260728-r002",
+        "critical_contract_sha256": "df0c5df369a3049125d06b985683c7bf7c4027664fc48d8b86f103e0ad8044e5"
+      },
+      "result_ids": [
+        "W001-A003-result-R004",
+        "W001-A004-result-R002"
+      ],
+      "decision_summary": {
+        "control_value": 0.6548958191047396,
+        "delta": -0.002205156130222,
+        "descriptive_improved_pathways": 17,
+        "descriptive_total_pathways": 30,
+        "evidence_direction": "refutes",
+        "primary_metric": "external_xzy_pooled_pcc",
+        "statement": "Huber(delta=1)未提升external XZY pooled PCC；相同合同不得重试。",
+        "treatment_value": 0.6526906629745176,
+        "uncertainty": "单次配对正式运行；预测CSV缺少sample_id和spatial_cluster_id，未执行空间簇bootstrap。"
+      },
+      "conclusion": "Huber(delta=1)未提升external XZY pooled PCC；相同合同不得重试。",
+      "accepted_at": "2026-07-29T13:20:03+00:00"
     }
   ]
 }

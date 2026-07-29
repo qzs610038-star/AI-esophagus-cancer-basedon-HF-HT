@@ -72,6 +72,17 @@ def _markdown_target(value: str) -> str:
 
 
 def _key_metrics(experiment: Mapping[str, Any]) -> str:
+    decision = experiment.get("decision_summary")
+    if isinstance(decision, Mapping):
+        control = decision.get("control_value")
+        treatment = decision.get("treatment_value")
+        delta = decision.get("delta")
+        if all(isinstance(value, (int, float)) for value in (control, treatment, delta)):
+            return (
+                f"Control PCC={float(control):.4f}；"
+                f"Treatment PCC={float(treatment):.4f}；"
+                f"ΔPCC={float(delta):+.4f}"
+            )
     labels = (
         ("best_val_pcc", "Val PCC"),
         ("best_val_loss", "Val loss"),
@@ -93,6 +104,9 @@ def _key_metrics(experiment: Mapping[str, Any]) -> str:
 
 
 def _conclusion(experiment: Mapping[str, Any]) -> str:
+    decision = experiment.get("decision_summary")
+    if isinstance(decision, Mapping) and decision.get("statement"):
+        return _cell(decision["statement"])
     if experiment.get("conclusion"):
         return _cell(experiment["conclusion"])
     evidence = experiment.get("evidence_status", "pending")
@@ -115,7 +129,8 @@ def _progress_row(experiment: Mapping[str, Any]) -> str:
     values = (
         experiment.get("display_name") or experiment.get("id"),
         experiment.get("id"),
-        experiment.get("result_id")
+        (experiment.get("paired_result") or {}).get("pair_id")
+        or experiment.get("result_id")
         or (experiment.get("last_preflight") or {}).get("result_id"),
         experiment.get("workspace_id"),
         purpose,

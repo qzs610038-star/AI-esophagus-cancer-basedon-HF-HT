@@ -1,0 +1,20 @@
+{
+  "record_id": "claim-g14-w001-huber-pcc-refuted-20260729",
+  "record_type": "claim",
+  "created_at": "2026-07-29T13:20:00+00:00",
+  "source_refs": [
+    "result:W001-A003-result-R004",
+    "result:W001-A004-result-R002",
+    "import:import-W001-A003-result-R004",
+    "import:import-W001-A004-result-R002",
+    "contract:df0c5df369a3049125d06b985683c7bf7c4027664fc48d8b86f103e0ad8044e5",
+    "user_confirmation:G14-1-2-3"
+  ],
+  "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+  "result_id": "W001-A004-result-R002",
+  "payload": {
+    "statement": "在冻结数据、划分、seed、模型、训练参数和评估入口的配对协议下，Huber(delta=1)未提升 external XZY pooled PCC：Huber−MSE=-0.0022051561。",
+    "evidence_direction": "refutes",
+    "uncertainty": "单次配对正式运行；已导入预测CSV缺少样本和空间簇标识，故不能在仅使用已导入artifact的边界内执行预注册XZY空间簇bootstrap。"
+  }
+}

@@ -83,6 +83,7 @@ from scripts.pfmval_result_bundle import (  # noqa: E402
     record_result_bundle_import_v1,
     validate_result_bundle_v1,
 )
+from scripts.pfmval_result_pair import finalize_result_pair  # noqa: E402
 from scripts.pfmval_assets import (  # noqa: E402
     build_close_preview,
     build_shadow_inventory,
@@ -1349,6 +1350,24 @@ def command_governance(args: argparse.Namespace) -> int:
             )
             print(json.dumps(report, ensure_ascii=False, indent=2))
             return 0
+    if args.governance_command == "result-pair":
+        acceptance = read_json(Path(args.input).resolve())
+        result = finalize_result_pair(PROJECT_ROOT, acceptance)
+        views = refresh_experiment_views(PROJECT_ROOT)
+        with state_lock(PROJECT_ROOT):
+            state = sync_state(PROJECT_ROOT)
+        print(
+            json.dumps(
+                {
+                    **result,
+                    "views": views,
+                    "state_revision": state["state_revision"],
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
     raise ValueError(f"unknown governance command: {args.governance_command}")
 
 
@@ -1860,6 +1879,13 @@ def build_parser() -> argparse.ArgumentParser:
     result_bundle_publish.add_argument("--revision-path", required=True)
     result_bundle_publish.add_argument("--expected-parent", required=True)
     result_bundle_publish.add_argument("--commit-message", required=True)
+    governance_result_pair = governance_sub.add_parser("result-pair")
+    governance_result_pair_sub = governance_result_pair.add_subparsers(
+        dest="result_pair_command",
+        required=True,
+    )
+    result_pair_finalize = governance_result_pair_sub.add_parser("finalize")
+    result_pair_finalize.add_argument("--input", required=True)
 
     job = sub.add_parser("job")
     job_sub = job.add_subparsers(dest="job_command", required=True)

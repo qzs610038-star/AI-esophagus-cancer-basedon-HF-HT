@@ -2458,6 +2458,17 @@ def validate_governance_v3_state(
                 schema_root / "scientific_record.schema.json",
                 f"scientific record {index}",
             )
+        for index, event in enumerate(
+            _read_jsonl_events(
+                root / "project_state" / "result_pair_events.jsonl"
+            ),
+            1,
+        ):
+            validate_against_schema(
+                event,
+                schema_root / "result_pair_event_v1.schema.json",
+                f"result pair event {index}",
+            )
         for index, fact in enumerate(
             _read_jsonl_events(
                 root / "project_state" / "project_facts.jsonl"

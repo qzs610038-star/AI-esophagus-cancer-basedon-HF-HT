@@ -104,9 +104,28 @@ def _accepted_experiment(
         ),
         None,
     )
+    paired_result = (
+        experiment.get("paired_result", {})
+        if isinstance(experiment, Mapping)
+        else {}
+    )
+    accepted_result_ids = {
+        str(experiment.get("result_id", ""))
+        if isinstance(experiment, Mapping)
+        else "",
+        str(paired_result.get("pair_id", "")),
+        *(
+            str(value)
+            for value in (
+                experiment.get("result_ids", [])
+                if isinstance(experiment, Mapping)
+                else []
+            )
+        ),
+    }
     if (
         experiment is None
-        or experiment.get("result_id") != result_id
+        or result_id not in accepted_result_ids
         or experiment.get("evidence_status") != "accepted"
     ):
         raise ValueError(

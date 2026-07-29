@@ -1,0 +1,19 @@
+{
+  "record_id": "negative-g14-w001-identical-huber-retry-stop-20260729",
+  "record_type": "negative_result",
+  "created_at": "2026-07-29T13:20:01+00:00",
+  "source_refs": [
+    "result:W001-A003-result-R004",
+    "result:W001-A004-result-R002",
+    "claim:claim-g14-w001-huber-pcc-refuted-20260729",
+    "user_confirmation:G14-2"
+  ],
+  "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+  "result_id": "W001-A004-result-R002",
+  "payload": {
+    "route": "在相同合同下追加或重试 MSE versus Huber(delta=1) 训练",
+    "outcome": "Huber未满足主门控 pooled PCC 提升；17/30通路提升仅为描述性结果，不参与通过判定。",
+    "stop_condition": "不得因该结果不理想消耗剩余2个run units，不得重试不变合同。",
+    "continue_condition": "仅可在另开实验、重新登记、重新批准且提出新的内部验证驱动假设后继续；不得以XZY结果调参。"
+  }
+}

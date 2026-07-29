@@ -149,7 +149,13 @@ def build_dashboard(registry):
 
         icon = status_icon.get(status, "question")
         note = ""
-        if exp.get("external_xzy_pcc") is not None:
+        decision = exp.get("decision_summary")
+        if isinstance(decision, dict) and isinstance(
+            decision.get("delta"),
+            (int, float),
+        ):
+            note = f" | pair_ΔPCC={float(decision['delta']):+.4f}"
+        elif exp.get("external_xzy_pcc") is not None:
             note = f" | ext_XZY_PCC={exp['external_xzy_pcc']:.4f}"
         lines.append(f"| {eid} | {family} | :{icon}: {status} | {fold} | {encoder} | {tokens} | {pcc} | {loss} | {gap} | {epoch}{note} |")
 

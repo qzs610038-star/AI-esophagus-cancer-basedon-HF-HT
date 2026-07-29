@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 130,
-  "updated_at": "2026-07-29T02:48:41+00:00",
-  "source_commit": "f1babe47f131f8d417aff82d539f899032786058",
+  "state_revision": 134,
+  "updated_at": "2026-07-29T14:57:57+00:00",
+  "source_commit": "515eca623ab6b700bf8836dfabdad0377eafd481",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -324,7 +324,8 @@
     "mpp1_barcode_repair_v003_frozen_recheck_20260711",
     "mpp3_barcode_repair_v003_frozen_recheck_20260711",
     "mpp4_barcode_repair_v003_frozen_recheck_20260711",
-    "mpp5_barcode_repair_v003_frozen_recheck_20260711"
+    "mpp5_barcode_repair_v003_frozen_recheck_20260711",
+    "mpp2_huber_loss_paired_v001_20260728"
   ],
   "blocked_actions": [
     "direct_server_connection",
@@ -338,9 +339,9 @@
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
   "source_hashes": {
-    "experiment_registry_sha256": "3fc35baf4a7bab050852f2d0005085195022cb1f8116a1477918182e3e87f79a",
-    "experiment_dashboard_sha256": "8f9b2405f37ec6df91ac2f0c37d7bc9e60f3a0fdf58c8a5f2da75912de120ea8",
-    "experiment_progress_sha256": "56ee758ea2f75f71e5461db13c07954ffeb29406b3b2aad03a8229a99dae4802",
+    "experiment_registry_sha256": "d06008071726c1a8ff2a3dc9ab67cc90223ddcb7443342b09f8fe54513798149",
+    "experiment_dashboard_sha256": "a57aaf3a3951e615d18c731b5e1378d1eb5b18411685e1f071495ba4046802a5",
+    "experiment_progress_sha256": "3dc0e9514aa66bd910903951e5565d0d720dc1d4a36c7b66cd5c4c6de6bf87ee",
     "document_registry_sha256": "ef570d183d7d07461396c382f1de2c6ac4ce7e983751d54d120d1201582bf6fc",
     "asset_registry_sha256": "e30959ff4af1c99af4ddb1f8ffac5fdad84902da42c8baa84443e4ecb1a4501d",
     "workspace_registry_sha256": "cbc1ac9cde34191f286a80f19a598ae558e3f4b84e9d5ba0297589151f8de9be",

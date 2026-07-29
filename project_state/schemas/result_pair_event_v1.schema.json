@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PFMval Paired Result Acceptance Event v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "recorded_at",
+    "experiment_id",
+    "pair_id",
+    "workspace_id",
+    "member_results",
+    "approval_id",
+    "critical_contract_sha256",
+    "scientific_record_ids",
+    "decision_summary",
+    "confirmation_source",
+    "registry_before_sha256",
+    "registry_after_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "event_id": {"type": "string", "minLength": 1},
+    "event_type": {"const": "PAIR_RESULT_ACCEPTED"},
+    "recorded_at": {"type": "string", "minLength": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "pair_id": {"type": "string", "minLength": 1},
+    "workspace_id": {"type": "string", "pattern": "^W[0-9]{3,}$"},
+    "member_results": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "label",
+          "result_id",
+          "bundle_sha256",
+          "attempt_id",
+          "job_id",
+          "import_event_id"
+        ],
+        "properties": {
+          "role": {"enum": ["control", "treatment"]},
+          "label": {"type": "string", "minLength": 1},
+          "result_id": {"type": "string", "minLength": 1},
+          "bundle_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "attempt_id": {"type": "string", "pattern": "^A[0-9]{3,}$"},
+          "job_id": {"type": "string", "minLength": 1},
+          "import_event_id": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "approval_id": {"type": "string", "minLength": 1},
+    "critical_contract_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scientific_record_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "decision_summary": {
+      "type": "object",
+      "required": [
+        "primary_metric",
+        "control_value",
+        "treatment_value",
+        "delta",
+        "evidence_direction",
+        "statement",
+        "uncertainty"
+      ],
+      "properties": {
+        "primary_metric": {"type": "string", "minLength": 1},
+        "control_value": {"type": "number"},
+        "treatment_value": {"type": "number"},
+        "delta": {"type": "number"},
+        "evidence_direction": {
+          "enum": ["supports", "refutes", "unresolved"]
+        },
+        "statement": {"type": "string", "minLength": 1},
+        "uncertainty": {"type": "string", "minLength": 1},
+        "descriptive_improved_pathways": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "descriptive_total_pathways": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "confirmation_source": {"type": "string", "minLength": 1},
+    "registry_before_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "registry_after_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false
+}
