@@ -45,12 +45,19 @@ python deploy/pfmval_ops.py agent start-check --strict
 PASS=7 WARN=6 FAIL=0
 ```
 
-最终 strict gate、W002 clean 状态和 Gitee 任务分支远端 SHA 在最终文档提交后重新执行并补入最终回执。
+文档提交后已取得以下发布证据：
+
+```text
+branch=codex/w002-server-execution-roundtrip-v1-20260729
+local_sha=cf60379a18592491eceede812fd4d61eee758bf1
+gitee_remote_sha=cf60379a18592491eceede812fd4d61eee758bf1
+push_mode=new task-specific branch, no force-push
+```
 
 ## 4. 判断
 
-总体结论：**CONDITIONAL GO**。
+总体结论：**GO（仅针对 W002 本地实现与任务专用 Gitee 分支发布）**。
 
-- 对“W002 本地实现完成、进入最终 strict gate 与任务专用 Gitee 分支发布”无代码或测试 blocker。
+- W002 本地实现、全量测试、strict gate、clean worktree 和任务专用 Gitee 分支发布均已取得证据。
 - 对“真实服务器启用或训练”仍为 **NOT RUN / 未授权**；必须按迁移边界另行批准。
-- 当前保留的 condition：最终文档提交后需重新取得全量测试、strict `FAIL=0`、clean worktree 与远端 SHA 四项新鲜证据。
+- 本结论不把本地 fixture 或 bare remote PASS 外推为真实服务器 PASS。
