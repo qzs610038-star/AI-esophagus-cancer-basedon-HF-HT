@@ -40,6 +40,7 @@ from scripts.pfmval_state import (
     sync_state,
     transition_directive,
     validate_diagnostic_state,
+    validate_governance_v3_state,
     validate_state,
     validate_result_envelope,
     validate_job_manifest,
@@ -56,6 +57,24 @@ from config_utils import load_config
 
 def test_normalize_rel_preserves_hidden_directory_prefixes():
     assert normalize_rel(Path(".claude") / "next-steps.md") == ".claude/next-steps.md"
+
+
+def test_server_governance_validation_skips_local_worktree_lookup(monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    calls = []
+    real_run = subprocess.run
+
+    def guarded_run(args, *args_tail, **kwargs):
+        calls.append(args)
+        if list(args[:3]) == ["git", "-C", str(root)]:
+            raise AssertionError("server validation must not query archive-root worktrees")
+        return real_run(args, *args_tail, **kwargs)
+
+    monkeypatch.setattr("scripts.pfmval_state.subprocess.run", guarded_run)
+    report = ValidationReport()
+    validate_governance_v3_state(root, report, host_scope="server")
+    assert not report.fail_items
+    assert not calls
     assert normalize_rel(Path(".qoder") / "experience.md") == ".qoder/experience.md"
 
 

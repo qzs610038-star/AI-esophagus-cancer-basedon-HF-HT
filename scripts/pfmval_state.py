@@ -2234,6 +2234,8 @@ def validate_server_paths(
 def validate_governance_v3_state(
     root: Path,
     report: ValidationReport,
+    *,
+    host_scope: Optional[str] = None,
 ) -> None:
     schema_root = root / "project_state" / "schemas"
     workspace_path = root / "project_state" / "workspace_registry.json"
@@ -2275,6 +2277,12 @@ def validate_governance_v3_state(
                 if relative_path.is_absolute():
                     if host.get("host_scope") != "local":
                         raise ValueError("only local workspace bindings may use absolute paths")
+                    # A server-side Gitee archive is intentionally not a local
+                    # Git worktree.  Its integrity is verified by job run-v2;
+                    # this structural validator must not query a local-host
+                    # workspace path while validating the server package.
+                    if host_scope == "server":
+                        continue
                     expected_branch = str(host.get("branch", ""))
                     expected_commit = str(host.get("current_source_commit", ""))
                     completed = subprocess.run(
@@ -2664,7 +2672,7 @@ def validate_state(
         report.warn(f"pending results must be imported before model conclusions: {local_pending}")
 
     validate_server_paths(root, report, task=task, host_scope=host_scope)
-    validate_governance_v3_state(root, report)
+    validate_governance_v3_state(root, report, host_scope=host_scope)
     if not report.fail_items:
         report.passed("state package validation completed")
     return report
