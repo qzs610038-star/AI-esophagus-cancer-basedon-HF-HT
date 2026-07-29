@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "source_review": "project_state/governance/G12_server_roundtrip_troubleshooting_review_20260729.md",
+  "source_review_sha256": "4921ccfc055ef24410dfadeeef1e6bffe6096547c0f0cbcb07e66294995cdd08",
+  "blockers": [
+    {
+      "id": "G12-B01",
+      "stage": "execution_bundle",
+      "symptom": "runner SHA mismatch",
+      "cause": "dirty main HEAD was used as runner identity",
+      "expected_guard": "runner identity is content-addressed inside the bundle"
+    },
+    {
+      "id": "G12-B02",
+      "stage": "execution_bundle",
+      "symptom": "dirty checkout blocked governance checkout",
+      "cause": "shared main worktree was used as the governance execution locus",
+      "expected_guard": "bundle verification is independent from main worktree dirtiness"
+    },
+    {
+      "id": "G12-B03",
+      "stage": "execution_bundle",
+      "symptom": "governance worktree is dirty",
+      "cause": "a reused return worktree carried residual changes",
+      "expected_guard": "ordinary immutable bundle directory is accepted"
+    },
+    {
+      "id": "G12-B04",
+      "stage": "preflight_v2",
+      "symptom": "git worktree list failed for a Gitee archive",
+      "cause": "ordinary archive was incorrectly treated as a Git worktree",
+      "expected_guard": "host scope distinguishes bundle directory from source worktree"
+    },
+    {
+      "id": "G12-B05",
+      "stage": "preflight_v2",
+      "symptom": "source commit unavailable in governance archive",
+      "cause": "source object was queried in the wrong Git object database",
+      "expected_guard": "source object availability is checked only in the source repository"
+    },
+    {
+      "id": "G12-B06",
+      "stage": "execution_bundle",
+      "symptom": "unrelated best_epoch.txt hash mismatch",
+      "cause": "the complete repository archive included historical results and CRLF drift",
+      "expected_guard": "execution bundle closes only over execution-critical files"
+    },
+    {
+      "id": "G12-R1",
+      "stage": "result_bundle_v1",
+      "symptom": "completed terminal event was treated as unsuccessful",
+      "cause": "runner terminal status and result envelope status were conflated",
+      "expected_guard": "completed plus returncode zero maps to result success"
+    },
+    {
+      "id": "G12-R2",
+      "stage": "result_bundle_v1",
+      "symptom": "duplicate metrics.json basename",
+      "cause": "manual packaging registered the same metrics payload twice",
+      "expected_guard": "artifact paths are unique and packaging is generated"
+    },
+    {
+      "id": "G12-R3",
+      "stage": "result_bundle_v1",
+      "symptom": "single large_artifacts record became a JSON object",
+      "cause": "PowerShell pipeline cardinality changed the protocol type",
+      "expected_guard": "artifacts and large_artifacts remain arrays"
+    },
+    {
+      "id": "G12-R4",
+      "stage": "result_bundle_v1",
+      "symptom": "remote artifact SHA differed after Git normalization",
+      "cause": "raw CRLF bytes and Git-normalized LF bytes were compared as one representation",
+      "expected_guard": "raw and Git-normalized integrity are both recorded and verified"
+    },
+    {
+      "id": "G12-RR1",
+      "stage": "state_machine",
+      "symptom": "implementation SHA mismatch after branch advanced",
+      "cause": "implementation identity was incorrectly required to equal branch tip",
+      "expected_guard": "exact implementation identity is content-addressed and branch-tip independent"
+    },
+    {
+      "id": "G12-RR2",
+      "stage": "state_machine",
+      "symptom": "build failure hid interpreter and stderr",
+      "cause": "manual operation card used bare python and collapsed diagnostics",
+      "expected_guard": "single entry records selected backend and complete failure diagnostics"
+    },
+    {
+      "id": "G12-RR3",
+      "stage": "server_fingerprint_v1",
+      "symptom": "fixed virtualenv lacked jsonschema",
+      "cause": "schema validation was bound to one unverified Python path",
+      "expected_guard": "fingerprint records capability-tested schema backends"
+    },
+    {
+      "id": "G12-RR4",
+      "stage": "server_fingerprint_v1",
+      "symptom": "no Python candidate could import jsonschema",
+      "cause": "the operation card had no zero-install strict schema fallback",
+      "expected_guard": "fingerprint can select PowerShell Test-Json strict validation"
+    }
+  ]
+}

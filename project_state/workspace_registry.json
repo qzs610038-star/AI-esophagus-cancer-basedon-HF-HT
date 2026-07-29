@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-29T02:35:18+00:00",
-  "next_workspace_number": 2,
+  "updated_at": "2026-07-29T15:50:50+00:00",
+  "next_workspace_number": 3,
   "workspaces": [
     {
       "workspace_id": "W001",
@@ -22,6 +22,28 @@
           "path_id": "local_experiment_workspaces",
           "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W001",
           "current_source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda"
+        }
+      }
+    },
+    {
+      "workspace_id": "W002",
+      "display_name": "G15 server execution roundtrip v1 governance maintenance",
+      "experiment_id": "governance_g15_server_execution_roundtrip_v1_20260729",
+      "protocol_revision": 1,
+      "status": "shadow",
+      "active_attempt_id": null,
+      "lease": null,
+      "opened_at": "2026-07-29T15:50:50+00:00",
+      "last_verified_at": null,
+      "close_eligibility": "not_evaluated",
+      "retention_policy": "retain_until_explicit_close_approval",
+      "hosts": {
+        "local": {
+          "host_scope": "local",
+          "branch": "codex/w002-server-execution-roundtrip-v1-20260729",
+          "path_id": "local_experiment_workspaces",
+          "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W002",
+          "current_source_commit": ""
         }
       }
     }
