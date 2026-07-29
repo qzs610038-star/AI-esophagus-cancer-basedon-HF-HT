@@ -237,7 +237,8 @@ def validate_against_schema(instance: Any, schema_path: Path, label: str) -> boo
 
 def validate_against_schema_strict(instance: Any, schema_path: Path, label: str) -> str:
     """Validate a complete JSON Schema without requiring a Python package install."""
-    if validate_against_schema(instance, schema_path, label):
+    force_powershell = os.environ.get("PFMVAL_FORCE_POWERSHELL_SCHEMA") == "1"
+    if not force_powershell and validate_against_schema(instance, schema_path, label):
         return "python-jsonschema"
 
     powershell = shutil.which("pwsh")
