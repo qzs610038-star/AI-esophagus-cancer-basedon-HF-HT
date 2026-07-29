@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/server_fingerprint_v1.schema.json",
+  "title": "PFMval reusable server fingerprint v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "expires_at",
+    "content_sha256",
+    "os",
+    "powershell",
+    "git",
+    "python_candidates",
+    "schema_backends",
+    "selected_schema_backend",
+    "pytorch",
+    "cuda",
+    "gpu",
+    "disk",
+    "path_ids",
+    "git_line_endings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "expires_at": {
+      "type": "string"
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "os": {
+      "type": "object"
+    },
+    "powershell": {
+      "type": "object"
+    },
+    "git": {
+      "type": "object"
+    },
+    "python_candidates": {
+      "type": "array"
+    },
+    "schema_backends": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "selected_schema_backend": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pytorch": {
+      "type": "object"
+    },
+    "cuda": {
+      "type": "object"
+    },
+    "gpu": {
+      "type": "object"
+    },
+    "disk": {
+      "type": "object"
+    },
+    "path_ids": {
+      "type": "object"
+    },
+    "git_line_endings": {
+      "type": [
+        "object",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

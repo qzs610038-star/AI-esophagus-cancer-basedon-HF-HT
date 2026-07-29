@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -116,6 +118,54 @@ def test_execution_bundle_is_minimal_closed_content_addressed_and_reproducible(
         assert hashlib.sha256(payload).hexdigest() == record["sha256"]
 
 
+def test_execution_bundle_cli_generates_one_path_operation_card(tmp_path):
+    bundle = tmp_path / "bundle"
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "deploy" / "pfmval_ops.py"),
+            "governance",
+            "execution-bundle-v1",
+            "build",
+            "--job",
+            str(JOB_PATH),
+            "--output",
+            str(bundle),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+
+    assert completed.returncode == 0, completed.stdout + completed.stderr
+    operation_card = (bundle / "run_server.ps1").read_text(encoding="utf-8")
+    assert "'--bundle', $Bundle" in operation_card
+    assert "source_commit" not in operation_card
+    assert "critical_contract_sha256" not in operation_card
+    assert "refs/heads/" not in operation_card
+    assert "commit message" not in operation_card.lower()
+
+    validated = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "deploy" / "pfmval_ops.py"),
+            "governance",
+            "execution-bundle-v1",
+            "validate",
+            "--bundle",
+            str(bundle),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    assert validated.returncode == 0, validated.stdout + validated.stderr
+
+
 def test_server_fingerprint_is_reused_until_expiry_and_then_refreshed(tmp_path):
     from scripts.pfmval_execution_roundtrip import ensure_server_fingerprint_v1
 
@@ -224,6 +274,40 @@ def test_preflight_v2_aggregates_all_independent_blockers_without_fail_fast(
     } == failure_ids
 
 
+def test_preflight_v2_reports_bundle_tamper_and_missing_host_assets_together(
+    tmp_path,
+):
+    from scripts.pfmval_execution_roundtrip import (
+        build_execution_bundle_v1,
+        run_preflight_v2,
+    )
+
+    bundle = tmp_path / "bundle"
+    build_execution_bundle_v1(ROOT, JOB_PATH, bundle)
+    runner = bundle / "runtime" / "deploy" / "pfmval_ops.py"
+    runner.write_bytes(runner.read_bytes() + b"\n# tampered\n")
+
+    report = run_preflight_v2(
+        bundle,
+        state_root=tmp_path / "state",
+        now=datetime(2026, 7, 29, 16, 0, tzinfo=timezone.utc),
+        probe=_fixture_probe,
+    )
+    failure_ids = {item["check_id"] for item in report["failures"]}
+
+    assert report["status"] == "blocked"
+    assert "bundle_integrity" in failure_ids
+    assert {
+        "source_head",
+        "source_clean",
+        "source_object",
+        "entrypoint_sha",
+        "publish_fast_forward",
+        "remote_identity",
+    }.issubset(failure_ids)
+    assert "budget" not in failure_ids
+
+
 def test_state_machine_replay_and_terminal_recovery_never_rerun(tmp_path):
     from scripts.pfmval_execution_roundtrip import execute_roundtrip_v1
 
@@ -328,6 +412,48 @@ def test_state_machine_replay_and_terminal_recovery_never_rerun(tmp_path):
     assert recovered["status"] == "PUBLISHED"
     assert recovered["recovered_from_terminal"] is True
     assert calls["run"] == 1
+
+
+def test_state_machine_rejects_same_job_identity_with_different_bundle_sha(
+    tmp_path,
+):
+    from scripts.pfmval_execution_roundtrip import execute_roundtrip_v1
+
+    state_root = tmp_path / "state"
+    preflight = {"safe_to_start": False, "failures": [], "warnings": []}
+    for index, bundle_id in enumerate(("a" * 64, "b" * 64)):
+        bundle = tmp_path / f"bundle-{index}"
+        bundle.mkdir()
+        (bundle / "bundle_manifest.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": "1.0",
+                    "bundle_id": bundle_id,
+                    "identity": {
+                        "job_id": "W777-A003",
+                        "source_commit": "1" * 40,
+                        "critical_contract_sha256": "2" * 64,
+                    },
+                    "run_units": 1,
+                    "files": [],
+                }
+            ),
+            encoding="utf-8",
+        )
+        if index == 0:
+            report = execute_roundtrip_v1(
+                bundle,
+                state_root=state_root,
+                preflight=preflight,
+            )
+            assert report["status"] == "BLOCKED"
+        else:
+            with pytest.raises(ValueError, match="different bundle SHA"):
+                execute_roundtrip_v1(
+                    bundle,
+                    state_root=state_root,
+                    preflight=preflight,
+                )
 
 
 def test_governance_maintenance_workspace_can_advance_clean_branch_head(tmp_path):

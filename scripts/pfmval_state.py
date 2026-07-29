@@ -2390,7 +2390,11 @@ def validate_governance_v3_state(
                         raise ValueError(f"absolute workspace is not a local Git worktree: {registered}")
                     if matched.get("branch") != expected_branch:
                         raise ValueError("absolute workspace branch does not match registry")
-                    if matched.get("head") != expected_commit:
+                    if (
+                        workspace.get("workspace_kind", "experiment")
+                        != "governance_maintenance"
+                        and matched.get("head") != expected_commit
+                    ):
                         raise ValueError("absolute workspace HEAD does not match registry")
                 elif ".." in relative_path.parts:
                     raise ValueError(

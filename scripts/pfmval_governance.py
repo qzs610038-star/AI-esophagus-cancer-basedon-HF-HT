@@ -150,11 +150,12 @@ def _registered_local_worktree(
     path: Path,
     branch: str,
     source_commit: str,
+    require_source_commit: bool = True,
 ) -> Path:
     """Return a verified local linked-worktree path without contacting a remote."""
     if not branch:
         raise ValueError("external local worktree requires an explicit branch")
-    if not source_commit:
+    if require_source_commit and not source_commit:
         raise ValueError("external local worktree requires a source_commit")
     completed = subprocess.run(
         ["git", "-C", str(root), "worktree", "list", "--porcelain"],
@@ -193,7 +194,7 @@ def _registered_local_worktree(
         raise ValueError("external path is not a local Git worktree of the registered repository")
     if match.get("branch") != branch:
         raise ValueError("external local worktree branch does not match requested branch")
-    if match.get("head") != source_commit:
+    if source_commit and match.get("head") != source_commit:
         raise ValueError("external local worktree HEAD does not match source_commit")
     return resolved
 
@@ -221,7 +222,10 @@ def allocate_workspace(
     branch: str = "",
     source_commit: str = "",
     protocol_revision: int = 1,
+    workspace_kind: str = "experiment",
 ) -> Dict[str, Any]:
+    if workspace_kind not in {"experiment", "governance_maintenance"}:
+        raise ValueError("invalid workspace_kind")
     registry_path = _workspace_registry_path(root)
     registry = initialize_workspace_registry(root)
     if any(
@@ -248,6 +252,7 @@ def allocate_workspace(
             path=declared_path,
             branch=branch,
             source_commit=source_commit,
+            require_source_commit=workspace_kind == "experiment",
         )
         stored_path = str(absolute_path)
     else:
@@ -266,6 +271,7 @@ def allocate_workspace(
 
     now = _utc_now()
     workspace = {
+        "workspace_kind": workspace_kind,
         "workspace_id": workspace_id,
         "display_name": display_name,
         "experiment_id": experiment_id,
@@ -378,7 +384,12 @@ def assert_workspace_locus(
     if expected_branch and branch != expected_branch:
         raise ValueError("branch does not match registered workspace")
     expected_head = str(local.get("current_source_commit", ""))
-    if expected_head and head != expected_head:
+    if (
+        workspace.get("workspace_kind", "experiment")
+        != "governance_maintenance"
+        and expected_head
+        and head != expected_head
+    ):
         raise ValueError("HEAD does not match registered workspace")
     if dirty:
         raise ValueError("workspace is dirty")

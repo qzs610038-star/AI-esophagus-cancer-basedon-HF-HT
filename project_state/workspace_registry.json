@@ -26,6 +26,7 @@
       }
     },
     {
+      "workspace_kind": "governance_maintenance",
       "workspace_id": "W002",
       "display_name": "G15 server execution roundtrip v1 governance maintenance",
       "experiment_id": "governance_g15_server_execution_roundtrip_v1_20260729",
@@ -43,7 +44,7 @@
           "branch": "codex/w002-server-execution-roundtrip-v1-20260729",
           "path_id": "local_experiment_workspaces",
           "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W002",
-          "current_source_commit": ""
+          "current_source_commit": "e19ac19c54c3c5caf19122b5da896d18e53529ad"
         }
       }
     }

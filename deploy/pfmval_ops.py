@@ -84,6 +84,12 @@ from scripts.pfmval_result_bundle import (  # noqa: E402
     validate_result_bundle_v1,
 )
 from scripts.pfmval_result_pair import finalize_result_pair  # noqa: E402
+from scripts.pfmval_execution_roundtrip import (  # noqa: E402
+    build_execution_bundle_v1,
+    execute_roundtrip_v1,
+    run_preflight_v2,
+    validate_execution_bundle_v1,
+)
 from scripts.pfmval_assets import (  # noqa: E402
     build_close_preview,
     build_shadow_inventory,
@@ -1330,6 +1336,20 @@ def command_governance(args: argparse.Namespace) -> int:
             )
             print(json.dumps(report, ensure_ascii=False, indent=2))
             return 0
+    if args.governance_command == "execution-bundle-v1":
+        if args.execution_bundle_v1_command == "build":
+            report = build_execution_bundle_v1(
+                PROJECT_ROOT,
+                Path(args.job),
+                Path(args.output),
+            )
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+            print("[INFO] Bundle-only build; no dispatch or training ran.")
+            return 0
+        if args.execution_bundle_v1_command == "validate":
+            report = validate_execution_bundle_v1(Path(args.bundle))
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+            return 0
         if args.result_bundle_v1_command == "record-import":
             event = record_result_bundle_import_v1(
                 PROJECT_ROOT,
@@ -1372,6 +1392,22 @@ def command_governance(args: argparse.Namespace) -> int:
 
 
 def command_job(args: argparse.Namespace) -> int:
+    if args.job_command == "preflight-v2":
+        report = run_preflight_v2(Path(args.bundle))
+        if args.report:
+            write_json_atomic(Path(args.report).resolve(), report)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0 if report["safe_to_start"] else 1
+
+    if args.job_command == "execute-v1":
+        if args.dry_run:
+            report = run_preflight_v2(Path(args.bundle))
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+            return 0 if report["safe_to_start"] else 1
+        report = execute_roundtrip_v1(Path(args.bundle))
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0 if report["status"] in {"PUBLISHED", "ALREADY_PUBLISHED"} else 1
+
     if args.job_command == "dispatch":
         parameters = parse_key_values(args.param)
         registry = read_json(PROJECT_ROOT / "experiments" / "experiment_registry.json")
@@ -1879,6 +1915,20 @@ def build_parser() -> argparse.ArgumentParser:
     result_bundle_publish.add_argument("--revision-path", required=True)
     result_bundle_publish.add_argument("--expected-parent", required=True)
     result_bundle_publish.add_argument("--commit-message", required=True)
+    governance_execution_bundle = governance_sub.add_parser(
+        "execution-bundle-v1"
+    )
+    governance_execution_bundle_sub = governance_execution_bundle.add_subparsers(
+        dest="execution_bundle_v1_command",
+        required=True,
+    )
+    execution_bundle_build = governance_execution_bundle_sub.add_parser("build")
+    execution_bundle_build.add_argument("--job", required=True)
+    execution_bundle_build.add_argument("--output", required=True)
+    execution_bundle_validate = governance_execution_bundle_sub.add_parser(
+        "validate"
+    )
+    execution_bundle_validate.add_argument("--bundle", required=True)
     governance_result_pair = governance_sub.add_parser("result-pair")
     governance_result_pair_sub = governance_result_pair.add_subparsers(
         dest="result_pair_command",
@@ -1889,6 +1939,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     job = sub.add_parser("job")
     job_sub = job.add_subparsers(dest="job_command", required=True)
+    preflight_v2 = job_sub.add_parser("preflight-v2")
+    preflight_v2.add_argument("--bundle", required=True)
+    preflight_v2.add_argument("--report")
+    execute_v1 = job_sub.add_parser("execute-v1")
+    execute_v1.add_argument("--bundle", required=True)
+    execute_v1.add_argument("--dry-run", action="store_true")
     dispatch = job_sub.add_parser("dispatch")
     dispatch.add_argument("--job-id", required=True)
     dispatch.add_argument("--experiment-id", required=True)

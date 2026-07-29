@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/execution_bundle_v1.schema.json",
+  "title": "PFMval execution bundle v1 manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "identity",
+    "created_at",
+    "job_schema_version",
+    "workspace_id",
+    "attempt_id",
+    "approval_id",
+    "run_units",
+    "requirements",
+    "publish",
+    "files"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "bundle_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "job_id",
+        "source_commit",
+        "critical_contract_sha256"
+      ],
+      "properties": {
+        "job_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "critical_contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "job_schema_version": {
+      "type": "string"
+    },
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^W[0-9]{3,}$"
+    },
+    "attempt_id": {
+      "type": "string",
+      "pattern": "^A[0-9]{3,}$"
+    },
+    "approval_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_units": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "requirements": {
+      "type": "object"
+    },
+    "publish": {
+      "type": "object"
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "role",
+          "size_bytes",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

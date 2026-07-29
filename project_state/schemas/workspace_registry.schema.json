@@ -39,6 +39,12 @@
           "hosts"
         ],
         "properties": {
+          "workspace_kind": {
+            "enum": [
+              "experiment",
+              "governance_maintenance"
+            ]
+          },
           "workspace_id": {
             "type": "string",
             "pattern": "^W[0-9]{3,}$"
