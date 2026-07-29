@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `87d4fd75f24f352ce9ae36874068acb0fb87d001fc8c85da59c1726bcc02d465`
+> source_sha256: `d7a80ee801a76b8f4db6e25547e818e91134a6f89f605e635819eff8828c01ef`
 
 ## 我要找什么
 
@@ -97,6 +97,8 @@
 - [doc-30d6cd0aae35](automation/report_inputs/gemini_mpp_report_handoff_20260713.md)
 - [doc-916d4b92af63](deploy/SYNC_GUIDE.md)
 - [doc-ce94fd42b6c4](project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717_goal_prompt.md)
+- [doc-6f9670b9c076](project_state/plans/scientific_records_lifecycle_v1_upgrade_plan_20260729.md)
+- [doc-9337a1ac2103](project_state/plans/server_execution_roundtrip_v1_upgrade_plan_20260729.md)
 - [doc-92f924374faa](project_state/plans/workflow_governance_v3_g08_local_completion_approval_20260727.md)
 - [doc-542d6960864e](project_state/plans/workflow_governance_v3_refactor/REFERENCE_open_source_research_workflow_adaptation_20260726.md)
 

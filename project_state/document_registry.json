@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-29T15:00:19+00:00",
-  "state_revision": 134,
+  "updated_at": "2026-07-29T15:02:47+00:00",
+  "state_revision": 135,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -556,9 +556,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:00:18+00:00",
-      "state_revision": 134,
-      "content_sha256": "cf407ebc3a108d2671641bc319709e453172b652f8a939bc4a6672e9adb5c12b",
+      "verified_at": "2026-07-29T15:02:34+00:00",
+      "state_revision": 135,
+      "content_sha256": "6832c5f8a5a3f0b9ae552cfa26724c6f451008fab07f9a73bdad3f2318ceae86",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -577,9 +577,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:00:18+00:00",
-      "state_revision": 134,
-      "content_sha256": "7399c271139ad1f3211d55db28db50b3fb1d73d1cacefa8b076a31d9722758fe",
+      "verified_at": "2026-07-29T15:02:34+00:00",
+      "state_revision": 135,
+      "content_sha256": "8aad8c635311c0a9537a5f7602d343eaa01d470ad100d1bbcbdbc55741447737",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3785,9 +3785,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:00:18+00:00",
-      "state_revision": 134,
-      "content_sha256": "2aaf77cdb17dd67efc06344ffd143549a916ef7a1230ca4154a4af0d1c22c95b",
+      "verified_at": "2026-07-29T15:02:34+00:00",
+      "state_revision": 135,
+      "content_sha256": "11a343e2f29a08ad92e504785d5e3f6653898c945402f59fc7e6b644870a2bc0",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3806,9 +3806,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:00:19+00:00",
-      "state_revision": 134,
-      "content_sha256": "6202f7231cecfe6d53be7388b94e094cec40f5be8d915f0cf144e6f2c92bf5f1",
+      "verified_at": "2026-07-29T15:02:47+00:00",
+      "state_revision": 135,
+      "content_sha256": "52469208f3042ffa87342077ab2d134a4c73da72bdfc4a745c7e1b3fb2381b1b",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3828,9 +3828,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:00:18+00:00",
-      "state_revision": 134,
-      "content_sha256": "baed4a232fc98205de07f023ceb92668fa6f8204b07254c098974ca74766151b",
+      "verified_at": "2026-07-29T15:02:34+00:00",
+      "state_revision": 135,
+      "content_sha256": "78fd9448bb3fce9c9420b93185fe70845a8a51c3afda029b78aa9e97edbf07c4",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4194,6 +4194,48 @@
       "verified_at": "2026-07-26T16:52:20+00:00",
       "state_revision": 109,
       "content_sha256": "f34d443da26acc964a443ffe8415e92652a48dff90c190c1570804e2877853cb",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-6f9670b9c076",
+      "path": "project_state/plans/scientific_records_lifecycle_v1_upgrade_plan_20260729.md",
+      "category": "状态方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-29T15:02:33+00:00",
+      "state_revision": 134,
+      "content_sha256": "babf04c0145626384b61b698f7dd9cb40089f48a596b35201ea1fafa23eba112",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-9337a1ac2103",
+      "path": "project_state/plans/server_execution_roundtrip_v1_upgrade_plan_20260729.md",
+      "category": "状态方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-29T15:02:33+00:00",
+      "state_revision": 134,
+      "content_sha256": "a7f055e990339049962410f2d67463fdd2040b61ae6a8337aada1ea9427e6fe7",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4648,12 +4690,12 @@
     }
   ],
   "summary": {
-    "total": 209,
-    "live": 86,
+    "total": 211,
+    "live": 88,
     "missing": 123,
     "active": 52,
     "superseded": 1,
-    "historical": 15,
+    "historical": 17,
     "pending_review": 0,
     "approved_design": 18
   }
