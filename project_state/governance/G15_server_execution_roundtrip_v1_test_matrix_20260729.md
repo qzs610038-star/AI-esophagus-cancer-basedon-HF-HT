@@ -1,7 +1,7 @@
 # G15 服务器执行往返 v1 测试矩阵
 
-> fixture：`tests/fixtures/g12_server_roundtrip_blockers_v1.json`  
-> 定向测试：`tests/test_execution_roundtrip_v1.py`  
+> fixture：`tests/fixtures/g12_server_roundtrip_blockers_v1.json`
+> 定向测试：`tests/test_execution_roundtrip_v1.py`
 > 既有结果协议回归：`tests/test_result_bundle_v1.py`
 
 ## G12 14-blocker 映射

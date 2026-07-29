@@ -1,8 +1,8 @@
 # G15 项目级服务器执行往返 v1 实现说明
 
-> 授权：`DIR-20260730-001`  
-> 实现归属：`W002` / `codex/w002-server-execution-roundtrip-v1-20260729`  
-> TDD 提交：RED `089232b` → GREEN `1d33977`  
+> 授权：`DIR-20260730-001`
+> 实现归属：`W002` / `codex/w002-server-execution-roundtrip-v1-20260729`
+> TDD 提交：RED `089232b` → GREEN `1d33977`
 > 边界：仅本地与 bare remote 演练；未操作真实服务器、未 dispatch、未训练、未 import/accept 结果。
 
 ## 1. 公共入口
