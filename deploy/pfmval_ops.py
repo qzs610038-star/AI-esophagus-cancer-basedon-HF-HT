@@ -192,6 +192,67 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _bound_artifact(manifest: Dict[str, Any], artifact_id: str) -> Dict[str, Any] | None:
+    artifacts = manifest.get("input_binding", {}).get("artifacts", [])
+    return next(
+        (item for item in artifacts if item.get("artifact_id") == artifact_id),
+        None,
+    )
+
+
+def _contains_option(argv: List[str], option: str) -> bool:
+    return any(item == option or item.startswith(f"{option}=") for item in argv)
+
+
+def _job_v2_runtime_command(
+    manifest: Dict[str, Any],
+    *,
+    governance_root: Path,
+    source_worktree: Path,
+    run_directory: Path,
+    entrypoint: Path,
+    argv: List[str],
+) -> List[str]:
+    """Build the allowlisted command with runtime paths outside the source tree.
+
+    The immutable manifest supplies scientific parameters.  This helper supplies
+    only server path bindings, checks the protected split hash, and forces the
+    output root below the external attempt directory.
+    """
+    command = [sys.executable, str(entrypoint), *argv[2:]]
+    if entrypoint.name != "train_mpp_uni2h_mlp.py":
+        return command
+
+    protected_options = (
+        "--mpp_root", "--cache_root", "--flat_cache_root", "--splits_root",
+        "--manifest_labels_root", "--output_root",
+    )
+    if any(_contains_option(argv[2:], option) for option in protected_options):
+        raise ValueError("job run-v2 MPP command must not override runtime path bindings")
+
+    split_binding = _bound_artifact(manifest, "mpp2_split_manifest")
+    split_path = source_worktree / "mpp_standard_splits" / "group_2" / "split_manifest.csv"
+    if not isinstance(split_binding, dict) or not split_path.is_file():
+        raise ValueError("job run-v2 requires the bound MPP2 split manifest")
+    if _sha256_file(split_path) != split_binding.get("sha256"):
+        raise ValueError("source MPP2 split manifest hash does not match the job binding")
+
+    repair = active_mpp_repair(governance_root)
+    data_manifest_id = manifest.get("input_binding", {}).get("data_manifest_id")
+    if repair is None or data_manifest_id != repair.get("data_manifest_id"):
+        raise ValueError("job run-v2 repaired-label manifest does not match the active governance evidence")
+    registry_path = governance_root / "configs" / "server_paths.yaml"
+    command.extend([
+        "--mpp_root", str(get_registered_path("mpp_data_root", registry_path=registry_path, project_root=governance_root)),
+        "--cache_root", str(get_registered_path("server_mpp_partner_cache", registry_path=registry_path, project_root=governance_root)),
+        "--flat_cache_root", str(get_registered_path("server_mpp_flat_cache", registry_path=registry_path, project_root=governance_root)),
+        "--splits_root", str((source_worktree / "mpp_standard_splits").resolve()),
+        "--manifest_labels_root", str(repair["server_stage_path"]),
+        "--output_root", str(run_directory),
+    ])
+    return command
+
+
 def prepare_job_v2_execution(
     manifest: Dict[str, Any],
     *,
@@ -233,11 +294,7 @@ def prepare_job_v2_execution(
     entrypoint = (source_worktree / argv[1]).resolve()
     if not entrypoint.is_relative_to(source_worktree) or not entrypoint.is_file():
         raise ValueError("job run-v2 entrypoint is missing or escapes source worktree")
-    artifacts = manifest.get("input_binding", {}).get("artifacts", [])
-    entrypoint_binding = next(
-        (item for item in artifacts if item.get("artifact_id") == "mpp2_training_entrypoint"),
-        None,
-    )
+    entrypoint_binding = _bound_artifact(manifest, "mpp2_training_entrypoint")
     if not isinstance(entrypoint_binding, dict):
         raise ValueError("job run-v2 requires a bound training entrypoint hash")
     if _sha256_file(entrypoint) != entrypoint_binding.get("sha256"):
@@ -247,11 +304,19 @@ def prepare_job_v2_execution(
         raise ValueError("attempt run root escapes supplied run_root")
     if target.exists():
         raise ValueError("attempt run root already exists; implicit retry is forbidden")
+    command = _job_v2_runtime_command(
+        manifest,
+        governance_root=governance_root,
+        source_worktree=source_worktree,
+        run_directory=target,
+        entrypoint=entrypoint,
+        argv=argv,
+    )
     return {
         "governance_root": str(governance_root.resolve()),
         "source_worktree": str(source_worktree),
         "run_directory": str(target),
-        "command": [sys.executable, *argv[1:]],
+        "command": command,
     }
 
 
@@ -274,6 +339,33 @@ def write_job_v2_started_event(plan: Dict[str, Any], manifest: Dict[str, Any]) -
         "execution_binding": manifest["execution_binding"],
     }
     output = run_directory / "attempt_started.json"
+    write_json_atomic(output, event)
+    return output
+
+
+def write_job_v2_terminal_event(
+    plan: Dict[str, Any], manifest: Dict[str, Any], *, returncode: int, error: str | None = None,
+) -> Path:
+    """Record the terminal server-side status without changing experiment state."""
+    event = {
+        "event_type": "EXPERIMENT_TERMINAL",
+        "event_id": f"terminal-{manifest['job_id']}",
+        "recorded_at": _utc_now(),
+        "experiment_id": manifest["experiment_id"],
+        "workspace_id": manifest["workspace_id"],
+        "attempt_id": manifest["attempt_id"],
+        "job_id": manifest["job_id"],
+        "approval_id": manifest["approval_id"],
+        "source_commit": manifest["source_commit"],
+        "critical_contract_sha256": manifest["critical_contract_sha256"],
+        "run_units": manifest["run_units"],
+        "execution_binding": manifest["execution_binding"],
+        "status": "completed" if returncode == 0 else "failed",
+        "returncode": returncode,
+    }
+    if error:
+        event["error"] = error
+    output = Path(plan["run_directory"]) / "attempt_terminal.json"
     write_json_atomic(output, event)
     return output
 
@@ -1241,9 +1333,20 @@ def command_job(args: argparse.Namespace) -> int:
             print(json.dumps({"status": "validated", **plan}, ensure_ascii=False, indent=2))
             return 0
         started_path = write_job_v2_started_event(plan, manifest)
-        completed = subprocess.run(plan["command"], cwd=plan["source_worktree"], check=False)
+        try:
+            completed = subprocess.run(plan["command"], cwd=plan["source_worktree"], check=False)
+            returncode = int(completed.returncode)
+            terminal_path = write_job_v2_terminal_event(
+                plan, manifest, returncode=returncode,
+            )
+        except OSError as exc:
+            returncode = 127
+            terminal_path = write_job_v2_terminal_event(
+                plan, manifest, returncode=returncode, error=str(exc),
+            )
         print(f"[INFO] server-returnable started event: {started_path}")
-        return int(completed.returncode)
+        print(f"[INFO] server-returnable terminal event: {terminal_path}")
+        return returncode
 
     if args.job_command == "pack":
         job = read_json(Path(args.manifest).resolve())

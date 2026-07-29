@@ -156,3 +156,52 @@ def test_job_runner_v2_cli_dry_run_validates_without_creating_attempt_root(tmp_p
 
     assert ops.main() == 0
     assert not (tmp_path / "runs").exists()
+
+
+def test_job_runner_v2_writes_terminal_event(tmp_path, monkeypatch):
+    ops = _load_ops()
+    governance = tmp_path / "governance"
+    source = tmp_path / "W001"
+    governance_sha = _commit_repo(governance, "README.md", "governance\n")
+    source_sha = _commit_repo(source, "train.py", "print('fixture')\n")
+    manifest = _manifest(source_sha, governance_sha, hashlib.sha256((source / "train.py").read_bytes()).hexdigest())
+    monkeypatch.setattr(ops, "validate_job_manifest", lambda *_args, **_kwargs: None)
+    plan = ops.prepare_job_v2_execution(
+        manifest, governance_root=governance, source_worktree=source, run_root=tmp_path / "runs",
+    )
+    ops.write_job_v2_started_event(plan, manifest)
+    terminal = ops.write_job_v2_terminal_event(plan, manifest, returncode=7, error="fixture failure")
+    event = json.loads(terminal.read_text(encoding="utf-8"))
+    assert event["event_type"] == "EXPERIMENT_TERMINAL"
+    assert event["status"] == "failed"
+    assert event["returncode"] == 7
+
+
+def test_job_runner_v2_mpp_command_uses_external_attempt_root(tmp_path, monkeypatch):
+    ops = _load_ops()
+    source = tmp_path / "W001"
+    entrypoint = source / "train_mpp_uni2h_mlp.py"
+    entrypoint.parent.mkdir()
+    entrypoint.write_text("print('fixture')\n", encoding="utf-8")
+    split = source / "mpp_standard_splits" / "group_2" / "split_manifest.csv"
+    split.parent.mkdir(parents=True)
+    split.write_text("fixture\n", encoding="utf-8")
+    manifest = {
+        "input_binding": {
+            "data_manifest_id": "repair:fixture",
+            "artifacts": [{"artifact_id": "mpp2_split_manifest", "sha256": hashlib.sha256(split.read_bytes()).hexdigest()}],
+        }
+    }
+    monkeypatch.setattr(ops, "active_mpp_repair", lambda _root: {"data_manifest_id": "repair:fixture", "server_stage_path": "D:/labels"})
+    monkeypatch.setattr(ops, "get_registered_path", lambda path_id, **_kwargs: Path(f"D:/{path_id}"))
+    command = ops._job_v2_runtime_command(
+        manifest,
+        governance_root=tmp_path / "governance",
+        source_worktree=source,
+        run_directory=tmp_path / "runs" / "W001" / "A003",
+        entrypoint=entrypoint,
+        argv=["python", "train_mpp_uni2h_mlp.py", "--loss", "mse"],
+    )
+    assert "--output_root" in command
+    assert command[command.index("--output_root") + 1] == str(tmp_path / "runs" / "W001" / "A003")
+    assert command[command.index("--splits_root") + 1] == str((source / "mpp_standard_splits").resolve())
