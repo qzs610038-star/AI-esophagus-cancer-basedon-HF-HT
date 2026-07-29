@@ -1,8 +1,10 @@
 import importlib.util
 import hashlib
+import io
 import json
 import subprocess
 import sys
+import tarfile
 from pathlib import Path
 
 
@@ -51,6 +53,15 @@ def _manifest(source_commit: str, governance_commit: str, entrypoint_sha256: str
             "governance_commit": governance_commit,
         },
     }
+
+
+def _archive_commit(repo: Path, commit: str, destination: Path) -> None:
+    payload = subprocess.run(
+        ["git", "archive", "--format=tar", commit], cwd=repo, check=True, capture_output=True,
+    ).stdout
+    destination.mkdir()
+    with tarfile.open(fileobj=io.BytesIO(payload)) as archive:
+        archive.extractall(destination, filter="data")
 
 
 def test_job_runner_v2_uses_workspace_and_external_attempt_root(tmp_path, monkeypatch):
@@ -205,3 +216,53 @@ def test_job_runner_v2_mpp_command_uses_external_attempt_root(tmp_path, monkeypa
     assert "--output_root" in command
     assert command[command.index("--output_root") + 1] == str(tmp_path / "runs" / "W001" / "A003")
     assert command[command.index("--splits_root") + 1] == str((source / "mpp_standard_splits").resolve())
+
+
+def test_job_runner_v2_accepts_byte_verified_regular_governance_bundle(tmp_path, monkeypatch):
+    ops = _load_ops()
+    governance_repo = tmp_path / "governance-repo"
+    source = tmp_path / "W001"
+    governance_sha = _commit_repo(governance_repo, "README.md", "governance\n")
+    source_sha = _commit_repo(source, "train.py", "print('fixture')\n")
+    bundle = tmp_path / "governance-bundle"
+    _archive_commit(governance_repo, governance_sha, bundle)
+    manifest = _manifest(source_sha, governance_sha, hashlib.sha256((source / "train.py").read_bytes()).hexdigest())
+    monkeypatch.setattr(ops, "validate_job_manifest", lambda *_args, **_kwargs: None)
+
+    plan = ops.prepare_job_v2_execution(
+        manifest,
+        governance_root=bundle,
+        source_worktree=source,
+        run_root=tmp_path / "runs",
+        governance_repo=governance_repo,
+        governance_commit=governance_sha,
+    )
+
+    assert Path(plan["governance_root"]) == bundle.resolve()
+
+
+def test_job_runner_v2_rejects_tampered_regular_governance_bundle(tmp_path, monkeypatch):
+    ops = _load_ops()
+    governance_repo = tmp_path / "governance-repo"
+    source = tmp_path / "W001"
+    governance_sha = _commit_repo(governance_repo, "README.md", "governance\n")
+    source_sha = _commit_repo(source, "train.py", "print('fixture')\n")
+    bundle = tmp_path / "governance-bundle"
+    _archive_commit(governance_repo, governance_sha, bundle)
+    (bundle / "README.md").write_text("tampered\n", encoding="utf-8")
+    manifest = _manifest(source_sha, governance_sha, hashlib.sha256((source / "train.py").read_bytes()).hexdigest())
+    monkeypatch.setattr(ops, "validate_job_manifest", lambda *_args, **_kwargs: None)
+
+    try:
+        ops.prepare_job_v2_execution(
+            manifest,
+            governance_root=bundle,
+            source_worktree=source,
+            run_root=tmp_path / "runs",
+            governance_repo=governance_repo,
+            governance_commit=governance_sha,
+        )
+    except ValueError as exc:
+        assert "file hash mismatch" in str(exc)
+    else:
+        raise AssertionError("tampered governance archive must be rejected")

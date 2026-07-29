@@ -204,6 +204,73 @@ def _contains_option(argv: List[str], option: str) -> bool:
     return any(item == option or item.startswith(f"{option}=") for item in argv)
 
 
+def _validate_git_archive_bundle(bundle_root: Path, repo_root: Path, commit: str) -> None:
+    """Prove that a regular directory is an exact tracked-file Git archive."""
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ValueError("governance archive commit must be a full 40-character SHA")
+    listing = subprocess.run(
+        ["git", "-C", str(repo_root), "ls-tree", "-r", "-z", commit],
+        check=True,
+        capture_output=True,
+    ).stdout
+    for item in listing.split(b"\0"):
+        if not item:
+            continue
+        metadata, raw_path = item.split(b"\t", 1)
+        mode, object_type, blob_id = metadata.split()
+        if object_type != b"blob" or mode not in {b"100644", b"100755"}:
+            raise ValueError("governance archive contains unsupported Git tree entry")
+        relative_path = Path(raw_path.decode("utf-8", errors="surrogateescape"))
+        candidate = (bundle_root / relative_path).resolve()
+        if not candidate.is_relative_to(bundle_root.resolve()) or not candidate.is_file():
+            raise ValueError(f"governance archive is missing tracked file: {relative_path.as_posix()}")
+        actual_blob = subprocess.run(
+            [
+                "git", "-C", str(repo_root), "hash-object",
+                f"--path={relative_path.as_posix()}", "--stdin",
+            ],
+            check=True,
+            capture_output=True,
+            input=candidate.read_bytes(),
+        ).stdout.strip()
+        if actual_blob != blob_id:
+            raise ValueError(f"governance archive file hash mismatch: {relative_path.as_posix()}")
+
+
+def _validate_governance_execution_root(
+    governance_root: Path,
+    *,
+    expected_governance: str,
+    governance_repo: Path | None,
+    governance_commit: str | None,
+) -> None:
+    """Accept either a clean Git worktree or a byte-verified Gitee archive."""
+    if (governance_root / ".git").exists():
+        ancestry = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", expected_governance, "HEAD"],
+            cwd=governance_root,
+            check=False,
+        )
+        if ancestry.returncode != 0:
+            raise ValueError("governance bundle does not contain execution_binding baseline")
+        if _git_text(governance_root, "status", "--porcelain", "--untracked-files=all"):
+            raise ValueError("governance bundle is dirty")
+        return
+
+    if governance_repo is None or governance_commit is None:
+        raise ValueError("regular governance bundle requires --governance-repo and --governance-commit")
+    governance_repo = governance_repo.resolve()
+    if not governance_repo.is_dir():
+        raise ValueError("governance archive repository is missing")
+    ancestry = subprocess.run(
+        ["git", "-C", str(governance_repo), "merge-base", "--is-ancestor", expected_governance, governance_commit],
+        check=False,
+    )
+    if ancestry.returncode != 0:
+        raise ValueError("governance archive does not contain execution_binding baseline")
+    _validate_git_archive_bundle(governance_root, governance_repo, governance_commit)
+
+
 def _job_v2_runtime_command(
     manifest: Dict[str, Any],
     *,
@@ -259,6 +326,8 @@ def prepare_job_v2_execution(
     governance_root: Path,
     source_worktree: Path,
     run_root: Path,
+    governance_repo: Path | None = None,
+    governance_commit: str | None = None,
 ) -> Dict[str, Any]:
     """Validate the split source/governance execution boundary without writing it.
 
@@ -274,15 +343,12 @@ def prepare_job_v2_execution(
     if binding.get("mode") != "source_plus_governance_bundle":
         raise ValueError("job run-v2 requires source_plus_governance_bundle binding")
     expected_governance = str(binding.get("governance_commit", ""))
-    ancestry = subprocess.run(
-        ["git", "merge-base", "--is-ancestor", expected_governance, "HEAD"],
-        cwd=governance_root,
-        check=False,
+    _validate_governance_execution_root(
+        governance_root,
+        expected_governance=expected_governance,
+        governance_repo=governance_repo,
+        governance_commit=governance_commit,
     )
-    if ancestry.returncode != 0:
-        raise ValueError("governance bundle does not contain execution_binding baseline")
-    if _git_text(governance_root, "status", "--porcelain", "--untracked-files=all"):
-        raise ValueError("governance bundle is dirty")
     source_worktree = source_worktree.resolve()
     if _git_text(source_worktree, "rev-parse", "HEAD") != manifest["source_commit"]:
         raise ValueError("registered source worktree HEAD does not match job source_commit")
@@ -1328,6 +1394,8 @@ def command_job(args: argparse.Namespace) -> int:
             governance_root=PROJECT_ROOT,
             source_worktree=Path(args.source_worktree),
             run_root=Path(args.run_root),
+            governance_repo=Path(args.governance_repo) if args.governance_repo else None,
+            governance_commit=args.governance_commit,
         )
         if args.dry_run:
             print(json.dumps({"status": "validated", **plan}, ensure_ascii=False, indent=2))
@@ -1727,6 +1795,8 @@ def build_parser() -> argparse.ArgumentParser:
     run_v2.add_argument("--manifest", required=True)
     run_v2.add_argument("--source-worktree", required=True)
     run_v2.add_argument("--run-root", required=True)
+    run_v2.add_argument("--governance-repo")
+    run_v2.add_argument("--governance-commit")
     run_v2.add_argument("--dry-run", action="store_true")
     pack = job_sub.add_parser("pack")
     pack.add_argument("--manifest", required=True)
