@@ -352,7 +352,14 @@ def build_execution_bundle_v1(
         "$Runner = Join-Path $Bundle 'runtime\\deploy\\pfmval_ops.py'\n"
         "$Arguments = @($Runner, 'job', 'execute-v1', '--bundle', $Bundle)\n"
         "if ($DryRun) { $Arguments += '--dry-run' }\n"
-        "& python @Arguments\n"
+        "$Python = Get-Command python -ErrorAction SilentlyContinue\n"
+        "$PythonPrefix = @()\n"
+        "if ($null -eq $Python) {\n"
+        "  $Python = Get-Command py -ErrorAction SilentlyContinue\n"
+        "  $PythonPrefix = @('-3')\n"
+        "}\n"
+        "if ($null -eq $Python) { throw 'No Python launcher is available' }\n"
+        "& $Python.Source @PythonPrefix @Arguments\n"
         "exit $LASTEXITCODE\n"
     ).encode("utf-8")
     _write_payload(
@@ -1072,9 +1079,20 @@ def _default_executor(context: Mapping[str, Any]) -> Dict[str, Any]:
         "server_automation_worktrees",
     ) / str(job["workspace_id"])
     command = [str(item) for item in job["resolved_argv"]]
+    execution_environment = dict(os.environ)
+    execution_environment.update(
+        {
+            "PFMVAL_EXECUTION_BUNDLE": str(bundle_dir),
+            "PFMVAL_EXECUTION_STATE": str(state_dir),
+            "PFMVAL_RESULT_SOURCE_BUNDLE": str(
+                state_dir / "result_source_bundle"
+            ),
+        }
+    )
     completed = subprocess.run(
         command,
         cwd=source_root,
+        env=execution_environment,
         check=False,
         capture_output=True,
         text=True,

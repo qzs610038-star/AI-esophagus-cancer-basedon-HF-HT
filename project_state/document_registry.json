@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-29T15:02:47+00:00",
-  "state_revision": 135,
+  "updated_at": "2026-07-29T16:19:33+00:00",
+  "state_revision": 137,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -556,9 +556,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:02:34+00:00",
-      "state_revision": 135,
-      "content_sha256": "6832c5f8a5a3f0b9ae552cfa26724c6f451008fab07f9a73bdad3f2318ceae86",
+      "verified_at": "2026-07-29T16:19:33+00:00",
+      "state_revision": 137,
+      "content_sha256": "74ebd553510b48668d85e86346682b1c16ecbd9a97627d95c476a3d3bef281a9",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -577,9 +577,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:02:34+00:00",
-      "state_revision": 135,
-      "content_sha256": "8aad8c635311c0a9537a5f7602d343eaa01d470ad100d1bbcbdbc55741447737",
+      "verified_at": "2026-07-29T16:19:33+00:00",
+      "state_revision": 137,
+      "content_sha256": "18cedcb17c4c7d2810741efbbe395daf6aa9927d731aba1e984f88ac061e9a2c",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -1473,6 +1473,27 @@
       "verified_at": "2026-07-29T02:35:34+00:00",
       "state_revision": 128,
       "content_sha256": "",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-8e4214c3095b",
+      "path": "01_指南与解读/分析报告/G09_团队分工输入分类记录_20260728.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-29T16:18:13+00:00",
+      "state_revision": 136,
+      "content_sha256": "c94ae432ea8ad1fef18862e5fb987d326be3fad04c62a95eb10953a04ddb8ce5",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3785,9 +3806,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:02:34+00:00",
-      "state_revision": 135,
-      "content_sha256": "11a343e2f29a08ad92e504785d5e3f6653898c945402f59fc7e6b644870a2bc0",
+      "verified_at": "2026-07-29T16:19:33+00:00",
+      "state_revision": 137,
+      "content_sha256": "87a4cf90da05661099614903e5a13285b70e59e99d9eab81a099c92634cdcaf5",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3828,9 +3849,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:02:34+00:00",
-      "state_revision": 135,
-      "content_sha256": "78fd9448bb3fce9c9420b93185fe70845a8a51c3afda029b78aa9e97edbf07c4",
+      "verified_at": "2026-07-29T16:19:33+00:00",
+      "state_revision": 137,
+      "content_sha256": "8e9bb40e23d837cf47553c16858e3099174beedeea59ace593c84699ef257046",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4215,6 +4236,27 @@
       "verified_at": "2026-07-29T15:02:33+00:00",
       "state_revision": 134,
       "content_sha256": "babf04c0145626384b61b698f7dd9cb40089f48a596b35201ea1fafa23eba112",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-703b599b0346",
+      "path": "project_state/plans/server_execution_roundtrip_v1_migration_boundary_20260729.md",
+      "category": "状态方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-29T16:19:33+00:00",
+      "state_revision": 137,
+      "content_sha256": "1a2e69c747caa44c6e54020a3caae18b2fc1cbf3932ab1f9378e9a016b5fb5cf",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4690,12 +4732,12 @@
     }
   ],
   "summary": {
-    "total": 211,
-    "live": 88,
+    "total": 213,
+    "live": 90,
     "missing": 123,
     "active": 52,
     "superseded": 1,
-    "historical": 17,
+    "historical": 19,
     "pending_review": 0,
     "approved_design": 18
   }

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
@@ -41,6 +42,149 @@ def _fixture_probe(*, gpu_free_bytes: int = 8_000_000_000) -> dict:
         "path_ids": {"server_automation_worktrees": "D:/fixture/worktrees"},
         "git_line_endings": {"core.autocrlf": "true"},
     }
+
+
+def _synthetic_governed_project(
+    root: Path,
+    *,
+    command_id: str,
+) -> Path:
+    from scripts.pfmval_execution_roundtrip import RUNTIME_FILES
+
+    experiment_id = f"fixture_{command_id}"
+    job_id = f"W900-A001-{command_id}"
+    approval_id = f"APR-{command_id}"
+    contract_sha = hashlib.sha256(command_id.encode("utf-8")).hexdigest()
+    source_commit = "1" * 40
+    workspace_id = "W900"
+    attempt_id = "A001"
+    for relative in RUNTIME_FILES:
+        source = ROOT / relative
+        destination = root / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+    (root / "experiments").mkdir(parents=True, exist_ok=True)
+    (root / "experiments" / "experiment_registry.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "experiments": [
+                    {
+                        "id": experiment_id,
+                        "workspace_id": workspace_id,
+                        "critical_contract_sha256": contract_sha,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    governance = root / "project_state" / "governance"
+    governance.mkdir(parents=True, exist_ok=True)
+    (governance / f"{command_id}_critical_contract.json").write_text(
+        json.dumps(
+            {
+                "experiment_id": experiment_id,
+                "canonical_sha256": contract_sha,
+                "data_manifest_id": "fixture-data",
+                "input_artifacts": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (governance / f"{command_id}_attempt.json").write_text(
+        json.dumps(
+            {
+                "event_type": "ATTEMPT_PREPARED",
+                "job_id": job_id,
+                "attempt_id": attempt_id,
+                "budget": {"remaining_after_prepare": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "project_state" / "experiment_approvals.jsonl").write_text(
+        json.dumps(
+            {
+                "approval_id": approval_id,
+                "experiment_id": experiment_id,
+                "critical_contract_sha256": contract_sha,
+                "status": "active",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (root / "project_state" / "attempt_events.jsonl").write_text(
+        "",
+        encoding="utf-8",
+    )
+    (root / "project_state" / "workspace_registry.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "updated_at": "2026-07-29T00:00:00+00:00",
+                "next_workspace_number": 901,
+                "workspaces": [
+                    {
+                        "workspace_id": workspace_id,
+                        "experiment_id": experiment_id,
+                        "lease": None,
+                        "hosts": {},
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "configs").mkdir(parents=True, exist_ok=True)
+    (root / "configs" / "server_paths.yaml").write_text(
+        "\n".join(
+            [
+                'schema_version: "1.0"',
+                "paths:",
+                "  server_automation_worktrees:",
+                "    path: 'D:\\fixture\\worktrees'",
+                "  server_repo_worktree:",
+                "    path: 'D:\\fixture\\repo'",
+                "  server_mpp_results:",
+                "    path: 'D:\\fixture\\results'",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    job_dir = root / "automation" / "jobs" / job_id
+    job_dir.mkdir(parents=True, exist_ok=True)
+    job_path = job_dir / "job.json"
+    job_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "2.0",
+                "job_id": job_id,
+                "experiment_id": experiment_id,
+                "workspace_id": workspace_id,
+                "attempt_id": attempt_id,
+                "approval_id": approval_id,
+                "source_commit": source_commit,
+                "critical_contract_sha256": contract_sha,
+                "run_units": 1,
+                "resolved_argv": ["python", "fixture.py"],
+                "command_id": command_id,
+                "path_ids": [],
+                "input_binding": {"data_manifest_id": "fixture-data", "artifacts": []},
+                "created_at": "2026-07-29T00:00:00+00:00",
+                "dispatch_revision": 1,
+                "result_branch": f"automation/server/{workspace_id}/{attempt_id}",
+                "execution_binding": {
+                    "mode": "execution_bundle_v1",
+                    "governance_commit": "2" * 40,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    return job_path
 
 
 def test_g12_review_is_frozen_as_fourteen_named_regression_fixtures():
@@ -164,6 +308,28 @@ def test_execution_bundle_cli_generates_one_path_operation_card(tmp_path):
         encoding="utf-8",
     )
     assert validated.returncode == 0, validated.stdout + validated.stderr
+
+
+def test_two_distinct_experiment_types_build_and_verify_without_execution(
+    tmp_path,
+):
+    from scripts.pfmval_execution_roundtrip import build_execution_bundle_v1
+
+    reports = []
+    for command_id in ("standard_training", "mpp_pathway_ridge_calibration"):
+        project = tmp_path / command_id
+        job = _synthetic_governed_project(project, command_id=command_id)
+        reports.append(
+            build_execution_bundle_v1(
+                project,
+                job,
+                tmp_path / f"{command_id}-bundle",
+            )
+        )
+
+    assert all(report["status"] == "valid" for report in reports)
+    assert reports[0]["bundle_id"] != reports[1]["bundle_id"]
+    assert not list(tmp_path.rglob("attempt_started.json"))
 
 
 def test_server_fingerprint_is_reused_until_expiry_and_then_refreshed(tmp_path):
