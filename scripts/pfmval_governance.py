@@ -1219,96 +1219,9 @@ def build_result_v2(
 
 
 def validate_result_v2(result: Mapping[str, Any]) -> None:
-    required = {
-        "schema_version",
-        "result_id",
-        "job_id",
-        "experiment_id",
-        "workspace_id",
-        "attempt_id",
-        "protocol_revision",
-        "approval_id",
-        "critical_contract_sha256",
-        "source_commit",
-        "phase",
-        "status",
-        "created_at",
-        "run_units",
-        "artifacts",
-        "metrics",
-        "metric_artifact_ids",
-        "large_artifacts",
-    }
-    missing = sorted(required - set(result))
-    if missing:
-        raise ValueError(f"result v2 missing fields: {', '.join(missing)}")
-    if result["schema_version"] != "2.0":
-        raise ValueError("result v2 schema_version must be 2.0")
-    if not WORKSPACE_ID_RE.fullmatch(str(result["workspace_id"])):
-        raise ValueError("invalid result workspace_id")
-    if not ATTEMPT_ID_RE.fullmatch(str(result["attempt_id"])):
-        raise ValueError("invalid result attempt_id")
-    if not FULL_COMMIT_RE.fullmatch(str(result["source_commit"])):
-        raise ValueError("result source_commit must be a full 40-character SHA")
-    if not SHA256_RE.fullmatch(str(result["critical_contract_sha256"])):
-        raise ValueError("result critical contract must be SHA-256")
-    if int(result["run_units"]) < 1:
-        raise ValueError("result run_units must be positive")
-    if result["phase"] not in {"preflight", "smoke", "formal"}:
-        raise ValueError("invalid result phase")
-    if result["status"] not in {"success", "failed", "incomplete"}:
-        raise ValueError("invalid result status")
-    artifacts = list(result["artifacts"])
-    artifact_ids: set[str] = set()
-    by_id: Dict[str, Mapping[str, Any]] = {}
-    for artifact in artifacts:
-        artifact_id = str(artifact.get("artifact_id", ""))
-        if not artifact_id or artifact_id in artifact_ids:
-            raise ValueError("result artifact_id must be non-empty and unique")
-        artifact_ids.add(artifact_id)
-        by_id[artifact_id] = artifact
-        if not _safe_artifact_path(str(artifact.get("path", ""))):
-            raise ValueError("result artifact path is unsafe")
-        if artifact.get("source_attempt_id") != result["attempt_id"]:
-            raise ValueError("result artifact attempt binding mismatch")
-        if int(artifact.get("size_bytes", -1)) < 0:
-            raise ValueError("result artifact size is invalid")
-        role = artifact.get("evidence_role")
-        if role not in {"critical", "supporting", "diagnostic"}:
-            raise ValueError("result artifact has invalid evidence_role")
-        digest = str(artifact.get("sha256", ""))
-        if role == "critical" and not SHA256_RE.fullmatch(digest):
-            raise ValueError("critical artifact requires SHA-256")
-        if digest and not SHA256_RE.fullmatch(digest):
-            raise ValueError("artifact SHA-256 is invalid")
-    metric_ids = list(result["metric_artifact_ids"])
-    for artifact_id in metric_ids:
-        artifact = by_id.get(str(artifact_id))
-        if artifact is None:
-            raise ValueError("metric source artifact is missing")
-        if artifact.get("evidence_role") == "diagnostic":
-            raise ValueError("diagnostic artifact cannot source accepted metrics")
-        if artifact.get("evidence_role") != "critical":
-            raise ValueError("metric source artifact must be critical")
-    if (
-        result["phase"] == "formal"
-        and result["status"] == "success"
-        and not any(
-            artifact.get("kind") == "selection_proof"
-            and artifact.get("evidence_role") == "critical"
-            for artifact in artifacts
-        )
-    ):
-        raise ValueError("formal success requires critical selection proof")
-    for artifact in result["large_artifacts"]:
-        if not str(artifact.get("server_path", "")):
-            raise ValueError("large artifact requires registered server path")
-        if int(artifact.get("size_bytes", -1)) < 0:
-            raise ValueError("large artifact size is invalid")
-        if not SHA256_RE.fullmatch(str(artifact.get("sha256", ""))):
-            raise ValueError("large artifact requires SHA-256")
-        if not artifact.get("retention") and not artifact.get("recompute_policy"):
-            raise ValueError("large artifact requires retention or recompute policy")
+    from scripts.pfmval_result_bundle import validate_result_manifest_v1
+
+    validate_result_manifest_v1(Path(__file__).resolve().parents[1], result)
 
 
 def record_result_import_v2(

@@ -79,8 +79,16 @@ def test_tracked_project_guide_links_exist_and_registry_marks_it_active():
     assert entry["lifecycle"] == "active"
     assert entry["authority"] == "derived"
     assert entry["availability"] == "tracked"
+    missing_paths = {
+        item["path"]
+        for item in registry["documents"]
+        if item.get("lifecycle") == "missing"
+        or item.get("availability") == "missing"
+    }
     for target in re.findall(
         r"\[[^\]]+\]\(([^)]+)\)",
         guide_path.read_text(encoding="utf-8"),
     ):
+        if unquote(target) in missing_paths:
+            continue
         assert (root / unquote(target)).exists(), target

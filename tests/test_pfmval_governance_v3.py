@@ -599,14 +599,15 @@ def test_result_v2_tiers_artifacts_and_import_is_idempotent_without_budget_chang
                 "evidence_role": "critical",
                 "retention": "retain",
             },
-            {
-                "artifact_id": "stdout",
-                "path": "stdout.log",
-                "kind": "log",
-                "size_bytes": 200,
-                "evidence_role": "diagnostic",
-                "retention": "short",
-            },
+                {
+                    "artifact_id": "stdout",
+                    "path": "stdout.log",
+                    "kind": "log",
+                    "size_bytes": 200,
+                    "sha256": "e" * 64,
+                    "evidence_role": "diagnostic",
+                    "retention": "short",
+                },
         ],
         metrics={"pcc": 0.5},
         metric_artifact_ids=["metrics"],
@@ -655,6 +656,32 @@ def test_p0a_local_cli_happy_path_requires_no_ad_hoc_state_writes(
 ):
     root = tmp_path / "repo"
     root.mkdir()
+    subprocess.run(["git", "init", str(root)], check=True, capture_output=True)
+    subprocess.run(
+        ["git", "-C", str(root), "config", "user.name", "PFMval Test"],
+        check=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "config",
+            "user.email",
+            "pfmval@example.invalid",
+        ],
+        check=True,
+    )
+    (root / "tracked.txt").write_text("baseline\n", encoding="utf-8")
+    subprocess.run(
+        ["git", "-C", str(root), "add", "tracked.txt"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(root), "commit", "-m", "baseline"],
+        check=True,
+        capture_output=True,
+    )
     _write_minimal_experiment_registry(root)
     monkeypatch.setattr(pfmval_ops, "PROJECT_ROOT", root)
 

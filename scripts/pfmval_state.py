@@ -2773,89 +2773,9 @@ def validate_diagnostic_state(root: Path) -> ValidationReport:
 def validate_result_envelope(bundle_dir: Path, manifest: Mapping[str, Any]) -> None:
     project_root = Path(__file__).resolve().parent.parent
     if manifest.get("schema_version") == "2.0":
-        from scripts.pfmval_governance import validate_result_v2
+        from scripts.pfmval_result_bundle import validate_result_bundle_v1
 
-        validate_against_schema(
-            manifest,
-            project_root / "project_state" / "schemas" / "result_envelope_v2.schema.json",
-            "result envelope v2",
-        )
-        validate_result_v2(manifest)
-        total = 0
-        for artifact in manifest.get("artifacts", []):
-            raw_path = str(artifact.get("path", ""))
-            if "\\" in raw_path:
-                raise ValueError(
-                    f"artifact path must use bundle-relative POSIX separators: {raw_path}"
-                )
-            rel = PurePosixPath(raw_path)
-            if not raw_path or rel.is_absolute() or ".." in rel.parts:
-                raise ValueError(f"unsafe artifact path: {rel}")
-            path = bundle_dir / Path(*rel.parts)
-            if path.name not in ALLOWED_RESULT_FILES:
-                raise ValueError(f"artifact is not allowlisted: {rel}")
-            if not path.exists() or not path.is_file():
-                raise ValueError(f"artifact missing: {rel}")
-            size = path.stat().st_size
-            if size != int(artifact.get("size_bytes", -1)):
-                raise ValueError(f"artifact size mismatch: {rel}")
-            if size > MAX_RESULT_FILE_BYTES:
-                raise ValueError(f"artifact exceeds {MAX_RESULT_FILE_BYTES} bytes: {rel}")
-            digest = str(artifact.get("sha256", "")).lower()
-            if digest and sha256_file(path) != digest:
-                raise ValueError(f"artifact hash mismatch: {rel}")
-            total += size
-        if total > MAX_RESULT_TOTAL_BYTES:
-            raise ValueError(f"result bundle exceeds {MAX_RESULT_TOTAL_BYTES} bytes")
-        expected_files = {
-            "result.json",
-            *(str(item.get("path", "")) for item in manifest.get("artifacts", [])),
-        }
-        actual_files = {
-            normalize_rel(path.relative_to(bundle_dir))
-            for path in bundle_dir.rglob("*")
-            if path.is_file()
-        }
-        unexpected_files = sorted(actual_files - expected_files)
-        if unexpected_files:
-            raise ValueError(
-                f"result bundle contains unlisted files: {unexpected_files}"
-            )
-
-        def check_finite_v2(value: Any, location: str) -> None:
-            if isinstance(value, float) and not math.isfinite(value):
-                raise ValueError(f"non-finite metric at {location}")
-            if isinstance(value, dict):
-                for key, item in value.items():
-                    check_finite_v2(item, f"{location}.{key}")
-            elif isinstance(value, list):
-                for index, item in enumerate(value):
-                    check_finite_v2(item, f"{location}[{index}]")
-
-        check_finite_v2(manifest.get("metrics", {}), "metrics")
-        for artifact in manifest.get("large_artifacts", []):
-            server_path = str(artifact.get("server_path", ""))
-            if not re.match(r"^[A-Za-z]:[\\/]", server_path):
-                raise ValueError(
-                    f"large artifact is not an absolute Windows server path: {server_path}"
-                )
-            if int(artifact.get("size_bytes", -1)) < 0:
-                raise ValueError(
-                    f"large artifact has invalid size: {server_path}"
-                )
-            if not re.fullmatch(
-                r"[0-9a-f]{64}",
-                str(artifact.get("sha256", "")).lower(),
-            ):
-                raise ValueError(
-                    f"large artifact has invalid SHA-256: {server_path}"
-                )
-            if not artifact.get("retention") and not artifact.get(
-                "recompute_policy"
-            ):
-                raise ValueError(
-                    f"large artifact has no retention or recompute policy: {server_path}"
-                )
+        validate_result_bundle_v1(project_root, bundle_dir)
         return
 
     validate_against_schema(

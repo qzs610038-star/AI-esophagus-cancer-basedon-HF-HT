@@ -10,6 +10,7 @@ from scripts import finalize_experiment as finalize_module
 from scripts import pfmval_state as state_module
 from scripts.finalize_experiment import build_dashboard
 from scripts.pfmval_governance import build_job_v2, build_result_v2
+from scripts.pfmval_result_bundle import build_result_bundle_v1
 from scripts.pfmval_state import (
     MPP_TRAINING_ALLOWED_PARAMETERS,
     append_directive,
@@ -1010,13 +1011,27 @@ def test_result_import_dual_reads_v2_and_rejects_same_id_with_different_sha(
         encoding="utf-8",
     )
 
-    bundle = root / "bundle-v2"
-    bundle.mkdir()
-    artifact = bundle / "metrics.json"
+    legacy_bundle = root / "legacy-bundle-v2"
+    legacy_bundle.mkdir()
+    artifact = legacy_bundle / "metrics.json"
     artifact.write_text('{"best_epoch":2,"best_val_loss":0.2}\n', encoding="utf-8")
+    terminal = legacy_bundle / "attempt_terminal.json"
+    terminal.write_text(
+        json.dumps(
+            {
+                "event_type": "EXPERIMENT_TERMINAL",
+                "job_id": "W001-A001",
+                "attempt_id": "A001",
+                "status": "completed",
+                "returncode": 0,
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     result_manifest = build_result_v2(
         job,
-        result_id="RES-W001-A001",
+        result_id="RES-W001-A001-legacy",
         status="success",
         artifacts=[
             {
@@ -1027,12 +1042,29 @@ def test_result_import_dual_reads_v2_and_rejects_same_id_with_different_sha(
                 "sha256": sha256_file(artifact),
                 "evidence_role": "critical",
                 "retention": "retain",
+            },
+            {
+                "artifact_id": "attempt_terminal",
+                "path": terminal.name,
+                "kind": "attempt_event",
+                "size_bytes": terminal.stat().st_size,
+                "sha256": sha256_file(terminal),
+                "evidence_role": "critical",
+                "retention": "retain",
             }
         ],
         metrics={"best_epoch": 2, "best_val_loss": 0.2},
         metric_artifact_ids=["selection-proof"],
     )
-    write_json(bundle / "result.json", result_manifest)
+    write_json(legacy_bundle / "result.json", result_manifest)
+    bundle = root / "bundle-v2"
+    build_result_bundle_v1(
+        project_root,
+        legacy_bundle,
+        bundle,
+        result_id="RES-W001-A001",
+        artifact_retention="retain",
+    )
 
     imported = import_result_bundle(root, bundle)
     assert imported["status"] == "imported"
@@ -1044,8 +1076,9 @@ def test_result_import_dual_reads_v2_and_rejects_same_id_with_different_sha(
 
     same = import_result_bundle(root, bundle)
     assert same["status"] == "already_imported"
-    result_manifest["created_at"] = "2026-07-27T00:00:01+00:00"
-    write_json(bundle / "result.json", result_manifest)
+    changed_manifest = read_json(bundle / "result.json")
+    changed_manifest["created_at"] = "2026-07-27T00:00:01+00:00"
+    write_json(bundle / "result.json", changed_manifest)
     with pytest.raises(ValueError, match="different bundle SHA"):
         import_result_bundle(root, bundle)
 

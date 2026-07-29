@@ -77,6 +77,12 @@ from scripts.pfmval_governance import (  # noqa: E402
     validate_job_v2,
     validate_result_v2,
 )
+from scripts.pfmval_result_bundle import (  # noqa: E402
+    build_result_bundle_v1,
+    publish_result_bundle_v1,
+    record_result_bundle_import_v1,
+    validate_result_bundle_v1,
+)
 from scripts.pfmval_assets import (  # noqa: E402
     build_close_preview,
     build_shadow_inventory,
@@ -1303,6 +1309,46 @@ def command_governance(args: argparse.Namespace) -> int:
             )
             print(json.dumps(event, ensure_ascii=False, indent=2))
             return 0
+    if args.governance_command == "result-bundle-v1":
+        if args.result_bundle_v1_command == "build":
+            report = build_result_bundle_v1(
+                PROJECT_ROOT,
+                Path(args.source_bundle),
+                Path(args.staging),
+                result_id=args.result_id,
+                artifact_retention=args.artifact_retention,
+                created_at=args.created_at,
+            )
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+            print("[INFO] Packaging-only build; no training or result import ran.")
+            return 0
+        if args.result_bundle_v1_command == "validate":
+            report = validate_result_bundle_v1(
+                PROJECT_ROOT,
+                Path(args.bundle),
+            )
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+            return 0
+        if args.result_bundle_v1_command == "record-import":
+            event = record_result_bundle_import_v1(
+                PROJECT_ROOT,
+                Path(args.bundle),
+                bundle_sha256=args.bundle_sha256,
+            )
+            print(json.dumps(event, ensure_ascii=False, indent=2))
+            return 0
+        if args.result_bundle_v1_command == "publish":
+            report = publish_result_bundle_v1(
+                PROJECT_ROOT,
+                Path(args.bundle),
+                remote_name=args.remote,
+                ref=args.ref,
+                revision_path=args.revision_path,
+                expected_parent=args.expected_parent,
+                commit_message=args.commit_message,
+            )
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+            return 0
     raise ValueError(f"unknown governance command: {args.governance_command}")
 
 
@@ -1791,6 +1837,29 @@ def build_parser() -> argparse.ArgumentParser:
     governance_result_record = governance_result_sub.add_parser("record-import")
     governance_result_record.add_argument("--manifest", required=True)
     governance_result_record.add_argument("--bundle-sha256", required=True)
+    governance_result_bundle = governance_sub.add_parser("result-bundle-v1")
+    governance_result_bundle_sub = governance_result_bundle.add_subparsers(
+        dest="result_bundle_v1_command",
+        required=True,
+    )
+    result_bundle_build = governance_result_bundle_sub.add_parser("build")
+    result_bundle_build.add_argument("--source-bundle", required=True)
+    result_bundle_build.add_argument("--staging", required=True)
+    result_bundle_build.add_argument("--result-id", required=True)
+    result_bundle_build.add_argument("--artifact-retention", required=True)
+    result_bundle_build.add_argument("--created-at")
+    result_bundle_validate = governance_result_bundle_sub.add_parser("validate")
+    result_bundle_validate.add_argument("--bundle", required=True)
+    result_bundle_record = governance_result_bundle_sub.add_parser("record-import")
+    result_bundle_record.add_argument("--bundle", required=True)
+    result_bundle_record.add_argument("--bundle-sha256", required=True)
+    result_bundle_publish = governance_result_bundle_sub.add_parser("publish")
+    result_bundle_publish.add_argument("--bundle", required=True)
+    result_bundle_publish.add_argument("--remote", choices=["gitee"], default="gitee")
+    result_bundle_publish.add_argument("--ref", required=True)
+    result_bundle_publish.add_argument("--revision-path", required=True)
+    result_bundle_publish.add_argument("--expected-parent", required=True)
+    result_bundle_publish.add_argument("--commit-message", required=True)
 
     job = sub.add_parser("job")
     job_sub = job.add_subparsers(dest="job_command", required=True)

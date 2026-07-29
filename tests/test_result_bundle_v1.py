@@ -1,0 +1,385 @@
+import copy
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from scripts.pfmval_result_bundle import (
+    build_result_bundle_v1,
+    publish_result_bundle_v1,
+    validate_result_bundle_v1,
+)
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _sha256(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def _write(path: Path, data: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data)
+
+
+def _historical_source_bundle(
+    root: Path,
+    *,
+    attempt_id: str,
+    result_id: str,
+    include_large_artifact_id: bool,
+) -> Path:
+    bundle = root / result_id
+    artifacts_dir = bundle / "artifacts"
+    artifacts_dir.mkdir(parents=True)
+    job = {
+        "schema_version": "2.0",
+        "job_id": f"W001-{attempt_id}",
+        "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+        "workspace_id": "W001",
+        "attempt_id": attempt_id,
+        "protocol_revision": 2,
+        "approval_id": "APR-mpp2-huber-loss-paired-v001-20260728-r002",
+        "critical_contract_sha256": "d" * 64,
+        "source_commit": "a" * 40,
+        "phase": "formal",
+        "run_units": 1,
+    }
+    terminal = {
+        "event_type": "EXPERIMENT_TERMINAL",
+        "job_id": job["job_id"],
+        "attempt_id": attempt_id,
+        "status": "completed",
+        "returncode": 0,
+    }
+    metrics = {"loss": {"type": "mse"}, "external_xzy": {"pcc": 0.6549}}
+    summary_lf = b"best epoch: 15\nselection: internal validation only\n"
+    summary_raw_crlf = summary_lf.replace(b"\n", b"\r\n")
+    payloads = {
+        "artifacts/job.json": (json.dumps(job, indent=2) + "\n").encode(),
+        "artifacts/attempt_terminal.json": (
+            json.dumps(terminal, indent=2) + "\n"
+        ).encode(),
+        "artifacts/metrics.json": (json.dumps(metrics, indent=2) + "\n").encode(),
+        "artifacts/training_summary.txt": summary_lf,
+    }
+    for relative, payload in payloads.items():
+        _write(bundle / relative, payload)
+    artifacts = [
+        {
+            "artifact_id": "job_manifest",
+            "path": "artifacts/job.json",
+            "kind": "job_manifest",
+            "evidence_role": "critical",
+            "size_bytes": len(payloads["artifacts/job.json"]),
+            "sha256": _sha256(payloads["artifacts/job.json"]),
+            "source_attempt_id": attempt_id,
+        },
+        {
+            "artifact_id": "attempt_terminal",
+            "path": "artifacts/attempt_terminal.json",
+            "kind": "attempt_event",
+            "evidence_role": "critical",
+            "size_bytes": len(payloads["artifacts/attempt_terminal.json"]),
+            "sha256": _sha256(payloads["artifacts/attempt_terminal.json"]),
+            "source_attempt_id": attempt_id,
+        },
+        {
+            "artifact_id": "metrics",
+            "path": "artifacts/metrics.json",
+            "kind": "metrics",
+            "evidence_role": "critical",
+            "size_bytes": len(payloads["artifacts/metrics.json"]),
+            "sha256": _sha256(payloads["artifacts/metrics.json"]),
+            "source_attempt_id": attempt_id,
+        },
+        {
+            "artifact_id": "selection_proof",
+            "path": "artifacts/training_summary.txt",
+            "kind": "selection_proof",
+            "evidence_role": "critical",
+            "size_bytes": len(summary_raw_crlf),
+            "sha256": _sha256(summary_raw_crlf),
+            "source_attempt_id": attempt_id,
+        },
+    ]
+    large = {
+        "server_path": (
+            f"D:\\AIPatho\\qzs\\pfmval_experiment_runs\\W001\\{attempt_id}"
+            "\\best_checkpoint.pth"
+        ),
+        "size_bytes": 6420688,
+        "sha256": "c" * 64,
+        "retention": "retain_on_server_until_explicit_user_disposition",
+    }
+    if include_large_artifact_id:
+        large["artifact_id"] = "best_checkpoint"
+    result = {
+        **job,
+        "result_id": result_id,
+        "status": "success",
+        "created_at": "2026-07-29T05:23:40+00:00",
+        "artifacts": artifacts,
+        "metrics": metrics,
+        "metric_artifact_ids": ["metrics"],
+        "large_artifacts": [large],
+    }
+    # Historical packages contained these redundant packaging sidecars.
+    _write(bundle / "result.json", (json.dumps(result, indent=2) + "\n").encode())
+    _write(bundle / "artifacts.json", (json.dumps(artifacts, indent=2) + "\n").encode())
+    _write(bundle / "large_artifacts.json", (json.dumps([large], indent=2) + "\n").encode())
+    _write(bundle / "metrics.json", (json.dumps(metrics, indent=2) + "\n").encode())
+    return bundle
+
+
+@pytest.mark.parametrize(
+    ("attempt_id", "old_result_id", "new_result_id", "has_large_id"),
+    [
+        ("A003", "W001-A003-result-R003", "W001-A003-result-R004", False),
+        ("A004", "W001-A004-result-R001", "W001-A004-result-R002", True),
+    ],
+)
+def test_historical_g12_only_packaging_revision_passes_full_validator(
+    tmp_path,
+    attempt_id,
+    old_result_id,
+    new_result_id,
+    has_large_id,
+):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id=attempt_id,
+        result_id=old_result_id,
+        include_large_artifact_id=has_large_id,
+    )
+    staging = tmp_path / "staging" / new_result_id
+
+    report = build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        staging,
+        result_id=new_result_id,
+        artifact_retention="retain_in_immutable_result_bundle",
+        created_at="2026-07-29T12:00:00+00:00",
+    )
+
+    validated = validate_result_bundle_v1(PROJECT_ROOT, staging)
+    result = json.loads((staging / "result.json").read_text(encoding="utf-8"))
+    assert report["bundle_sha256"] == validated["bundle_sha256"]
+    assert result["result_id"] == new_result_id
+    assert result["status"] == "success"
+    assert isinstance(result["artifacts"], list)
+    assert isinstance(result["large_artifacts"], list)
+    assert all(item["artifact_id"] for item in result["artifacts"])
+    assert all(item["retention"] for item in result["artifacts"])
+    assert all(item["artifact_id"] for item in result["large_artifacts"])
+    assert not (staging / "metrics.json").exists()
+    integrity = json.loads(
+        (staging / "artifacts" / "bundle_integrity.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    summary = next(
+        item
+        for item in integrity["artifacts"]
+        if item["path"] == "artifacts/training_summary.txt"
+    )
+    assert summary["source_match"] == "git_normalized_from_crlf"
+    assert summary["sha256_raw"] != summary["sha256_git_normalized"]
+
+
+def test_build_requires_empty_staging_and_array_protocol_types(tmp_path):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A003",
+        result_id="W001-A003-result-R003",
+        include_large_artifact_id=False,
+    )
+    staging = tmp_path / "staging"
+    staging.mkdir()
+    (staging / "existing.txt").write_text("occupied", encoding="utf-8")
+    with pytest.raises(ValueError, match="staging directory must be empty"):
+        build_result_bundle_v1(
+            PROJECT_ROOT,
+            source,
+            staging,
+            result_id="W001-A003-result-R004",
+            artifact_retention="retain",
+        )
+
+    result_path = source / "result.json"
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    result["large_artifacts"] = result["large_artifacts"][0]
+    result_path.write_text(json.dumps(result), encoding="utf-8")
+    with pytest.raises(ValueError, match="large_artifacts must be an array"):
+        build_result_bundle_v1(
+            PROJECT_ROOT,
+            source,
+            tmp_path / "empty-staging",
+            result_id="W001-A003-result-R004",
+            artifact_retention="retain",
+        )
+
+
+def test_build_rejects_duplicate_paths_unregistered_sidecars_and_bad_terminal(
+    tmp_path,
+):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A004",
+        result_id="W001-A004-result-R001",
+        include_large_artifact_id=True,
+    )
+    result_path = source / "result.json"
+    original = json.loads(result_path.read_text(encoding="utf-8"))
+
+    duplicate = copy.deepcopy(original)
+    duplicate["artifacts"][1]["path"] = "artifacts/job.json"
+    result_path.write_text(json.dumps(duplicate), encoding="utf-8")
+    with pytest.raises(ValueError, match="artifact paths must be unique"):
+        build_result_bundle_v1(
+            PROJECT_ROOT,
+            source,
+            tmp_path / "duplicate-staging",
+            result_id="W001-A004-result-R002",
+            artifact_retention="retain",
+        )
+
+    result_path.write_text(json.dumps(original), encoding="utf-8")
+    (source / "unregistered.txt").write_text("sidecar", encoding="utf-8")
+    with pytest.raises(ValueError, match="unregistered sidecar"):
+        build_result_bundle_v1(
+            PROJECT_ROOT,
+            source,
+            tmp_path / "sidecar-staging",
+            result_id="W001-A004-result-R002",
+            artifact_retention="retain",
+        )
+    (source / "unregistered.txt").unlink()
+
+    terminal_path = source / "artifacts" / "attempt_terminal.json"
+    terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
+    terminal["returncode"] = 9
+    terminal_path.write_text(json.dumps(terminal), encoding="utf-8")
+    original["artifacts"][1]["size_bytes"] = terminal_path.stat().st_size
+    original["artifacts"][1]["sha256"] = _sha256(terminal_path.read_bytes())
+    result_path.write_text(json.dumps(original), encoding="utf-8")
+    report = build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        tmp_path / "failed-staging",
+        result_id="W001-A004-result-R002",
+        artifact_retention="retain",
+    )
+    assert report["status"] == "failed"
+
+
+def test_validator_rejects_tampering_and_full_schema_violations(tmp_path):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A004",
+        result_id="W001-A004-result-R001",
+        include_large_artifact_id=True,
+    )
+    staging = tmp_path / "staging"
+    build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        staging,
+        result_id="W001-A004-result-R002",
+        artifact_retention="retain",
+    )
+
+    result_path = staging / "result.json"
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    del result["artifacts"][0]["retention"]
+    result_path.write_text(json.dumps(result), encoding="utf-8")
+    with pytest.raises(ValueError, match="result envelope v2 schema"):
+        validate_result_bundle_v1(PROJECT_ROOT, staging)
+
+
+def _git(cwd: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", *args],
+        cwd=cwd,
+        check=True,
+        text=True,
+        capture_output=True,
+    ).stdout.strip()
+
+
+def test_publish_is_fast_forward_idempotent_and_verifies_remote_sha(tmp_path):
+    repo = tmp_path / "repo"
+    remote = tmp_path / "remote.git"
+    repo.mkdir()
+    _git(repo, "init")
+    _git(repo, "config", "user.name", "PFMval Test")
+    _git(repo, "config", "user.email", "pfmval@example.invalid")
+    (repo / "baseline.txt").write_text("baseline\n", encoding="utf-8")
+    _git(repo, "add", "baseline.txt")
+    _git(repo, "commit", "-m", "baseline")
+    parent = _git(repo, "rev-parse", "HEAD")
+    _git(tmp_path, "init", "--bare", str(remote))
+    _git(repo, "remote", "add", "gitee", str(remote))
+    ref = "automation/server/W001/A003"
+    _git(repo, "push", "gitee", f"{parent}:refs/heads/{ref}")
+
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A003",
+        result_id="W001-A003-result-R003",
+        include_large_artifact_id=False,
+    )
+    bundle = tmp_path / "bundle"
+    build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        bundle,
+        result_id="W001-A003-result-R004",
+        artifact_retention="retain",
+        created_at="2026-07-29T12:00:00+00:00",
+    )
+
+    first = publish_result_bundle_v1(
+        repo,
+        bundle,
+        remote_name="gitee",
+        ref=ref,
+        revision_path="automation/returns/W001/A003/R004",
+        expected_parent=parent,
+        commit_message="G12-R: return W001 A003 packaging-only R004",
+    )
+    second = publish_result_bundle_v1(
+        repo,
+        bundle,
+        remote_name="gitee",
+        ref=ref,
+        revision_path="automation/returns/W001/A003/R004",
+        expected_parent=first["commit_sha"],
+        commit_message="G12-R: return W001 A003 packaging-only R004",
+    )
+    remote_sha = _git(
+        repo,
+        "ls-remote",
+        "--heads",
+        "gitee",
+        f"refs/heads/{ref}",
+    ).split()[0]
+    assert first["status"] == "published"
+    assert second["status"] == "already_published"
+    assert first["commit_sha"] == second["commit_sha"] == remote_sha
+    assert first["parent_sha"] == parent
+
+    with pytest.raises(ValueError, match="remote SHA mismatch"):
+        publish_result_bundle_v1(
+            repo,
+            bundle,
+            remote_name="gitee",
+            ref=ref,
+            revision_path="automation/returns/W001/A003/R005",
+            expected_parent="f" * 40,
+            commit_message="must not publish",
+        )
