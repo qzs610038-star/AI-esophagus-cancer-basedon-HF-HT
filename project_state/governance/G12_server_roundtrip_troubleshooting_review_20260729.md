@@ -4,7 +4,7 @@
 > 工作树：W001  
 > experiment：`mpp2_huber_loss_paired_v001_20260728`  
 > 证据边界：本文是运行流程复盘与后续改进建议，不是实验结果，不执行 result import/accept，不改变 G12 科学合同。  
-> 当前运行状态：G12 的 A003（MSE）与 A004（Huber δ=1）均已完成并经 Gitee 回传；本地尚未执行 result import/accept，故 Registry 仍为 `pending`，本文不作科学比较或结论。
+> 当前运行状态：G12 的 A003（MSE）与 A004（Huber δ=1）均已完成并经 Gitee 回传；G12-R 又生成并核验了 A003/R004、A004/R002 两个不可变“仅封装修订”。本地尚未执行 result import/accept，Registry 仍为 `pending`，本文不作科学比较或结论。
 
 ## 1. 结论
 
@@ -19,7 +19,8 @@
   4. 在此之前，脏治理 worktree 本身已阻断一次。
 - 宽口径：把 runner SHA、governance SHA、dirty checkout 等同类 locus/identity 错误计入，服务器与本地之间共出现 **6 轮**可辨识阻塞，均发生在正式训练启动前。
 - 这 6 轮均未进入 `EXPERIMENT_STARTED`，因此没有浪费模型拟合预算，但消耗了大量人工复制命令、服务器执行、错误回传、本地修复、测试、提交和再次 fetch 的时间。
-- A003 完成后，结果回传又出现 **3 次本地打包阻塞** 与 **1 次跨平台完整性核验歧义**；它们都发生在正式训练之后，未触发重训、未额外消耗 run unit，最终由 A003 `R003` 与 A004 `R001` 两个不可变结果包闭环。
+- 首次结果回传出现 **3 次本地打包阻塞** 与 **1 次跨平台完整性核验歧义**；G12-R 的权威封装修订又暴露 **4 轮**服务器兼容问题。它们都发生在正式训练之后，未触发重训、未额外消耗 run unit。
+- 全链路可辨识阻塞共 **14 个**：训练启动/执行包 6 个、首次结果回传 4 个、G12-R 封装修订 4 个。最大单一簇仍是 execution bundle 的 locus/identity（6 个）；若按阶段合并，结果封装与回传共 8 个，但根因分散在协议类型、路径唯一性、换行完整性、Git ref 语义和 Schema 运行时能力。
 
 总体判断：
 
@@ -56,6 +57,26 @@
 
 两份 return commit 均以 `6c0f9cad173068ef194f3c1558a78e7fe8ceb313` 为唯一父提交。两次训练合计 `run_consumed=2`，没有 A005 或隐式重试。
 
+### 2.2 G12-R 不可变“仅封装修订”链路
+
+G12-R 不覆盖 A003/R003 或 A004/R001，不重跑训练，只从历史结果内容构建下一可用 revision，并要求 build、validate、governance result-v2 validate 与 record-import 共用同一权威完整校验入口。
+
+| 序号 | 服务器表现 | 实际卡点 | 安全意图 | 最终修正 |
+| ---: | --- | --- | --- | --- |
+| RR1 | `implementation SHA mismatch` | 操作卡把“实现提交”错误地等同于持续前进的治理分支 tip；分支加入审计/测试提交后必然不相等 | 固定实际执行的构建器版本 | 改为验证 implementation commit 存在且为远端 tip 的祖先，再从 exact implementation SHA 建 detached worktree |
+| RR2 | `A003/R004 build failed` | 操作卡使用裸 `python` 且只回传总括错误，隐藏了实际解释器与 stderr | 构建失败必须停止，不能发布半包 | 使用显式解释器、保留原始错误输出，并为每次执行生成新的空 staging 子目录 |
+| RR3 | 固定 venv 报 `ModuleNotFoundError: jsonschema` | 操作卡把严格 Schema 校验绑定到一个未登记依赖能力的 Python 路径 | 不得因解释器漂移而换用宽松校验 | 改为 capability-based 探测，并完整回传每个 candidate 的路径、退出码和 stderr |
+| RR4 | `no server Python candidate can import jsonschema` | capability 探测证明服务器没有任何可用的 Python Schema 后端，继续换路径无法解决 | 不得安装临时依赖、不得放宽 `result_envelope_v2.schema.json` | 增加 PowerShell 7 `Test-Json -SchemaFile` 零安装严格后端；再以 `PFMVAL_FORCE_POWERSHELL_SCHEMA=1` 和跨后端回归证明 build、validate、result-v2 validate、record-import 判定同构 |
+
+G12-R 最终事实：
+
+| attempt / revision | result id | result ref commit / parent | artifact / bundle SHA-256 |
+| --- | --- | --- | --- |
+| A003/R004 | `W001-A003-result-R004` | `83a7362e30cdcae871c638f03733815db501d963` / `d59221d650821796a561f65fc98561334f914757` | 12 / `f962f9a845e500648d147be6e2ea365be7de266fd0adb10dcedd20ad760c45e1` |
+| A004/R002 | `W001-A004-result-R002` | `a34f257f50bf1bf68a93571a37bb7dfc11b6236b` / `445f72bd12c4409d775b8e147ff6d218c9711244` | 13 / `a2bfca4b0140e90c3c8ce7c90a34b0ad3d3266c7e1f5b9d885c4876494dc2c78` |
+
+两份新 revision 均保留原 job、attempt、source commit、approval、contract、指标与 artifact 内容，仅修正封装元数据和包结构。`run_consumed` 仍为 `2/4`，没有 result import/accept 或 G13。
+
 对应本地治理提交链：
 
 | 提交 | 作用 |
@@ -68,6 +89,12 @@
 | `4ccadad` | server host scope 下不再把 archive 当本地 worktree |
 | `cc25bff` | source commit 改在 pinned source worktree 的 Git 对象库校验 |
 | `6c0f9ca` | archive 完整性验证容许严格限定的文本 LF→CRLF |
+| `9840efe` | 新增权威 `result_bundle_v1` build/validate/publish 工作流 |
+| `3009587` | 将 implementation 身份从“tip 相等”修正为“祖先关系 + exact checkout” |
+| `9da0fae` / `6b04ef2` | 显式 Python 与 capability-based Schema 解释器探测 |
+| `78e01dd` / `50fb973` | 增加零安装 PowerShell Schema 后端及强制同构演练 |
+| `8a44cbe` | 服务器卡默认使用零安装严格 Schema 校验 |
+| `31e9993` | 纳入最终审核回执并闭合 G12-R 审计链 |
 
 从 `bd7da76` 到 `6c0f9ca` 的四个补丁，本质上都在补同一个缺口：**没有在第一次下发前对“Windows 服务器上的普通 archive + 独立 source worktree”做完整端到端演练。**
 
@@ -234,26 +261,45 @@ run-governed-job-v2.ps1 -Bundle <bundle> -SourceWorkspace W001 -Attempt A003 -Dr
 
 本次第 6 轮失败是典型的 E2/E3 问题错误阻断 E0/E1。
 
-### 5.6 将结果回传变成单一、类型稳定的入口
+### 5.6 已落地：单一、类型稳定的 `result_bundle_v1`
 
-执行 bundle 的简化还不够；A003 后的三个打包故障表明，**return path 也不能继续依赖临时拼接的 PowerShell 卡**。建议新增由同一 CLI 生成并校验的 `result_bundle_v1`：
+G12-R 已把此前建议落地为权威入口：
 
-1. 输入只接受 runner 生成的 attempt root、immutable job 和 terminal event；终态映射固定为 `completed + returncode=0 → result status=success`，其他组合不得包装成成功。
-2. artifact 清单由相对路径和稳定 `artifact_id` 生成；先做 basename/path 唯一性检查，再复制，禁止 silent overwrite。
-3. `artifacts` 与 `large_artifacts` 始终由 schema writer 输出 JSON array；即使只有一个 large artifact 也必须是 `[{...}]`，不把 PowerShell 管道基数当作协议。
-4. 对文本 artifact 同时记录 `sha256_raw`（服务器字节）与 `sha256_canonical`（规定 LF 规范化后的字节），或明确记录 `line_ending=CRLF`；验证器只接受预注册的可逆规范化，不再依赖 Git 客户端配置猜测。
-5. 一个命令完成 `build → validate → isolated-index commit → Gitee push → remote SHA check`；失败时保留新的不可变本地 return revision，不覆盖旧 revision，也绝不触发训练。
+1. 在空 staging 目录构建，固定 `completed + returncode=0 → success`。
+2. 强制 `artifact_id`、`retention`、唯一相对路径及 artifact 闭包；`artifacts` 与 `large_artifacts` 始终为数组。
+3. 同时校验 Schema、语义字段、size、SHA-256、原始换行与 Git 规范化完整性。
+4. build、validate、governance result-v2 validate 与 record-import 使用同一入口，不再允许局部 validator 与完整 Schema 分叉。
+5. 发布使用不可变 revision、fast-forward 与远端 commit SHA 复核；重复执行不得覆盖历史 revision。
+6. Schema 后端支持 Python `jsonschema` 与 PowerShell 7 零安装严格验证，并有强制后端同构回归。
 
-这保持 E0/E1 的强绑定，却消除 R1--R4 所暴露的手工语义、命名与序列化歧义。
+因此 R1--R4 对应的状态、命名、数组和换行歧义已形成代码与 fixture 防线。仍待简化的是服务器操作卡本身：解释器/后端能力探测、staging 分配、发布与回传应由一个生成式入口封装，不再由用户维护多段 PowerShell。
+
+### 5.7 跨阶段共性根因
+
+14 个 blocker 的共性不是“门禁太多”，而是：
+
+- 正确的不变量被错误绑定到易变化的载体，例如 branch tip、worktree 形态、整仓 archive 字节或某个 Python 环境；
+- 协议字段依赖 PowerShell 管道基数、Git 换行配置等隐式主机行为；
+- preflight 采用 fail-fast，一轮只暴露一个 blocker；
+- 本地下发前没有用服务器等价能力矩阵演练最终操作卡。
+
+优化原则应是：**保留不变量，替换载体；保留严格校验，去除主机偶然性；一次聚合诊断，不再串行试错。**
 
 ## 6. 推荐实施顺序
 
-### P0：G12 已完成；以下仍为待实施治理改进
+### P0：已完成
 
-1. 冻结本次排障错误样本为回归 fixture。
-2. 实现最小 execution bundle schema、builder、verifier。
-3. 实现聚合 `preflight-v2`。
-4. 生成单入口服务器操作卡。
+1. `result_bundle_v1` 权威 build/validate/publish 入口。
+2. A003/R003、A004/R001 历史 fixture，以及 retention、artifact_id、数组退化、重名路径、未登记 sidecar、LF/CRLF、重复推送、远端 SHA 不一致回归。
+3. 严格 Schema 的零安装 PowerShell 后端和 Python 后端同构演练。
+4. A003/R004、A004/R002 不可变“仅封装修订”及远端 ref/parent/bundle SHA 复核。
+
+### P0：仍待实施
+
+1. 实现最小 execution bundle schema、builder、verifier。
+2. 实现聚合 `preflight-v2`，一次报告所有只读 blocker。
+3. 生成单入口服务器操作卡，并自动选择已验证的 Schema 后端。
+4. 将服务器 runtime capability 固化为可复用、带时效的 fingerprint，而不是在操作卡内临时猜测路径。
 5. 在 Windows 上覆盖以下端到端场景：
    - dirty 主仓库；
    - 不创建新 worktree；
@@ -264,7 +310,7 @@ run-governed-job-v2.ps1 -Bundle <bundle> -SourceWorkspace W001 -Attempt A003 -Dr
    - source object 缺失；
    - attempt root 已存在；
    - approval/contract/job 任一字段漂移。
-6. 增加 return-path fixture：`completed`/`failed` 状态映射、同名 artifact、单元素 `large_artifacts`、CRLF/LF 原始与 canonical SHA、重复回传 revision 和 remote-ref SHA 校验。
+6. 将完整“构建→严格验证→提交→fast-forward 推送→远端 SHA 复核”封装成一个稳定命令；操作卡只传 bundle/ref，不再手填实现 SHA、解释器候选和 staging 路径。
 
 ### P1：后续正式实验默认启用
 
@@ -281,6 +327,7 @@ run-governed-job-v2.ps1 -Bundle <bundle> -SourceWorkspace W001 -Attempt A003 -Dr
 
 后续治理改进至少达到：
 
+- 以本次 **14 个可辨识 blocker** 为基线，下一次同类双臂实验的服务器往返 blocker 目标为 **0**；
 - 从本地批准完成到服务器正式启动：**1 次 Gitee push + 1 次服务器粘贴执行**；
 - preflight 失败：**1 次回传暴露全部 blocker**；
 - 不因无关历史结果、Dashboard、CRLF 或 dirty 主仓库阻断；
@@ -299,7 +346,10 @@ run-governed-job-v2.ps1 -Bundle <bundle> -SourceWorkspace W001 -Attempt A003 -Dr
 | 当前整仓库、worktree 形态相关校验是否过度 | PASS：存在明确过度绑定 |
 | 是否可以在不削弱科学门禁的前提下简化 | PASS |
 | G12 是否已完成运行与回传边界 | PASS：双臂 completed、两个 result ref 已核验 |
+| G12-R 是否已完成权威封装修订 | PASS：A003/R004、A004/R002 均经完整 Schema、artifact 闭包、bundle SHA 与远端 SHA 核验 |
+| `result_bundle_v1` 是否已落地 | PASS |
+| execution bundle / 聚合 preflight / 单入口服务器卡是否已落地 | FAIL：仍是后续治理优化的主要缺口 |
 | 是否已 result import/accept 或启动 G13 | PASS：均未执行 |
 | 是否可立刻实施上述 P0 改进 | CONDITIONAL GO：须以独立批准任务实施，不得追溯改写本次不可变 result refs |
 
-总体结论：**CONDITIONAL GO（针对后续治理改进）**。G12 的运行与回传已闭环，但结果仍处于未 import/未 accept 状态。P0 应作为独立、明确批准的工程治理任务执行；它不得改写本次 source commit、approval、critical contract、attempt 或 result ref。
+总体结论：**CONDITIONAL GO（针对后续治理改进）**。G12 与 G12-R 的运行、回传和不可变封装修订已闭环，但结果仍处于未 import/未 accept 状态。`result_bundle_v1` 已解决 return path 的核心分叉；下一优先级应转向最小 execution bundle、聚合 preflight 和单入口服务器卡。后续改进必须作为独立、明确批准的工程治理任务执行，不得改写本次 source commit、approval、critical contract、attempt 或 result ref。
