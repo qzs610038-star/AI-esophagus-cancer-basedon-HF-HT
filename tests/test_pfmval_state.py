@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from scripts import finalize_experiment as finalize_module
+from scripts import pfmval_state as state_module
 from scripts.finalize_experiment import build_dashboard
 from scripts.pfmval_governance import build_job_v2, build_result_v2
 from scripts.pfmval_state import (
@@ -97,6 +98,33 @@ def test_git_commit_exists_uses_real_git_object_database(tmp_path):
     ).stdout.strip()
     assert git_commit_exists(repo, commit) is True
     assert git_commit_exists(repo, "0" * 40) is False
+
+
+def test_job_v2_manifest_uses_pinned_source_git_root_for_archive_governance(tmp_path, monkeypatch):
+    source = tmp_path / "source"
+    source.mkdir()
+    subprocess.run(["git", "init"], cwd=source, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "pfmval-test@example.invalid"], cwd=source, check=True)
+    subprocess.run(["git", "config", "user.name", "PFMval Test"], cwd=source, check=True)
+    (source / "tracked.txt").write_text("test\n", encoding="utf-8")
+    subprocess.run(["git", "add", "tracked.txt"], cwd=source, check=True)
+    subprocess.run(["git", "commit", "-m", "fixture"], cwd=source, check=True, capture_output=True)
+    source_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=source, check=True,
+        capture_output=True, text=True, encoding="utf-8",
+    ).stdout.strip()
+    archive = tmp_path / "governance-archive"
+    archive.mkdir()
+    monkeypatch.setattr(state_module, "validate_against_schema", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("scripts.pfmval_governance.validate_job_v2", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(state_module, "_validate_job_v2_governance_binding", lambda *_args, **_kwargs: None)
+
+    validate_job_manifest(
+        archive,
+        {"schema_version": "2.0", "source_commit": source_commit},
+        require_head=False,
+        source_git_root=source,
+    )
 
 
 def write_json(path: Path, value):

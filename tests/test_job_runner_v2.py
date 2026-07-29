@@ -71,7 +71,12 @@ def test_job_runner_v2_uses_workspace_and_external_attempt_root(tmp_path, monkey
     governance_sha = _commit_repo(governance, "README.md", "governance\n")
     source_sha = _commit_repo(source, "train.py", "print('fixture')\n")
     manifest = _manifest(source_sha, governance_sha, hashlib.sha256((source / "train.py").read_bytes()).hexdigest())
-    monkeypatch.setattr(ops, "validate_job_manifest", lambda *_args, **_kwargs: None)
+    validation = {}
+
+    def capture_validation(*_args, **kwargs):
+        validation.update(kwargs)
+
+    monkeypatch.setattr(ops, "validate_job_manifest", capture_validation)
 
     plan = ops.prepare_job_v2_execution(
         manifest,
@@ -82,6 +87,7 @@ def test_job_runner_v2_uses_workspace_and_external_attempt_root(tmp_path, monkey
 
     assert Path(plan["source_worktree"]) == source.resolve()
     assert Path(plan["run_directory"]) == (tmp_path / "runs" / "W001" / "A001").resolve()
+    assert Path(validation["source_git_root"]) == source.resolve()
     assert "state_revision" not in manifest
     event_path = ops.write_job_v2_started_event(plan, manifest)
     event = json.loads(event_path.read_text(encoding="utf-8"))
@@ -98,7 +104,12 @@ def test_job_runner_v2_rejects_legacy_unbound_v2_manifest(tmp_path, monkeypatch)
     source_sha = _commit_repo(source, "train.py", "print('fixture')\n")
     manifest = _manifest(source_sha, governance_sha, hashlib.sha256((source / "train.py").read_bytes()).hexdigest())
     manifest.pop("execution_binding")
-    monkeypatch.setattr(ops, "validate_job_manifest", lambda *_args, **_kwargs: None)
+    validation = {}
+
+    def capture_validation(*_args, **kwargs):
+        validation.update(kwargs)
+
+    monkeypatch.setattr(ops, "validate_job_manifest", capture_validation)
 
     try:
         ops.prepare_job_v2_execution(
@@ -227,7 +238,12 @@ def test_job_runner_v2_accepts_byte_verified_regular_governance_bundle(tmp_path,
     bundle = tmp_path / "governance-bundle"
     _archive_commit(governance_repo, governance_sha, bundle)
     manifest = _manifest(source_sha, governance_sha, hashlib.sha256((source / "train.py").read_bytes()).hexdigest())
-    monkeypatch.setattr(ops, "validate_job_manifest", lambda *_args, **_kwargs: None)
+    validation = {}
+
+    def capture_validation(*_args, **kwargs):
+        validation.update(kwargs)
+
+    monkeypatch.setattr(ops, "validate_job_manifest", capture_validation)
 
     plan = ops.prepare_job_v2_execution(
         manifest,
@@ -239,6 +255,7 @@ def test_job_runner_v2_accepts_byte_verified_regular_governance_bundle(tmp_path,
     )
 
     assert Path(plan["governance_root"]) == bundle.resolve()
+    assert Path(validation["source_git_root"]) == source.resolve()
 
 
 def test_job_runner_v2_rejects_tampered_regular_governance_bundle(tmp_path, monkeypatch):

@@ -336,7 +336,13 @@ def prepare_job_v2_execution(
     """
     if manifest.get("schema_version") != "2.0":
         raise ValueError("job run-v2 only accepts schema_version=2.0")
-    validate_job_manifest(governance_root, manifest, require_head=False)
+    source_worktree = source_worktree.resolve()
+    validate_job_manifest(
+        governance_root,
+        manifest,
+        require_head=False,
+        source_git_root=source_worktree,
+    )
     binding = manifest.get("execution_binding")
     if not isinstance(binding, dict):
         raise ValueError("job run-v2 requires an explicit execution_binding; regenerate the job after protocol approval")
@@ -349,7 +355,6 @@ def prepare_job_v2_execution(
         governance_repo=governance_repo,
         governance_commit=governance_commit,
     )
-    source_worktree = source_worktree.resolve()
     if _git_text(source_worktree, "rev-parse", "HEAD") != manifest["source_commit"]:
         raise ValueError("registered source worktree HEAD does not match job source_commit")
     if _git_text(source_worktree, "status", "--porcelain", "--untracked-files=all"):
@@ -1418,7 +1423,12 @@ def command_job(args: argparse.Namespace) -> int:
 
     if args.job_command == "pack":
         job = read_json(Path(args.manifest).resolve())
-        validate_job_manifest(PROJECT_ROOT, job, require_head=False)
+        validate_job_manifest(
+            PROJECT_ROOT,
+            job,
+            require_head=False,
+            source_git_root=Path(args.source_worktree).resolve() if args.source_worktree else None,
+        )
         metrics = read_json(Path(args.metrics_json).resolve()) if args.metrics_json else {}
         artifacts = [Path(item).resolve() for item in args.artifact]
         large_artifacts = [Path(item).resolve() for item in args.large_artifact]
@@ -1805,6 +1815,7 @@ def build_parser() -> argparse.ArgumentParser:
     pack.add_argument("--large-artifact", action="append", default=[], help="server-only file; record path, size and SHA-256 without copying")
     pack.add_argument("--metrics-json")
     pack.add_argument("--output", required=True)
+    pack.add_argument("--source-worktree", help="pinned source worktree when packaging from a Gitee governance archive")
     job_import = job_sub.add_parser("import")
     job_import.add_argument("--bundle", required=True)
     return parser

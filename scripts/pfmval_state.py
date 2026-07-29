@@ -3735,7 +3735,20 @@ def create_job_manifest(
     }
 
 
-def validate_job_manifest(root: Path, manifest: Mapping[str, Any], *, require_head: bool = True) -> None:
+def validate_job_manifest(
+    root: Path,
+    manifest: Mapping[str, Any],
+    *,
+    require_head: bool = True,
+    source_git_root: Path | None = None,
+) -> None:
+    """Validate a job envelope and its governance binding.
+
+    ``root`` is always the governance-state root.  A server-side Gitee archive
+    is intentionally not a Git worktree, so schema and approval binding remain
+    rooted there while source-object availability can be checked against the
+    separately pinned source worktree.
+    """
     if manifest.get("schema_version") == "2.0":
         from scripts.pfmval_governance import validate_job_v2
 
@@ -3745,15 +3758,16 @@ def validate_job_manifest(root: Path, manifest: Mapping[str, Any], *, require_he
             "server job v2",
         )
         validate_job_v2(manifest)
-        if not git_commit_exists(root, str(manifest["source_commit"])):
+        git_root = source_git_root or root
+        if not git_commit_exists(git_root, str(manifest["source_commit"])):
             raise ValueError(
                 "job source commit is unavailable locally: "
                 f"{manifest['source_commit']}"
             )
-        if require_head and manifest["source_commit"] != git_head(root):
+        if require_head and manifest["source_commit"] != git_head(git_root):
             raise ValueError(
                 f"job source commit {manifest['source_commit']} "
-                f"does not match HEAD {git_head(root)}"
+                f"does not match HEAD {git_head(git_root)}"
             )
         _validate_job_v2_governance_binding(root, manifest)
         return
