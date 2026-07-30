@@ -30,6 +30,7 @@ python deploy/pfmval_ops.py agent start-check --task diagnostic
 - `histogene/`、`egnv1/`、`egnv2/` 为受保护目录，未经用户明确授权不得修改。
 - 禁止 `git clean -fd`；不得自动删除 checkpoints、MPP 数据、缓存或未跟踪训练结果。
 - 服务器与本地当前只允许通过已配置的 Gitee Git remote 同步代码、状态和小型结果；SSH、SCP、HTTP 远程命令、Tunnel 均不是 active 通道。
+- GitHub `origin` 仅是用户逐次明确触发的备份与网页端只读镜像：Agent 不得自动推送、周期同步或将其用作服务器代码、状态、诊断、作业或结果传输通道；该用途不改变 Gitee 作为日常服务器同步唯一通道的规则。
 - 正式训练必须存在绑定 `job_id` 与 `source_commit` 的显式用户批准文件。
 - `diagnostic` 只能使用 allowlisted command id 并记录 source commit、分支、时间和输出校验值；它不是 experiment/job/result import 的替代通道。
 - 本地 `explore` 只允许位于 `scripts/explorations/` 与 `experiments/explorations/`，不得访问服务器、训练数据或生成可比较实验结论。
