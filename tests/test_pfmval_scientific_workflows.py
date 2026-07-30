@@ -7,6 +7,7 @@ from deploy import pfmval_ops
 from scripts.pfmval_science import (
     adjudicate_fact_candidates,
     list_scientific_records,
+    record_science_decision,
     record_scientific_entry,
 )
 
@@ -261,6 +262,64 @@ def test_p0c_t08_scientific_records_do_not_write_other_registries(tmp_path):
         },
     )
     assert {path: path.read_bytes() for path in protected} == before
+
+
+def test_science_decision_v1_single_result_is_one_atomic_append_only_receipt(
+    tmp_path,
+):
+    """The public decision API projects three records from one approved input."""
+    root = _root(tmp_path)
+    decision = {
+        "schema_version": "science_decision_v1",
+        "decision_id": "decision-single-1",
+        "created_at": "2026-07-30T00:00:00+00:00",
+        "experiment_id": "exp-a",
+        "result_binding": {
+            "kind": "single_result",
+            "result_id": "res-a",
+            "acceptance_event_id": "accept-res-a",
+        },
+        "user_confirmation_ref": "user:DIR-20260730-002",
+        "decision_summary": {
+            "primary_metric": "external_xzy_pcc",
+            "control_value": 0.6549,
+            "treatment_value": 0.6527,
+            "delta": -0.0022,
+            "direction": "no_improvement",
+            "stop_rule": "do_not_retry_unchanged_protocol",
+            "uncertainty": "single paired comparison",
+            "open_questions": ["new hypothesis required"],
+        },
+        "claim": {"statement": "Huber does not improve PCC"},
+        "negative_result": {
+            "route": "identical retry",
+            "outcome": "no improvement",
+            "stop_condition": "do not retry unchanged protocol",
+            "continue_condition": "new hypothesis",
+        },
+        "explanation": {
+            "observation": "delta PCC is negative",
+            "interpretation": "no material benefit",
+            "recommendation": "close without retry",
+            "unit": "correlation",
+            "statistic": "Pearson PCC",
+            "text_description": "accepted paired comparison",
+        },
+    }
+
+    first = record_science_decision(root, decision)
+    record_path = root / "project_state" / "scientific_records.jsonl"
+    before_replay = record_path.read_bytes()
+    second = record_science_decision(root, decision)
+
+    assert first["status"] == "recorded"
+    assert first["receipt"]["decision_id"] == "decision-single-1"
+    assert len(first["receipt"]["projected_record_ids"]) == 3
+    assert second["status"] == "already_recorded"
+    assert record_path.read_bytes() == before_replay
+    assert {
+        record["record_type"] for record in list_scientific_records(root)
+    } == {"claim", "negative_result", "explanation"}
 
 
 def test_p0c_local_cli_fixture_uses_only_repository_files(
