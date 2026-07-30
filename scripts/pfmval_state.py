@@ -2033,6 +2033,14 @@ def render_current_state(root: Path, state: Mapping[str, Any], registry: Mapping
         experiment = experiments.get(result_id)
         if experiment:
             lines.append(f"- `{result_id}` ({experiment.get('evidence_status', 'unknown')}): {_result_metrics_line(experiment)}")
+            decision = experiment.get("decision_summary")
+            if isinstance(decision, Mapping):
+                lines.append(
+                    "  - decision_summary: "
+                    f"{decision.get('primary_metric', 'unknown')} "
+                    f"Δ={decision.get('delta', 'unknown')}; "
+                    f"next={experiment.get('next_action', 'unknown')}"
+                )
         else:
             lines.append(f"- `{result_id}`: **missing from Registry**")
     if state.get("pending_result_ids"):

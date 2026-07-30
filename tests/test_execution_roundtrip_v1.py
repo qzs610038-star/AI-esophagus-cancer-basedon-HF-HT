@@ -651,3 +651,70 @@ def test_governance_maintenance_workspace_can_advance_clean_branch_head(tmp_path
             head="2" * 40,
             dirty=True,
         )
+
+
+def test_prediction_column_contract_reports_all_missing_columns_in_preflight():
+    from scripts.pfmval_execution_roundtrip import (
+        aggregate_preflight_v2,
+        preflight_prediction_artifact_columns,
+    )
+
+    contract = {
+        "schema_version": "prediction_artifact_contract_v1",
+        "required_columns": [
+            "sample_id",
+            "spatial_cluster_id",
+            "pathway_id",
+            "y_true",
+            "y_pred",
+        ],
+    }
+    column_report = preflight_prediction_artifact_columns(
+        contract,
+        ["pathway_id", "y_pred", "pathway_id"],
+    )
+    assert column_report["status"] == "blocked"
+    assert column_report["missing_columns"] == [
+        "sample_id",
+        "spatial_cluster_id",
+        "y_true",
+    ]
+    assert column_report["duplicate_columns"] == ["pathway_id"]
+
+    report = aggregate_preflight_v2(
+        bundle_manifest={"bundle_id": "b" * 64},
+        fingerprint=_fixture_probe(),
+        observations={
+            "bundle": {"valid": True},
+            "source": {
+                "head_matches": True,
+                "clean": True,
+                "object_available": True,
+                "entrypoint_sha_matches": True,
+            },
+            "bindings": {
+                "approval_matches": True,
+                "contract_matches": True,
+                "job_matches": True,
+                "data_manifest_matches": True,
+                "split_matches": True,
+            },
+            "attempt": {
+                "root_absent": True,
+                "lease_available": True,
+                "budget_available": True,
+            },
+            "runtime": {
+                "schema_backend_available": True,
+                "gpu_sufficient": True,
+                "disk_sufficient": True,
+            },
+            "publish": {
+                "fast_forward": True,
+                "remote_identity_matches": True,
+            },
+            "prediction_contract": column_report,
+        },
+    )
+    failure = next(item for item in report["failures"] if item["check_id"] == "prediction_columns")
+    assert failure["missing_columns"] == column_report["missing_columns"]

@@ -8,6 +8,7 @@ from deploy import pfmval_ops
 from scripts.pfmval_science import (
     adjudicate_fact_candidates,
     list_scientific_records,
+    project_decision_summaries,
     record_science_decision,
     record_scientific_entry,
 )
@@ -330,6 +331,80 @@ def test_science_decision_v1_single_result_is_one_atomic_append_only_receipt(
     assert {
         record["record_type"] for record in list_scientific_records(root)
     } == {"claim", "negative_result", "explanation"}
+    projection = project_decision_summaries(root)
+    registry = json.loads(
+        (root / "experiments" / "experiment_registry.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert projection["experiment_ids"] == ["exp-a"]
+    assert registry["experiments"][0]["decision_summary"]["delta"] == -0.0022
+    assert registry["experiments"][0]["next_action"] == "closed_no_retry"
+    before_second_projection = (
+        root / "experiments" / "experiment_registry.json"
+    ).read_bytes()
+    assert project_decision_summaries(root)["status"] == "already_projected"
+    assert (
+        root / "experiments" / "experiment_registry.json"
+    ).read_bytes() == before_second_projection
+
+
+def test_science_decision_v1_supports_accepted_paired_result_only(tmp_path):
+    root = _root(tmp_path)
+    registry_path = root / "experiments" / "experiment_registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    registry["experiments"][0]["paired_result"] = {
+        "pair_id": "PAIR-exp-a",
+        "member_result_ids": ["res-a", "res-b"],
+    }
+    registry_path.write_text(
+        json.dumps(registry, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    package = {
+        "schema_version": "science_decision_v1",
+        "decision_id": "decision-paired-1",
+        "created_at": "2026-07-30T00:00:00+00:00",
+        "experiment_id": "exp-a",
+        "result_binding": {
+            "kind": "paired_result",
+            "result_id": "PAIR-exp-a",
+            "acceptance_event_id": "accept-pair-exp-a",
+        },
+        "user_confirmation_ref": "user:DIR-20260730-002",
+        "decision_summary": {
+            "primary_metric": "external_xzy_pcc",
+            "control_value": 1.0,
+            "treatment_value": 0.9,
+            "delta": -0.1,
+            "direction": "no_improvement",
+            "stop_rule": "do_not_retry_unchanged_protocol",
+            "uncertainty": "paired only",
+            "open_questions": [],
+        },
+        "claim": {"statement": "paired conclusion"},
+        "negative_result": {
+            "route": "retry",
+            "outcome": "none",
+            "stop_condition": "stop",
+            "continue_condition": "new hypothesis",
+        },
+        "explanation": {
+            "observation": "paired values",
+            "interpretation": "negative",
+            "recommendation": "stop",
+            "unit": "correlation",
+            "statistic": "PCC",
+            "text_description": "paired result",
+        },
+    }
+    assert record_science_decision(root, package)["status"] == "recorded"
+    before_conflict = (root / "project_state" / "scientific_records.jsonl").read_bytes()
+    with pytest.raises(ValueError, match="different scientific content"):
+        record_science_decision(
+            root, {**package, "claim": {"statement": "different"}}
+        )
+    assert (root / "project_state" / "scientific_records.jsonl").read_bytes() == before_conflict
 
 
 def test_p0c_local_cli_fixture_uses_only_repository_files(

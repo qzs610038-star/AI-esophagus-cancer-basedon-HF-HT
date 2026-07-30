@@ -48,10 +48,19 @@ RUNTIME_FILES = (
     "project_state/schemas/critical_contract.schema.json",
     "project_state/schemas/execution_bundle_v1.schema.json",
     "project_state/schemas/experiment_approval_v2.schema.json",
+    "project_state/schemas/prediction_artifact_contract_v1.schema.json",
     "project_state/schemas/result_envelope_v2.schema.json",
     "project_state/schemas/server_fingerprint_v1.schema.json",
     "project_state/schemas/server_job_v2.schema.json",
     "project_state/schemas/workspace_registry.schema.json",
+)
+
+PREDICTION_ARTIFACT_COLUMNS = (
+    "sample_id",
+    "spatial_cluster_id",
+    "pathway_id",
+    "y_true",
+    "y_pred",
 )
 
 
@@ -101,6 +110,47 @@ def _read_jsonl(path: Path) -> list[Dict[str, Any]]:
             raise ValueError(f"expected JSON object at {path}:{line_number}")
         records.append(value)
     return records
+
+
+def validate_prediction_artifact_contract(
+    contract: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """Validate the declared, pre-training scientific prediction table contract."""
+    expected = list(PREDICTION_ARTIFACT_COLUMNS)
+    columns = contract.get("required_columns")
+    if contract.get("schema_version") != "prediction_artifact_contract_v1":
+        raise ValueError("unsupported prediction artifact contract schema_version")
+    if not isinstance(columns, list) or any(not isinstance(item, str) for item in columns):
+        raise ValueError("prediction artifact contract requires a string required_columns array")
+    duplicates = sorted({item for item in columns if columns.count(item) > 1})
+    missing = [item for item in expected if item not in columns]
+    unexpected = sorted(set(columns) - set(expected))
+    if duplicates or missing or unexpected:
+        raise ValueError(
+            "prediction artifact contract must declare exactly "
+            f"{expected}; missing={missing}; duplicates={duplicates}; unexpected={unexpected}"
+        )
+    return {"schema_version": "prediction_artifact_contract_v1", "required_columns": expected}
+
+
+def preflight_prediction_artifact_columns(
+    contract: Mapping[str, Any],
+    observed_columns: Iterable[str],
+) -> Dict[str, Any]:
+    """Report every column-contract violation together before a training start."""
+    canonical = validate_prediction_artifact_contract(contract)
+    observed = [str(item) for item in observed_columns]
+    required = canonical["required_columns"]
+    missing = [item for item in required if item not in observed]
+    duplicates = sorted({item for item in observed if observed.count(item) > 1})
+    return {
+        "status": "ready" if not missing and not duplicates else "blocked",
+        "required_columns": required,
+        "observed_columns": observed,
+        "missing_columns": missing,
+        "duplicate_columns": duplicates,
+        "valid": not missing and not duplicates,
+    }
 
 
 def _write_json_atomic(path: Path, value: Mapping[str, Any]) -> None:
@@ -793,6 +843,25 @@ def aggregate_preflight_v2(
                     **record,
                     "severity": "HARD_FAIL",
                     "message": f"{group}.{field} did not pass",
+                }
+            )
+    prediction_observation = observations.get("prediction_contract")
+    if isinstance(prediction_observation, Mapping):
+        record = {
+            "check_id": "prediction_columns",
+            "layer": "E0",
+            "observed": prediction_observation.get("valid"),
+        }
+        if prediction_observation.get("valid") is True:
+            passes.append(record)
+        else:
+            failures.append(
+                {
+                    **record,
+                    "severity": "HARD_FAIL",
+                    "message": "prediction artifact column contract did not pass",
+                    "missing_columns": list(prediction_observation.get("missing_columns", [])),
+                    "duplicate_columns": list(prediction_observation.get("duplicate_columns", [])),
                 }
             )
     line_endings = fingerprint.get("git_line_endings")

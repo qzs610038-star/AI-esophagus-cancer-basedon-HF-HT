@@ -103,6 +103,7 @@ from scripts.pfmval_views import (  # noqa: E402
 from scripts.pfmval_science import (  # noqa: E402
     adjudicate_fact_candidates,
     list_scientific_records,
+    project_decision_summaries,
     record_science_decision,
     record_scientific_entry,
 )
@@ -626,6 +627,14 @@ def command_state(args: argparse.Namespace) -> int:
 
 
 def command_docs(args: argparse.Namespace) -> int:
+    if args.docs_command == "guide":
+        guide = build_project_guide(PROJECT_ROOT)
+        guide_path = PROJECT_ROOT / "PROJECT_GUIDE.md"
+        write_text_atomic(guide_path, guide)
+        print(json.dumps({"project_guide_sha256": hashlib.sha256(guide.encode("utf-8")).hexdigest()}, ensure_ascii=False, indent=2))
+        return 0
+    if args.docs_command != "scan":
+        raise ValueError(f"unknown docs command: {args.docs_command}")
     registry = scan_documents(PROJECT_ROOT)
     summary = registry["summary"]
     print(json.dumps(summary, ensure_ascii=False, indent=2))
@@ -974,13 +983,14 @@ def command_asset(args: argparse.Namespace) -> int:
 def command_views(args: argparse.Namespace) -> int:
     if args.views_command != "refresh":
         raise ValueError(f"unknown views command: {args.views_command}")
+    if not args.experiments:
+        raise ValueError("views refresh requires --experiments; PROJECT_GUIDE uses docs guide")
+    projection = project_decision_summaries(PROJECT_ROOT)
     hashes = refresh_experiment_views(PROJECT_ROOT)
-    guide = build_project_guide(PROJECT_ROOT)
-    guide_path = PROJECT_ROOT / "PROJECT_GUIDE.md"
-    write_text_atomic(guide_path, guide)
-    hashes["project_guide_sha256"] = hashlib.sha256(
-        guide.encode("utf-8")
-    ).hexdigest()
+    with state_lock(PROJECT_ROOT):
+        state = sync_state(PROJECT_ROOT)
+    hashes["decision_projection"] = projection
+    hashes["current_state_revision"] = str(state["state_revision"])
     print(json.dumps(hashes, ensure_ascii=False, indent=2))
     return 0
 
@@ -1605,6 +1615,7 @@ def build_parser() -> argparse.ArgumentParser:
     docs_sub = docs.add_subparsers(dest="docs_command", required=True)
     scan = docs_sub.add_parser("scan")
     scan.add_argument("--write", action="store_true")
+    docs_sub.add_parser("guide")
 
     paths = sub.add_parser("paths")
     paths_sub = paths.add_subparsers(dest="paths_command", required=True)
@@ -1692,7 +1703,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     views = sub.add_parser("views")
     views_sub = views.add_subparsers(dest="views_command", required=True)
-    views_sub.add_parser("refresh")
+    views_refresh = views_sub.add_parser("refresh")
+    views_refresh.add_argument("--experiments", action="store_true")
 
     science = sub.add_parser("science")
     science_sub = science.add_subparsers(

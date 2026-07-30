@@ -318,6 +318,20 @@ def _decision_projection(decision: Mapping[str, Any]) -> list[dict[str, Any]]:
     return [claim, negative, explanation]
 
 
+def _validate_decision_binding(root: Path, decision: Mapping[str, Any]) -> None:
+    binding = decision["result_binding"]
+    experiment = _accepted_experiment(
+        root,
+        experiment_id=str(decision["experiment_id"]),
+        result_id=str(binding["result_id"]),
+    )
+    pair_id = str((experiment.get("paired_result") or {}).get("pair_id", ""))
+    if binding["kind"] == "paired_result" and binding["result_id"] != pair_id:
+        raise ValueError("paired science decision must bind the accepted pair_id")
+    if binding["kind"] == "single_result" and binding["result_id"] == pair_id:
+        raise ValueError("single science decision cannot bind a paired result")
+
+
 def _decision_receipt(decision: Mapping[str, Any], projections: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     projected = [dict(item) for item in projections]
     digest = hashlib.sha256(_canonical(projected).encode("utf-8")).hexdigest()
@@ -336,6 +350,7 @@ def record_science_decision(root: Path, decision: Mapping[str, Any]) -> dict[str
     from scripts.pfmval_state import validate_against_schema
 
     validate_against_schema(normalized, _decision_schema_path(root), "science_decision_v1")
+    _validate_decision_binding(root, normalized)
     projections = _decision_projection(normalized)
     for entry in projections:
         _validate_record(root, entry)
@@ -354,6 +369,60 @@ def record_science_decision(root: Path, decision: Mapping[str, Any]) -> dict[str
         return {"status": "already_recorded", "receipt": receipt}
     _write_records_atomic(path, [*records, *projections])
     return {"status": "recorded", "receipt": receipt}
+
+
+def project_decision_summaries(root: Path) -> dict[str, Any]:
+    """Project accepted decision summaries into the experiment fact registry only."""
+    records = _read_records(_records_path(root))
+    summaries: dict[str, Mapping[str, Any]] = {}
+    for record in records:
+        if record.get("record_type") != "claim":
+            continue
+        payload = record.get("payload")
+        experiment_id = str(record.get("experiment_id", ""))
+        summary = payload.get("decision_summary") if isinstance(payload, Mapping) else None
+        if not experiment_id or not isinstance(summary, Mapping):
+            continue
+        previous = summaries.get(experiment_id)
+        if previous is not None and _canonical(previous) != _canonical(summary):
+            raise ValueError(f"conflicting decision_summary projections for {experiment_id}")
+        summaries[experiment_id] = summary
+    registry_path = root / "experiments" / "experiment_registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    changed: list[str] = []
+    for experiment in registry.get("experiments", []):
+        experiment_id = str(experiment.get("id", ""))
+        summary = summaries.get(experiment_id)
+        if summary is None:
+            continue
+        normalized = json.loads(_canonical(summary))
+        next_action = (
+            "closed_no_retry"
+            if normalized.get("stop_rule") == "do_not_retry_unchanged_protocol"
+            else "open_new_hypothesis"
+        )
+        if (
+            _canonical(experiment.get("decision_summary")) != _canonical(normalized)
+            or experiment.get("next_action") != next_action
+        ):
+            experiment["decision_summary"] = normalized
+            experiment["next_action"] = next_action
+            changed.append(experiment_id)
+    if changed:
+        descriptor, temporary_name = tempfile.mkstemp(
+            prefix=f".{registry_path.name}.", suffix=".tmp", dir=registry_path.parent
+        )
+        try:
+            with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
+                handle.write(json.dumps(registry, ensure_ascii=False, indent=2) + "\n")
+            os.replace(temporary_name, registry_path)
+        except Exception:
+            try:
+                os.unlink(temporary_name)
+            except FileNotFoundError:
+                pass
+            raise
+    return {"status": "updated" if changed else "already_projected", "experiment_ids": changed}
 
 
 def list_scientific_records(
