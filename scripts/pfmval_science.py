@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import tempfile
+import hashlib
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
@@ -265,6 +266,94 @@ def record_scientific_entry(
         return {"status": "already_recorded", "record": existing}
     _write_records_atomic(path, [*records, normalized])
     return {"status": "recorded", "record": normalized}
+
+
+def _decision_schema_path(root: Path) -> Path:
+    return root / "project_state" / "schemas" / "science_decision_v1.schema.json"
+
+
+def _decision_projection(decision: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Create the three append-only scientific records from one decision package."""
+    binding = dict(decision["result_binding"])
+    common = {
+        "created_at": decision["created_at"],
+        "source_refs": [
+            f"decision:{decision['decision_id']}",
+            f"result:{binding['result_id']}",
+            f"acceptance:{binding['acceptance_event_id']}",
+            str(decision["user_confirmation_ref"]),
+        ],
+        "experiment_id": decision["experiment_id"],
+        "result_id": binding["result_id"],
+    }
+    summary = dict(decision["decision_summary"])
+    evidence_direction = {
+        "improvement": "supports",
+        "no_improvement": "refutes",
+        "unresolved": "unresolved",
+    }.get(str(summary["direction"]), "unresolved")
+    claim = {
+        **common,
+        "record_id": f"{decision['decision_id']}:claim",
+        "record_type": "claim",
+        "payload": {
+            **dict(decision["claim"]),
+            "evidence_direction": evidence_direction,
+            "uncertainty": summary["uncertainty"],
+            "decision_summary": summary,
+        },
+    }
+    negative = {
+        **common,
+        "record_id": f"{decision['decision_id']}:negative_result",
+        "record_type": "negative_result",
+        "payload": {**dict(decision["negative_result"]), "decision_summary": summary},
+    }
+    explanation = {
+        **common,
+        "record_id": f"{decision['decision_id']}:explanation",
+        "record_type": "explanation",
+        "payload": {**dict(decision["explanation"]), "decision_summary": summary},
+    }
+    return [claim, negative, explanation]
+
+
+def _decision_receipt(decision: Mapping[str, Any], projections: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
+    projected = [dict(item) for item in projections]
+    digest = hashlib.sha256(_canonical(projected).encode("utf-8")).hexdigest()
+    return {
+        "decision_id": str(decision["decision_id"]),
+        "schema_version": "science_decision_v1",
+        "result_binding": dict(decision["result_binding"]),
+        "projected_record_ids": [str(item["record_id"]) for item in projected],
+        "projection_sha256": digest,
+    }
+
+
+def record_science_decision(root: Path, decision: Mapping[str, Any]) -> dict[str, Any]:
+    """Validate one decision package then atomically append its three projections."""
+    normalized = json.loads(_canonical(dict(decision)))
+    from scripts.pfmval_state import validate_against_schema
+
+    validate_against_schema(normalized, _decision_schema_path(root), "science_decision_v1")
+    projections = _decision_projection(normalized)
+    for entry in projections:
+        _validate_record(root, entry)
+    path = _records_path(root)
+    records = _read_records(path)
+    existing = {str(item.get("record_id")): item for item in records}
+    ids = [str(item["record_id"]) for item in projections]
+    present = [item_id for item_id in ids if item_id in existing]
+    receipt = _decision_receipt(normalized, projections)
+    if present:
+        if len(present) != len(ids) or any(
+            _canonical(existing[item["record_id"]]) != _canonical(item)
+            for item in projections
+        ):
+            raise ValueError("decision_id is already bound to different scientific content")
+        return {"status": "already_recorded", "receipt": receipt}
+    _write_records_atomic(path, [*records, *projections])
+    return {"status": "recorded", "receipt": receipt}
 
 
 def list_scientific_records(

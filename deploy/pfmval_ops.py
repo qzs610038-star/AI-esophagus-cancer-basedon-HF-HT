@@ -103,6 +103,7 @@ from scripts.pfmval_views import (  # noqa: E402
 from scripts.pfmval_science import (  # noqa: E402
     adjudicate_fact_candidates,
     list_scientific_records,
+    record_science_decision,
     record_scientific_entry,
 )
 from scripts.pfmval_knowledge import (  # noqa: E402
@@ -985,6 +986,11 @@ def command_views(args: argparse.Namespace) -> int:
 
 
 def command_science(args: argparse.Namespace) -> int:
+    if args.science_command == "decision":
+        decision = read_json(Path(args.input).resolve())
+        result = record_science_decision(PROJECT_ROOT, decision)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
     if args.science_command == "record":
         entry = read_json(Path(args.input).resolve())
         result = record_scientific_entry(PROJECT_ROOT, entry)
@@ -1695,6 +1701,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     science_record = science_sub.add_parser("record")
     science_record.add_argument("--input", required=True)
+    science_decision = science_sub.add_parser("decision")
+    science_decision.add_argument("--input", required=True)
     science_list = science_sub.add_parser("list")
     science_list.add_argument(
         "--record-type",

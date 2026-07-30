@@ -1,4 +1,5 @@
 import json
+import shutil
 from pathlib import Path
 
 import pytest
@@ -43,6 +44,15 @@ def _root(tmp_path: Path, *, accepted: bool = True) -> Path:
         root / "project_state" / "document_registry.json",
         {"schema_version": "1.0", "documents": []},
     )
+    schema_source = (
+        Path(__file__).resolve().parent.parent
+        / "project_state"
+        / "schemas"
+        / "science_decision_v1.schema.json"
+    )
+    schema_target = root / "project_state" / "schemas" / schema_source.name
+    schema_target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(schema_source, schema_target)
     return root
 
 
