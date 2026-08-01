@@ -1,0 +1,7 @@
+interface:
+  display_name: "qzs 稳定结论文档撰写"
+  short_description: "审核后追加本机实验稳定结论、完成日期、双语伪代码、证据链接及可视化图表"
+  default_prompt: "Use $qzs-stable-conclusion-writer to draft and append reviewed qzs conclusions without overwriting existing content."
+policy:
+  allow_implicit_invocation: true
+

@@ -1,22 +1,24 @@
-# MPP2 逐通路 Ridge 校准第一次实验方案
+# MPP2 逐通路 Ridge 校准第一次实验方案（已完成并以外部门失败关闭）
 
 > experiment_id: `mpp2_pathway_ridge_calibration_v001_20260717`
 > status: `execution_approved_pending_bound_replacement_job`
 > lifecycle: `active`
 > created_at: `2026-07-17`
 > owner: `PFMval MPP2`
+
+> **2026-08-01 用户批准的最终边界**：正式 r003 已完成，Registry 状态为 `failed / rejected`。校准后 XZY mean raw R² `-0.08803688`、mean raw MAE `1176.22480`，均未优于原始冻结基线，因此本方案以下“交付 CalibratedMPP2”的步骤仅保留为历史实验合同，不得再次执行。`CalibratedMPP2` 不进入 Phase 3 或部署。用户已决定后续 Phase 3 研究采用 H&E 与 accepted 修复版冻结 MPP2 原始输出联合输入，待队友基线包到位后比较“直接拼接 vs 特征融合”；不再重复判断是否采用 MPP2。
 > directive_id: `DIR-20260717-001`（方案登记） + `DIR-20260717-003`（r002 门控语义修正后的一次替代正式执行；取代 `DIR-20260717-002`）
 > execution_authority: `state directive + experiment registry + approved job manifest`
 
 ## 1. 目标与交付定义
 
-本实验只尝试一个方向：在冻结的 MPP2 神经网络后增加“逐通路、正斜率、带恒等先验的 Ridge 仿射校准”。目标不是输出一份供 Phase 3 再处理的中间 z-score，而是交付一个完整的 `CalibratedMPP2` 推理包：
+本实验历史合同只尝试一个方向：在冻结的 MPP2 神经网络后增加“逐通路、正斜率、带恒等先验的 Ridge 仿射校准”。原目标是交付一个完整的 `CalibratedMPP2` 推理包；该目标因外部门失败而未获准交付：
 
 ```text
 UNI2-h feature -> frozen MPP2 head -> pathway-wise calibration -> raw ssGSEA score
 ```
 
-Phase 3 直接消费最终 30 个 raw ssGSEA 通路分数。除既有的 ID 对齐和预先固定的患者聚合外，Phase 3 不得再次 inverse z-score、重新拟合校准器、患者内 z-score、rank normalization 或 quantile normalization。
+该接口仅描述当时的预注册假设。当前 Phase 3 不得消费校准后的 30 列；后续联合输入只使用 accepted 修复版冻结基线原始输出，并比较直接拼接与特征融合。
 
 本文件是可追溯的实验方案，不在未登记 directive、experiment、job approval 和 source_commit 前授权训练或服务器执行。
 
@@ -109,7 +111,7 @@ R^2_{raw}(y,\tilde y)=R^2_z(y,\tilde y)
 ### Step 0：登记与预检
 
 1. 运行 `python deploy/pfmval_ops.py agent start-check --strict`。
-2. 追加用户 directive，明确“Phase 3 直接消费 calibrated raw 30 列，不做二次数值处理”。
+2. 历史执行时曾追加用户 directive，约束校准接口；该指令已被 `DIR-20260801-004` 取代，不能据此再次执行或交付。
 3. 登记 experiment，绑定 repaired `data_manifest_id`、source commit、checkpoint SHA 和 z-score 参数 SHA。
 4. 创建只读推理/校准 job manifest；禁止修改 protected MPP 资产。
 
@@ -216,9 +218,9 @@ raw MAE 下降
 
 若只由 `-0.088 -> -0.083`，记录为弱信号，不替换交付模型；若 mean raw R2 达到 0 以上，记录为强成功。若三个空间网格中至少两个 `delta R2` 的 95% CI 下界大于 0，记为“空间稳健强证据”；否则保留为单患者弱/中等证据，不宣传为跨患者证明。
 
-## 6. 最终模型包与 Phase 3 接口
+## 6. 最终模型包与 Phase 3 接口（未通过外部门，不得启用）
 
-通过外部门后，将校准和 train-only inverse z-score 集成到推理包装，而不是交给 Phase 3 另行处理：
+以下内容是“若外部门通过”的历史条件式设计；r003 实际未通过，故没有可批准的 Phase 3 校准模型包：
 
 ```python
 class CalibratedMPP2(nn.Module):
@@ -251,7 +253,7 @@ mpp2_calibrated_raw_v001/
 └── README_PHASE3_INPUT_CONTRACT.md
 ```
 
-对 Phase 3 暴露的预测表只提供 ID 和最终 30 个 raw calibrated pathway 列。禁止混用旧 `pred_z_*`、旧 raw 输出或未经校准的 baseline 输出。
+不得向 Phase 3 暴露或交付 raw calibrated pathway 列。后续研究只使用 accepted 修复版冻结 baseline 原始输出与 H&E 联合输入；当前待核验问题是直接拼接和特征融合的定义、协议与表现，而不是是否采用 MPP2。
 
 ## 7. 明确排除项
 

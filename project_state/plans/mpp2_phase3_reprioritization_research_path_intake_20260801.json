@@ -1,0 +1,55 @@
+{
+  "fixture_only": false,
+  "real_operation": "NOT RUN",
+  "document_id": "mpp2-phase3-reprioritization-20260801",
+  "title": "MPP2 后续实验与 Phase 3 接入重新排序讨论",
+  "confirmed_conclusions": [
+    "Phase 3 是食管鳞癌新辅助治疗 pCR/MPR 响应预测；当前已运行终点仅确认为 pCR/non-pCR，MPR 标签合同待定，队列约 78 例且准确数目待 patient manifest 核验。",
+    "后续 Phase 3 研究已决定采用 H&E 与 accepted 修复版冻结 MPP2 原始输出联合输入，当前比较特征融合与直接拼接；CalibratedMPP2 因 r003 外部门失败且证据被拒绝，不得进入 Phase 3 或部署。",
+    "LoRA rank=8、LoRA dropout=0.10、Huber 和 Ridge 校准均有正式停止结论，不能作为本轮默认重试路线。",
+    "yzq 的 20 个测试折 AUC 属于已审核团队探索证据，不是 accepted 实验结果；删病例或替换低 AUC fold 只能用于敏感性诊断。"
+  ],
+  "interpretations": [
+    {
+      "statement": "当前最高优先级是取得并核验队友 Phase 3 基线实验，在相同 H&E+accepted raw MPP2 输入和相同患者级协议下比较直接拼接与特征融合。",
+      "uncertainty": "基线实验、准确 patient manifest、结构化标签合同、tracked Phase 3 实现及 development/test 边界尚未进入本项目事实源。"
+    },
+    {
+      "statement": "方案1的 B1 患者内逐通路百分位是基线到位后的第一项新 MPP2 候选，可与绝对值并行输出并进入既定融合结构。",
+      "uncertainty": "如果 Phase 3 只做患者内均值池化，百分位均值接近 0.5，B1 信息会被抹除；必须先核实 CLAM、DTFD-MIL 或 TransMIL 的真实接入路径。"
+    },
+    {
+      "statement": "方案2应改写为 CHRep 启发的训练-gallery后校准或 A1-S 探针，而不是把测试患者均值方差归一化称为 CHRep；其优先级低于 B1。",
+      "uncertainty": "CHRep 是与表示学习配套的两阶段方法，当前 accepted MPP2 是否能安全拆出独立校准模块尚未验证。"
+    },
+    {
+      "statement": "方案3必须拆成 VPT 与 SPIRAL/Gromov-Wasserstein OT 两个不同假设；VPT 可先于 OT，但都应在低成本探针显示稳定增量后解锁。",
+      "uncertainty": "VPT 需要在线重跑 UNI2-h token 序列且原论文是识别任务；SPIRAL 是 SRT-SRT 图整合与坐标对齐，不是现成的 H&E-通路跨模态适配器。"
+    }
+  ],
+  "negative_routes": [
+    {
+      "route": "CalibratedMPP2 / 逐通路 Ridge r003",
+      "stop_reason": "XZY mean raw R2 从 -0.08801664 变为 -0.08803688，mean raw MAE 从 1176.21137 变为 1176.22480，外部门失败且 evidence_status=rejected。"
+    },
+    {
+      "route": "LoRA rank=8 与 dropout=0.10 原配置重试或 sweep",
+      "stop_reason": "LoRA 增量未达到预注册门槛且内部验证变差；dropout=0.10 也未优于同期冻结对照。"
+    },
+    {
+      "route": "Huber(delta=1) 同合同重试",
+      "stop_reason": "相对 MSE 的 XZY pooled PCC 差值为 -0.0022051561，Registry 已关闭为 no_retry。"
+    },
+    {
+      "route": "依据 XZY 或同一约 78 例 Phase 3 队列反复选择模型",
+      "stop_reason": "会把外部或下游评估集转化为隐性调参集，破坏可解释的泛化证据。"
+    }
+  ],
+  "open_hypotheses": [
+    "在相同 H&E+accepted raw MPP2 输入与患者级划分下，特征融合是否稳定优于直接拼接？",
+    "患者内 ordinal 特征相对 accepted absolute 特征是替代信息还是互补信息？",
+    "空间平滑是否在不牺牲外部泛化的情况下改善逐通路排序及 Phase 3 增量？",
+    "约 78 例能否建立固定 development/test 边界；若不能，是否接受本阶段全部 AUC 仅为 exploratory？",
+    "MPR 将采用独立二分类、与 pCR 的有序终点，还是分层标签合同？"
+  ]
+}

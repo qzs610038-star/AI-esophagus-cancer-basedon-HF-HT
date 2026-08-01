@@ -10,6 +10,7 @@
 4. 涉及服务器训练、缓存、路径或同步时，读取 `configs/server_paths.yaml` 和 `01_指南与解读/部署方案/服务器路径索引_20260701.md`。
 5. 只使用 `project_state/document_registry.json` 中 `lifecycle=active` 的方案作为执行依据；`superseded`、`historical`、`missing` 文档不得作为当前结论。
 6. 涉及方案、完成声明、实验结果或 GO/NO-GO 独立校验时，读取 `.agents/skills/pfmval-audit/SKILL.md`；`.agents/skills/` 是项目 Skill 权威源，`.claude/skills/<name>/SKILL.md` 只能作为直接引用同名权威 Skill 的薄适配器，不得复制或覆盖规则。
+7. 涉及 `团队项目进度与结论/` 的成员资料、汇总索引或术语表维护时，读取 `.agents/skills/team-progress-maintainer/SKILL.md`；涉及 `qzs/` 的本机稳定实验结论、双语伪代码或配套图表时，同时读取 `.agents/skills/qzs-stable-conclusion-writer/SKILL.md`。
 
 开始训练、修改服务器路径或生成项目结论前，运行：
 
@@ -42,6 +43,7 @@ python deploy/pfmval_ops.py agent start-check --task diagnostic
 
 - 每个实验工作树使用永久、不复用的 `W###` 编号；可附短名帮助记忆，但权威身份始终是编号。
 - 新对话开始实验代码写入前，用户需指定 `本对话工作树：W###`。Agent 必须核对其 experiment、路径、branch、HEAD 和 dirty 状态并回执；未绑定时只允许只读定位，不得默认写 `main`。
+- 本地诊断/探索例外：若任务不涉及服务器对接或同步、模型训练、正式实验调度、结果 import/accept，也不改写受保护资产，可无需指定 `W###`，直接在本地 `main` 开展。开始任何实验代码写入或结果性运行前，必须先将当前非忽略工作区完整提交到本地 Git；该基线提交不得自动推送到任何 remote。此例外不改变服务器实验、训练、证据晋级和 Gitee 往返门禁。
 - 绑定后，本对话后续修改、测试、提交和 job 生成均默认限于该工作树。切换工作树必须由用户显式指定并重新核验，不得使用全局“当前工作树”文件代替逐对话绑定。
 - 一个 experiment 在服务器只对应一个持久工作树；protocol revision、job 和 attempt 不新建工作树。attempt 输出必须写到注册的工作树外运行目录。
 - 服务器与本地代码默认由本地单写者维护；服务器简单兼容适配通过 Gitee 返回 patch/记录，由本地工作树接纳后再下发新 commit，禁止两端同时修改同一代码分支。
@@ -53,3 +55,10 @@ python deploy/pfmval_ops.py agent start-check --task diagnostic
 - 指令状态仅可显式 append-only 转为 `completed`、`superseded` 或 `cancelled`；生命周期检查只提供人工复核候选，不得自动关闭指令。
 - 新训练先登记 experiment id；服务器结果先进入 inbox，经 `result import` 验证后才可成为 accepted 证据。
 - `CURRENT_STATE.md`、Dashboard、next-steps 和 session-brief 均为生成文件，禁止手工维护事实。
+
+## 团队进度维护固定边界
+
+- `团队项目进度与结论/` 内的正式维护内容必须先经过用户显式审核与批准；未批准内容只能作为对话中的待审概要，不得提前写入。
+- 禁止覆写、删除、替换、重排或移动维护文档内任何既有内容。新增进展必须追加为带日期的新内容。
+- 后期需要修正既有表述时，必须保留原文，只能在需修正位置紧邻追加独立的“补充说明（YYYY-MM-DD，已获用户审核）”块，写明新证据、修正理解和适用边界。
+- 写入前后必须使用对应 Skill 的 append-only 校验脚本比较修改前快照和修改后文件；出现旧内容删除或改写时不得交付。

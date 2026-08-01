@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-30T05:57:38+00:00",
-  "state_revision": 144,
+  "updated_at": "2026-08-01T05:01:28+00:00",
+  "state_revision": 159,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -340,6 +340,132 @@
       "availability": "tracked"
     },
     {
+      "doc_id": "doc-18867c8d4cf0",
+      "path": ".agents/skills/qzs-stable-conclusion-writer/SKILL.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "ef15606b8986cbe868443baed00c2439d42a1f4f352519986152fe5930b099f7",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-a3778c11ac95",
+      "path": ".agents/skills/qzs-stable-conclusion-writer/assets/stable-conclusion-template.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "fb8ea49f3da57d04b51a6e8ffa4c1f36b9aab7f4c9136c97c6bb809c481dbc50",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-7bbcae9b630d",
+      "path": ".agents/skills/qzs-stable-conclusion-writer/assets/visualization-readme-template.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "ae808649500ab53cbd36b87f9f71773bafddef697a8ffa308a8bc3c9d0d9bd3f",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-3c115efe64bd",
+      "path": ".agents/skills/qzs-stable-conclusion-writer/references/evidence-and-approval-boundaries.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "359b6f0e836dce0b42f0f66a71eacfcfd8cda3f764627713e8f495aba4a0e0ba",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-ad37e55a955d",
+      "path": ".agents/skills/qzs-stable-conclusion-writer/references/experiment-section-schema.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "af84df0d4f2a88ffed31ab85de539d651fb2e24b9ed89d501789d071c7a8c30b",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-6ca8659ff141",
+      "path": ".agents/skills/qzs-stable-conclusion-writer/references/pseudocode-and-visualization-policy.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "772c789b0055f216ecc8b019277093766671d3ef2f3cda4f26c70d4dc0137db3",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
       "doc_id": "doc-bbcfcbdf94e6",
       "path": ".agents/skills/sync-server/SKILL.md",
       "category": "Agent Skill",
@@ -349,6 +475,111 @@
       "verified_at": "2026-07-26T16:52:20+00:00",
       "state_revision": 109,
       "content_sha256": "77abc0a98ceee53981d44fe4d2def7093194953887145672d8a89c00f48fdbda",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-d471d560d51d",
+      "path": ".agents/skills/team-progress-maintainer/SKILL.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "5adb0337bf151bd91754a7835f5b49bde84e4ec7fa51104c1cebc7b45f53a567",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-a47d3ba9cb04",
+      "path": ".agents/skills/team-progress-maintainer/assets/member-progress-template.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "f34ff6908eeff7076af3e167143225c8ebc6ffff19b8b913df75178271d07307",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-aec64183e49c",
+      "path": ".agents/skills/team-progress-maintainer/assets/summary-index-template.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "08ce5051e597ac196289899dcee91adb76ae198a9afa9420f1eace6ffae87e4d",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-bc58922ac774",
+      "path": ".agents/skills/team-progress-maintainer/references/approval-and-append-only-policy.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "8e9e52341a8813cf4cb4e8038712a735875cad5a4c307b1e526655fb4393f84e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-514daea1df9f",
+      "path": ".agents/skills/team-progress-maintainer/references/directory-and-routing-policy.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T16:09:53+00:00",
+      "state_revision": 145,
+      "content_sha256": "16fd4149f308d9e340297c78bac6ef7430ca8259082734a182200f27e1f5612d",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -556,9 +787,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-30T05:57:37+00:00",
-      "state_revision": 144,
-      "content_sha256": "69378353505149d8758d998c8938b65dc49c45fba95767990a4bc5e48d61eea9",
+      "verified_at": "2026-08-01T05:01:28+00:00",
+      "state_revision": 159,
+      "content_sha256": "e9d3a8c1a32d63b4c48f64a8edbd59bca087d75773a27d9ef1964bc09d403188",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -577,9 +808,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-30T05:57:37+00:00",
-      "state_revision": 144,
-      "content_sha256": "25b904982ce608344cc3a745a612430506769d759ac05daa6f8947144551007f",
+      "verified_at": "2026-08-01T05:01:28+00:00",
+      "state_revision": 159,
+      "content_sha256": "694b4a1ff04bded179729cf1160e5a49f40625168fda8555651b1d382ad4f8ac",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -1312,9 +1543,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-07-29T16:52:21+00:00",
-      "state_revision": 140,
-      "content_sha256": "045632f6d7104a84fd1645638c1562b33b62dd2bd680d59978d7a54460468358",
+      "verified_at": "2026-07-31T17:42:38+00:00",
+      "state_revision": 153,
+      "content_sha256": "63f0071da870a02dbd8019097678120ed37baad4cee4eeca4e7f9db768e7fece",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -1396,9 +1627,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-07-29T16:52:21+00:00",
-      "state_revision": 140,
-      "content_sha256": "35c94565691f0d37c545a78bbc749117005a0c79ba2eecebdb616aa3be1a20cf",
+      "verified_at": "2026-07-31T16:48:00+00:00",
+      "state_revision": 148,
+      "content_sha256": "587d941fc5c6b7a16310ceae6ab6c31eb6addc2a56c4d8f0e9a74e249876451c",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -1769,6 +2000,90 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-c7d309b77926",
+      "path": "01_指南与解读/分析报告/MPP2原始基因集分数空间连续性与患者内排名分析方案_20260801.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-01T03:41:46+00:00",
+      "state_revision": 156,
+      "content_sha256": "1e0242f2880b128393dd03d19b2268e0aca99203e539a22ecf3cc3fff24aa609",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-4ddcb830325e",
+      "path": "01_指南与解读/分析报告/MPP2双线并行改进与Phase3快速接入方案_原文_20260731.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T17:42:38+00:00",
+      "state_revision": 153,
+      "content_sha256": "771b56a00473a901803aeaba46619f90834f11e1b663752d9595c05980c6b963",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-e80cbb0dc4bd",
+      "path": "01_指南与解读/分析报告/MPP2双线并行改进与Phase3快速接入方案_执行实现扩展与冲突审查_20260731.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T17:42:38+00:00",
+      "state_revision": 153,
+      "content_sha256": "0fe224fb1141058577ff9ce826affa7bd8289a7322044a84e52684bddc52591e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-4c04d5240205",
+      "path": "01_指南与解读/分析报告/MPP2后续实验重新排序与Phase3接入讨论稿_20260801.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T17:42:38+00:00",
+      "state_revision": 153,
+      "content_sha256": "b049d46cf3431af8254649b7dc414de8076a4695fb85eaf1b7e4db58e92e89a1",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-9328df98eb69",
       "path": "01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md",
       "category": "分析报告",
@@ -1788,6 +2103,27 @@
       "tags": [],
       "connectivity_modes": [],
       "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-46539423c410",
+      "path": "01_指南与解读/分析报告/MPP2方案独立审查与网络对比调研报告_20260731.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T17:42:38+00:00",
+      "state_revision": 153,
+      "content_sha256": "34b25a4ee99ae18bb4420ca249f4243bac1a7c42d15a1b64901ac014172fc753",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
     },
     {
       "doc_id": "doc-a9e91078fa55",
@@ -2484,6 +2820,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-29671fc27444",
+      "path": "01_指南与解读/学习指南/MPP2原始基因集分数空间连续性与患者内排名分析方案_学习指南_20260801.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-01T05:01:28+00:00",
+      "state_revision": 159,
+      "content_sha256": "d51dfc6db0e9a9420a8ddde8b706172f601b71fbda7e7fd2dbc473ec630b416d",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-b66bfc74b3e2",
       "path": "01_指南与解读/学习指南/Mamba与频域模块学习指南_20260609.md",
       "category": "学习指南",
@@ -2511,6 +2868,69 @@
         "初学者",
         "学习指南"
       ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-379b96e712aa",
+      "path": "01_指南与解读/学习指南/PFMval_MPP2_双线优化方案体系化学习指南_20260801.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-01T03:14:16+00:00",
+      "state_revision": 155,
+      "content_sha256": "1477d632680e2af69305a93eeafb72434866748e987cce06a759b63d25af6fdf",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-624fb900b6c2",
+      "path": "01_指南与解读/学习指南/PFMval_MPP2_双线优化方案深度学习指南_20260801.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-01T03:41:46+00:00",
+      "state_revision": 156,
+      "content_sha256": "9a031d3561ffdf4491a791455578433db135f3f96530ab36fd849f1e0a53bbf0",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-081fee8475ee",
+      "path": "01_指南与解读/学习指南/PFMval_MPP2_双线方案学习指南_20260731.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-07-31T17:42:38+00:00",
+      "state_revision": 153,
+      "content_sha256": "c0f6f376694f5d5712d5e5d4b3d97b55c9e1c1ef891ec5d990b2c6c57db04b21",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
       "connectivity_modes": [],
       "availability": "local_only"
     },
@@ -2642,6 +3062,27 @@
       "connectivity_modes": [
         "ssh"
       ],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-7a93ec4e548d",
+      "path": "01_指南与解读/学习指南/UNI2-H_数据输入输出结构对比分析学习指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-01T05:01:28+00:00",
+      "state_revision": 159,
+      "content_sha256": "1fad19cb43319d29c226769958e093f8c9e03af058ad99b63f19debb3fcf555b",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
       "availability": "local_only"
     },
     {
@@ -3093,9 +3534,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-07-29T16:52:21+00:00",
-      "state_revision": 140,
-      "content_sha256": "b4c44692f190270603549700aa3d5629a0fff6b7901056ca21d98c501159494d",
+      "verified_at": "2026-07-31T17:15:45+00:00",
+      "state_revision": 152,
+      "content_sha256": "b74ed3550d0a0624ad781c540dcf9c5cbb3c1dd3c5e1e1926a9f33abf7469f3b",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3166,9 +3607,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-07-29T16:52:21+00:00",
-      "state_revision": 140,
-      "content_sha256": "cb7a363edf112405ff5f79c2e4142c2d499d1ef3bc45e511aba9658490681892",
+      "verified_at": "2026-07-31T16:48:00+00:00",
+      "state_revision": 148,
+      "content_sha256": "245e66dfd1ba1049c4ea5a3441220131dbb194b78e570bc3be45474a37be673d",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3655,9 +4096,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-07-29T16:52:21+00:00",
-      "state_revision": 140,
-      "content_sha256": "bb03e574700cf9da2be99a7a1416d91859664fd0bde6abefac949be3580d4eb2",
+      "verified_at": "2026-07-31T16:48:00+00:00",
+      "state_revision": 148,
+      "content_sha256": "a733b553d296bcf561296c7def1f6d799ec1a023e85467661619f601d340ef28",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3683,9 +4124,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-07-29T16:52:21+00:00",
-      "state_revision": 140,
-      "content_sha256": "079c67b03578e71c3ac12935b8cbc80c9cd58bde086c991e9bc552aec865b36c",
+      "verified_at": "2026-07-31T16:48:00+00:00",
+      "state_revision": 148,
+      "content_sha256": "dea55f00fa7b84c5c1c5f477254438c736ad85a406cbbf6222782361f82d5513",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3788,9 +4229,9 @@
       "scope": "agent_entry",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-30T05:56:38+00:00",
-      "state_revision": 143,
-      "content_sha256": "6d37b9fac74c4814ff6a4ccaef41da96a148b21427ea544ba69daeb189227fe4",
+      "verified_at": "2026-08-01T05:01:28+00:00",
+      "state_revision": 159,
+      "content_sha256": "a7b9f12e9cd60c5d4cdc535a21a9a2d369f9f72ca487c43dd6412355f868d6cc",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3835,9 +4276,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-30T05:57:37+00:00",
-      "state_revision": 144,
-      "content_sha256": "2e9bc7e6869251888e3d703f9d222f2857fe2800cf5df7194d86ed841b44c56f",
+      "verified_at": "2026-08-01T05:01:28+00:00",
+      "state_revision": 159,
+      "content_sha256": "84bf164e6732be0f9464d00f48c8013edacb80679f4be92aa110c5873ebf6e44",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3856,9 +4297,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-30T05:57:38+00:00",
-      "state_revision": 144,
-      "content_sha256": "117ff097eb48f5a2b1910a055893377188fd706954cba23dc61ced0de07ae5b9",
+      "verified_at": "2026-07-31T17:42:38+00:00",
+      "state_revision": 153,
+      "content_sha256": "b85dd4882cfe1d35b038fe043c43111e584b1037f28dfc195c06b91335ffb77a",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3878,9 +4319,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-30T05:57:37+00:00",
-      "state_revision": 144,
-      "content_sha256": "ad69a505c57beba708ce6d0e6a1e0796bbc0935fcf40e3d49981e01a9b7ee9fd",
+      "verified_at": "2026-08-01T05:01:28+00:00",
+      "state_revision": 159,
+      "content_sha256": "dd4d1b56695c08c270db5c3639f672004c9f72fa095f8f2d7cdae7bfe8230865",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4178,9 +4619,9 @@
       "scope": "plan_review:gitee_numbered_workspace_protocol_v001",
       "authority": "reference",
       "lifecycle": "approved_design",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "2e5e9cf7e12e4024bda88756173a594e821a721257feee2619cef35992782a8f",
+      "verified_at": "2026-08-01T05:01:28+00:00",
+      "state_revision": 159,
+      "content_sha256": "0989ca478007293ca6dcbb9a8d4d6aa50306d0d0915837fa3dbc34d024f8aec3",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4199,9 +4640,9 @@
       "scope": "mpp2_pathway_ridge_calibration",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "2923fe7bb645506cd0b7629dcc1ad0bc47681c1a79e122687cd29c09b173ccf6",
+      "verified_at": "2026-07-31T17:15:45+00:00",
+      "state_revision": 152,
+      "content_sha256": "c26341b6c96860ba183298f3618ae32bef70dc008df0d5ce17d5a9a07e2692f3",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4220,9 +4661,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "fc5c72780b030ca9513ec94cc2771b9fb692d82d93f4d3e4ba4dcbd745bd2184",
+      "verified_at": "2026-07-31T16:59:48+00:00",
+      "state_revision": 150,
+      "content_sha256": "8947290e9b68c8a0e78de65de36e4830386f1b2d5e6182f63957f609a5fec66c",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4241,9 +4682,9 @@
       "scope": "mpp_training",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "f34d443da26acc964a443ffe8415e92652a48dff90c190c1570804e2877853cb",
+      "verified_at": "2026-07-31T17:15:45+00:00",
+      "state_revision": 152,
+      "content_sha256": "d9e6145504c32cb5d7428c2c4c91c2e655bba7423a424a55562c800479747719",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4782,12 +5223,12 @@
     }
   ],
   "summary": {
-    "total": 215,
-    "live": 199,
+    "total": 236,
+    "live": 220,
     "missing": 16,
     "active": 53,
     "superseded": 11,
-    "historical": 117,
+    "historical": 138,
     "pending_review": 0,
     "approved_design": 18
   }

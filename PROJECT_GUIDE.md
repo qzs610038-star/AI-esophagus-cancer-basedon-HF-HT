@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `1f05d0aecc0f514a7f4f7714dbd45bcb96a3659a247c45ab0aa80d94328fc0d5`
+> source_sha256: `a8ddb839f74a2f95ae48ebdfd37e0036e9666d22e65eec73216560d2b37ee2d5`
 
 ## 我要找什么
 
@@ -87,6 +87,17 @@
 - [doc-fe4b048ff34a](.agents/skills/_shared/legacy-compatibility-policy.md)
 - [doc-3bbbee463565](.agents/skills/pfmval-audit/assets/audit-report-template.md)
 - [doc-eea543c941ec](.agents/skills/pfmval-audit/references/evidence-boundaries.md)
+- [doc-18867c8d4cf0](.agents/skills/qzs-stable-conclusion-writer/SKILL.md)
+- [doc-a3778c11ac95](.agents/skills/qzs-stable-conclusion-writer/assets/stable-conclusion-template.md)
+- [doc-7bbcae9b630d](.agents/skills/qzs-stable-conclusion-writer/assets/visualization-readme-template.md)
+- [doc-3c115efe64bd](.agents/skills/qzs-stable-conclusion-writer/references/evidence-and-approval-boundaries.md)
+- [doc-ad37e55a955d](.agents/skills/qzs-stable-conclusion-writer/references/experiment-section-schema.md)
+- [doc-6ca8659ff141](.agents/skills/qzs-stable-conclusion-writer/references/pseudocode-and-visualization-policy.md)
+- [doc-d471d560d51d](.agents/skills/team-progress-maintainer/SKILL.md)
+- [doc-a47d3ba9cb04](.agents/skills/team-progress-maintainer/assets/member-progress-template.md)
+- [doc-aec64183e49c](.agents/skills/team-progress-maintainer/assets/summary-index-template.md)
+- [doc-bc58922ac774](.agents/skills/team-progress-maintainer/references/approval-and-append-only-policy.md)
+- [doc-514daea1df9f](.agents/skills/team-progress-maintainer/references/directory-and-routing-policy.md)
 - [doc-f7b1e2850c57](.claude/deployment-gotchas.md)
 - [doc-872d775dd6d4](.claude/git-cloud-sync-options.md)
 - [doc-4d82a45da166](.claude/he-ssgsea-greedy-river.md)
@@ -113,6 +124,10 @@
 - [doc-c8131c8195ec](01_指南与解读/分析报告/MPP2_LoRA实验结果分析报告_20260713.md)
 - [doc-62ef6f4047db](01_指南与解读/分析报告/MPP2_用户授权强制Ridge校准与XZY实测报告_20260725.md)
 - [doc-788bf4046027](01_指南与解读/分析报告/MPP2_用户授权解除lambda限制与PCC敏感性实测报告_20260725.md)
+- [doc-4ddcb830325e](01_指南与解读/分析报告/MPP2双线并行改进与Phase3快速接入方案_原文_20260731.md)
+- [doc-e80cbb0dc4bd](01_指南与解读/分析报告/MPP2双线并行改进与Phase3快速接入方案_执行实现扩展与冲突审查_20260731.md)
+- [doc-4c04d5240205](01_指南与解读/分析报告/MPP2后续实验重新排序与Phase3接入讨论稿_20260801.md)
+- [doc-46539423c410](01_指南与解读/分析报告/MPP2方案独立审查与网络对比调研报告_20260731.md)
 - [doc-a9e91078fa55](01_指南与解读/分析报告/MPP2逐通路Ridge校准_r003实验总结_20260718.md)
 - [doc-5735d8901a5d](01_指南与解读/分析报告/MPP五划分UNI2h_MLP执行框架_Claude评审版_20260702.md)
 - [doc-943290bcd1e6](01_指南与解读/分析报告/MPP五划分训练分工与微信通知模板_20260701.md)
@@ -143,6 +158,7 @@
 - [doc-408ca0730228](01_指南与解读/学习指南/MPP2_LoRA实验全貌与对抗审查初学者指南_20260715.md)
 - [doc-25365ec02764](01_指南与解读/学习指南/MPP2_R2预测优化_假设检验与实验复盘_20260725.md)
 - [doc-b66bfc74b3e2](01_指南与解读/学习指南/Mamba与频域模块学习指南_20260609.md)
+- [doc-081fee8475ee](01_指南与解读/学习指南/PFMval_MPP2_双线方案学习指南_20260731.md)
 - [doc-ce20d727038e](01_指南与解读/学习指南/PFMval学习指南.md)
 - [doc-f0d642418ca1](01_指南与解读/学习指南/PFMval维护机制优化方案_v2.0.md)
 - [doc-bece8ee254c0](01_指南与解读/学习指南/RL方法选择_初学者指南.md)

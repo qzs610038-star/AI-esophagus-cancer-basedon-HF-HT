@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="653.952813pt" height="465.532115pt" viewBox="0 0 653.952813 465.532115" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <title>02_逐通路PCC方向_描述性构成</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>02_逐通路PCC方向_描述性构成</dc:title>
+    <dc:date>2026-07-31T23:36:52.813272</dc:date>
+    <dc:description>来源：experiment_registry.json（mpp2_huber_loss_paired_v001_20260728）；G14 收口回执；scientific_records.jsonl。</dc:description>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 465.532115 
+L 653.952813 465.532115 
+L 653.952813 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 116.36875 346.8005 
+L 640.88875 346.8005 
+L 640.88875 30.7925 
+L 116.36875 30.7925 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 116.36875 332.4365 
+L 413.59675 332.4365 
+L 413.59675 234.1565 
+L 116.36875 234.1565 
+z
+" clip-path="url(#pa13594fb52)" style="fill: #54a24b"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 116.36875 143.4365 
+L 343.66075 143.4365 
+L 343.66075 45.1565 
+L 116.36875 45.1565 
+z
+" clip-path="url(#pa13594fb52)" style="fill: #9a9a9a"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 116.36875 346.8005 
+L 116.36875 30.7925 
+" clip-path="url(#pa13594fb52)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="mb6f5d49462" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mb6f5d49462" x="116.36875" y="346.8005" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="116.36875" y="361.79425" transform="rotate(-0 116.36875 361.79425)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 203.78875 346.8005 
+L 203.78875 30.7925 
+" clip-path="url(#pa13594fb52)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#mb6f5d49462" x="203.78875" y="346.8005" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="203.78875" y="361.79425" transform="rotate(-0 203.78875 361.79425)">5</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 291.20875 346.8005 
+L 291.20875 30.7925 
+" clip-path="url(#pa13594fb52)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#mb6f5d49462" x="291.20875" y="346.8005" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="291.20875" y="361.79425" transform="rotate(-0 291.20875 361.79425)">10</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 378.62875 346.8005 
+L 378.62875 30.7925 
+" clip-path="url(#pa13594fb52)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#mb6f5d49462" x="378.62875" y="346.8005" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="378.62875" y="361.79425" transform="rotate(-0 378.62875 361.79425)">15</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 466.04875 346.8005 
+L 466.04875 30.7925 
+" clip-path="url(#pa13594fb52)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#mb6f5d49462" x="466.04875" y="346.8005" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="466.04875" y="361.79425" transform="rotate(-0 466.04875 361.79425)">20</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <path d="M 553.46875 346.8005 
+L 553.46875 30.7925 
+" clip-path="url(#pa13594fb52)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#mb6f5d49462" x="553.46875" y="346.8005" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="553.46875" y="361.79425" transform="rotate(-0 553.46875 361.79425)">25</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_13">
+      <path d="M 640.88875 346.8005 
+L 640.88875 30.7925 
+" clip-path="url(#pa13594fb52)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#mb6f5d49462" x="640.88875" y="346.8005" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="640.88875" y="361.79425" transform="rotate(-0 640.88875 361.79425)">30</text>
+     </g>
+    </g>
+    <g id="text_8">
+     <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="378.62875" y="376.273937" transform="rotate(-0 378.62875 376.273937)">通路数量（共 30 条）</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_15">
+      <defs>
+       <path id="m5334aa7329" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m5334aa7329" x="116.36875" y="283.2965" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="109.36875" y="287.293375" transform="rotate(-0 109.36875 287.293375)">PCC 提升（描述性）</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#m5334aa7329" x="116.36875" y="94.2965" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="109.36875" y="98.293375" transform="rotate(-0 109.36875 98.293375)">PCC 未提升（描述性）</text>
+     </g>
+    </g>
+   </g>
+   <g id="line2d_17">
+    <path d="M 378.62875 346.8005 
+L 378.62875 30.7925 
+" clip-path="url(#pa13594fb52)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #666666; stroke-opacity: 0.7"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 116.36875 346.8005 
+L 640.88875 346.8005 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 11px; font-family: 'Microsoft YaHei'; text-anchor: start" x="421.46455" y="286.325797" transform="rotate(-0 421.46455 286.325797)">17/30（56.7%）</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 11px; font-family: 'Microsoft YaHei'; text-anchor: start" x="351.52855" y="97.325797" transform="rotate(-0 351.52855 97.325797)">13/30（43.3%）</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 9px; font-family: 'Microsoft YaHei'; text-anchor: middle; fill: #555555" x="378.62875" y="152.539156" transform="rotate(-0 378.62875 152.539156)">仅作数量参照</text>
+   </g>
+   <g id="text_14">
+    <g id="patch_6">
+     <path d="M 171.840469 462.832115 
+L 585.417031 462.832115 
+Q 589.917031 462.832115 589.917031 458.332115 
+L 589.917031 435.28274 
+Q 589.917031 430.78274 585.417031 430.78274 
+L 171.840469 430.78274 
+Q 167.340469 430.78274 167.340469 435.28274 
+L 167.340469 458.332115 
+Q 167.340469 462.832115 171.840469 462.832115 
+z
+" style="fill: #fff9e8; stroke: #d9a441; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 10px; font-family: 'Microsoft YaHei'" transform="translate(200.720938 443.27649)">限制：当前可核验来源仅提供“17/30 提升”的计数，未提供逐通路 PCC 数值；</text>
+    <text style="font-size: 10px; font-family: 'Microsoft YaHei'" transform="translate(171.840469 455.846177)">因此本图不绘制或推断 30 条通路的具体效应大小。总体 pooled PCC 仍下降 0.002205156。</text>
+   </g>
+   <g id="text_15">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="378.62875" y="16.7925" transform="rotate(-0 378.62875 16.7925)">逐通路 PCC 变化方向：描述性构成，不替代总体指标</text>
+   </g>
+  </g>
+  <g id="text_16">
+   <text style="font-size: 8.5px; font-family: 'Microsoft YaHei'; text-anchor: start" x="38.53675" y="385.7885" transform="rotate(-0 38.53675 385.7885)">来源：experiment_registry.json（mpp2_huber_loss_paired_v001_20260728）；G14 收口回执；scientific_records.jsonl。</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pa13594fb52">
+   <rect x="116.36875" y="30.7925" width="524.52" height="316.008"/>
+  </clipPath>
+ </defs>
+</svg>

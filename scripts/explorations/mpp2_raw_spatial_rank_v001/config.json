@@ -1,0 +1,14 @@
+{
+  "seed": 20260801,
+  "data_root": "data/protected_local/mpp2_r2_root_cause_20260725",
+  "output_root": "data/protected_local/mpp2_r2_root_cause_20260725/analysis_outputs/mpp2_raw_spatial_rank_v001",
+  "patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ", "XZY"],
+  "internal_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+  "external_patients": ["XZY"],
+  "n_permutations_smoke": 499,
+  "n_permutations_final": 9999,
+  "primary_graph": "rook_1step_row_standardized",
+  "sensitivity_graphs": ["queen_1step", "knn4", "knn8"],
+  "fdr_scope": "within_patient_30_pathways",
+  "overwrite": true
+}

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="616.752pt" height="396.929234pt" viewBox="0 0 616.752 396.929234" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <title>MSE 与 Huber pooled PCC 哑铃对比</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>MSE 与 Huber pooled PCC 哑铃对比</dc:title>
+    <dc:date>2026-07-31T23:41:50.504964</dc:date>
+    <dc:description>来源：experiment_registry.json（mpp2_huber_loss_paired_v001_20260728）；G14 收口回执；scientific_records.jsonl。</dc:description>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 396.929234 
+L 616.752 396.929234 
+L 616.752 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 85.032 347.26925 
+L 609.552 347.26925 
+L 609.552 31.26125 
+L 85.032 31.26125 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 193.021412 96.422172 
+L 501.562588 275.100885 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #555555; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_2">
+      <defs>
+       <path id="m0eb392c273" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m0eb392c273" x="193.021412" y="347.26925" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="193.021412" y="362.263" transform="rotate(-0 193.021412 362.263)">MSE（对照）</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m0eb392c273" x="501.562588" y="347.26925" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="501.562588" y="362.263" transform="rotate(-0 501.562588 362.263)">Huber（delta=1）</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_4">
+      <path d="M 85.032 331.063712 
+L 609.552 331.063712 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_5">
+      <defs>
+       <path id="m65d67345b4" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m65d67345b4" x="85.032" y="331.063712" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="78.032" y="335.060587" transform="rotate(-0 78.032 335.060587)">0.6520</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_6">
+      <path d="M 85.032 290.549865 
+L 609.552 290.549865 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_7">
+      <g>
+       <use xlink:href="#m65d67345b4" x="85.032" y="290.549865" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="78.032" y="294.54674" transform="rotate(-0 78.032 294.54674)">0.6525</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_8">
+      <path d="M 85.032 250.036019 
+L 609.552 250.036019 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m65d67345b4" x="85.032" y="250.036019" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="78.032" y="254.032894" transform="rotate(-0 78.032 254.032894)">0.6530</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_10">
+      <path d="M 85.032 209.522173 
+L 609.552 209.522173 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#m65d67345b4" x="85.032" y="209.522173" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="78.032" y="213.519048" transform="rotate(-0 78.032 213.519048)">0.6535</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_12">
+      <path d="M 85.032 169.008327 
+L 609.552 169.008327 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#m65d67345b4" x="85.032" y="169.008327" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="78.032" y="173.005202" transform="rotate(-0 78.032 173.005202)">0.6540</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_14">
+      <path d="M 85.032 128.494481 
+L 609.552 128.494481 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_15">
+      <g>
+       <use xlink:href="#m65d67345b4" x="85.032" y="128.494481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="78.032" y="132.491356" transform="rotate(-0 78.032 132.491356)">0.6545</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_16">
+      <path d="M 85.032 87.980635 
+L 609.552 87.980635 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_17">
+      <g>
+       <use xlink:href="#m65d67345b4" x="85.032" y="87.980635" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="78.032" y="91.97751" transform="rotate(-0 78.032 91.97751)">0.6550</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_18">
+      <path d="M 85.032 47.466788 
+L 609.552 47.466788 
+" clip-path="url(#p994d77e0c7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.28; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_19">
+      <g>
+       <use xlink:href="#m65d67345b4" x="85.032" y="47.466788" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: end" x="78.032" y="51.463663" transform="rotate(-0 78.032 51.463663)">0.6555</text>
+     </g>
+    </g>
+    <g id="text_11">
+     <text style="font-size: 10px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="39.817938" y="189.26525" transform="rotate(-90 39.817938 189.26525)">external XZY pooled PCC（局部放大纵轴）</text>
+    </g>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="mab579c0036" d="M 0 6.708204 
+C 1.779036 6.708204 3.485448 6.001385 4.743416 4.743416 
+C 6.001385 3.485448 6.708204 1.779036 6.708204 0 
+C 6.708204 -1.779036 6.001385 -3.485448 4.743416 -4.743416 
+C 3.485448 -6.001385 1.779036 -6.708204 0 -6.708204 
+C -1.779036 -6.708204 -3.485448 -6.001385 -4.743416 -4.743416 
+C -6.001385 -3.485448 -6.708204 -1.779036 -6.708204 0 
+C -6.708204 1.779036 -6.001385 3.485448 -4.743416 4.743416 
+C -3.485448 6.001385 -1.779036 6.708204 0 6.708204 
+z
+" style="stroke: #ffffff; stroke-width: 1.5"/>
+    </defs>
+    <g clip-path="url(#p994d77e0c7)">
+     <use xlink:href="#mab579c0036" x="193.021412" y="96.422172" style="fill: #4c78a8; stroke: #ffffff; stroke-width: 1.5"/>
+    </g>
+   </g>
+   <g id="PathCollection_2">
+    <defs>
+     <path id="m32879fb236" d="M 0 6.708204 
+C 1.779036 6.708204 3.485448 6.001385 4.743416 4.743416 
+C 6.001385 3.485448 6.708204 1.779036 6.708204 0 
+C 6.708204 -1.779036 6.001385 -3.485448 4.743416 -4.743416 
+C 3.485448 -6.001385 1.779036 -6.708204 0 -6.708204 
+C -1.779036 -6.708204 -3.485448 -6.001385 -4.743416 -4.743416 
+C -6.001385 -3.485448 -6.708204 -1.779036 -6.708204 0 
+C -6.708204 1.779036 -6.001385 3.485448 -4.743416 4.743416 
+C -3.485448 6.001385 -1.779036 6.708204 0 6.708204 
+z
+" style="stroke: #ffffff; stroke-width: 1.5"/>
+    </defs>
+    <g clip-path="url(#p994d77e0c7)">
+     <use xlink:href="#m32879fb236" x="501.562588" y="275.100885" style="fill: #e45756; stroke: #ffffff; stroke-width: 1.5"/>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 85.032 347.26925 
+L 85.032 31.26125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 85.032 347.26925 
+L 609.552 347.26925 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 11px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="193.021412" y="79.912933" transform="rotate(-0 193.021412 79.912933)">0.654895819</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 11px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="501.562588" y="258.591646" transform="rotate(-0 501.562588 258.591646)">0.652690663</text>
+   </g>
+   <g id="patch_5">
+    <path d="M 431.189125 287.048228 
+Q 465.390095 281.24191 498.488804 275.622723 
+" style="fill: none; stroke: #333333; stroke-linecap: round"/>
+    <path d="M 493.996564 274.255325 
+L 498.488804 275.622723 
+L 494.699541 278.396076 
+" style="fill: none; stroke: #333333; stroke-linecap: round"/>
+   </g>
+   <g id="text_14">
+    <g id="patch_6">
+     <path d="M 269.209734 317.092023 
+L 425.374266 317.092023 
+Q 429.049266 317.092023 429.049266 313.417023 
+L 429.049266 289.16596 
+Q 429.049266 285.49096 425.374266 285.49096 
+L 269.209734 285.49096 
+Q 265.534734 285.49096 265.534734 289.16596 
+L 265.534734 313.417023 
+Q 265.534734 317.092023 269.209734 317.092023 
+z
+" style="fill: #fff5f5; stroke: #e45756; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 10.5px; font-family: 'Microsoft YaHei'" transform="translate(269.209734 297.559398)">Huber − MSE = -0.0022051561</text>
+    <text style="font-size: 10.5px; font-family: 'Microsoft YaHei'" transform="translate(272.90032 310.806788)">Huber 未提高总体 pooled PCC</text>
+   </g>
+   <g id="text_15">
+    <g id="patch_7">
+     <path d="M 162.042 48.997073 
+L 532.542 48.997073 
+Q 535.582 48.997073 535.582 45.957073 
+L 535.582 36.00137 
+Q 535.582 32.96137 532.542 32.96137 
+L 162.042 32.96137 
+Q 159.002 32.96137 159.002 36.00137 
+L 159.002 45.957073 
+Q 159.002 48.997073 162.042 48.997073 
+z
+" style="fill: #fff9e8; stroke: #d9a441; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 9.5px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="347.292" y="43.595432" transform="rotate(-0 347.292 43.595432)">注意：纵轴采用局部放大，仅用于展示两组之间的微小差值；不表示绝对效果差异很大。</text>
+   </g>
+   <g id="text_16">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Microsoft YaHei'; text-anchor: middle" x="347.292" y="17.26125" transform="rotate(-0 347.292 17.26125)">MSE 与 Huber：外部 XZY pooled PCC 哑铃对比（n=1039 样本，30 条通路）</text>
+   </g>
+  </g>
+  <g id="text_17">
+   <text style="font-size: 8.5px; font-family: 'Microsoft YaHei'" transform="translate(7.2 377.292406)">来源：experiment_registry.json（mpp2_huber_loss_paired_v001_20260728）；G14 收口回执；scientific_records.jsonl。</text>
+   <text style="font-size: 8.5px; font-family: 'Microsoft YaHei'" transform="translate(7.2 387.616187)">说明：单次配对正式运行；图仅比较已验收的主要指标。</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p994d77e0c7">
+   <rect x="85.032" y="31.26125" width="524.52" height="316.008"/>
+  </clipPath>
+ </defs>
+</svg>
