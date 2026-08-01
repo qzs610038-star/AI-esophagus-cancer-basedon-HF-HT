@@ -1,0 +1,19 @@
+{
+  "loss": {
+    "reduction": "mean",
+    "delta": null,
+    "type": "mse"
+  },
+  "external_xzy": {
+    "mae_raw": 1176.2114,
+    "pcc": 0.6549,
+    "r2": -0.088,
+    "r2_raw": -0.088,
+    "loss": 0.6621,
+    "mae": 0.6191
+  },
+  "checkpoint_selection": {
+    "external_xzy_role": "evaluated_once_after_checkpoint_frozen",
+    "policy": "internal_validation_loss_only"
+  }
+}

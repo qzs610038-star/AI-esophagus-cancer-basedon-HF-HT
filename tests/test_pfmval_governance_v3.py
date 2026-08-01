@@ -552,10 +552,40 @@ def test_server_job_v2_binds_workspace_attempt_approval_contract_and_run_units()
     assert job["schema_version"] == "2.0"
     assert job["run_units"] == 3
     assert job["result_branch"] == "automation/server/W001/A001"
+    assert job["artifact_policy"]["raw_predictions"] == {
+        "requirement": "required_inline_for_every_evaluated_split",
+        "artifact_kind": "raw_prediction_table",
+        "large_artifact_exemption": False,
+        "required_columns": [
+            "sample_id",
+            "spatial_cluster_id",
+            "pathway_id",
+            "y_true",
+            "y_pred",
+        ],
+    }
+    assert job["artifact_policy"]["diagnostic_logs"] == (
+        "include_only_when_needed_for_agent_analysis"
+    )
     with pytest.raises(ValueError, match="run_units"):
         validate_job_v2({**job, "run_units": 0})
     with pytest.raises(ValueError, match="full 40-character"):
         validate_job_v2({**job, "source_commit": "abc1234"})
+    invalid_policy = json.loads(json.dumps(job))
+    invalid_policy["artifact_policy"]["raw_predictions"][
+        "large_artifact_exemption"
+    ] = True
+    with pytest.raises(ValueError, match="raw prediction"):
+        validate_job_v2(invalid_policy)
+
+    legacy_job = json.loads(json.dumps(job))
+    legacy_job["artifact_policy"] = {
+        "critical": "sha256_required",
+        "supporting": "size_inventory_default",
+        "diagnostic": "non_evidence",
+        "large_artifacts": "registered_path_size_sha256_only",
+    }
+    validate_job_v2(legacy_job)
 
 
 def test_result_v2_tiers_artifacts_and_import_is_idempotent_without_budget_change(

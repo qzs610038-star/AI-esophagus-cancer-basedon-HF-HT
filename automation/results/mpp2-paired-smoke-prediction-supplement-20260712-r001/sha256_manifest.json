@@ -1,0 +1,22 @@
+[
+  {
+    "file": "s0_predictions_external_xzy.csv",
+    "size_bytes": 668562,
+    "sha256": "b5972c69d14fe4dde57c33eb32c4423523d8f7bac9d95c21e7424cddcbe3deee"
+  },
+  {
+    "file": "s0_predictions_internal_val.csv",
+    "size_bytes": 722461,
+    "sha256": "fab7798511b9bb80ce172f0f961d9e3517ec14b3e8f31183c40453e0f26a1b57"
+  },
+  {
+    "file": "s1_predictions_external_xzy.csv",
+    "size_bytes": 668141,
+    "sha256": "78a69e69a7b412d3f94c649c8425b157c3cc04e5cd3ffa071af5307fb9d7886b"
+  },
+  {
+    "file": "s1_predictions_internal_val.csv",
+    "size_bytes": 722290,
+    "sha256": "1ae94c7fa5ab8489012d1a077f4a64233a44f0ed3523062904a18c746c46ae8a"
+  }
+]

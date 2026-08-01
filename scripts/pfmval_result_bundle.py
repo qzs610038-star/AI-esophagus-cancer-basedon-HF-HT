@@ -213,6 +213,78 @@ def _terminal_status(bundle_dir: Path, result: Mapping[str, Any]) -> str:
     return "incomplete"
 
 
+def _validate_prediction_return(
+    bundle_dir: Path,
+    result: Mapping[str, Any],
+) -> None:
+    """Enforce the job-bound raw-prediction return contract for successful runs."""
+    job_artifact = next(
+        (
+            item
+            for item in result["artifacts"]
+            if item.get("kind") == "job_manifest"
+        ),
+        None,
+    )
+    if job_artifact is None:
+        return
+    job_path = bundle_dir / Path(
+        *PurePosixPath(str(job_artifact["path"])).parts
+    )
+    job = read_json(job_path)
+    raw_policy = job.get("artifact_policy", {}).get("raw_predictions", {})
+    if raw_policy.get("requirement") != (
+        "required_inline_for_every_evaluated_split"
+    ):
+        return
+    if result.get("status") != "success":
+        return
+
+    declaration = result.get("prediction_return")
+    if not isinstance(declaration, Mapping) or declaration.get("applicability") != "required":
+        raise ValueError(
+            "successful prediction-producing result requires raw prediction return declaration"
+        )
+    split_records = declaration.get("evaluated_splits")
+    if not isinstance(split_records, list) or not split_records:
+        raise ValueError("raw prediction return must list every evaluated split")
+
+    artifacts_by_id = {
+        str(item["artifact_id"]): item for item in result["artifacts"]
+    }
+    seen_splits: set[str] = set()
+    seen_artifacts: set[str] = set()
+    for record in split_records:
+        split_id = str(record.get("split_id", ""))
+        artifact_id = str(record.get("artifact_id", ""))
+        if not split_id or split_id in seen_splits:
+            raise ValueError("raw prediction evaluated split ids must be non-empty and unique")
+        if not artifact_id or artifact_id in seen_artifacts:
+            raise ValueError("raw prediction artifact ids must be non-empty and unique")
+        seen_splits.add(split_id)
+        seen_artifacts.add(artifact_id)
+        artifact = artifacts_by_id.get(artifact_id)
+        if artifact is None:
+            raise ValueError(f"raw prediction artifact is missing: {artifact_id}")
+        if artifact.get("kind") != "raw_prediction_table":
+            raise ValueError("raw prediction artifact kind must be raw_prediction_table")
+        if artifact.get("evidence_role") != "critical":
+            raise ValueError("raw prediction artifact must be critical evidence")
+        if artifact.get("evaluation_split") != split_id:
+            raise ValueError("raw prediction artifact split binding mismatch")
+
+    for artifact in result["large_artifacts"]:
+        artifact_kind = str(artifact.get("kind", ""))
+        identity = " ".join(
+            str(artifact.get(field, "")).lower()
+            for field in ("artifact_id", "server_path")
+        )
+        if artifact_kind == "raw_prediction_table" or "prediction" in identity:
+            raise ValueError(
+                "raw prediction data cannot be registered as a large artifact"
+            )
+
+
 def _bundle_sha256(bundle_dir: Path) -> str:
     records = []
     for path in sorted(item for item in bundle_dir.rglob("*") if item.is_file()):
@@ -405,6 +477,7 @@ def validate_result_bundle_v1(
     bundle_dir = bundle_dir.resolve()
     result = read_json(bundle_dir / "result.json")
     validate_result_manifest_v1(project_root, result)
+    _validate_prediction_return(bundle_dir, result)
     paths = {str(item["path"]) for item in result["artifacts"]}
     expected_files = {"result.json", *paths}
     actual_files = {

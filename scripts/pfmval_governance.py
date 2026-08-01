@@ -1075,6 +1075,10 @@ def build_job_v2(
 ) -> Dict[str, Any]:
     workspace_id = str(prepared_attempt["workspace_id"])
     attempt_id = str(prepared_attempt["attempt_id"])
+    prediction_required = command_id in {
+        "standard_training",
+        "mpp_pathway_ridge_calibration",
+    }
     job = {
         "schema_version": "2.0",
         "job_id": str(prepared_attempt["job_id"]),
@@ -1103,7 +1107,24 @@ def build_job_v2(
             "critical": "sha256_required",
             "supporting": "size_inventory_default",
             "diagnostic": "non_evidence",
+            "diagnostic_logs": "include_only_when_needed_for_agent_analysis",
             "large_artifacts": "registered_path_size_sha256_only",
+            "raw_predictions": {
+                "requirement": (
+                    "required_inline_for_every_evaluated_split"
+                    if prediction_required
+                    else "not_applicable"
+                ),
+                "artifact_kind": "raw_prediction_table",
+                "large_artifact_exemption": False,
+                "required_columns": [
+                    "sample_id",
+                    "spatial_cluster_id",
+                    "pathway_id",
+                    "y_true",
+                    "y_pred",
+                ],
+            },
         },
     }
     validate_job_v2(job)
@@ -1155,6 +1176,45 @@ def validate_job_v2(job: Mapping[str, Any]) -> None:
         raise ValueError("invalid job phase")
     if job["command_id"] not in JOB_V2_COMMANDS:
         raise ValueError("job command_id is not allowlisted")
+    artifact_policy = job["artifact_policy"]
+    if not isinstance(artifact_policy, Mapping):
+        raise ValueError("job artifact_policy must be an object")
+    raw_predictions = artifact_policy.get("raw_predictions")
+    legacy_policy = {
+        "critical": "sha256_required",
+        "supporting": "size_inventory_default",
+        "diagnostic": "non_evidence",
+        "large_artifacts": "registered_path_size_sha256_only",
+    }
+    if raw_predictions is None:
+        if dict(artifact_policy) != legacy_policy:
+            raise ValueError("job artifact_policy requires raw prediction policy")
+    else:
+        if not isinstance(raw_predictions, Mapping):
+            raise ValueError("job raw prediction policy must be an object")
+        expected_requirement = (
+            "required_inline_for_every_evaluated_split"
+            if job["command_id"] in {"standard_training", "mpp_pathway_ridge_calibration"}
+            else "not_applicable"
+        )
+        if raw_predictions.get("requirement") != expected_requirement:
+            raise ValueError("job raw prediction requirement does not match command")
+        if raw_predictions.get("artifact_kind") != "raw_prediction_table":
+            raise ValueError("job raw prediction artifact kind is invalid")
+        if raw_predictions.get("large_artifact_exemption") is not False:
+            raise ValueError("raw prediction data cannot use the large-artifact exemption")
+        if raw_predictions.get("required_columns") != [
+            "sample_id",
+            "spatial_cluster_id",
+            "pathway_id",
+            "y_true",
+            "y_pred",
+        ]:
+            raise ValueError("job raw prediction column contract is invalid")
+        if artifact_policy.get("diagnostic_logs") != (
+            "include_only_when_needed_for_agent_analysis"
+        ):
+            raise ValueError("job diagnostic log return policy is invalid")
     if not isinstance(job["resolved_argv"], list) or not job["resolved_argv"]:
         raise ValueError("job resolved_argv must be a non-empty list")
     if any(not isinstance(item, str) or "\x00" in item for item in job["resolved_argv"]):

@@ -39,7 +39,10 @@
 - 服务器绝对路径通过 `configs/server_paths.yaml` 的稳定 path id 引用，不直接删除。
 - MPP 原始 ssGSEA、标准划分、train-only z-score 参数、manifest、group 3/5 embargo 审计为受保护资产。
 - 当前路径索引确认五组 train 标签均有冲突重复 barcode；新 MPP 训练在独立数据修复任务完成前硬阻止，禁止调度器自动去重或重建。
-- 权重和大型特征留在服务器；Gitee 只回传路径、大小、SHA-256 与限额内的小型指标/日志。
+- 特征缓存、embedding/中间特征、checkpoint/权重等大型资产可留在服务器，但必须登记服务器路径、大小、SHA-256 及保留或复算策略。
+- 对会产生预测结果的训练或校准作业，每个实际执行的评估 split 都必须通过 Gitee 结果包回传逐样本原始预测表；至少绑定稳定样本标识、空间分组、pathway、`y_true`（真实值）和 `y_pred`（预测值）。原始预测表属于 critical artifact，不得以“文件较大”为由降级到 `large_artifacts` 仅登记服务器路径。
+- 原始预测回传清单必须显式列出 `split_id`（评估数据划分标识）与对应 `artifact_id`（结果包内文件标识）；缺失任一已评估 split、文件、SHA-256 或 split 绑定时，结果打包/验证直接 FAIL，不得进入 import/accepted。
+- stdout/stderr、环境探测等诊断日志只在 Agent 自行分析或排障确有需要时回传；它们保持 diagnostic、非证据，不得替代原始预测表，也不得阻断原始预测表的回传。
 - 回传结果必须匹配原始 `automation/jobs/<job_id>/job.json` 的实验、提交、阶段、数据版本和正式批准；失败打包不留半包，导入中断由事务备份恢复。
 
 ## 后续自动排障

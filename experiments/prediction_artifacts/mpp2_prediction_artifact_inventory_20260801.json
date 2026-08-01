@@ -1,0 +1,224 @@
+{
+  "schema_version": "local_prediction_artifact_inventory_v1",
+  "inventory_id": "mpp2-prediction-artifacts-20260801",
+  "created_at": "2026-08-01T16:38:23+08:00",
+  "updated_at": "2026-08-01T16:51:58+08:00",
+  "scope": "MPP2 accepted repaired baseline and subsequent registered experiments",
+  "authority": "experiments/experiment_registry.json",
+  "transport_policy": "gitee_only",
+  "manual_transfer_boundary": "Files received from the user are archived and byte-verified locally, but are not retroactively treated as a governed Gitee result return.",
+  "registration_boundary": "Local byte-preserving archive only. This inventory does not import a result, change evidence status, or change a scientific decision.",
+  "column_contract_note": "These historical wide prediction tables do not satisfy prediction_artifact_contract_v1 because sample_id and spatial_cluster_id are absent.",
+  "sources": [
+    {
+      "source_ref": "refs/heads/automation/server/mpp2-paired-smoke-prediction-supplement-20260712-r001",
+      "source_commit": "4477e1d5e449bcf1a4a07bad00923d95f2258da8",
+      "local_tracking_ref": "refs/remotes/gitee/automation/server/mpp2-paired-smoke-prediction-supplement-20260712-r001"
+    },
+    {
+      "source_ref": "refs/heads/automation/server/W001/A003",
+      "source_commit": "83a7362e30cdcae871c638f03733815db501d963",
+      "local_tracking_ref": "refs/remotes/gitee/automation/server/W001/A003"
+    },
+    {
+      "source_ref": "refs/heads/automation/server/W001/A004",
+      "source_commit": "a34f257f50bf1bf68a93571a37bb7dfc11b6236b",
+      "local_tracking_ref": "refs/remotes/gitee/automation/server/W001/A004"
+    }
+  ],
+  "manual_transfer_directories": [
+    {
+      "experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "provenance_level": "manual_user_transfer",
+      "manual_drop_directory": "D:\\AI空间转录病理研究\\temp_result_20260801\\mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "registered_server_directory": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\checkpoints\\mpp_uni2h_mlp\\mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "local_directory": "checkpoints/mpp_uni2h_mlp/mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "file_count": 11,
+      "total_bytes": 8453981,
+      "checkpoint_sha256": "c69191d4a67939724988bc3656c3cd2e0b173d9c871456a5fb900ab446e86a98",
+      "transfer_verified_at": "2026-08-01T16:51:58+08:00",
+      "status": "archived_and_verified",
+      "live_server_verified": false
+    },
+    {
+      "experiment_id": "mpp2_lora_r8_dropout10_smoke_20260714",
+      "provenance_level": "manual_user_transfer",
+      "manual_drop_directory": "D:\\AI空间转录病理研究\\temp_result_20260801\\mpp2_lora_r8_dropout10_smoke_20260714_r001",
+      "registered_server_directory": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\checkpoints\\mpp_uni2h_mlp\\mpp2_lora_r8_dropout10_smoke_20260714_r001",
+      "local_directory": "checkpoints/mpp_uni2h_mlp/mpp2_lora_r8_dropout10_smoke_20260714_r001",
+      "file_count": 8,
+      "total_bytes": 14929422,
+      "checkpoint_sha256": "a95c185e8bd2586df7162552d04ea8072701cb762762ed5477dfa1ff782b6a32",
+      "transfer_verified_at": "2026-08-01T16:51:58+08:00",
+      "status": "archived_and_verified",
+      "live_server_verified": false
+    }
+  ],
+  "local_artifacts": [
+    {
+      "experiment_id": "mpp2_paired_s0_frozen_continue_smoke_20260712",
+      "result_id": "mpp2-paired-s0-frozen-continue-smoke-20260712-r002-result-20260712173215-1393b29c",
+      "role": "S0_control",
+      "split": "external_xzy",
+      "source_path": "automation/results/mpp2-paired-smoke-prediction-supplement-20260712-r001/s0_predictions_external_xzy.csv",
+      "local_path": "automation/results/mpp2-paired-smoke-prediction-supplement-20260712-r001/s0_predictions_external_xzy.csv",
+      "size_bytes": 668562,
+      "sha256": "b5972c69d14fe4dde57c33eb32c4423523d8f7bac9d95c21e7424cddcbe3deee",
+      "data_rows": 1039,
+      "column_count": 66,
+      "status": "archived_and_verified"
+    },
+    {
+      "experiment_id": "mpp2_paired_s0_frozen_continue_smoke_20260712",
+      "result_id": "mpp2-paired-s0-frozen-continue-smoke-20260712-r002-result-20260712173215-1393b29c",
+      "role": "S0_control",
+      "split": "internal_val",
+      "source_path": "automation/results/mpp2-paired-smoke-prediction-supplement-20260712-r001/s0_predictions_internal_val.csv",
+      "local_path": "automation/results/mpp2-paired-smoke-prediction-supplement-20260712-r001/s0_predictions_internal_val.csv",
+      "size_bytes": 722461,
+      "sha256": "fab7798511b9bb80ce172f0f961d9e3517ec14b3e8f31183c40453e0f26a1b57",
+      "data_rows": 1078,
+      "column_count": 66,
+      "status": "archived_and_verified"
+    },
+    {
+      "experiment_id": "mpp2_paired_s1_lora_r8_smoke_20260712",
+      "result_id": "mpp2-paired-s1-lora-r8-smoke-20260712-r002-result-20260712173316-163abad4",
+      "role": "S1_lora_r8",
+      "split": "external_xzy",
+      "source_path": "automation/results/mpp2-paired-smoke-prediction-supplement-20260712-r001/s1_predictions_external_xzy.csv",
+      "local_path": "automation/results/mpp2-paired-smoke-prediction-supplement-20260712-r001/s1_predictions_external_xzy.csv",
+      "size_bytes": 668141,
+      "sha256": "78a69e69a7b412d3f94c649c8425b157c3cc04e5cd3ffa071af5307fb9d7886b",
+      "data_rows": 1039,
+      "column_count": 66,
+      "status": "archived_and_verified"
+    },
+    {
+      "experiment_id": "mpp2_paired_s1_lora_r8_smoke_20260712",
+      "result_id": "mpp2-paired-s1-lora-r8-smoke-20260712-r002-result-20260712173316-163abad4",
+      "role": "S1_lora_r8",
+      "split": "internal_val",
+      "source_path": "automation/results/mpp2-paired-smoke-prediction-supplement-20260712-r001/s1_predictions_internal_val.csv",
+      "local_path": "automation/results/mpp2-paired-smoke-prediction-supplement-20260712-r001/s1_predictions_internal_val.csv",
+      "size_bytes": 722290,
+      "sha256": "1ae94c7fa5ab8489012d1a077f4a64233a44f0ed3523062904a18c746c46ae8a",
+      "data_rows": 1078,
+      "column_count": 66,
+      "status": "archived_and_verified"
+    },
+    {
+      "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+      "attempt_id": "A003",
+      "job_id": "W001-A003",
+      "result_id": "W001-A003-result-R004",
+      "role": "MSE_control",
+      "split": "external_xzy",
+      "source_path": "automation/returns/W001/A003/R004/artifacts/predictions_external_xzy.csv",
+      "local_path": "automation/returns/W001/A003/R004/artifacts/predictions_external_xzy.csv",
+      "size_bytes": 656413,
+      "sha256": "b7e32b6c7fa3deb96c44775ecd08c651bb68d9da860ffb5284227b24ce5031f2",
+      "data_rows": 1039,
+      "column_count": 60,
+      "status": "archived_and_verified",
+      "byte_identical_alias": "automation/returns/W001/A003/R004/artifacts/predictions.csv"
+    },
+    {
+      "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+      "attempt_id": "A004",
+      "job_id": "W001-A004",
+      "result_id": "W001-A004-result-R002",
+      "role": "Huber_delta1_treatment",
+      "split": "external_xzy",
+      "source_path": "automation/returns/W001/A004/R002/artifacts/predictions_external_xzy.csv",
+      "local_path": "automation/returns/W001/A004/R002/artifacts/predictions_external_xzy.csv",
+      "size_bytes": 656208,
+      "sha256": "36f965f9d281917bed8cc97bdcf151b2e0337a2d54156c02e3c75059815a598c",
+      "data_rows": 1039,
+      "column_count": 60,
+      "status": "archived_and_verified",
+      "byte_identical_alias": "automation/returns/W001/A004/R002/artifacts/predictions.csv"
+    },
+    {
+      "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+      "attempt_id": "A004",
+      "job_id": "W001-A004",
+      "result_id": "W001-A004-result-R002",
+      "role": "Huber_delta1_treatment",
+      "split": "internal_val",
+      "source_path": "automation/returns/W001/A004/R002/artifacts/predictions_internal_val.csv",
+      "local_path": "automation/returns/W001/A004/R002/artifacts/predictions_internal_val.csv",
+      "size_bytes": 709289,
+      "sha256": "1f2f0f71c2d49bba9675d6787f97bb612ff10f28cc3c3156a4639c48eaf66589",
+      "data_rows": 1078,
+      "column_count": 60,
+      "status": "archived_and_verified"
+    },
+    {
+      "experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "result_id": "mpp2-repair-v003-frozen-20260711-r002-result-20260711164140-f2b1b51d",
+      "role": "accepted_repaired_frozen_baseline",
+      "split": "external_xzy",
+      "source_path": "D:/AI空间转录病理研究/temp_result_20260801/mpp2_barcode_repair_v003_frozen_baseline_20260711/predictions_external_xzy.csv",
+      "local_path": "checkpoints/mpp_uni2h_mlp/mpp2_barcode_repair_v003_frozen_baseline_20260711/predictions_external_xzy.csv",
+      "size_bytes": 657453,
+      "sha256": "ed3c888d63a24a40ce32df77a9c7fd40c31cdc2576fe5c2e065c111a401e573b",
+      "data_rows": 1039,
+      "column_count": 60,
+      "status": "archived_and_verified",
+      "byte_identical_alias": "checkpoints/mpp_uni2h_mlp/mpp2_barcode_repair_v003_frozen_baseline_20260711/predictions.csv"
+    },
+    {
+      "experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "result_id": "mpp2-repair-v003-frozen-20260711-r002-result-20260711164140-f2b1b51d",
+      "role": "accepted_repaired_frozen_baseline",
+      "split": "internal_val",
+      "source_path": "D:/AI空间转录病理研究/temp_result_20260801/mpp2_barcode_repair_v003_frozen_baseline_20260711/predictions_internal_val.csv",
+      "local_path": "checkpoints/mpp_uni2h_mlp/mpp2_barcode_repair_v003_frozen_baseline_20260711/predictions_internal_val.csv",
+      "size_bytes": 710197,
+      "sha256": "6ecbccd7bb0c2d17f6da1d858604f53bb982dc59f27162dd90f117cc5193bee5",
+      "data_rows": 1078,
+      "column_count": 60,
+      "status": "archived_and_verified"
+    },
+    {
+      "experiment_id": "mpp2_lora_r8_dropout10_smoke_20260714",
+      "result_id": "mpp2-lora-r8-dropout10-smoke-20260714-r001-result-20260714182311-7971c360",
+      "role": "lora_r8_dropout10",
+      "split": "external_xzy",
+      "source_path": "D:/AI空间转录病理研究/temp_result_20260801/mpp2_lora_r8_dropout10_smoke_20260714_r001/predictions_external_xzy.csv",
+      "local_path": "checkpoints/mpp_uni2h_mlp/mpp2_lora_r8_dropout10_smoke_20260714_r001/predictions_external_xzy.csv",
+      "size_bytes": 668062,
+      "sha256": "bc1bc3469979404e6ea112302db6a9a570b9117c49f8de8f5333f33b282d25b3",
+      "data_rows": 1039,
+      "column_count": 66,
+      "status": "archived_and_verified"
+    },
+    {
+      "experiment_id": "mpp2_lora_r8_dropout10_smoke_20260714",
+      "result_id": "mpp2-lora-r8-dropout10-smoke-20260714-r001-result-20260714182311-7971c360",
+      "role": "lora_r8_dropout10",
+      "split": "internal_val",
+      "source_path": "D:/AI空间转录病理研究/temp_result_20260801/mpp2_lora_r8_dropout10_smoke_20260714_r001/predictions_internal_val.csv",
+      "local_path": "checkpoints/mpp_uni2h_mlp/mpp2_lora_r8_dropout10_smoke_20260714_r001/predictions_internal_val.csv",
+      "size_bytes": 722416,
+      "sha256": "a12822421157ffbefeeeec7aa35aa11e4a0643fb84676625278d258c04d01655",
+      "data_rows": 1078,
+      "column_count": 66,
+      "status": "archived_and_verified"
+    }
+  ],
+  "pending_server_retrieval": [
+    {
+      "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+      "attempt_id": "A003",
+      "status": "pending_server_lookup_optional",
+      "server_directory": "D:\\AIPatho\\qzs\\pfmval_experiment_runs\\W001\\A003\\mpp2_huber_loss_paired_v001_20260728_A0",
+      "expected_files": [
+        "predictions_internal_val.csv"
+      ],
+      "note": "The accepted R004 bundle contains external predictions but no internal-validation prediction table.",
+      "live_server_verified": false
+    }
+  ]
+}

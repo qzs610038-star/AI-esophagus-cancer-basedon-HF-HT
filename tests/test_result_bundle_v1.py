@@ -34,6 +34,8 @@ def _historical_source_bundle(
     attempt_id: str,
     result_id: str,
     include_large_artifact_id: bool,
+    enforce_prediction_return: bool = False,
+    include_prediction_artifact: bool = False,
 ) -> Path:
     bundle = root / result_id
     artifacts_dir = bundle / "artifacts"
@@ -51,6 +53,27 @@ def _historical_source_bundle(
         "phase": "formal",
         "run_units": 1,
     }
+    if enforce_prediction_return:
+        job["command_id"] = "standard_training"
+        job["artifact_policy"] = {
+            "critical": "sha256_required",
+            "supporting": "size_inventory_default",
+            "diagnostic": "non_evidence",
+            "diagnostic_logs": "include_only_when_needed_for_agent_analysis",
+            "large_artifacts": "registered_path_size_sha256_only",
+            "raw_predictions": {
+                "requirement": "required_inline_for_every_evaluated_split",
+                "artifact_kind": "raw_prediction_table",
+                "large_artifact_exemption": False,
+                "required_columns": [
+                    "sample_id",
+                    "spatial_cluster_id",
+                    "pathway_id",
+                    "y_true",
+                    "y_pred",
+                ],
+            },
+        }
     terminal = {
         "event_type": "EXPERIMENT_TERMINAL",
         "job_id": job["job_id"],
@@ -69,6 +92,11 @@ def _historical_source_bundle(
         "artifacts/metrics.json": (json.dumps(metrics, indent=2) + "\n").encode(),
         "artifacts/training_summary.txt": summary_lf,
     }
+    if include_prediction_artifact:
+        payloads["artifacts/predictions_internal_val.csv"] = (
+            b"sample_id,spatial_cluster_id,pathway_id,y_true,y_pred\n"
+            b"sample-1,cluster-1,pathway-1,0.25,0.30\n"
+        )
     for relative, payload in payloads.items():
         _write(bundle / relative, payload)
     artifacts = [
@@ -109,6 +137,20 @@ def _historical_source_bundle(
             "source_attempt_id": attempt_id,
         },
     ]
+    if include_prediction_artifact:
+        prediction_path = "artifacts/predictions_internal_val.csv"
+        artifacts.append(
+            {
+                "artifact_id": "predictions_internal_validation",
+                "path": prediction_path,
+                "kind": "raw_prediction_table",
+                "evaluation_split": "internal_validation",
+                "evidence_role": "critical",
+                "size_bytes": len(payloads[prediction_path]),
+                "sha256": _sha256(payloads[prediction_path]),
+                "source_attempt_id": attempt_id,
+            }
+        )
     large = {
         "server_path": (
             f"D:\\AIPatho\\qzs\\pfmval_experiment_runs\\W001\\{attempt_id}"
@@ -130,6 +172,18 @@ def _historical_source_bundle(
         "metric_artifact_ids": ["metrics"],
         "large_artifacts": [large],
     }
+    result.pop("command_id", None)
+    result.pop("artifact_policy", None)
+    if enforce_prediction_return and include_prediction_artifact:
+        result["prediction_return"] = {
+            "applicability": "required",
+            "evaluated_splits": [
+                {
+                    "split_id": "internal_validation",
+                    "artifact_id": "predictions_internal_validation",
+                }
+            ],
+        }
     # Historical packages contained these redundant packaging sidecars.
     _write(bundle / "result.json", (json.dumps(result, indent=2) + "\n").encode())
     _write(bundle / "artifacts.json", (json.dumps(artifacts, indent=2) + "\n").encode())
@@ -242,6 +296,84 @@ def test_build_requires_empty_staging_and_array_protocol_types(tmp_path):
             source,
             staging,
             result_id="W001-A003-result-R004",
+            artifact_retention="retain",
+        )
+
+
+def test_policy_aware_training_result_requires_inline_raw_predictions(tmp_path):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A005",
+        result_id="W001-A005-result-R001",
+        include_large_artifact_id=True,
+        enforce_prediction_return=True,
+        include_prediction_artifact=False,
+    )
+
+    with pytest.raises(ValueError, match="raw prediction return declaration"):
+        build_result_bundle_v1(
+            PROJECT_ROOT,
+            source,
+            tmp_path / "missing-predictions",
+            result_id="W001-A005-result-R002",
+            artifact_retention="retain",
+        )
+
+
+def test_policy_aware_training_result_accepts_every_declared_prediction_split(tmp_path):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A006",
+        result_id="W001-A006-result-R001",
+        include_large_artifact_id=True,
+        enforce_prediction_return=True,
+        include_prediction_artifact=True,
+    )
+
+    report = build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        tmp_path / "complete-predictions",
+        result_id="W001-A006-result-R002",
+        artifact_retention="retain",
+    )
+
+    assert report["status"] == "success"
+
+
+def test_raw_predictions_cannot_use_large_artifact_exemption(tmp_path):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A007",
+        result_id="W001-A007-result-R001",
+        include_large_artifact_id=True,
+        enforce_prediction_return=True,
+        include_prediction_artifact=True,
+    )
+    result_path = source / "result.json"
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    result["large_artifacts"].append(
+        {
+            "artifact_id": "predictions_external_xzy",
+            "kind": "raw_prediction_table",
+            "server_path": "D:\\fixture\\predictions_external_xzy.csv",
+            "size_bytes": 10_000_000,
+            "sha256": "e" * 64,
+            "retention": "retain_on_server",
+        }
+    )
+    result_path.write_text(json.dumps(result), encoding="utf-8")
+    (source / "large_artifacts.json").write_text(
+        json.dumps(result["large_artifacts"]),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="cannot be registered as a large artifact"):
+        build_result_bundle_v1(
+            PROJECT_ROOT,
+            source,
+            tmp_path / "invalid-large-predictions",
+            result_id="W001-A007-result-R002",
             artifact_retention="retain",
         )
 

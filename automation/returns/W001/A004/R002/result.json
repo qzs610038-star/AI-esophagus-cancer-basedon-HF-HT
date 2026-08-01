@@ -1,0 +1,185 @@
+{
+  "schema_version": "2.0",
+  "result_id": "W001-A004-result-R002",
+  "job_id": "W001-A004",
+  "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+  "workspace_id": "W001",
+  "attempt_id": "A004",
+  "protocol_revision": 2,
+  "approval_id": "APR-mpp2-huber-loss-paired-v001-20260728-r002",
+  "critical_contract_sha256": "df0c5df369a3049125d06b985683c7bf7c4027664fc48d8b86f103e0ad8044e5",
+  "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+  "phase": "formal",
+  "status": "success",
+  "created_at": "2026-07-29T12:19:53+00:00",
+  "run_units": 1,
+  "artifacts": [
+    {
+      "artifact_id": "job_manifest",
+      "path": "artifacts/job.json",
+      "size_bytes": 2471,
+      "sha256": "e6966c738d131c1c66678566e713e35a7d55d69aafc04dd786756fd820fc471b",
+      "kind": "job_manifest",
+      "evidence_role": "critical",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "attempt_started",
+      "path": "artifacts/attempt_started.json",
+      "size_bytes": 639,
+      "sha256": "5b9d1248485c384cdbffb36cb01fe40f17404fbf4d16d8915f9e54d5ac6987ee",
+      "kind": "attempt_event",
+      "evidence_role": "critical",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "attempt_terminal",
+      "path": "artifacts/attempt_terminal.json",
+      "size_bytes": 685,
+      "sha256": "3589772a9a5feaa1b6ef5b0efa0c03675cf7a51d3fbcde7373c69e2019044161",
+      "kind": "attempt_event",
+      "evidence_role": "critical",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "training_summary",
+      "path": "artifacts/training_summary.txt",
+      "size_bytes": 1085,
+      "sha256": "0b2834759e46e31598b985f33b80e25ed515afd44c1b0e1b735dd31f0a3d538f",
+      "kind": "selection_proof",
+      "evidence_role": "critical",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "best_epoch",
+      "path": "artifacts/best_epoch.txt",
+      "size_bytes": 108,
+      "sha256": "4ada80ff0091b522a947328a637a8f689812f057c4d8f8560b9076a3962dc1e6",
+      "kind": "selection_proof",
+      "evidence_role": "critical",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "training_history",
+      "path": "artifacts/training_history.csv",
+      "size_bytes": 1615,
+      "sha256": "90a47caab09adc2ec8faae707dd85e99c51ccdcde37a891d3fac56ff410d6681",
+      "kind": "training_history",
+      "evidence_role": "critical",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "metrics",
+      "path": "artifacts/metrics.json",
+      "size_bytes": 649,
+      "sha256": "f74bc963cd2f49d5ac608ac802734ad7a6f648ece10caaeb858689d27731a6fc",
+      "kind": "metrics",
+      "evidence_role": "critical",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "predictions_internal_val",
+      "path": "artifacts/predictions_internal_val.csv",
+      "size_bytes": 709289,
+      "sha256": "1f2f0f71c2d49bba9675d6787f97bb612ff10f28cc3c3156a4639c48eaf66589",
+      "kind": "predictions",
+      "evidence_role": "supporting",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "predictions_external_xzy",
+      "path": "artifacts/predictions_external_xzy.csv",
+      "size_bytes": 656208,
+      "sha256": "36f965f9d281917bed8cc97bdcf151b2e0337a2d54156c02e3c75059815a598c",
+      "kind": "predictions",
+      "evidence_role": "supporting",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "predictions_standard",
+      "path": "artifacts/predictions.csv",
+      "size_bytes": 656208,
+      "sha256": "36f965f9d281917bed8cc97bdcf151b2e0337a2d54156c02e3c75059815a598c",
+      "kind": "predictions",
+      "evidence_role": "supporting",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "per_pathway_pcc",
+      "path": "artifacts/per_pathway_pcc_external_xzy.csv",
+      "size_bytes": 2514,
+      "sha256": "292a86bddc060914c7ac18fd9cf1977b12b2ea285e3df07920d07bfe4cac088d",
+      "kind": "per_pathway_metrics",
+      "evidence_role": "supporting",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "per_pathway_rawscale",
+      "path": "artifacts/per_pathway_pcc_external_xzy_rawscale.csv",
+      "size_bytes": 1852,
+      "sha256": "5e5495e3d2447c18ece11cc685c969abb9d7467477ac0dd5e63e915d28baef28",
+      "kind": "per_pathway_metrics",
+      "evidence_role": "supporting",
+      "source_attempt_id": "A004",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "bundle_integrity",
+      "path": "artifacts/bundle_integrity.json",
+      "kind": "bundle_integrity",
+      "evidence_role": "critical",
+      "size_bytes": 4730,
+      "sha256": "0216576e1b094d0163c04ddee05974dfea7760c34a1d243989f4005a5abd94e9",
+      "retention": "retain_with_immutable_result_bundle",
+      "source_attempt_id": "A004"
+    }
+  ],
+  "metrics": {
+    "loss": {
+      "type": "huber",
+      "delta": 1.0,
+      "reduction": "mean",
+      "torch_expression": "nn.HuberLoss(delta=1.0, reduction=\"mean\")"
+    },
+    "internal_validation": {
+      "pooled_pcc": 0.7975,
+      "mae": 0.4504,
+      "r2": 0.6358,
+      "loss": 0.1723,
+      "selection_rule": "minimum internal validation loss only"
+    },
+    "external_xzy": {
+      "pooled_pcc": 0.6527,
+      "mae": 0.6184,
+      "r2": -0.0901,
+      "loss": 0.2883,
+      "mae_raw": 1174.2159,
+      "r2_raw": -0.0901,
+      "evaluation_count": 1
+    },
+    "external_evaluation_policy": "checkpoint frozen before one-shot XZY evaluation; XZY did not select checkpoint or tune parameters"
+  },
+  "metric_artifact_ids": [
+    "metrics"
+  ],
+  "large_artifacts": [
+    {
+      "artifact_id": "best_checkpoint",
+      "server_path": "D:\\AIPatho\\qzs\\pfmval_experiment_runs\\W001\\A004\\mpp2_huber_loss_paired_v001_20260728_A1\\best_checkpoint.pth",
+      "size_bytes": 6420688,
+      "sha256": "6fe11dbc244952eb829d8e0b1a5bc730cb1179373ae86072b162f34ba8911db5",
+      "retention": "retain_on_server_until_explicit_user_disposition"
+    }
+  ]
+}

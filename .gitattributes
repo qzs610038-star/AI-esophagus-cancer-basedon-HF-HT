@@ -35,4 +35,7 @@
 
 # Result bundles contain server-produced byte-exact artifacts whose hashes are
 # recorded in result.json; do not normalize their line endings on checkout.
-automation/results/** -text
+automation/results/** -text -eol
+automation/returns/** -text -eol
+checkpoints/mpp_uni2h_mlp/mpp2_barcode_repair_v003_frozen_baseline_20260711/** -text -eol
+checkpoints/mpp_uni2h_mlp/mpp2_lora_r8_dropout10_smoke_20260714_r001/** -text -eol

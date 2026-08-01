@@ -1,0 +1,169 @@
+{
+  "schema_version": "2.0",
+  "result_id": "W001-A003-result-R004",
+  "job_id": "W001-A003",
+  "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+  "workspace_id": "W001",
+  "attempt_id": "A003",
+  "protocol_revision": 2,
+  "approval_id": "APR-mpp2-huber-loss-paired-v001-20260728-r002",
+  "critical_contract_sha256": "df0c5df369a3049125d06b985683c7bf7c4027664fc48d8b86f103e0ad8044e5",
+  "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+  "phase": "formal",
+  "status": "success",
+  "created_at": "2026-07-29T12:19:48+00:00",
+  "run_units": 1,
+  "artifacts": [
+    {
+      "artifact_id": "job_manifest",
+      "path": "artifacts/job.json",
+      "kind": "job_manifest",
+      "evidence_role": "critical",
+      "size_bytes": 2468,
+      "sha256": "85ae6210bc5d8d3237ba410f04c5e33d01f77476c1fe31d5b40468a35bdafcb8",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "attempt_started",
+      "path": "artifacts/attempt_started.json",
+      "kind": "attempt_event",
+      "evidence_role": "critical",
+      "size_bytes": 639,
+      "sha256": "e34429a432bcd21599ae40622f722c0f4240aa6ca7f58d3166fdec97c1018880",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "attempt_terminal",
+      "path": "artifacts/attempt_terminal.json",
+      "kind": "attempt_event",
+      "evidence_role": "critical",
+      "size_bytes": 685,
+      "sha256": "c0ef48fde133ed04650fa39a53cf38e0c6926bd9eae82e406bf16d312ba8d849",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "selection_proof",
+      "path": "artifacts/training_summary.txt",
+      "kind": "selection_proof",
+      "evidence_role": "critical",
+      "size_bytes": 1084,
+      "sha256": "a134119a0d18fb5268076d53be43b7a4ea64c5c773a55fb3c6c2c3342084a48f",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "best_epoch",
+      "path": "artifacts/best_epoch.txt",
+      "kind": "selection_proof",
+      "evidence_role": "critical",
+      "size_bytes": 108,
+      "sha256": "c485d0a19aaf6da255f8f43ec367790c2f74d377d2d110a3a0d05179c02551b1",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "training_history",
+      "path": "artifacts/training_history.csv",
+      "kind": "training_history",
+      "evidence_role": "critical",
+      "size_bytes": 1606,
+      "sha256": "00212cd4d35d709482238398016508184623216bfe3308531f12a0ac15bed700",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "metrics",
+      "path": "artifacts/metrics.json",
+      "kind": "metrics",
+      "evidence_role": "critical",
+      "size_bytes": 376,
+      "sha256": "e4377fc6c4a86b61091ff4a9c03fcca9e11ac1e69875a53c756ae3737ce3751e",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "external_predictions",
+      "path": "artifacts/predictions_external_xzy.csv",
+      "kind": "predictions",
+      "evidence_role": "supporting",
+      "size_bytes": 656413,
+      "sha256": "b7e32b6c7fa3deb96c44775ecd08c651bb68d9da860ffb5284227b24ce5031f2",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "standard_predictions",
+      "path": "artifacts/predictions.csv",
+      "kind": "predictions",
+      "evidence_role": "supporting",
+      "size_bytes": 656413,
+      "sha256": "b7e32b6c7fa3deb96c44775ecd08c651bb68d9da860ffb5284227b24ce5031f2",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "per_pathway_zspace",
+      "path": "artifacts/per_pathway_pcc_external_xzy.csv",
+      "kind": "per_pathway_metrics",
+      "evidence_role": "supporting",
+      "size_bytes": 2522,
+      "sha256": "096b991a56a1bcb2f0eb263fac1fd93a6218f992102acf096e90c5870e3de431",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "per_pathway_rawscale",
+      "path": "artifacts/per_pathway_pcc_external_xzy_rawscale.csv",
+      "kind": "per_pathway_metrics",
+      "evidence_role": "supporting",
+      "size_bytes": 1867,
+      "sha256": "b9a42bd501580bdee36e915c9bcd784115bb874328baedb83231e5eca97983d3",
+      "source_attempt_id": "A003",
+      "retention": "retain_in_immutable_result_bundle"
+    },
+    {
+      "artifact_id": "bundle_integrity",
+      "path": "artifacts/bundle_integrity.json",
+      "kind": "bundle_integrity",
+      "evidence_role": "critical",
+      "size_bytes": 4326,
+      "sha256": "441baafdae38af900c4c889d2556a13080c15199c398c39c907680b977d720e8",
+      "retention": "retain_with_immutable_result_bundle",
+      "source_attempt_id": "A003"
+    }
+  ],
+  "metrics": {
+    "loss": {
+      "reduction": "mean",
+      "delta": null,
+      "type": "mse"
+    },
+    "external_xzy": {
+      "mae_raw": 1176.2114,
+      "pcc": 0.6549,
+      "r2": -0.088,
+      "r2_raw": -0.088,
+      "loss": 0.6621,
+      "mae": 0.6191
+    },
+    "checkpoint_selection": {
+      "external_xzy_role": "evaluated_once_after_checkpoint_frozen",
+      "policy": "internal_validation_loss_only"
+    }
+  },
+  "metric_artifact_ids": [
+    "metrics"
+  ],
+  "large_artifacts": [
+    {
+      "server_path": "D:\\AIPatho\\qzs\\pfmval_experiment_runs\\W001\\A003\\mpp2_huber_loss_paired_v001_20260728_A0\\best_checkpoint.pth",
+      "size_bytes": 6420688,
+      "sha256": "c69191d4a67939724988bc3656c3cd2e0b173d9c871456a5fb900ab446e86a98",
+      "retention": "retain under external W001/A003 run root pending local review",
+      "artifact_id": "best_checkpoint"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "event_type": "EXPERIMENT_TERMINAL",
+  "event_id": "terminal-W001-A004",
+  "recorded_at": "2026-07-29T04:50:40Z",
+  "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
+  "workspace_id": "W001",
+  "attempt_id": "A004",
+  "job_id": "W001-A004",
+  "approval_id": "APR-mpp2-huber-loss-paired-v001-20260728-r002",
+  "source_commit": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+  "critical_contract_sha256": "df0c5df369a3049125d06b985683c7bf7c4027664fc48d8b86f103e0ad8044e5",
+  "run_units": 1,
+  "execution_binding": {
+    "mode": "source_plus_governance_bundle",
+    "governance_commit": "f1babe47f131f8d417aff82d539f899032786058"
+  },
+  "status": "completed",
+  "returncode": 0
+}

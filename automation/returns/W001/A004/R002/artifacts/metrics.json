@@ -1,0 +1,25 @@
+{
+  "loss": {
+    "type": "huber",
+    "delta": 1.0,
+    "reduction": "mean",
+    "torch_expression": "nn.HuberLoss(delta=1.0, reduction=\"mean\")"
+  },
+  "internal_validation": {
+    "pooled_pcc": 0.7975,
+    "mae": 0.4504,
+    "r2": 0.6358,
+    "loss": 0.1723,
+    "selection_rule": "minimum internal validation loss only"
+  },
+  "external_xzy": {
+    "pooled_pcc": 0.6527,
+    "mae": 0.6184,
+    "r2": -0.0901,
+    "loss": 0.2883,
+    "mae_raw": 1174.2159,
+    "r2_raw": -0.0901,
+    "evaluation_count": 1
+  },
+  "external_evaluation_policy": "checkpoint frozen before one-shot XZY evaluation; XZY did not select checkpoint or tune parameters"
+}

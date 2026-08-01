@@ -124,7 +124,78 @@
       "pattern": "^automation/server/W[0-9]{3,}/A[0-9]{3,}$"
     },
     "artifact_policy": {
-      "type": "object"
+      "type": "object",
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "critical",
+            "supporting",
+            "diagnostic",
+            "diagnostic_logs",
+            "large_artifacts",
+            "raw_predictions"
+          ],
+          "properties": {
+            "critical": {"const": "sha256_required"},
+            "supporting": {"const": "size_inventory_default"},
+            "diagnostic": {"const": "non_evidence"},
+            "diagnostic_logs": {
+              "const": "include_only_when_needed_for_agent_analysis"
+            },
+            "large_artifacts": {
+              "const": "registered_path_size_sha256_only"
+            },
+            "raw_predictions": {
+              "type": "object",
+              "required": [
+                "requirement",
+                "artifact_kind",
+                "large_artifact_exemption",
+                "required_columns"
+              ],
+              "properties": {
+                "requirement": {
+                  "enum": [
+                    "required_inline_for_every_evaluated_split",
+                    "not_applicable"
+                  ]
+                },
+                "artifact_kind": {"const": "raw_prediction_table"},
+                "large_artifact_exemption": {"const": false},
+                "required_columns": {
+                  "const": [
+                    "sample_id",
+                    "spatial_cluster_id",
+                    "pathway_id",
+                    "y_true",
+                    "y_pred"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "required": [
+            "critical",
+            "supporting",
+            "diagnostic",
+            "large_artifacts"
+          ],
+          "properties": {
+            "critical": {"const": "sha256_required"},
+            "supporting": {"const": "size_inventory_default"},
+            "diagnostic": {"const": "non_evidence"},
+            "large_artifacts": {
+              "const": "registered_path_size_sha256_only"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
     },
     "execution_binding": {
       "type": "object",
