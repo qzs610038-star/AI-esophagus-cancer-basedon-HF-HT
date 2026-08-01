@@ -1,0 +1,16 @@
+{
+  "seed": 20260801,
+  "prediction_csv": "checkpoints/mpp_uni2h_mlp/mpp2_barcode_repair_v003_frozen_baseline_20260711/predictions_external_xzy.csv",
+  "prediction_csv_sha256": "ed3c888d63a24a40ce32df77a9c7fd40c31cdc2576fe5c2e065c111a401e573b",
+  "coordinate_bridge_csv": "automation/results/mpp2-pathway-ridge-calibration-20260717-r003/predictions_external_xzy.csv",
+  "coordinate_bridge_sha256": "d4775efe75e43f950bb6651bc40f8264195a560f85b33db3990a69e57aa1681b",
+  "raw_xzy_csv": "data/protected_local/mpp2_r2_root_cause_20260725/source_snapshot/raw_ssgsea/XZY/XZY_ssGSEA.csv",
+  "current_v001_spatial_metrics": "data/protected_local/mpp2_r2_root_cause_20260725/analysis_outputs/mpp2_raw_spatial_rank_v001/spatial_metrics.csv",
+  "output_root": "data/protected_local/mpp2_r2_root_cause_20260725/analysis_outputs/mpp2_raw_spatial_rank_v001",
+  "row_alignment_tolerance": 0.000002,
+  "n_permutations_smoke": 199,
+  "n_permutations_final": 9999,
+  "coordinate_block_pixels": [1024, 2048, 4096],
+  "coordinate_cv_folds": 5,
+  "evidence_class": "diagnostic_only"
+}
