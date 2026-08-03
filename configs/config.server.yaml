@@ -50,3 +50,26 @@ cross_validation:
     1: { train: ["JFX0729", "LMZ12939"], test: "HYZ15040" }
     2: { train: ["HYZ15040", "LMZ12939"], test: "JFX0729" }
     3: { train: ["HYZ15040", "JFX0729"], test: "LMZ12939" }
+
+# ── Phase 3 CLAM 基线配置（仅登记，不授权训练）──
+# 依据：队友 0801-CLAM README、0721-新划分.pptx，以及用户于 2026-08-03 的明确确认。
+phase3_clam:
+  status: "configured_not_executed"
+  path_ids:
+    image_features: server_phase3_escc_uni2h_features
+    mpp2_raw_scores: server_phase3_escc_mpp2_raw_scores
+    shared_splits: phase3_escc_shared_pcr_mpr_splits
+  protocol:
+    tasks: ["pCR", "MPR"]
+    labels: "use_current_doctor_verified_labels"
+    primary_evaluation_unit: "slide"
+    secondary_evaluation_unit: "patient"
+    input_score_scale: "raw_mpp2_output"
+    split_unit: "patient"
+    folds: 5
+    training_seeds: [1, 2, 42, 61]
+    split_dir: "ESCC_shared_pCR_MPR_100"
+  evidence_boundary:
+    ppt_results_are_historical_reference: true
+    training_authorized: false
+    result_accepted: false

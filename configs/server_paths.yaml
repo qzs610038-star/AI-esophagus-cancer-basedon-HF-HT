@@ -1,5 +1,5 @@
 schema_version: "1.0"
-updated_at: "2026-07-11T00:19:25+08:00"
+updated_at: "2026-08-03T12:15:00+08:00"
 inventory:
   source: '01_指南与解读\部署方案\服务器路径索引_20260701.md'
   generated_at: "2026-07-01"
@@ -117,6 +117,37 @@ paths:
     required_on: server
     stability: medium_low
     protected: true
+  server_phase3_yzq_root:
+    path: 'D:\AIPatho\yzq'
+    kind: directory
+    status: active
+    required_on: server
+    stability: unknown
+  server_phase3_escc_uni2h_features:
+    path: 'D:\AIPatho\yzq\ESCC_uni2h_features'
+    kind: directory
+    status: active
+    required_on: server
+    stability: unknown
+  server_phase3_escc_mpp2_raw_scores:
+    path: 'D:\AIPatho\yzq\patch_329_scores_mpp2_20260711'
+    kind: directory
+    status: active
+    required_on: server
+    stability: unknown
+  phase3_escc_shared_pcr_mpr_splits:
+    path: 'reference_implementations\phase3_clam_escc_20260801\splits\ESCC_shared_pCR_MPR_100'
+    kind: repo_directory
+    status: active
+    required_on: both
+    stability: high
+    protected: true
+  legacy_server_phase3_escc_mpp2_zscore_features:
+    path: 'D:\AIPatho\yzq\ESCC_mpp2_z_scores_20260711'
+    kind: directory
+    status: legacy
+    required_on: server
+    stability: unknown
   legacy_partner_labels_local:
     path: 'parter_ljk_MPP1&4_patch_split_zscore'
     kind: repo_directory

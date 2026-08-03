@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-01T09:14:01+00:00",
-  "state_revision": 162,
+  "updated_at": "2026-08-03T04:50:33+00:00",
+  "state_revision": 165,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -787,9 +787,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-01T09:14:01+00:00",
-      "state_revision": 162,
-      "content_sha256": "a62446e42f0c9dde16a525e524adc27d28c68f3867382573a048357a87c24757",
+      "verified_at": "2026-08-03T04:50:33+00:00",
+      "state_revision": 165,
+      "content_sha256": "48f2a554a3e38bcafee862a13c2c18da03b1eb65f0ba0728b78fa90bbe976f4b",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -808,9 +808,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-01T09:14:01+00:00",
-      "state_revision": 162,
-      "content_sha256": "d68aa7ebb4f4d3383192fba9fd023a1ce5376791b233b178db4da9355b888392",
+      "verified_at": "2026-08-03T04:50:33+00:00",
+      "state_revision": 165,
+      "content_sha256": "c42f5575d9a79a99c6e90fd435dcc646d0c17645d59a4889ab4ffd8a6c863f95",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -2338,6 +2338,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-f0d70db9e127",
+      "path": "01_指南与解读/分析报告/Phase3_CLAM基线方案审查与文献注册_20260803.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-03T03:26:40+00:00",
+      "state_revision": 162,
+      "content_sha256": "466ccd368357521360f5f0fa02a468c64ed5f87f14979d1139c2ee0c03f57a38",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-e27e5de180af",
       "path": "01_指南与解读/分析报告/UNI2h_LoRA冒烟测试报告_20260530.md",
       "category": "分析报告",
@@ -2607,6 +2628,27 @@
         "PCC",
         "评估"
       ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-515c5e16512f",
+      "path": "01_指南与解读/分析报告/组会汇报_空间转录组病理预测最新进展_20260801.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-03T03:26:40+00:00",
+      "state_revision": 162,
+      "content_sha256": "ddcaa90200b600e3222398c562aa7d35d74743946cc02e209b2d4c3e01f6b881",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
       "connectivity_modes": [],
       "availability": "local_only"
     },
@@ -3062,6 +3104,27 @@
       "connectivity_modes": [
         "ssh"
       ],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-b2f3af7c6cb5",
+      "path": "01_指南与解读/学习指南/SpaMIL_vs_Phase3_对比学习指南_20260803.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-03T04:50:33+00:00",
+      "state_revision": 165,
+      "content_sha256": "6b82083c37a8740fff3e13f57a02432fc5bd3ae1a9e8170f7f64efde346384b9",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
       "availability": "local_only"
     },
     {
@@ -3528,6 +3591,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-c2c997fcc3af",
+      "path": "01_指南与解读/部署方案/MPP2_Phase3两套输出说明与选择指南_20260801.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-03T03:26:40+00:00",
+      "state_revision": 162,
+      "content_sha256": "67af94e7890afac7791d711bd6c5f30ff6e5d523f6c625b02415adb75ea4476f",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-9299955f63d9",
       "path": "01_指南与解读/部署方案/MPP2最新模型_Phase3空转基因预测_快速配置.md",
       "category": "部署方案",
@@ -3826,9 +3910,9 @@
       "scope": "server_paths",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "52b96c0dc2c49d35776256eb8226a94ac0de9ef125b85b5c6e9e03a47890b103",
+      "verified_at": "2026-08-03T04:05:16+00:00",
+      "state_revision": 164,
+      "content_sha256": "b329c7ecbab8fd9dc36bbeb21c2f632c50b1e681e75cf4f81bd9ff832b901d63",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4276,9 +4360,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-01T09:14:01+00:00",
-      "state_revision": 162,
-      "content_sha256": "2dbd325856164d2f23e853caf1e5c72d283a08516950089d6dffd128eb3e1d0c",
+      "verified_at": "2026-08-03T04:50:33+00:00",
+      "state_revision": 165,
+      "content_sha256": "c820cf527aeb75aeef7234e921d19bb8cff472ee4be04a1fa2ea3399268769fc",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4319,9 +4403,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-01T09:14:01+00:00",
-      "state_revision": 162,
-      "content_sha256": "b4ecf284dbe449e74f37e5e74480107cb7f11e2e92b190602403c2b483c8fa57",
+      "verified_at": "2026-08-03T04:50:33+00:00",
+      "state_revision": 165,
+      "content_sha256": "7b174b999babfadbe4692ad0db7bfd5d5b0dc4f3f1f8e2567c0370f5339837b5",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5223,12 +5307,12 @@
     }
   ],
   "summary": {
-    "total": 236,
-    "live": 220,
+    "total": 240,
+    "live": 224,
     "missing": 16,
     "active": 53,
     "superseded": 11,
-    "historical": 138,
+    "historical": 142,
     "pending_review": 0,
     "approved_design": 18
   }

@@ -1,0 +1,239 @@
+{
+  "project": "PFMval Literature Repository",
+  "updated_at": "2026-08-03",
+  "root_directory": "D:\\AI空间转录病理研究\\PFMval_new\\Ai病理项目文献汇总",
+  "total_categories": 11,
+  "teacher_backbone_policy": "Fixed UNI2-h Foundation Model as Teacher for H&E Feature Pre-extraction",
+  "categories": [
+    {
+      "id": "01",
+      "folder": "01_HE映射空间转录组模型",
+      "description": "HE图像映射空间转录组的核心模型与算法文献",
+      "documents": [
+        {
+          "id": "LIT-01-001",
+          "title": "Hist2ST: Spatial transcriptomics prediction from histology images",
+          "file_name": "Hist2ST.pdf",
+          "year": 2023,
+          "journal": "Nature Machine Intelligence",
+          "tags": ["SpatialTranscriptomics", "Transformer", "NeighborAware", "SpotLevel"],
+          "relevance_to_mpp2": "High (Module A Core Candidate)"
+        },
+        {
+          "id": "LIT-01-002",
+          "title": "Exemplar Guided Deep Neural Network for Spatial Transcriptomics Analysis",
+          "file_name": "EGN Yang_Exemplar_Guided_Deep_Neural_Network_for_Spatial_Transcriptomics_Analysis_of_WACV_2023_paper.pdf",
+          "year": 2023,
+          "journal": "WACV",
+          "tags": ["ExemplarGuided", "Interpretable", "DualEncoder", "Prototypes"],
+          "relevance_to_mpp2": "High (Module C Core Candidate)"
+        },
+        {
+          "id": "LIT-01-003",
+          "title": "PEaRL: Pathway-Enhanced Representation Learning for Gene and Pathway Expression Prediction",
+          "file_name": "Majumder_PEaRL_Pathway-Enhanced_Representation_Learning_for_Gene_and_Pathway_Expression_Prediction_WACV_2026_paper.pdf",
+          "year": 2026,
+          "journal": "WACV",
+          "tags": ["PathwayEnhanced", "MultiTaskLoss", "MSigDB", "BiologicalConstraint"],
+          "relevance_to_mpp2": "High (Module B Core Candidate)"
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "folder": "02_病理基础模型_FoundationModels",
+      "description": "通用病理大模型与自监督视觉主干网络（固定UNI2-h为教师模型）",
+      "documents": [
+        {
+          "id": "LIT-02-002",
+          "title": "Towards a general-purpose foundation model for computational pathology (UNI / UNI2-h)",
+          "file_name": "[12]_Towards a general-purpose foundation model for computational pathology.pdf",
+          "year": 2024,
+          "journal": "Nature Medicine",
+          "doi": "10.1038/s41591-024-02857-3",
+          "source_url": "https://www.nature.com/articles/s41591-024-02857-3",
+          "tags": ["UNI2h", "FixedTeacher", "FeatureExtraction"],
+          "relevance_to_mpp2": "UNI family paper background for the fixed teacher backbone; use the UNI2-h model card for the exact 1536-dimensional configuration"
+        },
+        {
+          "id": "LIT-02-003",
+          "title": "MahmoodLab UNI2-h model card",
+          "file_name": null,
+          "year": 2025,
+          "source_url": "https://huggingface.co/MahmoodLab/UNI2-h",
+          "availability": "metadata_only",
+          "tags": ["UNI2h", "ModelCard", "1536Dim", "License"],
+          "relevance_to_mpp2": "Authoritative architecture, use and license source for the Phase 3 pre-extracted pathology features"
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "folder": "03_多实例学习MIL与WSI分类",
+      "description": "Phase 3 CLAM、MIL 直接依据与邻近对照",
+      "documents": [
+        {
+          "id": "LIT-03-001",
+          "title": "Attention-based Deep Multiple Instance Learning",
+          "file_name": "[7]_Attention-based deep multiple instance learning.pdf",
+          "year": 2018,
+          "journal": "ICML / PMLR 80",
+          "source_url": "https://proceedings.mlr.press/v80/ilse18a.html",
+          "availability": "local_pdf_verified",
+          "association_scope": "direct_method_basis",
+          "tags": ["MIL", "Attention", "GatedAttention", "BagAggregation"]
+        },
+        {
+          "id": "LIT-03-002",
+          "title": "Clinical-grade computational pathology using weakly supervised deep learning on whole slide images",
+          "file_name": "[8]_Clinical-grade computational pathology using weakly supervised deep learning on whole slide images.pdf",
+          "year": 2019,
+          "journal": "Nature Medicine",
+          "doi": "10.1038/s41591-019-0508-1",
+          "source_url": "https://doi.org/10.1038/s41591-019-0508-1",
+          "availability": "local_pdf_verified",
+          "association_scope": "adjacent_weakly_supervised_wsi_background",
+          "tags": ["MIL", "WeaklySupervised", "WSI", "ClinicalScale"]
+        },
+        {
+          "id": "LIT-03-003",
+          "title": "Data-efficient and weakly supervised computational pathology on whole-slide images",
+          "file_name": "[9]_Data-efficient and weakly supervised computational pathology on whole-slide images.pdf",
+          "year": 2021,
+          "journal": "Nature Biomedical Engineering",
+          "doi": "10.1038/s41551-020-00682-w",
+          "source_url": "https://www.nature.com/articles/s41551-020-00682-w",
+          "code_url": "https://github.com/mahmoodlab/CLAM",
+          "availability": "local_pdf_verified",
+          "association_scope": "direct_clam_basis",
+          "tags": ["CLAM", "MIL", "WeaklySupervised", "WSI", "InstanceClustering"]
+        },
+        {
+          "id": "LIT-03-004",
+          "title": "TransMIL: Transformer based Correlated Multiple Instance Learning for Whole Slide Image Classification",
+          "file_name": "[11]_TransMIL Transformer based correlated multiple instance learning for whole slide image classification.pdf",
+          "year": 2021,
+          "journal": "NeurIPS 34",
+          "source_url": "https://proceedings.neurips.cc/paper/2021/hash/10c272d06794d3e5785d5e7c5356e9ff-Abstract.html",
+          "availability": "local_pdf_verified",
+          "association_scope": "adjacent_mil_comparator_not_implemented",
+          "tags": ["TransMIL", "Transformer", "CorrelatedMIL", "Spatial"]
+        },
+        {
+          "id": "LIT-03-005",
+          "title": "Pancancer outcome prediction via a unified weakly supervised deep learning model",
+          "file_name": "Pancancer outcome prediction via a unified weakly supervised.pdf",
+          "year": 2025,
+          "journal": "Signal Transduction and Targeted Therapy",
+          "doi": "10.1038/s41392-025-02374-w",
+          "source_url": "https://doi.org/10.1038/s41392-025-02374-w",
+          "availability": "local_pdf_verified",
+          "association_scope": "adjacent_multimodal_prognosis_different_endpoint",
+          "tags": ["PROGPATH", "MIL", "CrossAttention", "Prognosis"]
+        },
+        {
+          "id": "LIT-03-006",
+          "title": "Pseudo-Bag Mixup Augmentation for Multiple Instance Learning-Based Whole Slide Image Classification",
+          "file_name": null,
+          "year": 2024,
+          "journal": "IEEE Transactions on Medical Imaging",
+          "source_url": "https://github.com/liupei101/PseMix",
+          "availability": "metadata_only",
+          "association_scope": "optional_code_path_not_enabled",
+          "tags": ["PseMix", "MIL", "Augmentation", "PseudoBag"]
+        },
+        {
+          "id": "LIT-03-007",
+          "title": "Smooth Loss Functions for Deep Top-k Classification",
+          "file_name": null,
+          "year": 2018,
+          "journal": "ICLR",
+          "source_url": "https://openreview.net/forum?id=Hk5elxbRW",
+          "availability": "metadata_only",
+          "association_scope": "environment_dependency_not_active_under_ce_commands",
+          "tags": ["SmoothTopK", "Loss", "Dependency"]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "folder": "05_多模态融合与预后预测",
+      "description": "Phase 3 病理-通路融合方法背景与代码内候选来源",
+      "documents": [
+        {
+          "id": "LIT-05-001",
+          "title": "Pathomic Fusion: An Integrated Framework for Fusing Histopathology and Genomic Features for Cancer Diagnosis and Prognosis",
+          "file_name": "[6]_Pathomic fusion an integrated framework for fusing histopathology and genomic features for cancer diagnosis and prognosis.pdf",
+          "year": 2020,
+          "journal": "IEEE Transactions on Medical Imaging",
+          "doi": "10.1109/TMI.2020.3021387",
+          "source_url": "https://doi.org/10.1109/TMI.2020.3021387",
+          "availability": "local_pdf_verified",
+          "association_scope": "multimodal_background_not_exact_reimplementation",
+          "tags": ["PathomicFusion", "Histopathology", "Genomics", "Multimodal"]
+        },
+        {
+          "id": "LIT-05-002",
+          "title": "Attention Is All You Need",
+          "file_name": null,
+          "year": 2017,
+          "journal": "NeurIPS 30",
+          "source_url": "https://proceedings.neurips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html",
+          "availability": "metadata_only",
+          "association_scope": "multihead_attention_background",
+          "tags": ["Transformer", "MultiheadAttention", "CrossAttention"]
+        },
+        {
+          "id": "LIT-05-003",
+          "title": "Beyond Self-Attention: External Attention Using Two Linear Layers for Visual Tasks",
+          "file_name": null,
+          "year": 2023,
+          "journal": "IEEE TPAMI",
+          "doi": "10.1109/TPAMI.2022.3211006",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/36197869/",
+          "availability": "metadata_only",
+          "association_scope": "optional_code_path_not_enabled",
+          "tags": ["ExternalAttention", "VisualAttention"]
+        },
+        {
+          "id": "LIT-05-004",
+          "title": "Efficient Low-rank Multimodal Fusion With Modality-Specific Factors",
+          "file_name": null,
+          "year": 2018,
+          "journal": "ACL",
+          "doi": "10.18653/v1/P18-1209",
+          "source_url": "https://aclanthology.org/P18-1209/",
+          "availability": "metadata_only",
+          "association_scope": "optional_code_path_inspiration_not_exact_reimplementation",
+          "tags": ["LowRankFusion", "Multimodal"]
+        },
+        {
+          "id": "LIT-05-005",
+          "title": "FiLM: Visual Reasoning with a General Conditioning Layer",
+          "file_name": null,
+          "year": 2018,
+          "journal": "AAAI",
+          "doi": "10.1609/aaai.v32i1.11671",
+          "source_url": "https://ojs.aaai.org/index.php/AAAI/article/view/11671",
+          "availability": "metadata_only",
+          "association_scope": "optional_code_path_not_enabled",
+          "tags": ["FiLM", "FeatureWiseModulation", "Multimodal"]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "folder": "98个即插即用的AI模块-阿飞",
+      "description": "即插即用的轻量算子库（Mamba/CNN/Graph/Tabular/Attention组件）",
+      "documents": [
+        {
+          "id": "LIT-11-001",
+          "title": "98个即插即用模块完整版",
+          "file_name": "98个即插即用模块_完整版.md",
+          "tags": ["PlugAndPlay", "ConvSSM", "MambaIR", "MambaTab", "AKConv"],
+          "relevance_to_mpp2": "High (Extension Operators for Modules A/B/C)"
+        }
+      ]
+    }
+  ]
+}
