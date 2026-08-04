@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-07-30T02:50:32+00:00",
-  "next_workspace_number": 4,
+  "updated_at": "2026-08-04T06:10:27+00:00",
+  "next_workspace_number": 5,
   "workspaces": [
     {
       "workspace_id": "W001",
@@ -68,6 +68,29 @@
           "path_id": "local_experiment_workspaces",
           "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W003",
           "current_source_commit": "a0a6dd69dc409c8b3f366ffa41bb980aa2d47b4b"
+        }
+      }
+    },
+    {
+      "workspace_kind": "experiment",
+      "workspace_id": "W004",
+      "display_name": "Phase 3 双线基线与跨队列空间通路迁移",
+      "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+      "protocol_revision": 1,
+      "status": "shadow",
+      "active_attempt_id": null,
+      "lease": null,
+      "opened_at": "2026-08-04T06:10:27+00:00",
+      "last_verified_at": null,
+      "close_eligibility": "not_evaluated",
+      "retention_policy": "retain_until_explicit_close_approval",
+      "hosts": {
+        "local": {
+          "host_scope": "local",
+          "branch": "codex/w004-phase3-dual-baseline-transfer-20260804-bound",
+          "path_id": "local_experiment_workspaces",
+          "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W004",
+          "current_source_commit": "1626fbb67a28f52b746a3c863fbb37d0fceff6bd"
         }
       }
     }
