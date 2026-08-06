@@ -21,10 +21,6 @@ param(
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = Split-Path -Parent $ScriptDir
-$pythonPath = (Get-Command python -ErrorAction SilentlyContinue).Source
-if (-not $pythonPath) {
-    $pythonPath = "python"
-}
 
 # ------------------------------------------------------------
 # Help
@@ -74,6 +70,26 @@ if (-not $Arguments) {
     Write-Host "[FAIL] -Arguments is required. Use -Help for usage."
     exit 1
 }
+
+# ------------------------------------------------------------
+# Preflight 0: resolve the approved server interpreter
+# ------------------------------------------------------------
+$pythonResolver = Join-Path $ScriptDir "resolve_server_python.ps1"
+if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
+    Write-Host "[FAIL] Server Python resolver missing: $pythonResolver"
+    exit 1
+}
+. $pythonResolver
+try {
+    $pythonPath = Resolve-PfmvalServerPython
+    $pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $pythonPath
+    $env:PFMVAL_PYTHON = $pythonPath
+} catch {
+    Write-Host "[FAIL] Server Python preflight: $_"
+    exit 1
+}
+Write-Host "[PASS] Python interpreter: $($pythonIdentity.Executable)"
+Write-Host "[INFO] Python version: $($pythonIdentity.Version)"
 
 # ------------------------------------------------------------
 # Preflight 1: verify working directory

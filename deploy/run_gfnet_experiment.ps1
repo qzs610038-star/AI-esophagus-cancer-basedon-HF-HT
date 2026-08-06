@@ -3,8 +3,19 @@
 # Prerequisites: git pull first to get model_gfnet.py and updated train_online_tokens.py
 
 $ErrorActionPreference = "Stop"
-$Python = "C:\Users\AIPatho1\pfmval_env\Scripts\python.exe"
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$pythonResolver = Join-Path $ScriptDir "resolve_server_python.ps1"
+$Python = $null
 $ProjectDir = "D:\AIPatho\qzs\pfmval_deploy_git"
+
+if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
+    throw "Server Python resolver missing: $pythonResolver"
+}
+. $pythonResolver
+$Python = Resolve-PfmvalServerPython
+$pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $Python
+$env:PFMVAL_PYTHON = $Python
+Write-Host "Server Python: $($pythonIdentity.Executable) | $($pythonIdentity.Version)" -ForegroundColor Cyan
 
 Set-Location $ProjectDir
 

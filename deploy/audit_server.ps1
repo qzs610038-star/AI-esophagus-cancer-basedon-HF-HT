@@ -79,12 +79,17 @@ if ($nvcc) {
 
 # ---- 6. Python 环境 ----
 Write-Host "`n--- Python ---" -ForegroundColor Yellow
-$pythonCommands = @("python", "python3", "python310", "python311", "python312")
-foreach ($py in $pythonCommands) {
-    $cmd = Get-Command $py -ErrorAction SilentlyContinue
-    if ($cmd) {
-        $ver = & $py --version 2>&1
-        Write-Host "  $py : $ver [$($cmd.Source)]"
+$pythonResolver = Join-Path $PSScriptRoot "resolve_server_python.ps1"
+if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
+    Write-Host "  [FAIL] Server Python resolver missing: $pythonResolver" -ForegroundColor Red
+} else {
+    . $pythonResolver
+    try {
+        $serverPython = Resolve-PfmvalServerPython
+        $pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $serverPython
+        Write-Host "  [PASS] $($pythonIdentity.Executable) | $($pythonIdentity.Version)" -ForegroundColor Green
+    } catch {
+        Write-Host "  [FAIL] $($_.Exception.Message)" -ForegroundColor Red
     }
 }
 

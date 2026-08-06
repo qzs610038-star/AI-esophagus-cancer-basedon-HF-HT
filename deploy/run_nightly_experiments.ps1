@@ -9,9 +9,7 @@
 # ============================================================
 
 $ErrorActionPreference = "Continue"
-# Python 路径 — 部署到新服务器时修改此处
-# 建议使用 venv: C:\Users\<YourUser>\pfmval_env\Scripts\python.exe
-$PYTHON = if ($env:PFMVAL_PYTHON) { $env:PFMVAL_PYTHON } else { "C:\Users\AIPatho1\pfmval_env\Scripts\python.exe" }
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 # ── CPU Thread Limit (2026-06-04: NUMA0 protection, max 64 threads) ──
 $env:OMP_NUM_THREADS = "8"
@@ -152,12 +150,21 @@ Write-Log "  Total experiments: $($QUEUE.Count)"
 Write-Log "============================================"
 Write-Log ""
 
-if (-not (Test-Path $PYTHON)) {
-    Write-Log "FATAL: Python not found: $PYTHON"
+$pythonResolver = Join-Path $ScriptDir "resolve_server_python.ps1"
+if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
+    Write-Log "FATAL: Server Python resolver missing: $pythonResolver"
     exit 1
 }
-$pyVer = & $PYTHON --version 2>&1
-Write-Log "[ENV] $pyVer"
+. $pythonResolver
+try {
+    $PYTHON = Resolve-PfmvalServerPython
+    $pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $PYTHON
+    $env:PFMVAL_PYTHON = $PYTHON
+} catch {
+    Write-Log "FATAL: Server Python preflight failed: $_"
+    exit 1
+}
+Write-Log "[ENV] Python=$($pythonIdentity.Executable) | $($pythonIdentity.Version)"
 Write-Log "[ENV] Working dir: $(Get-Location)"
 Write-Log ""
 

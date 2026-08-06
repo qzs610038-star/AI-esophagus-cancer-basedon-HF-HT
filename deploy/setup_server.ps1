@@ -206,13 +206,21 @@ Write-Host "==============================================" -ForegroundColor Yel
 Write-Host "  7/7: 环境验证" -ForegroundColor Yellow
 Write-Host "=============================================="
 
-# Python
+# Python (never resolve through PATH; WindowsApps/python.exe is a Store alias)
 Write-Host "Python:"
-$py = Get-Command python -ErrorAction SilentlyContinue
-if ($py) {
-    python --version 2>&1
+$pythonResolver = Join-Path $PSScriptRoot "resolve_server_python.ps1"
+if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
+    Write-Host "  [FAIL] Server Python resolver missing: $pythonResolver" -ForegroundColor Red
 } else {
-    Write-Host "  (需先激活 conda 环境)"
+    . $pythonResolver
+    try {
+        $serverPython = Resolve-PfmvalServerPython
+        $pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $serverPython
+        $env:PFMVAL_PYTHON = $serverPython
+        Write-Host "  [PASS] $($pythonIdentity.Executable) | $($pythonIdentity.Version)" -ForegroundColor Green
+    } catch {
+        Write-Host "  [FAIL] $($_.Exception.Message)" -ForegroundColor Red
+    }
 }
 
 # PyTorch + CUDA

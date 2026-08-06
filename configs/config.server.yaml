@@ -10,6 +10,14 @@
 # ⚠️ 数据路径变更时: 只修改 configs/server_paths.yaml 中对应 path id，
 #    然后 git commit + push，服务器 pull 后即刻生效。
 
+# ── 服务器 Python 解释器 ──
+# 服务器启动器必须调用此绝对路径，禁止使用裸 `python` 或 PATH 查找。
+# WindowsApps/python.exe 是 Store 占位别名，会导致 9009；环境迁移只能显式设置 PFMVAL_PYTHON。
+runtime:
+  python_interpreter: "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe"
+  require_absolute_path: true
+  forbid_path_lookup: true
+
 # ── 训练设备 ──
 training:
   device: "auto"
