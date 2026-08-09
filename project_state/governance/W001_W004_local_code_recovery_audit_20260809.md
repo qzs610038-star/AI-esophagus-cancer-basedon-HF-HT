@@ -1,5 +1,7 @@
 # W001–W004 本地代码回收审计
 
+> 实现提交：`66c06a0`
+
 ## 审计结论
 
 - W001：注册分支和结题分支均已进入 main，独有提交为 0；实验为 `done/accepted/closed_no_retry`。但 main 的 attempt event 仅保留四条 `ATTEMPT_PREPARED`，关闭预检仍会报告非终态阻塞。
