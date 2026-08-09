@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-04T06:11:30+00:00",
-  "state_revision": 172,
+  "updated_at": "2026-08-07T04:47:02+00:00",
+  "state_revision": 182,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -172,6 +172,48 @@
       "availability": "tracked"
     },
     {
+      "doc_id": "doc-2148ae26c88e",
+      "path": ".agents/skills/lark-markdown-appender/SKILL.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-06T02:50:28+00:00",
+      "state_revision": 173,
+      "content_sha256": "beebc899fb501f14aa770c293a67921c1905f8e11756db2b81932afa54af0c28",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-b019198a3aad",
+      "path": ".agents/skills/lark-markdown-importer/SKILL.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-06T02:50:28+00:00",
+      "state_revision": 173,
+      "content_sha256": "1ae49113d216cca5dd1f28ca2269073604221848cec2aaf07b4ab84d7355d612",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
       "doc_id": "doc-ca2c55a62b83",
       "path": ".agents/skills/meeting-report/SKILL.md",
       "category": "Agent Skill",
@@ -304,9 +346,9 @@
       "scope": "skill:pfmval-governance",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T20:27:56+00:00",
-      "state_revision": 121,
-      "content_sha256": "2ee159d9320f30841f3ab1bd1ac9693f212b0119cc179907fd73839b94f3c9a4",
+      "verified_at": "2026-08-07T04:47:01+00:00",
+      "state_revision": 181,
+      "content_sha256": "d093935731026a19763b309c7994d16a8258b6e9c9bf12fdcbb909cfaf47a81c",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -787,9 +829,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-04T06:11:30+00:00",
-      "state_revision": 172,
-      "content_sha256": "953a5f5af5e7d44935700d6b041ad88770252a63bcd0537fc5c3a9201c7a7683",
+      "verified_at": "2026-08-07T04:47:02+00:00",
+      "state_revision": 182,
+      "content_sha256": "994927021bedb1c58b4e2cc286bad183ecbd5121c38b025872ce2911a48dfeeb",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -808,9 +850,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-04T06:11:30+00:00",
-      "state_revision": 172,
-      "content_sha256": "9a3af27b58723aad2aa685a9f050f674c06677271c400178586e1852f9cfda1b",
+      "verified_at": "2026-08-07T04:47:02+00:00",
+      "state_revision": 182,
+      "content_sha256": "db54b22548a2cded206a7149583602edfbf15a8f23bc84c9b67d8f1204363d8b",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -979,6 +1021,48 @@
       "verified_at": "2026-07-26T16:52:20+00:00",
       "state_revision": 109,
       "content_sha256": "be3e7e22161c906f67bf00ef50b5d5db49e2bdbdb731624ec5e29107bc31717a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-f8cbef2c18c5",
+      "path": ".claude/skills/lark-markdown-appender/SKILL.md",
+      "category": "本地Agent视图",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-06T02:50:28+00:00",
+      "state_revision": 173,
+      "content_sha256": "6ff72b79e17f4aed208c11c8093c80993c0d08328b44ce00299404ada8d8e21a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-b7fda3194a13",
+      "path": ".claude/skills/lark-markdown-importer/SKILL.md",
+      "category": "本地Agent视图",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-06T02:50:28+00:00",
+      "state_revision": 173,
+      "content_sha256": "260c39a284cda2f3110aea33c7bd65d3cd59dce0fa4c301bc957fa017ba789b9",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -2862,6 +2946,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-7c1ae9ff3486",
+      "path": "01_指南与解读/学习指南/MPP2_空间通路结构化残差适配器_SPRA_方案解读与学习指南_20260806.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-07T04:47:01+00:00",
+      "state_revision": 181,
+      "content_sha256": "0c9f59b9a6617aff1a21fdaf28b9d25bf4dc1000c29088724d516fd2fe529cea",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-29671fc27444",
       "path": "01_指南与解读/学习指南/MPP2原始基因集分数空间连续性与患者内排名分析方案_学习指南_20260801.md",
       "category": "学习指南",
@@ -3113,9 +3218,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-08-04T06:11:30+00:00",
-      "state_revision": 172,
-      "content_sha256": "1784b437cf3581057adf67254c26f4391c30799ec058a029e6592b14b4d76499",
+      "verified_at": "2026-08-07T04:47:01+00:00",
+      "state_revision": 181,
+      "content_sha256": "3e63ab8e464cde1790bdcc8958416a3ab412de8231701bedfbb2875c5747b561",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3910,8 +4015,8 @@
       "scope": "server_paths",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-08-03T04:05:16+00:00",
-      "state_revision": 164,
+      "verified_at": "2026-08-07T04:47:01+00:00",
+      "state_revision": 181,
       "content_sha256": "b329c7ecbab8fd9dc36bbeb21c2f632c50b1e681e75cf4f81bd9ff832b901d63",
       "supersedes": [],
       "superseded_by": [],
@@ -3922,7 +4027,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "doc_role": "deployment_plan"
     },
     {
       "doc_id": "doc-c9b5dcee616a",
@@ -4360,9 +4466,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-04T06:11:30+00:00",
-      "state_revision": 172,
-      "content_sha256": "ac94fb40b305476c0299981ef766b2300f8881acce9c42a156f40c9c04fc7ee5",
+      "verified_at": "2026-08-07T04:47:02+00:00",
+      "state_revision": 182,
+      "content_sha256": "a3acf6374d91032b786232a22e864555b67fdd28716d984d4803b6e2cbd45a9e",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4381,9 +4487,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-31T17:42:38+00:00",
-      "state_revision": 153,
-      "content_sha256": "b85dd4882cfe1d35b038fe043c43111e584b1037f28dfc195c06b91335ffb77a",
+      "verified_at": "2026-08-07T04:47:02+00:00",
+      "state_revision": 182,
+      "content_sha256": "da79718db9402edaf122f37427c2cc365627016be519a734d3db9d144e3d9435",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4403,9 +4509,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-04T06:11:30+00:00",
-      "state_revision": 172,
-      "content_sha256": "ef7842b3c3dafefc3b9bf5041c0b87750d2efaae1bba2a9e693d5116ef6d418f",
+      "verified_at": "2026-08-07T04:47:02+00:00",
+      "state_revision": 182,
+      "content_sha256": "e4c7e4916519baf34c5857f52b754f2b781950f2bc89e42bdaa2e3b519d7d09d",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4739,6 +4845,27 @@
       "availability": "tracked"
     },
     {
+      "doc_id": "doc-b8c47b391978",
+      "path": "project_state/plans/mpp2_dual_mechanism_gallery_spra_review_draft_v002_20260806.md",
+      "category": "状态方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-06T04:14:41+00:00",
+      "state_revision": 179,
+      "content_sha256": "4113152bc75326c913853ddd88ffb84348426b7b377e024d5e09246081b3514f",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
       "doc_id": "doc-2f635595aea6",
       "path": "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md",
       "category": "状态方案",
@@ -4769,6 +4896,27 @@
       "verified_at": "2026-07-31T16:59:48+00:00",
       "state_revision": 150,
       "content_sha256": "8947290e9b68c8a0e78de65de36e4830386f1b2d5e6182f63957f609a5fec66c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-6cef1c65d72f",
+      "path": "project_state/plans/mpp2_spatial_pathway_residual_adapter_review_draft_20260805.md",
+      "category": "状态方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-06T02:50:28+00:00",
+      "state_revision": 173,
+      "content_sha256": "c77cbf353aeb5879fcd8012ca946e7033158f731b37f2d8f3e617c6b318403a9",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5328,12 +5476,12 @@
     }
   ],
   "summary": {
-    "total": 241,
-    "live": 225,
+    "total": 248,
+    "live": 232,
     "missing": 16,
     "active": 53,
     "superseded": 11,
-    "historical": 143,
+    "historical": 150,
     "pending_review": 0,
     "approved_design": 18
   }

@@ -9,6 +9,8 @@ import tempfile
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
+from scripts.pfmval_knowledge import review_document_freshness
+
 
 PROGRESS_COLUMNS = (
     "可读名称",
@@ -271,6 +273,21 @@ def build_project_guide(root: Path) -> str:
         ),
         key=lambda item: str(item.get("path", "")),
     )
+    deployment_docs = [
+        item for item in active_docs
+        if item.get("doc_role") == "deployment_plan"
+    ]
+    learning_docs = [
+        item for item in active_docs
+        if item.get("doc_role") == "learning_guide"
+    ]
+    learning_freshness = {
+        str(item.get("doc_id")): review_document_freshness(
+            root,
+            document_id=str(item.get("doc_id")),
+        )
+        for item in learning_docs
+    }
     source_hash = _canonical_hash(
         {
             "document_state_revision": document_registry.get(
@@ -288,12 +305,18 @@ def build_project_guide(root: Path) -> str:
                         "lifecycle",
                         "truth_sources",
                         "availability",
+                        "doc_role",
+                        "related_docs",
+                        "source_refs",
+                        "dependency_fingerprints",
+                        "freshness",
                     )
                 }
                 for item in document_registry.get("documents", [])
                 if item.get("path") != "PROJECT_GUIDE.md"
             ],
             "assets": asset_registry.get("assets", []),
+            "learning_freshness": learning_freshness,
         }
     )
     lines = [
@@ -326,9 +349,55 @@ def build_project_guide(root: Path) -> str:
         "| `.agents/` | Skill 与 Agent 规则 | agent | reference | approval-required | active |",
         "| `archive/` | 历史材料 | user | historical | approval-required | historical |",
         "",
-        "## 当前 active 文档",
+        "## 部署方案与学习指南",
+        "",
+        "### Active 部署方案",
         "",
     ]
+    if deployment_docs:
+        lines.extend(
+            f"- [{item.get('doc_id', item['path'])}]({_markdown_target(item['path'])})"
+            for item in deployment_docs
+        )
+    else:
+        lines.append("- 暂无标注 `doc_role=deployment_plan` 的 active 文档。")
+    lines.extend(["", "### Active 学习指南", ""])
+    if learning_docs:
+        for item in learning_docs:
+            preview = learning_freshness[str(item.get("doc_id"))]
+            changed = ",".join(preview["changed_dependencies"])
+            suffix = (
+                f"；changed_dependencies={changed}"
+                if changed
+                else ""
+            )
+            lines.append(
+                f"- [{item.get('doc_id', item['path'])}]({_markdown_target(item['path'])})"
+                f" — `{preview['freshness']}`{suffix}"
+            )
+    else:
+        lines.append("- 暂无标注 `doc_role=learning_guide` 的 active 文档。")
+    review_due = [
+        item for item in learning_docs
+        if learning_freshness[str(item.get("doc_id"))]["freshness"]
+        == "review_due"
+    ]
+    lines.extend(["", "### 待复核学习指南（WARN）", ""])
+    if review_due:
+        for item in review_due:
+            preview = learning_freshness[str(item.get("doc_id"))]
+            changed = ",".join(preview["changed_dependencies"]) or "stored status"
+            lines.append(
+                f"- WARN [{item.get('doc_id', item['path'])}]({_markdown_target(item['path'])})"
+                f" — `review_due`；changed_dependencies={changed}"
+            )
+    else:
+        lines.append("- 无。")
+    lines.extend([
+        "",
+        "## 当前 active 文档",
+        "",
+    ])
     if active_docs:
         lines.extend(
             f"- [{item.get('doc_id', item['path'])}]({_markdown_target(item['path'])})"

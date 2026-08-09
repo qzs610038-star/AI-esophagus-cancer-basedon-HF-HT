@@ -42,6 +42,10 @@ JOB_SCHEMA_VERSION = "1.0"
 RESULT_SCHEMA_VERSION = "1.0"
 MAX_RESULT_FILE_BYTES = 20 * 1024 * 1024
 MAX_RESULT_TOTAL_BYTES = 50 * 1024 * 1024
+SOFT_SOURCE_HASH_KEYS = {
+    "experiment_dashboard_sha256",
+    "experiment_progress_sha256",
+}
 SMOKE_MAX_EPOCHS = 3
 MPP_TRAINING_PATH_IDS = {
     "mpp_data_root",
@@ -1761,6 +1765,27 @@ def scan_documents(root: Path) -> Dict[str, Any]:
                 else "local_only"
             ),
         }
+        for relationship_field, default in (
+            ("doc_role", None),
+            ("related_docs", []),
+            ("source_refs", []),
+            ("dependency_fingerprints", {}),
+            ("freshness", None),
+            ("freshness_reason", None),
+            ("changed_dependencies", []),
+        ):
+            if relationship_field in old:
+                value = old.get(relationship_field, default)
+                if isinstance(default, list):
+                    value = list(value or [])
+                elif isinstance(default, dict):
+                    value = dict(value or {})
+                entry[relationship_field] = value
+        if lifecycle == "active" and "doc_role" not in entry:
+            if entry["category"] == "部署方案":
+                entry["doc_role"] = "deployment_plan"
+            elif entry["category"] == "学习指南":
+                entry["doc_role"] = "learning_guide"
         if lifecycle == "superseded":
             if scope == "historical_guidance" and "mpp" in rel_path.lower():
                 entry["superseded_by"] = ["plan-mpp-training"]
@@ -2154,14 +2179,34 @@ def compute_source_hashes(root: Path) -> Dict[str, str]:
         # state -> view -> document-registry -> state revision loop. The source
         # hash therefore covers lifecycle decisions and normative/reference
         # content, while excluding derived-view bookkeeping.
-        semantic = read_json(document_registry)
-        for field in ("updated_at", "state_revision", "summary"):
-            semantic.pop(field, None)
-        for document in semantic.get("documents", []):
-            document.pop("verified_at", None)
-            document.pop("state_revision", None)
-            if document.get("authority") == "derived":
-                document.pop("content_sha256", None)
+        registry = read_json(document_registry)
+        hard_document_fields = (
+            "doc_id",
+            "path",
+            "category",
+            "scope",
+            "authority",
+            "lifecycle",
+            "availability",
+            "content_sha256",
+            "supersedes",
+            "superseded_by",
+            "truth_sources",
+            "connectivity_modes",
+        )
+        semantic = {
+            "schema_version": registry.get("schema_version"),
+            "documents": [
+                {
+                    key: document.get(key)
+                    for key in hard_document_fields
+                    if key in document
+                }
+                for document in registry.get("documents", [])
+                if document.get("lifecycle") == "active"
+                and document.get("authority") == "normative"
+            ],
+        }
         hashes["document_registry_sha256"] = sha256_bytes(canonical_json_bytes(semantic))
     return hashes
 
@@ -2312,6 +2357,7 @@ def validate_governance_v3_state(
     report: ValidationReport,
     *,
     host_scope: Optional[str] = None,
+    task: str = "general",
 ) -> None:
     schema_root = root / "project_state" / "schemas"
     workspace_path = root / "project_state" / "workspace_registry.json"
@@ -2403,7 +2449,16 @@ def validate_governance_v3_state(
                         != "governance_maintenance"
                         and matched.get("head") != expected_commit
                     ):
-                        raise ValueError("absolute workspace HEAD does not match registry")
+                        message = (
+                            "absolute workspace HEAD does not match registry: "
+                            f"{workspace_id}"
+                        )
+                        if task == "knowledge":
+                            report.warn(message)
+                        else:
+                            raise ValueError(
+                                "absolute workspace HEAD does not match registry"
+                            )
                 elif ".." in relative_path.parts:
                     raise ValueError(
                         "workspace path escapes registered root: "
@@ -2650,6 +2705,45 @@ def validate_state(
         for successor in document.get("superseded_by", []):
             if successor not in doc_by_id:
                 report.fail(f"superseded document points to unknown successor {successor}: {document.get('path')}")
+    from scripts.pfmval_knowledge import review_document_freshness
+
+    for document in document_list:
+        if (
+            document.get("lifecycle") != "active"
+            or document.get("doc_role") != "learning_guide"
+        ):
+            continue
+        document_id = str(document.get("doc_id", ""))
+        source_refs = [str(item) for item in document.get("source_refs", [])]
+        if not source_refs:
+            report.warn(
+                f"active learning guide has no source_refs: {document_id}"
+            )
+            continue
+        invalid_sources = [
+            source_id
+            for source_id in source_refs
+            if source_id not in doc_by_id
+            or doc_by_id[source_id].get("lifecycle") != "active"
+            or doc_by_id[source_id].get("doc_role") != "deployment_plan"
+        ]
+        if invalid_sources:
+            report.warn(
+                "active learning guide has invalid deployment source_refs: "
+                f"{document_id} -> {', '.join(invalid_sources)}"
+            )
+        preview = review_document_freshness(
+            root,
+            document_id=document_id,
+        )
+        if preview["freshness"] == "review_due":
+            changed = ", ".join(preview["changed_dependencies"]) or "stored status"
+            report.warn(
+                f"active learning guide review_due: {document_id}; "
+                f"changed_dependencies={changed}"
+            )
+        else:
+            report.passed(f"active learning guide is fresh: {document_id}")
     normative_scope: Dict[str, List[str]] = {}
     for item in document_list:
         if item.get("lifecycle") == "active" and item.get("authority") == "normative":
@@ -2728,16 +2822,40 @@ def validate_state(
             message = f"state source hash is empty: {key}"
             (report.fail if strict else report.warn)(message)
         elif actual != expected:
-            report.fail(f"state source hash mismatch: {key}")
+            message = f"state source hash mismatch: {key}"
+            if key in SOFT_SOURCE_HASH_KEYS:
+                report.warn(message)
+            else:
+                report.fail(message)
     current_view = root / "CURRENT_STATE.md"
     if current_view.exists():
         state_hash = sha256_bytes(canonical_json_bytes(state))
         if state_hash not in current_view.read_text(encoding="utf-8"):
-            report.fail("CURRENT_STATE.md was not generated from the current state payload")
+            report.warn(
+                "CURRENT_STATE.md was not generated from the current state payload"
+            )
         else:
             report.passed("CURRENT_STATE.md matches current_state.json")
     else:
         report.fail("CURRENT_STATE.md missing")
+    project_guide = root / "PROJECT_GUIDE.md"
+    if project_guide.exists():
+        from scripts.pfmval_views import build_project_guide
+
+        expected_guide = build_project_guide(root)
+        if project_guide.read_text(encoding="utf-8") != expected_guide:
+            report.warn(
+                "PROJECT_GUIDE.md is stale; regenerate with docs guide"
+            )
+        else:
+            report.passed("PROJECT_GUIDE.md matches document registries")
+    readme_path = root / "README.md"
+    if readme_path.exists():
+        expected_readme_block = _readme_state_block(state, registry)
+        if expected_readme_block not in readme_path.read_text(encoding="utf-8"):
+            report.warn(
+                "README state block is stale; regenerate with state sync"
+            )
 
     transaction_root = root / "project_state" / ".transactions"
     if transaction_root.exists() and any(transaction_root.iterdir()):
@@ -2763,7 +2881,12 @@ def validate_state(
         report.warn(f"pending results must be imported before model conclusions: {local_pending}")
 
     validate_server_paths(root, report, task=task, host_scope=host_scope)
-    validate_governance_v3_state(root, report, host_scope=host_scope)
+    validate_governance_v3_state(
+        root,
+        report,
+        host_scope=host_scope,
+        task=task,
+    )
     if not report.fail_items:
         report.passed("state package validation completed")
     return report

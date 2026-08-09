@@ -15,7 +15,29 @@
         "properties": {
           "authority": {"enum": ["normative", "derived", "reference"]},
           "lifecycle": {"enum": ["draft", "pending_review", "approved_design", "active", "superseded", "historical", "missing"]},
-          "availability": {"enum": ["tracked", "local_only"]}
+          "availability": {"enum": ["tracked", "local_only"]},
+          "doc_role": {"type": "string", "minLength": 1},
+          "related_docs": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "dependency_fingerprints": {
+            "type": "object",
+            "additionalProperties": {"type": "string"}
+          },
+          "freshness": {"enum": ["fresh", "review_due"]},
+          "freshness_reason": {"type": "string"},
+          "changed_dependencies": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          }
         }
       }
     }

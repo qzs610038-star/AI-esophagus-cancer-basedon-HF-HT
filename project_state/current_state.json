@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 173,
-  "updated_at": "2026-08-04T06:11:37+00:00",
-  "source_commit": "1626fbb67a28f52b746a3c863fbb37d0fceff6bd",
+  "state_revision": 182,
+  "updated_at": "2026-08-07T04:47:02+00:00",
+  "source_commit": "b07eb9376ba6b34678c266da346dcfaaa7deffff",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -33,7 +33,9 @@
     "DIR-20260801-008",
     "DIR-20260801-009",
     "DIR-20260803-001",
-    "DIR-20260804-001"
+    "DIR-20260806-001",
+    "DIR-20260806-002",
+    "DIR-20260807-001"
   ],
   "active_plans": {
     "mpp_training": {
@@ -348,7 +350,7 @@
     "experiment_registry_sha256": "d06008071726c1a8ff2a3dc9ab67cc90223ddcb7443342b09f8fe54513798149",
     "experiment_dashboard_sha256": "a57aaf3a3951e615d18c731b5e1378d1eb5b18411685e1f071495ba4046802a5",
     "experiment_progress_sha256": "3dc0e9514aa66bd910903951e5565d0d720dc1d4a36c7b66cd5c4c6de6bf87ee",
-    "document_registry_sha256": "34b53a2ad4632fd735ac63aa416a1c7d4334ca5d4cb6abd09d2c916dec951891",
+    "document_registry_sha256": "37ada73aab36d27a73d966e83520a5ba01fe114a1afee8b6336e6f1e8c02c05d",
     "asset_registry_sha256": "e30959ff4af1c99af4ddb1f8ffac5fdad84902da42c8baa84443e4ecb1a4501d",
     "workspace_registry_sha256": "6b5680a7fe3edd91ebee7549f68755247494e6f73c089d77a4315e00280b1ee0",
     "workflow_catalog_sha256": "b08d9d253c09ccd96c03a8269b3e63f4553c557582c21b47e159aeb61e88ba34",

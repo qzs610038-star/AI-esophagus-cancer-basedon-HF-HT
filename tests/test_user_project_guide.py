@@ -92,3 +92,53 @@ def test_tracked_project_guide_links_exist_and_registry_marks_it_active():
         if unquote(target) in missing_paths:
             continue
         assert (root / unquote(target)).exists(), target
+
+
+def test_project_guide_surfaces_deployment_learning_links_and_review_due(tmp_path):
+    root = tmp_path / "repo"
+    plan = root / "01_指南与解读" / "部署方案" / "plan.md"
+    guide = root / "01_指南与解读" / "学习指南" / "guide.md"
+    plan.parent.mkdir(parents=True)
+    guide.parent.mkdir(parents=True)
+    plan.write_text("# changed deployment\n", encoding="utf-8")
+    guide.write_text("# learning guide\n", encoding="utf-8")
+    _write_json(
+        root / "project_state" / "document_registry.json",
+        {
+            "state_revision": 8,
+            "updated_at": "2026-08-07T00:00:00+00:00",
+            "documents": [
+                {
+                    "doc_id": "plan-a",
+                    "path": "01_指南与解读/部署方案/plan.md",
+                    "lifecycle": "active",
+                    "authority": "normative",
+                    "doc_role": "deployment_plan",
+                    "content_sha256": "0" * 64,
+                    "related_docs": ["guide-a"],
+                },
+                {
+                    "doc_id": "guide-a",
+                    "path": "01_指南与解读/学习指南/guide.md",
+                    "lifecycle": "active",
+                    "authority": "reference",
+                    "doc_role": "learning_guide",
+                    "source_refs": ["plan-a"],
+                    "dependency_fingerprints": {"plan-a": "0" * 64},
+                    "freshness": "fresh",
+                },
+            ],
+        },
+    )
+    _write_json(
+        root / "project_state" / "asset_registry.json",
+        {"schema_version": "1.0", "assets": []},
+    )
+
+    rendered = build_project_guide(root)
+
+    assert "## 部署方案与学习指南" in rendered
+    assert "plan-a" in rendered
+    assert "guide-a" in rendered
+    assert "review_due" in rendered
+    assert "changed_dependencies=plan-a" in rendered

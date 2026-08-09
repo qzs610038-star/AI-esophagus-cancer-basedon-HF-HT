@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from deploy import pfmval_ops
 from scripts import finalize_experiment as finalize_module
 from scripts import pfmval_state as state_module
 from scripts.finalize_experiment import build_dashboard
@@ -734,12 +735,19 @@ def test_mpp_index_reports_conflicting_duplicate_barcodes(tmp_path):
     assert index["labels_validated"] is False
 
 
-def test_manual_dashboard_edit_is_detected(tmp_path):
+def test_manual_dashboard_edit_is_detected_as_soft_warning(tmp_path):
     root = make_minimal_project(tmp_path)
     with (root / "experiments" / "experiment_dashboard.md").open("a", encoding="utf-8") as handle:
         handle.write("manual edit\n")
     report = validate_state(root)
-    assert any("experiment_dashboard_sha256" in message for message in report.fail_items)
+    assert not any(
+        "experiment_dashboard_sha256" in message
+        for message in report.fail_items
+    )
+    assert any(
+        "experiment_dashboard_sha256" in message
+        for message in report.warn_items
+    )
 
 
 def test_job_parameters_are_argv_safe():
@@ -1639,6 +1647,257 @@ def test_document_registry_semantic_hash_ignores_derived_view_bookkeeping(tmp_pa
     registry["documents"][0]["lifecycle"] = "superseded"
     write_json(registry_path, registry)
     assert compute_source_hashes(root)["document_registry_sha256"] != before
+
+
+def test_document_registry_hard_hash_ignores_active_reference_knowledge_metadata(
+    tmp_path,
+):
+    root = make_minimal_project(tmp_path)
+    registry_path = root / "project_state" / "document_registry.json"
+    registry = read_json(registry_path)
+    registry["documents"].append({
+        "doc_id": "guide-a",
+        "path": "01_指南与解读/学习指南/guide-a.md",
+        "category": "学习指南",
+        "scope": "learning_guide",
+        "authority": "reference",
+        "lifecycle": "active",
+        "availability": "tracked",
+        "verified_at": "2026-08-07T00:00:00+00:00",
+        "state_revision": 1,
+        "content_sha256": "a" * 64,
+        "supersedes": [],
+        "superseded_by": [],
+        "truth_sources": ["project_state/current_state.json"],
+        "doc_role": "learning_guide",
+        "source_refs": ["plan-mpp-training"],
+        "dependency_fingerprints": {"plan-mpp-training": "b" * 64},
+        "freshness": "fresh",
+    })
+    write_json(registry_path, registry)
+    before = compute_source_hashes(root)["document_registry_sha256"]
+
+    registry["documents"][-1]["dependency_fingerprints"] = {
+        "plan-mpp-training": "c" * 64,
+    }
+    registry["documents"][-1]["freshness"] = "review_due"
+    write_json(registry_path, registry)
+
+    assert compute_source_hashes(root)["document_registry_sha256"] == before
+
+
+def test_document_scan_preserves_optional_relationship_metadata(tmp_path):
+    root = make_minimal_project(tmp_path)
+    registry_path = root / "project_state" / "document_registry.json"
+    registry = read_json(registry_path)
+    registry["documents"][0].update({
+        "doc_role": "deployment_plan",
+        "related_docs": ["guide-a"],
+        "source_refs": [],
+        "dependency_fingerprints": {},
+        "freshness": "fresh",
+        "freshness_reason": "verified",
+    })
+    write_json(registry_path, registry)
+
+    scanned = scan_documents(root)
+    document = next(
+        item for item in scanned["documents"]
+        if item["doc_id"] == "plan-mpp-training"
+    )
+
+    assert document["doc_role"] == "deployment_plan"
+    assert document["related_docs"] == ["guide-a"]
+    assert document["source_refs"] == []
+    assert document["dependency_fingerprints"] == {}
+    assert document["freshness"] == "fresh"
+    assert document["freshness_reason"] == "verified"
+
+
+def test_document_scan_infers_deployment_role_only_for_active_document(tmp_path):
+    root = make_minimal_project(tmp_path)
+    deployment = (
+        root
+        / "01_指南与解读"
+        / "部署方案"
+        / "服务器路径索引_20260701.md"
+    )
+    deployment.parent.mkdir(parents=True)
+    deployment.write_text("# server paths\n", encoding="utf-8")
+
+    scanned = scan_documents(root)
+    document = next(
+        item for item in scanned["documents"]
+        if item["path"].endswith("服务器路径索引_20260701.md")
+    )
+
+    assert document["lifecycle"] == "active"
+    assert document["doc_role"] == "deployment_plan"
+
+
+def test_generated_view_hash_drift_is_soft_but_registry_drift_remains_hard(
+    tmp_path,
+):
+    root = make_minimal_project(tmp_path)
+    (root / "experiments" / "experiment_dashboard.md").write_text(
+        "stale generated view\n",
+        encoding="utf-8",
+    )
+
+    view_report = validate_state(root, strict=True)
+
+    assert not any(
+        "experiment_dashboard_sha256" in message
+        for message in view_report.fail_items
+    )
+    assert any(
+        "experiment_dashboard_sha256" in message
+        for message in view_report.warn_items
+    )
+
+    (root / "CURRENT_STATE.md").write_text(
+        "stale current-state view\n",
+        encoding="utf-8",
+    )
+    current_view_report = validate_state(root, strict=True)
+    assert not any(
+        "CURRENT_STATE.md" in message
+        for message in current_view_report.fail_items
+    )
+    assert any(
+        "CURRENT_STATE.md" in message
+        for message in current_view_report.warn_items
+    )
+
+    (root / "PROJECT_GUIDE.md").write_text(
+        "stale project guide\n",
+        encoding="utf-8",
+    )
+    (root / "README.md").write_text(
+        "# stale readme state block\n",
+        encoding="utf-8",
+    )
+    navigation_report = validate_state(root, strict=True)
+    assert not any(
+        "PROJECT_GUIDE.md" in message or "README state block" in message
+        for message in navigation_report.fail_items
+    )
+    assert any(
+        "PROJECT_GUIDE.md" in message
+        for message in navigation_report.warn_items
+    )
+    assert any(
+        "README state block" in message
+        for message in navigation_report.warn_items
+    )
+
+    registry_path = root / "experiments" / "experiment_registry.json"
+    registry_path.write_text('{"changed": true}\n', encoding="utf-8")
+    registry_report = validate_state(root, strict=True)
+    assert any(
+        "experiment_registry_sha256" in message
+        for message in registry_report.fail_items
+    )
+
+
+def test_knowledge_task_downgrades_only_workspace_head_drift(monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    registry = read_json(root / "project_state" / "workspace_registry.json")
+    records = []
+    for workspace in registry.get("workspaces", []):
+        for host in workspace.get("hosts", {}).values():
+            path = Path(str(host.get("relative_path", "")))
+            if path.is_absolute():
+                records.extend([
+                    f"worktree {path}",
+                    f"HEAD {'0' * 40}",
+                    f"branch refs/heads/{host.get('branch', '')}",
+                    "",
+                ])
+    completed = subprocess.CompletedProcess(
+        args=["git", "worktree", "list"],
+        returncode=0,
+        stdout="\n".join(records),
+        stderr="",
+    )
+    monkeypatch.setattr(
+        "scripts.pfmval_state.subprocess.run",
+        lambda *_args, **_kwargs: completed,
+    )
+
+    report = ValidationReport()
+    validate_governance_v3_state(
+        root,
+        report,
+        host_scope="local",
+        task="knowledge",
+    )
+
+    assert not any(
+        "workspace HEAD" in message for message in report.fail_items
+    )
+    assert any(
+        "workspace HEAD" in message for message in report.warn_items
+    )
+
+
+def test_cli_accepts_knowledge_validation_task():
+    agent_args = pfmval_ops.build_parser().parse_args([
+        "agent",
+        "start-check",
+        "--strict",
+        "--task",
+        "knowledge",
+    ])
+    state_args = pfmval_ops.build_parser().parse_args([
+        "state",
+        "validate",
+        "--strict",
+        "--task",
+        "knowledge",
+    ])
+
+    assert agent_args.task == "knowledge"
+    assert state_args.task == "knowledge"
+
+
+def test_state_validation_warns_when_active_learning_guide_dependency_changed(
+    tmp_path,
+):
+    root = make_minimal_project(tmp_path)
+    registry_path = root / "project_state" / "document_registry.json"
+    registry = read_json(registry_path)
+    guide_path = root / "01_指南与解读" / "学习指南" / "guide.md"
+    guide_path.parent.mkdir(parents=True)
+    guide_path.write_text("# guide\n", encoding="utf-8")
+    registry["documents"].append({
+        "doc_id": "guide-a",
+        "path": "01_指南与解读/学习指南/guide.md",
+        "category": "学习指南",
+        "scope": "learning_guide",
+        "authority": "reference",
+        "lifecycle": "active",
+        "availability": "tracked",
+        "verified_at": "2026-08-07T00:00:00+00:00",
+        "state_revision": 1,
+        "content_sha256": sha256_file(guide_path),
+        "supersedes": [],
+        "superseded_by": [],
+        "truth_sources": ["project_state/current_state.json"],
+        "doc_role": "learning_guide",
+        "source_refs": ["plan-mpp-training"],
+        "dependency_fingerprints": {"plan-mpp-training": "0" * 64},
+        "freshness": "fresh",
+    })
+    write_json(registry_path, registry)
+
+    report = validate_state(root, task="knowledge")
+
+    assert not any("guide-a" in message for message in report.fail_items)
+    assert any(
+        "guide-a" in message and "review_due" in message
+        for message in report.warn_items
+    )
 
 
 def test_finalize_honors_custom_registry_and_keeps_unverified_result_pending(tmp_path, monkeypatch):

@@ -1068,7 +1068,11 @@ def command_knowledge(args: argparse.Namespace) -> int:
         print(json.dumps(artifact, ensure_ascii=False, indent=2))
         return 0
     if args.knowledge_command == "freshness":
-        fingerprints = read_json(Path(args.fingerprints).resolve())
+        fingerprints = (
+            read_json(Path(args.fingerprints).resolve())
+            if args.fingerprints
+            else None
+        )
         preview = review_document_freshness(
             PROJECT_ROOT,
             document_id=args.document_id,
@@ -1608,7 +1612,11 @@ def build_parser() -> argparse.ArgumentParser:
     state_sub.add_parser("migrate", help="one-time initial migration of provenance and document lifecycle")
     validate = state_sub.add_parser("validate")
     validate.add_argument("--strict", action="store_true")
-    validate.add_argument("--task", choices=["general", "server", "training"], default="general")
+    validate.add_argument(
+        "--task",
+        choices=["general", "server", "training", "knowledge"],
+        default="general",
+    )
     validate.add_argument("--host-scope", choices=["local", "server"], default=None)
 
     docs = sub.add_parser("docs")
@@ -1646,7 +1654,11 @@ def build_parser() -> argparse.ArgumentParser:
     agent_sub = agent.add_subparsers(dest="agent_command", required=True)
     start = agent_sub.add_parser("start-check")
     start.add_argument("--strict", action="store_true")
-    start.add_argument("--task", choices=["general", "server", "training", "diagnostic"], default="general")
+    start.add_argument(
+        "--task",
+        choices=["general", "server", "training", "diagnostic", "knowledge"],
+        default="general",
+    )
     start.add_argument("--host-scope", choices=["local", "server"], default=None)
 
     diagnostic = sub.add_parser("diagnostic")
@@ -1763,7 +1775,7 @@ def build_parser() -> argparse.ArgumentParser:
     knowledge_profile.add_argument("--output")
     knowledge_freshness = knowledge_sub.add_parser("freshness")
     knowledge_freshness.add_argument("--document-id", required=True)
-    knowledge_freshness.add_argument("--fingerprints", required=True)
+    knowledge_freshness.add_argument("--fingerprints")
 
     workflow = sub.add_parser("workflow")
     workflow_sub = workflow.add_subparsers(

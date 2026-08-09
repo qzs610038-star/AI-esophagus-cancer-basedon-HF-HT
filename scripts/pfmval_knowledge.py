@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import tempfile
 from pathlib import Path
@@ -373,6 +374,39 @@ def build_document_profile(
     if profile == "research_path":
         return _research_path(payload)
     if profile == "learning_guide":
+        registry_path = root / "project_state" / "document_registry.json"
+        if registry_path.exists():
+            registry = json.loads(registry_path.read_text(encoding="utf-8"))
+            registered = next(
+                (
+                    item
+                    for item in registry.get("documents", [])
+                    if item.get("doc_id") == str(payload.get("document_id", ""))
+                    and item.get("lifecycle") == "active"
+                    and item.get("doc_role") == "learning_guide"
+                ),
+                None,
+            )
+            if registered is not None:
+                preview = review_document_freshness(
+                    root,
+                    document_id=str(registered["doc_id"]),
+                )
+                return {
+                    "document_id": str(registered["doc_id"]),
+                    "profile": "learning_guide",
+                    "status": preview["freshness"],
+                    "freshness": preview["freshness"],
+                    "lifecycle": preview["lifecycle"],
+                    "source_refs": list(registered.get("source_refs", [])),
+                    "dependency_fingerprints": preview[
+                        "current_fingerprints"
+                    ],
+                    "changed_dependencies": preview[
+                        "changed_dependencies"
+                    ],
+                    "writes": 0,
+                }
         return _learning_interface(payload)
     if profile == "paper_output":
         return _paper_interface(payload)
@@ -406,7 +440,7 @@ def review_document_freshness(
     root: Path,
     *,
     document_id: str,
-    current_fingerprints: Mapping[str, str],
+    current_fingerprints: Mapping[str, str] | None = None,
 ) -> dict[str, Any]:
     registry = json.loads(
         (root / "project_state" / "document_registry.json").read_text(
@@ -423,8 +457,32 @@ def review_document_freshness(
     )
     if document is None:
         raise ValueError(f"unknown document_id: {document_id}")
+    if current_fingerprints is None:
+        documents = {
+            str(item.get("doc_id")): item
+            for item in registry.get("documents", [])
+            if item.get("doc_id")
+        }
+        resolved: dict[str, str] = {}
+        for source_id in document.get("source_refs", []):
+            source_key = str(source_id)
+            source = documents.get(source_key)
+            if source is None:
+                resolved[source_key] = ""
+                continue
+            source_path = root / str(source.get("path", ""))
+            if source_path.is_file():
+                resolved[source_key] = hashlib.sha256(
+                    source_path.read_bytes()
+                ).hexdigest()
+            else:
+                resolved[source_key] = str(
+                    source.get("content_sha256", "")
+                )
+        current_fingerprints = resolved
+    current = dict(current_fingerprints)
     previous = document.get("dependency_fingerprints", {})
-    changed = _canonical(previous) != _canonical(dict(current_fingerprints))
+    changed = _canonical(previous) != _canonical(current)
     return {
         "document_id": document_id,
         "freshness": "review_due" if changed else document.get(
@@ -434,9 +492,10 @@ def review_document_freshness(
         "lifecycle": document.get("lifecycle"),
         "changed_dependencies": sorted(
             key
-            for key in set(previous) | set(current_fingerprints)
-            if previous.get(key) != current_fingerprints.get(key)
+            for key in set(previous) | set(current)
+            if previous.get(key) != current.get(key)
         ),
+        "current_fingerprints": current,
         "writes": 0,
         "deletes": 0,
         "directive_closures": 0,

@@ -43,7 +43,7 @@ python deploy/pfmval_ops.py agent start-check --strict
 | Non-experimental project fact | `project_fact` | `knowledge fact-preview` or `knowledge profile --profile project_fact` | confirmation preview |
 | Long-term meeting summary | `meeting_brief` | `knowledge profile --profile meeting_brief` | draft brief with accepted/explore/failed separated |
 | Long-term research path | `research_path` | `knowledge profile --profile research_path` | draft with uncertainty, negative routes, and stop reasons |
-| Learning guide maintenance | `learning_guide` | `knowledge profile --profile learning_guide` | `interface_reserved` |
+| Learning guide maintenance | `learning_guide` | `knowledge profile --profile learning_guide` or `knowledge freshness --document-id ...` | active Registry learning guide returns `fresh`/`review_due`; unregistered intake remains `interface_reserved` |
 | Document/constraint lifecycle | `lifecycle_review` | `knowledge profile --profile lifecycle_review` or `knowledge freshness` | `review_due` or current preview |
 | Workflow discovery/evolution | `workflow_discovery` | `workflow discover --scope-manifest ...` | unrecorded preview or candidate only |
 | Paper writing/output | `paper_output` | `knowledge profile --profile paper_output` | `template_pending` |
@@ -52,6 +52,12 @@ The long-term-document user entry deliberately routes to two profiles, so six
 user workflows produce seven technical routes. Use templates from
 `templates/`; every shipped payload is synthetic and must be replaced or
 explicitly confirmed before it can represent a real project fact or document.
+
+For knowledge-only maintenance, use `agent start-check --strict --task knowledge`.
+This task profile may downgrade experiment-workspace HEAD drift and generated
+navigation drift to WARN, but it never weakens path/branch identity, experiment
+Registry, active normative document, server transport, approval, result, or
+protected-asset failures.
 
 ## Experiment intake boundary
 

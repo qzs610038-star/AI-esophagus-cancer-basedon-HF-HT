@@ -233,6 +233,68 @@ def test_r10_t07_freshness_review_only_returns_review_due(tmp_path):
     assert document_registry.read_bytes() == before
 
 
+def test_active_learning_guide_profile_resolves_registry_dependency_fingerprints(
+    tmp_path,
+):
+    root = _root(tmp_path)
+    plan = root / "01_指南与解读" / "部署方案" / "plan.md"
+    guide = root / "01_指南与解读" / "学习指南" / "guide.md"
+    plan.parent.mkdir(parents=True)
+    guide.parent.mkdir(parents=True)
+    plan.write_text("# changed plan\n", encoding="utf-8")
+    guide.write_text("# guide\n", encoding="utf-8")
+    _write_json(
+        root / "project_state" / "document_registry.json",
+        {
+            "schema_version": "1.0",
+            "documents": [
+                {
+                    "doc_id": "plan-1",
+                    "path": "01_指南与解读/部署方案/plan.md",
+                    "lifecycle": "active",
+                    "authority": "normative",
+                    "doc_role": "deployment_plan",
+                    "content_sha256": "0" * 64,
+                },
+                {
+                    "doc_id": "guide-1",
+                    "path": "01_指南与解读/学习指南/guide.md",
+                    "lifecycle": "active",
+                    "authority": "reference",
+                    "doc_role": "learning_guide",
+                    "source_refs": ["plan-1"],
+                    "dependency_fingerprints": {"plan-1": "0" * 64},
+                    "freshness": "fresh",
+                },
+            ],
+        },
+    )
+
+    artifact = build_document_profile(
+        root,
+        profile="learning_guide",
+        payload={"document_id": "guide-1"},
+    )
+
+    assert artifact["status"] == "review_due"
+    assert artifact["freshness"] == "review_due"
+    assert artifact["source_refs"] == ["plan-1"]
+    assert artifact["changed_dependencies"] == ["plan-1"]
+    assert artifact["writes"] == 0
+
+
+def test_freshness_cli_can_resolve_registry_dependencies_without_input_file():
+    args = pfmval_ops.build_parser().parse_args([
+        "knowledge",
+        "freshness",
+        "--document-id",
+        "guide-1",
+    ])
+
+    assert args.document_id == "guide-1"
+    assert args.fingerprints is None
+
+
 def test_r10_t08_fact_replay_is_noop_and_experiment_registry_is_isolated(tmp_path):
     root = _root(tmp_path)
     experiment_path = root / "experiments" / "experiment_registry.json"

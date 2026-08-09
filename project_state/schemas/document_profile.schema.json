@@ -41,6 +41,18 @@
         "type": "string"
       }
     },
+    "dependency_fingerprints": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "freshness": {
+      "enum": ["fresh", "review_due"]
+    },
+    "changed_dependencies": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
     "body": {
       "type": "string"
     },

@@ -1,0 +1,60 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - img "logo" [ref=e6] [cursor=pointer]
+    - generic [ref=e7]:
+      - generic [ref=e12]:
+        - generic [ref=e14]:
+          - generic [ref=e15]: 扫码登录
+          - generic [ref=e16]:
+            - text: 请使用
+            - strong [ref=e17]: 飞书移动端
+            - text: 扫描二维码
+        - link "切换至Lark登录" [ref=e26] [cursor=pointer]:
+          - /url: https://www.larksuite.com/accounts/cross_login/auth?app_id=2&origin_web_did=2bb104b26c4d157e68b29b6567e31ded&redirect_uri=https%3A%2F%2Fmy.feishu.cn%2Fdocx%2FE7cJdjWCQouR9dxAIzYcI4danoe%3Flogin_redirect_times%3D1
+        - generic [ref=e27]: 扫码成功
+      - generic [ref=e35]:
+        - text: 还没有账号？
+        - button "立即注册" [ref=e36] [cursor=pointer]
+    - generic [ref=e37]:
+      - generic [ref=e38]: 简体中文
+      - generic:
+        - list:
+          - listitem [ref=e44] [cursor=pointer]:
+            - generic [ref=e45]: 简体中文
+          - listitem [ref=e47] [cursor=pointer]:
+            - generic [ref=e48]: 繁體中文（中國香港）
+          - listitem [ref=e49] [cursor=pointer]:
+            - generic [ref=e50]: 繁體中文（中國台灣）
+          - listitem [ref=e51] [cursor=pointer]:
+            - generic [ref=e52]: English
+          - listitem [ref=e53] [cursor=pointer]:
+            - generic [ref=e54]: 日本語
+          - listitem [ref=e55] [cursor=pointer]:
+            - generic [ref=e56]: Bahasa Indonesia
+          - listitem [ref=e57] [cursor=pointer]:
+            - generic [ref=e58]: Bahasa Melayu
+          - listitem [ref=e59] [cursor=pointer]:
+            - generic [ref=e60]: Deutsch
+          - listitem [ref=e61] [cursor=pointer]:
+            - generic [ref=e62]: Español
+          - listitem [ref=e63] [cursor=pointer]:
+            - generic [ref=e64]: Français
+          - listitem [ref=e65] [cursor=pointer]:
+            - generic [ref=e66]: Italiano
+          - listitem [ref=e67] [cursor=pointer]:
+            - generic [ref=e68]: Português (Brasil)
+          - listitem [ref=e69] [cursor=pointer]:
+            - generic [ref=e70]: Русский
+          - listitem [ref=e71] [cursor=pointer]:
+            - generic [ref=e72]: Tiếng Việt
+          - listitem [ref=e73] [cursor=pointer]:
+            - generic [ref=e74]: ภาษาไทย
+          - listitem [ref=e75] [cursor=pointer]:
+            - generic [ref=e76]: 한국어
+  - generic [ref=e77]:
+    - generic [ref=e79]:
+      - img "pic" [ref=e80]
+      - button "animation" [ref=e82]
+    - generic [ref=e135]:
+      - generic [ref=e136]: 先进团队 先用飞书
+      - generic [ref=e137]: 字节跳动旗下 AI 工作平台

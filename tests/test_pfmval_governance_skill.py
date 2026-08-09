@@ -29,6 +29,8 @@ def test_g08_canonical_skill_and_thin_adapter_expose_seven_safe_routes():
         "paper_output",
     ):
         assert f"`{route}`" in skill
+    assert "active Registry learning guide" in skill
+    assert "--task knowledge" in skill
 
     forbidden_direct_actions = (
         "ssh ",

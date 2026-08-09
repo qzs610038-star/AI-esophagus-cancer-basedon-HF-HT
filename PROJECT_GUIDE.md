@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `a8ddb839f74a2f95ae48ebdfd37e0036e9666d22e65eec73216560d2b37ee2d5`
+> source_sha256: `e2143979364f5c4a38ce057bda9ef4e2ba5139a5c862e9c7055a621518b62744`
 
 ## 我要找什么
 
@@ -26,6 +26,20 @@
 | `02_组会汇报/` | 组会材料 | user | reference | manual | active-by-registry |
 | `.agents/` | Skill 与 Agent 规则 | agent | reference | approval-required | active |
 | `archive/` | 历史材料 | user | historical | approval-required | historical |
+
+## 部署方案与学习指南
+
+### Active 部署方案
+
+- [doc-2a8751c5530f](01_指南与解读/部署方案/服务器路径索引_20260701.md)
+
+### Active 学习指南
+
+- 暂无标注 `doc_role=learning_guide` 的 active 文档。
+
+### 待复核学习指南（WARN）
+
+- 无。
 
 ## 当前 active 文档
 
@@ -85,6 +99,8 @@
 ## 历史与过时资料
 
 - [doc-fe4b048ff34a](.agents/skills/_shared/legacy-compatibility-policy.md)
+- [doc-2148ae26c88e](.agents/skills/lark-markdown-appender/SKILL.md)
+- [doc-b019198a3aad](.agents/skills/lark-markdown-importer/SKILL.md)
 - [doc-3bbbee463565](.agents/skills/pfmval-audit/assets/audit-report-template.md)
 - [doc-eea543c941ec](.agents/skills/pfmval-audit/references/evidence-boundaries.md)
 - [doc-18867c8d4cf0](.agents/skills/qzs-stable-conclusion-writer/SKILL.md)
@@ -103,6 +119,8 @@
 - [doc-4d82a45da166](.claude/he-ssgsea-greedy-river.md)
 - [doc-71283d40f6a5](.claude/maintenance-plan.md)
 - [doc-b9e51b0eb0d0](.claude/skills/README.md)
+- [doc-f8cbef2c18c5](.claude/skills/lark-markdown-appender/SKILL.md)
+- [doc-b7fda3194a13](.claude/skills/lark-markdown-importer/SKILL.md)
 - [doc-af1018facf20](01_指南与解读/01_README.md)
 - [doc-dcade5200ce3](01_指南与解读/分析报告/2026-06-30_数据最新情报_完整提取.md)
 - [doc-b4b14aed4452](01_指南与解读/分析报告/5.16修复记录.md)
@@ -124,6 +142,7 @@
 - [doc-c8131c8195ec](01_指南与解读/分析报告/MPP2_LoRA实验结果分析报告_20260713.md)
 - [doc-62ef6f4047db](01_指南与解读/分析报告/MPP2_用户授权强制Ridge校准与XZY实测报告_20260725.md)
 - [doc-788bf4046027](01_指南与解读/分析报告/MPP2_用户授权解除lambda限制与PCC敏感性实测报告_20260725.md)
+- [doc-c7d309b77926](01_指南与解读/分析报告/MPP2原始基因集分数空间连续性与患者内排名分析方案_20260801.md)
 - [doc-4ddcb830325e](01_指南与解读/分析报告/MPP2双线并行改进与Phase3快速接入方案_原文_20260731.md)
 - [doc-e80cbb0dc4bd](01_指南与解读/分析报告/MPP2双线并行改进与Phase3快速接入方案_执行实现扩展与冲突审查_20260731.md)
 - [doc-4c04d5240205](01_指南与解读/分析报告/MPP2后续实验重新排序与Phase3接入讨论稿_20260801.md)
@@ -137,6 +156,7 @@
 - [doc-54de45fef40e](01_指南与解读/分析报告/PFMval_PCC优化建议报告_附论文推荐_20260513.md)
 - [doc-f09cdbaf0403](01_指南与解读/分析报告/PFMval本地状态与Gitee维护实施日志_20260711.md)
 - [doc-09f2221baaab](01_指南与解读/分析报告/Phase2模型改进建议_0507.md)
+- [doc-f0d70db9e127](01_指南与解读/分析报告/Phase3_CLAM基线方案审查与文献注册_20260803.md)
 - [doc-e27e5de180af](01_指南与解读/分析报告/UNI2h_LoRA冒烟测试报告_20260530.md)
 - [doc-f3092657ca03](01_指南与解读/分析报告/he-ssgsea-greedy-river.md)
 - [doc-ed7fb303d91d](01_指南与解读/分析报告/下一步改进操作建议_0516.md)
@@ -148,6 +168,7 @@
 - [doc-cf69a7bdaf91](01_指南与解读/分析报告/文献整理报告_模型选型建议.md)
 - [doc-30e164b2d426](01_指南与解读/分析报告/新数据集3ST分析报告.md)
 - [doc-088b1ab72e4c](01_指南与解读/分析报告/模型评估与选型分析.md)
+- [doc-515c5e16512f](01_指南与解读/分析报告/组会汇报_空间转录组病理预测最新进展_20260801.md)
 - [doc-02d2881f162c](01_指南与解读/分析报告/训练加速方法调研_20260610.md)
 - [doc-b3a0045b24d7](01_指南与解读/学习指南/5.16改进建议原因分析_初学者版.md)
 - [doc-28a15deb2a7e](01_指南与解读/学习指南/Agent辅助科研系统自我维护更新机制指南.md)
@@ -157,13 +178,19 @@
 - [doc-08c643bb284f](01_指南与解读/学习指南/LoRA在线微调与MPP2迁移学习指南.md)
 - [doc-408ca0730228](01_指南与解读/学习指南/MPP2_LoRA实验全貌与对抗审查初学者指南_20260715.md)
 - [doc-25365ec02764](01_指南与解读/学习指南/MPP2_R2预测优化_假设检验与实验复盘_20260725.md)
+- [doc-7c1ae9ff3486](01_指南与解读/学习指南/MPP2_空间通路结构化残差适配器_SPRA_方案解读与学习指南_20260806.md)
+- [doc-29671fc27444](01_指南与解读/学习指南/MPP2原始基因集分数空间连续性与患者内排名分析方案_学习指南_20260801.md)
 - [doc-b66bfc74b3e2](01_指南与解读/学习指南/Mamba与频域模块学习指南_20260609.md)
+- [doc-379b96e712aa](01_指南与解读/学习指南/PFMval_MPP2_双线优化方案体系化学习指南_20260801.md)
+- [doc-624fb900b6c2](01_指南与解读/学习指南/PFMval_MPP2_双线优化方案深度学习指南_20260801.md)
 - [doc-081fee8475ee](01_指南与解读/学习指南/PFMval_MPP2_双线方案学习指南_20260731.md)
 - [doc-ce20d727038e](01_指南与解读/学习指南/PFMval学习指南.md)
 - [doc-f0d642418ca1](01_指南与解读/学习指南/PFMval维护机制优化方案_v2.0.md)
 - [doc-bece8ee254c0](01_指南与解读/学习指南/RL方法选择_初学者指南.md)
 - [doc-5c6f3862cc1e](01_指南与解读/学习指南/SSH远程操作_初学者指南.md)
 - [doc-204c5e1dcc4e](01_指南与解读/学习指南/SSH远程连接实战排障_初学者指南_20260616.md)
+- [doc-b2f3af7c6cb5](01_指南与解读/学习指南/SpaMIL_vs_Phase3_对比学习指南_20260803.md)
+- [doc-7a93ec4e548d](01_指南与解读/学习指南/UNI2-H_数据输入输出结构对比分析学习指南.md)
 - [doc-417d1e19e6f9](01_指南与解读/学习指南/UNI2-H_渐进式解冻训练_初学者指南.md)
 - [doc-35b99c569e2c](01_指南与解读/学习指南/infer_解读指南.md)
 - [doc-2c7136131bbe](01_指南与解读/学习指南/split_解读指南.md)
@@ -184,6 +211,7 @@
 - [doc-931fb38fe2d8](01_指南与解读/部署方案/Loki_OmiCLIP_安装指南.md)
 - [doc-6124b85413ab](01_指南与解读/部署方案/MPP1-5重跑服务器操作排错与踩坑汇总.md)
 - [doc-b1dee7a99232](01_指南与解读/部署方案/MPP1_MPP5模型获取与预测指南.md)
+- [doc-c2c997fcc3af](01_指南与解读/部署方案/MPP2_Phase3两套输出说明与选择指南_20260801.md)
 - [doc-9299955f63d9](01_指南与解读/部署方案/MPP2最新模型_Phase3空转基因预测_快速配置.md)
 - [doc-bf1e3b39e68c](01_指南与解读/部署方案/Mamba与频域模块实验部署方案_20260609.md)
 - [doc-a8af2d7e8bbf](01_指南与解读/部署方案/OmiCLIP_部署方案.md)
@@ -221,7 +249,10 @@
 - [doc-97488a7e8511](automation/logs/workflow_governance_v3_safe_cleanup_20260726.md)
 - [doc-30d6cd0aae35](automation/report_inputs/gemini_mpp_report_handoff_20260713.md)
 - [doc-916d4b92af63](deploy/SYNC_GUIDE.md)
+- [doc-05d7fe5438b6](project_state/plans/Phase3_双线基线与跨队列空间通路迁移分阶段实验方案_20260803.md)
+- [doc-b8c47b391978](project_state/plans/mpp2_dual_mechanism_gallery_spra_review_draft_v002_20260806.md)
 - [doc-ce94fd42b6c4](project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717_goal_prompt.md)
+- [doc-6cef1c65d72f](project_state/plans/mpp2_spatial_pathway_residual_adapter_review_draft_20260805.md)
 - [doc-6f9670b9c076](project_state/plans/scientific_records_lifecycle_v1_upgrade_plan_20260729.md)
 - [doc-703b599b0346](project_state/plans/server_execution_roundtrip_v1_migration_boundary_20260729.md)
 - [doc-9337a1ac2103](project_state/plans/server_execution_roundtrip_v1_upgrade_plan_20260729.md)

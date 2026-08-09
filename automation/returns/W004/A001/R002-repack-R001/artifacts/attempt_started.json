@@ -1,0 +1,25 @@
+{
+  "event_type": "EXPERIMENT_RECOVERY_STARTED",
+  "event_id": "recovery-started-W004-A001-R002",
+  "recorded_at": "2026-08-07T11:08:42Z",
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "workspace_id": "W004",
+  "attempt_id": "A001",
+  "job_id": "W004-A001",
+  "approval_id": "APR-W004-phase3-stage2-v002-20260807",
+  "source_commit": "b898c9d80c2702a32a51773c9cfb8ca75312731a",
+  "critical_contract_sha256": "889ea8736fe94899719b571a1263bfd3d9e82a0938c1050f04f86707c99b893c",
+  "recovery_id": "R002",
+  "run_units_delta": 0,
+  "execution_binding": {
+    "mode": "source_plus_governance_bundle",
+    "governance_commit": "807e7ea7c60604a588b8d2a5008a1bd58a1e2fa0"
+  },
+  "original_attempt": {
+    "attempt_root": "D:\\AIPatho\\qzs\\pfmval_experiment_runs\\W004\\A001",
+    "started_sha256": "b6c59191bc21378a6b6310b80491a5e20635d1708b5b254680686b6dcf968cc9",
+    "terminal_sha256": "24b0241c16f3dd4490806e90ad3c00a9af36a0c9e0c466b4281d61f93970ac47",
+    "terminal_status": "failed",
+    "terminal_returncode": 1
+  }
+}
