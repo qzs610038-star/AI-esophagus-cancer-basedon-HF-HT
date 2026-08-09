@@ -19,11 +19,7 @@ SENSITIVE_PARTS = {
     "cache",
     "__pycache__",
 }
-PROTECTED_ROOTS = ("histogene", "egnv1", "egnv2")
 FIXED_POLICY_RULES = (
-    ("fixed-histogene", "histogene", "approval_required", "protected"),
-    ("fixed-egnv1", "egnv1", "approval_required", "protected"),
-    ("fixed-egnv2", "egnv2", "approval_required", "protected"),
     (
         "fixed-mpp-standard-splits",
         "mpp_standard_splits",
@@ -77,28 +73,17 @@ def build_shadow_inventory(root: Path) -> dict[str, Any]:
     """Inventory bounded metadata and lineage candidates without file hashes."""
     root = root.resolve(strict=False)
     active_mpp_trainers = sorted(root.glob("train_mpp_*.py"))
-    shared_histogene_utils = False
     shared_neutral_metrics = False
     for trainer in active_mpp_trainers:
         if trainer.stat().st_size > 1024 * 1024:
             continue
         text = trainer.read_text(encoding="utf-8", errors="replace")
-        if "from histogene.utils import compute_metrics" in text:
-            shared_histogene_utils = True
         if "from pfmval_core.metrics import compute_metrics" in text:
             shared_neutral_metrics = True
 
     paths: set[Path] = set()
-    for name in PROTECTED_ROOTS:
-        protected = root / name
-        if protected.exists():
-            paths.add(protected)
-    if shared_histogene_utils and (root / "histogene" / "utils.py").is_file():
-        paths.add(root / "histogene" / "utils.py")
     if shared_neutral_metrics and (root / "pfmval_core" / "metrics.py").is_file():
         paths.add(root / "pfmval_core" / "metrics.py")
-    if (root / "histogene" / "utils.py").is_file():
-        paths.add(root / "histogene" / "utils.py")
     paths.update(active_mpp_trainers)
 
     # Metadata-only inventory of shallow ignored/local roots.  It never opens
@@ -130,24 +115,7 @@ def build_shadow_inventory(root: Path) -> dict[str, Any]:
             continue
         item = _metadata(path, root)
         relative = item["path"]
-        if relative == "histogene/utils.py" and shared_histogene_utils:
-            item.update(
-                {
-                    "era": "shared_dependency",
-                    "custody": "project",
-                    "asset_class": "python_module",
-                    "lifecycle": "protected",
-                    "mutability": "approval_required",
-                    "evidence_role": "runtime_dependency",
-                    "lineage": [
-                        trainer.relative_to(root).as_posix()
-                        for trainer in active_mpp_trainers
-                        if "from histogene.utils import compute_metrics"
-                        in trainer.read_text(encoding="utf-8", errors="replace")
-                    ],
-                }
-            )
-        elif relative == "pfmval_core/metrics.py" and shared_neutral_metrics:
+        if relative == "pfmval_core/metrics.py" and shared_neutral_metrics:
             item.update(
                 {
                     "era": "shared_dependency",
@@ -162,29 +130,6 @@ def build_shadow_inventory(root: Path) -> dict[str, Any]:
                         if "from pfmval_core.metrics import compute_metrics"
                         in trainer.read_text(encoding="utf-8", errors="replace")
                     ],
-                }
-            )
-        elif relative == "histogene/utils.py":
-            item.update(
-                {
-                    "era": "legacy_mixed",
-                    "custody": "project",
-                    "asset_class": "compatibility_module",
-                    "lifecycle": "protected",
-                    "mutability": "approval_required",
-                    "evidence_role": "compatibility",
-                    "replacement": "pfmval_core/metrics.py",
-                }
-            )
-        elif relative in PROTECTED_ROOTS:
-            item.update(
-                {
-                    "era": "legacy_mixed",
-                    "custody": "project",
-                    "asset_class": "code_root",
-                    "lifecycle": "protected",
-                    "mutability": "approval_required",
-                    "evidence_role": "mixed",
                 }
             )
         elif path in active_mpp_trainers:

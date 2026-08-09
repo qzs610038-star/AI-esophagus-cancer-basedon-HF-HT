@@ -198,6 +198,13 @@ registered
 
 - 新实验对话写入前由用户指定 `本对话工作树：W###`；Agent 回显
   experiment、路径、branch、HEAD 和 dirty 状态。
+- 新实验的专属代码、配置、最简测试、结构化日志索引和 closeout 必须集中在
+  `experiments/workspaces/W###/`；未修改公共代码只写入
+  `shared_code_manifest.json`，不复制。原始大日志、checkpoint、预测、缓存和
+  中间产物仍写入工作树外的已注册 W### 运行目录。
+- 实验结束时先把完整 W### 包作为独立审核提交合入 main，再把可复用代码
+  晋升到公共目录。完整包后续可退出 main 当前树，但必须保留对应 Git 提交、
+  `CLOSEOUT.md` 和治理索引，以便恢复和总结。
 - 绑定后所有修改默认在该 worktree；切换须用户显式指定。禁止用一个全局
   current-workspace 文件服务并发对话。
 - 默认由本地工作树维护 canonical code。服务器简单兼容适配经 server-owned

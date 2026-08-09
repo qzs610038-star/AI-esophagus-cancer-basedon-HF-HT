@@ -1,7 +1,6 @@
 import numpy as np
 import pytest
 
-from histogene.utils import compute_metrics as legacy_compute_metrics
 from pfmval_core.metrics import compute_metrics
 
 
@@ -13,18 +12,15 @@ from pfmval_core.metrics import compute_metrics
         (np.array([1.0]), np.array([1.5])),
     ],
 )
-def test_neutral_metrics_matches_legacy_for_supported_inputs(y_true, y_pred):
-    expected = legacy_compute_metrics(y_true, y_pred)
+def test_neutral_metrics_returns_expected_keys_and_finite_values(y_true, y_pred):
     actual = compute_metrics(y_true, y_pred)
-    assert actual.keys() == expected.keys()
-    for key in actual:
-        assert actual[key] == pytest.approx(expected[key], nan_ok=True)
+    assert actual.keys() == {"mse", "mae", "r2", "pcc"}
+    assert all(np.isfinite(actual[key]) for key in ("mse", "mae", "pcc"))
+    assert np.isfinite(actual["r2"]) or np.isnan(actual["r2"])
 
 
-def test_neutral_metrics_matches_legacy_nan_rejection():
+def test_neutral_metrics_rejects_nan():
     values = np.array([1.0, np.nan])
-    with pytest.raises(ValueError):
-        legacy_compute_metrics(values, values)
     with pytest.raises(ValueError):
         compute_metrics(values, values)
 

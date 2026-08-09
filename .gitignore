@@ -243,6 +243,10 @@ experiments/
 experiments/explorations/*
 !experiments/explorations/.gitkeep
 !experiments/explorations/README.md
+!experiments/workspaces/
+experiments/workspaces/*
+!experiments/workspaces/_template/
+!experiments/workspaces/_template/**
 experiments/analysis/
 experiments/results/
 experiments/sweeps/
@@ -293,6 +297,9 @@ account_migration_export_*.zip
 
 # Historical reference package remains local-only until an explicit index is approved.
 historical_file/
+
+# MPP1-5 前旧代码本地只读归档；当前树只保留迁移清单与 Git 历史。
+historical_code/
 
 # Ad-hoc teammate delivery package; include only when explicitly needed.
 phase3_qzs_share/

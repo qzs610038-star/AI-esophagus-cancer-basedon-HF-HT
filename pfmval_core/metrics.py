@@ -1,8 +1,7 @@
 """Metrics shared by active MPP trainers.
 
-The behavior intentionally matches ``histogene.utils`` so callers can migrate
-without changing scientific results.  The protected legacy module remains
-read-only and available as a compatibility path.
+This is the canonical metrics implementation for current MPP trainers.  The
+pre-MPP compatibility module is retained only in local Git-backed history.
 """
 
 from __future__ import annotations

@@ -5,13 +5,13 @@ def test_shadow_inventory_uses_lineage_and_does_not_hash_large_or_sensitive_file
     tmp_path,
 ):
     root = tmp_path / "repo"
-    (root / "histogene").mkdir(parents=True)
-    (root / "histogene" / "utils.py").write_text(
+    (root / "pfmval_core").mkdir(parents=True)
+    (root / "pfmval_core" / "metrics.py").write_text(
         "def compute_metrics(a, b): return {}\n",
         encoding="utf-8",
     )
     (root / "train_mpp_uni2h_mlp.py").write_text(
-        "from histogene.utils import compute_metrics\n",
+        "from pfmval_core.metrics import compute_metrics\n",
         encoding="utf-8",
     )
     (root / "ignored_checkpoints").mkdir()
@@ -21,9 +21,8 @@ def test_shadow_inventory_uses_lineage_and_does_not_hash_large_or_sensitive_file
     inventory = build_shadow_inventory(root)
     by_path = {item["path"]: item for item in inventory["candidates"]}
 
-    assert by_path["histogene/utils.py"]["era"] == "shared_dependency"
-    assert by_path["histogene"]["era"] == "legacy_mixed"
-    assert by_path["histogene"]["lifecycle"] == "protected"
+    assert by_path["pfmval_core/metrics.py"]["era"] == "shared_dependency"
+    assert by_path["pfmval_core/metrics.py"]["lifecycle"] == "active"
     assert "sha256" not in by_path["ignored_checkpoints/model.ckpt"]
     assert all(".env" not in item["path"] for item in inventory["candidates"])
     assert "secret" not in str(inventory)
