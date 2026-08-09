@@ -1,7 +1,6 @@
 ---
 name: post-train
 description: Thin Claude adapter for the tracked PFMval post-train compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

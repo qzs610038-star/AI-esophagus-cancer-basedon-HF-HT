@@ -1,7 +1,6 @@
 ---
 name: train-guide
 description: Thin Claude adapter for the tracked PFMval train-guide compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

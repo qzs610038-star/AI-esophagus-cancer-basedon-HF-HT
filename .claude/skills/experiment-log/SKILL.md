@@ -1,7 +1,6 @@
 ---
 name: experiment-log
 description: Thin Claude adapter for the tracked PFMval experiment-log compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

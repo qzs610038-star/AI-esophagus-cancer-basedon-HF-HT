@@ -1,7 +1,6 @@
 ---
 name: pfmval-governance
 description: Thin Claude adapter for the tracked PFMval governance Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

@@ -1,7 +1,6 @@
 ---
 name: compare
 description: Thin Claude adapter for the tracked PFMval compare compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

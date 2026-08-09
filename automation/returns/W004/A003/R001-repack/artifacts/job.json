@@ -1,0 +1,97 @@
+{
+  "schema_version": "2.0",
+  "job_id": "W004-A003",
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "workspace_id": "W004",
+  "attempt_id": "A003",
+  "protocol_revision": 2,
+  "approval_id": "APR-W004-phase3-stage2-v002-20260807",
+  "critical_contract_sha256": "889ea8736fe94899719b571a1263bfd3d9e82a0938c1050f04f86707c99b893c",
+  "source_commit": "b898c9d80c2702a32a51773c9cfb8ca75312731a",
+  "phase": "formal",
+  "command_id": "standard_training",
+  "path_ids": [
+    "phase3_w004_server_asset_manifest",
+    "server_experiment_runs"
+  ],
+  "resolved_argv": [
+    "python",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/run_stage2.py",
+    "--card-id",
+    "S2-SPATIAL-IDENTITY-001",
+    "--config",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_stage2_training_config_v002_20260807.json",
+    "--asset-manifest",
+    "D:\\AIPatho\\qzs\\phase3_w004_server_evidence_20260806\\server_asset_manifest_v001.json",
+    "--split-package",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/slide_seed_package_v001",
+    "--output-root",
+    "D:\\AIPatho\\qzs\\pfmval_experiment_runs\\W004\\A003",
+    "--device",
+    "cuda"
+  ],
+  "input_binding": {
+    "data_manifest_id": "phase3_effective_cohort_v001_20260804",
+    "data_manifest_sha256": "53a55499f5a72f8ed1aa440eefdc8099e4f7825874b54ad78c015f933122df7b",
+    "card_id": "S2-SPATIAL-IDENTITY-001",
+    "split_unit": "slide",
+    "split_package_root": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/slide_seed_package_v001",
+    "pathway_input_mode": "legacy_zscore_compatibility",
+    "compatibility_only": true,
+    "raw_mpp2_claim": false,
+    "server_asset_manifest": {
+      "path_id": "phase3_w004_server_asset_manifest",
+      "path": "D:\\AIPatho\\qzs\\phase3_w004_server_evidence_20260806\\server_asset_manifest_v001.json",
+      "sha256": "computed_and_returned_by_server_preflight",
+      "nested_asset_sha_drift": "hard_stop"
+    },
+    "artifacts": [
+      {
+        "artifact_id": "mpp2_training_entrypoint",
+        "sha256": "3276fca749f06209860977b6b12fc2ce2e2b92bae2c8ae4d7af08716cba9aff5"
+      },
+      {
+        "artifact_id": "stage2_resolved_config",
+        "sha256": "60913834ed0a6884a5918617193523aaef76695e30ee1a353bf55a015dea02d8"
+      },
+      {
+        "artifact_id": "slide_seed_package_manifest",
+        "sha256": "7477ec6d04702f927fd3c8f1efa3bbfcfa1d0a858a2374ae8e9c73a666ec14cc"
+      },
+      {
+        "artifact_id": "effective_cohort_manifest",
+        "sha256": "53a55499f5a72f8ed1aa440eefdc8099e4f7825874b54ad78c015f933122df7b"
+      }
+    ]
+  },
+  "run_units": 40,
+  "workspace_branch": "codex/w004-phase3-stage2-source-b898-20260807",
+  "dispatch_revision": 1,
+  "adaptation_record_id": null,
+  "created_at": "2026-08-07T15:45:35+00:00",
+  "dispatch_branch": "codex/w004-phase3-stage2-source-b898-20260807",
+  "result_branch": "automation/server/W004/A003",
+  "artifact_policy": {
+    "critical": "sha256_required",
+    "supporting": "size_inventory_default",
+    "diagnostic": "non_evidence",
+    "diagnostic_logs": "include_only_when_needed_for_agent_analysis",
+    "large_artifacts": "registered_path_size_sha256_only",
+    "raw_predictions": {
+      "requirement": "required_inline_for_every_evaluated_split",
+      "artifact_kind": "raw_prediction_table",
+      "large_artifact_exemption": false,
+      "required_columns": [
+        "sample_id",
+        "spatial_cluster_id",
+        "pathway_id",
+        "y_true",
+        "y_pred"
+      ]
+    }
+  },
+  "execution_binding": {
+    "mode": "source_plus_governance_bundle",
+    "governance_commit": "f8a1c2f494f86e997343384e7316e8e39d1096eb"
+  }
+}

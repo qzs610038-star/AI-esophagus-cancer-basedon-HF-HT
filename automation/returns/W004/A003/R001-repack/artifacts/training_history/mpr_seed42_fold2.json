@@ -1,0 +1,107 @@
+{
+  "fold": 2,
+  "history": [
+    {
+      "epoch": 0.0,
+      "train_loss": 0.6929398775100708,
+      "validation_loss": 0.6851953864097595
+    },
+    {
+      "epoch": 1.0,
+      "train_loss": 0.6835877895355225,
+      "validation_loss": 0.6755070686340332
+    },
+    {
+      "epoch": 2.0,
+      "train_loss": 0.6737549304962158,
+      "validation_loss": 0.6640244126319885
+    },
+    {
+      "epoch": 3.0,
+      "train_loss": 0.662152886390686,
+      "validation_loss": 0.6502461433410645
+    },
+    {
+      "epoch": 4.0,
+      "train_loss": 0.6481314897537231,
+      "validation_loss": 0.6340643763542175
+    },
+    {
+      "epoch": 5.0,
+      "train_loss": 0.631531298160553,
+      "validation_loss": 0.6158098578453064
+    },
+    {
+      "epoch": 6.0,
+      "train_loss": 0.6126490831375122,
+      "validation_loss": 0.596267819404602
+    },
+    {
+      "epoch": 7.0,
+      "train_loss": 0.5923407673835754,
+      "validation_loss": 0.576824963092804
+    },
+    {
+      "epoch": 8.0,
+      "train_loss": 0.5718816518783569,
+      "validation_loss": 0.5604948401451111
+    },
+    {
+      "epoch": 9.0,
+      "train_loss": 0.5519351363182068,
+      "validation_loss": 0.5439471006393433
+    },
+    {
+      "epoch": 10.0,
+      "train_loss": 0.531731367111206,
+      "validation_loss": 0.5254395008087158
+    },
+    {
+      "epoch": 11.0,
+      "train_loss": 0.5105366110801697,
+      "validation_loss": 0.5141692757606506
+    },
+    {
+      "epoch": 12.0,
+      "train_loss": 0.48916685581207275,
+      "validation_loss": 0.4781370162963867
+    },
+    {
+      "epoch": 13.0,
+      "train_loss": 0.47116702795028687,
+      "validation_loss": 0.5615200400352478
+    },
+    {
+      "epoch": 14.0,
+      "train_loss": 0.47316136956214905,
+      "validation_loss": 0.43866947293281555
+    },
+    {
+      "epoch": 15.0,
+      "train_loss": 0.4516508877277374,
+      "validation_loss": 0.4317295551300049
+    },
+    {
+      "epoch": 16.0,
+      "train_loss": 0.433790922164917,
+      "validation_loss": 0.5023143887519836
+    },
+    {
+      "epoch": 17.0,
+      "train_loss": 0.4211847484111786,
+      "validation_loss": 0.483163058757782
+    },
+    {
+      "epoch": 18.0,
+      "train_loss": 0.4045649468898773,
+      "validation_loss": 0.3980388641357422
+    },
+    {
+      "epoch": 19.0,
+      "train_loss": 0.38889172673225403,
+      "validation_loss": 0.3802291750907898
+    }
+  ],
+  "seed": 42,
+  "task": "MPR"
+}

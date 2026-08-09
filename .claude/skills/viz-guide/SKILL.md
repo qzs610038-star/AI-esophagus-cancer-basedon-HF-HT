@@ -1,7 +1,6 @@
 ---
 name: viz-guide
 description: Thin Claude adapter for the tracked PFMval viz-guide compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

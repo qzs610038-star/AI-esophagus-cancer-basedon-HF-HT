@@ -1,7 +1,6 @@
 ---
 name: health
 description: Thin Claude adapter for the tracked PFMval health compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

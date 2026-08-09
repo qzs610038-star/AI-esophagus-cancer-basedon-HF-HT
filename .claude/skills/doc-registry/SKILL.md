@@ -1,7 +1,6 @@
 ---
 name: doc-registry
 description: Thin Claude adapter for the tracked PFMval doc-registry compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

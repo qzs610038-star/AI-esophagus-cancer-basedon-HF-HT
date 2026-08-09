@@ -1,7 +1,6 @@
 ---
 name: data-guide
 description: Thin Claude adapter for the tracked PFMval data-guide compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

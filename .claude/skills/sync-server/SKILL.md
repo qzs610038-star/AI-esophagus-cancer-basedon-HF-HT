@@ -1,7 +1,6 @@
 ---
 name: sync-server
 description: Thin Claude adapter for the tracked PFMval sync-server compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

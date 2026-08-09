@@ -1,7 +1,6 @@
 ---
 name: git-rescue
 description: Thin Claude adapter for the tracked PFMval git-rescue compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

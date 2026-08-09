@@ -9,7 +9,7 @@
 3. 涉及实验状态、性能或下一步决策时，读取 `experiments/experiment_registry.json`；`experiments/experiment_dashboard.md` 仅为派生视图。
 4. 涉及服务器训练、缓存、路径或同步时，读取 `configs/server_paths.yaml` 和 `01_指南与解读/部署方案/服务器路径索引_20260701.md`。
 5. 只使用 `project_state/document_registry.json` 中 `lifecycle=active` 的方案作为执行依据；`superseded`、`historical`、`missing` 文档不得作为当前结论。
-6. 涉及方案、完成声明、实验结果或 GO/NO-GO 独立校验时，读取 `.agents/skills/pfmval-audit/SKILL.md`；`.agents/skills/` 是项目 Skill 权威源，`.claude/skills/<name>/SKILL.md` 只能作为直接引用同名权威 Skill 的薄适配器，不得复制或覆盖规则。
+6. 涉及方案、完成声明、实验结果或 GO/NO-GO 独立校验时，读取 `.agents/skills/pfmval-audit/SKILL.md`；`.agents/skills/` 是项目 Skill 权威源，`.claude/skills/<name>/SKILL.md` 只能作为直接引用同名权威 Skill 的薄适配器，不得复制或覆盖规则。这些适配器允许 Agent 通过 Skill 工具自动调用以加载对应 canonical 技能，但实际训练、服务器操作、资产改写、结果导入等高危动作仍受 HARD blocks、canonical 技能自身安全边界与显式用户批准门禁约束。
 7. 涉及 `团队项目进度与结论/` 的成员资料、汇总索引或术语表维护时，读取 `.agents/skills/team-progress-maintainer/SKILL.md`；涉及 `qzs/` 的本机稳定实验结论、双语伪代码或配套图表时，同时读取 `.agents/skills/qzs-stable-conclusion-writer/SKILL.md`。
 
 开始训练、修改服务器路径或生成项目结论前，运行：

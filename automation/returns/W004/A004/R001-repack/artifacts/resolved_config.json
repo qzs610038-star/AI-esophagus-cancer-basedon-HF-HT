@@ -1,0 +1,107 @@
+{
+  "asset_manifest_path": "D:\\AIPatho\\qzs\\phase3_w004_server_evidence_20260806\\server_asset_manifest_v001.json",
+  "asset_manifest_sha256": "d1da1f907fc564170ba876d3cfe949fa37af8effb4d79321d0b62fca3c9d76ba",
+  "card": {
+    "transform_definition": "features unchanged; deterministic coordinate permutation before kNN smoothing",
+    "transform_name": "spatial_coordinate_permutation_control"
+  },
+  "config": {
+    "accepted_pathway_input": "legacy_zscore_compatibility",
+    "batch_run_units": 160,
+    "card_run_units": 40,
+    "compatibility_only": true,
+    "config_id": "phase3_stage2_training_config_v002_20260807",
+    "device": "cuda",
+    "epochs": 20,
+    "evidence_boundary": {
+      "accepted_evidence_promotion": false,
+      "raw_mpp2_claim": false,
+      "result_import": false,
+      "status": "COMPATIBILITY_ONLY",
+      "yzq_reference": "reference_only/pending_review"
+    },
+    "excluded_bad_slide_count": 22,
+    "execution_mode": "server_training_after_explicit_approval",
+    "expected_patient_count": 78,
+    "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+    "feature_flags": {
+      "accepted_evidence_promotion": false,
+      "job_creation": true,
+      "result_import": false,
+      "server_preflight_access": true,
+      "server_training_access": true
+    },
+    "folds_per_seed": 5,
+    "learning_rate": 0.001,
+    "model": {
+      "class": "MILBagClassifier",
+      "fusion": "adaptive_gated",
+      "hidden_dim": 128,
+      "image_dim": 1536,
+      "low_rank_dim": 16,
+      "name": "stage2_mil_adaptive_gated_attention",
+      "num_outputs": 1,
+      "pathway_dim": 30,
+      "pooling": "attention"
+    },
+    "output_contract": {
+      "delta_auc_synergy": "not_computable_without_same-seed-fold_single-modality_control_rows",
+      "non_applicable_spatial_cluster_id": "NA",
+      "pathway_id": "all_30",
+      "prediction_kind_test": "repeated_holdout_test",
+      "required_prediction_columns": [
+        "sample_id",
+        "spatial_cluster_id",
+        "pathway_id",
+        "y_true",
+        "y_pred"
+      ]
+    },
+    "pathology_dim": 1536,
+    "pathway_dim": 30,
+    "pathway_evidence_status": "pending_review",
+    "pathway_input_mode": "legacy_zscore_compatibility",
+    "patience": 5,
+    "patient_overlap_policy": "allow_with_warning",
+    "protocol_revision": 2,
+    "raw_mpp2_claim": false,
+    "seeds": [
+      1,
+      2,
+      42,
+      61
+    ],
+    "selected_effective_slide_count": 307,
+    "selected_split_unit": "slide",
+    "server_asset_manifest": {
+      "path": "D:\\AIPatho\\qzs\\phase3_w004_server_evidence_20260806\\server_asset_manifest_v001.json",
+      "path_id": "phase3_w004_server_asset_manifest"
+    },
+    "server_experiment_runs": {
+      "path": "D:\\AIPatho\\qzs\\pfmval_experiment_runs",
+      "path_id": "server_experiment_runs"
+    },
+    "source_slide_count": 329,
+    "split_design": "repeated_stratified_holdout_not_partition_oof",
+    "stage2_cards": [
+      "S2-ABS-001",
+      "S2-ORD-SLIDE-001",
+      "S2-SPATIAL-IDENTITY-001",
+      "S2-SPATIAL-SHUFFLE-001"
+    ],
+    "tasks": [
+      "pCR",
+      "MPR"
+    ],
+    "training_fit_policy": {
+      "external_mode": "transform_only_no_fit",
+      "fit_scope": "train_only",
+      "test_mode": "transform_only_after_checkpoint_freeze",
+      "validation_mode": "transform_only"
+    },
+    "workspace_id": "W004"
+  },
+  "config_path": "D:\\AIPatho\\qzs\\pfmval_automation\\W004\\experiments\\phase3_dual_baseline_spatial_pathway_transfer_v001_20260804\\phase3_stage2_training_config_v002_20260807.json",
+  "config_sha256": "60913834ed0a6884a5918617193523aaef76695e30ee1a353bf55a015dea02d8",
+  "split_package_manifest_sha256": "7477ec6d04702f927fd3c8f1efa3bbfcfa1d0a858a2374ae8e9c73a666ec14cc"
+}

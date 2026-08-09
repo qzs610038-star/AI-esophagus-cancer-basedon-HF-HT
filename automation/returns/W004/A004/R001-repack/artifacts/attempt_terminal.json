@@ -1,0 +1,19 @@
+{
+  "event_type": "EXPERIMENT_TERMINAL",
+  "event_id": "terminal-W004-A004",
+  "recorded_at": "2026-08-08T04:13:29Z",
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "workspace_id": "W004",
+  "attempt_id": "A004",
+  "job_id": "W004-A004",
+  "approval_id": "APR-W004-phase3-stage2-v002-20260807",
+  "source_commit": "b898c9d80c2702a32a51773c9cfb8ca75312731a",
+  "critical_contract_sha256": "889ea8736fe94899719b571a1263bfd3d9e82a0938c1050f04f86707c99b893c",
+  "run_units": 40,
+  "execution_binding": {
+    "mode": "source_plus_governance_bundle",
+    "governance_commit": "f8a1c2f494f86e997343384e7316e8e39d1096eb"
+  },
+  "status": "completed",
+  "returncode": 0
+}

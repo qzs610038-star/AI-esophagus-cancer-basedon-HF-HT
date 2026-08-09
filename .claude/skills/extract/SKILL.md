@@ -1,7 +1,6 @@
 ---
 name: extract
 description: Thin Claude adapter for the tracked PFMval extract compatibility Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 

@@ -1,0 +1,2130 @@
+{
+  "epochs": 20,
+  "fit_records": [
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed1_fold0.pt",
+      "checkpoint_sha256": "c0120344066517da080ea2cf15671e32c342a7c6a1c0f1dfaca08dcfac4c7b34",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 0,
+      "seed": 1,
+      "task": "pCR",
+      "test": {
+        "auc": 0.7727272727272727,
+        "auprc": 0.6827061973114605,
+        "brier": 0.180442192741292,
+        "fn": 5,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9773200757575757,
+          "ci95_low": 0.511248765854029,
+          "median_auc": 0.7916666666666667,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 0.8,
+        "tn": 16,
+        "tp": 6
+      },
+      "test_prediction_path": "predictions/pCR/seed_1/fold_0/test.csv",
+      "training_history_path": "training_history/pcr_seed1_fold0.json",
+      "validation": {
+        "auc": 0.8727272727272727,
+        "auprc": 0.8503302253302254,
+        "brier": 0.13541333195442615,
+        "fn": 4,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9858091908091908,
+          "ci95_low": 0.6782738095238096,
+          "median_auc": 0.876034337179848,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 7
+      },
+      "validation_prediction_path": "predictions/pCR/seed_1/fold_0/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G100037,23G113311,23G116881,24G011777,24G012954,24G013161,24G016912,24G019106,24G027094,24G037700,24G042860,24G054539,24G070697,24G075578,24G094172,24G099680,24G115797,24G120277,24G121321,25G004489,25G005746,25G006622,25G008366,25G010990,25G012687,25G017036,25G022288,25G023717,25G026128,25G027985,25G031563,25G046033,25G050827,25G051075,25G060727,25G084572,25G088475,25G095565,25G096905,25G098473,25G104761,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed1_fold1.pt",
+      "checkpoint_sha256": "652d9a571684dd3b593fd6160a1c9dc08c064146519ea6af4e0adb1b7a75cad2",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 1,
+      "seed": 1,
+      "task": "pCR",
+      "test": {
+        "auc": 0.75,
+        "auprc": 0.7569978252534034,
+        "brier": 0.1692440309534605,
+        "fn": 4,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9844067733253589,
+          "ci95_low": 0.5132798573975044,
+          "median_auc": 0.7666666666666666,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_1/fold_1/test.csv",
+      "training_history_path": "training_history/pcr_seed1_fold1.json",
+      "validation": {
+        "auc": 0.8818181818181818,
+        "auprc": 0.8715534465534467,
+        "brier": 0.1259449522249862,
+        "fn": 4,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.6713392857142857,
+          "median_auc": 0.8982719350366408,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 7
+      },
+      "validation_prediction_path": "predictions/pCR/seed_1/fold_1/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G092685,23G100152,23G104976,23G109760,23G116881,24G012954,24G013161,24G016912,24G019106,24G019386,24G021163,24G027094,24G042860,24G069959,24G070697,24G072240,24G075578,24G079991,24G087143,24G094172,24G103891,24G116762,24G117782,24G120277,24G121321,24G124181,25G004489,25G005746,25G006622,25G008366,25G018780,25G031563,25G035789,25G046033,25G051075,25G084572,25G088475,25G088548,25G095565,25G098382,25G104761,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed1_fold2.pt",
+      "checkpoint_sha256": "e70b6e3bcd01922f3618019e7e288d5427d01237c2ec796889c03b4e97b60f4a",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 2,
+      "seed": 1,
+      "task": "pCR",
+      "test": {
+        "auc": 0.9227272727272727,
+        "auprc": 0.9301970756516211,
+        "brier": 0.0922999527429394,
+        "fn": 1,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.7478813705234161,
+          "median_auc": 0.9310542398777693,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.9090909090909091,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 10
+      },
+      "test_prediction_path": "predictions/pCR/seed_1/fold_2/test.csv",
+      "training_history_path": "training_history/pcr_seed1_fold2.json",
+      "validation": {
+        "auc": 0.8363636363636363,
+        "auprc": 0.7359797065679419,
+        "brier": 0.14923116066468003,
+        "fn": 3,
+        "fp": 5,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9645396825396826,
+          "ci95_low": 0.6515707671957672,
+          "median_auc": 0.8400197628458499,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7272727272727273,
+        "specificity": 0.75,
+        "tn": 15,
+        "tp": 8
+      },
+      "validation_prediction_path": "predictions/pCR/seed_1/fold_2/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G092685,23G104976,23G113311,23G116881,24G011777,24G021163,24G027094,24G031191,24G038355,24G044299,24G069959,24G070697,24G072240,24G075578,24G087143,24G094172,24G099680,24G103891,24G115797,24G117782,24G120277,24G121321,25G004489,25G005746,25G006622,25G008366,25G015816,25G017036,25G018780,25G031563,25G035789,25G046033,25G050827,25G084572,25G084601,25G088548,25G095565,25G104761,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed1_fold3.pt",
+      "checkpoint_sha256": "256893c0a7a7a132fe88305f291cc3a2cec746bd6307e2a903f72093e7e0b964",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 3,
+      "seed": 1,
+      "task": "pCR",
+      "test": {
+        "auc": 0.9909090909090909,
+        "auprc": 0.9841597796143251,
+        "brier": 0.09049289265003427,
+        "fn": 4,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9720763305322129,
+          "median_auc": 0.9949106449106448,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_1/fold_3/test.csv",
+      "training_history_path": "training_history/pcr_seed1_fold3.json",
+      "validation": {
+        "auc": 0.9045454545454547,
+        "auprc": 0.8907148407148409,
+        "brier": 0.12666005034234804,
+        "fn": 3,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.7597482174688057,
+          "median_auc": 0.9084928229665071,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7272727272727273,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 8
+      },
+      "validation_prediction_path": "predictions/pCR/seed_1/fold_3/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G092685,23G100037,23G100152,23G109760,23G113311,24G002499,24G011777,24G012954,24G013161,24G016912,24G019106,24G021163,24G027094,24G031191,24G033428,24G069959,24G072240,24G075578,24G087143,24G103891,24G115797,24G120277,24G124181,25G004489,25G006622,25G008366,25G012687,25G017036,25G018780,25G026128,25G027985,25G028295,25G031563,25G046033,25G051075,25G084572,25G084601,25G088475,25G095565,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed1_fold4.pt",
+      "checkpoint_sha256": "3e1820fc5f2fabd0b7115ac91c5d38ad7d158308a67990fb7d1f4fc62448a2d7",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 4,
+      "seed": 1,
+      "task": "pCR",
+      "test": {
+        "auc": 0.8227272727272728,
+        "auprc": 0.7871194462103552,
+        "brier": 0.1483499541400556,
+        "fn": 4,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9807844202898551,
+          "ci95_low": 0.5359093434944829,
+          "median_auc": 0.8076690821256038,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.85,
+        "tn": 17,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_1/fold_4/test.csv",
+      "training_history_path": "training_history/pcr_seed1_fold4.json",
+      "validation": {
+        "auc": 0.8409090909090908,
+        "auprc": 0.8596283346283347,
+        "brier": 0.1358665504507372,
+        "fn": 3,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.6634090909090908,
+          "median_auc": 0.8666666666666667,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7272727272727273,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 8
+      },
+      "validation_prediction_path": "predictions/pCR/seed_1/fold_4/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G104976,23G113311,23G116881,24G011777,24G012954,24G013161,24G019386,24G021163,24G027094,24G054539,24G072240,24G075578,24G087143,24G099680,24G103891,24G108632,24G115797,24G121321,24G125015,25G004489,25G005746,25G008366,25G012687,25G017036,25G018780,25G026128,25G027985,25G031563,25G035789,25G046033,25G050827,25G060727,25G064241,25G084601,25G088548,25G095565,25G096905,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed2_fold0.pt",
+      "checkpoint_sha256": "5d73852bf292b9b8c2eb58ab8e997cc51f04cbee2d75d3b7b99fc2cbf54a9f92",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 0,
+      "seed": 2,
+      "task": "pCR",
+      "test": {
+        "auc": 0.8136363636363636,
+        "auprc": 0.8340115440115441,
+        "brier": 0.13337682474924778,
+        "fn": 4,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9913323451910407,
+          "ci95_low": 0.5996604938271605,
+          "median_auc": 0.8375,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_2/fold_0/test.csv",
+      "training_history_path": "training_history/pcr_seed2_fold0.json",
+      "validation": {
+        "auc": 0.9136363636363637,
+        "auprc": 0.9215784215784217,
+        "brier": 0.11117973630292032,
+        "fn": 2,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.7640655253837071,
+          "median_auc": 0.9238095238095239,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8181818181818182,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 9
+      },
+      "validation_prediction_path": "predictions/pCR/seed_2/fold_0/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G092685,23G104976,23G109760,23G113311,23G116881,24G002499,24G011777,24G012954,24G016912,24G019386,24G021163,24G027094,24G033428,24G044299,24G054539,24G069959,24G070697,24G072240,24G079991,24G087143,24G094172,24G095750,24G099680,24G116762,24G120277,24G121321,24G125015,25G004489,25G006622,25G008366,25G015816,25G022288,25G023717,25G026128,25G027985,25G035789,25G050827,25G064241,25G088475,25G088548,25G098473,25G104761",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed2_fold1.pt",
+      "checkpoint_sha256": "673d9e7a3a7f033d9eda91fb7297dee1075157e6200738e3cf5c1e597af8b763",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 1,
+      "seed": 2,
+      "task": "pCR",
+      "test": {
+        "auc": 0.8318181818181819,
+        "auprc": 0.8094257594257595,
+        "brier": 0.16253835544650358,
+        "fn": 3,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9813176804812834,
+          "ci95_low": 0.6584027777777779,
+          "median_auc": 0.8454246411483254,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7272727272727273,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 8
+      },
+      "test_prediction_path": "predictions/pCR/seed_2/fold_1/test.csv",
+      "training_history_path": "training_history/pcr_seed2_fold1.json",
+      "validation": {
+        "auc": 0.9409090909090909,
+        "auprc": 0.9221435130526041,
+        "brier": 0.12465913306709347,
+        "fn": 3,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8338956170703575,
+          "median_auc": 0.9477101845522898,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7272727272727273,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 8
+      },
+      "validation_prediction_path": "predictions/pCR/seed_2/fold_1/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G085500,23G100037,23G100152,23G113311,23G116881,24G011777,24G012954,24G016912,24G021163,24G027094,24G031191,24G033428,24G042860,24G044299,24G069959,24G070697,24G075578,24G079991,24G094172,24G099680,24G103891,24G108632,24G116762,24G121321,24G124181,25G004489,25G005746,25G008366,25G012687,25G015816,25G017036,25G023717,25G026128,25G027985,25G031563,25G035789,25G046033,25G050827,25G088475,25G095565,25G098473,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed2_fold2.pt",
+      "checkpoint_sha256": "7f9b138f0c72e6064220066db20d2358e3e9340a978c5044fcaf7aef1333daa6",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 2,
+      "seed": 2,
+      "task": "pCR",
+      "test": {
+        "auc": 0.7318181818181817,
+        "auprc": 0.7049297321036452,
+        "brier": 0.18649287310386461,
+        "fn": 5,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.8914957983193278,
+          "ci95_low": 0.4771615612648222,
+          "median_auc": 0.7428571428571429,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 0.85,
+        "tn": 17,
+        "tp": 6
+      },
+      "test_prediction_path": "predictions/pCR/seed_2/fold_2/test.csv",
+      "training_history_path": "training_history/pcr_seed2_fold2.json",
+      "validation": {
+        "auc": 0.7181818181818181,
+        "auprc": 0.6905829464652995,
+        "brier": 0.18690239598668223,
+        "fn": 6,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9366977225672878,
+          "ci95_low": 0.36881613756613757,
+          "median_auc": 0.7163879598662208,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.45454545454545453,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 5
+      },
+      "validation_prediction_path": "predictions/pCR/seed_2/fold_2/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G104976,23G116881,24G000715,24G002499,24G011777,24G012954,24G013161,24G016912,24G019386,24G031191,24G037700,24G042860,24G044299,24G054539,24G070697,24G075578,24G087143,24G099680,24G121321,25G005746,25G008366,25G010990,25G012687,25G017036,25G022288,25G023717,25G026128,25G028295,25G035789,25G046033,25G060727,25G084572,25G084601,25G095565,25G096905,25G098382,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed2_fold3.pt",
+      "checkpoint_sha256": "160db80bbce66c0cac6b06ef56d71ee2481a37722e14cb99b7fe663890400d31",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 3,
+      "seed": 2,
+      "task": "pCR",
+      "test": {
+        "auc": 0.9318181818181819,
+        "auprc": 0.9058441558441559,
+        "brier": 0.13300389905745075,
+        "fn": 2,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9938618625367768,
+          "ci95_low": 0.8124035493827161,
+          "median_auc": 0.934369202226345,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8181818181818182,
+        "specificity": 0.8,
+        "tn": 16,
+        "tp": 9
+      },
+      "test_prediction_path": "predictions/pCR/seed_2/fold_3/test.csv",
+      "training_history_path": "training_history/pcr_seed2_fold3.json",
+      "validation": {
+        "auc": 0.8590909090909091,
+        "auprc": 0.8695391126221166,
+        "brier": 0.15496218633291628,
+        "fn": 5,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9900119047619047,
+          "ci95_low": 0.6362499999999999,
+          "median_auc": 0.873055092482337,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 6
+      },
+      "validation_prediction_path": "predictions/pCR/seed_2/fold_3/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G100152,23G113311,23G116881,24G011777,24G012954,24G016912,24G021163,24G033428,24G037700,24G042860,24G044299,24G054539,24G070697,24G079991,24G087143,24G094172,24G099680,24G103891,24G120277,24G121321,24G124181,24G125015,25G005746,25G006622,25G008366,25G010990,25G012687,25G015816,25G018780,25G022288,25G023717,25G028295,25G035789,25G046033,25G050827,25G084572,25G088475,25G095565,25G096905,25G098382,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed2_fold4.pt",
+      "checkpoint_sha256": "4e7161e7b583bc69e708b2358e3987f64ea0fc115d63c01cf3da51cc6628ef62",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 4,
+      "seed": 2,
+      "task": "pCR",
+      "test": {
+        "auc": 0.7590909090909091,
+        "auprc": 0.6513516786244059,
+        "brier": 0.1823055766610027,
+        "fn": 6,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9607924836601307,
+          "ci95_low": 0.5896284271284272,
+          "median_auc": 0.7878472222222221,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.45454545454545453,
+        "specificity": 0.8,
+        "tn": 16,
+        "tp": 5
+      },
+      "test_prediction_path": "predictions/pCR/seed_2/fold_4/test.csv",
+      "training_history_path": "training_history/pcr_seed2_fold4.json",
+      "validation": {
+        "auc": 0.75,
+        "auprc": 0.7166508392792978,
+        "brier": 0.18271996247396002,
+        "fn": 5,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9335795454545456,
+          "ci95_low": 0.48267857142857146,
+          "median_auc": 0.7583333333333333,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 0.85,
+        "tn": 17,
+        "tp": 6
+      },
+      "validation_prediction_path": "predictions/pCR/seed_2/fold_4/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G085500,23G100152,23G116881,24G000715,24G011777,24G012954,24G019106,24G019386,24G037700,24G042860,24G044299,24G070697,24G072240,24G075578,24G087143,24G094172,24G095750,24G099680,24G103891,24G108632,24G116762,24G120277,24G121321,24G124181,24G125015,25G004489,25G005746,25G006622,25G008366,25G017036,25G023717,25G026128,25G027985,25G028295,25G031563,25G050827,25G064241,25G084572,25G084601,25G088548,25G095565,25G098473",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed42_fold0.pt",
+      "checkpoint_sha256": "2f0e0ba34eea20db7ff6d48dfaf2ac9d717c6d2105e5c4be5961c462253ed601",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 0,
+      "seed": 42,
+      "task": "pCR",
+      "test": {
+        "auc": 0.85,
+        "auprc": 0.7628785652849825,
+        "brier": 0.17027967816719172,
+        "fn": 5,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9911572802197801,
+          "ci95_low": 0.6197380952380952,
+          "median_auc": 0.8666666666666667,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 0.8,
+        "tn": 16,
+        "tp": 6
+      },
+      "test_prediction_path": "predictions/pCR/seed_42/fold_0/test.csv",
+      "training_history_path": "training_history/pcr_seed42_fold0.json",
+      "validation": {
+        "auc": 0.8681818181818183,
+        "auprc": 0.8291528062580695,
+        "brier": 0.16265061685164214,
+        "fn": 7,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.6968306107954546,
+          "median_auc": 0.8734827264239029,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.36363636363636365,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 4
+      },
+      "validation_prediction_path": "predictions/pCR/seed_42/fold_0/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G085500,23G092685,23G100037,23G100152,23G104976,23G113311,24G011777,24G012954,24G013161,24G016912,24G021163,24G027094,24G042860,24G069959,24G072240,24G075578,24G094172,24G103891,24G120277,24G121321,24G124181,24G125015,25G004489,25G006622,25G008366,25G015816,25G017036,25G018780,25G026128,25G028295,25G035789,25G046033,25G050827,25G051075,25G084601,25G098473,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed42_fold1.pt",
+      "checkpoint_sha256": "ff794330e4e0a9a09c82511c9d9dfc4cc4809359b1abf4a029676a93ca91939e",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 1,
+      "seed": 42,
+      "task": "pCR",
+      "test": {
+        "auc": 0.9500000000000001,
+        "auprc": 0.901911976911977,
+        "brier": 0.11791447019512444,
+        "fn": 5,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8586743393009378,
+          "median_auc": 0.9606782106782107,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 6
+      },
+      "test_prediction_path": "predictions/pCR/seed_42/fold_1/test.csv",
+      "training_history_path": "training_history/pcr_seed42_fold1.json",
+      "validation": {
+        "auc": 0.9454545454545455,
+        "auprc": 0.9295815295815297,
+        "brier": 0.10904906414428835,
+        "fn": 2,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8633475672877846,
+          "median_auc": 0.9517850570482149,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8181818181818182,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 9
+      },
+      "validation_prediction_path": "predictions/pCR/seed_42/fold_1/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G092685,23G113311,23G116881,24G000715,24G002499,24G011777,24G013161,24G016912,24G019106,24G021163,24G027094,24G031191,24G037700,24G042860,24G044299,24G054539,24G070697,24G075578,24G095750,24G103891,24G108632,24G116762,24G117782,24G120277,24G121321,24G124181,24G125015,25G004489,25G005746,25G008366,25G012687,25G015816,25G018780,25G026128,25G027985,25G031563,25G035789,25G046033,25G050827,25G051075,25G064241,25G084572,25G088475,25G088548,25G095565,25G098382,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed42_fold2.pt",
+      "checkpoint_sha256": "13a2aadce3862280855c5fcaad958db3257e27dd93589135d3d770c8247b88d5",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 2,
+      "seed": 42,
+      "task": "pCR",
+      "test": {
+        "auc": 0.7909090909090909,
+        "auprc": 0.7975786839423202,
+        "brier": 0.14471879075329072,
+        "fn": 4,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9607142857142859,
+          "ci95_low": 0.5498743386243387,
+          "median_auc": 0.8077677224736048,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_42/fold_2/test.csv",
+      "training_history_path": "training_history/pcr_seed42_fold2.json",
+      "validation": {
+        "auc": 0.85,
+        "auprc": 0.8335080469769465,
+        "brier": 0.13813953085695205,
+        "fn": 4,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9929347826086957,
+          "ci95_low": 0.6598690476190476,
+          "median_auc": 0.8599716202270382,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 7
+      },
+      "validation_prediction_path": "predictions/pCR/seed_42/fold_2/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G092685,23G100152,23G109760,23G113311,23G116881,24G000715,24G013161,24G016912,24G019106,24G019386,24G021163,24G031191,24G033428,24G037700,24G038355,24G042860,24G054539,24G069959,24G070697,24G072240,24G079991,24G087143,24G095750,24G103891,24G115797,24G116762,24G120277,24G121321,24G125015,25G004489,25G006622,25G008366,25G017036,25G022288,25G023717,25G031563,25G046033,25G051075,25G064241,25G084572,25G088475,25G095565,25G098382,25G098473,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed42_fold3.pt",
+      "checkpoint_sha256": "eba0304f4741c4164329ff7b062eb982d356a8e33e3d11c135f61306453883bc",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 3,
+      "seed": 42,
+      "task": "pCR",
+      "test": {
+        "auc": 0.8863636363636365,
+        "auprc": 0.8836857260386672,
+        "brier": 0.12232271514766499,
+        "fn": 4,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.718746617965368,
+          "median_auc": 0.8983494363929146,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_42/fold_3/test.csv",
+      "training_history_path": "training_history/pcr_seed42_fold3.json",
+      "validation": {
+        "auc": 0.8636363636363636,
+        "auprc": 0.8641456582633054,
+        "brier": 0.12681708882681086,
+        "fn": 4,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.630279356060606,
+          "median_auc": 0.8788676236044657,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 7
+      },
+      "validation_prediction_path": "predictions/pCR/seed_42/fold_3/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G085500,23G092685,23G100152,23G109760,23G116881,24G002499,24G011777,24G012954,24G019386,24G021163,24G027094,24G031191,24G033428,24G037700,24G044299,24G069959,24G070697,24G075578,24G079991,24G103891,24G115797,24G120277,24G125015,25G005067,25G005746,25G008366,25G010990,25G012687,25G015816,25G017036,25G022288,25G023717,25G026128,25G027985,25G031563,25G046033,25G051075,25G064241,25G084572,25G088475,25G098473,25G104761",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed42_fold4.pt",
+      "checkpoint_sha256": "2bd8f80ac433b4c608af3779f3023291ed4490b2fb65414b08d36b114f22f670",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 4,
+      "seed": 42,
+      "task": "pCR",
+      "test": {
+        "auc": 0.8227272727272728,
+        "auprc": 0.8115980192532157,
+        "brier": 0.1454185994253821,
+        "fn": 4,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9653925120772947,
+          "ci95_low": 0.6659356725146198,
+          "median_auc": 0.8333333333333334,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_42/fold_4/test.csv",
+      "training_history_path": "training_history/pcr_seed42_fold4.json",
+      "validation": {
+        "auc": 0.8863636363636364,
+        "auprc": 0.8518037518037518,
+        "brier": 0.1317926588065278,
+        "fn": 3,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9798128342245989,
+          "ci95_low": 0.7097792832167832,
+          "median_auc": 0.888888888888889,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7272727272727273,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 8
+      },
+      "validation_prediction_path": "predictions/pCR/seed_42/fold_4/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G100037,23G104976,23G113311,23G116881,24G000715,24G011777,24G013161,24G016912,24G019106,24G019386,24G021163,24G031191,24G033428,24G037700,24G042860,24G044299,24G069959,24G070697,24G072240,24G075578,24G087143,24G099680,24G116762,24G117782,24G120277,24G121321,24G124181,25G004489,25G005746,25G006622,25G008366,25G010990,25G017036,25G026128,25G027985,25G050827,25G060727,25G064241,25G084572,25G084601,25G088475,25G095565,25G098382,25G098473,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed61_fold0.pt",
+      "checkpoint_sha256": "09e49798287b166ecb9def6f241188ff12729c4c89092f9570ea06dfe6dc6e69",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 0,
+      "seed": 61,
+      "task": "pCR",
+      "test": {
+        "auc": 0.859090909090909,
+        "auprc": 0.8359985973622337,
+        "brier": 0.13352564505031328,
+        "fn": 5,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.6702606421356421,
+          "median_auc": 0.8618389407863092,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 6
+      },
+      "test_prediction_path": "predictions/pCR/seed_61/fold_0/test.csv",
+      "training_history_path": "training_history/pcr_seed61_fold0.json",
+      "validation": {
+        "auc": 0.7409090909090909,
+        "auprc": 0.7135024724945673,
+        "brier": 0.18071164418519767,
+        "fn": 5,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9520833333333333,
+          "ci95_low": 0.516547619047619,
+          "median_auc": 0.7396950875211745,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 6
+      },
+      "validation_prediction_path": "predictions/pCR/seed_61/fold_0/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G092685,23G100152,23G104976,23G109760,23G113311,23G116881,24G013161,24G016912,24G019106,24G019386,24G021163,24G027094,24G031191,24G037700,24G042860,24G054539,24G069959,24G072240,24G079991,24G087143,24G094172,24G095750,24G099680,24G117782,24G120277,24G121321,24G125015,25G004489,25G005746,25G008366,25G010990,25G015816,25G023717,25G026128,25G035789,25G046033,25G050827,25G051075,25G060727,25G064241,25G084601,25G098473,25G104761,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 18.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed61_fold1.pt",
+      "checkpoint_sha256": "7bc8fba181dd8108d0dc5d9e6f84c929d0d8f4b7a99047d3412c27e81d1e721f",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 1,
+      "seed": 61,
+      "task": "pCR",
+      "test": {
+        "auc": 0.9227272727272727,
+        "auprc": 0.9069364978455887,
+        "brier": 0.10804616429757431,
+        "fn": 2,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.7654904306220096,
+          "median_auc": 0.9291979949874687,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8181818181818182,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 9
+      },
+      "test_prediction_path": "predictions/pCR/seed_61/fold_1/test.csv",
+      "training_history_path": "training_history/pcr_seed61_fold1.json",
+      "validation": {
+        "auc": 0.9363636363636364,
+        "auprc": 0.8936674436674437,
+        "brier": 0.11818674880834189,
+        "fn": 4,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8229761904761905,
+          "median_auc": 0.9559073966968703,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 7
+      },
+      "validation_prediction_path": "predictions/pCR/seed_61/fold_1/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G092685,23G100152,23G109760,23G113311,23G116881,24G011777,24G013161,24G016912,24G019106,24G027094,24G031191,24G037700,24G042860,24G044299,24G054539,24G069959,24G079991,24G087143,24G094172,24G095750,24G103891,24G115797,24G116762,24G117782,24G121321,24G124181,24G125015,25G005746,25G008366,25G010990,25G012687,25G015816,25G017036,25G018780,25G023717,25G026128,25G035789,25G050827,25G051075,25G084572,25G098473,25G104761,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed61_fold2.pt",
+      "checkpoint_sha256": "4aebbd2787447393b9d2471bd198688fb588851494f47eb098cbe91e24e95e74",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 2,
+      "seed": 61,
+      "task": "pCR",
+      "test": {
+        "auc": 0.8818181818181818,
+        "auprc": 0.8511173170264079,
+        "brier": 0.13454521305437425,
+        "fn": 4,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9957236842105264,
+          "ci95_low": 0.6765876152832674,
+          "median_auc": 0.8903882575757576,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_61/fold_2/test.csv",
+      "training_history_path": "training_history/pcr_seed61_fold2.json",
+      "validation": {
+        "auc": 0.8272727272727272,
+        "auprc": 0.8213967405143876,
+        "brier": 0.14034623751219663,
+        "fn": 5,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9573033545401968,
+          "ci95_low": 0.631174089068826,
+          "median_auc": 0.8476800976800977,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5454545454545454,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 6
+      },
+      "validation_prediction_path": "predictions/pCR/seed_61/fold_2/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G085500,23G092685,23G100037,23G109760,23G113311,23G116881,24G000715,24G002499,24G012954,24G013161,24G019106,24G021163,24G027094,24G031191,24G037700,24G042860,24G054539,24G069959,24G072240,24G075578,24G079991,24G094172,24G117782,24G120277,24G121321,24G124181,25G005746,25G008366,25G017036,25G022288,25G023717,25G026128,25G046033,25G060727,25G084572,25G088475,25G088548,25G095565,25G098382,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed61_fold3.pt",
+      "checkpoint_sha256": "5557592821a5fa5e8d6199794574dee25cd0e7ca2e878c547d94e074b3cfa529",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 3,
+      "seed": 61,
+      "task": "pCR",
+      "test": {
+        "auc": 0.8954545454545455,
+        "auprc": 0.8617604617604617,
+        "brier": 0.1306438678925838,
+        "fn": 4,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.7667978896103895,
+          "median_auc": 0.9172077922077921,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.95,
+        "tn": 19,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/pCR/seed_61/fold_3/test.csv",
+      "training_history_path": "training_history/pcr_seed61_fold3.json",
+      "validation": {
+        "auc": 0.8681818181818182,
+        "auprc": 0.8516958630594995,
+        "brier": 0.13094018987022252,
+        "fn": 4,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9924999999999999,
+          "ci95_low": 0.6630518419489008,
+          "median_auc": 0.869378591954023,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6363636363636364,
+        "specificity": 0.9,
+        "tn": 18,
+        "tp": 7
+      },
+      "validation_prediction_path": "predictions/pCR/seed_61/fold_3/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G113311,23G116881,24G002499,24G011777,24G012954,24G016912,24G019106,24G019386,24G021163,24G027094,24G031191,24G033428,24G037700,24G042860,24G044299,24G069959,24G070697,24G075578,24G087143,24G095750,24G103891,24G116762,24G120277,24G121321,24G124181,25G004489,25G006622,25G008366,25G012687,25G017036,25G023717,25G027985,25G031563,25G046033,25G050827,25G051075,25G084572,25G088475,25G088548,25G095565,25G096905,25G098473,25G104761,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 0.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/pcr_seed61_fold4.pt",
+      "checkpoint_sha256": "c96e4f8d1c41dac7c0174ac88fd4c1e4059f2f2994db02efdb38d3393b322ca6",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 4,
+      "seed": 61,
+      "task": "pCR",
+      "test": {
+        "auc": 0.5863636363636364,
+        "auprc": 0.42462394507849055,
+        "brier": 0.23019739858070282,
+        "fn": 11,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.7781250000000001,
+          "ci95_low": 0.3475223214285714,
+          "median_auc": 0.5898173920377867,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.0,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 0
+      },
+      "test_prediction_path": "predictions/pCR/seed_61/fold_4/test.csv",
+      "training_history_path": "training_history/pcr_seed61_fold4.json",
+      "validation": {
+        "auc": 0.5136363636363637,
+        "auprc": 0.4460384154395044,
+        "brier": 0.23137950780736236,
+        "fn": 11,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.746371336996337,
+          "ci95_low": 0.27142713365539456,
+          "median_auc": 0.5110673640085405,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.0,
+        "specificity": 1.0,
+        "tn": 20,
+        "tp": 0
+      },
+      "validation_prediction_path": "predictions/pCR/seed_61/fold_4/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G085500,23G092685,23G104976,23G109760,23G113311,23G116881,24G000715,24G011777,24G012954,24G016912,24G019106,24G038355,24G044299,24G054539,24G075578,24G087143,24G095750,24G099680,24G115797,24G116762,24G121321,24G124181,24G125015,25G004489,25G005067,25G008366,25G012687,25G015816,25G017036,25G018780,25G023717,25G026128,25G027985,25G028295,25G035789,25G051075,25G060727,25G084601,25G088475,25G088548,25G095565,25G098382,25G098473,25G104761,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed1_fold0.pt",
+      "checkpoint_sha256": "324902134f0afdc9aaa4178e693f5ca0da2815fadc86b7bc7b8173486b71b7d4",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 0,
+      "seed": 1,
+      "task": "MPR",
+      "test": {
+        "auc": 0.8958333333333333,
+        "auprc": 0.9028265107212474,
+        "brier": 0.14904222543526088,
+        "fn": 6,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9861642156862745,
+          "ci95_low": 0.7823982007575758,
+          "median_auc": 0.9127717391304349,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6,
+        "specificity": 0.9375,
+        "tn": 15,
+        "tp": 9
+      },
+      "test_prediction_path": "predictions/MPR/seed_1/fold_0/test.csv",
+      "training_history_path": "training_history/mpr_seed1_fold0.json",
+      "validation": {
+        "auc": 0.875,
+        "auprc": 0.8797883597883598,
+        "brier": 0.15090820498166277,
+        "fn": 7,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9625835561497326,
+          "ci95_low": 0.7560040370813397,
+          "median_auc": 0.8802083333333333,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.5333333333333333,
+        "specificity": 0.875,
+        "tn": 14,
+        "tp": 8
+      },
+      "validation_prediction_path": "predictions/MPR/seed_1/fold_0/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G085500,23G092685,23G100152,23G104976,23G113311,23G116881,24G012954,24G013161,24G016912,24G019106,24G019386,24G031191,24G042860,24G072240,24G079991,24G094172,24G095750,24G099680,24G103891,24G120277,24G125015,25G004489,25G005746,25G008366,25G015816,25G017036,25G026128,25G027985,25G031563,25G035789,25G060727,25G064241,25G084572,25G084601,25G088548,25G096905,25G098382,25G098473,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 18.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed1_fold1.pt",
+      "checkpoint_sha256": "acf1a0bac26c56992c18785702ea8de1a40af6f2120093b1ad6e3f11874dc475",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 1,
+      "seed": 1,
+      "task": "MPR",
+      "test": {
+        "auc": 0.9208333333333334,
+        "auprc": 0.919701502201502,
+        "brier": 0.11939034833418916,
+        "fn": 3,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9947493734335839,
+          "ci95_low": 0.8212078309584703,
+          "median_auc": 0.9342769803296119,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 12
+      },
+      "test_prediction_path": "predictions/MPR/seed_1/fold_1/test.csv",
+      "training_history_path": "training_history/mpr_seed1_fold1.json",
+      "validation": {
+        "auc": 0.8333333333333334,
+        "auprc": 0.8165777299133067,
+        "brier": 0.16902154134506037,
+        "fn": 4,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9451034007352941,
+          "ci95_low": 0.6630716832187421,
+          "median_auc": 0.8417257085020243,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7333333333333333,
+        "specificity": 0.75,
+        "tn": 12,
+        "tp": 11
+      },
+      "validation_prediction_path": "predictions/MPR/seed_1/fold_1/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G100152,23G104976,23G109760,23G113311,23G116881,24G000715,24G002499,24G013161,24G016912,24G021163,24G031191,24G037700,24G038355,24G042860,24G044299,24G070697,24G072240,24G079991,24G094172,24G099680,24G103891,24G108632,24G115797,24G120277,24G121321,24G125015,25G008366,25G012687,25G015816,25G018780,25G022288,25G023717,25G028295,25G031563,25G050827,25G051075,25G064241,25G084601,25G088548,25G095565,25G098382,25G098473,25G104761,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 9.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed1_fold2.pt",
+      "checkpoint_sha256": "49c28139808bac61aafb402e25370770b8dcc4889b715f328722cd283d780962",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 2,
+      "seed": 1,
+      "task": "MPR",
+      "test": {
+        "auc": 0.6583333333333333,
+        "auprc": 0.6820105846373595,
+        "brier": 0.23245552882907314,
+        "fn": 8,
+        "fp": 5,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9005288957688338,
+          "ci95_low": 0.4349583333333334,
+          "median_auc": 0.6674242424242425,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.4666666666666667,
+        "specificity": 0.6875,
+        "tn": 11,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/MPR/seed_1/fold_2/test.csv",
+      "training_history_path": "training_history/mpr_seed1_fold2.json",
+      "validation": {
+        "auc": 0.7291666666666666,
+        "auprc": 0.7482506279410304,
+        "brier": 0.2175324608713422,
+        "fn": 4,
+        "fp": 8,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9186564171122994,
+          "ci95_low": 0.5122473086124403,
+          "median_auc": 0.7405002405002405,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7333333333333333,
+        "specificity": 0.5,
+        "tn": 8,
+        "tp": 11
+      },
+      "validation_prediction_path": "predictions/MPR/seed_1/fold_2/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G085500,23G109760,23G113311,23G116881,24G011777,24G012954,24G013161,24G016912,24G019386,24G021163,24G042860,24G044299,24G054539,24G069959,24G070697,24G072240,24G075578,24G079991,24G087143,24G094172,24G095750,24G099680,24G115797,24G117782,24G120277,24G124181,24G125015,25G005746,25G006622,25G008366,25G012687,25G015816,25G027985,25G031563,25G035789,25G050827,25G051075,25G084572,25G088548,25G098382,25G104761,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed1_fold3.pt",
+      "checkpoint_sha256": "b77db0764586f47533768e18e85acaa85178c4a76958e413eee92d33dea794a5",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 3,
+      "seed": 1,
+      "task": "MPR",
+      "test": {
+        "auc": 0.8291666666666666,
+        "auprc": 0.8163171648849398,
+        "brier": 0.18066708478526938,
+        "fn": 8,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9596801346801347,
+          "ci95_low": 0.641404428904429,
+          "median_auc": 0.8406226126814362,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.4666666666666667,
+        "specificity": 0.75,
+        "tn": 12,
+        "tp": 7
+      },
+      "test_prediction_path": "predictions/MPR/seed_1/fold_3/test.csv",
+      "training_history_path": "training_history/mpr_seed1_fold3.json",
+      "validation": {
+        "auc": 0.9125,
+        "auprc": 0.9257671957671956,
+        "brier": 0.12015466710590178,
+        "fn": 3,
+        "fp": 5,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.983247145011851,
+          "ci95_low": 0.7958243297318928,
+          "median_auc": 0.9190379795642953,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.6875,
+        "tn": 11,
+        "tp": 12
+      },
+      "validation_prediction_path": "predictions/MPR/seed_1/fold_3/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G092685,23G100037,23G100152,23G104976,23G113311,24G013161,24G016912,24G019106,24G019386,24G021163,24G027094,24G031191,24G037700,24G044299,24G070697,24G072240,24G075578,24G087143,24G094172,24G095750,24G099680,24G115797,24G116762,24G120277,24G124181,24G125015,25G005067,25G005746,25G006622,25G008366,25G012687,25G015816,25G017036,25G018780,25G022288,25G023717,25G027985,25G031563,25G046033,25G050827,25G051075,25G060727,25G064241,25G084572,25G088548,25G095565,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 10.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed1_fold4.pt",
+      "checkpoint_sha256": "c4314faebd620094f11e9b5834563a8d826444887a8a35d7d73d8d6fb4a5feeb",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 4,
+      "seed": 1,
+      "task": "MPR",
+      "test": {
+        "auc": 0.875,
+        "auprc": 0.8983583083583083,
+        "brier": 0.16453810996176443,
+        "fn": 2,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9904436121154387,
+          "ci95_low": 0.7107575757575758,
+          "median_auc": 0.875,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8666666666666667,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 13
+      },
+      "test_prediction_path": "predictions/MPR/seed_1/fold_4/test.csv",
+      "training_history_path": "training_history/mpr_seed1_fold4.json",
+      "validation": {
+        "auc": 0.7249999999999999,
+        "auprc": 0.7658675477446091,
+        "brier": 0.2014087102301483,
+        "fn": 5,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9123903508771931,
+          "ci95_low": 0.46979166666666666,
+          "median_auc": 0.75,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6666666666666666,
+        "specificity": 0.75,
+        "tn": 12,
+        "tp": 10
+      },
+      "validation_prediction_path": "predictions/MPR/seed_1/fold_4/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G092685,23G100037,23G104976,23G109760,23G113311,23G116881,24G002499,24G011777,24G013161,24G016912,24G019106,24G019386,24G021163,24G027094,24G031191,24G033428,24G037700,24G038355,24G044299,24G075578,24G079991,24G087143,24G094172,24G095750,24G103891,24G124181,25G004489,25G008366,25G015816,25G017036,25G018780,25G026128,25G031563,25G035789,25G050827,25G051075,25G084572,25G088475,25G098382,25G098473,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed2_fold0.pt",
+      "checkpoint_sha256": "f3c2561e39ac52915240fea4b2014458c95c4b9976a980346ed921a5936f14c6",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 0,
+      "seed": 2,
+      "task": "MPR",
+      "test": {
+        "auc": 0.9833333333333334,
+        "auprc": 0.9838235294117645,
+        "brier": 0.06942196693479732,
+        "fn": 0,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9398382319434951,
+          "median_auc": 0.9881652661064425,
+          "valid_draws": 200
+        },
+        "sensitivity": 1.0,
+        "specificity": 0.875,
+        "tn": 14,
+        "tp": 15
+      },
+      "test_prediction_path": "predictions/MPR/seed_2/fold_0/test.csv",
+      "training_history_path": "training_history/mpr_seed2_fold0.json",
+      "validation": {
+        "auc": 0.9583333333333334,
+        "auprc": 0.9733333333333332,
+        "brier": 0.06548024883721287,
+        "fn": 1,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8839472624798712,
+          "median_auc": 0.9673221515326778,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.9333333333333333,
+        "specificity": 0.9375,
+        "tn": 15,
+        "tp": 14
+      },
+      "validation_prediction_path": "predictions/MPR/seed_2/fold_0/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G092685,23G104976,23G116881,24G000715,24G012954,24G013161,24G016912,24G019106,24G019386,24G021163,24G027094,24G031191,24G033428,24G037700,24G042860,24G044299,24G069959,24G070697,24G075578,24G087143,24G099680,24G116762,24G121321,25G004489,25G005746,25G008366,25G015816,25G018780,25G026128,25G027985,25G035789,25G046033,25G050827,25G051075,25G060727,25G084601,25G088475,25G096905,25G104761,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed2_fold1.pt",
+      "checkpoint_sha256": "899b3392e97229d3832321026609fa9d3ddcf8df4112dfbb9ea9479a312c18ec",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 1,
+      "seed": 2,
+      "task": "MPR",
+      "test": {
+        "auc": 0.7833333333333334,
+        "auprc": 0.8514567901234567,
+        "brier": 0.17350681524272402,
+        "fn": 6,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9775372653662128,
+          "ci95_low": 0.5339583333333334,
+          "median_auc": 0.8,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6,
+        "specificity": 0.875,
+        "tn": 14,
+        "tp": 9
+      },
+      "test_prediction_path": "predictions/MPR/seed_2/fold_1/test.csv",
+      "training_history_path": "training_history/mpr_seed2_fold1.json",
+      "validation": {
+        "auc": 0.7166666666666666,
+        "auprc": 0.8149954548397262,
+        "brier": 0.20346556894678738,
+        "fn": 6,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9924906015037593,
+          "ci95_low": 0.38652380952380955,
+          "median_auc": 0.7440767973856209,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6,
+        "specificity": 0.875,
+        "tn": 14,
+        "tp": 9
+      },
+      "validation_prediction_path": "predictions/MPR/seed_2/fold_1/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G085500,23G092685,23G100152,23G113311,24G000715,24G011777,24G012954,24G013161,24G016912,24G019106,24G019386,24G031191,24G038355,24G044299,24G054539,24G069959,24G075578,24G095750,24G099680,24G103891,24G116762,24G120277,24G121321,25G005746,25G006622,25G012687,25G017036,25G018780,25G026128,25G028295,25G035789,25G051075,25G084572,25G084601,25G088548,25G096905,25G098473,25G104761,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 9.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed2_fold2.pt",
+      "checkpoint_sha256": "6683a19ce5906ccc0e4cbf5ce889bcf9b8453a62c1529cd38d2b133824a6ea83",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 2,
+      "seed": 2,
+      "task": "MPR",
+      "test": {
+        "auc": 0.9208333333333334,
+        "auprc": 0.9357511769276474,
+        "brier": 0.15790504328003485,
+        "fn": 2,
+        "fp": 5,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9904436121154387,
+          "ci95_low": 0.7783933080808081,
+          "median_auc": 0.9263613579403053,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8666666666666667,
+        "specificity": 0.6875,
+        "tn": 11,
+        "tp": 13
+      },
+      "test_prediction_path": "predictions/MPR/seed_2/fold_2/test.csv",
+      "training_history_path": "training_history/mpr_seed2_fold2.json",
+      "validation": {
+        "auc": 0.6416666666666666,
+        "auprc": 0.6881936050643144,
+        "brier": 0.23131115813120487,
+        "fn": 6,
+        "fp": 8,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.7907051282051282,
+          "ci95_low": 0.45145833333333335,
+          "median_auc": 0.6365578865578865,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6,
+        "specificity": 0.5,
+        "tn": 8,
+        "tp": 9
+      },
+      "validation_prediction_path": "predictions/MPR/seed_2/fold_2/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G092685,23G100037,23G100152,23G109760,23G113311,23G116881,24G000715,24G002499,24G011777,24G013161,24G016912,24G019106,24G019386,24G027094,24G033428,24G042860,24G044299,24G072240,24G075578,24G087143,24G095750,24G103891,24G108632,24G117782,24G120277,24G121321,24G124181,25G005746,25G008366,25G017036,25G018780,25G022288,25G028295,25G035789,25G046033,25G050827,25G064241,25G084572,25G088475,25G095565,25G096905,25G098382,25G104761,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 18.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed2_fold3.pt",
+      "checkpoint_sha256": "79eb05683d794e31e7dfc0ad760c08c681549e2c31885ad571b868bc34263f55",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 3,
+      "seed": 2,
+      "task": "MPR",
+      "test": {
+        "auc": 0.8958333333333333,
+        "auprc": 0.897566846638054,
+        "brier": 0.13779785549607715,
+        "fn": 3,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9815277777777778,
+          "ci95_low": 0.7245517676767677,
+          "median_auc": 0.8965773809523809,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.75,
+        "tn": 12,
+        "tp": 12
+      },
+      "test_prediction_path": "predictions/MPR/seed_2/fold_3/test.csv",
+      "training_history_path": "training_history/mpr_seed2_fold3.json",
+      "validation": {
+        "auc": 0.7875000000000001,
+        "auprc": 0.8389328449328448,
+        "brier": 0.1916581226437449,
+        "fn": 4,
+        "fp": 6,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9440618591934382,
+          "ci95_low": 0.583173076923077,
+          "median_auc": 0.7956815114709851,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7333333333333333,
+        "specificity": 0.625,
+        "tn": 10,
+        "tp": 11
+      },
+      "validation_prediction_path": "predictions/MPR/seed_2/fold_3/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G085500,23G100037,23G109760,23G113311,24G002499,24G011777,24G012954,24G019106,24G019386,24G021163,24G037700,24G042860,24G044299,24G070697,24G072240,24G075578,24G087143,24G094172,24G103891,24G108632,24G117782,24G120277,24G121321,24G124181,25G004489,25G005746,25G008366,25G010990,25G015816,25G017036,25G018780,25G023717,25G026128,25G031563,25G046033,25G064241,25G084572,25G088475,25G088548,25G095565,25G096905,25G098473",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed2_fold4.pt",
+      "checkpoint_sha256": "94f8674e5d8bccc28c2744cbf81bbdb26c10ed1420a5899fed8f5fa372d1fa8b",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 4,
+      "seed": 2,
+      "task": "MPR",
+      "test": {
+        "auc": 0.9666666666666667,
+        "auprc": 0.9689987789987788,
+        "brier": 0.08411462096631696,
+        "fn": 3,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8737675070028011,
+          "median_auc": 0.9694638694638694,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.9375,
+        "tn": 15,
+        "tp": 12
+      },
+      "test_prediction_path": "predictions/MPR/seed_2/fold_4/test.csv",
+      "training_history_path": "training_history/mpr_seed2_fold4.json",
+      "validation": {
+        "auc": 0.8583333333333333,
+        "auprc": 0.8746731046731047,
+        "brier": 0.15547649442536177,
+        "fn": 6,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9667187500000001,
+          "ci95_low": 0.6469117647058823,
+          "median_auc": 0.8668592436974789,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 9
+      },
+      "validation_prediction_path": "predictions/MPR/seed_2/fold_4/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G092685,23G100037,23G100152,23G109760,23G113311,23G116881,24G000715,24G002499,24G011777,24G013161,24G016912,24G019106,24G019386,24G021163,24G027094,24G031191,24G033428,24G042860,24G069959,24G072240,24G075578,24G087143,24G094172,24G095750,24G099680,24G103891,24G108632,24G120277,24G121321,25G004489,25G008366,25G010990,25G012687,25G017036,25G018780,25G026128,25G031563,25G046033,25G084572,25G088475,25G095565,25G096905,25G104761,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 18.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed42_fold0.pt",
+      "checkpoint_sha256": "4242f783e8c786127299733b7beeb7e47c3ae8a9dfc97ac0ef7db400d77d1b66",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 0,
+      "seed": 42,
+      "task": "MPR",
+      "test": {
+        "auc": 0.8541666666666665,
+        "auprc": 0.8991493886230728,
+        "brier": 0.14126497213520348,
+        "fn": 4,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.6664772727272728,
+          "median_auc": 0.8782249742002064,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7333333333333333,
+        "specificity": 0.9375,
+        "tn": 15,
+        "tp": 11
+      },
+      "test_prediction_path": "predictions/MPR/seed_42/fold_0/test.csv",
+      "training_history_path": "training_history/mpr_seed42_fold0.json",
+      "validation": {
+        "auc": 0.8374999999999999,
+        "auprc": 0.8786202686202684,
+        "brier": 0.16049769879976147,
+        "fn": 5,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9666883116883117,
+          "ci95_low": 0.6872732843137255,
+          "median_auc": 0.848319876970396,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6666666666666666,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 10
+      },
+      "validation_prediction_path": "predictions/MPR/seed_42/fold_0/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G085500,23G092685,23G100152,23G109760,23G113311,23G116881,24G011777,24G012954,24G016912,24G019106,24G019386,24G031191,24G033428,24G037700,24G042860,24G069959,24G070697,24G075578,24G079991,24G087143,24G095750,24G103891,24G116762,24G117782,24G120277,24G121321,24G124181,25G005067,25G005746,25G006622,25G008366,25G012687,25G018780,25G026128,25G027985,25G028295,25G035789,25G046033,25G050827,25G051075,25G088548,25G104761",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed42_fold1.pt",
+      "checkpoint_sha256": "49a3146664c1e34e3b859612ab5050af049b438f625dda77eed133888a6d1bb6",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 1,
+      "seed": 42,
+      "task": "MPR",
+      "test": {
+        "auc": 0.9125,
+        "auprc": 0.9341269841269841,
+        "brier": 0.11719742043618847,
+        "fn": 2,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8013706140350877,
+          "median_auc": 0.9235714285714285,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8666666666666667,
+        "specificity": 0.9375,
+        "tn": 15,
+        "tp": 13
+      },
+      "test_prediction_path": "predictions/MPR/seed_42/fold_1/test.csv",
+      "training_history_path": "training_history/mpr_seed42_fold1.json",
+      "validation": {
+        "auc": 0.8541666666666666,
+        "auprc": 0.8875538109980834,
+        "brier": 0.1375579467358202,
+        "fn": 5,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9748249299719888,
+          "ci95_low": 0.6825892857142857,
+          "median_auc": 0.8612278244631186,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6666666666666666,
+        "specificity": 0.875,
+        "tn": 14,
+        "tp": 10
+      },
+      "validation_prediction_path": "predictions/MPR/seed_42/fold_1/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G113311,23G116881,24G000715,24G002499,24G011777,24G013161,24G016912,24G019106,24G019386,24G033428,24G037700,24G038355,24G042860,24G044299,24G069959,24G070697,24G072240,24G075578,24G079991,24G087143,24G094172,24G099680,24G103891,24G108632,24G117782,24G120277,24G121321,24G125015,25G005067,25G005746,25G006622,25G008366,25G010990,25G017036,25G018780,25G026128,25G028295,25G035789,25G050827,25G084572,25G088548,25G095565,25G098473,25G104761,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed42_fold2.pt",
+      "checkpoint_sha256": "eeefcb73a759a72ba1dbdc09c0847bc64269f8345d4d05bf187056fef9e9df87",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 2,
+      "seed": 42,
+      "task": "MPR",
+      "test": {
+        "auc": 0.9000000000000001,
+        "auprc": 0.9215552965552964,
+        "brier": 0.1366484087675102,
+        "fn": 3,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.7249422268907563,
+          "median_auc": 0.9086920024420024,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.75,
+        "tn": 12,
+        "tp": 12
+      },
+      "test_prediction_path": "predictions/MPR/seed_42/fold_2/test.csv",
+      "training_history_path": "training_history/mpr_seed42_fold2.json",
+      "validation": {
+        "auc": 0.9541666666666666,
+        "auprc": 0.9565720012701437,
+        "brier": 0.11500838663233875,
+        "fn": 5,
+        "fp": 0,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.865253716871364,
+          "median_auc": 0.955050505050505,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6666666666666666,
+        "specificity": 1.0,
+        "tn": 16,
+        "tp": 10
+      },
+      "validation_prediction_path": "predictions/MPR/seed_42/fold_2/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G092685,23G100152,23G104976,23G109760,23G113311,23G116881,24G002499,24G013161,24G019106,24G019386,24G027094,24G031191,24G037700,24G038355,24G042860,24G044299,24G072240,24G075578,24G079991,24G087143,24G094172,24G095750,24G099680,24G108632,24G116762,24G120277,24G121321,24G124181,25G004489,25G005067,25G005746,25G006622,25G008366,25G018780,25G023717,25G027985,25G028295,25G031563,25G046033,25G050827,25G084572,25G084601,25G088548,25G098473",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed42_fold3.pt",
+      "checkpoint_sha256": "dfb551e41f1fdc27cce5a23d115ef1950c386007da439f6431e8299c8fa7de1d",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 3,
+      "seed": 42,
+      "task": "MPR",
+      "test": {
+        "auc": 0.9708333333333333,
+        "auprc": 0.9683778639660992,
+        "brier": 0.09062052565145658,
+        "fn": 3,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9284821428571429,
+          "median_auc": 0.9754901960784315,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.9375,
+        "tn": 15,
+        "tp": 12
+      },
+      "test_prediction_path": "predictions/MPR/seed_42/fold_3/test.csv",
+      "training_history_path": "training_history/mpr_seed42_fold3.json",
+      "validation": {
+        "auc": 0.8833333333333333,
+        "auprc": 0.9113716108452949,
+        "brier": 0.1413069631269391,
+        "fn": 3,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9818759018759019,
+          "ci95_low": 0.7455357142857143,
+          "median_auc": 0.9057765151515151,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.75,
+        "tn": 12,
+        "tp": 12
+      },
+      "validation_prediction_path": "predictions/MPR/seed_42/fold_3/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G085500,23G092685,23G104976,23G113311,23G116881,24G011777,24G012954,24G013161,24G021163,24G031191,24G033428,24G037700,24G038355,24G042860,24G044299,24G054539,24G070697,24G079991,24G087143,24G103891,24G120277,24G121321,24G125015,25G005067,25G005746,25G006622,25G008366,25G012687,25G015816,25G017036,25G023717,25G026128,25G031563,25G035789,25G046033,25G051075,25G060727,25G064241,25G084601,25G088475,25G088548,25G096905,25G098473,25G107269",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 7.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed42_fold4.pt",
+      "checkpoint_sha256": "f907903653cbad0483cc005a7206adfedce902adb2aff2b28d5d0b3a07e3d81e",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 4,
+      "seed": 42,
+      "task": "MPR",
+      "test": {
+        "auc": 0.6916666666666667,
+        "auprc": 0.6312439857279899,
+        "brier": 0.21733349543323421,
+        "fn": 5,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.8759803921568627,
+          "ci95_low": 0.417436974789916,
+          "median_auc": 0.7093537414965986,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6666666666666666,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 10
+      },
+      "test_prediction_path": "predictions/MPR/seed_42/fold_4/test.csv",
+      "training_history_path": "training_history/mpr_seed42_fold4.json",
+      "validation": {
+        "auc": 0.7625,
+        "auprc": 0.7129076479076479,
+        "brier": 0.20118732107682172,
+        "fn": 6,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9384147999130057,
+          "ci95_low": 0.5331009615384615,
+          "median_auc": 0.7708817498291183,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 9
+      },
+      "validation_prediction_path": "predictions/MPR/seed_42/fold_4/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G100037,23G109760,23G113311,23G116881,24G012954,24G016912,24G019106,24G019386,24G021163,24G031191,24G038355,24G042860,24G044299,24G069959,24G072240,24G075578,24G079991,24G095750,24G103891,24G108632,24G115797,24G117782,24G120277,24G121321,24G124181,24G125015,25G008366,25G010990,25G015816,25G023717,25G026128,25G031563,25G035789,25G050827,25G051075,25G060727,25G084572,25G088548,25G095565,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 18.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed61_fold0.pt",
+      "checkpoint_sha256": "6bc076fd6cb97f4e17e54d9d093369d83b5b8ac9f6dd5759c1736dd10b00e559",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 0,
+      "seed": 61,
+      "task": "MPR",
+      "test": {
+        "auc": 0.8583333333333334,
+        "auprc": 0.8850179014884896,
+        "brier": 0.15310459715834204,
+        "fn": 4,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9732886904761905,
+          "ci95_low": 0.6785027472527473,
+          "median_auc": 0.8666666666666667,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7333333333333333,
+        "specificity": 0.875,
+        "tn": 14,
+        "tp": 11
+      },
+      "test_prediction_path": "predictions/MPR/seed_61/fold_0/test.csv",
+      "training_history_path": "training_history/mpr_seed61_fold0.json",
+      "validation": {
+        "auc": 0.8583333333333334,
+        "auprc": 0.856656028521017,
+        "brier": 0.15691294292827898,
+        "fn": 4,
+        "fp": 4,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.971408607839529,
+          "ci95_low": 0.6956597222222222,
+          "median_auc": 0.8666666666666667,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7333333333333333,
+        "specificity": 0.75,
+        "tn": 12,
+        "tp": 11
+      },
+      "validation_prediction_path": "predictions/MPR/seed_61/fold_0/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G109760,23G113311,23G116881,24G000715,24G011777,24G012954,24G013161,24G016912,24G019106,24G019386,24G021163,24G027094,24G033428,24G037700,24G038355,24G042860,24G044299,24G054539,24G095750,24G099680,24G103891,24G115797,24G120277,24G124181,25G004489,25G005746,25G008366,25G012687,25G017036,25G018780,25G022288,25G023717,25G026128,25G027985,25G028295,25G031563,25G050827,25G060727,25G084572,25G084601,25G088548,25G095565,25G096905,25G098382,25G098473,25G104761,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed61_fold1.pt",
+      "checkpoint_sha256": "1e5057e5afa9b11d48a68df9ce78910f23d6d284747dd29d2a1b8bdfab5d6104",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 1,
+      "seed": 61,
+      "task": "MPR",
+      "test": {
+        "auc": 0.8083333333333333,
+        "auprc": 0.8492503983883294,
+        "brier": 0.17495817354065143,
+        "fn": 5,
+        "fp": 2,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9476425438596491,
+          "ci95_low": 0.6014098011363637,
+          "median_auc": 0.8070175438596492,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6666666666666666,
+        "specificity": 0.875,
+        "tn": 14,
+        "tp": 10
+      },
+      "test_prediction_path": "predictions/MPR/seed_61/fold_1/test.csv",
+      "training_history_path": "training_history/mpr_seed61_fold1.json",
+      "validation": {
+        "auc": 0.8458333333333333,
+        "auprc": 0.8555853405853404,
+        "brier": 0.15981033119058477,
+        "fn": 6,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9583333333333333,
+          "ci95_low": 0.6984152932837144,
+          "median_auc": 0.8629699248120299,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 9
+      },
+      "validation_prediction_path": "predictions/MPR/seed_61/fold_1/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G075065,23G109760,23G116881,24G002499,24G011777,24G012954,24G013161,24G016912,24G019386,24G021163,24G027094,24G031191,24G037700,24G038355,24G042860,24G054539,24G069959,24G070697,24G072240,24G075578,24G087143,24G095750,24G099680,24G120277,24G121321,24G124181,24G125015,25G006622,25G008366,25G012687,25G018780,25G022288,25G027985,25G028295,25G031563,25G046033,25G050827,25G060727,25G084572,25G084601,25G088475,25G088548,25G095565,25G096905,25G098382,25G098473,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 17.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed61_fold2.pt",
+      "checkpoint_sha256": "7030ed67b4127f39a0551566c79d0ae0b879e151eb5debf85e797a807978dcde",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 2,
+      "seed": 61,
+      "task": "MPR",
+      "test": {
+        "auc": 0.8708333333333333,
+        "auprc": 0.8896425796425795,
+        "brier": 0.15095094081115296,
+        "fn": 4,
+        "fp": 6,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9905059523809524,
+          "ci95_low": 0.7402303921568627,
+          "median_auc": 0.8788676236044657,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.7333333333333333,
+        "specificity": 0.625,
+        "tn": 10,
+        "tp": 11
+      },
+      "test_prediction_path": "predictions/MPR/seed_61/fold_2/test.csv",
+      "training_history_path": "training_history/mpr_seed61_fold2.json",
+      "validation": {
+        "auc": 0.8833333333333333,
+        "auprc": 0.8907625272331154,
+        "brier": 0.14207183002615587,
+        "fn": 5,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.9881296992481202,
+          "ci95_low": 0.7024999999999999,
+          "median_auc": 0.893009768009768,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.6666666666666666,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 10
+      },
+      "validation_prediction_path": "predictions/MPR/seed_61/fold_2/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G104976,23G109760,23G116881,24G002499,24G011777,24G012954,24G013161,24G019106,24G019386,24G021163,24G027094,24G031191,24G037700,24G042860,24G044299,24G070697,24G075578,24G079991,24G094172,24G099680,24G115797,24G116762,24G121321,24G124181,24G125015,25G005067,25G005746,25G008366,25G012687,25G015816,25G018780,25G027985,25G028295,25G031563,25G051075,25G064241,25G084572,25G084601,25G088548,25G095565,25G098473,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed61_fold3.pt",
+      "checkpoint_sha256": "83197b74b828e31f7524647a9d94d3a5d2c77a86a1b843e5240f0b3937bda8d1",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 3,
+      "seed": 61,
+      "task": "MPR",
+      "test": {
+        "auc": 0.8958333333333333,
+        "auprc": 0.9120923520923521,
+        "brier": 0.13329578957223523,
+        "fn": 3,
+        "fp": 3,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 0.990610119047619,
+          "ci95_low": 0.7575675230566536,
+          "median_auc": 0.8949874686716792,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.8125,
+        "tn": 13,
+        "tp": 12
+      },
+      "test_prediction_path": "predictions/MPR/seed_61/fold_3/test.csv",
+      "training_history_path": "training_history/mpr_seed61_fold3.json",
+      "validation": {
+        "auc": 0.9458333333333333,
+        "auprc": 0.9506919006919006,
+        "brier": 0.09946041155677894,
+        "fn": 3,
+        "fp": 1,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8571428571428572,
+          "median_auc": 0.9422619047619047,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.8,
+        "specificity": 0.9375,
+        "tn": 15,
+        "tp": 12
+      },
+      "validation_prediction_path": "predictions/MPR/seed_61/fold_3/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G085500,23G092685,23G113311,23G116881,24G011777,24G012954,24G013161,24G031191,24G033428,24G037700,24G042860,24G044299,24G054539,24G069959,24G070697,24G087143,24G094172,24G099680,24G103891,24G108632,24G120277,24G121321,24G124181,25G004489,25G005067,25G008366,25G010990,25G012687,25G018780,25G022288,25G023717,25G026128,25G027985,25G028295,25G031563,25G035789,25G050827,25G084572,25G095565,25G098382,25G098473,25G104761,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    },
+    {
+      "best_epoch": 19.0,
+      "card_id": "S2-ABS-001",
+      "checkpoint_path": "checkpoints/mpr_seed61_fold4.pt",
+      "checkpoint_sha256": "dfc12f2c3767597274a7c889ab2f1925d20117b84cab0477ea22163a49cb3945",
+      "evidence_scope": "slide_repeated_holdout_patient_nonindependent",
+      "fold": 4,
+      "seed": 61,
+      "task": "MPR",
+      "test": {
+        "auc": 0.9416666666666667,
+        "auprc": 0.9561111111111109,
+        "brier": 0.12812830110897835,
+        "fn": 1,
+        "fp": 6,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8403277310924369,
+          "median_auc": 0.9504901960784313,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.9333333333333333,
+        "specificity": 0.625,
+        "tn": 10,
+        "tp": 14
+      },
+      "test_prediction_path": "predictions/MPR/seed_61/fold_4/test.csv",
+      "training_history_path": "training_history/mpr_seed61_fold4.json",
+      "validation": {
+        "auc": 0.925,
+        "auprc": 0.9150407724320766,
+        "brier": 0.1345588562773581,
+        "fn": 1,
+        "fp": 5,
+        "n": 31,
+        "patient_cluster_bootstrap": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8220552884615385,
+          "median_auc": 0.9285714285714286,
+          "valid_draws": 200
+        },
+        "sensitivity": 0.9333333333333333,
+        "specificity": 0.6875,
+        "tn": 11,
+        "tp": 14
+      },
+      "validation_prediction_path": "predictions/MPR/seed_61/fold_4/validation.csv",
+      "warnings": [
+        "WARN_PATIENT_NONINDEPENDENCE:23G068252,23G075065,23G085500,23G092685,23G100152,23G104976,23G109760,23G113311,23G116881,24G000715,24G013161,24G016912,24G019106,24G021163,24G031191,24G033428,24G044299,24G069959,24G070697,24G072240,24G075578,24G079991,24G087143,24G095750,24G103891,24G117782,24G120277,24G125015,25G004489,25G005067,25G006622,25G012687,25G018780,25G028295,25G031563,25G035789,25G046033,25G050827,25G051075,25G060727,25G064241,25G084572,25G088548,25G095565,25G098473,25G107269,25G120205",
+        "COMPATIBILITY_ONLY: legacy z-score pathway input is not raw MPP2"
+      ]
+    }
+  ],
+  "learning_rate": 0.001,
+  "patience": 5,
+  "patient_overlap_policy": "allow_with_warning",
+  "prediction_kind": "repeated_holdout_test",
+  "selection_rule": "minimum validation BCE; early stop after patience=5; restore best validation checkpoint; test only after freeze"
+}

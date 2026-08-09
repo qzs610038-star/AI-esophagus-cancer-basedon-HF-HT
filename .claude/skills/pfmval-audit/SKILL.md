@@ -1,7 +1,6 @@
 ---
 name: pfmval-audit
 description: Thin Claude adapter for the tracked PFMval independent audit Skill.
-disable-model-invocation: true
 allowed-tools: Read
 ---
 
