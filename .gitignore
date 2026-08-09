@@ -247,6 +247,8 @@ experiments/explorations/*
 experiments/workspaces/*
 !experiments/workspaces/_template/
 !experiments/workspaces/_template/**
+experiments/workspaces/_template/**/__pycache__/
+experiments/workspaces/_template/**/*.py[cod]
 experiments/analysis/
 experiments/results/
 experiments/sweeps/
