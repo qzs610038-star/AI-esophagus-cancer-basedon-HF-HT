@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-09T14:26:03+00:00",
+  "updated_at": "2026-08-09T14:57:13+00:00",
   "next_workspace_number": 6,
   "workspaces": [
     {
@@ -31,13 +31,13 @@
       "display_name": "G15 server execution roundtrip v1 governance maintenance",
       "experiment_id": "governance_g15_server_execution_roundtrip_v1_20260729",
       "protocol_revision": 1,
-      "status": "shadow",
+      "status": "tombstoned",
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-07-29T15:50:50+00:00",
-      "last_verified_at": "2026-08-09T14:26:03+00:00",
-      "close_eligibility": "close_ready_waiting_exact_path_approval",
-      "retention_policy": "retain_until_explicit_close_approval",
+      "last_verified_at": "2026-08-09T14:57:13+00:00",
+      "close_eligibility": "closed_user_approved_worktree_removed",
+      "retention_policy": "preserve_branch_and_git_history",
       "hosts": {
         "local": {
           "host_scope": "local",
@@ -54,13 +54,13 @@
       "display_name": "G16 scientific records lifecycle v1 governance maintenance",
       "experiment_id": "governance_g16_scientific_records_lifecycle_v1_20260730",
       "protocol_revision": 1,
-      "status": "shadow",
+      "status": "tombstoned",
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-07-30T02:50:32+00:00",
-      "last_verified_at": "2026-08-09T14:26:03+00:00",
-      "close_eligibility": "close_ready_waiting_exact_path_approval",
-      "retention_policy": "retain_until_explicit_close_approval",
+      "last_verified_at": "2026-08-09T14:57:13+00:00",
+      "close_eligibility": "closed_user_approved_worktree_removed",
+      "retention_policy": "preserve_branch_and_git_history",
       "hosts": {
         "local": {
           "host_scope": "local",

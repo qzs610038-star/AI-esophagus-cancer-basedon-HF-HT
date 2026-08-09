@@ -45,3 +45,11 @@ W004 分支记录为 `running/pending`，active attempt 为 A004：
 - W004 五组 Phase 3 测试、公共结果接口回归及 workspace close-preview 测试：`68 passed`。
 - 严格门禁：PASS 7、WARN 7、FAIL 0；WARN 均为既有项目事项。
 - W006 示例代码路径已放行，`logs/raw/` 仍被 Git 忽略。
+
+## 用户批准后的物理关闭记录（2026-08-09）
+
+- 用户明确批准移除精确路径 `D:\AI空间转录病理研究\PFMval_new_governed_workspaces\W002` 与 `D:\AI空间转录病理研究\PFMval_new_governed_workspaces\W003`。
+- 移除前复核两者均为已登记 Git worktree、普通目录且工作区干净；父目录和 W 编号与批准目标一致。
+- 已使用 `git worktree remove` 仅移除上述两个工作树；未使用 `--force`、全局 prune 或递归清理。
+- 移除后两个物理路径均不存在，Git worktree 清单中均无残留；对应分支继续保留。
+- Workspace Registry 将 W002、W003 标记为 `tombstoned`，永久保留编号、分支及 Git 历史。

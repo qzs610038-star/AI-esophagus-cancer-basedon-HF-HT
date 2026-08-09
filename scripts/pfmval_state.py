@@ -2407,6 +2407,30 @@ def validate_governance_v3_state(
                         continue
                     expected_branch = str(host.get("branch", ""))
                     expected_commit = str(host.get("current_source_commit", ""))
+                    if workspace.get("status") == "tombstoned":
+                        if relative_path.exists():
+                            raise ValueError(
+                                "tombstoned workspace path still exists: "
+                                f"{relative_path}"
+                            )
+                        branch_check = subprocess.run(
+                            [
+                                "git",
+                                "-C",
+                                str(root),
+                                "show-ref",
+                                "--verify",
+                                "--quiet",
+                                f"refs/heads/{expected_branch}",
+                            ],
+                            check=False,
+                        )
+                        if branch_check.returncode != 0:
+                            raise ValueError(
+                                "tombstoned workspace branch is missing: "
+                                f"{expected_branch}"
+                            )
+                        continue
                     completed = subprocess.run(
                         ["git", "-C", str(root), "worktree", "list", "--porcelain"],
                         check=True,
