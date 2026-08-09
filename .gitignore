@@ -249,6 +249,14 @@ experiments/workspaces/*
 !experiments/workspaces/_template/**
 experiments/workspaces/_template/**/__pycache__/
 experiments/workspaces/_template/**/*.py[cod]
+!experiments/workspaces/W[0-9][0-9][0-9]/
+!experiments/workspaces/W[0-9][0-9][0-9]/**
+experiments/workspaces/W[0-9][0-9][0-9]/**/__pycache__/
+experiments/workspaces/W[0-9][0-9][0-9]/**/*.py[cod]
+experiments/workspaces/W[0-9][0-9][0-9]/logs/raw/
+experiments/workspaces/W[0-9][0-9][0-9]/checkpoints/
+experiments/workspaces/W[0-9][0-9][0-9]/outputs/
+experiments/workspaces/W[0-9][0-9][0-9]/cache/
 experiments/analysis/
 experiments/results/
 experiments/sweeps/

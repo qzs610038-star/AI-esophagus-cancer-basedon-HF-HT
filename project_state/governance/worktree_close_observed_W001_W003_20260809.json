@@ -1,0 +1,23 @@
+[
+  {
+    "path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W001",
+    "branch": "codex/w001-mpp2-huber-loss-20260728-bound",
+    "head": "a04319a1d6aeafcd35d6adc7e2893f1d7b683bda",
+    "dirty": false,
+    "unpushed_commits": 0
+  },
+  {
+    "path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W002",
+    "branch": "codex/w002-server-execution-roundtrip-v1-20260729",
+    "head": "05df5debe1ece3305604310463643c2f0a3c3f61",
+    "dirty": false,
+    "unpushed_commits": 0
+  },
+  {
+    "path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W003",
+    "branch": "codex/w003-scientific-records-lifecycle-v1-20260730",
+    "head": "28e3aeface15c30e8b437509eb64b4048e17a8c8",
+    "dirty": false,
+    "unpushed_commits": 0
+  }
+]

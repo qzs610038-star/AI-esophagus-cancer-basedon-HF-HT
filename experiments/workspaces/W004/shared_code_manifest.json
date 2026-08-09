@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "workspace_id": "W004",
+  "source_commit": "b898c9d80c2702a32a51773c9cfb8ca75312731a",
+  "posttrain_governance_commit": "c4143e685a2ef32adab5bad598b33a652f2ce7fb",
+  "promoted_shared_code": [
+    {
+      "path": "scripts/pfmval_governance.py",
+      "symbol": "build_result_v2",
+      "change": "optional prediction_return passthrough"
+    }
+  ],
+  "pending_shared_code_review": [
+    "deploy/pfmval_ops.py",
+    "scripts/pfmval_result_bundle.py"
+  ],
+  "promotion_status": "partial_minimal_dependency_only"
+}

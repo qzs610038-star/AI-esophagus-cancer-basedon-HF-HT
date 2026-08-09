@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-09T13:49:50+00:00",
+  "updated_at": "2026-08-09T14:26:03+00:00",
   "next_workspace_number": 6,
   "workspaces": [
     {
@@ -13,7 +13,7 @@
       "lease": null,
       "opened_at": "2026-07-28T14:18:14+00:00",
       "last_verified_at": "2026-08-09T13:49:50+00:00",
-      "close_eligibility": "not_evaluated",
+      "close_eligibility": "blocked_nonterminal_attempt_events",
       "retention_policy": "retain_until_explicit_close_approval",
       "hosts": {
         "local": {
@@ -35,8 +35,8 @@
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-07-29T15:50:50+00:00",
-      "last_verified_at": null,
-      "close_eligibility": "not_evaluated",
+      "last_verified_at": "2026-08-09T14:26:03+00:00",
+      "close_eligibility": "close_ready_waiting_exact_path_approval",
       "retention_policy": "retain_until_explicit_close_approval",
       "hosts": {
         "local": {
@@ -44,7 +44,7 @@
           "branch": "codex/w002-server-execution-roundtrip-v1-20260729",
           "path_id": "local_experiment_workspaces",
           "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W002",
-          "current_source_commit": "e19ac19c54c3c5caf19122b5da896d18e53529ad"
+          "current_source_commit": "05df5debe1ece3305604310463643c2f0a3c3f61"
         }
       }
     },
@@ -58,8 +58,8 @@
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-07-30T02:50:32+00:00",
-      "last_verified_at": null,
-      "close_eligibility": "not_evaluated",
+      "last_verified_at": "2026-08-09T14:26:03+00:00",
+      "close_eligibility": "close_ready_waiting_exact_path_approval",
       "retention_policy": "retain_until_explicit_close_approval",
       "hosts": {
         "local": {
@@ -67,7 +67,7 @@
           "branch": "codex/w003-scientific-records-lifecycle-v1-20260730",
           "path_id": "local_experiment_workspaces",
           "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W003",
-          "current_source_commit": "a0a6dd69dc409c8b3f366ffa41bb980aa2d47b4b"
+          "current_source_commit": "28e3aeface15c30e8b437509eb64b4048e17a8c8"
         }
       }
     },
@@ -82,7 +82,7 @@
       "lease": null,
       "opened_at": "2026-08-04T06:10:27+00:00",
       "last_verified_at": null,
-      "close_eligibility": "not_evaluated",
+      "close_eligibility": "blocked_pending_result_reconciliation_and_code_review",
       "retention_policy": "retain_until_explicit_close_approval",
       "hosts": {
         "local": {

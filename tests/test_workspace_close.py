@@ -188,3 +188,57 @@ def test_close_preview_reports_unreturned_result_and_can_reach_close_ready(tmp_p
     assert ready["status"] == "close_ready"
     assert ready["blockers"] == []
     assert ready["execute_authorized"] is False
+
+
+def test_close_preview_accepts_exact_registered_external_workspace(tmp_path):
+    root = tmp_path / "repo"
+    workspace_path = tmp_path / "repo_governed_workspaces" / "W002"
+    _write_json(
+        root / "project_state" / "workspace_registry.json",
+        {
+            "schema_version": "1.0",
+            "updated_at": "2026-08-09T00:00:00+00:00",
+            "next_workspace_number": 3,
+            "workspaces": [
+                {
+                    "workspace_id": "W002",
+                    "experiment_id": "governance-g15",
+                    "status": "shadow",
+                    "lease": None,
+                    "hosts": {
+                        "local": {
+                            "path_id": "local_experiment_workspaces",
+                            "relative_path": str(workspace_path),
+                            "branch": "codex/w002",
+                            "current_source_commit": "b" * 40,
+                        }
+                    },
+                }
+            ],
+        },
+    )
+    (root / "project_state" / "attempt_events.jsonl").write_text(
+        "", encoding="utf-8"
+    )
+    _write_json(
+        root / "project_state" / "asset_registry.json",
+        {
+            "schema_version": "1.0",
+            "updated_at": "2026-08-09T00:00:00+00:00",
+            "assets": [],
+        },
+    )
+    preview = build_close_preview(
+        root,
+        workspace_id="W002",
+        observed_worktrees=[
+            {
+                "path": str(workspace_path),
+                "branch": "codex/w002",
+                "head": "b" * 40,
+                "dirty": False,
+                "unpushed_commits": 0,
+            }
+        ],
+    )
+    assert preview["status"] == "close_ready"

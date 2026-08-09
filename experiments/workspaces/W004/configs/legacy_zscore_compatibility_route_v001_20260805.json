@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "record_type": "phase3_legacy_zscore_compatibility_route",
+  "record_id": "W004-P3-LEGACY-ZSCORE-ROUTE-20260805-001",
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "workspace_id": "W004",
+  "directive_id": "DIR-20260805-005",
+  "approved_at": "2026-08-05",
+  "route": "legacy_zscore_compatibility",
+  "source_path": "D:\\AIPatho\\yzq\\ESCC_mpp2_z_scores_20260711\\pt_files",
+  "source_kind": "legacy_zscore",
+  "raw_mpp2_claim": false,
+  "evidence_status": "pending_review",
+  "conversion": {
+    "performed": false,
+    "formula": null,
+    "note": "Use legacy z-score values directly as a compatibility input; do not fabricate raw values."
+  },
+  "preserved_hard_constraints": {
+    "source_slide_count": 329,
+    "excluded_bad_slide_count": 22,
+    "effective_slide_count": 307,
+    "pathway_dim": 30,
+    "coordinate_dim": 2,
+    "fit_scope_count": 40
+  },
+  "preflight_semantics": {
+    "manifest_must_declare_same_route": true,
+    "manifest_raw_mpp2_claim_must_be_false": true,
+    "passing_verdict": "COMPATIBILITY_ONLY",
+    "training_authorized": false,
+    "job_created": false,
+    "training_started": false,
+    "result_imported": false,
+    "accepted_evidence_promotion": false
+  },
+  "required_evidence_before_any_future_execution": [
+    "exactly 307 effective slide records and no excluded 22 IDs",
+    "pathway matrices are finite and 30-column with canonical order",
+    "coordinates are finite two-column matrices with equal patch-row counts",
+    "pathway, pathology, and coordinate SHA-256 values",
+    "40 fit_scope_records equal train IDs only"
+  ]
+}

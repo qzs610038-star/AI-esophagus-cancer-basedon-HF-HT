@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phase 3 W004 server asset manifest",
+  "type": "object",
+  "required": ["schema_version", "pathway_names", "records", "fit_scope_records"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "pathway_input_mode": {
+      "enum": ["repaired_frozen_mpp2_raw_only", "legacy_zscore_compatibility"]
+    },
+    "compatibility_annotation": {
+      "type": "object",
+      "properties": {
+        "source_kind": {"const": "legacy_zscore"},
+        "raw_mpp2_claim": {"const": false},
+        "evidence_status": {"enum": ["diagnostic_only", "pending_review"]}
+      },
+      "additionalProperties": true
+    },
+    "pathway_names": {
+      "type": "array",
+      "minItems": 30,
+      "maxItems": 30,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "records": {
+      "type": "array",
+      "minItems": 307,
+      "maxItems": 307,
+      "items": {
+        "type": "object",
+        "required": ["case_id", "slide_id", "pathology_path", "pathology_sha256", "pathway_path", "pathway_sha256", "coordinates_path", "coordinates_sha256"],
+        "properties": {
+          "case_id": {"type": "string", "minLength": 1},
+          "slide_id": {"type": "string", "minLength": 1},
+          "pathology_path": {"type": "string", "minLength": 1},
+          "pathology_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+          "pathway_path": {"type": "string", "minLength": 1},
+          "pathway_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+          "coordinates_path": {"type": "string", "minLength": 1},
+          "coordinates_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "fit_scope_records": {
+      "type": "array",
+      "minItems": 40,
+      "maxItems": 40,
+      "items": {
+        "type": "object",
+        "required": ["seed", "task", "fold", "fit_slide_ids"],
+        "properties": {
+          "seed": {"enum": [1, 2, 42, 61]},
+          "task": {"enum": ["pCR", "MPR"]},
+          "fold": {"type": "integer", "minimum": 0, "maximum": 4},
+          "fit_slide_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "required": ["pathway_input_mode"],
+        "properties": {"pathway_input_mode": {"const": "legacy_zscore_compatibility"}}
+      },
+      "then": {
+        "required": ["compatibility_annotation"],
+        "properties": {
+          "compatibility_annotation": {
+            "required": ["source_kind", "raw_mpp2_claim", "evidence_status"]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "workspace_id": "W004",
+  "raw_logs_location": "external_registered_W004_run_root",
+  "entries": [],
+  "result_reconciliation": {
+    "A001": "imported",
+    "A002": "returned_validated_not_imported",
+    "A003": "returned_validated_not_imported",
+    "A004": "returned_validated_not_imported"
+  }
+}

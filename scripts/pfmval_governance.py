@@ -1258,6 +1258,7 @@ def build_result_v2(
     metrics: Mapping[str, Any],
     metric_artifact_ids: Iterable[str],
     large_artifacts: Iterable[Mapping[str, Any]] = (),
+    prediction_return: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     result = {
         "schema_version": "2.0",
@@ -1285,6 +1286,8 @@ def build_result_v2(
         "metric_artifact_ids": list(metric_artifact_ids),
         "large_artifacts": [dict(item) for item in large_artifacts],
     }
+    if prediction_return is not None:
+        result["prediction_return"] = dict(prediction_return)
     validate_result_v2(result)
     return result
 

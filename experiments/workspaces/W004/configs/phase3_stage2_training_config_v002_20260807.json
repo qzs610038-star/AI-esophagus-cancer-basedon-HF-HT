@@ -1,0 +1,96 @@
+{
+  "config_id": "phase3_stage2_training_config_v002_20260807",
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "workspace_id": "W004",
+  "protocol_revision": 2,
+  "execution_mode": "server_training_after_explicit_approval",
+  "selected_split_unit": "slide",
+  "split_design": "repeated_stratified_holdout_not_partition_oof",
+  "source_slide_count": 329,
+  "excluded_bad_slide_count": 22,
+  "selected_effective_slide_count": 307,
+  "expected_patient_count": 78,
+  "seeds": [
+    1,
+    2,
+    42,
+    61
+  ],
+  "folds_per_seed": 5,
+  "tasks": [
+    "pCR",
+    "MPR"
+  ],
+  "pathology_dim": 1536,
+  "pathway_dim": 30,
+  "pathway_input_mode": "legacy_zscore_compatibility",
+  "accepted_pathway_input": "legacy_zscore_compatibility",
+  "pathway_evidence_status": "pending_review",
+  "compatibility_only": true,
+  "raw_mpp2_claim": false,
+  "patient_overlap_policy": "allow_with_warning",
+  "training_fit_policy": {
+    "fit_scope": "train_only",
+    "validation_mode": "transform_only",
+    "test_mode": "transform_only_after_checkpoint_freeze",
+    "external_mode": "transform_only_no_fit"
+  },
+  "model": {
+    "name": "stage2_mil_adaptive_gated_attention",
+    "class": "MILBagClassifier",
+    "image_dim": 1536,
+    "pathway_dim": 30,
+    "hidden_dim": 128,
+    "fusion": "adaptive_gated",
+    "pooling": "attention",
+    "low_rank_dim": 16,
+    "num_outputs": 1
+  },
+  "epochs": 20,
+  "learning_rate": 0.001,
+  "patience": 5,
+  "device": "cuda",
+  "stage2_cards": [
+    "S2-ABS-001",
+    "S2-ORD-SLIDE-001",
+    "S2-SPATIAL-IDENTITY-001",
+    "S2-SPATIAL-SHUFFLE-001"
+  ],
+  "card_run_units": 40,
+  "batch_run_units": 160,
+  "server_asset_manifest": {
+    "path_id": "phase3_w004_server_asset_manifest",
+    "path": "D:\\AIPatho\\qzs\\phase3_w004_server_evidence_20260806\\server_asset_manifest_v001.json"
+  },
+  "server_experiment_runs": {
+    "path_id": "server_experiment_runs",
+    "path": "D:\\AIPatho\\qzs\\pfmval_experiment_runs"
+  },
+  "output_contract": {
+    "prediction_kind_test": "repeated_holdout_test",
+    "required_prediction_columns": [
+      "sample_id",
+      "spatial_cluster_id",
+      "pathway_id",
+      "y_true",
+      "y_pred"
+    ],
+    "non_applicable_spatial_cluster_id": "NA",
+    "pathway_id": "all_30",
+    "delta_auc_synergy": "not_computable_without_same-seed-fold_single-modality_control_rows"
+  },
+  "evidence_boundary": {
+    "status": "COMPATIBILITY_ONLY",
+    "accepted_evidence_promotion": false,
+    "result_import": false,
+    "raw_mpp2_claim": false,
+    "yzq_reference": "reference_only/pending_review"
+  },
+  "feature_flags": {
+    "server_preflight_access": true,
+    "server_training_access": true,
+    "job_creation": true,
+    "result_import": false,
+    "accepted_evidence_promotion": false
+  }
+}

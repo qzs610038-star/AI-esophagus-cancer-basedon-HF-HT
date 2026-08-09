@@ -300,8 +300,23 @@ def build_close_preview(
     local = workspace.get("hosts", {}).get("local")
     if not local:
         raise ValueError("workspace has no local host binding")
-    physical_path = (root / str(local["relative_path"])).resolve(strict=False)
-    if not physical_path.is_relative_to(root.resolve(strict=False)):
+    declared_path = Path(str(local["relative_path"]))
+    physical_path = (
+        declared_path.resolve(strict=False)
+        if declared_path.is_absolute()
+        else (root / declared_path).resolve(strict=False)
+    )
+    if declared_path.is_absolute():
+        governed_root = (root.parent / f"{root.name}_governed_workspaces").resolve(
+            strict=False
+        )
+        if not (
+            local.get("path_id") == "local_experiment_workspaces"
+            and physical_path.parent == governed_root
+            and physical_path.name == workspace_id
+        ):
+            raise ValueError("absolute workspace close path is not the registered governed locus")
+    elif not physical_path.is_relative_to(root.resolve(strict=False)):
         raise ValueError("workspace close path escapes repository root")
     observed = next(
         (

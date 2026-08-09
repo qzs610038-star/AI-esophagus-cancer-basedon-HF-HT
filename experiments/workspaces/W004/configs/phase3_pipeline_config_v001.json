@@ -1,0 +1,60 @@
+{
+  "config_id": "phase3_pipeline_config_v001_20260805_legacy_zscore_compatibility",
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "workspace_id": "W004",
+  "execution_mode": "server_preflight_only_no_training",
+  "selected_split_unit": "slide",
+  "source_slide_count": 329,
+  "excluded_bad_slide_count": 22,
+  "selected_effective_slide_count": 307,
+  "expected_patient_count": 78,
+  "seeds": [1, 2, 42, 61],
+  "folds_per_seed": 5,
+  "split_design": "repeated_stratified_holdout_not_partition_oof",
+  "patient_overlap_policy": "allow_only_with_explicit_warning_and_nonindependent_evidence_label",
+  "tasks": ["pCR", "MPR"],
+  "pathology_dim": 1536,
+  "pathway_dim": 30,
+  "pathway_input_mode": "legacy_zscore_compatibility",
+  "accepted_pathway_input": "legacy_zscore_compatibility",
+  "pathway_input_source": "D:\\AIPatho\\yzq\\ESCC_mpp2_z_scores_20260711\\pt_files",
+  "pathway_evidence_status": "pending_review",
+  "raw_mpp2_claim": false,
+  "forbidden_pathway_inputs": ["CalibratedMPP2", "XZY_fitted_transform"],
+  "gate_policy": {
+    "hard_fail": [
+      "exclusion_set_integrity",
+      "effective_307_coverage",
+      "feature_mpp2_coverage",
+      "pathway_30_order",
+      "patch_coordinate_alignment",
+      "train_only_fit_isolation"
+    ],
+    "warn": [
+      "pathway_input_route",
+      "slide_split_patient_overlap",
+      "scientific_performance_gate",
+      "noncritical_layout_observation"
+    ]
+  },
+  "training_fit_policy": {
+    "fit_scope": "train_only",
+    "validation_mode": "transform_only",
+    "test_mode": "transform_only_after_checkpoint_freeze",
+    "external_mode": "transform_only_no_fit"
+  },
+  "stages": {
+    "stage1": ["logistic", "pca_logistic", "svm", "random_forest", "h_and_e", "pathway", "concat", "dual_linear", "adaptive_gated", "low_rank"],
+    "stage2": ["absolute", "slice_ordinal", "patient_ordinal_sensitivity", "spatial_smoothed", "train_gallery", "generic_rank_control"],
+    "stage3": ["phase2_lopo_prototype", "four_view_zero_init_residual", "covariance_matched_30d", "pathway_identity_permutation", "patch_pathway_shuffle", "equal_parameter_adapter", "single_view_ablations"],
+    "stage4": ["patient_set_attention", "inverse_slide_count_loss", "monotonic_pcr_mpr_head"],
+    "stage5": ["fixed_pathway_graph", "intervention_delta", "patient_cluster_bootstrap", "conformal_risk_coverage"]
+  },
+  "compatibility_only": true,
+  "real_training": false,
+  "server_preflight_access": true,
+  "server_training_access": false,
+  "job_creation": false,
+  "result_import": false,
+  "accepted_evidence_promotion": false
+}
