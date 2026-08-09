@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-09T13:49:50+00:00",
-  "state_revision": 186,
+  "updated_at": "2026-08-09T14:10:42+00:00",
+  "state_revision": 188,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -5040,9 +5040,9 @@
       "scope": "workflow_governance_v3",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-08-09T13:49:50+00:00",
-      "state_revision": 185,
-      "content_sha256": "9a4d04ba004abda24fd6bdf63f6eb1865296e39b7eb32726d3739d3c5cfdfa33",
+      "verified_at": "2026-08-09T14:10:42+00:00",
+      "state_revision": 188,
+      "content_sha256": "5c923bf1d96c04c34d8e8f0ab511a7857f8109379bcdbdf26a23bedfb42cd390",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
