@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-07T04:47:02+00:00",
-  "state_revision": 182,
+  "updated_at": "2026-08-09T13:49:50+00:00",
+  "state_revision": 186,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -283,9 +283,9 @@
       "scope": "skill:pfmval-audit",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T16:52:20+00:00",
-      "state_revision": 109,
-      "content_sha256": "43b06a3d677f17fcf659e58ff256f27c1157e8ffd8546e9ef628de76ddcb34c9",
+      "verified_at": "2026-08-09T13:49:50+00:00",
+      "state_revision": 185,
+      "content_sha256": "dfe505507a41f759913aff19d0557113d3b9113196af5183da1c1901bf46288f",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -346,9 +346,9 @@
       "scope": "skill:pfmval-governance",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-08-07T04:47:01+00:00",
-      "state_revision": 181,
-      "content_sha256": "d093935731026a19763b309c7994d16a8258b6e9c9bf12fdcbb909cfaf47a81c",
+      "verified_at": "2026-08-09T13:49:50+00:00",
+      "state_revision": 185,
+      "content_sha256": "1ed02691e9dd2088b36257b0638ee0141a3bf4c78eb6c384b555ffc370028f4a",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4419,9 +4419,9 @@
       "scope": "agent_entry",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-08-01T05:01:28+00:00",
-      "state_revision": 159,
-      "content_sha256": "a7b9f12e9cd60c5d4cdc535a21a9a2d369f9f72ca487c43dd6412355f868d6cc",
+      "verified_at": "2026-08-09T13:49:50+00:00",
+      "state_revision": 185,
+      "content_sha256": "0c0299d072de146a7452648030769847644028c18da623ee5a4f185002dce985",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5040,9 +5040,9 @@
       "scope": "workflow_governance_v3",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-07-26T20:27:56+00:00",
-      "state_revision": 121,
-      "content_sha256": "c1106dcf40b6746e01f828e06212f5a97fe907106206eeb76a312462b4fda10a",
+      "verified_at": "2026-08-09T13:49:50+00:00",
+      "state_revision": 185,
+      "content_sha256": "9a4d04ba004abda24fd6bdf63f6eb1865296e39b7eb32726d3739d3c5cfdfa33",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [

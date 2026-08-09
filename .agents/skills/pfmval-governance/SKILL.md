@@ -70,8 +70,9 @@ subject to their existing explicit approval and workspace gates.
 ## Safety boundaries
 
 - No direct server access, training, promotion of results, deletion, migration,
-  unprotection, external-platform integration, cloud synchronization, or
-  remote publication.
+  external-platform integration, cloud synchronization, or remote publication.
+  Unprotection may only follow a current explicit user directive recorded in
+  project state; it does not by itself authorize migration or deletion.
 - Project facts require preview, conflict review, and separate explicit
   confirmation for each real statement.
 - Lifecycle review produces impact information only; it never changes a

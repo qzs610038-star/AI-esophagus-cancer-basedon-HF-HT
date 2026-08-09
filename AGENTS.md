@@ -28,7 +28,7 @@ python deploy/pfmval_ops.py agent start-check --task diagnostic
 
 ## 固定安全边界
 
-- `histogene/`、`egnv1/`、`egnv2/` 为受保护目录，未经用户明确授权不得修改。
+- 依据 `DIR-20260809-002`，`histogene/`、`egnv1/`、`egnv2/` 已解除特殊保护并转为 MPP1-5 前历史代码迁移候选；不得再作为活跃实验代码继续修改。实际迁移、取消 Git 跟踪或删除仍须用户审核精确清单后另行执行。
 - 禁止 `git clean -fd`；不得自动删除 checkpoints、MPP 数据、缓存或未跟踪训练结果。
 - 服务器与本地当前只允许通过已配置的 Gitee Git remote 同步代码、状态和小型结果；SSH、SCP、HTTP 远程命令、Tunnel 均不是 active 通道。
 - GitHub `origin` 仅是用户逐次明确触发的备份与网页端只读镜像：Agent 不得自动推送、周期同步或将其用作服务器代码、状态、诊断、作业或结果传输通道；该用途不改变 Gitee 作为日常服务器同步唯一通道的规则。

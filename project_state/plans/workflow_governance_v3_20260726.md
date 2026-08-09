@@ -23,7 +23,7 @@
 - `CURRENT_STATE.md`、Dashboard、next-steps 和 session-brief 仍是生成视图。
 - Explore 仍受 `DIR-20260726-001` 限制：未经后续明确批准不得成为 accepted evidence。
 - 本方案不授权训练、服务器操作、结果接纳、受保护资产改写、工作树删除或缓存清理。
-- `histogene/`、`egnv1/`、`egnv2/` 在完成依赖抽取、资产登记和迁移验证前继续保持现有保护。
+- 依据 `DIR-20260809-002`，`histogene/`、`egnv1/`、`egnv2/` 已解除特殊保护并转为 MPP1-5 前历史代码迁移候选；实际迁移、取消 Git 跟踪或删除仍须用户审核精确清单，且必须先处理现有调用方和资产登记。
 - P0C/R10/R11 的本地 D/I 已接受；G08 只完成无需真实用户内容或服务器的本地入口、
   fixture、preview 与 Catalog 准入。六个用户 workflow 的真实 O 均为
   `NOT RUN`，维护类科学证据等级均为 `S=N/A`。

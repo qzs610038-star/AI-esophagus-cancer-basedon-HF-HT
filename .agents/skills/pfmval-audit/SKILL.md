@@ -120,7 +120,9 @@ format literally.
   edit registries, or repair code while performing an audit.
 - Do not use SSH, SCP, HTTP remote commands, tunnels, or unregistered transfer
   paths.
-- Do not modify `histogene/`, `egnv1/`, or `egnv2/`.
+- Treat `histogene/`, `egnv1/`, and `egnv2/` according to the current recorded
+  directive. `DIR-20260809-002` removes their special protection but does not
+  authorize migration or deletion before the exact review list is approved.
 - Do not close directives or reinterpret an explicit user approval.
 - Treat Explore outputs as candidates unless a later explicit directive accepts
   them.

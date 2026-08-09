@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-04T06:10:27+00:00",
-  "next_workspace_number": 5,
+  "updated_at": "2026-08-09T13:49:50+00:00",
+  "next_workspace_number": 6,
   "workspaces": [
     {
       "workspace_id": "W001",
@@ -12,7 +12,7 @@
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-07-28T14:18:14+00:00",
-      "last_verified_at": null,
+      "last_verified_at": "2026-08-09T13:49:50+00:00",
       "close_eligibility": "not_evaluated",
       "retention_policy": "retain_until_explicit_close_approval",
       "hosts": {
@@ -87,10 +87,10 @@
       "hosts": {
         "local": {
           "host_scope": "local",
-          "branch": "codex/w004-phase3-dual-baseline-transfer-20260804-bound",
+          "branch": "codex/w004-phase3-stage2-source-b898-20260807",
           "path_id": "local_experiment_workspaces",
           "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W004",
-          "current_source_commit": "1626fbb67a28f52b746a3c863fbb37d0fceff6bd"
+          "current_source_commit": "b898c9d80c2702a32a51773c9cfb8ca75312731a"
         }
       }
     }
