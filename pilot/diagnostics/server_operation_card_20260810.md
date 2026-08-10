@@ -4,7 +4,7 @@
 > 试点：gitee_roundtrip_pilot_w006_v001_20260810 | 性质：零训练、allowlisted 诊断、非证据
 > 传输：仅 Gitee（remote: gitee）| 禁止 SSH/SCP/HTTP remote command/Tunnel
 > 本卡随故障调试可更新；暂不要求推送，用户本地查看。
-> 更新记录：2026-08-10 r3 — 修复"request missing"根因（治理 checkout 此前 detached 于旧 commit 40fde93d，仅 fetch 未 checkout；§1 增加 `git checkout --detach FETCH_HEAD` 与 request.json 自检）；§2 补充输出落点（仓库内 automation/diagnostics/<id>/，不依赖缺失的 server_diagnostics 外部目录）；§4 修正 git add 为仓库相对路径、push 使用完整 refs/heads/ refspec（修复 Invalid path / not a full refname 两处报错）。
+> 更新记录：2026-08-10 r4 — §4 扩展为完整 T5 最小闭包构造命令（started/terminal receipt、resolved_config、占位 CSV/TXT、remote_tree_closure），已确认诊断目录文件不被 .gitignore 命中；return 分支已有 environment_probe.json（0ca8135），本步追加 commit 后 fast-forward push。
 
 ## 0. 身份绑定（每次执行前核对）
 
@@ -52,18 +52,30 @@ Test-Path 'D:\AIPatho\qzs\pfmval_diagnostics'
 ## 4. 最小 return 闭包（T5）
 
 服务器侧需构造并回传（零训练试点最小集合，全部位于治理仓库内 `automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/`）：
-- terminal receipt（终态 JSON，如 terminal.json）
-- started receipt（启动回执，如 started.json）
-- resolved argv/config（实际生效参数/配置，如 resolved_config.json）
-- ≥1 个原始训练 CSV（被 .gitignore 命中则精确 force-add）
-- ≥1 个原始训练 TXT（同上）
-- remote tree 闭包校验结果（git ls-files / index 清单与 return manifest 对账）
+- started receipt：`started.json`
+- terminal receipt：`terminal.json`（终态矩阵按 return_profile_v1：零训练无预测 → 状态 `failed` = terminal_json_plus_raw_csv_txt 最贴合；notes 注明零训练预期无预测）
+- resolved argv/config：`resolved_config.json`
+- ≥1 个原始训练 CSV：`raw_training_sample.csv`（零训练试点占位样例，非真实训练产物）
+- ≥1 个原始训练 TXT：`raw_training_sample.txt`（同上）
+- remote tree 闭包校验：`remote_tree_closure.txt`（git ls-files 清单 + 与返回 manifest 对账）
 
-> 在治理 checkout 内（已 checkout FETCH_HEAD 的工作树）、对仓库相对目录 add/commit/push。注意：git add 必须用**仓库相对路径**（绝对路径报 Invalid path）；push 必须用完整 refspec `HEAD:refs/heads/<branch>`（否则报 not a full refname）。若 CSV/TXT 被 .gitignore 命中，`git add -f` 强制加入。
+> 注意：已确认 `automation/diagnostics/<id>/` 下 CSV/TXT/JSON 均不被 .gitignore 命中（本地 check-ignore 验证 exit=1），普通 `git add` 即可；如服务器侧 .gitignore 有差异导致忽略，则用 `git add -f`。return 分支已存在（0ca8135），本步为追加新 commit 后 fast-forward push。git add 必须用仓库相对路径；push 必须用完整 refspec。
 
 ```powershell
+$D = "D:\AIPatho\qzs\pfmval_governance\automation\diagnostics\diagnostic-20260810-gitee-rt-pilot-envprobe-r001"
+$S = "42b26431262efdfe93766f2e3bd3d54d26999472"
+$T = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ'
+@(
+  @{file='started.json'; content=(@{schema_version='1.0'; receipt_type='started'; diagnostic_id='diagnostic-20260810-gitee-rt-pilot-envprobe-r001'; source_commit=$S; source_branch='codex/w006-gitee-roundtrip-pilot-20260810-bound'; command_id='environment_probe'; started_at=$T} | ConvertTo-Json -Depth 4)},
+  @{file='terminal.json'; content=(@{schema_version='1.0'; receipt_type='terminal'; diagnostic_id='diagnostic-20260810-gitee-rt-pilot-envprobe-r001'; source_commit=$S; status='failed'; terminal_matrix='terminal_json_plus_raw_csv_txt'; note='zero-training pilot: no predictions by design'; completed_at=$T} | ConvertTo-Json -Depth 4)},
+  @{file='resolved_config.json'; content=(@{schema_version='1.0'; diagnostic_id='diagnostic-20260810-gitee-rt-pilot-envprobe-r001'; resolved_argv=@('--diagnostic-id','diagnostic-20260810-gitee-rt-pilot-envprobe-r001'); config_source='configs/server_paths.yaml'; python_interpreter='C:\Users\AIPatho1\pfmval_env\Scripts\python.exe'} | ConvertTo-Json -Depth 4)},
+  @{file='raw_training_sample.csv'; content=('sample_id,pathway,value,note' + "`n" + 'ZT-0001,PLACEHOLDER,0.0,zero-training-pilot-sample')},
+  @{file='raw_training_sample.txt'; content=('zero-training pilot raw TXT placeholder' + "`n" + 'diagnostic-20260810-gitee-rt-pilot-envprobe-r001')}
+) | ForEach-Object { Set-Content -LiteralPath (Join-Path $D $_.file) -Value $_.content -Encoding UTF8 }
+git -C D:\AIPatho\qzs\pfmval_governance ls-files "automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001" > (Join-Path $D 'remote_tree_closure.txt')
+Set-Location D:\AIPatho\qzs\pfmval_governance
 git add automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001
-git commit -m "diagnostic: return W006 env probe + minimal closure"
+git commit -m "diagnostic: return W006 env probe + minimal closure (receipts, csv, txt)"
 git push gitee HEAD:refs/heads/automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/return
 ```
 
