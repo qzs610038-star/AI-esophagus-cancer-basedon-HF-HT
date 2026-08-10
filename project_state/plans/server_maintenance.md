@@ -50,6 +50,8 @@
 - 每个训练 attempt 的回传包必须包含原始训练记录：至少一个机器可读 CSV 和一个原始 TXT 日志。CSV/TXT 必须登记 artifact id、相对路径、类型、证据角色、大小和来源 attempt；若它们承载 accepted 指标或逐样本预测则为 critical 并做 SHA-256，否则作为 supporting 只做精确清单、大小与 Git tree 闭包校验。
 - 回传结果必须匹配原始 `automation/jobs/<job_id>/job.json` 的实验、提交、阶段、数据版本和正式批准；失败打包不留半包，导入中断由事务备份恢复。
 
+> 补充说明（2026-08-10，已获用户审核认可）：`server_diagnostics`（`D:\AIPatho\qzs\pfmval_diagnostics`）在 W006 零训练 Gitee 往返试点中，由 environment_probe 固定 runner 执行时自动创建（其 `_prepare_diagnostic_source_worktree` 将 detached source worktree 建在该根下）；用户已认可该创建行为，作为上文"现场确认或创建批准"要求的满足记录。此后若 runner 目标诊断根不存在，仍按本节要求先获得创建批准，3B 治理项（runner 创建前检查/显式 `--allow-create`）已登记待后续治理批次实施。
+
 ## HT1 哈希分层（Hash Tiering 1）
 
 - critical：输入合同、选择证明、accepted 指标来源、逐样本原始预测、受保护 manifest 使用 SHA-256 硬校验。

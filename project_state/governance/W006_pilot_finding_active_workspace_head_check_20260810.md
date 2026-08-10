@@ -41,3 +41,9 @@ git 工作树实际 HEAD == workspace_registry.json 中该工作树 hosts.local.
 - 已在实施方案 T8 notes ⑦ 与本节登记该发现；
 - W006 内 strict start-check 的该 FAIL 记录为"已知校验冲突"，不作为试点新增 FAIL 判据；
 - workspace_registry 中 W006 `current_source_commit` 已按当前 HEAD 快照更新（语义见实施方案 T8 证据回填），后续治理定型后统一校正。
+
+## 6. 治理进展记录（append-only）
+
+- 2026-08-10（用户已审核）：用户采纳方案 A（试点内接受现状、不改治理代码），并指示本发现供 main 工作分支回收后统一治理；试点文件已合并回 main（HEAD=ca9e290）。
+- 2026-08-10（用户已审核）：用户批准立项治理批次（1A HEAD 校验放宽 / 2A path_probe 收集器 / 3B runner 创建前批准点），将开启新对话执行。
+- 2026-08-10（用户已审核）：3A 完成——用户认可 `server_diagnostics`（`D:\AIPatho\qzs\pfmval_diagnostics`）由 environment_probe runner 自动创建的行为，已在 `project_state/plans/server_maintenance.md`「路径与产物」节追加补充说明登记（2026-08-10）。
