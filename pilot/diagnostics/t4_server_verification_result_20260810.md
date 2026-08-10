@@ -32,17 +32,16 @@
 
 ## 4. 待排障事项
 
-### 4.1 `diagnostic run-allowlisted` 无输出（未获得 environment_probe.json）
-- 现象：服务器上运行 `python deploy/pfmval_ops.py diagnostic run-allowlisted --diagnostic-id diagnostic-20260810-gitee-rt-pilot-envprobe-r001` 无输出。
-- 疑因（按可能性排序）：
-  1. 运行目录不在治理 checkout（PS 提示符显示 C:\Users\AIPatho1）→ `deploy\pfmval_ops.py` 相对路径不存在；
-  2. 裸 `python` 未解析到 pfmval_env 解释器（核验已确认绝对路径解释器可用）；
-  3. 治理 checkout 工作树 HEAD 未切换到含 request.json 的分支 → `diagnostic request is missing`（该情形应有 traceback 输出，与"无输出"不符）。
-- 待服务器重跑确认（命令见 server_operation_card 更新版 §2）。
+### 4.1 `diagnostic run-allowlisted` 无输出 / request missing（已定位根因）
+- 现象 1：裸 `python deploy/pfmval_ops.py ...` 在 `C:\Users\AIPatho1>` 运行无输出 → 运行目录不在治理 checkout、相对路径脚本不存在。
+- 现象 2：Set-Location + 绝对路径解释器重跑后报 `[FAIL] diagnostic request is missing: D:\AIPatho\qzs\pfmval_governance\automation\diagnostics\diagnostic-20260810-gitee-rt-pilot-envprobe-r001\request.json`。
+- 根因：治理 checkout 仅 `git fetch`，未 `checkout` 到 FETCH_HEAD；其 HEAD detached 于旧 commit `40fde93d`，工作树内不存在 `automation/diagnostics/<id>/`，runner 找不到 request.json。
+- 修复（操作卡 r3）：§1 增加 `Set-Location` + `git checkout --detach FETCH_HEAD` + `Test-Path .\automation\diagnostics\<id>\request.json` 自检；§2 用绝对路径解释器运行。待服务器重跑确认获得 environment_probe.json。
 
-### 4.2 操作卡占位符导致 ParserError
-- 现象：`git add -f <return_dir>/...` 中的 `<` 为 PowerShell 保留符 → ParserError。
-- 处置：操作卡已修正（见 server_operation_card_20260810.md 更新版 §4），占位符改为真实路径示例，避免尖括号。
+### 4.2 操作卡 §4 回传命令两处报错（已修正）
+- `git add -f "D:\AIPatho\qzs\pfmval_diagnostics\..."` → `fatal: Invalid path 'D:/AIPatho/qzs/pfmval_diagnostics'`：git add 不支持绝对路径，且 server_diagnostics 目录本身缺失；改为治理仓库内相对路径 `automation/diagnostics/<id>`。
+- `git push gitee HEAD:automation/diagnostics/...` → `not a full refname`：refspec 需完整 `HEAD:refs/heads/automation/diagnostics/<id>/return`。
+- 说明：environment_probe runner 输出实际落在治理仓库内 `automation/diagnostics/<id>/environment_probe.json`，不依赖缺失的外部 server_diagnostics 目录；T5 最小 return 闭包同样在仓库内相对目录构造。
 
 ## 5. 对试点判定口径的影响
 

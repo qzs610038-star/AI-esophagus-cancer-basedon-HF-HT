@@ -4,7 +4,7 @@
 > 试点：gitee_roundtrip_pilot_w006_v001_20260810 | 性质：零训练、allowlisted 诊断、非证据
 > 传输：仅 Gitee（remote: gitee）| 禁止 SSH/SCP/HTTP remote command/Tunnel
 > 本卡随故障调试可更新；暂不要求推送，用户本地查看。
-> 更新记录：2026-08-10 r2 — 修正 §1 fetch 核对说明（分支 HEAD 领先于 source_commit 属正常）、§2 runner 命令改为绝对路径解释器+Set-Location（修复"无输出"疑因）、§4 移除尖括号占位符（修复 ParserError）、§3 标记已完成并指向核验登记。
+> 更新记录：2026-08-10 r3 — 修复"request missing"根因（治理 checkout 此前 detached 于旧 commit 40fde93d，仅 fetch 未 checkout；§1 增加 `git checkout --detach FETCH_HEAD` 与 request.json 自检）；§2 补充输出落点（仓库内 automation/diagnostics/<id>/，不依赖缺失的 server_diagnostics 外部目录）；§4 修正 git add 为仓库相对路径、push 使用完整 refs/heads/ refspec（修复 Invalid path / not a full refname 两处报错）。
 
 ## 0. 身份绑定（每次执行前核对）
 
@@ -19,19 +19,20 @@
 
 ## 1. 拉取请求（Gitee-only）
 
-> 核对：FETCH_HEAD 应包含诊断请求文件（`automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/request.json`）。source_commit=42b2643 是契约冻结值（request.json 内部绑定），分支 HEAD 会领先于它（含后续 pilot commit），二者不一致是正常的。
+> 必须 fetch **并 checkout 到 FETCH_HEAD**。根因：治理 checkout 此前 detached 于旧 commit（40fde93d），只 fetch 未 checkout → 工作树无请求文件 → runner 报 `diagnostic request is missing`。执行前确认治理 checkout 工作树干净（dirty 时先回执，勿强切）。source_commit=42b2643 是契约冻结值（request.json 内部绑定），分支 HEAD 领先于它属正常。
 
 ```powershell
 git -C D:\AIPatho\qzs\pfmval_governance fetch gitee codex/w006-gitee-roundtrip-pilot-20260810-bound
-git -C D:\AIPatho\qzs\pfmval_governance rev-parse FETCH_HEAD
+Set-Location D:\AIPatho\qzs\pfmval_governance
+git checkout --detach FETCH_HEAD
+Test-Path .\automation\diagnostics\diagnostic-20260810-gitee-rt-pilot-envprobe-r001\request.json
 ```
 
 ## 2. 执行固定 runner（仅 environment_probe 有固定收集器）
 
-> 先进入治理 checkout 目录（务必，否则相对路径 deploy\pfmval_ops.py 不存在 → 无输出/报错）；用绝对路径解释器运行（避免裸 python 解析到错误环境）。
+> 用绝对路径解释器运行（避免裸 python 解析到错误环境）。输出落在仓库内 `automation/diagnostics/<id>/environment_probe.json`，与缺失的外部 server_diagnostics 目录无关。
 
 ```powershell
-Set-Location D:\AIPatho\qzs\pfmval_governance
 & 'C:\Users\AIPatho1\pfmval_env\Scripts\python.exe' D:\AIPatho\qzs\pfmval_governance\deploy\pfmval_ops.py diagnostic run-allowlisted --diagnostic-id diagnostic-20260810-gitee-rt-pilot-envprobe-r001
 ```
 
@@ -50,20 +51,20 @@ Test-Path 'D:\AIPatho\qzs\pfmval_diagnostics'
 
 ## 4. 最小 return 闭包（T5）
 
-服务器侧需构造并回传（零训练试点最小集合）：
-- terminal receipt（终态 JSON，如 terminal.json / success.json）
+服务器侧需构造并回传（零训练试点最小集合，全部位于治理仓库内 `automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/`）：
+- terminal receipt（终态 JSON，如 terminal.json）
 - started receipt（启动回执，如 started.json）
-- resolved argv/config（实际生效参数/配置）
+- resolved argv/config（实际生效参数/配置，如 resolved_config.json）
 - ≥1 个原始训练 CSV（被 .gitignore 命中则精确 force-add）
 - ≥1 个原始训练 TXT（同上）
 - remote tree 闭包校验结果（git ls-files / index 清单与 return manifest 对账）
 
-> 在 return 输出根构建后，对精确目录 force-add 并提交（路径已为真实示例，可直接复制）。
+> 在治理 checkout 内（已 checkout FETCH_HEAD 的工作树）、对仓库相对目录 add/commit/push。注意：git add 必须用**仓库相对路径**（绝对路径报 Invalid path）；push 必须用完整 refspec `HEAD:refs/heads/<branch>`（否则报 not a full refname）。若 CSV/TXT 被 .gitignore 命中，`git add -f` 强制加入。
 
 ```powershell
-git add -f "D:\AIPatho\qzs\pfmval_diagnostics\diagnostic-20260810-gitee-rt-pilot-envprobe-r001"
+git add automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001
 git commit -m "diagnostic: return W006 env probe + minimal closure"
-git push gitee HEAD:automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/return
+git push gitee HEAD:refs/heads/automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/return
 ```
 
 约束：
