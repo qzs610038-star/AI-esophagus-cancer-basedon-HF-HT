@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-10T14:00:00+00:00",
+  "updated_at": "2026-08-10T14:30:00+00:00",
   "next_workspace_number": 7,
   "workspaces": [
     {
@@ -128,7 +128,7 @@
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-08-10T07:26:00+00:00",
-      "last_verified_at": "2026-08-10T14:00:00+00:00",
+      "last_verified_at": "2026-08-10T14:30:00+00:00",
       "close_eligibility": "not_evaluated",
       "retention_policy": "retain_until_explicit_close_approval",
       "hosts": {
@@ -137,7 +137,7 @@
           "branch": "codex/w006-gitee-roundtrip-pilot-20260810-bound",
           "path_id": "local_experiment_workspaces",
           "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W006",
-          "current_source_commit": "ef77daf9e8209c69d9afdd0199f0d951ee2caa72"
+          "current_source_commit": "246f9d7c899351202234ecf4c791c4fb8795b521"
         }
       }
     }
