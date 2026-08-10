@@ -47,3 +47,7 @@ git 工作树实际 HEAD == workspace_registry.json 中该工作树 hosts.local.
 - 2026-08-10（用户已审核）：用户采纳方案 A（试点内接受现状、不改治理代码），并指示本发现供 main 工作分支回收后统一治理；试点文件已合并回 main（HEAD=ca9e290）。
 - 2026-08-10（用户已审核）：用户批准立项治理批次（1A HEAD 校验放宽 / 2A path_probe 收集器 / 3B runner 创建前批准点），将开启新对话执行。
 - 2026-08-10（用户已审核）：3A 完成——用户认可 `server_diagnostics`（`D:\AIPatho\qzs\pfmval_diagnostics`）由 environment_probe runner 自动创建的行为，已在 `project_state/plans/server_maintenance.md`「路径与产物」节追加补充说明登记（2026-08-10）。
+- 2026-08-11（本批次，`completed_pending_user_review`）：1A 完成——`validate_state` 对 active 非治理工作树改为执行 `git merge-base --is-ancestor <current_source_commit> <HEAD>`；绑定提交相等或 HEAD 合法后继均通过，非后继在 general 路径仍为 FAIL，knowledge 路径仍仅 WARN。代码提交：`a9dc804`；覆盖：`test_active_workspace_head_may_advance_but_must_descend_from_binding`。
+- 2026-08-11（本批次，`completed_pending_user_review`）：2A 完成——`path_probe` 加入固定 runner，逐条输出已登记路径的存在性、文件/目录类型匹配及边界核验；输出固定为 `path_probe.json`，并与 `environment_probe` 一致执行 UTF-8、无 BOM、LF 与身份字段契约。代码提交：`a9dc804`；覆盖：环境/路径 probe 固定 runner 回归测试。
+- 2026-08-11（本批次，`completed_pending_user_review`）：3B 完成——诊断根不存在时 runner 返回“requires user-approved creation”并中止，不再自动 `mkdir`；3A 的既有用户认可记录保留，仅说明 2026-08-10 那一次已发生创建。代码提交：`a9dc804`；覆盖：缺失诊断根失败、显式预建根后成功的回归测试。
+- 2026-08-11（本批次验证）：`python -m pytest tests/test_pfmval_state.py tests/test_pfmval_governance_v3.py -x -q` 为 `82 passed`。测试还修复了 v2 作业 schema 临时夹具的本地 `$ref` 解析，确保验证只读取同目录 schema、不会尝试访问 `https://pfmval.local`。
