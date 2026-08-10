@@ -8,7 +8,7 @@
       "display_name": "MPP2 paired MSE vs Huber delta1",
       "experiment_id": "mpp2_huber_loss_paired_v001_20260728",
       "protocol_revision": 2,
-      "status": "shadow",
+      "status": "close_ready",
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-07-28T14:18:14+00:00",
@@ -128,9 +128,9 @@
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-08-10T07:26:00+00:00",
-      "last_verified_at": "2026-08-10T15:00:00+00:00",
-      "close_eligibility": "not_evaluated",
-      "retention_policy": "retain_until_explicit_close_approval",
+      "last_verified_at": "2026-08-11T00:00:00+00:00",
+      "close_eligibility": "close_ready_user_approved_retained_worktree",
+      "retention_policy": "preserve_branch_and_git_history_read_only",
       "hosts": {
         "local": {
           "host_scope": "local",

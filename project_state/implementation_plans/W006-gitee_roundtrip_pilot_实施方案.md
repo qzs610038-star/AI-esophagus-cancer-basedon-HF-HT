@@ -137,3 +137,8 @@ python deploy/pfmval_ops.py paths validate
 - **T4 排障进展登记（2026-08-10 r3，用户二次回传）**：runner 首轮"无输出"根因为运行目录不在治理 checkout；改用 Set-Location + 绝对路径解释器后报 `diagnostic request is missing` —— 根因系治理 checkout 仅 fetch 未 checkout（HEAD detached 于旧 commit 40fde93d），工作树无 `automation/diagnostics/<id>/request.json`。操作卡 r3 已增加 `git checkout --detach FETCH_HEAD` + request.json 自检。另修正 T5 回传命令两处报错：`git add` 必须用仓库相对路径（绝对路径报 Invalid path）、push 须完整 refspec `HEAD:refs/heads/automation/diagnostics/<id>/return`（否则 not a full refname）；并确认 environment_probe 输出落在治理仓库内（不依赖缺失的 server_diagnostics 外部目录）。待服务器按操作卡 r3 重跑确认。
 
 > 门禁：本文件须经用户明确二次批准后，方可绑定/创建 W006 工作树并开始 T2-T8。（用户已于 2026-08-10 明确批准本方案并绑定 W006；本行保留为历史门禁说明）
+
+### Closeout update（2026-08-11，用户已批准）
+
+- 用户明确批准关闭 W006。`workspace close --preview` 对 `D:\AI空间转录病理研究\PFMval_new_governed_workspaces\W006` 返回 `close_ready`（无 blocker、无 attempt、无保留资产）；Registry 已将 W006 标记为 `close_ready`、试点 experiment 标记为 `closed`，保留分支与 Git 历史，只读且不可再派发 job。
+- 本次不移除物理 worktree、分支或资产。未来若需物理移除，仍须针对该精确绝对路径另行获得最终批准。
