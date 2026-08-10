@@ -4,6 +4,7 @@
 > 试点：gitee_roundtrip_pilot_w006_v001_20260810 | 性质：零训练、allowlisted 诊断、非证据
 > 传输：仅 Gitee（remote: gitee）| 禁止 SSH/SCP/HTTP remote command/Tunnel
 > 本卡随故障调试可更新；暂不要求推送，用户本地查看。
+> 更新记录：2026-08-10 r2 — 修正 §1 fetch 核对说明（分支 HEAD 领先于 source_commit 属正常）、§2 runner 命令改为绝对路径解释器+Set-Location（修复"无输出"疑因）、§4 移除尖括号占位符（修复 ParserError）、§3 标记已完成并指向核验登记。
 
 ## 0. 身份绑定（每次执行前核对）
 
@@ -21,47 +22,30 @@
 ```powershell
 git -C D:\AIPatho\qzs\pfmval_governance fetch gitee codex/w006-gitee-roundtrip-pilot-20260810-bound
 git -C D:\AIPatho\qzs\pfmval_governance rev-parse FETCH_HEAD
-# 核对 rev-parse FETCH_HEAD 与 source_commit 一致后再继续
+# 核对：FETCH_HEAD 应包含诊断请求文件（automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/request.json）
+# 注意：source_commit=42b2643 是契约冻结值（request.json 内部绑定），分支 HEAD 会领先于它（含后续 pilot commit），二者不一致是正常的
 ```
 
 ## 2. 执行固定 runner（仅 environment_probe 有固定收集器）
 
 ```powershell
-# 在治理 checkout 内、位于已 fetch 的 W006 分支对应工作树运行
-python deploy/pfmval_ops.py diagnostic run-allowlisted --diagnostic-id diagnostic-20260810-gitee-rt-pilot-envprobe-r001
+# 先进入治理 checkout 目录（务必，否则相对路径 deploy\pfmval_ops.py 不存在 → 无输出/报错）
+Set-Location D:\AIPatho\qzs\pfmval_governance
+# 用绝对路径解释器运行（避免裸 python 解析到错误环境）
+& 'C:\Users\AIPatho1\pfmval_env\Scripts\python.exe' D:\AIPatho\qzs\pfmval_governance\deploy\pfmval_ops.py diagnostic run-allowlisted --diagnostic-id diagnostic-20260810-gitee-rt-pilot-envprobe-r001
 ```
 
 - 预期产物：`automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/environment_probe.json`
+- 无输出排查顺序：① `Get-Location` 是否为治理 checkout；② `Test-Path .\deploy\pfmval_ops.py`；③ 换绝对路径解释器（上命令已给出）；④ 若仍无输出，把完整终端粘贴回传分析。
 - 说明：`path_probe`（及 cache_probe/dry_run/single_batch_forward）当前**无固定 runner**（`DIAGNOSTIC_RUNNER_COMMANDS={"environment_probe"}`）；本次试点已登记该缺失，不手写命令替代。
 - 若该命令在治理 checkout 主工作树不可直接运行，请检出 W006 分支的 detached worktree 后运行；不得在源分支上直接修改。
 
-## 3. 路径现场只读核验（T4）
+## 3. 路径现场只读核验（T4）——已完成，见 t4_server_verification_result_20260810.md
 
-按 `pilot/diagnostics/t4_server_path_checklist_20260810.md` 逐项核验（存在性/类型/边界）：
-
-| # | path_id | 期望路径 | 期望类型 |
-|---|---|---|---|
-| 1 | server_governance_checkout | D:\AIPatho\qzs\pfmval_governance | git_worktree |
-| 2 | server_experiment_worktrees | D:\AIPatho\qzs\pfmval_automation | directory |
-| 3 | server_experiment_runs | D:\AIPatho\qzs\pfmval_experiment_runs | directory |
-| 4 | server_result_returns | D:\AIPatho\qzs\pfmval_result_returns | directory |
-| 5 | server_diagnostics | D:\AIPatho\qzs\pfmval_diagnostics | directory |
-| 6 | server_runtime_bundles | D:\AIPatho\qzs\pfmval_runtime_bundles | directory |
-| 7 | python 解释器 | C:\Users\AIPatho1\pfmval_env\Scripts\python.exe | file（可执行） |
+已核验：6/7 存在（server_diagnostics 缺失需现场创建批准）、解释器 3.13.5 可用、retired pointer 确认。复查只需跑缺失项：
 
 ```powershell
-# 只读建议命令
-Test-Path 'D:\AIPatho\qzs\pfmval_governance'; (Get-Item 'D:\AIPatho\qzs\pfmval_governance').Attributes
-Test-Path 'D:\AIPatho\qzs\pfmval_automation'; Test-Path 'D:\AIPatho\qzs\pfmval_experiment_runs'
-Test-Path 'D:\AIPatho\qzs\pfmval_result_returns'; Test-Path 'D:\AIPatho\qzs\pfmval_diagnostics'
-Test-Path 'D:\AIPatho\qzs\pfmval_runtime_bundles'
-& 'C:\Users\AIPatho1\pfmval_env\Scripts\python.exe' -c "import sys; print(sys.version)"
-```
-
-retired pointer 只读确认（不得作为事实源）：
-```powershell
-Test-Path 'D:\AIPatho\qzs\pfmval_deploy_git\configs\config.server.yaml'
-Test-Path 'D:\AIPatho\qzs\pfmval_governance\configs\config.server.yaml'
+Test-Path 'D:\AIPatho\qzs\pfmval_diagnostics'
 ```
 
 ## 4. 最小 return 闭包（T5）
@@ -75,10 +59,10 @@ Test-Path 'D:\AIPatho\qzs\pfmval_governance\configs\config.server.yaml'
 - remote tree 闭包校验结果（git ls-files / index 清单与 return manifest 对账）
 
 ```powershell
-# 在 return 输出根构建后，对精确目录 force-add 并提交
-git add -f <return_dir>/...
+# 在 return 输出根构建后，对精确目录 force-add 并提交（占位符须替换为真实路径，勿含尖括号）
+git add -f "D:\AIPatho\qzs\pfmval_diagnostics\diagnostic-20260810-gitee-rt-pilot-envprobe-r001"
 git commit -m "diagnostic: return W006 env probe + minimal closure"
-git push gitee <local_branch>:automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/return
+git push gitee HEAD:automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/return
 ```
 
 约束：
