@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pfmval.local/schemas/return_profile_v1.schema.json",
+  "title": "PFMval result return profile v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "required_artifact_kinds",
+    "force_add_exact_revision",
+    "terminal_matrix"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "required_artifact_kinds": {
+      "const": ["raw_training_csv", "raw_training_txt"]
+    },
+    "force_add_exact_revision": {"const": true},
+    "terminal_matrix": {
+      "type": "object",
+      "required": ["success", "failed", "incomplete"],
+      "properties": {
+        "success": {"const": "terminal_json_plus_raw_csv_txt_plus_required_predictions"},
+        "failed": {"const": "terminal_json_plus_raw_csv_txt"},
+        "incomplete": {"const": "terminal_json_plus_available_raw_csv_txt"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

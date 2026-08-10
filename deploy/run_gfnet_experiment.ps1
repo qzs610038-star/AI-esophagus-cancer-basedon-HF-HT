@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $pythonResolver = Join-Path $ScriptDir "resolve_server_python.ps1"
 $Python = $null
-$ProjectDir = "D:\AIPatho\qzs\pfmval_deploy_git"
+$ProjectDir = $null
 
 if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
     throw "Server Python resolver missing: $pythonResolver"
@@ -14,7 +14,7 @@ if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
 . $pythonResolver
 $Python = Resolve-PfmvalServerPython
 $pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $Python
-$env:PFMVAL_PYTHON = $Python
+$ProjectDir = Get-PfmvalServerPath -PathId "server_governance_checkout"
 Write-Host "Server Python: $($pythonIdentity.Executable) | $($pythonIdentity.Version)" -ForegroundColor Cyan
 
 Set-Location $ProjectDir

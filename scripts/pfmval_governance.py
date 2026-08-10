@@ -442,6 +442,8 @@ def acquire_workspace_lease(
     )
     if workspace is None:
         raise ValueError(f"unknown workspace_id: {workspace_id}")
+    if workspace.get("status") == "abandoned_reserved":
+        raise ValueError("abandoned_reserved workspace cannot acquire a lease")
     if workspace.get("experiment_id") != experiment_id:
         raise ValueError("workspace experiment_id mismatch")
     if workspace.get("lease") is not None:
@@ -1126,6 +1128,19 @@ def build_job_v2(
                 ],
             },
         },
+        "return_profile": {
+            "schema_version": "1.0",
+            "required_artifact_kinds": [
+                "raw_training_csv",
+                "raw_training_txt",
+            ],
+            "force_add_exact_revision": True,
+            "terminal_matrix": {
+                "success": "terminal_json_plus_raw_csv_txt_plus_required_predictions",
+                "failed": "terminal_json_plus_raw_csv_txt",
+                "incomplete": "terminal_json_plus_available_raw_csv_txt",
+            },
+        },
     }
     validate_job_v2(job)
     return job
@@ -1219,6 +1234,18 @@ def validate_job_v2(job: Mapping[str, Any]) -> None:
         raise ValueError("job resolved_argv must be a non-empty list")
     if any(not isinstance(item, str) or "\x00" in item for item in job["resolved_argv"]):
         raise ValueError("job resolved_argv contains unsafe values")
+    return_profile = job.get("return_profile")
+    if return_profile is not None and return_profile != {
+        "schema_version": "1.0",
+        "required_artifact_kinds": ["raw_training_csv", "raw_training_txt"],
+        "force_add_exact_revision": True,
+        "terminal_matrix": {
+            "success": "terminal_json_plus_raw_csv_txt_plus_required_predictions",
+            "failed": "terminal_json_plus_raw_csv_txt",
+            "incomplete": "terminal_json_plus_available_raw_csv_txt",
+        },
+    }:
+        raise ValueError("job return profile is invalid")
     input_binding = job["input_binding"]
     if not isinstance(input_binding, Mapping):
         raise ValueError("job input_binding must be an object")

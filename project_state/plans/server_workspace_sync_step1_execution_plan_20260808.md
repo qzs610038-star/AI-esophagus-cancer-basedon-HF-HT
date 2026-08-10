@@ -160,3 +160,34 @@ Expected: 工作区规则、迁移边界、临时豁免和保护边界与现有�
 - 回传包能明确告诉用户“收到了什么、缺了什么、为什么缺”；
 - W001～W005 与服务器侧的脏工作区能先分层归类，再进入下一轮统一治理。
 
+## 2026-08-10 实施登记
+
+### PR1：路径登记（Path Registration 1）— COMPLETED_LOCAL
+
+- `configs/server_paths.yaml` 已登记 governance checkout、持久 `W###` 源码、外置 run、return、diagnostic、runtime bundle 六类 path id。
+- `pfmval_deploy_git` 已降为 legacy/no-new-output；`server_automation_worktrees` 仅作 deprecated 兼容。
+- active `server_maintenance.md` 已写入路径职责与首次服务器使用前的现场核验停止点。
+
+### WB2：工作树绑定（Workspace Binding 2）— COMPLETED_LOCAL
+
+- `ensure_job_worktree()` 已从 job-id 目录改为 `server_experiment_worktrees/W###` 持久目录；attempt 输出继续位于外置 `server_experiment_runs/W###/A###`。
+- Workspace Registry schema 已增加 `abandoned_reserved`；W005 已登记为 experiment id 空、lease/attempt 空、编号/branch/HEAD/path 保留，任何 job/lease 都必须拒绝。
+- 新实验必须使用 `next_workspace_number=6` 对应的 W006 或更高编号。
+
+### RR3：结果回传（Result Return 3）— COMPLETED_LOCAL
+
+- 已新增 `return_profile_v1.schema.json`；新 job 自动要求原始 `raw_training_csv` 与 `raw_training_txt`。
+- 成功/失败 attempt 必须回 terminal JSON + 原始训练 CSV/TXT；incomplete 回 terminal JSON + 可取得的原始 CSV/TXT；产生预测的成功 attempt 仍需逐 split 原始预测表。
+- publisher 已对精确 revision path 使用 force-add，并在提交前比较 expected/staged tree，防止 `.gitignore` 漏掉 CSV/TXT/日志。
+
+### HT4：哈希分层（Hash Tiering 4）— COMPLETED_LOCAL
+
+- critical 继续 SHA-256 HARD；supporting/diagnostic 改为必传清单、精确大小和 Git tree 闭包。
+- diagnostic record 不再逐文件计算 SHA-256；supporting 文件不会被写入 artifact SHA。
+- bundle 身份只覆盖规范化 result manifest 与 critical artifacts；supporting/diagnostic 不得作为 accepted metric 来源。
+
+### LP5：现场试点（Live Pilot 5）— PENDING_SERVER
+
+- 本地实现与目标测试已完成，但尚未连接服务器或训练。
+- 新实验正式训练前仍需一次无训练 Gitee 往返：exact fetch、W006 或后续 `W###` 绑定核验、diagnostic、含被忽略 CSV/TXT 的最小 return、remote tree 对账。
+- 只有现场试点通过，才能把本计划的服务器闭环从 `COMPLETED_LOCAL` 提升为 `VERIFIED_SERVER`。

@@ -33,7 +33,7 @@ except ImportError:  # pragma: no cover - server preflight reports this cleanly
 
 STATE_SCHEMA_VERSION = "1.0"
 DOCUMENT_REGISTRY_SCHEMA_VERSION = "1.0"
-SERVER_PATHS_SCHEMA_VERSION = "1.0"
+SERVER_PATHS_SCHEMA_VERSION = "2.0"
 REPAIR_SCHEMA_VERSION = "1.0"
 DIAGNOSTIC_SCHEMA_VERSION = "1.0"
 EXPLORATION_SCHEMA_VERSION = "1.0"
@@ -485,12 +485,18 @@ def build_diagnostic_operation_cards(root: Path, request: Mapping[str, Any]) -> 
     registry_path = root / "configs" / "server_paths.yaml"
     registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
     paths = registry.get("paths", {}) if isinstance(registry, dict) else {}
-    repo_entry = paths.get("server_repo_worktree", {})
-    automation_entry = paths.get("server_automation_worktrees", {})
+    repo_entry = paths.get("server_governance_checkout") or paths.get(
+        "server_repo_worktree", {}
+    )
+    automation_entry = paths.get("server_diagnostics") or paths.get(
+        "server_automation_worktrees", {}
+    )
     server_repo = str(repo_entry.get("path", "")).strip()
     automation_root = str(automation_entry.get("path", "")).strip()
     if not server_repo or not automation_root:
-        raise ValueError("diagnostic cards require server_repo_worktree and server_automation_worktrees")
+        raise ValueError(
+            "diagnostic cards require canonical governance/diagnostic paths"
+        )
 
     diagnostic_id = str(request["diagnostic_id"])
     source_branch = str(request["source_branch"])
@@ -528,7 +534,7 @@ def build_diagnostic_operation_cards(root: Path, request: Mapping[str, Any]) -> 
 - 源码提交：`{source_commit}`
 - 回传分支：`{return_branch}`
 - 服务器仓库：`{server_repo}`
-- 自动化工作树根：`{automation_root}`
+- 诊断工作树根：`{automation_root}`
 
 ## 卡 1：本地发布请求
 
@@ -558,7 +564,7 @@ git push gitee {source_branch}:{source_branch}
 - 源码提交：`{source_commit}`
 - 回传分支：`{return_branch}`
 - 服务器仓库：`{server_repo}`
-- 自动化工作树根：`{automation_root}`
+- 诊断工作树根：`{automation_root}`
 
 ## 卡 1：本地发布请求
 
@@ -605,7 +611,7 @@ python deploy/pfmval_ops.py diagnostic record --diagnostic-id {diagnostic_id} --
 python deploy/pfmval_ops.py agent start-check --strict
 ```
 
-验收条件：`diagnostic record` 返回哈希且严格门禁 `FAIL=0`；不得创建 result envelope，不得消耗 run unit。
+验收条件：`diagnostic record` 返回路径、大小和 Git 闭包校验且严格门禁 `FAIL=0`；不得创建 result envelope，不得消耗 run unit。
 """
 
 
@@ -654,7 +660,12 @@ def _registered_server_path(root: Path, path_id: str) -> Path:
 
 
 def _prepare_diagnostic_source_worktree(root: Path, request: Mapping[str, Any]) -> Path:
-    automation_root = _registered_server_path(root, "server_automation_worktrees").resolve()
+    try:
+        automation_root = _registered_server_path(root, "server_diagnostics").resolve()
+    except ValueError:
+        automation_root = _registered_server_path(
+            root, "server_automation_worktrees"
+        ).resolve()
     source_worktree = (automation_root / f'{request["diagnostic_id"]}-source').resolve()
     if not source_worktree.is_relative_to(automation_root):
         raise ValueError("diagnostic source worktree escapes the registered automation root")
@@ -750,6 +761,7 @@ def run_allowlisted_diagnostic(root: Path, *, diagnostic_id: str) -> Dict[str, A
         raise ValueError("diagnostic source SHA mismatch")
     payload = _collect_environment_probe(source_worktree, request)
     output_path = request_dir / "environment_probe.json"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     write_json_atomic(output_path, payload)
     checked = _assert_utf8_lf_json(output_path)
     if checked.get("source_commit") != request["source_commit"] or checked.get("exit_code") != 0:
@@ -761,7 +773,7 @@ def run_allowlisted_diagnostic(root: Path, *, diagnostic_id: str) -> Dict[str, A
         "output": {
             "path": normalize_rel(output_path.relative_to(root)),
             "size_bytes": output_path.stat().st_size,
-            "sha256": sha256_file(output_path),
+            "verification": "size_plus_git_tree_closure",
             "encoding": "utf-8",
             "bom": False,
             "eol": "lf",
@@ -840,7 +852,11 @@ def record_diagnostic_outputs(
         size_bytes = output_path.stat().st_size
         if size_bytes > MAX_RESULT_FILE_BYTES:
             raise ValueError(f"diagnostic output exceeds {MAX_RESULT_FILE_BYTES} bytes: {relative}")
-        artifact = {"path": relative, "size_bytes": size_bytes, "sha256": sha256_file(output_path)}
+        artifact = {
+            "path": relative,
+            "size_bytes": size_bytes,
+            "verification": "size_plus_git_tree_closure",
+        }
         if request.get("command_id") == "environment_probe":
             payload = _assert_utf8_lf_json(output_path)
             if (
@@ -1572,6 +1588,10 @@ def _stable_doc_id(path: str) -> str:
 def _document_category(path: str) -> str:
     if path.startswith("project_state/plans/"):
         return "状态方案"
+    if path.startswith("project_state/implementation_plans/"):
+        return "状态说明"
+    if path.startswith("project_state/schemas/"):
+        return "状态Schema"
     if path.startswith(".agents/skills/"):
         return "Agent Skill"
     if "分析报告/" in path:
@@ -1644,8 +1664,14 @@ def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, s
         return scope, "derived", "active", connectivity
     if path == "experiments/decision_log.md":
         return "project_decisions", "reference", "active", connectivity
+    if path == "project_state/schemas/return_profile_v1.schema.json":
+        return "server_return_profile", "reference", "active", connectivity
+    if path == "project_state/implementation_plans/README.md":
+        return "implementation_plan_landing_zone", "reference", "active", connectivity
     if path.endswith("服务器路径索引_20260701.md"):
         return "server_paths", "normative", "active", connectivity
+    if path.endswith("服务器零训练Gitee往返试点检查方案_20260810.md"):
+        return "server_zero_training_gitee_roundtrip_pilot", "normative", "active", connectivity
     if path.endswith("MPP2后续方案与LoRA新数据实验建议_20260709.md"):
         return "mpp_training_reference", "reference", "active", connectivity
     superseded_patterns = (
@@ -1679,7 +1705,7 @@ def scan_documents(root: Path) -> Dict[str, Any]:
 
     live_paths: set[str] = set()
     for directory in (
-        "01_指南与解读", "02_组会汇报", "project_state/plans", "deploy",
+        "01_指南与解读", "02_组会汇报", "project_state/plans", "project_state/implementation_plans", "deploy",
         "automation", ".agents/skills", ".claude/skills",
     ):
         base = root / directory
@@ -1690,6 +1716,7 @@ def scan_documents(root: Path) -> Dict[str, Any]:
         ".claude/next-steps.md", ".claude/session-brief.md", ".claude/maintenance-plan.md",
         "experiments/experiment_dashboard.md", "experiments/experiment_progress.md",
         "experiments/decision_log.md",
+        "project_state/schemas/return_profile_v1.schema.json",
     ):
         if (root / path).exists():
             live_paths.add(path)
@@ -1760,6 +1787,7 @@ def scan_documents(root: Path) -> Dict[str, Any]:
                         rel_path.startswith("01_指南与解读/")
                         and not rel_path.endswith("服务器路径索引_20260701.md")
                         and not rel_path.endswith("MPP2后续方案与LoRA新数据实验建议_20260709.md")
+                        and not rel_path.endswith("服务器零训练Gitee往返试点检查方案_20260810.md")
                     )
                 )
                 else "local_only"
@@ -2287,8 +2315,22 @@ def validate_server_paths(
     except Exception as exc:
         report.fail(f"server path registry unreadable: {exc}")
         return
-    if registry.get("schema_version") != SERVER_PATHS_SCHEMA_VERSION:
-        report.fail("server path registry schema_version must be 1.0")
+    schema_version = registry.get("schema_version")
+    if schema_version not in {"1.0", SERVER_PATHS_SCHEMA_VERSION}:
+        report.fail("server path registry schema_version must be 1.0 or 2.0")
+    if schema_version == SERVER_PATHS_SCHEMA_VERSION:
+        runtime = registry.get("runtime")
+        transport = registry.get("transport")
+        if not isinstance(runtime, dict) or not re.match(
+            r"^[A-Za-z]:[\\/]", str(runtime.get("python_interpreter", ""))
+        ):
+            report.fail("server runtime.python_interpreter must be an absolute Windows path")
+        if runtime.get("require_absolute_path") is not True or runtime.get("forbid_path_lookup") is not True:
+            report.fail("server runtime must forbid PATH-based Python lookup")
+        if not isinstance(transport, dict) or transport.get("mode") != "gitee_only" or transport.get("remote") != "gitee":
+            report.fail("server transport must be gitee_only via remote gitee")
+        if transport.get("fetch_exact_commit_only") is not True or transport.get("force_push_allowed") is not False:
+            report.fail("server transport exact-commit and force-push policy is invalid")
     paths = registry.get("paths")
     if not isinstance(paths, dict) or not paths:
         report.fail("server path registry contains no paths")
@@ -2385,14 +2427,16 @@ def validate_governance_v3_state(
                 raise ValueError(
                     f"duplicate workspace registry id: {workspace_id}"
                 )
-            experiment_id = str(workspace.get("experiment_id", ""))
-            if experiment_id in experiment_ids:
-                raise ValueError(
-                    "one experiment is bound to multiple workspaces: "
-                    f"{experiment_id}"
-                )
+            experiment_value = workspace.get("experiment_id")
+            experiment_id = str(experiment_value or "")
+            if experiment_id:
+                if experiment_id in experiment_ids:
+                    raise ValueError(
+                        "one experiment is bound to multiple workspaces: "
+                        f"{experiment_id}"
+                    )
+                experiment_ids.add(experiment_id)
             workspace_ids.add(workspace_id)
-            experiment_ids.add(experiment_id)
             workspace_numbers.append(int(match.group(1)))
             for host in workspace.get("hosts", {}).values():
                 relative_path = Path(str(host.get("relative_path", "")))
@@ -3120,6 +3164,15 @@ def _validate_job_v2_governance_binding(
     )
     if workspace is None:
         raise ValueError("job v2 references an unknown workspace")
+    if workspace.get("status") in {
+        "abandoned_reserved",
+        "close_ready",
+        "tombstoned",
+        "archived",
+    }:
+        raise ValueError(
+            f"job v2 references a non-executable workspace: {workspace.get('status')}"
+        )
     if workspace.get("experiment_id") != job.get("experiment_id"):
         raise ValueError("job v2 workspace/experiment binding mismatch")
 

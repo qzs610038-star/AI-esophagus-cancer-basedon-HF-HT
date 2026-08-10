@@ -6,6 +6,7 @@ config_utils.py - PFMval 项目统一配置工具
 """
 
 import os
+from pathlib import Path
 import yaml
 import torch
 
@@ -52,8 +53,7 @@ def load_config(config_path=None):
 
     查找顺序:
       1. 显式传入的 config_path 参数
-      2. 环境变量 PFMVAL_CONFIG 指定的路径
-      3. 项目根目录下的 config.yaml（通过 get_project_root() 向上搜索）
+      2. 项目根目录下的 config.yaml（通过 get_project_root() 向上搜索）
 
     Args:
         config_path (str, optional): 配置文件的绝对或相对路径。默认为 None。
@@ -72,17 +72,12 @@ def load_config(config_path=None):
             raise FileNotFoundError(f"指定的配置文件不存在: {resolved}")
         return _read_yaml(resolved)
 
-    # 优先级 2：环境变量
-    env_path = os.environ.get("PFMVAL_CONFIG", "").strip()
-    if env_path:
-        resolved = os.path.abspath(env_path)
-        if not os.path.isfile(resolved):
-            raise FileNotFoundError(
-                f"环境变量 PFMVAL_CONFIG 指定的配置文件不存在: {resolved}"
-            )
-        return _read_yaml(resolved)
+    if os.environ.get("PFMVAL_CONFIG", "").strip():
+        raise RuntimeError(
+            "PFMVAL_CONFIG 已退役；服务器机器配置只允许读取 configs/server_paths.yaml"
+        )
 
-    # 优先级 3：自动搜索项目根目录
+    # 优先级 2：自动搜索项目根目录
     project_root = get_project_root()
     default_path = os.path.join(project_root, "config.yaml")
     return _read_yaml(default_path)
@@ -102,6 +97,10 @@ def _read_yaml(filepath):
         config = yaml.safe_load(f)
     # safe_load 在文件为空时返回 None
     config = config if config is not None else {}
+    if config.get("legacy_pointer") == "server_machine_profile_retired":
+        raise ValueError(
+            "config.server.yaml 已退役；请改用 configs/server_paths.yaml"
+        )
     path_ids = config.get("path_ids", {}) or {}
     if path_ids:
         from path_registry import get_registered_path
@@ -111,6 +110,33 @@ def _read_yaml(filepath):
         for config_key, path_id in path_ids.items():
             paths[config_key] = str(get_registered_path(str(path_id)))
     return config
+
+
+def load_server_profile(project_root=None):
+    """读取并校验唯一的服务器机器配置。"""
+    root = Path(project_root or get_project_root())
+    profile_path = root / "configs" / "server_paths.yaml"
+    profile = _read_yaml(profile_path)
+    if profile.get("schema_version") != "2.0":
+        raise ValueError("server_paths.yaml 必须使用 schema_version 2.0")
+
+    runtime = profile.get("runtime") or {}
+    python_interpreter = str(runtime.get("python_interpreter", "")).strip()
+    if not python_interpreter or not os.path.isabs(python_interpreter):
+        raise ValueError("runtime.python_interpreter 必须是绝对路径")
+    if runtime.get("require_absolute_path") is not True:
+        raise ValueError("runtime.require_absolute_path 必须为 true")
+    if runtime.get("forbid_path_lookup") is not True:
+        raise ValueError("runtime.forbid_path_lookup 必须为 true")
+
+    transport = profile.get("transport") or {}
+    if transport.get("mode") != "gitee_only" or transport.get("remote") != "gitee":
+        raise ValueError("transport 必须固定为 gitee_only / gitee")
+    if transport.get("fetch_exact_commit_only") is not True:
+        raise ValueError("transport.fetch_exact_commit_only 必须为 true")
+    if transport.get("force_push_allowed") is not False:
+        raise ValueError("transport.force_push_allowed 必须为 false")
+    return profile
 
 
 # ============================================================

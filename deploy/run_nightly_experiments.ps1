@@ -159,7 +159,6 @@ if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
 try {
     $PYTHON = Resolve-PfmvalServerPython
     $pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $PYTHON
-    $env:PFMVAL_PYTHON = $PYTHON
 } catch {
     Write-Log "FATAL: Server Python preflight failed: $_"
     exit 1

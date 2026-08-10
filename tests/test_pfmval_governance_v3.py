@@ -129,6 +129,44 @@ def test_workspace_shadow_scan_and_locus_guard_have_no_filesystem_side_effects(t
             head="a" * 40,
             dirty=True,
         )
+
+
+def test_abandoned_reserved_workspace_cannot_acquire_lease(tmp_path):
+    root = tmp_path / "repo"
+    root.mkdir()
+    initialize_workspace_registry(root)
+    workspace = allocate_workspace(
+        root,
+        experiment_id="candidate-exp",
+        display_name="abandoned candidate",
+        local_relative_path="workspaces/W001",
+    )
+    registry_path = root / "project_state" / "workspace_registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    registry["workspaces"][0].update(
+        {
+            "status": "abandoned_reserved",
+            "experiment_id": None,
+            "reservation_directive_id": "DIR-20260810-001",
+        }
+    )
+    registry_path.write_text(
+        json.dumps(registry, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="abandoned_reserved"):
+        acquire_workspace_lease(
+            root,
+            workspace_id=workspace["workspace_id"],
+            experiment_id="candidate-exp",
+            attempt_id="A001",
+            source_commit="a" * 40,
+            critical_contract_sha256="b" * 64,
+            holder="test",
+            pid=1,
+            run_root=tmp_path / "runs" / "W001" / "A001",
+        )
     with pytest.raises(ValueError, match="outside registered root"):
         allocate_workspace(
             root,
@@ -567,6 +605,16 @@ def test_server_job_v2_binds_workspace_attempt_approval_contract_and_run_units()
     assert job["artifact_policy"]["diagnostic_logs"] == (
         "include_only_when_needed_for_agent_analysis"
     )
+    assert job["return_profile"] == {
+        "schema_version": "1.0",
+        "required_artifact_kinds": ["raw_training_csv", "raw_training_txt"],
+        "force_add_exact_revision": True,
+        "terminal_matrix": {
+            "success": "terminal_json_plus_raw_csv_txt_plus_required_predictions",
+            "failed": "terminal_json_plus_raw_csv_txt",
+            "incomplete": "terminal_json_plus_available_raw_csv_txt",
+        },
+    }
     with pytest.raises(ValueError, match="run_units"):
         validate_job_v2({**job, "run_units": 0})
     with pytest.raises(ValueError, match="full 40-character"):

@@ -96,6 +96,32 @@ def test_job_runner_v2_uses_workspace_and_external_attempt_root(tmp_path, monkey
     assert not (source / "W001-A001").exists()
 
 
+def test_ensure_job_worktree_uses_persistent_workspace_id(tmp_path, monkeypatch):
+    ops = _load_ops()
+    calls = []
+
+    class Completed:
+        stdout = ""
+
+    def fake_run(args, **kwargs):
+        calls.append((args, kwargs))
+        return Completed()
+
+    monkeypatch.setattr(ops, "get_registered_path", lambda path_id: tmp_path / path_id)
+    monkeypatch.setattr(ops.subprocess, "run", fake_run)
+    manifest = {
+        "job_id": "W007-A003",
+        "workspace_id": "W007",
+        "source_commit": "a" * 40,
+    }
+
+    worktree = ops.ensure_job_worktree(manifest)
+
+    assert worktree == (tmp_path / "server_experiment_worktrees" / "W007").resolve()
+    assert all("W007-A003" not in str(args) for args, _ in calls)
+    assert any("worktree" in args and "add" in args for args, _ in calls)
+
+
 def test_job_runner_v2_rejects_legacy_unbound_v2_manifest(tmp_path, monkeypatch):
     ops = _load_ops()
     governance = tmp_path / "governance"

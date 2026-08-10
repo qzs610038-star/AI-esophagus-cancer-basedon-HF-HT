@@ -55,7 +55,7 @@ from scripts.pfmval_state import (
     verify_mpp_repair_server_assets,
 )
 from path_registry import get_registered_path
-from config_utils import load_config
+from config_utils import load_config, load_server_profile
 
 
 def test_normalize_rel_preserves_hidden_directory_prefixes():
@@ -375,7 +375,11 @@ def test_diagnostic_request_is_allowlisted_non_evidence_audit(tmp_path):
         outputs=["automation/diagnostics/diagnostic-20260714-cache-probe/stdout.txt"],
     )
     assert completion["server_write"] is False
-    assert completion["outputs"][0]["sha256"] == sha256_file(returned_output)
+    assert completion["outputs"][0] == {
+        "path": "automation/diagnostics/diagnostic-20260714-cache-probe/stdout.txt",
+        "size_bytes": returned_output.stat().st_size,
+        "verification": "size_plus_git_tree_closure",
+    }
     events = (root / "project_state" / "diagnostics.jsonl").read_text(encoding="utf-8")
     assert "diagnostic_request" in events
     assert "diagnostic_completed" in events
@@ -850,11 +854,18 @@ def test_repository_declares_lf_checkout_policy():
     assert "* text=auto eol=lf" in attributes
 
 
-def test_server_config_resolves_machine_paths_from_stable_ids():
+def test_server_profile_is_the_only_machine_configuration(monkeypatch):
     project_root = Path(__file__).resolve().parent.parent
-    config = load_config(project_root / "configs" / "config.server.yaml")
-    assert Path(config["paths"]["patch_base"]) == get_registered_path("phase2_patch_root")
-    assert Path(config["paths"]["ssgsea_base"]) == get_registered_path("phase2_ssgsea_zscore_root")
+    profile = load_server_profile(project_root)
+    assert profile["schema_version"] == "2.0"
+    assert profile["runtime"]["python_interpreter"].endswith("python.exe")
+    assert profile["transport"]["mode"] == "gitee_only"
+    assert profile["transport"]["remote"] == "gitee"
+    with pytest.raises(ValueError, match="已退役"):
+        load_config(project_root / "configs" / "config.server.yaml")
+    monkeypatch.setenv("PFMVAL_CONFIG", "legacy-config.yaml")
+    with pytest.raises(RuntimeError, match="已退役"):
+        load_config()
 
 
 def test_formal_job_requires_bound_explicit_approval(tmp_path):
@@ -1733,6 +1744,181 @@ def test_document_scan_infers_deployment_role_only_for_active_document(tmp_path)
 
     assert document["lifecycle"] == "active"
     assert document["doc_role"] == "deployment_plan"
+
+
+def test_document_scan_tracks_return_profile_schema_as_active_reference(tmp_path):
+    root = make_minimal_project(tmp_path)
+    schema = root / "project_state" / "schemas" / "return_profile_v1.schema.json"
+    schema.write_text(
+        json.dumps(
+            {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "$id": "https://pfmval.local/schemas/return_profile_v1.schema.json",
+                "title": "PFMval result return profile v1",
+                "type": "object",
+                "required": [
+                    "schema_version",
+                    "required_artifact_kinds",
+                    "force_add_exact_revision",
+                    "terminal_matrix",
+                ],
+                "properties": {
+                    "schema_version": {"const": "1.0"},
+                    "required_artifact_kinds": {
+                        "const": ["raw_training_csv", "raw_training_txt"]
+                    },
+                    "force_add_exact_revision": {"const": True},
+                    "terminal_matrix": {
+                        "type": "object",
+                        "required": ["success", "failed", "incomplete"],
+                        "properties": {
+                            "success": {
+                                "const": "terminal_json_plus_raw_csv_txt_plus_required_predictions"
+                            },
+                            "failed": {"const": "terminal_json_plus_raw_csv_txt"},
+                            "incomplete": {
+                                "const": "terminal_json_plus_available_raw_csv_txt"
+                            },
+                        },
+                        "additionalProperties": False,
+                    },
+                },
+                "additionalProperties": False,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    scanned = scan_documents(root)
+    document = next(
+        item
+        for item in scanned["documents"]
+        if item["path"] == "project_state/schemas/return_profile_v1.schema.json"
+    )
+
+    assert document["lifecycle"] == "active"
+    assert document["authority"] == "reference"
+    assert document["availability"] == "tracked"
+
+
+def test_document_scan_tracks_implementation_plan_landing_zone(tmp_path):
+    root = make_minimal_project(tmp_path)
+    landing = root / "project_state" / "implementation_plans"
+    landing.mkdir(parents=True)
+    readme = landing / "README.md"
+    readme.write_text(
+        "# project_state/implementation_plans\n\n"
+        "本目录只存放经用户批准的实验实施方案。\n\n"
+        "- `W###-<工作树名>_实施方案.md`\n",
+        encoding="utf-8",
+    )
+
+    scanned = scan_documents(root)
+    document = next(
+        item
+        for item in scanned["documents"]
+        if item["path"] == "project_state/implementation_plans/README.md"
+    )
+
+    assert document["lifecycle"] == "active"
+    assert document["authority"] == "reference"
+    assert document["availability"] == "tracked"
+
+
+def test_document_scan_treats_zero_training_gitee_pilot_plan_as_tracked_deployment_plan(tmp_path):
+    root = make_minimal_project(tmp_path)
+    plan = (
+        root
+        / "01_指南与解读"
+        / "部署方案"
+        / "服务器零训练Gitee往返试点检查方案_20260810.md"
+    )
+    plan.parent.mkdir(parents=True, exist_ok=True)
+    plan.write_text("# pilot\n## 审核边界\n## 执行清单\n", encoding="utf-8")
+
+    scanned = scan_documents(root)
+    document = next(
+        item
+        for item in scanned["documents"]
+        if item["path"].endswith("服务器零训练Gitee往返试点检查方案_20260810.md")
+    )
+
+    assert document["lifecycle"] == "active"
+    assert document["doc_role"] == "deployment_plan"
+    assert document["availability"] == "tracked"
+
+
+def test_server_path_index_marks_old_config_files_as_retired_pointers():
+    text = (
+        Path(__file__).resolve().parents[1]
+        / "01_指南与解读"
+        / "部署方案"
+        / "服务器路径索引_20260701.md"
+    ).read_text(encoding="utf-8")
+
+    assert "retired pointer" in text
+    assert "configs/server_paths.yaml" in text
+
+
+def test_document_scan_tracks_return_profile_schema_as_active_reference(tmp_path):
+    root = make_minimal_project(tmp_path)
+    schema = root / "project_state" / "schemas" / "return_profile_v1.schema.json"
+    schema.write_text(
+        json.dumps(
+            {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "$id": "https://pfmval.local/schemas/return_profile_v1.schema.json",
+                "title": "PFMval result return profile v1",
+                "type": "object",
+                "required": [
+                    "schema_version",
+                    "required_artifact_kinds",
+                    "force_add_exact_revision",
+                    "terminal_matrix",
+                ],
+                "properties": {
+                    "schema_version": {"const": "1.0"},
+                    "required_artifact_kinds": {
+                        "const": ["raw_training_csv", "raw_training_txt"]
+                    },
+                    "force_add_exact_revision": {"const": True},
+                    "terminal_matrix": {
+                        "type": "object",
+                        "required": ["success", "failed", "incomplete"],
+                        "properties": {
+                            "success": {
+                                "const": "terminal_json_plus_raw_csv_txt_plus_required_predictions"
+                            },
+                            "failed": {"const": "terminal_json_plus_raw_csv_txt"},
+                            "incomplete": {
+                                "const": "terminal_json_plus_available_raw_csv_txt"
+                            },
+                        },
+                        "additionalProperties": False,
+                    },
+                },
+                "additionalProperties": False,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    scanned = scan_documents(root)
+    document = next(
+        item
+        for item in scanned["documents"]
+        if item["path"] == "project_state/schemas/return_profile_v1.schema.json"
+    )
+
+    assert document["lifecycle"] == "active"
+    assert document["authority"] == "reference"
+    assert document["availability"] == "tracked"
 
 
 def test_generated_view_hash_drift_is_soft_but_registry_drift_remains_hard(

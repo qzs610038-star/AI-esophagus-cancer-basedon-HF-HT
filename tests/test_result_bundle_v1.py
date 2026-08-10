@@ -19,6 +19,24 @@ from scripts.pfmval_state import validate_against_schema_strict
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_return_profile_schema_validates_expected_contract():
+    schema = (
+        PROJECT_ROOT / "project_state" / "schemas" / "return_profile_v1.schema.json"
+    )
+    payload = {
+        "schema_version": "1.0",
+        "required_artifact_kinds": ["raw_training_csv", "raw_training_txt"],
+        "force_add_exact_revision": True,
+        "terminal_matrix": {
+            "success": "terminal_json_plus_raw_csv_txt_plus_required_predictions",
+            "failed": "terminal_json_plus_raw_csv_txt",
+            "incomplete": "terminal_json_plus_available_raw_csv_txt",
+        },
+    }
+
+    backend = validate_against_schema_strict(payload, schema, "return profile v1")
+
+    assert backend in {"python-jsonschema", "powershell-test-json"}
 def _sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -300,6 +318,120 @@ def test_build_requires_empty_staging_and_array_protocol_types(tmp_path):
         )
 
 
+def test_supporting_artifact_uses_size_inventory_without_sha256(tmp_path):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A003",
+        result_id="W001-A003-source",
+        include_large_artifact_id=False,
+    )
+    support_path = source / "artifacts" / "raw_training.csv"
+    payload = b"epoch,train_loss\n1,0.5\n"
+    _write(support_path, payload)
+    result_path = source / "result.json"
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    result["artifacts"].append(
+        {
+            "artifact_id": "raw_training_csv",
+            "path": "artifacts/raw_training.csv",
+            "kind": "raw_training_csv",
+            "evidence_role": "supporting",
+            "size_bytes": len(payload),
+            "source_attempt_id": "A003",
+        }
+    )
+    _write(result_path, (json.dumps(result, indent=2) + "\n").encode())
+
+    staging = tmp_path / "staging"
+    build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        staging,
+        result_id="W001-A003-result",
+        artifact_retention="retain",
+    )
+
+    built = json.loads((staging / "result.json").read_text(encoding="utf-8"))
+    artifact = next(
+        item for item in built["artifacts"] if item["artifact_id"] == "raw_training_csv"
+    )
+    assert "sha256" not in artifact
+    integrity = json.loads(
+        (staging / "artifacts" / "bundle_integrity.json").read_text(encoding="utf-8")
+    )
+    record = next(
+        item for item in integrity["artifacts"] if item["path"] == artifact["path"]
+    )
+    assert record["verification"] == "size_inventory"
+    validate_result_bundle_v1(PROJECT_ROOT, staging)
+
+
+def test_return_profile_requires_original_training_csv_and_txt(tmp_path):
+    source = _historical_source_bundle(
+        tmp_path / "source",
+        attempt_id="A003",
+        result_id="W001-A003-source",
+        include_large_artifact_id=False,
+    )
+    result_path = source / "result.json"
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    job_path = source / "artifacts" / "job.json"
+    job = json.loads(job_path.read_text(encoding="utf-8"))
+    job["return_profile"] = {
+        "schema_version": "1.0",
+        "required_artifact_kinds": ["raw_training_csv", "raw_training_txt"],
+        "force_add_exact_revision": True,
+        "terminal_matrix": {
+            "success": "terminal_json_plus_raw_csv_txt_plus_required_predictions",
+            "failed": "terminal_json_plus_raw_csv_txt",
+            "incomplete": "terminal_json_plus_available_raw_csv_txt",
+        },
+    }
+    job_payload = (json.dumps(job, indent=2) + "\n").encode()
+    _write(job_path, job_payload)
+    job_artifact = next(
+        item for item in result["artifacts"] if item["artifact_id"] == "job_manifest"
+    )
+    job_artifact["size_bytes"] = len(job_payload)
+    job_artifact["sha256"] = _sha256(job_payload)
+    _write(result_path, (json.dumps(result, indent=2) + "\n").encode())
+
+    with pytest.raises(ValueError, match="required raw training records"):
+        build_result_bundle_v1(
+            PROJECT_ROOT,
+            source,
+            tmp_path / "missing",
+            result_id="W001-A003-missing",
+            artifact_retention="retain",
+        )
+
+    additions = {
+        "raw_training_csv": ("artifacts/raw_training.csv", b"epoch,loss\n1,0.5\n"),
+        "raw_training_txt": ("artifacts/raw_training.txt", b"epoch 1 loss 0.5\n"),
+    }
+    for kind, (relative, payload) in additions.items():
+        _write(source / relative, payload)
+        result["artifacts"].append(
+            {
+                "artifact_id": kind,
+                "path": relative,
+                "kind": kind,
+                "evidence_role": "supporting",
+                "size_bytes": len(payload),
+                "source_attempt_id": "A003",
+            }
+        )
+    _write(result_path, (json.dumps(result, indent=2) + "\n").encode())
+    report = build_result_bundle_v1(
+        PROJECT_ROOT,
+        source,
+        tmp_path / "complete",
+        result_id="W001-A003-complete",
+        artifact_retention="retain",
+    )
+    assert report["status"] == "success"
+
+
 def test_policy_aware_training_result_requires_inline_raw_predictions(tmp_path):
     source = _historical_source_bundle(
         tmp_path / "source",
@@ -549,8 +681,9 @@ def test_publish_is_fast_forward_idempotent_and_verifies_remote_sha(tmp_path):
     _git(repo, "init")
     _git(repo, "config", "user.name", "PFMval Test")
     _git(repo, "config", "user.email", "pfmval@example.invalid")
-    (repo / "baseline.txt").write_text("baseline\n", encoding="utf-8")
-    _git(repo, "add", "baseline.txt")
+    (repo / ".gitignore").write_text("*.txt\n*.csv\n", encoding="utf-8")
+    (repo / "README.md").write_text("baseline\n", encoding="utf-8")
+    _git(repo, "add", ".gitignore", "README.md")
     _git(repo, "commit", "-m", "baseline")
     parent = _git(repo, "rev-parse", "HEAD")
     _git(tmp_path, "init", "--bare", str(remote))
@@ -603,6 +736,8 @@ def test_publish_is_fast_forward_idempotent_and_verifies_remote_sha(tmp_path):
     assert second["status"] == "already_published"
     assert first["commit_sha"] == second["commit_sha"] == remote_sha
     assert first["parent_sha"] == parent
+    returned_paths = _git(repo, "ls-tree", "-r", "--name-only", remote_sha)
+    assert "automation/returns/W001/A003/R004/artifacts/training_summary.txt" in returned_paths
 
     with pytest.raises(ValueError, match="remote SHA mismatch"):
         publish_result_bundle_v1(

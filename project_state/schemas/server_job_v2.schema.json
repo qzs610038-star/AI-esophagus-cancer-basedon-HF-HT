@@ -197,6 +197,9 @@
         }
       ]
     },
+    "return_profile": {
+      "$ref": "return_profile_v1.schema.json"
+    },
     "execution_binding": {
       "type": "object",
       "required": [

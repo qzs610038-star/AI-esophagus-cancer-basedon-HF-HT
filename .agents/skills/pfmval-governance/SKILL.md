@@ -82,3 +82,11 @@ subject to their existing explicit approval and workspace gates.
 - Paper output indexes project materials and waits for the senior author's
   template. It does not create manuscript prose.
 - Use `pfmval-audit` for an independent GO/NO-GO or completion review.
+- When workspace governance is in scope, scan for physical/Git worktrees absent
+  from `workspace_registry.json`, duplicate experiment bindings, reused numbers,
+  and `abandoned_reserved` workspaces with a lease or job. A reserved abandoned
+  workspace keeps its number and history but is never dispatchable.
+- When server return governance is in scope, compare policy with runtime:
+  critical files must still be hashed; supporting/diagnostic files must use
+  inventory, size, and Git closure; required raw training CSV/TXT must be present
+  in both the manifest and staged tree.

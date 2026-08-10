@@ -216,7 +216,6 @@ if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
     try {
         $serverPython = Resolve-PfmvalServerPython
         $pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $serverPython
-        $env:PFMVAL_PYTHON = $serverPython
         Write-Host "  [PASS] $($pythonIdentity.Executable) | $($pythonIdentity.Version)" -ForegroundColor Green
     } catch {
         Write-Host "  [FAIL] $($_.Exception.Message)" -ForegroundColor Red

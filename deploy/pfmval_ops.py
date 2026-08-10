@@ -149,11 +149,11 @@ def parse_key_values(items: List[str]) -> Dict[str, Any]:
 
 
 def ensure_job_worktree(manifest: Dict[str, Any]) -> Path:
-    job_id = str(manifest.get("job_id", ""))
-    if not re.fullmatch(r"[A-Za-z0-9_.-]+", job_id):
-        raise ValueError("unsafe job_id for worktree path")
-    worktree_root = get_registered_path("server_automation_worktrees").resolve()
-    worktree = (worktree_root / job_id).resolve()
+    workspace_id = str(manifest.get("workspace_id", ""))
+    if not re.fullmatch(r"W[0-9]{3,}", workspace_id):
+        raise ValueError("unsafe workspace_id for persistent worktree path")
+    worktree_root = get_registered_path("server_experiment_worktrees").resolve()
+    worktree = (worktree_root / workspace_id).resolve()
     if not worktree.is_relative_to(worktree_root):
         raise ValueError("job worktree escapes the registered automation root")
     if worktree.exists():
@@ -164,8 +164,20 @@ def ensure_job_worktree(manifest: Dict[str, Any]) -> Path:
             text=True,
             encoding="utf-8",
         )
+        status = subprocess.run(
+            ["git", "-C", str(worktree), "status", "--porcelain", "--untracked-files=all"],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        if status.stdout.strip():
+            raise ValueError(f"persistent workspace is dirty and cannot advance: {worktree}")
         if completed.stdout.strip() != manifest["source_commit"]:
-            raise ValueError(f"existing job worktree has the wrong commit: {worktree}")
+            subprocess.run(
+                ["git", "-C", str(worktree), "checkout", "--detach", manifest["source_commit"]],
+                check=True,
+            )
     else:
         worktree.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(
@@ -181,7 +193,7 @@ def ensure_job_worktree(manifest: Dict[str, Any]) -> Path:
         encoding="utf-8",
     )
     if status.stdout.strip():
-        raise ValueError(f"job worktree is dirty and cannot be reused: {worktree}")
+        raise ValueError(f"persistent workspace is dirty and cannot be reused: {worktree}")
     return worktree
 
 
@@ -736,7 +748,7 @@ def command_diagnostic(args: argparse.Namespace) -> int:
             PROJECT_ROOT, diagnostic_id=args.diagnostic_id, outputs=args.output,
         )
         print(json.dumps(event, ensure_ascii=False, indent=2))
-        print("[PASS] recorded non-evidence diagnostic output hashes.")
+        print("[PASS] recorded non-evidence diagnostic output inventory and size.")
         return 0
     if args.diagnostic_command == "run-allowlisted":
         result = run_allowlisted_diagnostic(PROJECT_ROOT, diagnostic_id=args.diagnostic_id)

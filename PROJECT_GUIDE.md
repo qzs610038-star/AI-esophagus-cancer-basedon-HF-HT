@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `e2143979364f5c4a38ce057bda9ef4e2ba5139a5c862e9c7055a621518b62744`
+> source_sha256: `c0bb2553e42486c24196eaa198015b34e95a9fc0f58bb986a9c800cc5b9c9f36`
 
 ## 我要找什么
 
@@ -159,6 +159,7 @@
 - [doc-f0d70db9e127](01_指南与解读/分析报告/Phase3_CLAM基线方案审查与文献注册_20260803.md)
 - [doc-e27e5de180af](01_指南与解读/分析报告/UNI2h_LoRA冒烟测试报告_20260530.md)
 - [doc-f3092657ca03](01_指南与解读/分析报告/he-ssgsea-greedy-river.md)
+- [doc-45a8eb08a3d1](01_指南与解读/分析报告/reports/MPP1_5_Analysis_Report.md)
 - [doc-ed7fb303d91d](01_指南与解读/分析报告/下一步改进操作建议_0516.md)
 - [doc-b33f15dd0971](01_指南与解读/分析报告/全模型训练总结与研究方向分析.md)
 - [doc-fce62ad81714](01_指南与解读/分析报告/历史参考与多中心MPP%281-5%29外部测试的综合对比分析报告_20260704.md)
@@ -175,6 +176,7 @@
 - [doc-d61539f485f0](01_指南与解读/学习指南/Codex与ClaudeCode协作方案_20260615.md)
 - [doc-44aabc89d933](01_指南与解读/学习指南/Codex与ClaudeCode双边协作快速命令指南_20260616.md)
 - [doc-342650294076](01_指南与解读/学习指南/Codex决策逻辑与MPP2_LoRA实验学习指南.md)
+- [doc-7116dbd3c118](01_指南与解读/学习指南/GIT_INDEX.md)
 - [doc-08c643bb284f](01_指南与解读/学习指南/LoRA在线微调与MPP2迁移学习指南.md)
 - [doc-408ca0730228](01_指南与解读/学习指南/MPP2_LoRA实验全貌与对抗审查初学者指南_20260715.md)
 - [doc-25365ec02764](01_指南与解读/学习指南/MPP2_R2预测优化_假设检验与实验复盘_20260725.md)
@@ -184,6 +186,7 @@
 - [doc-379b96e712aa](01_指南与解读/学习指南/PFMval_MPP2_双线优化方案体系化学习指南_20260801.md)
 - [doc-624fb900b6c2](01_指南与解读/学习指南/PFMval_MPP2_双线优化方案深度学习指南_20260801.md)
 - [doc-081fee8475ee](01_指南与解读/学习指南/PFMval_MPP2_双线方案学习指南_20260731.md)
+- [doc-beee219cfe1d](01_指南与解读/学习指南/PFMval_部署批准到Gitee训练回传登记全流程路线图_20260810.md)
 - [doc-ce20d727038e](01_指南与解读/学习指南/PFMval学习指南.md)
 - [doc-f0d642418ca1](01_指南与解读/学习指南/PFMval维护机制优化方案_v2.0.md)
 - [doc-bece8ee254c0](01_指南与解读/学习指南/RL方法选择_初学者指南.md)
@@ -207,6 +210,7 @@
 - [doc-5b97bb4672c9](01_指南与解读/部署方案/EGNv1_部署方案.md)
 - [doc-7dac00a3b364](01_指南与解读/部署方案/EGNv2_UNI集成方案.md)
 - [doc-c152680e6a3a](01_指南与解读/部署方案/EGNv2_部署方案.md)
+- [doc-d6c83332bf6b](01_指南与解读/部署方案/GIT_INDEX.md)
 - [doc-c7d6b9f304a2](01_指南与解读/部署方案/HisToGene_UNI特征集成方案.md)
 - [doc-931fb38fe2d8](01_指南与解读/部署方案/Loki_OmiCLIP_安装指南.md)
 - [doc-6124b85413ab](01_指南与解读/部署方案/MPP1-5重跑服务器操作排错与踩坑汇总.md)
@@ -226,7 +230,10 @@
 - [doc-c9b5dcee616a](01_指南与解读/部署方案/服务器部署指南.md)
 - [doc-2733f1449740](01_指南与解读/部署方案/空间信息修复方案_20260613.md)
 - [doc-47c2f8b8395b](01_指南与解读/部署方案/融合空间组学执行方案_20260522.md)
+- [doc-5eebe5c279e3](01_指南与解读/部署方案/项目Git文件追踪与未追踪结构全览_20260809.md)
 - [doc-3ba844a84b95](02_组会汇报/02_README.md)
+- [doc-dfba8163f05f](02_组会汇报/GIT_INDEX.md)
+- [doc-0de9c192c699](02_组会汇报/W004_A001与队友Phase3参考实验设置完整对比_20260808.md)
 - [doc-b059eaec8307](02_组会汇报/服务器部署问题提问清单_20260530.md)
 - [doc-4c9dc9320139](02_组会汇报/组会汇报_0418_HisToGene训练.md)
 - [doc-c8aa1aa25c35](02_组会汇报/组会汇报_0424_模型训练结果.md)
@@ -240,6 +247,7 @@
 - [doc-d3277b2759f7](02_组会汇报/组会汇报_0704_MPP1-5泛化能力对比.md)
 - [doc-ddc15476eddc](02_组会汇报/组会汇报_0711_MPP数据污染排查与安全门禁验证.md)
 - [doc-9a856fc78252](02_组会汇报/组会汇报_0725_MPP2R方优化探索.md)
+- [doc-800548382a8e](02_组会汇报/组会汇报_0808_特征融合分析与W004W005进展.md)
 - [doc-8d442e98e62d](automation/incidents/20260711_mpp2_baseline_cache_root_mismatch.md)
 - [doc-411d4d6be86f](automation/jobs/mpp2-paired-smoke-prediction-supplement-20260712/README.md)
 - [doc-6ff3e0b876b4](automation/logs/main_workspace_cleanup_and_report_handoff_20260713.md)
@@ -248,14 +256,19 @@
 - [doc-2cd25761ecf8](automation/logs/pre_maintenance_experiment_preservation_snapshot_20260714.md)
 - [doc-97488a7e8511](automation/logs/workflow_governance_v3_safe_cleanup_20260726.md)
 - [doc-30d6cd0aae35](automation/report_inputs/gemini_mpp_report_handoff_20260713.md)
+- [doc-58260e87622e](automation/returns/W004/README.md)
 - [doc-916d4b92af63](deploy/SYNC_GUIDE.md)
+- [doc-53c2d1113425](project_state/plans/Phase3_0803特征融合创新方案_讨论归档_20260808.md)
 - [doc-05d7fe5438b6](project_state/plans/Phase3_双线基线与跨队列空间通路迁移分阶段实验方案_20260803.md)
+- [doc-795c370926ca](project_state/plans/local_code_git_governance_execution_plan_review_draft_v001_20260809.md)
 - [doc-b8c47b391978](project_state/plans/mpp2_dual_mechanism_gallery_spra_review_draft_v002_20260806.md)
 - [doc-ce94fd42b6c4](project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717_goal_prompt.md)
 - [doc-6cef1c65d72f](project_state/plans/mpp2_spatial_pathway_residual_adapter_review_draft_20260805.md)
 - [doc-6f9670b9c076](project_state/plans/scientific_records_lifecycle_v1_upgrade_plan_20260729.md)
 - [doc-703b599b0346](project_state/plans/server_execution_roundtrip_v1_migration_boundary_20260729.md)
 - [doc-9337a1ac2103](project_state/plans/server_execution_roundtrip_v1_upgrade_plan_20260729.md)
+- [doc-56bb83e3d8ef](project_state/plans/server_workspace_sync_step1_execution_plan_20260808.md)
+- [doc-ae9fb7416682](project_state/plans/server_workspace_sync_troubleshooting_governance_review_draft_v001_20260808.md)
 - [doc-92f924374faa](project_state/plans/workflow_governance_v3_g08_local_completion_approval_20260727.md)
 - [doc-542d6960864e](project_state/plans/workflow_governance_v3_refactor/REFERENCE_open_source_research_workflow_adaptation_20260726.md)
 - [doc-d11c3567d955](project_state/plans/workflow_governance_v3_remaining_goals_20260727.md)

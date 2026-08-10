@@ -6,6 +6,11 @@
 > 与 Phase 3 的关系：W004 继续使用 accepted repaired frozen MPP2；本文不得修改 W004 的代码、分支、输入合同、实验 Registry 或结果  
 > 编制日期：2026-08-05
 
+> **弃用补充（2026-08-10，`DIR-20260810-001`）**：用户已决定不再使用 W005 在服务器执行本方案训练。
+> W005 编号永久保留且不得复用；现有分支、Gitee ref 与本地 worktree 仅作只读历史候选保留。
+> 本文未登记 experiment、未授权服务器排障或训练；后续新实验必须重新登记并使用 W006 或更高的新永久编号。
+> 下文所有“建议 W005”表述均已失效，仅保留作历史方案参考。
+
 ## 1. 审核结论
 
 建议新增一条**受限、串行门控、低于 W004 优先级**的 MPP2 上游改进线，方法暂名：
@@ -327,4 +332,3 @@ Stage E 通过只证明接口与工程安全，不证明模型有效。
 - [旧 1D GFNet 实现](../../model_gfnet.py)
 - [raw prediction schema](../schemas/prediction_artifact_contract_v1.schema.json)
 - [编号工作树协议](gitee_numbered_workspace_protocol_v001_20260726.md)
-

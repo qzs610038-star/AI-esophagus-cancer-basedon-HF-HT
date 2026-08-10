@@ -44,7 +44,7 @@ Parameters:
 Preflight checks:
   1. Verify working directory is project root
   2. nvidia-smi GPU status
-  3. Set PYTHONIOENCODING=utf-8, HF_HUB_OFFLINE=1, PFMVAL_CONFIG
+  3. Set PYTHONIOENCODING=utf-8, HF_HUB_OFFLINE=1
   4. Verify training script exists
 
 Output:
@@ -83,7 +83,6 @@ if (-not (Test-Path -LiteralPath $pythonResolver -PathType Leaf)) {
 try {
     $pythonPath = Resolve-PfmvalServerPython
     $pythonIdentity = Get-PfmvalPythonIdentity -PythonPath $pythonPath
-    $env:PFMVAL_PYTHON = $pythonPath
 } catch {
     Write-Host "[FAIL] Server Python preflight: $_"
     exit 1
@@ -146,16 +145,6 @@ $env:PYTHONIOENCODING = "utf-8"
 $env:HF_HUB_OFFLINE = "1"
 Write-Host "[INFO] PYTHONIOENCODING=utf-8"
 Write-Host "[INFO] HF_HUB_OFFLINE=1"
-
-# PFMVAL_CONFIG
-$configPath = Join-Path $ProjectRoot "configs\config.server.yaml"
-if (Test-Path $configPath) {
-    $env:PFMVAL_CONFIG = $configPath
-    Write-Host "[PASS] PFMVAL_CONFIG=$configPath"
-} else {
-    Write-Host "[WARN] config.server.yaml not found at: $configPath"
-    Write-Host "[INFO] Falling back to default config.yaml in project root"
-}
 
 # ------------------------------------------------------------
 # Preflight 4: verify script exists

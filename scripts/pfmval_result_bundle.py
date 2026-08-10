@@ -153,10 +153,14 @@ def validate_result_manifest_v1(
         if not str(artifact.get("retention", "")):
             raise ValueError("result artifact requires retention")
         digest = str(artifact.get("sha256", ""))
-        if len(digest) != 64 or any(char not in "0123456789abcdef" for char in digest):
-            if artifact.get("evidence_role") == "critical":
+        if artifact.get("evidence_role") == "critical":
+            if len(digest) != 64 or any(char not in "0123456789abcdef" for char in digest):
                 raise ValueError("critical artifact requires SHA-256")
-            raise ValueError("result artifact requires SHA-256")
+        elif digest and (
+            len(digest) != 64
+            or any(char not in "0123456789abcdef" for char in digest)
+        ):
+            raise ValueError("optional artifact SHA-256 is malformed")
     for artifact_id in result["metric_artifact_ids"]:
         artifact = by_id.get(str(artifact_id))
         if artifact is None:
@@ -285,12 +289,45 @@ def _validate_prediction_return(
             )
 
 
+def _validate_required_training_records(
+    bundle_dir: Path,
+    result: Mapping[str, Any],
+) -> None:
+    job_artifact = next(
+        (item for item in result["artifacts"] if item.get("kind") == "job_manifest"),
+        None,
+    )
+    if job_artifact is None:
+        return
+    job = read_json(
+        bundle_dir / Path(*PurePosixPath(str(job_artifact["path"])).parts)
+    )
+    profile = job.get("return_profile")
+    if not isinstance(profile, Mapping):
+        return
+    required_kinds = set(profile.get("required_artifact_kinds", []))
+    available_kinds = {str(item.get("kind", "")) for item in result["artifacts"]}
+    if result.get("status") in {"success", "failed"}:
+        missing = sorted(required_kinds - available_kinds)
+        if missing:
+            raise ValueError(
+                f"result return is missing required raw training records: {missing}"
+            )
+
+
 def _bundle_sha256(bundle_dir: Path) -> str:
+    result = read_json(bundle_dir / "result.json")
+    critical_paths = {
+        str(item["path"])
+        for item in result["artifacts"]
+        if item.get("evidence_role") == "critical"
+    }
     records = []
-    for path in sorted(item for item in bundle_dir.rglob("*") if item.is_file()):
+    for relative in sorted({"result.json", *critical_paths}):
+        path = bundle_dir / Path(*PurePosixPath(relative).parts)
         records.append(
             {
-                "path": path.relative_to(bundle_dir).as_posix(),
+                "path": relative,
                 "size_bytes": path.stat().st_size,
                 "sha256": _sha256_file(path),
             }
@@ -305,8 +342,22 @@ def _source_integrity(
 ) -> tuple[dict[str, Any], bytes]:
     expected_sha = str(artifact.get("sha256", ""))
     expected_size = int(artifact.get("size_bytes", -1))
-    actual_sha = _sha256_bytes(payload)
     normalized = _git_normalize(payload)
+    if artifact.get("evidence_role") != "critical":
+        if len(payload) != expected_size:
+            raise ValueError(
+                f"supporting/diagnostic artifact size mismatch: {artifact.get('path')}"
+            )
+        return {
+            "artifact_id": artifact["artifact_id"],
+            "path": artifact["path"],
+            "verification": "size_inventory",
+            "line_ending_source_materialized": _line_ending(payload),
+            "source_match": "size_only",
+            "size_bytes_raw": len(payload),
+            "size_bytes_git_normalized": len(normalized),
+        }, normalized
+    actual_sha = _sha256_bytes(payload)
     if actual_sha == expected_sha and len(payload) == expected_size:
         source_match = "raw"
         raw_payload = payload
@@ -325,6 +376,7 @@ def _source_integrity(
     record = {
         "artifact_id": artifact["artifact_id"],
         "path": artifact["path"],
+        "verification": "sha256",
         "line_ending_source_materialized": _line_ending(payload),
         "source_match": source_match,
         "size_bytes_raw": len(raw_payload),
@@ -410,7 +462,10 @@ def build_result_bundle_v1(
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes(normalized)
         artifact["size_bytes"] = len(normalized)
-        artifact["sha256"] = _sha256_bytes(normalized)
+        if artifact.get("evidence_role") == "critical":
+            artifact["sha256"] = _sha256_bytes(normalized)
+        else:
+            artifact.pop("sha256", None)
         artifact["source_attempt_id"] = source_result["attempt_id"]
         artifact["retention"] = str(
             artifact.get("retention") or artifact_retention
@@ -478,6 +533,7 @@ def validate_result_bundle_v1(
     result = read_json(bundle_dir / "result.json")
     validate_result_manifest_v1(project_root, result)
     _validate_prediction_return(bundle_dir, result)
+    _validate_required_training_records(bundle_dir, result)
     paths = {str(item["path"]) for item in result["artifacts"]}
     expected_files = {"result.json", *paths}
     actual_files = {
@@ -501,8 +557,10 @@ def validate_result_bundle_v1(
             raise ValueError(f"artifact size mismatch: {raw_path}")
         if size > MAX_RESULT_FILE_BYTES:
             raise ValueError(f"artifact exceeds size budget: {raw_path}")
-        if _sha256_file(path) != artifact["sha256"]:
-            raise ValueError(f"artifact SHA-256 mismatch: {raw_path}")
+        digest = str(artifact.get("sha256", ""))
+        if artifact.get("evidence_role") == "critical" or digest:
+            if _sha256_file(path) != digest:
+                raise ValueError(f"artifact SHA-256 mismatch: {raw_path}")
         total += size
         by_path[raw_path] = artifact
     total += (bundle_dir / "result.json").stat().st_size
@@ -527,6 +585,12 @@ def validate_result_bundle_v1(
     for record in records:
         raw_path = str(record["path"])
         actual = (bundle_dir / Path(*PurePosixPath(raw_path).parts)).read_bytes()
+        if record.get("verification") == "size_inventory":
+            if len(actual) != int(record.get("size_bytes_git_normalized", -1)):
+                raise ValueError(f"supporting/diagnostic size mismatch: {raw_path}")
+            if by_path[raw_path].get("evidence_role") == "critical":
+                raise ValueError(f"critical artifact cannot use size-only integrity: {raw_path}")
+            continue
         normalized_sha = str(record.get("sha256_git_normalized", ""))
         if _sha256_bytes(actual) != normalized_sha:
             raise ValueError(f"Git-normalized integrity mismatch: {raw_path}")
@@ -625,8 +689,25 @@ def _git_bundle_sha256(
         revision_path,
     ).splitlines()
     prefix = revision_path.rstrip("/") + "/"
+    relative_names = {name[len(prefix) :] for name in names if name.startswith(prefix)}
+    result_name = prefix + "result.json"
+    result_payload = subprocess.run(
+        ["git", "show", f"{commit_sha}:{result_name}"],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+    ).stdout
+    result = json.loads(result_payload.decode("utf-8"))
+    expected_names = {"result.json", *(str(item["path"]) for item in result["artifacts"])}
+    if relative_names != expected_names:
+        raise ValueError("remote result tree does not match manifest closure")
+    identity_names = {
+        "result.json",
+        *(str(item["path"]) for item in result["artifacts"] if item.get("evidence_role") == "critical"),
+    }
     records = []
-    for name in sorted(names):
+    for relative in sorted(identity_names):
+        name = prefix + relative
         if not name.startswith(prefix):
             raise ValueError(f"unexpected Git tree path outside revision: {name}")
         completed = subprocess.run(
@@ -638,7 +719,7 @@ def _git_bundle_sha256(
         payload = completed.stdout
         records.append(
             {
-                "path": name[len(prefix) :],
+                "path": relative,
                 "size_bytes": len(payload),
                 "sha256": _sha256_bytes(payload),
             }
@@ -714,7 +795,27 @@ def publish_result_bundle_v1(
             if destination.exists():
                 raise ValueError("immutable revision path already exists")
             shutil.copytree(bundle_dir, destination)
-            _run_git(worktree, "add", "--", revision_path)
+            _run_git(worktree, "add", "-f", "--", revision_path)
+            staged = set(
+                _run_git(
+                    worktree,
+                    "diff",
+                    "--cached",
+                    "--name-only",
+                    "--",
+                    revision_path,
+                ).splitlines()
+            )
+            prefix = revision_path.rstrip("/") + "/"
+            expected_staged = {
+                prefix + item.relative_to(bundle_dir).as_posix()
+                for item in bundle_dir.rglob("*")
+                if item.is_file()
+            }
+            if staged != expected_staged:
+                raise ValueError(
+                    "staged result tree does not match required bundle closure"
+                )
             result = read_json(bundle_dir / "result.json")
             commit_env = dict(os.environ)
             commit_env.update(

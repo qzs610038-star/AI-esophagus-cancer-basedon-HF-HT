@@ -18,7 +18,7 @@ REGISTRY_PATH = PROJECT_ROOT / "configs" / "server_paths.yaml"
 
 def load_path_registry(registry_path: Path = REGISTRY_PATH) -> Dict[str, Any]:
     value = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict) or value.get("schema_version") != "1.0":
+    if not isinstance(value, dict) or value.get("schema_version") not in {"1.0", "2.0"}:
         raise ValueError(f"invalid PFMval path registry: {registry_path}")
     return value
 

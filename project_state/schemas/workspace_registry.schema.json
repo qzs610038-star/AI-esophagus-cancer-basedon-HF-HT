@@ -53,8 +53,10 @@
             "type": "string"
           },
           "experiment_id": {
-            "type": "string",
-            "minLength": 1
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "protocol_revision": {
             "type": "integer",
@@ -65,6 +67,7 @@
               "shadow",
               "registered",
               "workspace_open",
+              "abandoned_reserved",
               "close_ready",
               "tombstoned",
               "archived"
@@ -96,6 +99,10 @@
           },
           "retention_policy": {
             "type": "string"
+          },
+          "reservation_directive_id": {
+            "type": "string",
+            "pattern": "^DIR-[0-9]{8}-[0-9]{3,}$"
           },
           "hosts": {
             "type": "object",
@@ -133,6 +140,44 @@
             }
           }
         },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "abandoned_reserved"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "properties": {
+                "experiment_id": {
+                  "type": "null"
+                },
+                "active_attempt_id": {
+                  "type": "null"
+                },
+                "lease": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "reservation_directive_id"
+              ]
+            },
+            "else": {
+              "properties": {
+                "experiment_id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ],
         "additionalProperties": false
       }
     }

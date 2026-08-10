@@ -1,16 +1,16 @@
 # PFMval 服务器 W### 同步、关键合同纠正与排障知识治理修改方案
 
 > plan_id: `server_workspace_sync_troubleshooting_governance_v001_20260808`
-> plan_revision: `003`
-> lifecycle: `pending_review`
-> execution_status: `NOT RUN`
-> authority: `review_draft`
+> plan_revision: `004`
+> lifecycle: `historical_reference`
+> execution_status: `PARTIALLY EXECUTED`; completion register见第 22 节
+> authority: `reference`; 当前服务器维护执行权威为 `project_state/plans/server_maintenance.md`
 > source_state_revision: `182`
 > source_commit: `b07eb9376ba6b34678c266da346dcfaaa7deffff`
 > working_tree_snapshot: `dirty; pre-existing and concurrent user changes preserved`
 > audit_snapshot: `PASS=6 WARN=6 FAIL=1; workspace branch binding drift`
 > created_at: `2026-08-08`
-> updated_at: `2026-08-08; align with user execution-flow requirements, add comparison coverage, and refine W004 temporary-exception boundary`
+> updated_at: `2026-08-09; append independently verified local/server governance completion register and new-experiment minimum gates`
 > boundary: 本文件只提出修改方案；不授权服务器操作、目录迁移、训练、job/attempt 创建、结果导入或接纳、Registry/current state 修改、受保护资产修改、清理、提交或推送。
 
 补充说明：上述前提只约束后续治理/同步/目录切换工作的启动顺序，不要求在当前 W004 本轮实验中先把历史复制残留全部清干净；当前轮次只要不新增无关脏文件，并保持实验相关改动可追溯即可。
@@ -753,3 +753,337 @@ W### 不因实验完成自动删除；关闭只先执行 preview。原始记录�
 - schema、CLI、目录或知识库已经实现；
 - 服务器已经迁移；
 - W004 或其他实验获得新的训练、attempt、job、同步或结果接纳授权。
+
+## 19. 2026-08-09 服务器个人目录人工盘点补充
+
+### 19.1 证据性质
+
+本节依据用户在服务器 PowerShell 中人工执行只读命令后回传的目录清单和 Git 状态，
+属于 `manual_observation / diagnostic_only`，用于制定整理动作，不自动成为实验结果或服务器迁移完成证据。
+
+当前服务器代码目录为：
+
+```text
+D:\AIPatho\qzs\pfmval_deploy_git
+HEAD (detached): 640a5e1294e61ee5234ef15f7b575525066db5a6
+git status --short: 无 tracked / untracked 输出
+```
+
+该状态只能证明 Git 可见工作区干净，不能证明物理目录已经干净。目录中仍存在被忽略或未由
+Git 状态展示的 `__pycache__`、`.idea`、`checkpoints`、`logs`、`mpp_uni2h_cache`、
+`uni2h_cache`、`uni2h_cache_tokens`、训练状态 TXT 和旧 ZIP。这进一步证明
+`pfmval_deploy_git` 当前是 `legacy_mixed`，不得仅凭 `git status` 判定可继续承载新实验输出。
+
+### 19.2 qzs 一级目录分类
+
+| 服务器目录或文件 | 当前分类 | 本轮动作 | 后续条件 |
+|---|---|---|---|
+| `data-phase2/`、`data-phase3/` | `protect` | 不移动、不删除 | 仅由已登记 path id 引用 |
+| `checkpoints/` | `protect` | 原位保留 | 后续只登记路径、大小、用途和保留/复算策略 |
+| `pfmval_governance/` | `keep` | 作为治理 checkout 候选保留 | 核对其 exact commit 与 clean 状态后使用 |
+| `pfmval_automation/` | `keep` | 作为 W### 源码 worktree 根保留 | 每个子目录必须反向绑定 Registry 中的 W### |
+| `pfmval_experiment_runs/` | `keep` | 作为运行产物根保留 | 后续统一为 `W###/A###` 结构 |
+| `pfmval_result_returns/` | `keep` | 作为回传 staging 根保留 | 每个 revision 不可覆盖，回传后按 retention 清理候选处理 |
+| `pfmval_runtime_bundles/` | `keep_review` | 暂不删除 | 对账 job/attempt/result 后决定保留期 |
+| `pfmval_deploy_git/` | `legacy_mixed` | 停止新增训练输出；暂不清空 | 完成 inventory、外部路径切换和新 W### 无训练试点后转只读 |
+| `pfmval_deploy/`、`deploy/` | `retire_candidate` | 只读保留 | 证明无 active job/path id 引用后再归档 |
+| `pfmval_dispatch/`、`pfmval_dispatch_jobs/` | `retire_candidate` | 暂不删除 | 对账旧 job 与当前 automation 记录 |
+| `pfmval_deploy_git_result_r002_20260712/` | `return_archive_candidate` | 暂不删除 | 与本地不可变 return 是否已完整归档逐项对账 |
+| `pfmval_prediction_supplement_20260712/` | `return_archive_candidate` | 暂不删除 | 确认四份 prediction CSV 已在 Gitee/local archive 后再处理 |
+| `phase3_w004_server_evidence_20260806/` | `return_archive_candidate` | 暂不删除 | 与 W004 return ref、524 个本地归档文件和 Registry 状态对账 |
+| `pfmval_deploy_20260529_212047.tar` | `retire_candidate` | 优先审核，不直接删除 | 若 `.tar.gz` 可读且内容相同，只保留一份归档即可；本轮不启用哈希 |
+| `pfmval_deploy_20260529_212047.tar.gz` | `archive_candidate` | 暂时保留 | 先人工确认可解压、来源和是否仍需长期保存 |
+| `.idea/`、旧 inventory TXT/PS1 | `ignore_or_refresh` | 不进入实验工作树 | inventory 仅保留最新一份及生成时间 |
+
+上述分类不是删除授权。任何 `retire_candidate` 必须先形成精确路径清单、active 引用检查和
+用户逐项批准；不得使用通配符删除、`git clean -fd` 或 `git reset --hard`。
+
+### 19.3 最小目标拓扑
+
+为减少人工迁移量，当前已存在的目录优先复用，不强制立即改名：
+
+```text
+D:\AIPatho\qzs\
+├─ pfmval_governance\          # 治理 checkout
+├─ pfmval_automation\W###\     # 持久源码 worktree
+├─ pfmval_experiment_runs\W###\A###\
+├─ pfmval_result_returns\W###\A###\R###\
+├─ pfmval_runtime_bundles\W###\
+├─ checkpoints\                # 大型模型资产，源码树外
+├─ data-phase2\                # 受保护数据
+├─ data-phase3\                # 受保护数据
+└─ pfmval_deploy_git\          # legacy_mixed，只读过渡
+```
+
+这比立即新建并搬运 `pfmval_runs` / `pfmval_returns` 更省时，也避免同一类目录再次出现两套命名。
+后续只需把这些已存在目录登记为稳定 path id，并禁止新输出回流 `pfmval_deploy_git`。
+
+## 20. CSV / TXT 全量走 Gitee 的历史快速分析
+
+### 20.1 总体判断
+
+逐样本预测 CSV、训练历史 CSV、指标 JSON、配置和必要 TXT/日志适合通过 Gitee 回传。
+现有证据不支持“CSV/TXT 文件类型会导致 Gitee 反复报错”这一判断：
+
+1. W001 历史 prediction supplement 已通过独立 Gitee branch 一次回传四份预测 CSV。
+2. W004 Stage 2 已成功归档四个不可变 Gitee 回传包；每包 131 个文件，其中 80 份逐切片预测 CSV。
+3. 四个 W004 包合计 524 个文件已从固定 Gitee commit 导出并通过本地包校验。
+4. 本次对项目历史故障记录的快速搜索未发现 `HTTP 413`、`RPC failed`、`too large` 或
+   `large file rejected` 等由文本结果体积直接触发的 Gitee 错误。
+
+因此，当前主要风险不是 CSV/TXT，而是“必传清单、Git 实际 staged tree、远端 tree”不一致。
+
+### 20.2 历史故障簇
+
+| 故障簇 | 历史表现 | 是否由 CSV/TXT 类型导致 | 简化治理措施 |
+|---|---|---|---|
+| `.gitignore` 漏包 | W004 A001/R002 的 `runner.log` 命中 `*.log`，普通 `git add` 未纳入远端包 | 否 | 仅对 manifest 已声明的 revision path 使用精确 `git add --force` |
+| 换行转换 | Windows 原始 CRLF 与 Git 物化 LF 导致文本/CSV 的原始字节校验表面不一致 | 否 | 记录原始/物化换行类型；禁止人工打开后另存回传文件 |
+| 同名路径冲突 | 根级与 artifact 副本同时命名 `metrics.json` | 否 | artifact 使用唯一相对路径，不按 basename 扁平化 |
+| JSON 单元素退化 | PowerShell 将一条 `large_artifacts` 序列化为 object，而非 array | 否 | 结构化清单固定输出数组 |
+| ref/commit 身份错误 | implementation SHA、governance SHA、dirty checkout 或非 fast-forward 冲突 | 否 | exact fetch、detached worktree、不可变 revision、禁止 force push |
+| 缺预测补传 | 旧结果包未覆盖全部预测，后来走独立 Gitee supplement | 否 | 新 job 在运行前冻结每个 split 的预测路径；缺失只做 packaging-only 补传，不重训 |
+
+### 20.3 文件回传分层
+
+| 内容 | Gitee 处理 | 原因 |
+|---|---|---|
+| 每个实际评估 split 的逐样本预测 CSV | 必须回传 | critical result，不允许只登记服务器路径 |
+| `metrics.json`、`training_history.csv`、selection/best epoch proof | 必须回传 | 体积小且支撑结果复核 |
+| `resolved_config`、`resolved_argv`、started/terminal receipt | 必须回传 | 证明实际执行内容和终态 |
+| 正式作业原始 stdout/stderr 或声明为 merged 的 `runner.log` | 按 return profile 回传 | 用于复现和排障；命中 ignore 时必须精确 force-add |
+| 纯 diagnostic 大日志 | 只有 Agent 分析需要时回传 | 非科学证据，避免仓库积累机器噪声 |
+| checkpoint、embedding、cache、模型权重、tar/zip 大包 | 不通过结果 ref 复制 | 留服务器并登记路径、大小、用途和保留/复算策略 |
+
+不得设置一个简单的“CSV 数量上限”。是否适合 Gitee 应按总 staged 大小、是否可压缩、
+是否属于不可缺失的 critical artifact 和远端当前能力判断。当前历史已经证明 80 份小 CSV/包、
+131 文件/包可稳定工作；未知的大型单文件应在发布前单独预览，而不是改走手工复制粘贴。
+
+### 20.4 最简发布闭环
+
+```text
+return preview
+→ 生成 expected 清单
+→ 复制到唯一 W###/A###/R### revision path
+→ 只 stage 该 revision path
+→ 比较 expected 与 staged tree
+→ push 不可变 server ref
+→ 从远端 tree 复核 required 文件存在
+→ COMPLETE 才进入本地 quarantine/import
+```
+
+手工复制粘贴只用于 `git status`、目录清单和短错误片段；不得替代预测 CSV、训练历史、
+完整日志或正式 result bundle。
+
+## 21. 服务器整理的三批最简执行顺序
+
+### SI1：停止污染（Stop Inflow）
+
+1. 不再在 `pfmval_deploy_git` 下新建日志、预测、checkpoint、cache 或临时 ZIP。
+2. 新源码只进入 `pfmval_automation/W###`；新输出只进入 `pfmval_experiment_runs/W###/A###`。
+3. 新回传 staging 只进入 `pfmval_result_returns/W###/A###/R###`。
+4. 本批不移动旧文件，完成后即可显著降低继续变脏的速度。
+
+### RA2：结果对账（Result Reconciliation）
+
+按目录而不是按散落文件逐个对账：
+
+1. `pfmval_deploy_git_result_r002_20260712`；
+2. `pfmval_prediction_supplement_20260712`；
+3. `phase3_w004_server_evidence_20260806`；
+4. `pfmval_result_returns`；
+5. `pfmval_runtime_bundles`。
+
+每个目录只记录：关联 W### / attempt / result、Gitee ref、是否已本地归档、是否仍需补传、
+建议保留或退役。结果没有完成 Gitee/local 对账前不得删除服务器副本。
+
+### HC3：历史收口（Historical Consolidation）
+
+1. 先审核两个 2026-05-29 tar 归档是否重复；
+2. 再审核 `pfmval_deploy`、`deploy`、旧 dispatch 目录是否还有 active 引用；
+3. 只把无 active 引用且结果已对账的目录提升为精确 `retire` 清单；
+4. 用户审核精确清单后，另开实际归档/删除批次；本方案不直接给出删除命令。
+
+三批完成的正确停止点是：新实验不再污染混合目录、历史结果均有去向、退役候选清单可审核。
+它不要求一次性扫描或搬走所有 cache、checkpoint 和数据，也不要求服务器所有物理目录都为空。
+
+## 22. 2026-08-09 治理完成登记与新实验前最小门禁
+
+### 22.1 证据边界与仓库位置
+
+本节是对本地非代码、本地代码和服务器目录治理的汇总登记，不把聊天完成声明直接当作项目事实。
+
+- 仓库核验位置：`main @ f0b2f700c8b68589a5845cb8a0bb84033ad8ba38`。
+- 核验时 Git 状态：除本文件既有/本次追加修改外，无其他工作区变化；`main` 相对 `origin/main` ahead 12，未在本轮推送。
+- 本地完成项依据 Git commit、Workspace Registry、Git tracked/ignored 现状和治理审计记录，分类为 `current`。
+- 服务器完成项依据用户回传的 PowerShell 表格、隔离回执和现场 `RV2 PASS`，分类为
+  `manual_observation / diagnostic_only`；它证明人工整理动作，但不等同于实验结果或 Registry accepted evidence。
+- 本文件在 `project_state/document_registry.json` 中是 `historical/reference`；当前执行规则仍须写入
+  active 的 `project_state/plans/server_maintenance.md` 后才能约束新实验。
+
+### LG1：本地非代码治理（Local Non-code Governance）
+
+状态：`COMPLETED / current`。
+
+1. 已建立本地 Git 备份基线：`6a59855`，并在 `cfafb39` 完成工作区治理基线收口。
+2. 当前 Git 跟踪边界已核验：
+   - `01_指南与解读/部署方案/`：仅 1 个索引文件；
+   - `01_指南与解读/学习指南/`：仅 1 个索引文件；
+   - `01_指南与解读/分析报告/`：97 个文件全量跟踪；
+   - `02_组会汇报/`：仅 1 个索引文件；
+   - `团队项目进度与结论/`：仅 1 个索引文件。
+3. `historical_file/` 已建立并被 Git 忽略；旧人读资料、历史运行摘要与迁移备份已从活跃工作树边界退出。
+4. `phase3_qzs_share/` 和 `codex_memory/` 保持本地忽略；前者仅在用户明确需要压缩包协作时另行处理，后者不得作为项目事实源。
+5. 本轮未删除本地资料、未改写历史报告正文、未自动推送远端。
+
+### CG2：本地代码治理（Local Code Governance）
+
+状态：`COMPLETED_WITH_OPEN_CLOSEOUT_DEBT / current`。
+
+1. `225acf9` 记录用户批准的代码治理基线；`240e8b1` 将 101 个经审核的 MPP1-5 前旧代码候选从 main 当前树退出，
+   `lora_utils.py` 保留。历史代码在 `historical_code/pre_mpp1_5/` 本地只读保存，并由 Git 忽略；迁移前 Git 历史仍可恢复。
+2. `586a93d` 增加 `experiments/workspaces/_template/`，包含 `code/`、`configs/`、最简测试、结构化日志索引、
+   `shared_code_manifest.json` 和 `CLOSEOUT.md`；原始日志、checkpoint、预测、缓存和中间产物继续位于工作树外。
+3. `66c06a0` 从 W004 选择性回收 14 个 Phase 3 核心模块、5 个测试、4 个小型配置/合同及日志/closeout 骨架；
+   未导入或接纳 W004 A002-A004 结果，也未整体合并其 44 个独有提交。
+4. `f0b2f70` 在用户精确批准后移除 W002、W003 的本地物理 worktree；Workspace Registry 已将两者标为
+   `tombstoned`，编号、分支和 Git 历史继续保留。
+5. 未完成但不否定上述治理完成项：W001 仍因非终态 attempt 事件阻塞关闭；W004 仍为
+   `blocked_pending_result_reconciliation_and_code_review`，不得标记完成或移除。
+
+### SG3：服务器目录治理（Server Directory Governance）
+
+状态：`PARTIALLY_COMPLETED / manual_observation`。
+
+1. `SI1` 停止污染已由用户确认执行：新源码、新运行输出和新回传 staging 不再写入
+   `pfmval_deploy_git` 的混合目录；该目录仅保留为 `legacy_mixed` 过渡入口。
+2. `RA2` 可恢复退役已完成并通过 `RV2` 现场验收：
+   - 三个冗余 runtime bundle 与四个已被替代的 W001 result-return staging 目录，共 7 个目录；
+   - 隔离回执共 2,339 个文件，约 445.85 MB；
+   - 7 个源路径均不存在，隔离目标存在，文件数与回执一致；
+   - 保留的 `G12-6c0f9cad173068ef194f3c1558a78e7fe8ceb313`、W004 服务器证据目录、
+     `pfmval_runtime_bundles` 根和 `pfmval_result_returns` 根均仍存在；
+   - `pfmval_runtime_bundles` 仅剩上述必要 bundle，`pfmval_result_returns` 根为空。
+3. 隔离区 `D:\AIPatho\qzs\RA2_RETIRE_HOLD_20260809` 尚未永久删除，因此未释放约 445.85 MB；
+   永久删除必须在下一次 Gitee 同步与结果接纳闭环成功后另行审核。
+4. `HC3` 历史收口尚未执行：两个 2026-05-29 tar、`pfmval_deploy/`、`deploy/` 和旧 dispatch 目录仍只是
+   `retire_candidate`，不得据此删除。
+
+### NG4：新实验前必要治理门禁（New-experiment Governance Gate）
+
+总体判定：`CONDITIONAL GO`。本地文件与代码治理已足以支持新实验准备，但在创建或绑定下一个实验工作树前，必须完成以下三项：
+
+1. **新实验重新登记（HARD）**：依据 `DIR-20260810-001`，W005 G-SPRA 候选路线已弃用，不再用于服务器训练。
+   W005 编号永久保留且不得复用；现有分支、Gitee ref 与本地 worktree 仅作只读历史候选保留，不补写成正式 experiment。
+   后续新实验必须先登记新的 experiment，再分配 `next_workspace_number=6` 对应的 W006 或更高永久编号，并重新核验
+   experiment、path、branch、HEAD、dirty、服务器 path id 与运行次数预算。
+2. **服务器路径登记（HARD）**：`configs/server_paths.yaml` 仍把 `pfmval_deploy_git` 登记为当前
+   `server_repo_worktree`，且尚未登记 governance、`W###` 持久源码、run、return、diagnostic、runtime bundle 的独立 path id。
+   新实验不得仅凭本历史草案使用这些未登记路径；应先在 active `server_maintenance.md` 与路径 Registry 中落位。
+3. **无训练 Gitee 往返试点（HARD）**：当前 `ensure_job_worktree()` 仍按 `job_id` 创建服务器 worktree，
+   `return_profile_v1.schema.json` 尚不存在。新实验正式训练前至少应以登记后的新 W### 做一次无训练的 exact fetch、环境 preflight、
+   回执/最小回传 staging 演练，并验证输出未回流 `pfmval_deploy_git`。该试点不授权训练或结果接纳。
+
+以下治理可后置，不阻塞新实验的本地方案设计与代码实现：
+
+- W001 事件账本修复与关闭；
+- W004 A002-A004 结果对账、import/accept 决策和 closeout；
+- `HC3` 历史目录精确退役清单及 RA2 隔离区永久删除；
+- 完整 `return_profile_v1`、v3 protocol/code/input digest 和长期知识晋升自动化。
+
+严格门禁说明：本机登记的 `D:\miniconda\envs\pfmval_py310\python.exe` 实际不存在，系统 Python 与
+`D:\miniconda\python.exe` 均缺少 `PyYAML`，因此本次无法重新执行 `agent start-check --strict`；该项记为环境 `WARN`，
+不冒充 PASS。最近一次仓库内治理审计记录为严格门禁 `FAIL=0`，但新实验启动时仍须在可用环境中重跑。
+
+## 23. 2026-08-10 Agent 接口、传输回传与哈希分层适配审计
+
+### IA1：接口适配审计（Interface Adaptation Audit）
+
+总体判定：`NO-GO` 于“现有 Agent 接口已经完整适配新服务器治理”的声明；以下能力仍是设计或部分实现：
+
+| 范围 | 当前证据 | 审计结论 | 必要修改落点 |
+|---|---|---|---|
+| 工作树绑定 | `AGENTS.md` 与编号协议已要求对话绑定 W###；但 `ensure_job_worktree()` 仍按 `job_id` 建服务器 worktree | 规则正确、执行未升级 | `deploy/pfmval_ops.py`、launcher、workspace schema/CLI、对应测试 |
+| 弃用编号 | W005 已由 `DIR-20260810-001` 取消执行，但 schema 没有“编号保留、物理 worktree 暂留、未登记 experiment”的状态 | 指令已生效，Registry 表达能力不足 | workspace schema/CLI 增加 `abandoned_reserved` 或等价受测生命周期；不得伪造 experiment |
+| 服务器路径 | `configs/server_paths.yaml` 仍把 `pfmval_deploy_git` 作为 active repo/config/cache/checkpoint 根 | 与 SI1 停止污染目标不一致 | active `server_maintenance.md`、`configs/server_paths.yaml`、路径测试 |
+| 诊断排障 | 已有 allowlisted diagnostic request/run/record，但按 diagnostic id 新建临时 worktree，且输出仍逐文件 SHA | 可用但未采用持久 W### 与轻哈希目标 | `scripts/pfmval_state.py`、diagnostic schema/测试 |
+| 结果回传 | job v2 已有 artifact policy；raw predictions 为 critical HARD | 关键预测治理已完成 | 保持 `server_job_v2`、`result_envelope_v2` 的关键预测约束 |
+| 回传 profile | `return_profile_v1.schema.json` 不存在，尚无 success/fit-before/fit-after/diagnostic 的确定矩阵 | 未实现 | 新 schema、模板、preview/pack/validate、四类 fixture |
+| 忽略文件漏包 | publisher 仍使用普通 `git add -- <revision_path>` | required `.log` 仍可能被 `.gitignore` 漏掉 | 仅对 manifest required revision path 精确 force-add，并比较 expected/staged/remote tree |
+
+在上述工作完成并通过无训练 Gitee 往返试点前，新实验可以登记、设计和本地实现，但不得把现有接口宣称为“持久 W### 服务器闭环已完成”。
+
+### HG2：哈希分层核验（Hash-tier Governance Verification）
+
+结论：**知识/导航层已放松；服务器结果与诊断实现层尚未按本方案完全放松。**
+
+1. 已实现：
+   - `DIR-20260807-001` 已将 Evidence/Governance 保持 HARD、Knowledge/Navigation 漂移降为 WARN；
+   - job v2 的 `artifact_policy` 已声明 `critical=sha256_required`、`supporting=size_inventory_default`、
+     `diagnostic=non_evidence`、大型资产仅登记服务器路径/size/SHA；
+   - 原始逐样本预测、metrics 来源、selection proof、关键输入和关键代码身份仍保持 SHA-256 HARD，符合方案。
+2. 未实现或仍偏严：
+   - `result_envelope_v2.schema.json` 仍要求每个普通 artifact 都有 SHA-256；
+   - `validate_result_bundle_v1()` 仍逐文件计算并比较所有 artifact SHA，并对完整 bundle 再计算 SHA；
+   - diagnostic record 仍对每个返回文件计算 SHA；
+   - supporting/diagnostic 尚未真正切换为“required 清单 + size/type + Git/bundle closure，默认不逐文件 SHA”。
+3. 因此不能声称哈希已经全面放松。后续若实施放松，应先由用户单独批准精确范围：
+   - 保留：source commit、protocol/critical contract、关键输入、原始预测、metrics/selection proof、不可变 ref/bundle 身份；
+   - 放松候选：普通 stdout/stderr、training history 辅助副本、环境探测、可重建图表和额外 debug dump；
+   - 负面影响：取消逐文件 SHA 会降低对 supporting/diagnostic 单文件字节篡改的独立检测能力；必须以 Git object 闭包、
+     不可变 revision、expected/staged/remote tree 一致性和 size/type 清单补偿。
+
+本审计没有新增、删除或放松任何哈希校验。
+
+### SM3：Skill 维护审计（Skill Maintenance Audit）
+
+canonical `.agents/skills/` 的总体路由方向正确，但尚未完整承载新治理；`.claude/skills/` 是薄适配器，无需复制规则。
+
+| Skill | 当前状态 | 建议补充 |
+|---|---|---|
+| `train` | retired router；已要求 active experiment、W###、合同与 run count | 增加绑定回执字段、拒绝 abandoned/reserved W、持久 W### 尚 code-pending 的停止点 |
+| `sync-server` | retired router；已要求 Gitee、exact commit、clean locus、remote SHA、quarantine | 增加外置 run/return/diagnostic path id、fetch-not-pull、无训练诊断试点、禁止按 job 新建长期 worktree |
+| `post-train` | retired router；已区分 critical/supporting/diagnostic | 增加 return profile 终态矩阵、required ignored file force-add、expected/staged/remote tree、packaging-only 补传 |
+| `experiment-log` | retired router；已要求 Registry 与不可变 envelope | 增加 abandoned-reserved W###、编号不复用、未登记候选不得伪造成 experiment/result |
+| `pfmval-governance` | active router；已有 intake 与 W### 边界 | 增加新实验编号分配前的 orphan/abandoned 扫描和 active server path gate |
+| `pfmval-audit` | active audit；证据分级完整 | 增加“policy 声明与 schema/runtime 哈希行为一致性”及 expected/staged/remote tree 反向核验 |
+
+Skill 修改应与 schema/CLI/测试同批落地；只改提示词而底层实现仍按 job 建 worktree、逐文件哈希或普通 git add，不能视为治理完成。
+
+## 24. 2026-08-10 IA1/HG2/SM3 修复登记
+
+### IF1：接口修复（Interface Fix 1）
+
+状态：`COMPLETED_LOCAL`。
+
+1. W005 已进入 Workspace Registry 的 `abandoned_reserved` 生命周期：编号永久保留，无 experiment、lease 或 active attempt；执行验证与 lease 获取均拒绝该状态。
+2. `ensure_job_worktree()` 已改为按 `workspace_id` 使用 `server_experiment_worktrees/W###`；不再按 job id 生成长期源码工作树。
+3. governance、`W###`、run、return、diagnostic、runtime bundle 的独立 path id 已登记；`pfmval_deploy_git` 已降为 legacy/no-new-output。
+4. `return_profile_v1.schema.json` 已创建；新 job 带终态回传矩阵，原始训练 CSV/TXT 为 success/failed 必传，incomplete 为尽量回传。
+5. 结果发布已改为精确 force-add，并在 commit 前比较 expected/staged tree；被忽略的必传 CSV/TXT 不再静默漏包。
+
+### HV2：哈希实现核验（Hash Verification 2）
+
+状态：`COMPLETED_LOCAL_WITH_DECLARED_TRADEOFF`。
+
+- critical：仍逐文件 SHA-256，覆盖关键合同、metrics/selection proof、原始预测与 bundle integrity。
+- supporting：新包去除 artifact SHA，只保留清单、精确大小、归一化记录和 Git tree 闭包。
+- diagnostic：记录路径、大小、UTF-8/LF 字节合同与 Git tree 闭包，不再逐文件 SHA。
+- bundle identity：只覆盖 `result.json` 与 critical artifacts；remote tree 仍必须与 manifest 全闭包一致。
+- 已接受的负面影响：supporting/diagnostic 不再具备独立的同大小字节篡改检测；由不可变 Git object、exact ref、expected/staged/remote tree 与大小清单补偿。它们不得成为 accepted metric 来源；若提升为证据，必须重新按 critical 打包。
+
+### SA3：Skill 适配（Skill Alignment 3）
+
+状态：`COMPLETED_LOCAL`。
+
+- `train`：拒绝 abandoned/closed workspace，固定持久 `W###` 与外置 attempt root。
+- `sync-server`：使用新 path id、fetch-not-pull、Gitee-only、allowlisted diagnostic。
+- `post-train`：加入终态矩阵、原始 CSV/TXT、精确 force-add、staged tree 与补传不可变 revision。
+- `experiment-log`：支持弃用编号但无 experiment 的规范表达。
+- `pfmval-governance` / `pfmval-audit`：加入 orphan/abandoned 扫描、policy/runtime 哈希一致性与 return closure 反向核验。
+
+### SV4：服务器现场验收（Server Verification 4）
+
+状态：`PENDING`。本轮未连接服务器、未训练、未推送。
+
+新实验前唯一新增 HARD 门禁是一次无训练 Gitee 往返试点，依次验证：新 path id 现场存在性、持久 `W###` 绑定、exact fetch、诊断回传、含原始 CSV/TXT 的最小结果回传、被忽略文件 force-add、remote tree 闭包。通过后可继续登记 W006 或更高编号的新实验；W001/W004 历史收口与 HC3 可并行后置，不阻塞新实验设计。

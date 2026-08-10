@@ -1,5 +1,5 @@
-schema_version: "1.0"
-updated_at: "2026-08-03T12:15:00+08:00"
+schema_version: "2.0"
+updated_at: "2026-08-10T00:00:00+08:00"
 inventory:
   source: '01_指南与解读\部署方案\服务器路径索引_20260701.md'
   generated_at: "2026-07-01"
@@ -8,6 +8,16 @@ policy:
   deletion_requires_user_approval: true
   lifecycle: [active, legacy, deprecated]
   active_scripts_must_use_registered_roots: true
+  single_machine_profile: true
+runtime:
+  python_interpreter: 'C:\Users\AIPatho1\pfmval_env\Scripts\python.exe'
+  require_absolute_path: true
+  forbid_path_lookup: true
+transport:
+  mode: gitee_only
+  remote: gitee
+  fetch_exact_commit_only: true
+  force_push_allowed: false
 paths:
   server_qzs_root:
     path: 'D:\AIPatho\qzs'
@@ -18,21 +28,77 @@ paths:
   server_repo_worktree:
     path: 'D:\AIPatho\qzs\pfmval_deploy_git'
     kind: git_worktree
+    status: legacy
+    required_on: server
+    stability: medium_low
+    role: legacy_mixed_checkout
+    write_policy: no_new_outputs
+  server_governance_checkout:
+    path: 'D:\AIPatho\qzs\pfmval_governance'
+    kind: git_worktree
     status: active
     required_on: server
     stability: medium_low
-  server_automation_worktrees:
+    role: governance_dispatch_checkout
+  server_experiment_worktrees:
     path: 'D:\AIPatho\qzs\pfmval_automation'
     kind: directory
     status: active
     required_on: server
     stability: medium_low
-  server_config:
-    path: 'D:\AIPatho\qzs\pfmval_deploy_git\configs\config.server.yaml'
-    kind: file
+    role: persistent_numbered_workspace_root
+  server_automation_worktrees:
+    path: 'D:\AIPatho\qzs\pfmval_automation'
+    kind: directory
+    status: deprecated
+    required_on: server
+    stability: medium_low
+    replaced_by: server_experiment_worktrees
+  server_experiment_runs:
+    path: 'D:\AIPatho\qzs\pfmval_experiment_runs'
+    kind: directory
     status: active
     required_on: server
     stability: medium_low
+    role: attempt_output_root
+  server_result_returns:
+    path: 'D:\AIPatho\qzs\pfmval_result_returns'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+    role: result_bundle_staging_root
+  server_diagnostics:
+    path: 'D:\AIPatho\qzs\pfmval_diagnostics'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+    role: non_evidence_diagnostic_root
+    live_verification_required: true
+  server_runtime_bundles:
+    path: 'D:\AIPatho\qzs\pfmval_runtime_bundles'
+    kind: directory
+    status: active
+    required_on: server
+    stability: medium_low
+    role: immutable_runtime_bundle_root
+  server_config:
+    path: 'D:\AIPatho\qzs\pfmval_deploy_git\configs\config.server.yaml'
+    kind: file
+    status: deprecated
+    required_on: server
+    stability: medium_low
+    role: retired_server_config_pointer
+    write_policy: no_new_outputs
+  server_governance_config:
+    path: 'D:\AIPatho\qzs\pfmval_governance\configs\config.server.yaml'
+    kind: file
+    status: deprecated
+    required_on: server
+    stability: medium_low
+    role: retired_server_config_pointer
+    write_policy: no_new_outputs
   phase2_patch_root:
     path: 'D:\AIPatho\qzs\data-phase2\patch'
     kind: directory
@@ -88,28 +154,35 @@ paths:
   server_mpp_standard_splits:
     path: 'D:\AIPatho\qzs\pfmval_deploy_git\mpp_standard_splits'
     kind: directory
-    status: active
+    status: legacy
     required_on: server
     stability: medium_low
     protected: true
+    write_policy: read_only_legacy
   server_mpp_flat_cache:
     path: 'D:\AIPatho\qzs\pfmval_deploy_git\mpp_uni2h_cache'
     kind: directory
     status: active
     required_on: server
     stability: medium_low
+    role: legacy_location_read_only_input
+    write_policy: read_only_input
   server_mpp_partner_cache:
     path: 'D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache'
     kind: directory
     status: active
     required_on: server
     stability: medium_low
+    role: legacy_location_read_only_input
+    write_policy: read_only_input
   server_mpp_results:
-    path: 'D:\AIPatho\qzs\pfmval_deploy_git\checkpoints\mpp_uni2h_mlp'
+    path: 'D:\AIPatho\qzs\pfmval_experiment_runs'
     kind: directory
     status: active
     required_on: server
     stability: medium_low
+    role: compatibility_alias_for_external_attempt_outputs
+    write_policy: attempt_scoped_only
   server_mpp2_frozen_baseline_checkpoint:
     path: 'D:\AIPatho\qzs\pfmval_deploy_git\checkpoints\mpp_uni2h_mlp\mpp2_barcode_repair_v003_frozen_baseline_20260711\best_checkpoint.pth'
     kind: file
@@ -117,6 +190,7 @@ paths:
     required_on: server
     stability: medium_low
     protected: true
+    write_policy: read_only_input
   server_phase3_yzq_root:
     path: 'D:\AIPatho\yzq'
     kind: directory

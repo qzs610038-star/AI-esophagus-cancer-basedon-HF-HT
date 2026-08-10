@@ -14,3 +14,9 @@ Route experiment registration and result status through
 `pfmval_ops.py`. Before a result-bearing execution, ask the user for the actual
 allowed run count. Do not append an alternative table or treat a chat report as
 an imported result.
+
+Represent an allocated but abandoned number as `abandoned_reserved` with a null
+`experiment_id`, null lease/active attempt, its reservation directive, and the
+preserved branch/HEAD/path. It is not an experiment and cannot receive an
+approval, job, attempt, result, or later reassignment. The next experiment must
+consume the monotonic `next_workspace_number`.

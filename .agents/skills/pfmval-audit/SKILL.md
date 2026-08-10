@@ -82,6 +82,15 @@ Inspect the actual files named by the claim. Depending on scope, verify:
 - generated-view consistency with the machine-readable source;
 - evidence scope, especially host/offline, simulation, server, board, external
   test, and accepted-result boundaries.
+- numbered workspace closure: physical/Git worktrees, Registry records,
+  experiment ids, branch, HEAD, dirty state, lifecycle, lease, and jobs;
+- server path separation: governance checkout, persistent `W###` source,
+  external run, return, diagnostic, and runtime-bundle roots;
+- return closure: terminal JSON, original training CSV/TXT, every required raw
+  prediction split, exact force-added staged tree, and immutable result ref;
+- hash-policy/runtime agreement: SHA-256 only remains HARD for critical evidence;
+  supporting/diagnostic files are not accidentally re-hashed or allowed to
+  source accepted metrics.
 
 Source inspection proves implementation, not runtime success. Tests prove only
 the exercised behavior. A result bundle proves only what its validated envelope
