@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "diagnostic_id": "diagnostic-20260810-gitee-rt-pilot-envprobe-r001",
+  "command_id": "environment_probe",
+  "source_commit": "42b26431262efdfe93766f2e3bd3d54d26999472",
+  "source_branch": "codex/w006-gitee-roundtrip-pilot-20260810-bound",
+  "detached_head": true,
+  "executed_at": "2026-08-10T13:35:07+00:00",
+  "exit_code": 0,
+  "python": {
+    "executable": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+    "version": "3.13.5",
+    "platform": "Windows-10-10.0.19045-SP0"
+  },
+  "pytorch_cuda": {
+    "torch_version": "2.6.0+cu124",
+    "cuda_runtime": "12.4",
+    "cuda_available": true,
+    "device_count": 1,
+    "device_name": "NVIDIA GeForce RTX 4080"
+  },
+  "environment": {
+    "source_worktree": "D:\\AIPatho\\qzs\\pfmval_diagnostics\\diagnostic-20260810-gitee-rt-pilot-envprobe-r001-source",
+    "disk_total_bytes": 4000768323584,
+    "disk_free_bytes": 148747878400
+  }
+}
