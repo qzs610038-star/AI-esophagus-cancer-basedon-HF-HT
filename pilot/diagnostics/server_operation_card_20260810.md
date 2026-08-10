@@ -19,19 +19,19 @@
 
 ## 1. 拉取请求（Gitee-only）
 
+> 核对：FETCH_HEAD 应包含诊断请求文件（`automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/request.json`）。source_commit=42b2643 是契约冻结值（request.json 内部绑定），分支 HEAD 会领先于它（含后续 pilot commit），二者不一致是正常的。
+
 ```powershell
 git -C D:\AIPatho\qzs\pfmval_governance fetch gitee codex/w006-gitee-roundtrip-pilot-20260810-bound
 git -C D:\AIPatho\qzs\pfmval_governance rev-parse FETCH_HEAD
-# 核对：FETCH_HEAD 应包含诊断请求文件（automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/request.json）
-# 注意：source_commit=42b2643 是契约冻结值（request.json 内部绑定），分支 HEAD 会领先于它（含后续 pilot commit），二者不一致是正常的
 ```
 
 ## 2. 执行固定 runner（仅 environment_probe 有固定收集器）
 
+> 先进入治理 checkout 目录（务必，否则相对路径 deploy\pfmval_ops.py 不存在 → 无输出/报错）；用绝对路径解释器运行（避免裸 python 解析到错误环境）。
+
 ```powershell
-# 先进入治理 checkout 目录（务必，否则相对路径 deploy\pfmval_ops.py 不存在 → 无输出/报错）
 Set-Location D:\AIPatho\qzs\pfmval_governance
-# 用绝对路径解释器运行（避免裸 python 解析到错误环境）
 & 'C:\Users\AIPatho1\pfmval_env\Scripts\python.exe' D:\AIPatho\qzs\pfmval_governance\deploy\pfmval_ops.py diagnostic run-allowlisted --diagnostic-id diagnostic-20260810-gitee-rt-pilot-envprobe-r001
 ```
 
@@ -58,8 +58,9 @@ Test-Path 'D:\AIPatho\qzs\pfmval_diagnostics'
 - ≥1 个原始训练 TXT（同上）
 - remote tree 闭包校验结果（git ls-files / index 清单与 return manifest 对账）
 
+> 在 return 输出根构建后，对精确目录 force-add 并提交（路径已为真实示例，可直接复制）。
+
 ```powershell
-# 在 return 输出根构建后，对精确目录 force-add 并提交（占位符须替换为真实路径，勿含尖括号）
 git add -f "D:\AIPatho\qzs\pfmval_diagnostics\diagnostic-20260810-gitee-rt-pilot-envprobe-r001"
 git commit -m "diagnostic: return W006 env probe + minimal closure"
 git push gitee HEAD:automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/return
