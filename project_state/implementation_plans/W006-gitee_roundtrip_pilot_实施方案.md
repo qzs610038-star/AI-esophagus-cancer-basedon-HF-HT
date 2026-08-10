@@ -103,13 +103,28 @@ python deploy/pfmval_ops.py paths validate
 | 任务 | 状态 | commit | 证据 |
 |---|---|---|---|
 | T1 本地基线提交 + source_commit 冻结 | `completed_pending_user_review` | 42b2643（用户批准实施方案的提交即基线） | 本文件 §2；branch/HEAD/clean 核验通过 |
-| T2 工作树绑定 | `completed_pending_user_review` | b452e00 | pilot/critical_contract.json、experiment_registry.json、workspace_registry.json |
-| T3 Gitee 诊断请求 | `completed_pending_user_review`（含缺失登记，见下方补充说明） | 418196d | automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-pathprobe-r001/ |
-| T4 服务器 allowlisted diagnostic | in_progress | - | 改用 environment_probe（见下方补充说明） |
-| T5 最小 return 闭包 | pending | - | - |
-| T6 本地回收核验 | pending | - | - |
-| T7 失败分流 | pending | - | - |
-| T8 证据回填 | pending | - | - |
+| T2 工作树绑定 | `completed_pending_user_review` | b452e00、7faea06 | pilot/critical_contract.json、experiment_registry.json、workspace_registry.json |
+| T3 Gitee 诊断请求 | `completed_pending_user_review`（含缺失登记） | 418196d、217d74e | automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-pathprobe-r001/、...envprobe-r001/ |
+| T4 服务器 allowlisted diagnostic | `completed_pending_user_review` | 0ca8135（服务器 return 首 commit） | environment_probe.json（926B，source_commit 匹配冻结值） |
+| T5 最小 return 闭包 | `completed_pending_user_review` | 0cf0f09（服务器 return 追加 commit） | started/terminal/resolved_config/CSV/TXT/remote_tree_closure 全量回传 |
+| T6 本地回收核验 | `completed_pending_user_review` | 161ee6b、24d1eb4 | 七项核验全过（见 §6 补充说明） |
+| T7 失败分流 | `completed_pending_user_review` | 见 000c55a（r3 修正） | 无试点失败项；路径/传输/闭包报错均已定位修复 |
+| T8 证据回填 | `completed_pending_user_review` | 本次追加 | 本文件 §6 T8 回填块 |
+
+## T8 证据回填（2026-08-10，final_verdict 供用户审核）
+
+- `source_commit`: `42b26431262efdfe93766f2e3bd3d54d26999472`（冻结值；environment_probe.json、started.json、terminal.json 三处均一致）
+- `workspace_id`: W006
+- `diagnostic_id`: `diagnostic-20260810-gitee-rt-pilot-envprobe-r001`（自动通道）；`diagnostic-20260810-gitee-rt-pilot-pathprobe-r001`（已登记无 runner，未执行）
+- `return_revision`: R001（return 分支 `automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/return`，HEAD=0cf0f09，基于 3495d94 fast-forward）
+- `checked_paths`: 7/7 — server_governance_checkout(git_worktree ✅)、server_experiment_worktrees ✅、server_experiment_runs ✅、server_result_returns ✅、server_diagnostics ✅（初检缺失，runner 自动创建后存在）、server_runtime_bundles ✅、python 解释器 ✅；retired pointer server_config/server_governance_config 确认存在且不作事实源
+- `python_interpreter_check`: `C:\Users\AIPatho1\pfmval_env\Scripts\python.exe` = Python 3.13.5，torch 2.6.0+cu124，CUDA 12.4，RTX 4080，exit_code=0
+- `force_added_artifacts`: 无（check-ignore 确认诊断目录 CSV/TXT/JSON 均不被 .gitignore 命中，普通 add 已入 remote tree；服务器侧 CRLF→LF 警告为行尾规范化提示，非错误）
+- `remote_tree_closure`: return 分支含 9 文件（request.json、operation_cards.md、environment_probe.json、started.json、terminal.json、resolved_config.json、raw_training_sample.csv、raw_training_sample.txt、remote_tree_closure.txt），与回传 manifest 对账一致
+- `new_warns`: 无试点新增 WARN（W006 内 start-check 的 7 个 WARN 均为基线既有；3 个 FAIL 均为工作树环境差异，处置 A 已获用户批准）
+- `new_fails`: 0（试点动作未引入任何 FAIL；主仓同 HEAD 基线 PASS=7 WARN=7 FAIL=0）
+- `final_verdict`: **CONDITIONAL GO** — 理由：①路径 7/7 + 解释器核验通过；②allowlisted environment_probe 成功返回且 source_commit 匹配；③最小 return 闭包完整（receipt 成对、CSV/TXT、resolved config、remote tree 闭包对账全过）；④无新增 FAIL。保留条件（需用户知情）：a) `path_probe` 固定 runner 缺失（已登记，待用户决定是否另开治理任务补齐）；b) `server_diagnostics` 目录由 runner 自动创建，未走独立"现场创建批准"流程（server_maintenance.md 要求），建议用户知悉并认可该创建行为；c) 操作卡 r2-r4 涉及的现场排障（运行目录/checkout/refspec）为既有工具使用要点，不构成试点失败。
+- `notes`: ①全程零训练：未执行 smoke/single-batch forward 之外任何训练性动作；②未导入 Registry 结果、未 accept 证据、未更新 accepted 指标（experiment 状态仍为 planned/preflight）；③传输全程仅 Gitee（remote: gitee），无 SSH/SCP/HTTP/Tunnel；④W006 分支本地 HEAD 推进至 24d1eb4，workspace_registry `current_source_commit` 已同步刷新（该字段语义为工作树当前 HEAD 快照）；⑤`diagnostic record` 已登记 environment_probe.json（926B，UTF-8/LF 校验通过）；⑥W005 未复用。
 
 ### 进度补充说明（2026-08-10，已获用户审核/决策）
 
