@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-09T16:33:06+00:00",
-  "next_workspace_number": 6,
+  "updated_at": "2026-08-10T07:26:00+00:00",
+  "next_workspace_number": 7,
   "workspaces": [
     {
       "workspace_id": "W001",
@@ -115,6 +115,29 @@
           "path_id": "local_experiment_workspaces",
           "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W005",
           "current_source_commit": "8e4ec966e47a17359e1d38e70ac754f972fb88a4"
+        }
+      }
+    },
+    {
+      "workspace_kind": "experiment",
+      "workspace_id": "W006",
+      "display_name": "零训练Gitee往返试点W006",
+      "experiment_id": "gitee_roundtrip_pilot_w006_v001_20260810",
+      "protocol_revision": 1,
+      "status": "shadow",
+      "active_attempt_id": null,
+      "lease": null,
+      "opened_at": "2026-08-10T07:26:00+00:00",
+      "last_verified_at": null,
+      "close_eligibility": "not_evaluated",
+      "retention_policy": "retain_until_explicit_close_approval",
+      "hosts": {
+        "local": {
+          "host_scope": "local",
+          "branch": "codex/w006-gitee-roundtrip-pilot-20260810-bound",
+          "path_id": "local_experiment_workspaces",
+          "relative_path": "D:\\AI空间转录病理研究\\PFMval_new_governed_workspaces\\W006",
+          "current_source_commit": "42b26431262efdfe93766f2e3bd3d54d26999472"
         }
       }
     }
