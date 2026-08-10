@@ -102,13 +102,19 @@ python deploy/pfmval_ops.py paths validate
 
 | 任务 | 状态 | commit | 证据 |
 |---|---|---|---|
-| T1 本地基线提交 + source_commit 冻结 | `pending_user_review` | - | - |
-| T2 工作树绑定 | `pending_user_review` | - | - |
-| T3 Gitee 诊断请求 | pending | - | - |
-| T4 服务器 allowlisted diagnostic | pending | - | - |
+| T1 本地基线提交 + source_commit 冻结 | `completed_pending_user_review` | 42b2643（用户批准实施方案的提交即基线） | 本文件 §2；branch/HEAD/clean 核验通过 |
+| T2 工作树绑定 | `completed_pending_user_review` | b452e00 | pilot/critical_contract.json、experiment_registry.json、workspace_registry.json |
+| T3 Gitee 诊断请求 | `completed_pending_user_review`（含缺失登记，见下方补充说明） | 418196d | automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-pathprobe-r001/ |
+| T4 服务器 allowlisted diagnostic | in_progress | - | 改用 environment_probe（见下方补充说明） |
 | T5 最小 return 闭包 | pending | - | - |
 | T6 本地回收核验 | pending | - | - |
 | T7 失败分流 | pending | - | - |
 | T8 证据回填 | pending | - | - |
 
-> 门禁：本文件须经用户明确二次批准后，方可绑定/创建 W006 工作树并开始 T2-T8。
+### 进度补充说明（2026-08-10，已获用户审核/决策）
+
+- T2 已登记实验 `gitee_roundtrip_pilot_w006_v001_20260810`（preflight，run_limit=1），critical contract canonical SHA-256 `6bb3f473d67f2bb727394262fabbed15ba3d4bcca1f25f4bc2efa5a96bcdaa2f`；W006 已登记（next_workspace_number=7）。T2 协议批准 commit `7faea06`（approval-w006-gitee-rt-pilot-protocol-v1-20260810）。
+- **缺失登记（用户要求，供后续考虑是否修复）**：`path_probe`（以及 `cache_probe`、`dry_run`、`single_batch_forward`）虽在 diagnostic command allowlist 中，但 `scripts/pfmval_state.py` 的 `DIAGNOSTIC_RUNNER_COMMANDS = {"environment_probe"}` 显示服务器侧固定 runner 目前仅实现 `environment_probe` 一个收集器。`path_probe` 请求已生成并推送（diagnostic-20260810-gitee-rt-pilot-pathprobe-r001），但服务器自动通道无法执行该 command_id；本次试点已按用户决策改用 `environment_probe` 完成可自动执行的部分，T4 的路径存在性/类型/边界核验转由用户服务器侧现场确认后按清单回传。是否补齐 `path_probe` 固定收集器由用户后续另行决策，不纳入本试点交付。
+- 传输已推送：source 分支 `codex/w006-gitee-roundtrip-pilot-20260810-bound` 已推送 Gitee（remote: gitee），含 T2/T3/协议批准共 3 个 commit（b452e00、418196d、7faea06）。
+
+> 门禁：本文件须经用户明确二次批准后，方可绑定/创建 W006 工作树并开始 T2-T8。（用户已于 2026-08-10 明确批准本方案并绑定 W006；本行保留为历史门禁说明）
