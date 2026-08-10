@@ -1,15 +1,15 @@
 # 实验进度
 
 > 此文件由 `experiments/experiment_registry.json` 自动生成，禁止手工维护。
-> source_sha256: `48707cae43264bca057dbc6d756f6173aec76bc42b419beaa05befc0063f6a30`
-> state_revision: `N/A`；updated_at: `2026-08-10T07:26:00+00:00`
+> source_sha256: `206fcfa547a490e41d442673d5240960a65c6710886885934fae8768ed3a2347`
+> state_revision: `N/A`；updated_at: `2026-08-10T07:33:29+00:00`
 
 ## 当前与待处理
 
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | mpp2_online_cache_parity_v003_20260711 | mpp2_online_cache_parity_v003_20260711 | legacy-import-mpp2_online_cache_parity_v003_20260711 | — | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. | preflight | done | planned | 暂无 | 待审查 | prepare_paired_smoke | — |
-| 零训练Gitee往返试点W006 | gitee_roundtrip_pilot_w006_v001_20260810 | — | W006 | 未登记 | preflight | planned | pending | 暂无 | 待审查 | approve_protocol | — |
+| 零训练Gitee往返试点W006 | gitee_roundtrip_pilot_w006_v001_20260810 | — | W006 | 未登记 | preflight | planned | pending | 暂无 | 待审查 | prepare_attempt | 2026-08-10T07:33:29+00:00 |
 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | — | — | 2026-07-09 superseded: old 3-patient/JFX-affected spatial Token+LoRA gate is tuning reference only. Do not launch before MPP2 new-data LoRA baseline is established. | — | paused | pending | 暂无 | 待审查 | paused_mpp2_lora_first | — |
 
 ## 已接纳结果

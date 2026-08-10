@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-10T07:26:00+00:00",
+  "updated_at": "2026-08-10T07:33:29+00:00",
   "current_mpp_policy": {
     "effective_date": "2026-07-09",
     "selected_mpp": 2,
@@ -1593,7 +1593,9 @@
       "source_commit": "42b26431262efdfe93766f2e3bd3d54d26999472",
       "evidence_status": "pending",
       "created_at": "2026-08-10T07:26:00+00:00",
-      "next_action": "approve_protocol"
+      "next_action": "prepare_attempt",
+      "approval_id": "approval-w006-gitee-rt-pilot-protocol-v1-20260810",
+      "updated_at": "2026-08-10T07:33:29+00:00"
     }
   ]
 }
