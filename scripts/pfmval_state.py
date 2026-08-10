@@ -91,7 +91,7 @@ DIAGNOSTIC_COMMANDS = {
     "dry_run": "Run an allowlisted command in dry-run mode only.",
     "single_batch_forward": "Run one non-training forward pass with no checkpoint selection.",
 }
-DIAGNOSTIC_RUNNER_COMMANDS = {"environment_probe"}
+DIAGNOSTIC_RUNNER_COMMANDS = {"environment_probe", "path_probe"}
 MPP_CACHE_PARITY_PATH_IDS = {
     "mpp_data_root",
     "mpp_standard_splits",
@@ -226,13 +226,22 @@ def read_json(path: Path) -> Any:
 
 
 def validate_against_schema(instance: Any, schema_path: Path, label: str) -> bool:
-    """Validate when jsonschema is installed; callers retain manual fallback checks."""
+    """Validate against the local schema set when jsonschema is installed."""
     try:
         import jsonschema
+        from referencing import Registry, Resource
     except ImportError:
         return False
     try:
-        jsonschema.validate(instance=instance, schema=read_json(schema_path))
+        schema = read_json(schema_path)
+        registry = Registry()
+        for sibling_path in schema_path.parent.glob("*.json"):
+            sibling = read_json(sibling_path)
+            schema_id = sibling.get("$id") if isinstance(sibling, dict) else None
+            if schema_id:
+                registry = registry.with_resource(schema_id, Resource.from_contents(sibling))
+        validator_class = jsonschema.validators.validator_for(schema)
+        validator_class(schema, registry=registry).validate(instance)
     except jsonschema.ValidationError as exc:
         location = ".".join(str(item) for item in exc.absolute_path) or "<root>"
         raise ValueError(f"{label} schema violation at {location}: {exc.message}") from exc
@@ -478,6 +487,17 @@ def _powershell_literal(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
 
 
+def _diagnostic_output_filename(command_id: str) -> str:
+    filenames = {
+        "environment_probe": "environment_probe.json",
+        "path_probe": "path_probe.json",
+    }
+    try:
+        return filenames[command_id]
+    except KeyError as exc:
+        raise ValueError(f"diagnostic command has no fixed output: {command_id}") from exc
+
+
 def build_diagnostic_operation_cards(root: Path, request: Mapping[str, Any]) -> str:
     """Build copy-ready Gitee diagnostic cards from the registered server paths."""
     if yaml is None:
@@ -520,7 +540,6 @@ def build_diagnostic_operation_cards(root: Path, request: Mapping[str, Any]) -> 
     source_branch_ps = _powershell_literal(source_branch)
     source_commit_ps = _powershell_literal(source_commit)
     return_branch_ps = _powershell_literal(return_branch)
-    output_rel = f"automation/diagnostics/{diagnostic_id}/environment_probe.json"
     if request["command_id"] not in DIAGNOSTIC_RUNNER_COMMANDS:
         return f"""# {diagnostic_id} 操作卡
 
@@ -551,6 +570,11 @@ git push gitee {source_branch}:{source_branch}
 
 `NOT APPLICABLE`：没有固定 runner 输出时，不得登记完成事件。
 """
+
+    output_rel = (
+        f"automation/diagnostics/{diagnostic_id}/"
+        f"{_diagnostic_output_filename(str(request['command_id']))}"
+    )
 
     return f"""# {diagnostic_id} 操作卡
 
@@ -674,7 +698,11 @@ def _prepare_diagnostic_source_worktree(root: Path, request: Mapping[str, Any]) 
         if _diagnostic_git_output(source_worktree, "rev-parse", "HEAD") != source_commit:
             raise ValueError("existing diagnostic source worktree has the wrong commit")
     else:
-        source_worktree.parent.mkdir(parents=True, exist_ok=True)
+        if not automation_root.is_dir():
+            raise ValueError(
+                "diagnostic root requires user-approved creation: "
+                f"{automation_root}"
+            )
         subprocess.run(
             ["git", "worktree", "add", "--detach", str(source_worktree), source_commit],
             cwd=root,
@@ -729,6 +757,60 @@ def _collect_environment_probe(source_worktree: Path, request: Mapping[str, Any]
     }
 
 
+def _collect_path_probe(source_worktree: Path, request: Mapping[str, Any]) -> Dict[str, Any]:
+    if yaml is None:
+        raise RuntimeError("PyYAML is required to collect path_probe")
+    registry_path = source_worktree / "configs" / "server_paths.yaml"
+    registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
+    paths = registry.get("paths", {}) if isinstance(registry, dict) else {}
+    rows: List[Dict[str, Any]] = []
+    for path_id, entry in sorted(paths.items()):
+        if not isinstance(entry, dict):
+            continue
+        raw_path = str(entry.get("path", "")).strip()
+        kind = str(entry.get("kind", ""))
+        configured = Path(raw_path)
+        is_repo_relative = not configured.is_absolute()
+        observed = (source_worktree / configured).resolve() if is_repo_relative else configured.resolve()
+        boundary_ok = (
+            observed.is_relative_to(source_worktree.resolve())
+            if is_repo_relative
+            else True
+        )
+        exists = observed.exists()
+        observed_type = "directory" if observed.is_dir() else ("file" if observed.is_file() else "missing")
+        expected_type = "file" if kind == "file" else "directory"
+        rows.append({
+            "path_id": str(path_id),
+            "registered_path": raw_path,
+            "kind": kind,
+            "required_on": str(entry.get("required_on", "")),
+            "status": str(entry.get("status", "")),
+            "exists": exists,
+            "observed_type": observed_type,
+            "expected_type": expected_type,
+            "type_matches": exists and observed_type == expected_type,
+            "boundary": {
+                "scope": "source_worktree" if is_repo_relative else "registered_absolute_path",
+                "ok": boundary_ok,
+            },
+        })
+    return {
+        "schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+        "diagnostic_id": request["diagnostic_id"],
+        "command_id": request["command_id"],
+        "source_commit": request["source_commit"],
+        "source_branch": request["source_branch"],
+        "detached_head": True,
+        "executed_at": utc_now(),
+        "exit_code": 0,
+        "path_probe": {
+            "source_worktree": str(source_worktree),
+            "paths": rows,
+        },
+    }
+
+
 def run_allowlisted_diagnostic(root: Path, *, diagnostic_id: str) -> Dict[str, Any]:
     """Execute one fixed diagnostic collector; arbitrary commands are impossible."""
     if not re.fullmatch(r"diagnostic-[0-9]{8}-[A-Za-z0-9_.-]+", diagnostic_id):
@@ -759,13 +841,22 @@ def run_allowlisted_diagnostic(root: Path, *, diagnostic_id: str) -> Dict[str, A
     source_worktree = _prepare_diagnostic_source_worktree(root, request)
     if _diagnostic_git_output(source_worktree, "rev-parse", "HEAD") != request["source_commit"]:
         raise ValueError("diagnostic source SHA mismatch")
-    payload = _collect_environment_probe(source_worktree, request)
-    output_path = request_dir / "environment_probe.json"
+    collectors = {
+        "environment_probe": _collect_environment_probe,
+        "path_probe": _collect_path_probe,
+    }
+    payload = collectors[command_id](source_worktree, request)
+    output_path = request_dir / _diagnostic_output_filename(command_id)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     write_json_atomic(output_path, payload)
     checked = _assert_utf8_lf_json(output_path)
-    if checked.get("source_commit") != request["source_commit"] or checked.get("exit_code") != 0:
-        raise ValueError("environment probe output does not match the request")
+    if (
+        checked.get("diagnostic_id") != diagnostic_id
+        or checked.get("command_id") != command_id
+        or checked.get("source_commit") != request["source_commit"]
+        or checked.get("exit_code") != 0
+    ):
+        raise ValueError("diagnostic output does not match the request")
     return {
         "diagnostic_id": diagnostic_id,
         "command_id": command_id,
@@ -832,11 +923,14 @@ def record_diagnostic_outputs(
         raise ValueError("diagnostic request is malformed or not allowlisted")
     if not outputs:
         raise ValueError("diagnostic completion requires at least one output file")
-    if request.get("command_id") == "environment_probe":
-        expected = f"automation/diagnostics/{diagnostic_id}/environment_probe.json"
+    if request.get("command_id") in DIAGNOSTIC_RUNNER_COMMANDS:
+        expected = (
+            f"automation/diagnostics/{diagnostic_id}/"
+            f"{_diagnostic_output_filename(str(request['command_id']))}"
+        )
         normalized_outputs = [normalize_rel(item) for item in outputs]
         if normalized_outputs != [expected]:
-            raise ValueError("environment_probe requires exactly its canonical environment_probe.json output")
+            raise ValueError("fixed diagnostic collector requires exactly its canonical JSON output")
     artifacts: List[Dict[str, Any]] = []
     seen: set[str] = set()
     for raw_output in outputs:
@@ -857,14 +951,15 @@ def record_diagnostic_outputs(
             "size_bytes": size_bytes,
             "verification": "size_plus_git_tree_closure",
         }
-        if request.get("command_id") == "environment_probe":
+        if request.get("command_id") in DIAGNOSTIC_RUNNER_COMMANDS:
             payload = _assert_utf8_lf_json(output_path)
             if (
                 payload.get("diagnostic_id") != diagnostic_id
+                or payload.get("command_id") != request.get("command_id")
                 or payload.get("source_commit") != request.get("source_commit")
                 or payload.get("exit_code") != 0
             ):
-                raise ValueError("environment_probe output identity or exit_code does not match the request")
+                raise ValueError("diagnostic output identity or exit_code does not match the request")
             artifact["byte_contract"] = {"encoding": "utf-8", "bom": False, "eol": "lf"}
         artifacts.append(artifact)
     event = {
@@ -2515,17 +2610,25 @@ def validate_governance_v3_state(
                     if (
                         workspace.get("workspace_kind", "experiment")
                         != "governance_maintenance"
-                        and matched.get("head") != expected_commit
+                        and expected_commit
+                        and subprocess.run(
+                            [
+                                "git", "-C", str(root), "merge-base", "--is-ancestor",
+                                expected_commit, str(matched.get("head", "")),
+                            ],
+                            check=False,
+                            capture_output=True,
+                        ).returncode != 0
                     ):
                         message = (
-                            "absolute workspace HEAD does not match registry: "
+                            "absolute workspace HEAD is not descended from registry commit: "
                             f"{workspace_id}"
                         )
                         if task == "knowledge":
                             report.warn(message)
                         else:
                             raise ValueError(
-                                "absolute workspace HEAD does not match registry"
+                                "absolute workspace HEAD is not descended from registry commit"
                             )
                 elif ".." in relative_path.parts:
                     raise ValueError(

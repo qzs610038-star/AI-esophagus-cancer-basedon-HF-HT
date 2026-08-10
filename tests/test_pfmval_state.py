@@ -448,6 +448,9 @@ def test_environment_probe_runner_is_fixed_and_byte_stable(tmp_path):
     assert commit in cards
     assert automation_root.as_posix() in cards
 
+    with pytest.raises(ValueError, match="requires user-approved creation"):
+        run_allowlisted_diagnostic(root, diagnostic_id="diagnostic-20260729-environment-probe")
+    automation_root.mkdir()
     result = run_allowlisted_diagnostic(root, diagnostic_id="diagnostic-20260729-environment-probe")
     output_path = root / result["output"]["path"]
     raw = output_path.read_bytes()
@@ -471,6 +474,107 @@ def test_environment_probe_runner_is_fixed_and_byte_stable(tmp_path):
         outputs=["automation/diagnostics/diagnostic-20260729-environment-probe/environment_probe.json"],
     )
     assert event["outputs"][0]["byte_contract"]["eol"] == "lf"
+
+    create_diagnostic_request(
+        root,
+        diagnostic_id="diagnostic-20260729-path-probe",
+        source_commit=commit,
+        command_id="path_probe",
+        source_branch="main",
+        return_branch="automation/diagnostics/path-probe",
+    )
+    path_result = run_allowlisted_diagnostic(root, diagnostic_id="diagnostic-20260729-path-probe")
+    path_output = root / path_result["output"]["path"]
+    path_raw = path_output.read_bytes()
+    assert path_output.name == "path_probe.json"
+    assert not path_raw.startswith(b"\xef\xbb\xbf")
+    assert b"\r" not in path_raw
+    path_payload = read_json(path_output)
+    assert path_payload["command_id"] == "path_probe"
+    assert path_payload["path_probe"]["paths"]
+    assert all("boundary" in row and "type_matches" in row for row in path_payload["path_probe"]["paths"])
+    path_event = record_diagnostic_outputs(
+        root,
+        diagnostic_id="diagnostic-20260729-path-probe",
+        outputs=["automation/diagnostics/diagnostic-20260729-path-probe/path_probe.json"],
+    )
+    assert path_event["outputs"][0]["byte_contract"] == {"encoding": "utf-8", "bom": False, "eol": "lf"}
+
+
+def test_active_workspace_head_may_advance_but_must_descend_from_binding(tmp_path):
+    root = tmp_path / "workspace-head-repo"
+    root.mkdir()
+    make_minimal_project(root)
+    write_json(root / "project_state" / "schemas" / "workspace_registry.schema.json", {"type": "object"})
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
+    subprocess.run(["git", "add", "."], cwd=root, check=True)
+    subprocess.run(
+        ["git", "-c", "user.email=pfmval-test@example.invalid", "-c", "user.name=PFMval Test", "commit", "-m", "baseline"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    bound_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, check=True, capture_output=True, text=True,
+    ).stdout.strip()
+    initial_branch = subprocess.run(
+        ["git", "branch", "--show-current"], cwd=root, check=True, capture_output=True, text=True,
+    ).stdout.strip()
+    workspace_path = tmp_path / "W001"
+    subprocess.run(
+        ["git", "worktree", "add", "-b", "codex/active-workspace", str(workspace_path)],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    workspace_registry = {
+        "schema_version": "1.0",
+        "updated_at": "2026-08-11T00:00:00+00:00",
+        "next_workspace_number": 2,
+        "workspaces": [{
+            "workspace_id": "W001", "display_name": "fixture", "experiment_id": "exp1",
+            "protocol_revision": 1, "status": "registered", "active_attempt_id": None,
+            "lease": None, "opened_at": "2026-08-11T00:00:00+00:00",
+            "last_verified_at": None, "close_eligibility": "not_evaluated",
+            "retention_policy": "retain_until_explicit_close_approval",
+            "hosts": {"local": {"host_scope": "local", "branch": "codex/active-workspace",
+                "path_id": "local_experiment_workspaces", "relative_path": str(workspace_path),
+                "current_source_commit": bound_commit}},
+        }],
+    }
+    write_json(root / "project_state" / "workspace_registry.json", workspace_registry)
+
+    equal_report = validate_state(root)
+    assert not any("not descended" in item for item in equal_report.fail_items)
+
+    (workspace_path / "advance.txt").write_text("advance\n", encoding="utf-8")
+    subprocess.run(["git", "add", "advance.txt"], cwd=workspace_path, check=True)
+    subprocess.run(
+        ["git", "-c", "user.email=pfmval-test@example.invalid", "-c", "user.name=PFMval Test", "commit", "-m", "advance"],
+        cwd=workspace_path,
+        check=True,
+        capture_output=True,
+    )
+    advanced_report = validate_state(root)
+    assert not any("not descended" in item for item in advanced_report.fail_items)
+
+    subprocess.run(["git", "checkout", "--orphan", "unrelated"], cwd=root, check=True, capture_output=True)
+    (root / "unrelated.txt").write_text("unrelated\n", encoding="utf-8")
+    subprocess.run(["git", "add", "unrelated.txt"], cwd=root, check=True)
+    subprocess.run(
+        ["git", "-c", "user.email=pfmval-test@example.invalid", "-c", "user.name=PFMval Test", "commit", "-m", "unrelated"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    unrelated_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, check=True, capture_output=True, text=True,
+    ).stdout.strip()
+    subprocess.run(["git", "checkout", initial_branch], cwd=root, check=True, capture_output=True)
+    workspace_registry["workspaces"][0]["hosts"]["local"]["current_source_commit"] = unrelated_commit
+    write_json(root / "project_state" / "workspace_registry.json", workspace_registry)
+    divergent_report = validate_state(root)
+    assert any("not descended" in item for item in divergent_report.fail_items)
 
 
 def test_explore_session_is_local_only_and_candidates_never_delete(tmp_path):
@@ -1020,15 +1124,11 @@ def test_result_import_dual_reads_v2_and_rejects_same_id_with_different_sha(
     job_path = root / "automation" / "jobs" / job["job_id"] / "job.json"
     write_json(job_path, job)
     project_root = Path(__file__).resolve().parent.parent
-    (root / "project_state" / "schemas" / "server_job_v2.schema.json").write_text(
-        (
-            project_root
-            / "project_state"
-            / "schemas"
-            / "server_job_v2.schema.json"
-        ).read_text(encoding="utf-8"),
-        encoding="utf-8",
-    )
+    for schema_name in ("server_job_v2.schema.json", "return_profile_v1.schema.json"):
+        (root / "project_state" / "schemas" / schema_name).write_text(
+            (project_root / "project_state" / "schemas" / schema_name).read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
 
     legacy_bundle = root / "legacy-bundle-v2"
     legacy_bundle.mkdir()
@@ -2006,10 +2106,16 @@ def test_knowledge_task_downgrades_only_workspace_head_drift(monkeypatch):
         stdout="\n".join(records),
         stderr="",
     )
-    monkeypatch.setattr(
-        "scripts.pfmval_state.subprocess.run",
-        lambda *_args, **_kwargs: completed,
-    )
+    def fake_git_run(args, **_kwargs):
+        if "worktree" in args:
+            return completed
+        if "merge-base" in args:
+            return subprocess.CompletedProcess(args=args, returncode=1, stdout="", stderr="")
+        if "show-ref" in args:
+            return subprocess.CompletedProcess(args=args, returncode=0, stdout="", stderr="")
+        raise AssertionError(f"unexpected git command: {args}")
+
+    monkeypatch.setattr("scripts.pfmval_state.subprocess.run", fake_git_run)
 
     report = ValidationReport()
     validate_governance_v3_state(
