@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "diagnostic_id": "diagnostic-20260810-gitee-rt-pilot-pathprobe-r001",
+  "created_at": "2026-08-10T07:28:20+00:00",
+  "source_commit": "42b26431262efdfe93766f2e3bd3d54d26999472",
+  "source_branch": "codex/w006-gitee-roundtrip-pilot-20260810-bound",
+  "return_branch": "automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-pathprobe-r001/return",
+  "command_id": "path_probe",
+  "command_description": "Verify configured registered paths without changing them.",
+  "execution_contract": {
+    "arbitrary_shell": false,
+    "training": false,
+    "experiment_registry_write": false,
+    "current_state_write": false,
+    "protected_asset_write": false,
+    "result_import": false,
+    "output_root": "automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-pathprobe-r001"
+  }
+}
