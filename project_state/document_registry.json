@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-10T06:06:38+00:00",
-  "state_revision": 207,
+  "updated_at": "2026-08-10T15:23:30+00:00",
+  "state_revision": 210,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -829,9 +829,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T06:06:38+00:00",
-      "state_revision": 204,
-      "content_sha256": "8fb904856c25a23bd78e97082ce99e98c1aaa2105c5ada96c18f4b2870c1a80a",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "b86a6befbe8b268ae53977cd8c6b5d1cca5bee73d1f8825edd6005ed3424e3c1",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -850,9 +850,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T06:06:38+00:00",
-      "state_revision": 204,
-      "content_sha256": "eec719c2bbbf264d1d3dd225ef6ee42880b7653c0127bff3594706cbeb0c0580",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "4930803ba74c12e9d3471798d37d29e6cdd939a06f831af72ae48a9cb1847ff0",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4698,9 +4698,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T06:06:38+00:00",
-      "state_revision": 204,
-      "content_sha256": "6f0a6e56f350aa7f107487b5c946a7cb2f58b3a0b0208e1d8acc1f21a81a604d",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "a7654662d6ae8598bf6c9af8ee9db697090f3ead0dc746006389e995a0712ff7",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4741,9 +4741,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T06:06:38+00:00",
-      "state_revision": 204,
-      "content_sha256": "fcfc575483ec2fb8846bca40a29d938f2df1ff6a08f7d6fd904933e90c94652f",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "a322162b1780d00595921af6954f75d4661fedc99b584865eb7565a831a62fae",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4769,6 +4769,48 @@
       "verified_at": "2026-07-26T16:52:20+00:00",
       "state_revision": 109,
       "content_sha256": "ab6ce17537949f3555ed7a826c4812d99029d83e8046d55cc5d913330f59dcdc",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-0ac22bde05aa",
+      "path": "automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/operation_cards.md",
+      "category": "项目入口",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "8f9090837f01c6cfef05303fd2a902f81c6b17b23a9518e425f5b46ab5d5bc2e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-b9a46a7eb3b0",
+      "path": "automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-pathprobe-r001/operation_cards.md",
+      "category": "项目入口",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "af4839fe6feaba4058802ac361af4ee9fdca8d4e884e498e71f5650fd8809375",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5020,9 +5062,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:00:18+00:00",
-      "state_revision": 134,
-      "content_sha256": "a57aaf3a3951e615d18c731b5e1378d1eb5b18411685e1f071495ba4046802a5",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "948b24a0113ceb614d2a44e4be3b021a8279b40eeb93e96aeb1eb8449fdea3ea",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5041,9 +5083,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-07-29T15:00:18+00:00",
-      "state_revision": 134,
-      "content_sha256": "3dc0e9514aa66bd910903951e5565d0d720dc1d4a36c7b66cd5c4c6de6bf87ee",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "35358e57ac4381d084564d66564f3e4ab5f9d4d609b1b42bb8748c3f49dfa332",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5065,6 +5107,27 @@
       "verified_at": "2026-08-10T06:03:14+00:00",
       "state_revision": 202,
       "content_sha256": "ed31891669a88d3d28ef3c3224bb7a1fd63ff3ac2a74b49e831a91a2cf3b023a",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-4907e5870007",
+      "path": "project_state/implementation_plans/W006-gitee_roundtrip_pilot_实施方案.md",
+      "category": "状态说明",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-10T15:23:30+00:00",
+      "state_revision": 210,
+      "content_sha256": "b97256f3f7f0454058c103169f4cbc16c1df47f5d83537dc593fc1da1ff70d16",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5855,12 +5918,12 @@
     }
   ],
   "summary": {
-    "total": 266,
-    "live": 250,
+    "total": 269,
+    "live": 253,
     "missing": 16,
     "active": 56,
     "superseded": 11,
-    "historical": 165,
+    "historical": 168,
     "pending_review": 0,
     "approved_design": 18
   }
