@@ -1,15 +1,15 @@
 # 实验进度
 
 > 此文件由 `experiments/experiment_registry.json` 自动生成，禁止手工维护。
-> source_sha256: `206fcfa547a490e41d442673d5240960a65c6710886885934fae8768ed3a2347`
-> state_revision: `N/A`；updated_at: `2026-08-10T07:33:29+00:00`
+> source_sha256: `c1cc04b71741733e97b6aed8f4e23e822d4e91c2c88bdb9cfa3d06848916dc70`
+> state_revision: `N/A`；updated_at: `2026-08-11T11:51:57+00:00`
 
 ## 当前与待处理
 
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | mpp2_online_cache_parity_v003_20260711 | mpp2_online_cache_parity_v003_20260711 | legacy-import-mpp2_online_cache_parity_v003_20260711 | — | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. | preflight | done | planned | 暂无 | 待审查 | prepare_paired_smoke | — |
-| 零训练Gitee往返试点W006 | gitee_roundtrip_pilot_w006_v001_20260810 | — | W006 | 未登记 | preflight | planned | pending | 暂无 | 待审查 | prepare_attempt | 2026-08-10T07:33:29+00:00 |
+| MPP2连续通路几何软对比残差四臂探针 | mpp2_cpgcr_probe_v001_20260811 | — | W007 | 未登记 | preflight | planned | pending | 暂无 | 待审查 | approve_protocol | — |
 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | — | — | 2026-07-09 superseded: old 3-patient/JFX-affected spatial Token+LoRA gate is tuning reference only. Do not launch before MPP2 new-data LoRA baseline is established. | — | paused | pending | 暂无 | 待审查 | paused_mpp2_lora_first | — |
 
 ## 已接纳结果
@@ -36,6 +36,7 @@
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | mpp2_pathway_ridge_calibration_v001_20260717 | mpp2_pathway_ridge_calibration_v001_20260717 | mpp2-pathway-ridge-calibration-20260717-r003-result-20260718000516-8f133e77 | — | DIR-20260717-003 authorizes exactly one replacement execution after r002's gate-semantic failure. Internal nested-LOPO must pass before calibrator freeze and external evaluation; fold-specific OOF PCC differences are diagnostic only, while PCC invariance is checked on the final single frozen calibrator. XZY must remain unread until that freeze is recorded. | formal | failed | rejected | 暂无 | 已拒绝 | validate gate-correction regression then create one bound replacement formal job manifest | 2026-07-17T16:07:20+00:00 |
+| 零训练Gitee往返试点W006 | gitee_roundtrip_pilot_w006_v001_20260810 | — | W006 | 未登记 | preflight | closed | pending | 暂无 | 待审查 | closed_user_approved_retained_worktree | 2026-08-11T00:00:00+00:00 |
 | online_tokens_gfnet_fold1_65t_legacy | online_tokens_gfnet_fold1_65t_legacy | legacy-import-online_tokens_gfnet_fold1_65t_legacy | — | 未登记 | — | done | historical | Val PCC=0.3914；Val loss=0.3337 | 仅历史参考 | archived_as_legacy_baseline | 2026-06-10T02:30:59 |
 | online_tokens_transformer_fold1_65t | online_tokens_transformer_fold1_65t | legacy-import-online_tokens_transformer_fold1_65t | — | 未登记 | — | done_incomplete_data | historical | Val PCC=0.3821 | 仅历史参考 | archived | 2026-06-09 |
 | smoke_gfnet_65t | smoke_gfnet_65t | legacy-import-smoke_gfnet_65t | — | 未登记 | — | done | historical | Val PCC=0.3933；Val loss=0.3314 | 仅历史参考 | archived | 2026-06-09T17:06:36 |

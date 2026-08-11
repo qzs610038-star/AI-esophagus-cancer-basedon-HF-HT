@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-10T07:33:29+00:00",
+  "updated_at": "2026-08-11T11:51:57+00:00",
   "current_mpp_policy": {
     "effective_date": "2026-07-09",
     "selected_mpp": 2,
@@ -1596,6 +1596,21 @@
       "next_action": "closed_user_approved_retained_worktree",
       "approval_id": "approval-w006-gitee-rt-pilot-protocol-v1-20260810",
       "updated_at": "2026-08-11T00:00:00+00:00"
+    },
+    {
+      "id": "mpp2_cpgcr_probe_v001_20260811",
+      "display_name": "MPP2连续通路几何软对比残差四臂探针",
+      "family": "governed_v3",
+      "status": "planned",
+      "phase": "preflight",
+      "workspace_id": "W007",
+      "protocol_revision": 1,
+      "run_limit": 1,
+      "critical_contract_sha256": "ecb2c753ecaac8f48278a4eb5adf08a0af398bf52c36378607267d25c969c459",
+      "source_commit": "bcb6bfa678141a64fb63d556c7d67e9a5a84fc42",
+      "evidence_status": "pending",
+      "created_at": "2026-08-11T11:51:57+00:00",
+      "next_action": "approve_protocol"
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 213,
-  "updated_at": "2026-08-11T11:48:31+00:00",
-  "source_commit": "ac6bba521e8c1527083d82a5610ea93b1dd21fb5",
+  "state_revision": 214,
+  "updated_at": "2026-08-11T11:56:25+00:00",
+  "source_commit": "bcb6bfa678141a64fb63d556c7d67e9a5a84fc42",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -352,12 +352,12 @@
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
   "source_hashes": {
-    "experiment_registry_sha256": "916a366176d050478f3aa06adce1b0f360963bb8a50ad141a12e787b51c47530",
-    "experiment_dashboard_sha256": "948b24a0113ceb614d2a44e4be3b021a8279b40eeb93e96aeb1eb8449fdea3ea",
-    "experiment_progress_sha256": "35358e57ac4381d084564d66564f3e4ab5f9d4d609b1b42bb8748c3f49dfa332",
+    "experiment_registry_sha256": "2b3e5b7d238ce2a1d09a45e5d04b3997b3fc448280d2dc35a42ddfbf7f57d943",
+    "experiment_dashboard_sha256": "418f21c701c61b5478c47cb0e24220c46bcf6ed4cedaf6545dad4b79d3612782",
+    "experiment_progress_sha256": "16a8ac1c56067a7d2576acf805c144fe79ffd9c7b3fe782988208c158eca7f86",
     "document_registry_sha256": "054fd45596da93ad4e7cdc071b3fdb77919700d8001f16bdb46f3be43c981ca3",
     "asset_registry_sha256": "e30959ff4af1c99af4ddb1f8ffac5fdad84902da42c8baa84443e4ecb1a4501d",
-    "workspace_registry_sha256": "6620d06327f756ab9e19b1ea02c3954c9c7f20fda7079bdff0f4f783dbdeb9c3",
+    "workspace_registry_sha256": "2b7da802da9cf0692e974c187430925a0674c0e107bf7771ddb3e0da1da059a5",
     "workflow_catalog_sha256": "b08d9d253c09ccd96c03a8269b3e63f4553c557582c21b47e159aeb61e88ba34",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "f25eff5588449f010db2ec79b58031212d6f1ea598481058229bee2bedcc750e",

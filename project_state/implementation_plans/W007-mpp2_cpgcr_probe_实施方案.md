@@ -1,9 +1,9 @@
 # W007-mpp2_cpgcr_probe 实施方案
 
-> 状态：`approved_pending_workspace_binding`（用户已批准，待 W007 绑定）  
+> 状态：`workspace_bound_code_pending`（W007 已绑定，待新对话填写代码）
 > 创建日期：2026-08-11  
 > 批准指令：`DIR-20260811-002`  
-> 当前授权：仅允许本地 experiment 登记、W007 创建/绑定和修改前配置；不得填写实验代码、推送 Gitee、操作服务器或训练。
+> 当前授权：W007 已完成本地 experiment 登记、工作树绑定和修改前配置；本对话不得填写实验代码、推送 Gitee、操作服务器或训练。
 
 ## 1. 绑定对象
 
@@ -161,7 +161,7 @@ python -m pytest experiments/workspaces/W007/mpp2_cpgcr_probe/tests -q
 
 | 项目 | 状态 | commit | 证据 |
 |---|---|---|---|
-| WEB-1 工作树与实验绑定 | `pending_user_review` | — | 等待本实施方案二次批准 |
+| WEB-1 工作树与实验绑定 | `completed_pending_user_review` | `b9965464980896df6d2a33ebe818d5ab87d6666e`（W007 脚手架） | experiment、关键合同、W007 Registry 与修改前配置 |
 | MLC-2 模型与损失 | `pending_user_review` | — | — |
 | EBC-3 评估边界 | `pending_user_review` | — | — |
 | OCCC-4 单击控制器 | `pending_user_review` | — | — |
@@ -172,4 +172,15 @@ python -m pytest experiments/workspaces/W007/mpp2_cpgcr_probe/tests -q
 
 ## 11. 二次批准门
 
-用户批准本文件后，才允许执行 WEB-1。正式服务器训练仍需后续绑定全部 job_id、attempt、source_commit 和预算的独立批量批准文件。
+用户已通过 `DIR-20260811-002` 批准 WEB-1，且本节门禁已经满足。正式服务器训练仍需后续绑定全部 job_id、attempt、source_commit 和预算的独立批量批准文件。
+
+## 12. WEB-1 绑定记录（2026-08-11）
+
+- experiment：`mpp2_cpgcr_probe_v001_20260811`，状态 `planned`，阶段 `preflight`，`run_limit=1`；该登记不构成训练批准。
+- 工作树：`D:\AI空间转录病理研究\PFMval_new_governed_workspaces\W007`。
+- branch：`codex/w007-mpp2-cpgcr-probe-20260811-bound`。
+- 绑定基线 HEAD：`bcb6bfa678141a64fb63d556c7d67e9a5a84fc42`。
+- W007 脚手架 commit：`b9965464980896df6d2a33ebe818d5ab87d6666e`；只包含 3 个绑定/修改前配置文件。
+- 最小关键合同 SHA-256：`ecb2c753ecaac8f48278a4eb5adf08a0af398bf52c36378607267d25c969c459`；普通方案、日志和预测文件不新增哈希绑定。
+- 已建立 `experiments/workspaces/W007/mpp2_cpgcr_probe/`、修改前配置和代码目录占位；尚未填写实验代码。
+- 后续代码填写必须在新对话显式声明 `本对话工作树：W007` 并完成 locus 核验后开始。

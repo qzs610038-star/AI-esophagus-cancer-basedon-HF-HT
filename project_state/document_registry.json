@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-10T16:34:38+00:00",
-  "state_revision": 212,
+  "updated_at": "2026-08-11T11:57:04+00:00",
+  "state_revision": 214,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -829,9 +829,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T16:34:38+00:00",
-      "state_revision": 212,
-      "content_sha256": "89c5bd3eb49cf7ee4f4ae4eaa65a33dec235eb5b1c2eec4f88840f997a8c7f3b",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "f38e68c972c6938b78a8f2293abe59f1138990337d4f46a8c3fb8a943df47902",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -850,9 +850,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T16:34:38+00:00",
-      "state_revision": 212,
-      "content_sha256": "54ecf46388a30147df72bfeeb8fbe9a52209c6c4a8f2adeffd4888785576d5d9",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "7fc9b2f65005545467881361b722c0b3d0983d22a83c78555e849fd8d207ce07",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3051,6 +3051,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-e0558a77299b",
+      "path": "01_指南与解读/学习指南/MPP2连续通路几何软对比残差_实验设计学习指南_20260811.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "3caf21384678231a247dac2dcaf6624b108e238fabee2d559b348134a004ad06",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-b66bfc74b3e2",
       "path": "01_指南与解读/学习指南/Mamba与频域模块学习指南_20260609.md",
       "category": "学习指南",
@@ -3831,6 +3852,27 @@
       "verified_at": "2026-07-31T17:15:45+00:00",
       "state_revision": 152,
       "content_sha256": "b74ed3550d0a0624ad781c540dcf9c5cbb3c1dd3c5e1e1926a9f33abf7469f3b",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-1787f584a79d",
+      "path": "01_指南与解读/部署方案/MPP2连续通路几何软对比残差_初步探索部署方案_20260811.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "d4d141bd58782c4c5a2a8b8933851d8e558e1b1469035cfd9011cf1e58e8a6e2",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4698,9 +4740,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T16:34:38+00:00",
-      "state_revision": 212,
-      "content_sha256": "27b5c1dfd5294a1be89c4ce1c0cd78f62ef564e1e6c60e9b1941d86c62c0f88c",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "993648d4682906b73263aaa4d257f7b396faa4ff4843c6696cfadd836038c838",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4741,9 +4783,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T16:34:38+00:00",
-      "state_revision": 212,
-      "content_sha256": "e10a69209aa4087823944b13a16cb88a4f320b5c41f76f238d4705cf427ee4dc",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "5b07437248feb62c885f8fd6831690f8f6bc34317eb8612e1078d2c0d3d2648b",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5062,9 +5104,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T15:23:30+00:00",
-      "state_revision": 210,
-      "content_sha256": "948b24a0113ceb614d2a44e4be3b021a8279b40eeb93e96aeb1eb8449fdea3ea",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "418f21c701c61b5478c47cb0e24220c46bcf6ed4cedaf6545dad4b79d3612782",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5083,9 +5125,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T15:23:30+00:00",
-      "state_revision": 210,
-      "content_sha256": "35358e57ac4381d084564d66564f3e4ab5f9d4d609b1b42bb8748c3f49dfa332",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "16a8ac1c56067a7d2576acf805c144fe79ffd9c7b3fe782988208c158eca7f86",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5128,6 +5170,27 @@
       "verified_at": "2026-08-10T16:34:38+00:00",
       "state_revision": 212,
       "content_sha256": "cef94ef5db9460f2e6f5c5647e9bc5f797ffd26f946614231fc1c986dab3a5dd",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-980504e1cf10",
+      "path": "project_state/implementation_plans/W007-mpp2_cpgcr_probe_实施方案.md",
+      "category": "状态说明",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-11T11:57:04+00:00",
+      "state_revision": 214,
+      "content_sha256": "0b1264e62668d17acd9ac12c13a0c9f8f4a84db2eb636e3a74a0efaf925688fe",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5918,12 +5981,12 @@
     }
   ],
   "summary": {
-    "total": 269,
-    "live": 253,
+    "total": 272,
+    "live": 256,
     "missing": 16,
     "active": 56,
     "superseded": 11,
-    "historical": 168,
+    "historical": 171,
     "pending_review": 0,
     "approved_design": 18
   }

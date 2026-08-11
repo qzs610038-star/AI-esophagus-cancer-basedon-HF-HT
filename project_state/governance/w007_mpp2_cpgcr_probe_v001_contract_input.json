@@ -1,0 +1,77 @@
+{
+  "experiment_id": "mpp2_cpgcr_probe_v001_20260811",
+  "protocol_revision": 1,
+  "source_commit": "bcb6bfa678141a64fb63d556c7d67e9a5a84fc42",
+  "critical_code": [
+    "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/model.py",
+    "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/losses.py",
+    "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/batch_plan.py",
+    "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/train_eval.py",
+    "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/result_contract.py",
+    "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/one_click_runner.py"
+  ],
+  "resolved_hyperparameters": {
+    "arms": [
+      "FBR",
+      "RCC",
+      "HCR",
+      "CPGCR"
+    ],
+    "seed": 42,
+    "batch_size": 30,
+    "patients_per_batch": 6,
+    "spots_per_patient": 5,
+    "image_projection_dim": 256,
+    "learning_rate": 0.0001,
+    "max_epochs": 50,
+    "patience": 10,
+    "min_delta": 0.0001,
+    "contrastive_weight": 0.1,
+    "contrastive_temperature": 0.07,
+    "label_temperature_rule": "train-fold cross-patient squared-distance median; 15 patient pairs sampled approximately equally; seed=42; max_pairs=100000"
+  },
+  "loss_contract": {
+    "absolute_loss": "patient_balanced_z_mse",
+    "RCC": "absolute_loss_only",
+    "HCR": "absolute_loss_plus_bidirectional_hard_pair_infonce",
+    "CPGCR": "absolute_loss_plus_bidirectional_continuous_pathway_geometry_soft_contrastive",
+    "candidate_set": "all valid in-batch spots; mask padding or missing only"
+  },
+  "regularization_contract": {
+    "baseline": "accepted B0 frozen, requires_grad=false, excluded from optimizer, forced eval, no_grad forward",
+    "residual_head": "zero_initialized",
+    "new_projector_dropout": 0.0,
+    "normalized_branch": "contrastive_similarity_only",
+    "unnormalized_branch": "residual_regression"
+  },
+  "feature_flags": {
+    "registration_only": true,
+    "code_pending": true,
+    "training_blocked": true,
+    "server_sync_blocked": true,
+    "one_click_test_required": true,
+    "one_click_training_required": true,
+    "fail_fast_required": true,
+    "raw_failure_log_return_required": true,
+    "four_arm_xzy_benchmark": true
+  },
+  "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+  "data_manifest_sha256": "1204018178a4d355c2aa03314d0fafa9f0151457b9edcef3a0df9b5946c306e2",
+  "input_artifacts": [],
+  "selection_policy": {
+    "checkpoint_metric": "internal_val_patient_balanced_z_mse",
+    "checkpoint_direction": "minimize",
+    "xzy_may_select_checkpoint": false,
+    "xzy_may_select_hyperparameters": false,
+    "phase3_may_select_phase2": false
+  },
+  "external_eval_policy": {
+    "mode": "four_arm_shared_external_benchmark",
+    "dataset": "XZY",
+    "timing": "once per arm after internal checkpoint freeze",
+    "freeze_before_first_xzy": "all four arm structures, order, budgets and hyperparameters",
+    "adaptation_after_xzy": "forbidden",
+    "rerun_after_xzy": "forbidden_without_new_explicit_protocol_approval",
+    "interpretation": "unified internal-external attribution after all four arms return"
+  }
+}
