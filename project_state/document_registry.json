@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-15T07:17:44+00:00",
+  "updated_at": "2026-08-15T12:39:36+00:00",
   "state_revision": 216,
   "documents": [
     {
@@ -493,9 +493,9 @@
       "scope": "skill:post-train",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-08-09T16:39:11+00:00",
-      "state_revision": 194,
-      "content_sha256": "c47bdfdf79655e3f108500d0d4c4549078444f5719c588c9989eff77276fbd7b",
+      "verified_at": "2026-08-15T12:39:36+00:00",
+      "state_revision": 216,
+      "content_sha256": "3ffe5e5ce7eeb2bb1426b839fc5d24fb5adeb8d1d51fb30af3406d2a43dfa046",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -2336,6 +2336,27 @@
       "availability": "tracked"
     },
     {
+      "doc_id": "doc-bb735af1a6b1",
+      "path": "01_指南与解读/分析报告/MPP2基线后实验结果与论文创新性事实汇总_20260815.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T12:39:36+00:00",
+      "state_revision": 216,
+      "content_sha256": "c559747270b17526be6e231833d0b1da5f0c9e345951901ab3d80ff06161d9db",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-46539423c410",
       "path": "01_指南与解读/分析报告/MPP2方案独立审查与网络对比调研报告_20260731.md",
       "category": "分析报告",
@@ -2590,6 +2611,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-a42e78bfe1f8",
+      "path": "01_指南与解读/分析报告/Phase2论文基线路径实验选择与决策建议_20260815.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T12:39:36+00:00",
+      "state_revision": 216,
+      "content_sha256": "45c0d5296396a4fe96c547e4bfca1d240035c80aebf5e8c7748311905b31077c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-f0d70db9e127",
       "path": "01_指南与解读/分析报告/Phase3_CLAM基线方案审查与文献注册_20260803.md",
       "category": "分析报告",
@@ -2647,6 +2689,48 @@
       "verified_at": "2026-08-15T07:17:44+00:00",
       "state_revision": 216,
       "content_sha256": "17a7fb754948443d7c6639b0631e9de4398ff2584639facd192f680f8b7d9514",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-bfa363c7c3a9",
+      "path": "01_指南与解读/分析报告/W007指标未改善原因分析报告_20260815.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T12:39:36+00:00",
+      "state_revision": 216,
+      "content_sha256": "d846c8280f27e4a9118f2419fa4a0c9198d03b1f1057fa7b261b5f6baedff22b",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-946579a70614",
+      "path": "01_指南与解读/分析报告/W007指标未改善深度归因与机制解读报告_20260815.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T12:39:36+00:00",
+      "state_revision": 216,
+      "content_sha256": "2fbfd849856806fc43a163a3f1b0ba6375598ae957ae73b942e0a0b112e8992b",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4280,6 +4364,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-c4bfb80248ae",
+      "path": "01_指南与解读/部署方案/W007全链路治理排障与配置优化部署方案_20260815.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T12:39:36+00:00",
+      "state_revision": 216,
+      "content_sha256": "5666b8b3dfc58112f35602b94d6bdd3f77359568ecdd698154f1d6e81d3e87ca",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-a4883d7b6b95",
       "path": "01_指南与解读/部署方案/W007四臂结果导入治理缺口修复部署方案_20260815.md",
       "category": "部署方案",
@@ -4289,6 +4394,27 @@
       "verified_at": "2026-08-15T07:17:44+00:00",
       "state_revision": 216,
       "content_sha256": "c7f964f117f6f61feab2697b639f597259b1c51e742ca9505f2b4b00ca455b8e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-63eb93c65117",
+      "path": "01_指南与解读/部署方案/W007指标未改善原因分析.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T12:39:36+00:00",
+      "state_revision": 216,
+      "content_sha256": "88341b19d87ee4c68e0a12276677736fdbfdf8ea01ff00f22e9027d61e9e0e0c",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4971,9 +5097,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T07:17:44+00:00",
+      "verified_at": "2026-08-15T12:39:36+00:00",
       "state_revision": 216,
-      "content_sha256": "1b37aa278cf36ffe68008d52b814a5c9947ad25b2787a957db8b6ee641775aa3",
+      "content_sha256": "ecbfdf4978138304bcb780ac4e662f275d9d4de74f8a414b09922064ae0ac5a8",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6233,12 +6359,12 @@
     }
   ],
   "summary": {
-    "total": 284,
-    "live": 268,
+    "total": 290,
+    "live": 274,
     "missing": 16,
     "active": 56,
     "superseded": 11,
-    "historical": 183,
+    "historical": 189,
     "pending_review": 0,
     "approved_design": 18
   }

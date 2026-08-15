@@ -29,3 +29,10 @@ tree closure for supporting and diagnostic files. Promotion of a supporting
 CSV/TXT to a metric source makes it critical and requires repackaging with a
 hash. A supplemental return creates a new immutable result revision; never
 rewrite an existing revision.
+
+Model weights (`.pth`, `.pt`) and intermediate feature caches belong to large
+non-prediction assets governed by `large_artifacts`: record their server path,
+size in bytes, SHA-256, and recompute policy in the result envelope rather than
+bundling physical binary files into the Git return ref. The Git return branch
+carries only raw prediction tables, metrics JSON, training history CSV, and
+diagnostics.
