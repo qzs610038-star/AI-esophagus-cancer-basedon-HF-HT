@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-15T15:13:25+00:00",
+  "updated_at": "2026-08-15T15:23:23+00:00",
   "state_revision": 222,
   "documents": [
     {
@@ -997,9 +997,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-07-29T16:52:21+00:00",
-      "state_revision": 140,
-      "content_sha256": "56241cafdec63c5601a57523066b509d022d7e29c8636c66a54277f7b6a5658d",
+      "verified_at": "2026-08-15T15:21:18+00:00",
+      "state_revision": 222,
+      "content_sha256": "078ed9ef269e060172fde00a88f951ab9ca403d07b74d0f67bbdde0be45eb0bf",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -2779,6 +2779,27 @@
       "verified_at": "2026-08-09T15:01:22+00:00",
       "state_revision": 192,
       "content_sha256": "fed23cb41dac19ac5a4152b50e5f8a14fe9c94de979e64dd49e4c4e079f44aa8",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-3baf38dc1317",
+      "path": "01_指南与解读/分析报告/settings_json_白名单清理清单_20260815.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T15:21:18+00:00",
+      "state_revision": 222,
+      "content_sha256": "700e15b64916c3c480327798a98e2526a1a21d704312c74c1fac0cf9c47c736e",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5121,9 +5142,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T15:13:25+00:00",
+      "verified_at": "2026-08-15T15:23:23+00:00",
       "state_revision": 222,
-      "content_sha256": "e5faa530bcfab094464203e50d5ad14bebd14c3fea5a2d638b5bbe5a46884c63",
+      "content_sha256": "54f098dead0025d537b1a19b4ca6f694f8a139737d068bfff4742b825aec94c3",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6383,12 +6404,12 @@
     }
   ],
   "summary": {
-    "total": 291,
-    "live": 275,
+    "total": 292,
+    "live": 276,
     "missing": 16,
     "active": 56,
     "superseded": 12,
-    "historical": 189,
+    "historical": 190,
     "pending_review": 0,
     "approved_design": 18
   }

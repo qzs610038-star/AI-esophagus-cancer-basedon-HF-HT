@@ -3002,6 +3002,24 @@ def validate_state(
                 or adapter.get("scope") != f"skill_adapter:{skill_name}"
             ):
                 report.fail(f"active skill {skill_name} adapter classification is invalid: {normalized_adapter}")
+    # P1-12: .agents/skills canonical 目录与 active_skills 注册表一致性（WARN 级）。
+    # 目录存在但未注册 → 提示决定"注册"或"正式归档"；注册但文件缺失 → 提示修复。
+    canonical_registered = {
+        normalize_rel(str(skill.get("canonical_path", ""))).lower()
+        for skill in state.get("active_skills", {}).values()
+    }
+    agents_skills_root = root / ".agents" / "skills"
+    if agents_skills_root.exists():
+        for skill_md in agents_skills_root.glob("*/SKILL.md"):
+            rel = normalize_rel(str(skill_md.relative_to(root))).lower()
+            if rel not in canonical_registered:
+                report.warn(f"canonical skill directory not registered in active_skills: {rel}")
+    else:
+        report.warn(".agents/skills directory is missing")
+    for skill_name, skill in state.get("active_skills", {}).items():
+        canonical_path = normalize_rel(str(skill.get("canonical_path", "")))
+        if not (root / canonical_path).exists():
+            report.warn(f"active skill {skill_name} canonical file is missing: {canonical_path}")
     for review_id, review in state.get("pending_plan_reviews", {}).items():
         review_path = normalize_rel(str(review.get("path", "")))
         document = doc_by_path.get(review_path.lower())
