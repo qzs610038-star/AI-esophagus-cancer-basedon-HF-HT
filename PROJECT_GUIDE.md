@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `8147db86b0dd272a975bb4da5ab27b21ab380ed9bb369d59e86a2c155cad4f43`
+> source_sha256: `87cb25a163c18d2494c263ca03cd6a0580c79b23364aa1d96ace8a33b2f3c518`
 
 ## 我要找什么
 
@@ -56,7 +56,9 @@
 - [doc-99b982a5eb8c](.agents/skills/pfmval-audit/SKILL.md)
 - [doc-caaf0fece4e6](.agents/skills/pfmval-governance/SKILL.md)
 - [doc-beb5a9361ddf](.agents/skills/post-train/SKILL.md)
+- [doc-18867c8d4cf0](.agents/skills/qzs-stable-conclusion-writer/SKILL.md)
 - [doc-bbcfcbdf94e6](.agents/skills/sync-server/SKILL.md)
+- [doc-d471d560d51d](.agents/skills/team-progress-maintainer/SKILL.md)
 - [doc-df6a61266d27](.agents/skills/train-guide/SKILL.md)
 - [doc-b514d4664439](.agents/skills/train/SKILL.md)
 - [doc-814b06f5cfe9](.agents/skills/update-ranking/SKILL.md)
@@ -102,23 +104,13 @@
 ## 历史与过时资料
 
 - [doc-fe4b048ff34a](.agents/skills/_shared/legacy-compatibility-policy.md)
-- [doc-6dae853d3c61](.agents/skills/design-research-plan-and-guide/SKILL.md)
-- [doc-6e79245c1589](.agents/skills/design-research-plan-and-guide/assets/学习指南模板.md)
-- [doc-fc270230f4e4](.agents/skills/design-research-plan-and-guide/assets/部署方案模板.md)
-- [doc-cb7724930aea](.agents/skills/design-research-plan-and-guide/references/成对文档输出合同.md)
-- [doc-34b64d725b06](.agents/skills/design-research-plan-and-guide/references/科研边界.md)
-- [doc-4107943e6c8a](.agents/skills/design-research-plan-and-guide/references/证据矩阵.md)
-- [doc-2148ae26c88e](.agents/skills/lark-markdown-appender/SKILL.md)
-- [doc-b019198a3aad](.agents/skills/lark-markdown-importer/SKILL.md)
 - [doc-3bbbee463565](.agents/skills/pfmval-audit/assets/audit-report-template.md)
 - [doc-eea543c941ec](.agents/skills/pfmval-audit/references/evidence-boundaries.md)
-- [doc-18867c8d4cf0](.agents/skills/qzs-stable-conclusion-writer/SKILL.md)
 - [doc-a3778c11ac95](.agents/skills/qzs-stable-conclusion-writer/assets/stable-conclusion-template.md)
 - [doc-7bbcae9b630d](.agents/skills/qzs-stable-conclusion-writer/assets/visualization-readme-template.md)
 - [doc-3c115efe64bd](.agents/skills/qzs-stable-conclusion-writer/references/evidence-and-approval-boundaries.md)
 - [doc-ad37e55a955d](.agents/skills/qzs-stable-conclusion-writer/references/experiment-section-schema.md)
 - [doc-6ca8659ff141](.agents/skills/qzs-stable-conclusion-writer/references/pseudocode-and-visualization-policy.md)
-- [doc-d471d560d51d](.agents/skills/team-progress-maintainer/SKILL.md)
 - [doc-a47d3ba9cb04](.agents/skills/team-progress-maintainer/assets/member-progress-template.md)
 - [doc-aec64183e49c](.agents/skills/team-progress-maintainer/assets/summary-index-template.md)
 - [doc-bc58922ac774](.agents/skills/team-progress-maintainer/references/approval-and-append-only-policy.md)
@@ -128,9 +120,6 @@
 - [doc-4d82a45da166](.claude/he-ssgsea-greedy-river.md)
 - [doc-71283d40f6a5](.claude/maintenance-plan.md)
 - [doc-b9e51b0eb0d0](.claude/skills/README.md)
-- [doc-83c96d3bf838](.claude/skills/design-research-plan-and-guide/SKILL.md)
-- [doc-f8cbef2c18c5](.claude/skills/lark-markdown-appender/SKILL.md)
-- [doc-b7fda3194a13](.claude/skills/lark-markdown-importer/SKILL.md)
 - [doc-af1018facf20](01_指南与解读/01_README.md)
 - [doc-dcade5200ce3](01_指南与解读/分析报告/2026-06-30_数据最新情报_完整提取.md)
 - [doc-b4b14aed4452](01_指南与解读/分析报告/5.16修复记录.md)
