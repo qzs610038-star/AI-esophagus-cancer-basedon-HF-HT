@@ -1763,8 +1763,6 @@ def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, s
         return "server_return_profile", "reference", "active", connectivity
     if path == "project_state/implementation_plans/README.md":
         return "implementation_plan_landing_zone", "reference", "active", connectivity
-    if path.endswith("服务器路径索引_20260701.md"):
-        return "server_paths", "normative", "active", connectivity
     if path.endswith("服务器零训练Gitee往返试点检查方案_20260810.md"):
         return "server_zero_training_gitee_roundtrip_pilot", "normative", "active", connectivity
     if path.endswith("MPP2后续方案与LoRA新数据实验建议_20260709.md"):
@@ -1775,6 +1773,9 @@ def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, s
         "mpp1_mpp4训练执行方案", "mpp-v3bis内部验证集二次实验方案",
         "执行计划_mpp1-5统一标准重跑", "mamba与频域模块实验部署方案",
         "deploy/sync_guide.md",
+        # DIR-20260815-002: 服务器路径索引快照已被 configs/server_paths.yaml
+        # （含 md_import 类）取代为唯一机器事实源，不再作为 active 方案。
+        "服务器路径索引",
     )
     if any(pattern.lower() in lower for pattern in superseded_patterns):
         return "historical_guidance", "reference", "superseded", connectivity

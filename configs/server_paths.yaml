@@ -250,3 +250,164 @@ templates:
     path: 'D:\AIPatho\Patch\visiumhd_patch\{group}\{patient}\patch_images'
     status: active
     protected: true
+
+# ============================================================================
+# md_import 类：由人工快照 MD 文件补入的未核验条目（DIR-20260815-002）
+# ----------------------------------------------------------------------------
+# 本类全部条目来自 '01_指南与解读\部署方案\服务器路径索引_20260701.md'，
+# 该 MD 为 2026-07-01 人工快照（含 2026-08-03 Phase3 补充），此后 YAML 为
+# 服务器路径设置的唯一机器事实源；MD 不再作为独立事实源被引用。
+# 本类条目未经过服务器现场核验，不保证路径存在性、状态或计数的完全正确。
+# ============================================================================
+md_import:
+  source: '01_指南与解读\部署方案\服务器路径索引_20260701.md'
+  imported_at: "2026-08-15T00:00:00+08:00"
+  imported_by: "DIR-20260815-002 (user-requested YAML consolidation)"
+  accuracy_guarantee: none
+  live_verification_required: true
+  review_required: true
+  usage_policy: |
+    任何 Agent 引用本类（md_import）条目时，必须同时做到：
+    (1) 向用户标明该路径来源为 md_import（MD 补入、未经服务器现场核验）；
+    (2) 显式提请用户审查该条目；
+    (3) 在用户确认并完成服务器现场核验之前，不得将其作为训练、派发、
+        路径决策、缓存使用或结果处理的执行依据。
+    本类条目仅作检索与人工核对线索，不具备主表 paths 的执行效力。
+  paths:
+    phase2_ssgsea_raw_root:
+      path: 'D:\AIPatho\qzs\data-phase2\ssGSEA'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: Phase2 原始 ssGSEA 标签目录（MD 独有，主表未登记）
+    phase2_token_cache_hyz_train:
+      path: 'D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache_tokens\HYZ15040\train'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: token 缓存；MD 仅确认 HYZ15040 存在，JFX0729/LMZ12939 存在性未确认
+    phase2_token_cache_hyz_val:
+      path: 'D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache_tokens\HYZ15040\val'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: token 缓存；MD 仅确认 HYZ15040 存在，JFX0729/LMZ12939 存在性未确认
+    qzs_checkpoints_online_cls:
+      path: 'D:\AIPatho\qzs\checkpoints\online_cls'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: qzs 根级历史训练结果（online_cls）
+    deploy_git_checkpoints_online_cls:
+      path: 'D:\AIPatho\qzs\pfmval_deploy_git\checkpoints\online_cls'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: legacy checkout 内历史训练结果（online_cls）
+    qzs_deploy_dir:
+      path: 'D:\AIPatho\qzs\deploy'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: 远程命令服务遗留文件（cmd_server.py）；与 Gitee-only 边界冲突，仅历史参考，非 active 通道
+    qzs_tools_dir:
+      path: 'D:\AIPatho\qzs\tools'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: 辅助工具（含代理/隧道工具遗留）；非 active 传输通道，仅历史参考
+    qzs_data_phase3:
+      path: 'D:\AIPatho\qzs\data-phase3'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: 预留目录（MD 快照时为空）
+    jfx0729_noov_old:
+      path: 'D:\AIPatho\qzs\data-phase2\patch\JFX0729_noov_old'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: JFX 旧数据归档（默认不用于新训练，仅历史对照/修复验证）
+    jfx0729_noov_split_old:
+      path: 'D:\AIPatho\qzs\data-phase2\patch\JFX0729_noov_split_old'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: JFX 旧划分归档（默认不用于新训练，仅历史对照/修复验证）
+    hf_cache_uni2h_snapshot:
+      path: 'D:\AIPatho\shared\.cache\huggingface\hub\models--MahmoodLab--UNI2-h\snapshots\d517a8dd47902dd7c308b3c36f63bce47e7b9a43'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: UNI2-h snapshot，含 config.json 与 pytorch_model.bin（约 2.54 GiB）
+    hf_cache_uni2h_incomplete_blob:
+      path: 'D:\AIPatho\shared\.cache\huggingface\hub\models--MahmoodLab--UNI2-h\blobs\6e077eda234bebc595868d918d3458d9dd32a050199b0ff04443b2f46a0a3b1e.incomplete'
+      kind: file
+      status: unverified
+      stability: unknown
+      note: 0 bytes 疑似未完成下载残留
+    hf_cache_openmidnight_dir:
+      path: 'D:\AIPatho\shared\.cache\huggingface\hub\models--SophontAI--OpenMidnight'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: 目录存在但 MD 快照时显示为空
+    torch_hub_checkpoints:
+      path: 'D:\AIPatho\shared\.cache\torch\hub\checkpoints'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: densenet121-a639ec97.pth（约 30.8 MiB）、resnet18-f37072fd.pth（约 44.7 MiB）
+    torch_hub_dinov2:
+      path: 'D:\AIPatho\shared\.cache\torch\hub\facebookresearch_dinov2_main'
+      kind: directory
+      status: unverified
+      stability: unknown
+      note: DINOv2 torch hub repo（hubconf.py、dinov2/、docs、notebooks、scripts）
+    hf_token_file:
+      path: 'D:\AIPatho\shared\.cache\huggingface\token'
+      kind: file
+      status: unverified
+      stability: unknown
+      sensitive: true
+      note: 敏感凭据文件；只登记路径，禁止复制内容到文档或对话
+    hf_token_stored:
+      path: 'D:\AIPatho\shared\.cache\huggingface\stored_tokens'
+      kind: file
+      status: unverified
+      stability: unknown
+      sensitive: true
+      note: 敏感凭据文件；只登记路径，禁止复制内容到文档或对话
+  counts:
+    patch_images_per_mpp_patient:
+      note: MD 快照 patch_images 计数（未核验）；行=MPP 划分，列=患者
+      mpp1: {HYZ15040: 3071, JFX: 7788, LMZ12939: 7275, TGC: 1116, XSL: 1526, XZY: 1039, ZHZ: 1074}
+      mpp2: {HYZ15040: 1454, JFX: 2029, LMZ12939: 3351, TGC: 1116, XSL: 1526, XZY: 1039, ZHZ: 1074}
+      mpp3: {HYZ15040: 5807, JFX: 8116, LMZ12939: 13376, TGC: 4476, XSL: 6093, XZY: 4139, ZHZ: 4257}
+      mpp4: {HYZ15040: 429, JFX: 541, LMZ12939: 889, TGC: 308, XSL: 396, XZY: 269, ZHZ: 282}
+      mpp5: {HYZ15040: 1722, JFX: 2162, LMZ12939: 3549, TGC: 1206, XSL: 1599, XZY: 1082, ZHZ: 1132}
+    phase2_patient_splits:
+      note: Phase2 三患者 train/val 计数（未核验）
+      HYZ15040: {train: 2390, val: 265}
+      JFX0729: {train: 7010, val: 778}
+      LMZ12939: {train: 6762, val: 751}
+  templates:
+    mpp_patient_scored_h5ad:
+      path: 'D:\AIPatho\Patch\visiumhd_patch\{mpp_id}\{patient}\{patient}_scored.h5ad'
+      status: unverified
+      note: MD 目录结构模板补入
+    mpp_patient_aggregated_h5ad:
+      path: 'D:\AIPatho\Patch\visiumhd_patch\{mpp_id}\{patient}\aggregated_patches.h5ad'
+      status: unverified
+      note: MD 目录结构模板补入
+  env:
+    note: MD 建议的缓存环境变量（未核验）；仅离线/缓存优先场景参考
+    HF_HOME: 'D:\AIPatho\shared\.cache\huggingface'
+    TORCH_HOME: 'D:\AIPatho\shared\.cache\torch'
+    HF_HUB_OFFLINE: '1'
+  notes:
+    - 命名差异：JFX 在 MPP 数据根（D:\AIPatho\Patch\visiumhd_patch）中患者名为 JFX，不是 Phase2 的 JFX0729。
+    - token 缓存存在性：MD 快照仅确认 uni2h_cache_tokens\HYZ15040 存在；JFX0729、LMZ12939 需重新核对或重建。
+    - 更新流程（MD 独有，仅供参考）：data/qzs/cache 三处变更后运行对应目录下 inventory_folder.ps1 重新生成 folder_inventory_*.txt。
+    - 清单摘要（2026-07-01 快照）：qzs 104 目录/343 已列文件/54243 省略；data 76 目录/106 已列/96308 省略；cache 90 目录/237 已列/0 省略。
+    - 原始 ssGSEA 禁止直接用于训练：任何训练前必须先生成标准化标签，参数只在训练集上拟合。

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-15T12:39:36+00:00",
-  "state_revision": 216,
+  "updated_at": "2026-08-15T14:36:52+00:00",
+  "state_revision": 219,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -955,9 +955,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T07:17:44+00:00",
-      "state_revision": 216,
-      "content_sha256": "2759fbc6f643a61f9b92bba8c9d23f8f0c679f777ab2fe23659a1cca1b68e1f8",
+      "verified_at": "2026-08-15T14:36:52+00:00",
+      "state_revision": 219,
+      "content_sha256": "bbb6ec6b384e67182c2c680bdcdd46ec03ff70aa8a33561067137a7abfec3fca",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -976,9 +976,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T07:17:44+00:00",
-      "state_revision": 216,
-      "content_sha256": "b3305d0bc8d3c58aac19939e837797081e62d63926fe937ea1dc21a33e53a2c9",
+      "verified_at": "2026-08-15T14:36:52+00:00",
+      "state_revision": 219,
+      "content_sha256": "80f7ff18a1938be1fb5cb1e2af84e90160d77e3b874827ba08df52017fc00f06",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4537,14 +4537,16 @@
       "doc_id": "doc-2a8751c5530f",
       "path": "01_指南与解读/部署方案/服务器路径索引_20260701.md",
       "category": "部署方案",
-      "scope": "server_paths",
-      "authority": "normative",
-      "lifecycle": "active",
-      "verified_at": "2026-08-10T06:03:14+00:00",
-      "state_revision": 202,
+      "scope": "historical_guidance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "verified_at": "2026-08-15T14:36:52+00:00",
+      "state_revision": 219,
       "content_sha256": "0e5d80474998b980b6adfdd5c724b66df9dc221a783a31f2065b7133cdf8872f",
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "plan-server-maintenance"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -5050,9 +5052,9 @@
       "scope": "agent_entry",
       "authority": "normative",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T03:32:51+00:00",
-      "state_revision": 199,
-      "content_sha256": "780eb06e9482d76a5ef8ea98a07427c557d33d2d4b048d18e78e05229b5393e8",
+      "verified_at": "2026-08-15T14:33:48+00:00",
+      "state_revision": 218,
+      "content_sha256": "6b455a82aa7fe57f07741fa4767b9a687d9ae985444f8233fdc94f61fef71ede",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5097,9 +5099,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T12:39:36+00:00",
-      "state_revision": 216,
-      "content_sha256": "ecbfdf4978138304bcb780ac4e662f275d9d4de74f8a414b09922064ae0ac5a8",
+      "verified_at": "2026-08-15T14:36:52+00:00",
+      "state_revision": 219,
+      "content_sha256": "2a1e3167f925f47349da2b6b150948d4d76211c2bef1631292db68edee4ba5a8",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5140,9 +5142,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T07:17:44+00:00",
-      "state_revision": 216,
-      "content_sha256": "6b083ac0f6df5b3da6fc3ca3aeccac393eff645aab32198550e44cd65df6ba45",
+      "verified_at": "2026-08-15T14:36:52+00:00",
+      "state_revision": 219,
+      "content_sha256": "06ad579fddc8bb5230f87f37dde454c739f1943e55ef85e9a3a39f0ba2c32986",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6362,8 +6364,8 @@
     "total": 290,
     "live": 274,
     "missing": 16,
-    "active": 56,
-    "superseded": 11,
+    "active": 55,
+    "superseded": 12,
     "historical": 189,
     "pending_review": 0,
     "approved_design": 18
