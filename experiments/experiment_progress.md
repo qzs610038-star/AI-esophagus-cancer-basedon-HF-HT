@@ -1,15 +1,14 @@
 # 实验进度
 
 > 此文件由 `experiments/experiment_registry.json` 自动生成，禁止手工维护。
-> source_sha256: `c1cc04b71741733e97b6aed8f4e23e822d4e91c2c88bdb9cfa3d06848916dc70`
-> state_revision: `N/A`；updated_at: `2026-08-11T11:51:57+00:00`
+> source_sha256: `03f5ac1a816564c6770a25313e17e61481b16c9af1f6de877b26771a6dd7e306`
+> state_revision: `N/A`；updated_at: `2026-08-15T07:16:45+00:00`
 
 ## 当前与待处理
 
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | mpp2_online_cache_parity_v003_20260711 | mpp2_online_cache_parity_v003_20260711 | legacy-import-mpp2_online_cache_parity_v003_20260711 | — | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. | preflight | done | planned | 暂无 | 待审查 | prepare_paired_smoke | — |
-| MPP2连续通路几何软对比残差四臂探针 | mpp2_cpgcr_probe_v001_20260811 | — | W007 | 未登记 | preflight | planned | pending | 暂无 | 待审查 | approve_protocol | — |
 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | — | — | 2026-07-09 superseded: old 3-patient/JFX-affected spatial Token+LoRA gate is tuning reference only. Do not launch before MPP2 new-data LoRA baseline is established. | — | paused | pending | 暂无 | 待审查 | paused_mpp2_lora_first | — |
 
 ## 已接纳结果
@@ -25,6 +24,7 @@
 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | mpp3-repair-v003-recheck-20260711-result-20260711204217-fb8a85ac | — | DIR-20260711-006 satisfied by validated result import with bbox embargo preserved; use this repaired formal result for reporting and do not redispatch automatically. | formal | done | accepted | Val PCC=0.8225；Val loss=0.3488；XZY PCC=0.6436；XZY MAE=0.6383；Test loss=0.6880 | 已接纳 | closed_use_accepted_repaired_result_for_reporting | 2026-07-11T12:51:00+00:00 |
 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | mpp4-repair-v003-recheck-20260711-result-20260711204236-49f9726f | — | DIR-20260711-006 satisfied by validated result import; use this repaired formal result for reporting and do not redispatch automatically. | formal | done | accepted | Val PCC=0.8209；Val loss=0.3198；XZY PCC=0.6151；XZY MAE=0.5094；Test loss=0.4635 | 已接纳 | closed_use_accepted_repaired_result_for_reporting | 2026-07-11T12:51:01+00:00 |
 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | mpp5-repair-v003-recheck-20260711-result-20260711204418-eef816b8 | — | DIR-20260711-006 satisfied by validated result import with bbox embargo preserved; use this repaired formal result for reporting and do not redispatch automatically. | formal | done | accepted | Val PCC=0.8347；Val loss=0.3166；XZY PCC=0.6072；XZY MAE=0.5082；Test loss=0.4723 | 已接纳 | closed_use_accepted_repaired_result_for_reporting | 2026-07-11T12:51:02+00:00 |
+| MPP2连续通路几何软对比残差四臂探针 | mpp2_cpgcr_probe_v001_20260811 | W007-four-arm-seed42-result-R001 | W007 | 未登记 | formal | done | accepted | 暂无 | single-seed differences are small and mixed; no residual arm is a clear winner | review_four_arm_analysis_no_redispatch | 2026-08-15T07:16:45+00:00 |
 | MPP2 paired MSE vs Huber delta1 | mpp2_huber_loss_paired_v001_20260728 | PAIR-W001-A003-A004 | W001 | 未登记 | formal | done | accepted | Control PCC=0.6549；Treatment PCC=0.6527；ΔPCC=-0.0022 | Huber(delta=1)未提升external XZY pooled PCC；相同合同不得重试。 | closed_no_retry | 2026-07-29T13:20:03+00:00 |
 | mpp1_std10val_xzy_ext_uni2h_mlp_20260706 | mpp1_std10val_xzy_ext_uni2h_mlp_20260706 | legacy-import-mpp1_std10val_xzy_ext_uni2h_mlp_20260706 | — | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. | — | done | accepted | Val PCC=0.6473；Val loss=0.5965；XZY PCC=0.7103；XZY MAE=0.8652；Test loss=1.2223 | 已接纳 | archived_mpp2_selected | 2026-07-08T05:56:05 |
 | mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706 | mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706 | legacy-import-mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706 | — | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. | — | done | accepted | Val PCC=0.8016；Val loss=0.3877；XZY PCC=0.6462；XZY MAE=0.6211；Test loss=0.6745 | 已接纳 | archived_mpp2_selected | 2026-07-08T05:56:06 |

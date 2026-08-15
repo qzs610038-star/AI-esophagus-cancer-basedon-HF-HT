@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-11T11:57:04+00:00",
-  "state_revision": 214,
+  "updated_at": "2026-08-15T07:17:44+00:00",
+  "state_revision": 216,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -55,6 +55,132 @@
       "verified_at": "2026-07-26T16:52:20+00:00",
       "state_revision": 109,
       "content_sha256": "157760a2019b80e54268f65d7b789b7f1dbb7e520d8bc648b0367daede61955c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-6dae853d3c61",
+      "path": ".agents/skills/design-research-plan-and-guide/SKILL.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "c4adbd3aff102c243288080b64bd71fe6a144dc3620ce16a404445402ccd1113",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-6e79245c1589",
+      "path": ".agents/skills/design-research-plan-and-guide/assets/学习指南模板.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "8a7da00abe3f882289a67bb98fca3eee1d81e81882949869be0e4e5d46a18352",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-fc270230f4e4",
+      "path": ".agents/skills/design-research-plan-and-guide/assets/部署方案模板.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "2a4275026db51c706899555297de815073ec210d0ddf6e04de36c932190e9bdb",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-cb7724930aea",
+      "path": ".agents/skills/design-research-plan-and-guide/references/成对文档输出合同.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "89f03c4ba48517ac507a2a495c3021fbcf58eb8a7321ca2fae547421073c91f1",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-34b64d725b06",
+      "path": ".agents/skills/design-research-plan-and-guide/references/科研边界.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "fb4506917e889358927f38d6d0019d39210c706b5d7b028ef8ed5db34bdd3867",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-4107943e6c8a",
+      "path": ".agents/skills/design-research-plan-and-guide/references/证据矩阵.md",
+      "category": "Agent Skill",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "6c14f132764e551000bd60f048ff8c1021fb6a84eedf4be1bd3def6917ff79cc",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -829,9 +955,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-11T11:57:04+00:00",
-      "state_revision": 214,
-      "content_sha256": "f38e68c972c6938b78a8f2293abe59f1138990337d4f46a8c3fb8a943df47902",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "2759fbc6f643a61f9b92bba8c9d23f8f0c679f777ab2fe23659a1cca1b68e1f8",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -850,9 +976,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-11T11:57:04+00:00",
-      "state_revision": 214,
-      "content_sha256": "7fc9b2f65005545467881361b722c0b3d0983d22a83c78555e849fd8d207ce07",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "b3305d0bc8d3c58aac19939e837797081e62d63926fe937ea1dc21a33e53a2c9",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -916,6 +1042,27 @@
       "verified_at": "2026-08-09T15:01:22+00:00",
       "state_revision": 192,
       "content_sha256": "abf96ee1d5348e59d645dad6e8fc9ee97d7c43d415b0cd4c35ebd42d887f4bfc",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-83c96d3bf838",
+      "path": ".claude/skills/design-research-plan-and-guide/SKILL.md",
+      "category": "本地Agent视图",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "6880497b61092235bee51ba52ac61fdac465f772be9ce91fec1e8240f5a20fbe",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -2491,6 +2638,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-15d9f62cccd4",
+      "path": "01_指南与解读/分析报告/W007_四臂结果核验与待审结论_20260815.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "17a7fb754948443d7c6639b0631e9de4398ff2584639facd192f680f8b7d9514",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-f3092657ca03",
       "path": "01_指南与解读/分析报告/he-ssgsea-greedy-river.md",
       "category": "分析报告",
@@ -3051,15 +3219,36 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-79e954b079da",
+      "path": "01_指南与解读/学习指南/MPP2连续通路几何软对比残差_初学者进阶解析与结果判读指南_20260815.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "6f671771bab8c8f7f0634933aff7b66d11b28a06cd29d35bf0236cf4c5fd1d89",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-e0558a77299b",
       "path": "01_指南与解读/学习指南/MPP2连续通路几何软对比残差_实验设计学习指南_20260811.md",
       "category": "学习指南",
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-08-11T11:57:04+00:00",
-      "state_revision": 214,
-      "content_sha256": "3caf21384678231a247dac2dcaf6624b108e238fabee2d559b348134a004ad06",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "dd79eda7024d165d62474bc23bbf9d639691cf5942df6a200a000cb9e5ea25ad",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3382,6 +3571,27 @@
         "在线训练",
         "初学者"
       ],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-e8e9907f441d",
+      "path": "01_指南与解读/学习指南/W007四臂结果导入治理缺口修复学习指南_20260815.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "92b1276c5f4d29e031d1c1ba285e7cff796a38f92b5e043dc75cc6dc76443a00",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
       "connectivity_modes": [],
       "availability": "local_only"
     },
@@ -4070,6 +4280,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-a4883d7b6b95",
+      "path": "01_指南与解读/部署方案/W007四臂结果导入治理缺口修复部署方案_20260815.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "c7f964f117f6f61feab2697b639f597259b1c51e742ca9505f2b4b00ca455b8e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-058364e7c37b",
       "path": "01_指南与解读/部署方案/ssGSEA标签预处理与JFX修复数据部署方案_20260616.md",
       "category": "部署方案",
@@ -4740,9 +4971,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-11T11:57:04+00:00",
-      "state_revision": 214,
-      "content_sha256": "993648d4682906b73263aaa4d257f7b396faa4ff4843c6696cfadd836038c838",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "1b37aa278cf36ffe68008d52b814a5c9947ad25b2787a957db8b6ee641775aa3",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4783,9 +5014,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-11T11:57:04+00:00",
-      "state_revision": 214,
-      "content_sha256": "5b07437248feb62c885f8fd6831690f8f6bc34317eb8612e1078d2c0d3d2648b",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "6b083ac0f6df5b3da6fc3ca3aeccac393eff645aab32198550e44cd65df6ba45",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4874,6 +5105,27 @@
       "verified_at": "2026-07-26T16:52:20+00:00",
       "state_revision": 109,
       "content_sha256": "e636cd05a2820e839486ff68958224a88ae0e4d9e8b19de85316844692b72381",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-4d2bd0fe03df",
+      "path": "automation/incidents/20260815_W007_four_arm_return_import_compatibility.md",
+      "category": "项目入口",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "6f82cd0bd1b2e8d1bf7313c3287f1da4824c28ce720871b57c48f85ea271963d",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5104,9 +5356,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-11T11:57:04+00:00",
-      "state_revision": 214,
-      "content_sha256": "418f21c701c61b5478c47cb0e24220c46bcf6ed4cedaf6545dad4b79d3612782",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "13e709fc4ce141d80b3debe9846053aaf59e9f97abebd5ea1caad380ca460355",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5125,9 +5377,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-11T11:57:04+00:00",
-      "state_revision": 214,
-      "content_sha256": "16a8ac1c56067a7d2576acf805c144fe79ffd9c7b3fe782988208c158eca7f86",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "554a37d861ebc7e3bb55dcaae9354b8c47f1d1ca77e89d081a90c055497a657f",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5188,9 +5440,9 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-08-11T11:57:04+00:00",
-      "state_revision": 214,
-      "content_sha256": "0b1264e62668d17acd9ac12c13a0c9f8f4a84db2eb636e3a74a0efaf925688fe",
+      "verified_at": "2026-08-15T07:17:44+00:00",
+      "state_revision": 216,
+      "content_sha256": "be5b6b99fcf939236c0f26db70b4c20e85c20b711124f76a0f942db7d47b78ec",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5981,12 +6233,12 @@
     }
   ],
   "summary": {
-    "total": 272,
-    "live": 256,
+    "total": 284,
+    "live": 268,
     "missing": 16,
     "active": 56,
     "superseded": 11,
-    "historical": 171,
+    "historical": 183,
     "pending_review": 0,
     "approved_design": 18
   }
