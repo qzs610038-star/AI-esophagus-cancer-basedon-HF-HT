@@ -28,6 +28,7 @@ from scripts.pfmval_state import (
     exploration_cleanup_candidates,
     git_commit_exists,
     import_result_bundle,
+    import_w007_four_arm_results,
     import_mpp_repair_evidence_from_git,
     list_exploration_sessions,
     normalize_rel,
@@ -275,6 +276,103 @@ def bind_job(root: Path, result_manifest: dict) -> Path:
     output = root / "automation" / "jobs" / job_id / "job.json"
     write_json(output, job)
     return output
+
+
+def make_w007_four_arm_quarantine(root: Path) -> Path:
+    quarantine = root / "project_state" / "inbox" / "W007" / "quarantine"
+    specifications = {
+        "FBR": ("7be042a27d7a914744dfca1969ecae9ed6a3fb2d", "automation/server/W007/FBR-R001"),
+        "RCC": ("24a87c72c90122fb061ef6f93ad133a04a3ab3d1", "automation/server/W007/A019"),
+        "HCR": ("0f81be3cd542baa19ef3a2fe97bb146122a055bb", "automation/server/W007/A022"),
+        "CPGCR": ("0f81be3cd542baa19ef3a2fe97bb146122a055bb", "automation/server/W007/A023"),
+    }
+    metrics = {
+        "patient_balanced_z_mse": 0.0,
+        "pooled_z_mse": 0.0,
+        "z_mae": 0.0,
+        "pooled_pcc": 1.0,
+        "raw_mae": 0.0,
+        "mean_pathway_raw_r2": 1.0,
+    }
+    predictions = (
+        "patient,spot_id,split,truth_z__p,prediction_z__p,truth_raw__p,prediction_raw__p\n"
+        "P1,S1,{split},0,0,10,10\n"
+        "P1,S2,{split},1,1,20,20\n"
+    )
+    for arm, (source_commit, return_branch) in specifications.items():
+        arm_dir = quarantine / arm / "automation" / "returns" / "W007" / "batch" / arm
+        arm_dir.mkdir(parents=True)
+        files = {
+            "metrics.json": json.dumps({"internal": metrics, "external": metrics}),
+            "internal_val_metrics.json": json.dumps(metrics),
+            "XZY_metrics.json": json.dumps(metrics),
+            "internal_val_predictions.csv": predictions.format(split="internal_val"),
+            "XZY_predictions.csv": predictions.format(split="XZY"),
+        }
+        if arm == "FBR":
+            files.update({"checkpoint.json": "{}", "baseline_replay_check.json": json.dumps({"status": "PASS"})})
+        else:
+            files.update({"training_history.csv": "epoch,val_loss\n1,0\n", "best_checkpoint.pth": "", "attempt_started.json": "{}"})
+        artifacts = []
+        for name, content in files.items():
+            path = arm_dir / name
+            path.write_text(content, encoding="utf-8")
+            artifacts.append({"path": f"{arm}/{name}", "size_bytes": path.stat().st_size})
+        write_json(
+            arm_dir / "return_manifest.json",
+            {
+                "schema_version": "1.0",
+                "workspace_id": "W007",
+                "source_commit": source_commit,
+                "return_branch": return_branch,
+                "verification": "inventory_size_and_git_tree_closure",
+                "artifacts": artifacts,
+            },
+        )
+    return quarantine
+
+
+def test_w007_four_arm_import_accepts_multiple_sources_without_selecting_winner(tmp_path):
+    root = make_minimal_project(tmp_path)
+    registry_path = root / "experiments" / "experiment_registry.json"
+    registry = read_json(registry_path)
+    registry["experiments"][0].update({
+        "id": "mpp2_cpgcr_probe_v001_20260811",
+        "workspace_id": "W007",
+        "source_commit": "bcb6bfa4e288620ced7b354538be92cda7a26b49",
+    })
+    write_json(registry_path, registry)
+    quarantine = make_w007_four_arm_quarantine(root)
+
+    preview = import_w007_four_arm_results(
+        root, quarantine, write=False, verify_git=False,
+        imported_at="2026-08-15T16:00:00+00:00",
+    )
+    assert preview["status"] == "validated"
+    assert read_json(registry_path)["experiments"][0]["evidence_status"] == "pending"
+
+    result = import_w007_four_arm_results(
+        root, quarantine, write=True, verify_git=False,
+        imported_at="2026-08-15T16:00:00+00:00",
+    )
+    experiment = read_json(registry_path)["experiments"][0]
+    assert result["status"] == "imported"
+    assert experiment["evidence_status"] == "accepted"
+    assert experiment["analysis_status"] == "pending_user_review"
+    assert experiment["result_ids"] == [
+        "W007-FBR-result-R001", "W007-A019-result-R001",
+        "W007-A022-result-R001", "W007-A023-result-R001",
+    ]
+    assert [member["source_commit"] for member in experiment["four_arm_results"]] == [
+        "7be042a27d7a914744dfca1969ecae9ed6a3fb2d",
+        "24a87c72c90122fb061ef6f93ad133a04a3ab3d1",
+        "0f81be3cd542baa19ef3a2fe97bb146122a055bb",
+        "0f81be3cd542baa19ef3a2fe97bb146122a055bb",
+    ]
+    assert "winner" not in experiment
+    assert "mpp2_cpgcr_probe_v001_20260811" in read_json(
+        root / "project_state" / "current_state.json"
+    )["latest_accepted_result_ids"]
 
 
 def test_directive_supersession_is_explicit_and_append_only(tmp_path):

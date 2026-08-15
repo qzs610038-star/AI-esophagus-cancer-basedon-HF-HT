@@ -3721,6 +3721,302 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
     return {"status": "imported", "result_id": manifest["result_id"], "evidence_status": target["evidence_status"]}
 
 
+W007_FOUR_ARM_SPEC = {
+    "FBR": {
+        "result_id": "W007-FBR-result-R001",
+        "attempt_id": "FBR-R001",
+        "source_commit": "7be042a27d7a914744dfca1969ecae9ed6a3fb2d",
+        "return_branch": "automation/server/W007/FBR-R001",
+        "return_commit": "fe8771f99472cf0a6d99061f50ca7321c4260f1f",
+        "execution_type": "frozen_baseline_replay",
+    },
+    "RCC": {
+        "result_id": "W007-A019-result-R001",
+        "attempt_id": "A019",
+        "source_commit": "24a87c72c90122fb061ef6f93ad133a04a3ab3d1",
+        "return_branch": "automation/server/W007/A019",
+        "return_commit": "036c7139fd7792055692e4082b23cb6380f116d4",
+        "execution_type": "formal_training",
+    },
+    "HCR": {
+        "result_id": "W007-A022-result-R001",
+        "attempt_id": "A022",
+        "source_commit": "0f81be3cd542baa19ef3a2fe97bb146122a055bb",
+        "return_branch": "automation/server/W007/A022",
+        "return_commit": "d91aaa2c8ba560c4f43884560877227c83fb377d",
+        "execution_type": "formal_training",
+    },
+    "CPGCR": {
+        "result_id": "W007-A023-result-R001",
+        "attempt_id": "A023",
+        "source_commit": "0f81be3cd542baa19ef3a2fe97bb146122a055bb",
+        "return_branch": "automation/server/W007/A023",
+        "return_commit": "1519551098ae313f6a0082079de8b045d8e9084f",
+        "execution_type": "formal_training",
+    },
+}
+
+
+def _w007_prediction_metrics(path: Path) -> Tuple[Dict[str, float], List[Tuple[Any, ...]]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    if not rows:
+        raise ValueError(f"empty W007 predictions: {path}")
+    columns = list(rows[0])
+    pathways = [name.removeprefix("truth_z__") for name in columns if name.startswith("truth_z__")]
+    if not pathways:
+        raise ValueError(f"W007 predictions have no truth_z columns: {path}")
+    required = []
+    for pathway in pathways:
+        required.extend((
+            f"prediction_z__{pathway}", f"truth_raw__{pathway}",
+            f"prediction_raw__{pathway}",
+        ))
+    missing = [name for name in required if name not in columns]
+    if missing:
+        raise ValueError(f"W007 predictions missing columns: {missing}")
+
+    z_truth: List[float] = []
+    z_prediction: List[float] = []
+    patient_squared_errors: Dict[str, List[float]] = {}
+    raw_truth_by_pathway: Dict[str, List[float]] = {name: [] for name in pathways}
+    raw_prediction_by_pathway: Dict[str, List[float]] = {name: [] for name in pathways}
+    evidence_rows: List[Tuple[Any, ...]] = []
+    for row in rows:
+        patient = str(row["patient"])
+        truth_values = tuple(float(row[f"truth_z__{name}"]) for name in pathways)
+        raw_truth_values = tuple(float(row[f"truth_raw__{name}"]) for name in pathways)
+        evidence_rows.append((patient, str(row["spot_id"]), str(row["split"]), truth_values, raw_truth_values))
+        for index, pathway in enumerate(pathways):
+            truth_z = truth_values[index]
+            prediction_z = float(row[f"prediction_z__{pathway}"])
+            truth_raw = raw_truth_values[index]
+            prediction_raw = float(row[f"prediction_raw__{pathway}"])
+            z_truth.append(truth_z)
+            z_prediction.append(prediction_z)
+            patient_squared_errors.setdefault(patient, []).append((prediction_z - truth_z) ** 2)
+            raw_truth_by_pathway[pathway].append(truth_raw)
+            raw_prediction_by_pathway[pathway].append(prediction_raw)
+
+    squared_errors = [(prediction - truth) ** 2 for truth, prediction in zip(z_truth, z_prediction)]
+    absolute_errors = [abs(prediction - truth) for truth, prediction in zip(z_truth, z_prediction)]
+    z_truth_mean = sum(z_truth) / len(z_truth)
+    z_prediction_mean = sum(z_prediction) / len(z_prediction)
+    covariance = sum((truth - z_truth_mean) * (prediction - z_prediction_mean) for truth, prediction in zip(z_truth, z_prediction))
+    truth_ss = sum((truth - z_truth_mean) ** 2 for truth in z_truth)
+    prediction_ss = sum((prediction - z_prediction_mean) ** 2 for prediction in z_prediction)
+    pooled_pcc = covariance / math.sqrt(truth_ss * prediction_ss)
+    raw_absolute_errors: List[float] = []
+    pathway_r2: List[float] = []
+    for pathway in pathways:
+        truths = raw_truth_by_pathway[pathway]
+        predictions = raw_prediction_by_pathway[pathway]
+        raw_absolute_errors.extend(abs(prediction - truth) for truth, prediction in zip(truths, predictions))
+        truth_mean = sum(truths) / len(truths)
+        denominator = sum((truth - truth_mean) ** 2 for truth in truths)
+        if denominator == 0:
+            raise ValueError(f"undefined raw R2 for constant pathway {pathway}: {path}")
+        pathway_r2.append(1.0 - sum((prediction - truth) ** 2 for truth, prediction in zip(truths, predictions)) / denominator)
+    metrics = {
+        "patient_balanced_z_mse": sum(sum(values) / len(values) for values in patient_squared_errors.values()) / len(patient_squared_errors),
+        "pooled_z_mse": sum(squared_errors) / len(squared_errors),
+        "z_mae": sum(absolute_errors) / len(absolute_errors),
+        "pooled_pcc": pooled_pcc,
+        "raw_mae": sum(raw_absolute_errors) / len(raw_absolute_errors),
+        "mean_pathway_raw_r2": sum(pathway_r2) / len(pathway_r2),
+    }
+    return metrics, evidence_rows
+
+
+def _w007_validate_metric_set(observed: Mapping[str, Any], computed: Mapping[str, float], label: str) -> None:
+    for metric, computed_value in computed.items():
+        if metric not in observed:
+            raise ValueError(f"W007 {label} metrics missing {metric}")
+        if not math.isclose(float(observed[metric]), computed_value, rel_tol=0.0, abs_tol=1e-6):
+            raise ValueError(
+                f"W007 {label} metric mismatch for {metric}: "
+                f"recorded={observed[metric]} recomputed={computed_value}"
+            )
+
+
+def import_w007_four_arm_results(
+    root: Path,
+    quarantine_root: Path,
+    *,
+    write: bool = False,
+    verify_git: bool = True,
+    imported_at: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Validate and optionally register the known W007 four-arm return profile."""
+    root = root.resolve()
+    quarantine_root = quarantine_root.resolve()
+    members: List[Dict[str, Any]] = []
+    reference_evidence: Dict[str, List[Tuple[Any, ...]]] = {}
+    required_common = {
+        "metrics.json", "internal_val_metrics.json", "XZY_metrics.json",
+        "internal_val_predictions.csv", "XZY_predictions.csv",
+    }
+    for arm, expected in W007_FOUR_ARM_SPEC.items():
+        manifests = list((quarantine_root / arm).rglob("return_manifest.json"))
+        if len(manifests) != 1:
+            raise ValueError(f"W007 {arm} requires exactly one return_manifest.json; found {len(manifests)}")
+        manifest_path = manifests[0]
+        manifest = read_json(manifest_path)
+        for field, value in {
+            "workspace_id": "W007",
+            "source_commit": expected["source_commit"],
+            "return_branch": expected["return_branch"],
+            "verification": "inventory_size_and_git_tree_closure",
+        }.items():
+            if manifest.get(field) != value:
+                raise ValueError(f"W007 {arm} {field} mismatch: {manifest.get(field)} != {value}")
+        bundle_root = manifest_path.parent.parent
+        artifact_paths: Dict[str, Path] = {}
+        for artifact in manifest.get("artifacts", []):
+            relative = PurePosixPath(str(artifact.get("path", "")))
+            if relative.is_absolute() or ".." in relative.parts:
+                raise ValueError(f"unsafe W007 artifact path: {relative}")
+            artifact_path = bundle_root.joinpath(*relative.parts)
+            if not artifact_path.is_file():
+                raise FileNotFoundError(artifact_path)
+            if artifact_path.stat().st_size != int(artifact.get("size_bytes", -1)):
+                raise ValueError(f"W007 artifact size mismatch: {artifact_path}")
+            artifact_paths[artifact_path.name] = artifact_path
+        required = set(required_common)
+        required.update(
+            {"checkpoint.json", "baseline_replay_check.json"}
+            if arm == "FBR"
+            else {"training_history.csv", "best_checkpoint.pth", "attempt_started.json"}
+        )
+        missing = sorted(required - set(artifact_paths))
+        if missing:
+            raise ValueError(f"W007 {arm} missing required artifacts: {missing}")
+        if arm == "FBR" and read_json(artifact_paths["baseline_replay_check.json"]).get("status") != "PASS":
+            raise ValueError("W007 FBR baseline replay check did not pass")
+
+        combined_metrics = read_json(artifact_paths["metrics.json"])
+        arm_evidence: Dict[str, List[Tuple[Any, ...]]] = {}
+        for cohort, prediction_name, metric_name in (
+            ("internal", "internal_val_predictions.csv", "internal_val_metrics.json"),
+            ("external", "XZY_predictions.csv", "XZY_metrics.json"),
+        ):
+            computed, evidence = _w007_prediction_metrics(artifact_paths[prediction_name])
+            _w007_validate_metric_set(read_json(artifact_paths[metric_name]), computed, f"{arm}/{cohort}")
+            _w007_validate_metric_set(combined_metrics.get(cohort, {}), computed, f"{arm}/combined/{cohort}")
+            arm_evidence[cohort] = evidence
+            if cohort in reference_evidence and evidence != reference_evidence[cohort]:
+                raise ValueError(f"W007 {arm} {cohort} sample identities or truths differ from FBR")
+            reference_evidence.setdefault(cohort, evidence)
+
+        if verify_git:
+            revision = subprocess.run(
+                ["git", "-C", str(root), "rev-parse", f"gitee/{expected['return_branch']}"],
+                check=True, capture_output=True, text=True, encoding="utf-8",
+            ).stdout.strip()
+            if revision != expected["return_commit"]:
+                raise ValueError(f"W007 {arm} return ref mismatch: {revision} != {expected['return_commit']}")
+        members.append({
+            "arm": arm,
+            **expected,
+            "seed": 42,
+            "metrics": {
+                "internal": combined_metrics["internal"],
+                "external": combined_metrics["external"],
+            },
+            "artifacts": [normalize_rel(path.relative_to(root)) for path in artifact_paths.values()],
+        })
+
+    result_ids = [member["result_id"] for member in members]
+    summary = {
+        "status": "validated" if not write else "imported",
+        "experiment_id": "mpp2_cpgcr_probe_v001_20260811",
+        "aggregate_result_id": "W007-four-arm-seed42-result-R001",
+        "result_ids": result_ids,
+        "verification": "metrics_recomputed_plus_inventory_size_and_git_tree_closure",
+    }
+    if not write:
+        return summary
+
+    imported_at = imported_at or utc_now()
+    registry_path = root / "experiments" / "experiment_registry.json"
+    state_path = root / "project_state" / "current_state.json"
+    with state_lock(root):
+        registry = read_json(registry_path)
+        target = next((item for item in registry.get("experiments", []) if item.get("id") == summary["experiment_id"]), None)
+        if target is None:
+            raise ValueError(f"unknown W007 experiment id: {summary['experiment_id']}")
+        if target.get("result_id") == summary["aggregate_result_id"]:
+            summary["status"] = "already_imported"
+            return summary
+        target.update({
+            "status": "done",
+            "phase": "formal",
+            "workspace_id": "W007",
+            "protocol_revision": 1,
+            "run_limit": 3,
+            "source_commit": "0f81be3cd542baa19ef3a2fe97bb146122a055bb",
+            "approval_id": "APR-W007-CPGCR-v001-20260811-R001",
+            "result_id": summary["aggregate_result_id"],
+            "result_ids": result_ids,
+            "four_arm_results": members,
+            "result_phase": "formal",
+            "evidence_status": "accepted",
+            "provenance_complete": True,
+            "imported_at": imported_at,
+            "analysis_status": "pending_user_review",
+            "next_action": "review_four_arm_analysis_no_redispatch",
+            "decision_summary": {
+                "status": "pending_user_review",
+                "statement": "single-seed differences are small and mixed; no residual arm is a clear winner",
+            },
+        })
+        registry["updated_at"] = imported_at
+        write_json_atomic(registry_path, registry)
+
+        from scripts.finalize_experiment import build_dashboard
+        from scripts.pfmval_views import build_experiment_progress
+
+        write_text_atomic(root / "experiments" / "experiment_dashboard.md", build_dashboard(registry))
+        write_text_atomic(root / "experiments" / "experiment_progress.md", build_experiment_progress(registry))
+        state = read_json(state_path)
+        accepted = list(state.get("latest_accepted_result_ids", []))
+        if target["id"] not in accepted:
+            accepted.append(target["id"])
+        state["latest_accepted_result_ids"] = accepted
+        state["pending_result_ids"] = [item for item in state.get("pending_result_ids", []) if item not in result_ids]
+        state["state_revision"] = int(state.get("state_revision", 0)) + 1
+        state["updated_at"] = imported_at
+        state["source_commit"] = git_head(root)
+        state["source_hashes"] = compute_source_hashes(root)
+        write_json_atomic(state_path, state)
+        write_text_atomic(root / "CURRENT_STATE.md", render_current_state(root, state, registry))
+        if (root / ".claude").exists():
+            write_text_atomic(root / ".claude" / "next-steps.md", _render_local_next_steps(state, registry))
+            write_text_atomic(root / ".claude" / "session-brief.md", _render_session_brief(state))
+        if (root / "README.md").exists():
+            readme_path = root / "README.md"
+            write_text_atomic(readme_path, replace_readme_state_block(readme_path.read_text(encoding="utf-8"), _readme_state_block(state, registry)))
+        event_path = root / "project_state" / "result_import_events.jsonl"
+        existing = event_path.read_text(encoding="utf-8") if event_path.exists() else ""
+        events = []
+        for member in members:
+            events.append(json.dumps({
+                "event_type": "W007_FOUR_ARM_RESULT_IMPORTED",
+                "workspace_id": "W007",
+                "experiment_id": target["id"],
+                "result_id": member["result_id"],
+                "arm": member["arm"],
+                "attempt_id": member["attempt_id"],
+                "source_commit": member["source_commit"],
+                "return_branch": member["return_branch"],
+                "return_commit": member["return_commit"],
+                "verification": summary["verification"],
+                "imported_at": imported_at,
+            }, ensure_ascii=False))
+        write_text_atomic(event_path, existing + "".join(line + "\n" for line in events))
+    return summary
+
+
 def safe_job_parameters(parameters: Mapping[str, Any]) -> List[str]:
     argv: List[str] = []
     key_pattern = re.compile(r"^[a-z][a-z0-9_-]*$")

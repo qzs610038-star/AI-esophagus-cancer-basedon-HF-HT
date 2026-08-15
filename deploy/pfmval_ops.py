@@ -36,6 +36,7 @@ from scripts.pfmval_state import (  # noqa: E402
     create_job_manifest,
     import_mpp_repair_evidence_from_git,
     import_result_bundle,
+    import_w007_four_arm_results,
     exploration_cleanup_candidates,
     list_exploration_sessions,
     migrate_experiment_provenance,
@@ -677,7 +678,14 @@ def command_paths(args: argparse.Namespace) -> int:
 
 
 def command_result(args: argparse.Namespace) -> int:
-    result = import_result_bundle(PROJECT_ROOT, Path(args.bundle).resolve())
+    if args.result_command == "import-w007-four-arm":
+        result = import_w007_four_arm_results(
+            PROJECT_ROOT,
+            Path(args.quarantine_root).resolve(),
+            write=args.write,
+        )
+    else:
+        result = import_result_bundle(PROJECT_ROOT, Path(args.bundle).resolve())
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 
@@ -1649,6 +1657,12 @@ def build_parser() -> argparse.ArgumentParser:
     result_sub = result.add_subparsers(dest="result_command", required=True)
     result_import = result_sub.add_parser("import")
     result_import.add_argument("--bundle", required=True)
+    result_w007 = result_sub.add_parser("import-w007-four-arm")
+    result_w007.add_argument(
+        "--quarantine-root",
+        default=str(PROJECT_ROOT / "project_state" / "inbox" / "W007" / "quarantine"),
+    )
+    result_w007.add_argument("--write", action="store_true")
 
     mpp = sub.add_parser("mpp")
     mpp_sub = mpp.add_subparsers(dest="mpp_command", required=True)
