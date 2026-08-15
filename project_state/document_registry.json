@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-15T14:36:52+00:00",
-  "state_revision": 219,
+  "updated_at": "2026-08-15T15:13:25+00:00",
+  "state_revision": 222,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -955,9 +955,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T14:36:52+00:00",
-      "state_revision": 219,
-      "content_sha256": "bbb6ec6b384e67182c2c680bdcdd46ec03ff70aa8a33561067137a7abfec3fca",
+      "verified_at": "2026-08-15T15:13:25+00:00",
+      "state_revision": 222,
+      "content_sha256": "a00737b0ebd775e8a0414d5975a177780d515fec8bd0dea26e55671b72cdc73e",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -976,9 +976,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T14:36:52+00:00",
-      "state_revision": 219,
-      "content_sha256": "80f7ff18a1938be1fb5cb1e2af84e90160d77e3b874827ba08df52017fc00f06",
+      "verified_at": "2026-08-15T15:13:25+00:00",
+      "state_revision": 222,
+      "content_sha256": "d158a1fb6d85de2830cf0cfab4b48f30de396ad5d85ac1d8766e0fcb91b09345",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -1009,7 +1009,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "local_only",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-40b8c02101e6",
@@ -5099,9 +5100,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T14:36:52+00:00",
-      "state_revision": 219,
-      "content_sha256": "2a1e3167f925f47349da2b6b150948d4d76211c2bef1631292db68edee4ba5a8",
+      "verified_at": "2026-08-15T15:13:25+00:00",
+      "state_revision": 222,
+      "content_sha256": "6df4fcf93039ba0a849245050407d3ae8b45d8ffca757b0d80bd9d7fc0162c59",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5120,9 +5121,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-10T06:03:14+00:00",
-      "state_revision": 202,
-      "content_sha256": "3ab2ef2d4e3b591c9b9ba0b520b96c20e028421426c7245a9e1c9ae1cea3943b",
+      "verified_at": "2026-08-15T15:13:25+00:00",
+      "state_revision": 222,
+      "content_sha256": "e5faa530bcfab094464203e50d5ad14bebd14c3fea5a2d638b5bbe5a46884c63",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5142,9 +5143,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-15T14:36:52+00:00",
-      "state_revision": 219,
-      "content_sha256": "06ad579fddc8bb5230f87f37dde454c739f1943e55ef85e9a3a39f0ba2c32986",
+      "verified_at": "2026-08-15T15:13:25+00:00",
+      "state_revision": 222,
+      "content_sha256": "e900515fede186dbcb6e056cc16df152bab869e9a1913ccf9ddeddc35acfe042",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5422,6 +5423,27 @@
       "verified_at": "2026-08-09T15:01:22+00:00",
       "state_revision": 192,
       "content_sha256": "f6cdecccdca811828eb6a0354cdfed030d6ed28d97eb157b1a3e9b27216a655e",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "doc-1a3b660607c7",
+      "path": "configs/server_paths.yaml",
+      "category": "配置事实源",
+      "scope": "server_paths_registry",
+      "authority": "normative",
+      "lifecycle": "active",
+      "verified_at": "2026-08-15T14:51:30+00:00",
+      "state_revision": 221,
+      "content_sha256": "dc547227bfe9d99671f1b9567a0fb27a065bb8123c1a2bc6ef5238e83da2cd15",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6361,10 +6383,10 @@
     }
   ],
   "summary": {
-    "total": 290,
-    "live": 274,
+    "total": 291,
+    "live": 275,
     "missing": 16,
-    "active": 55,
+    "active": 56,
     "superseded": 12,
     "historical": 189,
     "pending_review": 0,

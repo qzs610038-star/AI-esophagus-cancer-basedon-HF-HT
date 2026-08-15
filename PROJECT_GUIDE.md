@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `c0bb2553e42486c24196eaa198015b34e95a9fc0f58bb986a9c800cc5b9c9f36`
+> source_sha256: `3d3716893286f59e6f93ba5c32a282029d7993103f6acff39abc3d4fb02062bf`
 
 ## 我要找什么
 
@@ -31,7 +31,7 @@
 
 ### Active 部署方案
 
-- [doc-2a8751c5530f](01_指南与解读/部署方案/服务器路径索引_20260701.md)
+- [doc-c1e997e52610](01_指南与解读/部署方案/服务器零训练Gitee往返试点检查方案_20260810.md)
 
 ### Active 学习指南
 
@@ -82,23 +82,32 @@
 - [doc-654351a24cf0](.claude/skills/update-ranking/SKILL.md)
 - [doc-87b54df9f6ab](.claude/skills/viz-guide/SKILL.md)
 - [doc-9328df98eb69](01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md)
-- [doc-2a8751c5530f](01_指南与解读/部署方案/服务器路径索引_20260701.md)
+- [doc-c1e997e52610](01_指南与解读/部署方案/服务器零训练Gitee往返试点检查方案_20260810.md)
 - [agent-entry](AGENTS.md)
 - [doc-2d5d10cfc503](CLAUDE.md)
 - [view-current-state](CURRENT_STATE.md)
 - [doc-8ec9a00bfd09](README.md)
 - [doc-f4e7bea90c0b](automation/README.md)
+- [doc-1a3b660607c7](configs/server_paths.yaml)
 - [doc-9e8fc4dbabef](experiments/decision_log.md)
 - [doc-cab153659acd](experiments/experiment_dashboard.md)
 - [doc-97369b0611f5](experiments/experiment_progress.md)
+- [doc-21798b23e36d](project_state/implementation_plans/README.md)
 - [doc-2f635595aea6](project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md)
 - [plan-mpp-training](project_state/plans/mpp_training.md)
 - [plan-server-maintenance](project_state/plans/server_maintenance.md)
 - [doc-a567a7562613](project_state/plans/workflow_governance_v3_20260726.md)
+- [doc-c24f25f468a8](project_state/schemas/return_profile_v1.schema.json)
 
 ## 历史与过时资料
 
 - [doc-fe4b048ff34a](.agents/skills/_shared/legacy-compatibility-policy.md)
+- [doc-6dae853d3c61](.agents/skills/design-research-plan-and-guide/SKILL.md)
+- [doc-6e79245c1589](.agents/skills/design-research-plan-and-guide/assets/学习指南模板.md)
+- [doc-fc270230f4e4](.agents/skills/design-research-plan-and-guide/assets/部署方案模板.md)
+- [doc-cb7724930aea](.agents/skills/design-research-plan-and-guide/references/成对文档输出合同.md)
+- [doc-34b64d725b06](.agents/skills/design-research-plan-and-guide/references/科研边界.md)
+- [doc-4107943e6c8a](.agents/skills/design-research-plan-and-guide/references/证据矩阵.md)
 - [doc-2148ae26c88e](.agents/skills/lark-markdown-appender/SKILL.md)
 - [doc-b019198a3aad](.agents/skills/lark-markdown-importer/SKILL.md)
 - [doc-3bbbee463565](.agents/skills/pfmval-audit/assets/audit-report-template.md)
@@ -119,6 +128,7 @@
 - [doc-4d82a45da166](.claude/he-ssgsea-greedy-river.md)
 - [doc-71283d40f6a5](.claude/maintenance-plan.md)
 - [doc-b9e51b0eb0d0](.claude/skills/README.md)
+- [doc-83c96d3bf838](.claude/skills/design-research-plan-and-guide/SKILL.md)
 - [doc-f8cbef2c18c5](.claude/skills/lark-markdown-appender/SKILL.md)
 - [doc-b7fda3194a13](.claude/skills/lark-markdown-importer/SKILL.md)
 - [doc-af1018facf20](01_指南与解读/01_README.md)
@@ -146,6 +156,7 @@
 - [doc-4ddcb830325e](01_指南与解读/分析报告/MPP2双线并行改进与Phase3快速接入方案_原文_20260731.md)
 - [doc-e80cbb0dc4bd](01_指南与解读/分析报告/MPP2双线并行改进与Phase3快速接入方案_执行实现扩展与冲突审查_20260731.md)
 - [doc-4c04d5240205](01_指南与解读/分析报告/MPP2后续实验重新排序与Phase3接入讨论稿_20260801.md)
+- [doc-bb735af1a6b1](01_指南与解读/分析报告/MPP2基线后实验结果与论文创新性事实汇总_20260815.md)
 - [doc-46539423c410](01_指南与解读/分析报告/MPP2方案独立审查与网络对比调研报告_20260731.md)
 - [doc-a9e91078fa55](01_指南与解读/分析报告/MPP2逐通路Ridge校准_r003实验总结_20260718.md)
 - [doc-5735d8901a5d](01_指南与解读/分析报告/MPP五划分UNI2h_MLP执行框架_Claude评审版_20260702.md)
@@ -154,10 +165,15 @@
 - [doc-d5ac37d94c3e](01_指南与解读/分析报告/Mamba与频域模块迁移调研_20260609.md)
 - [doc-8fe357c9bfac](01_指南与解读/分析报告/PEaRL通路增强改进方案.md)
 - [doc-54de45fef40e](01_指南与解读/分析报告/PFMval_PCC优化建议报告_附论文推荐_20260513.md)
+- [doc-858237055309](01_指南与解读/分析报告/PFMval_项目维护报告_20260809-20260810.md)
 - [doc-f09cdbaf0403](01_指南与解读/分析报告/PFMval本地状态与Gitee维护实施日志_20260711.md)
 - [doc-09f2221baaab](01_指南与解读/分析报告/Phase2模型改进建议_0507.md)
+- [doc-a42e78bfe1f8](01_指南与解读/分析报告/Phase2论文基线路径实验选择与决策建议_20260815.md)
 - [doc-f0d70db9e127](01_指南与解读/分析报告/Phase3_CLAM基线方案审查与文献注册_20260803.md)
 - [doc-e27e5de180af](01_指南与解读/分析报告/UNI2h_LoRA冒烟测试报告_20260530.md)
+- [doc-15d9f62cccd4](01_指南与解读/分析报告/W007_四臂结果核验与待审结论_20260815.md)
+- [doc-bfa363c7c3a9](01_指南与解读/分析报告/W007指标未改善原因分析报告_20260815.md)
+- [doc-946579a70614](01_指南与解读/分析报告/W007指标未改善深度归因与机制解读报告_20260815.md)
 - [doc-f3092657ca03](01_指南与解读/分析报告/he-ssgsea-greedy-river.md)
 - [doc-45a8eb08a3d1](01_指南与解读/分析报告/reports/MPP1_5_Analysis_Report.md)
 - [doc-ed7fb303d91d](01_指南与解读/分析报告/下一步改进操作建议_0516.md)
@@ -182,6 +198,8 @@
 - [doc-25365ec02764](01_指南与解读/学习指南/MPP2_R2预测优化_假设检验与实验复盘_20260725.md)
 - [doc-7c1ae9ff3486](01_指南与解读/学习指南/MPP2_空间通路结构化残差适配器_SPRA_方案解读与学习指南_20260806.md)
 - [doc-29671fc27444](01_指南与解读/学习指南/MPP2原始基因集分数空间连续性与患者内排名分析方案_学习指南_20260801.md)
+- [doc-79e954b079da](01_指南与解读/学习指南/MPP2连续通路几何软对比残差_初学者进阶解析与结果判读指南_20260815.md)
+- [doc-e0558a77299b](01_指南与解读/学习指南/MPP2连续通路几何软对比残差_实验设计学习指南_20260811.md)
 - [doc-b66bfc74b3e2](01_指南与解读/学习指南/Mamba与频域模块学习指南_20260609.md)
 - [doc-379b96e712aa](01_指南与解读/学习指南/PFMval_MPP2_双线优化方案体系化学习指南_20260801.md)
 - [doc-624fb900b6c2](01_指南与解读/学习指南/PFMval_MPP2_双线优化方案深度学习指南_20260801.md)
@@ -195,6 +213,7 @@
 - [doc-b2f3af7c6cb5](01_指南与解读/学习指南/SpaMIL_vs_Phase3_对比学习指南_20260803.md)
 - [doc-7a93ec4e548d](01_指南与解读/学习指南/UNI2-H_数据输入输出结构对比分析学习指南.md)
 - [doc-417d1e19e6f9](01_指南与解读/学习指南/UNI2-H_渐进式解冻训练_初学者指南.md)
+- [doc-e8e9907f441d](01_指南与解读/学习指南/W007四臂结果导入治理缺口修复学习指南_20260815.md)
 - [doc-35b99c569e2c](01_指南与解读/学习指南/infer_解读指南.md)
 - [doc-2c7136131bbe](01_指南与解读/学习指南/split_解读指南.md)
 - [doc-980a6556fda8](01_指南与解读/学习指南/train_解读指南.md)
@@ -217,6 +236,7 @@
 - [doc-b1dee7a99232](01_指南与解读/部署方案/MPP1_MPP5模型获取与预测指南.md)
 - [doc-c2c997fcc3af](01_指南与解读/部署方案/MPP2_Phase3两套输出说明与选择指南_20260801.md)
 - [doc-9299955f63d9](01_指南与解读/部署方案/MPP2最新模型_Phase3空转基因预测_快速配置.md)
+- [doc-1787f584a79d](01_指南与解读/部署方案/MPP2连续通路几何软对比残差_初步探索部署方案_20260811.md)
 - [doc-bf1e3b39e68c](01_指南与解读/部署方案/Mamba与频域模块实验部署方案_20260609.md)
 - [doc-a8af2d7e8bbf](01_指南与解读/部署方案/OmiCLIP_部署方案.md)
 - [doc-a90dfe973942](01_指南与解读/部署方案/RL方案B与方案D_部署实现策略.md)
@@ -224,9 +244,14 @@
 - [doc-40e205e92e9d](01_指南与解读/部署方案/UNI2-h服务器离线加载排障记录_20260703.md)
 - [doc-822053816e9a](01_指南与解读/部署方案/VS%20Code%20Remote%20Tunnels远程连接部署方案_20260617.md)
 - [doc-d03361d527e6](01_指南与解读/部署方案/Virchow2_部署方案.md)
+- [doc-c4bfb80248ae](01_指南与解读/部署方案/W007全链路治理排障与配置优化部署方案_20260815.md)
+- [doc-a4883d7b6b95](01_指南与解读/部署方案/W007四臂结果导入治理缺口修复部署方案_20260815.md)
+- [doc-63eb93c65117](01_指南与解读/部署方案/W007指标未改善原因分析.md)
 - [doc-058364e7c37b](01_指南与解读/部署方案/ssGSEA标签预处理与JFX修复数据部署方案_20260616.md)
+- [doc-72112b3ed30e](01_指南与解读/部署方案/服务器单一机器配置治理方案_20260810.md)
 - [doc-e3de1edd8875](01_指南与解读/部署方案/服务器手动部署速查手册.md)
 - [doc-8908905b102c](01_指南与解读/部署方案/服务器训练操作手册.md)
+- [doc-2a8751c5530f](01_指南与解读/部署方案/服务器路径索引_20260701.md)
 - [doc-c9b5dcee616a](01_指南与解读/部署方案/服务器部署指南.md)
 - [doc-2733f1449740](01_指南与解读/部署方案/空间信息修复方案_20260613.md)
 - [doc-47c2f8b8395b](01_指南与解读/部署方案/融合空间组学执行方案_20260522.md)
@@ -248,7 +273,10 @@
 - [doc-ddc15476eddc](02_组会汇报/组会汇报_0711_MPP数据污染排查与安全门禁验证.md)
 - [doc-9a856fc78252](02_组会汇报/组会汇报_0725_MPP2R方优化探索.md)
 - [doc-800548382a8e](02_组会汇报/组会汇报_0808_特征融合分析与W004W005进展.md)
+- [doc-0ac22bde05aa](automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-envprobe-r001/operation_cards.md)
+- [doc-b9a46a7eb3b0](automation/diagnostics/diagnostic-20260810-gitee-rt-pilot-pathprobe-r001/operation_cards.md)
 - [doc-8d442e98e62d](automation/incidents/20260711_mpp2_baseline_cache_root_mismatch.md)
+- [doc-4d2bd0fe03df](automation/incidents/20260815_W007_four_arm_return_import_compatibility.md)
 - [doc-411d4d6be86f](automation/jobs/mpp2-paired-smoke-prediction-supplement-20260712/README.md)
 - [doc-6ff3e0b876b4](automation/logs/main_workspace_cleanup_and_report_handoff_20260713.md)
 - [doc-b7df29785957](automation/logs/mpp2_paired_smoke_review_20260712.md)
@@ -258,6 +286,8 @@
 - [doc-30d6cd0aae35](automation/report_inputs/gemini_mpp_report_handoff_20260713.md)
 - [doc-58260e87622e](automation/returns/W004/README.md)
 - [doc-916d4b92af63](deploy/SYNC_GUIDE.md)
+- [doc-4907e5870007](project_state/implementation_plans/W006-gitee_roundtrip_pilot_实施方案.md)
+- [doc-980504e1cf10](project_state/implementation_plans/W007-mpp2_cpgcr_probe_实施方案.md)
 - [doc-53c2d1113425](project_state/plans/Phase3_0803特征融合创新方案_讨论归档_20260808.md)
 - [doc-05d7fe5438b6](project_state/plans/Phase3_双线基线与跨队列空间通路迁移分阶段实验方案_20260803.md)
 - [doc-795c370926ca](project_state/plans/local_code_git_governance_execution_plan_review_draft_v001_20260809.md)

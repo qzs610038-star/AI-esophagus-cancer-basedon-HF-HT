@@ -1687,6 +1687,8 @@ def _document_category(path: str) -> str:
         return "状态说明"
     if path.startswith("project_state/schemas/"):
         return "状态Schema"
+    if path == "configs/server_paths.yaml":
+        return "配置事实源"
     if path.startswith(".agents/skills/"):
         return "Agent Skill"
     if "分析报告/" in path:
@@ -1744,6 +1746,9 @@ def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, s
         return "agent_entry", "normative", "active", connectivity
     if path == "CLAUDE.md":
         return "agent_adapter", "reference", "active", connectivity
+    if path == "configs/server_paths.yaml":
+        # DIR-20260815-002: 服务器路径设置的唯一机器事实源（含 md_import 类）。
+        return "server_paths_registry", "normative", "active", connectivity
     if path == "automation/README.md":
         return "gitee_job_protocol", "normative", "active", connectivity
     if path in {
@@ -1809,6 +1814,7 @@ def scan_documents(root: Path) -> Dict[str, Any]:
             live_paths.update(normalize_rel(path.relative_to(root)) for path in base.rglob("*.md"))
     for path in (
         "README.md", "PROJECT_GUIDE.md", "AGENTS.md", "CURRENT_STATE.md", "CLAUDE.md",
+        "configs/server_paths.yaml",
         ".claude/next-steps.md", ".claude/session-brief.md", ".claude/maintenance-plan.md",
         "experiments/experiment_dashboard.md", "experiments/experiment_progress.md",
         "experiments/decision_log.md",
@@ -1905,6 +1911,15 @@ def scan_documents(root: Path) -> Dict[str, Any]:
                 elif isinstance(default, dict):
                     value = dict(value or {})
                 entry[relationship_field] = value
+        # P0-1: lifecycle_override 是显式人工覆盖，扫描器优先采用；
+        # 被覆盖文档的 authority 固定为 reference（人工管理，不再视为自动 normative）。
+        override = old.get("lifecycle_override")
+        if override and file_path.exists():
+            entry["lifecycle"] = override
+            if entry.get("authority") == "normative":
+                entry["authority"] = "reference"
+        if override:
+            entry["lifecycle_override"] = override
         if lifecycle == "active" and "doc_role" not in entry:
             if entry["category"] == "部署方案":
                 entry["doc_role"] = "deployment_plan"
@@ -2448,6 +2463,39 @@ def validate_server_paths(
             scoped_path = root / str(entry["path"])
             if not scoped_path.exists():
                 report.fail(f"required {host_scope} path missing: {path_id} -> {entry['path']}")
+
+    # P0-3: md_import 交叉校验（全部 WARN，不阻塞任何流程）。
+    # 该类条目由人工快照 MD 补入、未经服务器现场核验；此处仅做线索级一致性提示。
+    md_import = registry.get("md_import")
+    if md_import is not None:
+        source_rel = str(md_import.get("source", ""))
+        if source_rel:
+            source_path = root / source_rel
+            if not source_path.exists():
+                report.warn(f"md_import.source file is missing: {source_rel}")
+            else:
+                recorded = str(md_import.get("source_sha256") or "")
+                actual = sha256_file(source_path)
+                if recorded and actual != recorded:
+                    report.warn(
+                        "md_import.source has changed since import "
+                        f"(recorded={recorded[:12]} actual={actual[:12]}); "
+                        "md_import entries may be stale, please review"
+                    )
+                elif not recorded:
+                    report.warn(f"md_import.source_sha256 is not recorded: {source_rel}")
+        md_paths = md_import.get("paths")
+        if isinstance(md_paths, dict):
+            for path_id in md_paths:
+                if path_id in paths:
+                    report.warn(
+                        f"path id {path_id} exists in both paths and md_import; "
+                        "promote the verified entry and remove the md_import copy"
+                    )
+        else:
+            report.warn("md_import.paths is missing or not a mapping")
+    else:
+        report.warn("server path registry has no md_import section")
     active_path_files = [
         "extract_uni2h_mpp.py",
         "prepare_mpp_zscore.py",
@@ -2977,7 +3025,16 @@ def validate_state(
         elif experiment.get("evidence_status") != "accepted":
             report.fail(f"latest result is not accepted evidence: {result_id}")
         elif not experiment.get("provenance_complete", False):
-            report.warn(f"accepted legacy result lacks a complete result envelope: {result_id}")
+            legacy_result_id = str(experiment.get("result_id", ""))
+            legacy_imported = legacy_result_id.startswith("legacy-import-") or not (
+                experiment.get("source_commit") or experiment.get("job_id")
+            )
+            if legacy_imported:
+                # P0-5: 历史导入结果无 job/source_commit 可补 envelope，属已知债务，
+                # 降噪为 acknowledged 提示，避免每次 start-check 重复告警。
+                report.passed(f"accepted legacy result envelope gap acknowledged: {result_id}")
+            else:
+                report.warn(f"accepted legacy result lacks a complete result envelope: {result_id}")
     for job in state.get("active_training_jobs", []):
         if job.get("experiment_id") not in experiments:
             report.fail(f"active job references unknown experiment: {job}")
@@ -4489,3 +4546,104 @@ def build_result_envelope(
     except Exception:
         shutil.rmtree(temporary_dir, ignore_errors=True)
         raise
+
+
+def set_document_lifecycle(root: Path, *, doc_id: str, lifecycle: str) -> Dict[str, Any]:
+    """P0-1: 显式设置文档 lifecycle_override。
+
+    写入后由 docs scan 保留（扫描器优先采用 override），authority 固定为
+    reference。调用方随后应执行 state sync --with-docs 完成闭环。
+    """
+    allowed = {"draft", "pending_review", "approved_design", "active", "superseded", "historical"}
+    if lifecycle not in allowed:
+        raise ValueError(f"lifecycle must be one of: {', '.join(sorted(allowed))}")
+    registry_path = root / "project_state" / "document_registry.json"
+    registry = read_json(registry_path)
+    document = next(
+        (item for item in registry.get("documents", []) if item.get("doc_id") == doc_id),
+        None,
+    )
+    if document is None:
+        raise ValueError(f"document not found: {doc_id}")
+    document["lifecycle_override"] = lifecycle
+    document["lifecycle"] = lifecycle
+    if document.get("authority") == "normative":
+        document["authority"] = "reference"
+    registry["updated_at"] = utc_now()
+    write_json_atomic(registry_path, registry)
+    return {
+        "doc_id": doc_id,
+        "path": document["path"],
+        "lifecycle_override": lifecycle,
+        "authority": document.get("authority"),
+    }
+
+
+def promote_md_import_paths(
+    root: Path,
+    *,
+    ids: Sequence[str],
+    required_on: str,
+    write: bool = False,
+) -> Dict[str, Any]:
+    """P0-4: 将 md_import.paths 中经用户核验的条目晋升到主表 paths。
+
+    仅做结构移动与标记，不改变路径内容；晋升后条目参与主表既有校验。
+    写回时保留 YAML 文件头部注释块；md_import 节内注释不保留（该节说明
+    职责由 usage_policy 承担）。
+    """
+    registry_path = root / "configs" / "server_paths.yaml"
+    if yaml is None:
+        raise RuntimeError("PyYAML is required for server_paths.yaml edits")
+    if required_on not in {"server", "local", "both"}:
+        raise ValueError("--required-on must be one of: server, local, both")
+    raw = registry_path.read_text(encoding="utf-8")
+    value = yaml.safe_load(raw)
+    if not isinstance(value, dict):
+        raise ValueError("server_paths.yaml must contain a mapping")
+    md_import = value.get("md_import")
+    if not isinstance(md_import, dict) or not isinstance(md_import.get("paths"), dict):
+        raise ValueError("server_paths.yaml has no md_import.paths section")
+    missing = [item for item in ids if item not in md_import["paths"]]
+    if missing:
+        raise ValueError(f"md_import path ids not found: {', '.join(missing)}")
+    main_paths = value.setdefault("paths", {})
+    conflicts = [item for item in ids if item in main_paths]
+    if conflicts:
+        raise ValueError(f"path ids already exist in main paths: {', '.join(conflicts)}")
+    promoted: List[Dict[str, Any]] = []
+    for path_id in ids:
+        entry = md_import["paths"][path_id]
+        new_entry: Dict[str, Any] = {
+            "path": entry["path"],
+            "kind": entry.get("kind", "directory"),
+            "status": "active",
+            "required_on": required_on,
+            "stability": entry.get("stability", "unknown"),
+            "promoted_from": "md_import",
+            "promoted_at": utc_now()[:10],
+        }
+        for key in ("sensitive", "protected", "write_policy", "role", "note"):
+            if key in entry:
+                new_entry[key] = entry[key]
+        main_paths[path_id] = new_entry
+        promoted.append({"id": path_id, "path": entry["path"]})
+        del md_import["paths"][path_id]
+    if not md_import["paths"]:
+        del md_import["paths"]
+    if write:
+        header = ""
+        lines = raw.splitlines()
+        index = 0
+        while index < len(lines) and (
+            not lines[index].strip() or lines[index].lstrip().startswith("#")
+        ):
+            header += lines[index] + "\n"
+            index += 1
+        body = yaml.safe_dump(value, allow_unicode=True, sort_keys=False, width=4096)
+        write_text_atomic(registry_path, header + body)
+    return {
+        "promoted": promoted,
+        "dry_run": not write,
+        "remaining_md_import_paths": len(md_import.get("paths", {})),
+    }

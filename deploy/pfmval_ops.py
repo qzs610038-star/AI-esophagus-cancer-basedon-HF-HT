@@ -41,11 +41,13 @@ from scripts.pfmval_state import (  # noqa: E402
     list_exploration_sessions,
     migrate_experiment_provenance,
     promote_exploration_script,
+    promote_md_import_paths,
     record_diagnostic_outputs,
     read_json,
     run_allowlisted_diagnostic,
     safe_job_parameters,
     scan_documents,
+    set_document_lifecycle,
     state_lock,
     sync_state,
     transition_directive,
@@ -608,6 +610,15 @@ def command_state(args: argparse.Namespace) -> int:
         return 0
     if args.state_command == "sync":
         with state_lock(PROJECT_ROOT):
+            if args.with_docs:
+                # 原子化修复路径：先重扫文档哈希与 PROJECT_GUIDE，再同步状态，
+                # 一条命令消除"改文件忘同步"导致的 start-check FAIL。
+                write_json_atomic(
+                    PROJECT_ROOT / "project_state" / "document_registry.json",
+                    scan_documents(PROJECT_ROOT),
+                )
+                guide = build_project_guide(PROJECT_ROOT)
+                write_text_atomic(PROJECT_ROOT / "PROJECT_GUIDE.md", guide)
             state = sync_state(PROJECT_ROOT, force_revision=args.force_revision)
         print(f"[PASS] state synchronized; revision={state['state_revision']}")
         return 0
@@ -646,6 +657,15 @@ def command_docs(args: argparse.Namespace) -> int:
         write_text_atomic(guide_path, guide)
         print(json.dumps({"project_guide_sha256": hashlib.sha256(guide.encode("utf-8")).hexdigest()}, ensure_ascii=False, indent=2))
         return 0
+    if args.docs_command == "set-lifecycle":
+        result = set_document_lifecycle(
+            PROJECT_ROOT,
+            doc_id=args.doc_id,
+            lifecycle=args.lifecycle,
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        print("[INFO] run `state sync --with-docs` to complete the lifecycle loop")
+        return 0
     if args.docs_command != "scan":
         raise ValueError(f"unknown docs command: {args.docs_command}")
     registry = scan_documents(PROJECT_ROOT)
@@ -674,6 +694,17 @@ def command_paths(args: argparse.Namespace) -> int:
         validate_server_paths(PROJECT_ROOT, report, task=task, host_scope=host_scope)
         report.emit()
         return 0 if report.ok else 1
+    if args.paths_command == "promote-md-import":
+        result = promote_md_import_paths(
+            PROJECT_ROOT,
+            ids=args.ids,
+            required_on=args.required_on,
+            write=args.write,
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        if not args.write:
+            print("[DRY RUN] use --write to persist the promotion")
+        return 0
     raise ValueError(f"unknown paths command: {args.paths_command}")
 
 
@@ -1629,6 +1660,11 @@ def build_parser() -> argparse.ArgumentParser:
     transition.add_argument("--superseded-by")
     sync = state_sub.add_parser("sync")
     sync.add_argument("--force-revision", action="store_true")
+    sync.add_argument(
+        "--with-docs",
+        action="store_true",
+        help="先重扫 document registry 与 PROJECT_GUIDE，再同步状态（原子化修复路径）",
+    )
     state_sub.add_parser("migrate", help="one-time initial migration of provenance and document lifecycle")
     validate = state_sub.add_parser("validate")
     validate.add_argument("--strict", action="store_true")
@@ -1643,6 +1679,16 @@ def build_parser() -> argparse.ArgumentParser:
     docs_sub = docs.add_subparsers(dest="docs_command", required=True)
     scan = docs_sub.add_parser("scan")
     scan.add_argument("--write", action="store_true")
+    set_lifecycle = docs_sub.add_parser(
+        "set-lifecycle",
+        help="显式设置文档 lifecycle_override（P0-1）；随后运行 state sync --with-docs",
+    )
+    set_lifecycle.add_argument("--doc-id", required=True)
+    set_lifecycle.add_argument(
+        "--lifecycle",
+        choices=["draft", "pending_review", "approved_design", "active", "superseded", "historical"],
+        required=True,
+    )
     docs_sub.add_parser("guide")
 
     paths = sub.add_parser("paths")
@@ -1652,6 +1698,13 @@ def build_parser() -> argparse.ArgumentParser:
     path_validate.add_argument("--training", action="store_true")
     path_validate.add_argument("--task", choices=["general", "server", "training"], default="general")
     path_validate.add_argument("--host-scope", choices=["local", "server"], default=None)
+    promote = paths_sub.add_parser(
+        "promote-md-import",
+        help="将 md_import 中经用户核验的路径晋升到主表 paths（先 dry-run 后 --write）",
+    )
+    promote.add_argument("--ids", nargs="+", required=True)
+    promote.add_argument("--required-on", choices=["server", "local", "both"], required=True)
+    promote.add_argument("--write", action="store_true")
 
     result = sub.add_parser("result")
     result_sub = result.add_subparsers(dest="result_command", required=True)

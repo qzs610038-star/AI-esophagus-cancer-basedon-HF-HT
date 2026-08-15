@@ -261,6 +261,7 @@ templates:
 # ============================================================================
 md_import:
   source: '01_指南与解读\部署方案\服务器路径索引_20260701.md'
+  source_sha256: '0e5d80474998b980b6adfdd5c724b66df9dc221a783a31f2065b7133cdf8872f'
   imported_at: "2026-08-15T00:00:00+08:00"
   imported_by: "DIR-20260815-002 (user-requested YAML consolidation)"
   accuracy_guarantee: none
@@ -411,3 +412,5 @@ md_import:
     - 更新流程（MD 独有，仅供参考）：data/qzs/cache 三处变更后运行对应目录下 inventory_folder.ps1 重新生成 folder_inventory_*.txt。
     - 清单摘要（2026-07-01 快照）：qzs 104 目录/343 已列文件/54243 省略；data 76 目录/106 已列/96308 省略；cache 90 目录/237 已列/0 省略。
     - 原始 ssGSEA 禁止直接用于训练：任何训练前必须先生成标准化标签，参数只在训练集上拟合。
+
+
