@@ -37,7 +37,7 @@ python deploy/pfmval_ops.py agent start-check --task diagnostic
 - 本地 `explore` 只允许位于 `scripts/explorations/` 与 `experiments/explorations/`，不得访问服务器、训练数据或生成可比较实验结论。
 - MPP 原始 ssGSEA、标准划分、z-score 参数、manifest 和 group 3/5 embargo 审计为受保护资产；重新生成必须另开任务并比较输入、参数和校验值。
 - 监督学习预处理必须在训练集上拟合，再应用到验证集和外部测试集；不得用 external XZY 拟合 z-score 或选择 checkpoint。
-- `CLAUDE.md`、`.claude/` 等本地适配文件只能补充工具特定说明，不得覆盖受跟踪状态包。
+- `CLAUDE.md`、`.claude/`、`.cursor/rules/` 等本地适配文件只能补充工具特定说明，不得覆盖受跟踪状态包。
 
 ## 对话与实验工作树绑定
 

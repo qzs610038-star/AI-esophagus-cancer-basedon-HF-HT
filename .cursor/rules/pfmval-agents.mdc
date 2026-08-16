@@ -1,0 +1,14 @@
+---
+description: PFMval 项目入口：先读 AGENTS.md；技能以 .agents/skills 为准
+alwaysApply: true
+---
+
+# PFMval Cursor 入口
+
+本文件只给 Cursor 指路，不新增、不改写项目规则。
+
+1. 先完整阅读并遵守仓库根目录的 `AGENTS.md`。
+2. 项目技能的正文只在 `.agents/skills/<技能名>/SKILL.md`。
+3. `.claude/skills/` 下的同名文件只是跳转，不要把它当成规则正文，也不要从那里抄规则。
+
+不要把本文件、`CLAUDE.md` 或 `.claude/` 当作可以覆盖 `AGENTS.md` 和受跟踪状态包的地方。

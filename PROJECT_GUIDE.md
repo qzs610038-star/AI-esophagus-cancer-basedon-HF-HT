@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `87cb25a163c18d2494c263ca03cd6a0580c79b23364aa1d96ace8a33b2f3c518`
+> source_sha256: `fc68c4b41c36b54543aa4527578e1c359f2a318ab1c3d650a82f0ffd5b34bfab`
 
 ## 我要找什么
 

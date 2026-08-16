@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updated_at": "2026-08-15T07:16:45+00:00",
+  "updated_at": "2026-08-16T14:20:00+00:00",
   "current_mpp_policy": {
-    "effective_date": "2026-07-09",
+    "effective_date": "2026-08-16",
     "selected_mpp": 2,
-    "decision": "MPP2 remains the downstream follow-up scheme. A single user-approved repaired-data MPP1/3/4/5 frozen-baseline parallel recheck is active solely to measure the impact of contaminated historical results before cross-MPP conclusions.",
-    "rationale": "The repaired MPP2 frozen baseline passed its safety guard, but the user requested a conservative same-protocol recheck of MPP1/3/4/5. MPP1 PCC and MPP4 raw-scale stability remain comparison context, not independent downstream branches.",
-    "next_recommended_experiment": "Dispatch and import the four repaired MPP1/3/4/5 frozen rechecks, then compare them with their historical counterparts before continuing MPP2 LoRA r=8.",
+    "decision": "MPP2 remains the only downstream follow-up scheme. Repaired-data MPP1/3/4/5 frozen rechecks are accepted comparison evidence, not independent training routes. MPP2 LoRA r=8 remains engineering_pass/candidate_effectiveness_fail/no_go_formal.",
+    "rationale": "The repaired MPP2 frozen baseline passed its safety guard; MPP1/3/4/5 rechecks were imported and accepted. Identical LoRA r=8 must not auto-launch (DIR-20260712-002). Latest accepted probe is mpp2_cpgcr_probe_v001_20260811; scientific conclusions await user review (DIR-20260815-001).",
+    "next_recommended_experiment": "Review the pending W007 deep-attribution analysis and interpretation reports; four-arm verification is accepted. Do not auto-launch MPP2 LoRA r=8 formal training.",
     "reference_doc": "01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md"
   },
   "three_patient_evidence_policy": {
@@ -1777,8 +1777,8 @@
       "imported_at": "2026-08-15T07:16:45+00:00",
       "analysis_status": "pending_user_review",
       "decision_summary": {
-        "status": "pending_user_review",
-        "statement": "single-seed differences are small and mixed; no residual arm is a clear winner"
+        "status": "verification_accepted_attribution_pending_user_review",
+        "statement": "four-arm verification accepted on 2026-08-16: single-seed differences are small and mixed; no residual arm is a clear winner. Deep-attribution analysis and interpretation reports remain pending_user_review."
       }
     }
   ]

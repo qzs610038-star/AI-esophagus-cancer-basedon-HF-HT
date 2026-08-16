@@ -1,9 +1,9 @@
 # W007-mpp2_cpgcr_probe 实施方案
 
-> 状态：`workspace_bound_code_pending`（W007 已绑定，待新对话填写代码）
+> 状态：`results_accepted_analysis_pending_user_review`（四臂结果已 import/accepted；科学结论待用户审核；不重派）
 > 创建日期：2026-08-11  
-> 批准指令：`DIR-20260811-002`  
-> 当前授权：W007 已完成本地 experiment 登记、工作树绑定和修改前配置；本对话不得填写实验代码、推送 Gitee、操作服务器或训练。
+> 批准指令：`DIR-20260811-002`；结果登记：`DIR-20260815-001`  
+> 当前授权：不得依据 XZY 追加训练或选配置；稳定结论须经用户审核。绑定当时的“不得填写代码”授权已结束。
 
 ## 1. 绑定对象
 
@@ -162,13 +162,13 @@ python -m pytest experiments/workspaces/W007/mpp2_cpgcr_probe/tests -q
 | 项目 | 状态 | commit | 证据 |
 |---|---|---|---|
 | WEB-1 工作树与实验绑定 | `completed_pending_user_review` | `b9965464980896df6d2a33ebe818d5ab87d6666e`（W007 脚手架） | experiment、关键合同、W007 Registry 与修改前配置 |
-| MLC-2 模型与损失 | `pending_user_review` | — | — |
-| EBC-3 评估边界 | `pending_user_review` | — | — |
-| OCCC-4 单击控制器 | `pending_user_review` | — | — |
-| FRC-5 失败与回传 | `pending_user_review` | — | — |
-| MVT-6 最小测试 | `pending_user_review` | — | — |
-| GSD-7 服务器诊断 | `pending_user_review` | — | — |
-| BJE-8 批量作业封装 | `pending_user_review` | — | — |
+| MLC-2 模型与损失 | `completed_pending_user_review` | 分段 source：FBR `7be042a27d7a914744dfca1969ecae9ed6a3fb2d`；RCC `24a87c72c90122fb061ef6f93ad133a04a3ab3d1` | 四臂已训练/回放并 accepted |
+| EBC-3 评估边界 | `completed_pending_user_review` | 同上分段 source | 每臂 internal-val 与 XZY 原始预测已回传 |
+| OCCC-4 单击控制器 | `completed_pending_user_review` | 工作树执行记录 | 一键测试/训练已在服务器使用 |
+| FRC-5 失败与回传 | `completed_pending_user_review` | return commits 见 Registry `result_ids` | 专用 `import-w007-four-arm` 已登记 |
+| MVT-6 最小测试 | `completed_pending_user_review` | W007 工作树测试 | 正式批次前本地/服务器预检已通过 |
+| GSD-7 服务器诊断 | `completed_pending_user_review` | 诊断与 return 包 | 四臂均形成独立 return commit |
+| BJE-8 批量作业封装 | `completed_pending_user_review` | `APR-W007-CPGCR-v001-20260811-R001` | 聚合结果 `W007-four-arm-seed42-result-R001` |
 
 ## 11. 二次批准门
 
@@ -184,3 +184,17 @@ python -m pytest experiments/workspaces/W007/mpp2_cpgcr_probe/tests -q
 - 最小关键合同 SHA-256：`ecb2c753ecaac8f48278a4eb5adf08a0af398bf52c36378607267d25c969c459`；普通方案、日志和预测文件不新增哈希绑定。
 - 已建立 `experiments/workspaces/W007/mpp2_cpgcr_probe/`、修改前配置和代码目录占位；尚未填写实验代码。
 - 后续代码填写必须在新对话显式声明 `本对话工作树：W007` 并完成 locus 核验后开始。
+
+## 13. 进度补充（2026-08-16，用户批准更新）
+
+本条只追加当前进度，不改写 §12 绑定当时的历史记录。
+
+- 四臂 FBR/RCC/HCR/CPGCR 已完成回传，并由 `DIR-20260815-001` 经专用 `result import-w007-four-arm` 登记。
+- 聚合结果：`W007-four-arm-seed42-result-R001`；成员结果：`W007-FBR-result-R001`、`W007-A019-result-R001`、`W007-A022-result-R001`、`W007-A023-result-R001`。
+- Registry：`mpp2_cpgcr_probe_v001_20260811`，`evidence_status=accepted`，`next_action=review_four_arm_analysis_no_redispatch`。
+- 四臂核验结论已于 2026-08-16 由用户接受：`01_指南与解读/分析报告/W007_四臂结果核验与待审结论_20260815.md`。
+- 仍待用户审核、不升为正式结论：`W007指标未改善原因分析报告_20260815.md`、`W007指标未改善深度归因与机制解读报告_20260815.md`。
+- 科学解释整体仍为 `pending_user_review`；不得依据 XZY 追加训练、改配置或重派。
+- 抬头状态由 `workspace_bound_code_pending` 更新为 `results_accepted_analysis_pending_user_review`。
+- §11 二次批准门记录的是绑定当时条件；正式批次已由 `APR-W007-CPGCR-v001-20260811-R001` 执行完毕，该节不再构成待办。
+
