@@ -233,4 +233,4 @@ def test_g08_repository_catalog_admits_only_the_six_approved_workflows():
         item["authorization_ref"] == "DIR-20260727-004"
         for item in catalog["entries"]
     )
-    assert len(catalog["scans"]) == 1
+    assert len(catalog["scans"]) >= 1

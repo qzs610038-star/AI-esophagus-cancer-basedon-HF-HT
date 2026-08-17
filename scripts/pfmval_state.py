@@ -45,6 +45,7 @@ MAX_RESULT_TOTAL_BYTES = 50 * 1024 * 1024
 SOFT_SOURCE_HASH_KEYS = {
     "experiment_dashboard_sha256",
     "experiment_progress_sha256",
+    "workflow_catalog_sha256",
 }
 SMOKE_MAX_EPOCHS = 3
 MPP_TRAINING_PATH_IDS = {
@@ -1680,6 +1681,26 @@ def _stable_doc_id(path: str) -> str:
     return known.get(path, "doc-" + hashlib.sha1(path.encode("utf-8")).hexdigest()[:12])
 
 
+def _is_soft_content_hash_path(path: str) -> bool:
+    relative = normalize_rel(path)
+    return (
+        relative == "AGENTS.md"
+        or relative.startswith(".agents/skills/")
+        or relative.startswith(".claude/skills/")
+    )
+
+
+def _is_soft_content_hash_document(document: Mapping[str, Any]) -> bool:
+    """Skill and agent-entry text is knowledge-layer; bytes are not evidence."""
+    path = normalize_rel(str(document.get("path", "")))
+    scope = str(document.get("scope", ""))
+    return (
+        _is_soft_content_hash_path(path)
+        or scope.startswith("skill:")
+        or scope.startswith("skill_adapter:")
+    )
+
+
 def _document_category(path: str) -> str:
     if path.startswith("project_state/plans/"):
         return "状态方案"
@@ -1831,7 +1852,11 @@ def scan_documents(root: Path) -> Dict[str, Any]:
         old = old_entries.get(rel_path, {})
         if file_path.exists():
             scope, authority, lifecycle, connectivity = _classify_document(rel_path, state)
-            digest = sha256_file(file_path)
+            previous_digest = str(old.get("content_sha256") or "")
+            if _is_soft_content_hash_path(rel_path) and previous_digest:
+                digest = previous_digest
+            else:
+                digest = sha256_file(file_path)
         else:
             scope, authority, lifecycle, connectivity = "missing_local_adapter", "reference", "missing", []
             digest = ""
@@ -2339,6 +2364,10 @@ def compute_source_hashes(root: Path) -> Dict[str, str]:
                     key: document.get(key)
                     for key in hard_document_fields
                     if key in document
+                    and not (
+                        key == "content_sha256"
+                        and _is_soft_content_hash_document(document)
+                    )
                 }
                 for document in registry.get("documents", [])
                 if document.get("lifecycle") == "active"
@@ -2919,8 +2948,13 @@ def validate_state(
         if document.get("lifecycle") == "active" and not document_path.exists() and document.get("availability") != "local_only":
             report.fail(f"active document is missing: {document.get('path')}")
         if document.get("lifecycle") == "active" and document.get("authority") == "normative" and document_path.exists():
-            if document.get("content_sha256") != sha256_file(document_path):
-                report.fail(f"active normative document hash is stale: {document.get('path')}")
+            if (
+                not _is_soft_content_hash_document(document)
+                and document.get("content_sha256") != sha256_file(document_path)
+            ):
+                report.fail(
+                    f"active normative document hash is stale: {document.get('path')}"
+                )
         for successor in document.get("superseded_by", []):
             if successor not in doc_by_id:
                 report.fail(f"superseded document points to unknown successor {successor}: {document.get('path')}")

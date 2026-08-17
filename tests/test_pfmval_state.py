@@ -1895,6 +1895,72 @@ def test_document_registry_hard_hash_ignores_active_reference_knowledge_metadata
     assert compute_source_hashes(root)["document_registry_sha256"] == before
 
 
+def test_skill_content_hash_drift_is_soft_and_excluded_from_hard_registry_fingerprint(
+    tmp_path,
+):
+    root = make_minimal_project(tmp_path)
+    skill_path = root / ".agents" / "skills" / "pfmval-audit" / "SKILL.md"
+    skill_path.parent.mkdir(parents=True, exist_ok=True)
+    skill_path.write_text("# skill\n", encoding="utf-8")
+    adapter_path = root / ".claude" / "skills" / "pfmval-audit" / "SKILL.md"
+    adapter_path.parent.mkdir(parents=True, exist_ok=True)
+    adapter_path.write_text("# adapter\n", encoding="utf-8")
+
+    state_path = root / "project_state" / "current_state.json"
+    state = read_json(state_path)
+    state["active_skills"] = {
+        "pfmval-audit": {
+            "canonical_path": ".agents/skills/pfmval-audit/SKILL.md",
+            "adapter_paths": [".claude/skills/pfmval-audit/SKILL.md"],
+            "status": "canonical",
+            "approved_at": "2026-07-26T20:02:02+08:00",
+        }
+    }
+    write_json(state_path, state)
+    write_json(root / "project_state" / "document_registry.json", scan_documents(root))
+    sync_state(root)
+
+    before = compute_source_hashes(root)["document_registry_sha256"]
+    skill_entry = next(
+        item
+        for item in read_json(root / "project_state" / "document_registry.json")["documents"]
+        if item["path"] == ".agents/skills/pfmval-audit/SKILL.md"
+    )
+    recorded_skill_hash = skill_entry["content_sha256"]
+    skill_path.write_text("# skill edited\n", encoding="utf-8")
+    (root / "AGENTS.md").write_text("# agents edited\n", encoding="utf-8")
+    report = validate_state(root)
+    assert not any("hash is stale" in item for item in report.fail_items)
+    assert not any("hash is stale" in item for item in report.warn_items)
+    assert compute_source_hashes(root)["document_registry_sha256"] == before
+
+    rescanned = {
+        item["path"]: item for item in scan_documents(root)["documents"]
+    }
+    assert rescanned[".agents/skills/pfmval-audit/SKILL.md"]["content_sha256"] == recorded_skill_hash
+    assert rescanned[".agents/skills/pfmval-audit/SKILL.md"]["lifecycle"] == "active"
+    assert rescanned[".claude/skills/pfmval-audit/SKILL.md"]["lifecycle"] == "active"
+
+    (root / "project_state" / "plans" / "mpp_training.md").write_text("# plan edited\n", encoding="utf-8")
+    plan_report = validate_state(root)
+    assert any(
+        "normative document hash is stale" in item for item in plan_report.fail_items
+    )
+
+
+def test_workflow_catalog_hash_mismatch_is_soft_warning(tmp_path):
+    root = make_minimal_project(tmp_path)
+    catalog_path = root / "project_state" / "workflow_catalog.json"
+    write_json(catalog_path, {"schema_version": "1.0", "entries": [], "scans": []})
+    schema_path = root / "project_state" / "schemas" / "workflow_catalog.schema.json"
+    write_json(schema_path, {"type": "object"})
+    sync_state(root)
+    catalog_path.write_text('{"schema_version":"1.0","entries":[],"scans":[{"scan_id":"x"}]}\n', encoding="utf-8")
+    report = validate_state(root)
+    assert not any("workflow_catalog_sha256" in item for item in report.fail_items)
+    assert any("workflow_catalog_sha256" in item for item in report.warn_items)
+
+
 def test_document_scan_preserves_optional_relationship_metadata(tmp_path):
     root = make_minimal_project(tmp_path)
     registry_path = root / "project_state" / "document_registry.json"
