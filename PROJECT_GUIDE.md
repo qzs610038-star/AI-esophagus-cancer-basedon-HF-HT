@@ -1,7 +1,7 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `fc68c4b41c36b54543aa4527578e1c359f2a318ab1c3d650a82f0ffd5b34bfab`
+> source_sha256: `168bfae178afa6248c90cba4be2bbb5b8606f0d8a0bff9f6421aa9b33852863e`
 
 ## 我要找什么
 
@@ -43,46 +43,14 @@
 
 ## 当前 active 文档
 
-- [doc-921860e03dd1](.agents/skills/compare/SKILL.md)
-- [doc-e3142f530aee](.agents/skills/data-guide/SKILL.md)
-- [doc-097871797001](.agents/skills/doc-registry/SKILL.md)
-- [doc-4fe3126360a9](.agents/skills/experiment-log/SKILL.md)
-- [doc-c9fed3a8c1f1](.agents/skills/extract/SKILL.md)
-- [doc-9a0e28a6bbc0](.agents/skills/git-rescue/SKILL.md)
-- [doc-3d986a3331d2](.agents/skills/health/SKILL.md)
-- [doc-ca2c55a62b83](.agents/skills/meeting-report/SKILL.md)
-- [doc-64713fd9ae4e](.agents/skills/onboard/SKILL.md)
-- [doc-492cd9b1883b](.agents/skills/parallel-extract/SKILL.md)
 - [doc-99b982a5eb8c](.agents/skills/pfmval-audit/SKILL.md)
 - [doc-caaf0fece4e6](.agents/skills/pfmval-governance/SKILL.md)
-- [doc-beb5a9361ddf](.agents/skills/post-train/SKILL.md)
 - [doc-18867c8d4cf0](.agents/skills/qzs-stable-conclusion-writer/SKILL.md)
-- [doc-bbcfcbdf94e6](.agents/skills/sync-server/SKILL.md)
 - [doc-d471d560d51d](.agents/skills/team-progress-maintainer/SKILL.md)
-- [doc-df6a61266d27](.agents/skills/train-guide/SKILL.md)
-- [doc-b514d4664439](.agents/skills/train/SKILL.md)
-- [doc-814b06f5cfe9](.agents/skills/update-ranking/SKILL.md)
-- [doc-52fe7ef7027c](.agents/skills/viz-guide/SKILL.md)
 - [doc-db8538d7cd90](.claude/next-steps.md)
 - [doc-06ca1fc82608](.claude/session-brief.md)
-- [doc-40b8c02101e6](.claude/skills/compare/SKILL.md)
-- [doc-0e1a3889f557](.claude/skills/data-guide/SKILL.md)
-- [doc-65976615ce59](.claude/skills/doc-registry/SKILL.md)
-- [doc-65b117d327e2](.claude/skills/experiment-log/SKILL.md)
-- [doc-d5381553a8e6](.claude/skills/extract/SKILL.md)
-- [doc-4b40912dde0b](.claude/skills/git-rescue/SKILL.md)
-- [doc-f72705822783](.claude/skills/health/SKILL.md)
-- [doc-36672b1d149c](.claude/skills/meeting-report/SKILL.md)
-- [doc-e0f1ea89a226](.claude/skills/onboard/SKILL.md)
-- [doc-b089dd676e8f](.claude/skills/parallel-extract/SKILL.md)
 - [doc-31b571198b27](.claude/skills/pfmval-audit/SKILL.md)
 - [doc-46398de15079](.claude/skills/pfmval-governance/SKILL.md)
-- [doc-1e2cda77a042](.claude/skills/post-train/SKILL.md)
-- [doc-298d98c90723](.claude/skills/sync-server/SKILL.md)
-- [doc-6ed04f28f7c0](.claude/skills/train-guide/SKILL.md)
-- [doc-0f428d649623](.claude/skills/train/SKILL.md)
-- [doc-654351a24cf0](.claude/skills/update-ranking/SKILL.md)
-- [doc-87b54df9f6ab](.claude/skills/viz-guide/SKILL.md)
 - [doc-9328df98eb69](01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md)
 - [doc-c1e997e52610](01_指南与解读/部署方案/服务器零训练Gitee往返试点检查方案_20260810.md)
 - [agent-entry](AGENTS.md)
@@ -103,7 +71,6 @@
 
 ## 历史与过时资料
 
-- [doc-fe4b048ff34a](.agents/skills/_shared/legacy-compatibility-policy.md)
 - [doc-3bbbee463565](.agents/skills/pfmval-audit/assets/audit-report-template.md)
 - [doc-eea543c941ec](.agents/skills/pfmval-audit/references/evidence-boundaries.md)
 - [doc-a3778c11ac95](.agents/skills/qzs-stable-conclusion-writer/assets/stable-conclusion-template.md)

@@ -12,16 +12,15 @@ specific repair.
 ## Required read order
 
 1. Read `AGENTS.md`.
-2. Read `CURRENT_STATE.md`.
-3. Read `project_state/current_state.json`.
-4. When a claim depends on user approval, supersession, or instruction meaning,
+2. Read only relevant fields from `project_state/current_state.json`.
+3. When a claim depends on user approval, supersession, or instruction meaning,
    read `project_state/directives.jsonl`.
-5. For experiments, performance, or next-step decisions, read
-   `experiments/experiment_registry.json`.
-6. Read `project_state/document_registry.json` and use only records whose
-   lifecycle is `active` as current execution authority.
-7. For server paths or synchronization, also read `configs/server_paths.yaml`
-   and `01_指南与解读/部署方案/服务器路径索引_20260701.md`.
+4. For experiments, performance, or next-step decisions, read only relevant
+   records from `experiments/experiment_registry.json`.
+5. Read only claim-related records whose lifecycle is `active` from
+   `project_state/document_registry.json`.
+6. For server paths or synchronization, read only relevant entries from
+   `configs/server_paths.yaml`.
 
 Record the repository locus before auditing:
 

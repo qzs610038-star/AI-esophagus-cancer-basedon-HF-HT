@@ -13,11 +13,10 @@ accepted project truth.
 ## Required read order
 
 1. `AGENTS.md`
-2. `CURRENT_STATE.md`
-3. `project_state/current_state.json`
-4. `project_state/directives.jsonl` when approval or instruction meaning matters
-5. `project_state/document_registry.json` for active document authority
-6. `experiments/experiment_registry.json` only when an experiment or result is in scope
+2. Relevant fields in `project_state/current_state.json`
+3. `project_state/directives.jsonl` only for approval or instruction meaning
+4. Related active records in `project_state/document_registry.json`
+5. Related `experiments/experiment_registry.json` records only when in scope
 
 Run the strict local start gate before generating a project conclusion:
 

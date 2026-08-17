@@ -7,7 +7,7 @@ description: 为 PFMval 项目本机成员 qzs 整理和维护经过用户审核
 
 ## 必读与准备
 
-1. 依次读取 `AGENTS.md`、`CURRENT_STATE.md`、`project_state/current_state.json`、`experiments/experiment_registry.json`。
+1. 读取 `AGENTS.md`、`project_state/current_state.json` 相关字段及相关实验 Registry 记录。
 2. 读取 `references/evidence-and-approval-boundaries.md`、`references/experiment-section-schema.md` 与 `references/pseudocode-and-visualization-policy.md`。
 3. 运行 `python deploy/pfmval_ops.py agent start-check --strict`。
 4. 对将修改的 qzs 维护文档和图表目录建立仓库外临时快照。
@@ -62,4 +62,3 @@ description: 为 PFMval 项目本机成员 qzs 整理和维护经过用户审核
 ```
 
 不得借修正之名重写整个章节。若无法在原位置安全追加，停止并请求用户决定。
-

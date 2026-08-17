@@ -7,7 +7,7 @@ description: 维护 PFMval 项目内 yzq、wzk、ljq、qzs、lzd 五名成员的
 
 ## 必读与准备
 
-1. 依次读取项目根目录 `AGENTS.md`、`CURRENT_STATE.md`、`project_state/current_state.json`；涉及实验结论时再读取 `experiments/experiment_registry.json`。
+1. 读取 `AGENTS.md` 和 `project_state/current_state.json` 相关字段；涉及实验结论时读取相关 Registry 记录。
 2. 读取 `references/directory-and-routing-policy.md` 与 `references/approval-and-append-only-policy.md`。
 3. 修改前运行项目严格检查：`python deploy/pfmval_ops.py agent start-check --strict`。
 4. 对所有将被修改的既有维护文档建立临时快照。快照放在仓库外临时目录，不写入团队资料目录。
@@ -58,4 +58,3 @@ description: 维护 PFMval 项目内 yzq、wzk、ljq、qzs、lzd 五名成员的
 
 </details>
 ```
-
