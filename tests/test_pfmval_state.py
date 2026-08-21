@@ -417,7 +417,8 @@ def test_diagnostic_gate_allows_document_freshness_drift_but_keeps_transport_har
     # diagnostic must surface it as a warning instead of blocking triage.
     (root / "project_state" / "plans" / "mpp_training.md").write_text("# changed\n", encoding="utf-8")
     full_report = validate_state(root)
-    assert any("normative document hash is stale" in message for message in full_report.fail_items)
+    assert not any("normative document hash is stale" in message for message in full_report.fail_items)
+    assert any("normative document hash is stale" in message for message in full_report.warn_items)
 
     diagnostic_report = validate_diagnostic_state(root)
     assert diagnostic_report.ok
@@ -672,7 +673,8 @@ def test_active_workspace_head_may_advance_but_must_descend_from_binding(tmp_pat
     workspace_registry["workspaces"][0]["hosts"]["local"]["current_source_commit"] = unrelated_commit
     write_json(root / "project_state" / "workspace_registry.json", workspace_registry)
     divergent_report = validate_state(root)
-    assert any("not descended" in item for item in divergent_report.fail_items)
+    assert not any("not descended" in item for item in divergent_report.fail_items)
+    assert any("not descended" in item for item in divergent_report.warn_items)
 
 
 def test_explore_session_is_local_only_and_candidates_never_delete(tmp_path):
@@ -901,7 +903,7 @@ def test_document_scan_registers_canonical_skills_adapters_and_review_lifecycle(
     assert entries["project_state/plans/asset_refactor.md"]["lifecycle"] == "pending_review"
 
 
-def test_state_validation_rejects_missing_active_skill_canonical_path(tmp_path):
+def test_state_validation_warns_missing_active_skill_canonical_path(tmp_path):
     root = make_minimal_project(tmp_path)
     state_path = root / "project_state" / "current_state.json"
     state = json.loads(state_path.read_text(encoding="utf-8"))
@@ -921,7 +923,57 @@ def test_state_validation_rejects_missing_active_skill_canonical_path(tmp_path):
 
     report = validate_state(root)
 
-    assert any("active skill train canonical path is absent" in item for item in report.fail_items)
+    assert any(
+        "active skill train canonical path is absent" in item
+        for item in report.warn_items
+    )
+    assert not any(
+        "active skill train canonical path is absent" in item
+        for item in report.fail_items
+    )
+
+
+def test_state_validation_warns_missing_active_plan_doc_id(tmp_path):
+    root = make_minimal_project(tmp_path)
+    state_path = root / "project_state" / "current_state.json"
+    state = read_json(state_path)
+    state["active_plans"]["mpp_training"]["doc_id"] = "missing-plan-doc"
+    write_json(state_path, state)
+
+    report = validate_state(root, strict=True)
+
+    assert any(
+        "active plan mpp_training is absent from document registry" in item
+        for item in report.warn_items
+    )
+    assert not any(
+        "active plan mpp_training is absent from document registry" in item
+        for item in report.fail_items
+    )
+
+
+def test_state_validation_warns_missing_plan_review_registry_entry(tmp_path):
+    root = make_minimal_project(tmp_path)
+    state_path = root / "project_state" / "current_state.json"
+    state = read_json(state_path)
+    state["pending_plan_reviews"] = {
+        "orphan_review": {
+            "path": "project_state/plans/orphan_review.md",
+            "status": "pending_review",
+        }
+    }
+    write_json(state_path, state)
+
+    report = validate_state(root, strict=True)
+
+    assert any(
+        "plan review orphan_review is absent from document registry" in item
+        for item in report.warn_items
+    )
+    assert not any(
+        "plan review orphan_review is absent from document registry" in item
+        for item in report.fail_items
+    )
 
 
 def test_mpp_index_reports_conflicting_duplicate_barcodes(tmp_path):
@@ -1030,10 +1082,11 @@ def test_server_task_skips_missing_local_only_legacy_path(tmp_path):
 
     local_report = ValidationReport()
     validate_server_paths(root, local_report, task="general")
-    assert any("legacy_partner_labels_local" in item for item in local_report.fail_items)
+    assert any("legacy_partner_labels_local" in item for item in local_report.warn_items)
+    assert not any("legacy_partner_labels_local" in item for item in local_report.fail_items)
 
 
-def test_server_scope_still_requires_missing_both_path(tmp_path):
+def test_server_scope_warns_missing_both_path(tmp_path):
     root = make_minimal_project(tmp_path)
     (root / "configs" / "server_paths.yaml").write_text(
         (root / "configs" / "server_paths.yaml").read_text(encoding="utf-8")
@@ -1047,7 +1100,8 @@ def test_server_scope_still_requires_missing_both_path(tmp_path):
 
     report = ValidationReport()
     validate_server_paths(root, report, task="training", host_scope="server")
-    assert any("required_on_both_missing" in item for item in report.fail_items)
+    assert any("required_on_both_missing" in item for item in report.warn_items)
+    assert not any("required_on_both_missing" in item for item in report.fail_items)
 
 
 def test_repository_declares_lf_checkout_policy():
@@ -1943,8 +1997,11 @@ def test_skill_content_hash_drift_is_soft_and_excluded_from_hard_registry_finger
 
     (root / "project_state" / "plans" / "mpp_training.md").write_text("# plan edited\n", encoding="utf-8")
     plan_report = validate_state(root)
-    assert any(
+    assert not any(
         "normative document hash is stale" in item for item in plan_report.fail_items
+    )
+    assert any(
+        "normative document hash is stale" in item for item in plan_report.warn_items
     )
 
 
@@ -1991,19 +2048,24 @@ def test_document_scan_preserves_optional_relationship_metadata(tmp_path):
 
 def test_document_scan_infers_deployment_role_only_for_active_document(tmp_path):
     root = make_minimal_project(tmp_path)
-    deployment = (
-        root
-        / "01_指南与解读"
-        / "部署方案"
-        / "服务器路径索引_20260701.md"
-    )
+    deployment_rel = "01_指南与解读/部署方案/wave_a_deployment_plan_20260821.md"
+    deployment = root / deployment_rel
     deployment.parent.mkdir(parents=True)
-    deployment.write_text("# server paths\n", encoding="utf-8")
+    deployment.write_text("# deployment plan\n", encoding="utf-8")
+    state_path = root / "project_state" / "current_state.json"
+    state = read_json(state_path)
+    state["active_plans"]["wave_a"] = {
+        "doc_id": "plan-wave-a",
+        "path": deployment_rel,
+        "status": "active",
+        "approved_at": "2026-07-11T00:00:00+08:00",
+    }
+    write_json(state_path, state)
 
     scanned = scan_documents(root)
     document = next(
         item for item in scanned["documents"]
-        if item["path"].endswith("服务器路径索引_20260701.md")
+        if item["path"] == deployment_rel
     )
 
     assert document["lifecycle"] == "active"
@@ -2294,6 +2356,362 @@ def test_knowledge_task_downgrades_only_workspace_head_drift(monkeypatch):
     )
     assert any(
         "workspace HEAD" in message for message in report.warn_items
+    )
+
+
+def test_document_registry_sha256_mismatch_is_soft_warning(tmp_path):
+    root = make_minimal_project(tmp_path)
+    for schema_name in (
+        "current_state.schema.json",
+        "document_registry.schema.json",
+        "directives.schema.json",
+    ):
+        write_json(root / "project_state" / "schemas" / schema_name, {"type": "object"})
+    guide_rel = "01_指南与解读/学习指南/wave_a_soft_hash.md"
+    guide_path = root / guide_rel
+    guide_path.parent.mkdir(parents=True, exist_ok=True)
+    guide_path.write_text("# guide\n", encoding="utf-8")
+    registry_path = root / "project_state" / "document_registry.json"
+    registry = read_json(registry_path)
+    registry["documents"].append({
+        "doc_id": "guide-wave-a-soft-hash",
+        "path": guide_rel,
+        "category": "学习指南",
+        "scope": "wave_a_soft_hash",
+        "authority": "normative",
+        "lifecycle": "active",
+        "verified_at": "2026-07-11T00:00:00+00:00",
+        "state_revision": 1,
+        "content_sha256": sha256_file(guide_path),
+        "supersedes": [],
+        "superseded_by": [],
+        "truth_sources": ["project_state/current_state.json"],
+        "connectivity_modes": [],
+    })
+    write_json(registry_path, registry)
+    sync_state(root, force_revision=True)
+    registry = read_json(registry_path)
+    registry["documents"][-1]["lifecycle"] = "superseded"
+    write_json(registry_path, registry)
+    report = validate_state(root, strict=True)
+    assert not any(
+        message.startswith("state source hash mismatch: document_registry_sha256")
+        or message.startswith("state source hash is empty: document_registry_sha256")
+        for message in report.fail_items
+    )
+    assert any(
+        "document_registry_sha256" in message for message in report.warn_items
+    )
+
+
+def test_document_registry_revision_lag_is_soft_warning(tmp_path):
+    root = make_minimal_project(tmp_path)
+    state_path = root / "project_state" / "current_state.json"
+    state = read_json(state_path)
+    state["state_revision"] = 5
+    write_json(state_path, state)
+    report = validate_state(root, strict=True)
+    assert not any(
+        "state revision behind" in message for message in report.fail_items
+    )
+    assert any(
+        "state revision behind" in message for message in report.warn_items
+    )
+
+
+def _build_worktree_list_lines(registry, *, branch_overrides=None, extra_lines=None):
+    branch_overrides = branch_overrides or {}
+    lines = list(extra_lines or [])
+    for workspace in registry.get("workspaces", []):
+        for host in workspace.get("hosts", {}).values():
+            path = Path(str(host.get("relative_path", "")))
+            if not path.is_absolute():
+                continue
+            branch = branch_overrides.get(
+                workspace.get("workspace_id"),
+                host.get("branch", ""),
+            )
+            lines.extend([
+                f"worktree {path}",
+                f"HEAD {'a' * 40}",
+                f"branch refs/heads/{branch}",
+                "",
+            ])
+    return lines
+
+
+def test_deleted_prunable_worktree_path_does_not_fail_validation(monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    registry = read_json(root / "project_state" / "workspace_registry.json")
+    deleted_temp = root / "nonexistent_prunable_worktree_for_test"
+    lines = _build_worktree_list_lines(
+        registry,
+        extra_lines=[
+            f"worktree {deleted_temp}",
+            f"HEAD {'0' * 40}",
+            "branch refs/heads/pruned-temp",
+            "",
+        ],
+    )
+    completed = subprocess.CompletedProcess(
+        args=["git", "worktree", "list"],
+        returncode=0,
+        stdout="\n".join(lines),
+        stderr="",
+    )
+
+    def fake_git_run(args, **_kwargs):
+        if "worktree" in args:
+            return completed
+        if "merge-base" in args:
+            return subprocess.CompletedProcess(args=args, returncode=0, stdout="", stderr="")
+        if "show-ref" in args:
+            return subprocess.CompletedProcess(args=args, returncode=0, stdout="", stderr="")
+        raise AssertionError(f"unexpected git command: {args}")
+
+    monkeypatch.setattr("scripts.pfmval_state.subprocess.run", fake_git_run)
+
+    report = ValidationReport()
+    validate_governance_v3_state(root, report, host_scope="local", task="general")
+    assert not any(
+        "workflow governance v3 state invalid" in message
+        for message in report.fail_items
+    )
+
+
+def test_current_checkout_branch_mismatch_still_fails(tmp_path, monkeypatch):
+    root = tmp_path / "repo"
+    root.mkdir()
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "pfmval-test@example.invalid"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "PFMval Test"], cwd=root, check=True)
+    (root / "tracked.txt").write_text("baseline\n", encoding="utf-8")
+    subprocess.run(["git", "add", "tracked.txt"], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-m", "baseline"], cwd=root, check=True, capture_output=True)
+    head = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout.strip()
+    schema_root = root / "project_state" / "schemas"
+    schema_root.mkdir(parents=True)
+    write_json(schema_root / "workspace_registry.schema.json", {"type": "object"})
+    write_json(schema_root / "asset_registry.schema.json", {"type": "object"})
+    write_json(schema_root / "experiment_approval_v2.schema.json", {"type": "object"})
+    write_json(schema_root / "attempt_event_v2.schema.json", {"type": "object"})
+    write_json(schema_root / "scientific_record.schema.json", {"type": "object"})
+    write_json(schema_root / "result_pair_event_v1.schema.json", {"type": "object"})
+    write_json(schema_root / "project_fact.schema.json", {"type": "object"})
+    write_json(root / "project_state" / "asset_registry.json", {"schema_version": "1.0", "assets": []})
+    write_json(
+        root / "project_state" / "workspace_registry.json",
+        {
+            "schema_version": "1.0",
+            "next_workspace_number": 2,
+            "workspaces": [{
+                "workspace_id": "W001",
+                "display_name": "current checkout",
+                "experiment_id": "exp-a",
+                "status": "active",
+                "hosts": {
+                    "local": {
+                        "host_scope": "local",
+                        "branch": "expected-branch",
+                        "relative_path": str(root.resolve()),
+                        "current_source_commit": head,
+                    }
+                },
+            }],
+        },
+    )
+
+    completed = subprocess.CompletedProcess(
+        args=["git", "worktree", "list"],
+        returncode=0,
+        stdout=(
+            f"worktree {root.resolve()}\n"
+            f"HEAD {head}\n"
+            "branch refs/heads/wrong-branch\n"
+            "\n"
+        ),
+        stderr="",
+    )
+
+    def fake_git_run(args, **_kwargs):
+        if "worktree" in args:
+            return completed
+        if "merge-base" in args:
+            return subprocess.CompletedProcess(args=args, returncode=0, stdout="", stderr="")
+        if "show-ref" in args:
+            return subprocess.CompletedProcess(args=args, returncode=0, stdout="", stderr="")
+        raise AssertionError(f"unexpected git command: {args}")
+
+    monkeypatch.setattr("scripts.pfmval_state.subprocess.run", fake_git_run)
+
+    report = ValidationReport()
+    validate_governance_v3_state(root, report, host_scope="local", task="general")
+    assert any(
+        "branch does not match registry" in message for message in report.fail_items
+    )
+
+
+def test_non_current_workspace_identity_drift_is_warning_only(tmp_path, monkeypatch):
+    root = tmp_path / "main"
+    external = tmp_path / "W002"
+    root.mkdir()
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "pfmval-test@example.invalid"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "PFMval Test"], cwd=root, check=True)
+    (root / "tracked.txt").write_text("baseline\n", encoding="utf-8")
+    subprocess.run(["git", "add", "tracked.txt"], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-m", "baseline"], cwd=root, check=True, capture_output=True)
+    head = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout.strip()
+    subprocess.run(
+        ["git", "worktree", "add", "-b", "codex/exp-a", str(external)],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    schema_root = root / "project_state" / "schemas"
+    schema_root.mkdir(parents=True)
+    for schema_name in (
+        "workspace_registry.schema.json",
+        "asset_registry.schema.json",
+        "experiment_approval_v2.schema.json",
+        "attempt_event_v2.schema.json",
+        "scientific_record.schema.json",
+        "result_pair_event_v1.schema.json",
+        "project_fact.schema.json",
+    ):
+        write_json(schema_root / schema_name, {"type": "object"})
+    write_json(root / "project_state" / "asset_registry.json", {"schema_version": "1.0", "assets": []})
+    write_json(
+        root / "project_state" / "workspace_registry.json",
+        {
+            "schema_version": "1.0",
+            "next_workspace_number": 3,
+            "workspaces": [{
+                "workspace_id": "W002",
+                "display_name": "external drift",
+                "experiment_id": "exp-b",
+                "status": "active",
+                "hosts": {
+                    "local": {
+                        "host_scope": "local",
+                        "branch": "codex/exp-a",
+                        "relative_path": str(external.resolve()),
+                        "current_source_commit": head,
+                    }
+                },
+            }],
+        },
+    )
+
+    completed = subprocess.CompletedProcess(
+        args=["git", "worktree", "list"],
+        returncode=0,
+        stdout=(
+            f"worktree {root.resolve()}\n"
+            f"HEAD {head}\n"
+            "branch refs/heads/main\n"
+            "\n"
+            f"worktree {external.resolve()}\n"
+            f"HEAD {head}\n"
+            "branch refs/heads/wrong-branch\n"
+            "\n"
+        ),
+        stderr="",
+    )
+
+    def fake_git_run(args, **_kwargs):
+        if "worktree" in args:
+            return completed
+        if "merge-base" in args:
+            return subprocess.CompletedProcess(args=args, returncode=0, stdout="", stderr="")
+        if "show-ref" in args:
+            return subprocess.CompletedProcess(args=args, returncode=0, stdout="", stderr="")
+        raise AssertionError(f"unexpected git command: {args}")
+
+    monkeypatch.setattr("scripts.pfmval_state.subprocess.run", fake_git_run)
+
+    report = ValidationReport()
+    validate_governance_v3_state(root, report, host_scope="local", task="general")
+    assert not any(
+        "workflow governance v3 state invalid" in message
+        for message in report.fail_items
+    )
+    assert any(
+        "branch does not match registry" in message for message in report.warn_items
+    )
+
+
+def test_missing_current_state_md_is_warning_only(tmp_path):
+    root = make_minimal_project(tmp_path)
+    current_view = root / "CURRENT_STATE.md"
+    if current_view.exists():
+        current_view.unlink()
+
+    report = validate_state(root, strict=True)
+
+    assert any("CURRENT_STATE.md missing" in item for item in report.warn_items)
+    assert not any("CURRENT_STATE.md missing" in item for item in report.fail_items)
+
+
+def test_invalid_workflow_catalog_is_warning_not_hard_fail(tmp_path):
+    root = tmp_path / "repo"
+    root.mkdir()
+    schema_root = root / "project_state" / "schemas"
+    schema_root.mkdir(parents=True)
+    for schema_name in (
+        "workspace_registry.schema.json",
+        "asset_registry.schema.json",
+        "experiment_approval_v2.schema.json",
+        "attempt_event_v2.schema.json",
+        "scientific_record.schema.json",
+        "result_pair_event_v1.schema.json",
+        "project_fact.schema.json",
+        "workflow_catalog.schema.json",
+    ):
+        write_json(schema_root / schema_name, {"type": "object"})
+    write_json(
+        root / "project_state" / "workspace_registry.json",
+        {"schema_version": "1.0", "next_workspace_number": 1, "workspaces": []},
+    )
+    write_json(
+        root / "project_state" / "asset_registry.json",
+        {"schema_version": "1.0", "assets": []},
+    )
+    write_json(
+        root / "project_state" / "workflow_catalog.json",
+        {
+            "schema_version": "1.0",
+            "entries": [
+                {"workflow_id": "wf-dup", "lifecycle": "active"},
+                {"workflow_id": "wf-dup", "lifecycle": "active"},
+            ],
+        },
+    )
+
+    report = ValidationReport()
+    validate_governance_v3_state(root, report, host_scope="local", task="general")
+
+    assert not any(
+        "workflow governance v3 state invalid" in message
+        for message in report.fail_items
+    )
+    assert any(
+        "workflow catalog" in message.lower() or "duplicate workflow" in message.lower()
+        for message in report.warn_items
     )
 
 

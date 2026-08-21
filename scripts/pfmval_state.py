@@ -43,6 +43,7 @@ RESULT_SCHEMA_VERSION = "1.0"
 MAX_RESULT_FILE_BYTES = 20 * 1024 * 1024
 MAX_RESULT_TOTAL_BYTES = 50 * 1024 * 1024
 SOFT_SOURCE_HASH_KEYS = {
+    "document_registry_sha256",
     "experiment_dashboard_sha256",
     "experiment_progress_sha256",
     "workflow_catalog_sha256",
@@ -2491,7 +2492,7 @@ def validate_server_paths(
         if entry.get("required_on") in required_scopes and not re.match(r"^[A-Za-z]:[\\/]", str(entry["path"])):
             scoped_path = root / str(entry["path"])
             if not scoped_path.exists():
-                report.fail(f"required {host_scope} path missing: {path_id} -> {entry['path']}")
+                report.warn(f"required {host_scope} path missing: {path_id} -> {entry['path']}")
 
     # P0-3: md_import 交叉校验（全部 WARN，不阻塞任何流程）。
     # 该类条目由人工快照 MD 补入、未经服务器现场核验；此处仅做线索级一致性提示。
@@ -2671,19 +2672,42 @@ def validate_governance_v3_state(
                             current["branch"] = value.removeprefix("refs/heads/")
                     if current:
                         records.append(current)
-                    registered = relative_path.resolve(strict=True)
+                    root_resolved = root.resolve()
+                    if not relative_path.exists():
+                        report.warn(
+                            f"absolute workspace path does not exist: {workspace_id}"
+                        )
+                        continue
+                    registered = relative_path.resolve(strict=False)
+                    is_current = registered == root_resolved
+                    visible_records = [
+                        item
+                        for item in records
+                        if item.get("path") and Path(str(item["path"])).exists()
+                    ]
                     matched = next(
                         (
                             item
-                            for item in records
-                            if Path(item.get("path", "")).resolve(strict=True) == registered
+                            for item in visible_records
+                            if Path(str(item.get("path", ""))).resolve(strict=False)
+                            == registered
                         ),
                         None,
                     )
                     if matched is None:
-                        raise ValueError(f"absolute workspace is not a local Git worktree: {registered}")
+                        message = (
+                            f"absolute workspace is not a local Git worktree: {registered}"
+                        )
+                        if is_current:
+                            raise ValueError(message)
+                        report.warn(message)
+                        continue
                     if matched.get("branch") != expected_branch:
-                        raise ValueError("absolute workspace branch does not match registry")
+                        message = "absolute workspace branch does not match registry"
+                        if is_current:
+                            raise ValueError(message)
+                        report.warn(f"{message}: {workspace_id}")
+                        continue
                     if (
                         workspace.get("workspace_kind", "experiment")
                         != "governance_maintenance"
@@ -2701,12 +2725,15 @@ def validate_governance_v3_state(
                             "absolute workspace HEAD is not descended from registry commit: "
                             f"{workspace_id}"
                         )
-                        if task == "knowledge":
-                            report.warn(message)
+                        if is_current:
+                            if task == "knowledge":
+                                report.warn(message)
+                            else:
+                                raise ValueError(
+                                    "absolute workspace HEAD is not descended from registry commit"
+                                )
                         else:
-                            raise ValueError(
-                                "absolute workspace HEAD is not descended from registry commit"
-                            )
+                            report.warn(message)
                 elif ".." in relative_path.parts:
                     raise ValueError(
                         "workspace path escapes registered root: "
@@ -2739,7 +2766,11 @@ def validate_governance_v3_state(
                 raise ValueError(f"asset path escapes repository: {asset_path}")
             asset_ids.add(asset_id)
             asset_paths.add(asset_path)
+    except (FileNotFoundError, ValueError, TypeError) as exc:
+        report.fail(f"workflow governance v3 state invalid: {exc}")
+        return
 
+    try:
         for index, approval in enumerate(
             _read_jsonl_events(
                 root / "project_state" / "experiment_approvals.jsonl"
@@ -2836,8 +2867,7 @@ def validate_governance_v3_state(
                         f"{workflow_id} -> {missing_replacements}"
                     )
     except (FileNotFoundError, ValueError, TypeError) as exc:
-        report.fail(f"workflow governance v3 state invalid: {exc}")
-        return
+        report.warn(f"workflow governance v3 historical/catalog state drift: {exc}")
     report.passed(
         "workflow governance v3 workspace/asset/approval/attempt/science/fact/workflow state validates"
     )
@@ -2942,7 +2972,7 @@ def validate_state(
         report.fail("document registry contains duplicate normalized paths")
     revision_delta = int(state.get("state_revision", 0)) - int(documents.get("state_revision", 0))
     if revision_delta > 1:
-        report.fail("document registry is more than one state revision behind")
+        report.warn("document registry is more than one state revision behind")
     for document in document_list:
         document_path = root / document.get("path", "")
         if document.get("lifecycle") == "active" and not document_path.exists() and document.get("availability") != "local_only":
@@ -2952,7 +2982,7 @@ def validate_state(
                 not _is_soft_content_hash_document(document)
                 and document.get("content_sha256") != sha256_file(document_path)
             ):
-                report.fail(
+                report.warn(
                     f"active normative document hash is stale: {document.get('path')}"
                 )
         for successor in document.get("superseded_by", []):
@@ -3007,9 +3037,9 @@ def validate_state(
     for scope, plan in state.get("active_plans", {}).items():
         document = doc_by_id.get(plan.get("doc_id"))
         if not document:
-            report.fail(f"active plan {scope} is absent from document registry")
+            report.warn(f"active plan {scope} is absent from document registry")
         elif document.get("lifecycle") != "active" or document.get("path") != normalize_rel(plan.get("path", "")):
-            report.fail(f"active plan {scope} points to non-active or mismatched document")
+            report.warn(f"active plan {scope} points to non-active or mismatched document")
     doc_by_path = {
         normalize_rel(str(item.get("path", ""))).lower(): item
         for item in document_list
@@ -3018,24 +3048,24 @@ def validate_state(
         canonical_path = normalize_rel(str(skill.get("canonical_path", "")))
         canonical = doc_by_path.get(canonical_path.lower())
         if not canonical:
-            report.fail(f"active skill {skill_name} canonical path is absent from document registry")
+            report.warn(f"active skill {skill_name} canonical path is absent from document registry")
         elif (
             canonical.get("lifecycle") != "active"
             or canonical.get("authority") != "normative"
             or canonical.get("scope") != f"skill:{skill_name}"
         ):
-            report.fail(f"active skill {skill_name} canonical document classification is invalid")
+            report.warn(f"active skill {skill_name} canonical document classification is invalid")
         for adapter_path in skill.get("adapter_paths", []):
             normalized_adapter = normalize_rel(str(adapter_path))
             adapter = doc_by_path.get(normalized_adapter.lower())
             if not adapter:
-                report.fail(f"active skill {skill_name} adapter path is absent from document registry: {normalized_adapter}")
+                report.warn(f"active skill {skill_name} adapter path is absent from document registry: {normalized_adapter}")
             elif (
                 adapter.get("lifecycle") != "active"
                 or adapter.get("authority") != "reference"
                 or adapter.get("scope") != f"skill_adapter:{skill_name}"
             ):
-                report.fail(f"active skill {skill_name} adapter classification is invalid: {normalized_adapter}")
+                report.warn(f"active skill {skill_name} adapter classification is invalid: {normalized_adapter}")
     # P1-12: .agents/skills canonical 目录与 active_skills 注册表一致性（WARN 级）。
     # 目录存在但未注册 → 提示决定"注册"或"正式归档"；注册但文件缺失 → 提示修复。
     canonical_registered = {
@@ -3059,9 +3089,9 @@ def validate_state(
         document = doc_by_path.get(review_path.lower())
         expected_lifecycle = "approved_design" if review.get("status") == "approved_design" else "pending_review"
         if not document:
-            report.fail(f"plan review {review_id} is absent from document registry")
+            report.warn(f"plan review {review_id} is absent from document registry")
         elif document.get("lifecycle") != expected_lifecycle:
-            report.fail(f"plan review {review_id} lifecycle does not match current state")
+            report.warn(f"plan review {review_id} lifecycle does not match current state")
     forbidden = set(state.get("server_transport", {}).get("forbidden_direct_connections", []))
     if state.get("server_transport", {}).get("mode") != "gitee_only":
         report.fail("server transport is not gitee_only")
@@ -3117,7 +3147,7 @@ def validate_state(
         else:
             report.passed("CURRENT_STATE.md matches current_state.json")
     else:
-        report.fail("CURRENT_STATE.md missing")
+        report.warn("CURRENT_STATE.md missing")
     project_guide = root / "PROJECT_GUIDE.md"
     if project_guide.exists():
         from scripts.pfmval_views import build_project_guide

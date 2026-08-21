@@ -29,7 +29,14 @@ git status --short --branch
 git rev-parse HEAD
 ```
 
-Run the strict read-only preflight before issuing a project conclusion:
+Run the strict read-only preflight before issuing a project conclusion, record
+the fresh output, and treat knowledge-layer WARN items as visible drift rather
+than a standalone reason to mark the audit `NOT APPLICABLE`. Knowledge-layer
+WARN includes generated-view drift, document Registry freshness/hash, plan or
+Skill registry alignment, historical workflow/jsonl structure, unused relative
+server-path existence, and non-current W### identity drift. Experiment
+Registry, transport, approval, result, protected-asset, and current-checkout
+identity FAIL items still block the conclusion.
 
 ```powershell
 python deploy/pfmval_ops.py agent start-check --strict

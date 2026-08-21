@@ -4,18 +4,20 @@
 
 ## 必读顺序
 
-1. 从机器事实源 `project_state/current_state.json` 只读取当前任务所需字段；`CURRENT_STATE.md` 仅为人工查看的派生视图，不默认读取。
+1. 从机器事实源 `project_state/current_state.json` 只读取当前任务所需字段；`CURRENT_STATE.md` 仅为人工查看的派生视图，不默认读取，缺失或过期不得单独阻断实验。
 2. 涉及实验状态、性能或下一步决策时，只读取 `experiments/experiment_registry.json` 中相关 experiment/result；`experiments/experiment_dashboard.md` 仅为派生视图。
-3. 涉及服务器训练、缓存、路径或同步时，只读取 `configs/server_paths.yaml` 中相关配置。其 `md_import` 类条目未经服务器现场核验：引用时必须标明来源并提请审查，核验前不得作为训练、派发、路径决策或结果处理的执行依据。
-4. 只筛选 `project_state/document_registry.json` 中与当前任务相关且 `lifecycle=active` 的记录作为执行依据；不得整表载入，其他生命周期不得作为当前结论。
+3. 涉及服务器训练、缓存、路径或同步时，只读取 `configs/server_paths.yaml` 中相关配置。其 `md_import` 类条目未经服务器现场核验：引用时必须标明来源并提请审查，核验前不得作为训练、派发、路径决策或结果处理的执行依据。未引用的相对路径缺失是知识层 WARN，不是实验结果 HARD。
+4. 只筛选 `project_state/document_registry.json` 中与当前任务相关且 `lifecycle=active` 的记录作为材料路由；不得整表载入，其他生命周期不得作为当前结论。文档 Registry 不是实验结果真实性证据；它与 `active_plans` / Skill / pending plan reviews 的对齐失配不得单独阻断训练或只读审计。
 5. 涉及方案、完成声明、实验结果或 GO/NO-GO 独立校验时，读取 `.agents/skills/pfmval-audit/SKILL.md`；`.agents/skills/` 是项目 Skill 权威源，其他 Agent 工具的路由或适配文件不得复制、覆盖权威规则，且不削弱高危动作门禁。
 6. 涉及 `团队项目进度与结论/` 时读取 `.agents/skills/team-progress-maintainer/SKILL.md`；涉及 `qzs/` 稳定实验结论时，同时读取 `.agents/skills/qzs-stable-conclusion-writer/SKILL.md`。
 
-开始训练、修改服务器路径或生成项目结论前，运行：
+训练、修改服务器路径、写 Registry 或 current state 前，仍必须运行 `--strict`，且证据链/治理 HARD 必须 FAIL=0：
 
 ```powershell
 python deploy/pfmval_ops.py agent start-check --strict
 ```
+
+只读实验审计（含方案/结果 GO-NO-GO 独立校验）：仍运行 `--strict` 并记录新鲜输出。知识层 WARN 不阻断出具判定，包括但不限于：`CURRENT_STATE.md` 缺失或过期、文档 Registry 哈希/修订落后、normative 文档 content SHA、方案/Skill 与文档 Registry 对齐、workflow catalog 与历史 approval/event jsonl 结构、未引用相对服务器路径缺失、非当前 checkout 的其它 W### 身份漂移。下列 HARD FAIL 仍阻断：experiment Registry、Gitee-only、正式批准、`source_commit`、结果导入/inbox、受保护资产、当前 checkout 工作树身份、未完成状态事务或锁。
 
 只读服务器故障排查可使用：
 

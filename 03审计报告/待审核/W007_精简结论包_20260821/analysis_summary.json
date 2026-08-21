@@ -1,0 +1,643 @@
+{
+  "experiment_id": "mpp2_cpgcr_probe_v001_20260811",
+  "evidence_status": "accepted",
+  "analysis_status": "pending_user_review",
+  "seed": 42,
+  "sample_counts": {
+    "internal_spots": 1078,
+    "internal_patients": 6,
+    "external_spots": 1039,
+    "external_patients": 1,
+    "pathways": 30
+  },
+  "metrics": {
+    "FBR": {
+      "internal": {
+        "patient_balanced_z_mse": 0.3807428181171417,
+        "pooled_z_mse": 0.37488633394241333,
+        "z_mae": 0.4542074203491211,
+        "pooled_pcc": 0.7971258175957328,
+        "raw_mae": 884.949124833327,
+        "mean_pathway_raw_r2": 0.6351241618682043
+      },
+      "external": {
+        "patient_balanced_z_mse": 0.6620767712593079,
+        "pooled_z_mse": 0.6620767712593079,
+        "z_mae": 0.6191226840019226,
+        "pooled_pcc": 0.6548958201828085,
+        "raw_mae": 1176.2113734248244,
+        "mean_pathway_raw_r2": -0.08801664134310691
+      },
+      "performance_gate": "WARN_only"
+    },
+    "RCC": {
+      "internal": {
+        "patient_balanced_z_mse": 0.3782516419887543,
+        "pooled_z_mse": 0.3732927143573761,
+        "z_mae": 0.4525867700576782,
+        "pooled_pcc": 0.7981542615500504,
+        "raw_mae": 881.3872616708513,
+        "mean_pathway_raw_r2": 0.6366682159472866
+      },
+      "external": {
+        "patient_balanced_z_mse": 0.6595339179039001,
+        "pooled_z_mse": 0.6595339179039001,
+        "z_mae": 0.6195924282073975,
+        "pooled_pcc": 0.6537580094959387,
+        "raw_mae": 1177.1066842150628,
+        "mean_pathway_raw_r2": -0.08757129572040458
+      },
+      "performance_gate": "WARN_only"
+    },
+    "HCR": {
+      "internal": {
+        "patient_balanced_z_mse": 0.3796412944793701,
+        "pooled_z_mse": 0.3739311695098877,
+        "z_mae": 0.45300954580307007,
+        "pooled_pcc": 0.797705833888436,
+        "raw_mae": 882.226408699934,
+        "mean_pathway_raw_r2": 0.6360481338115275
+      },
+      "external": {
+        "patient_balanced_z_mse": 0.6581084728240967,
+        "pooled_z_mse": 0.6581085324287415,
+        "z_mae": 0.6184862852096558,
+        "pooled_pcc": 0.6559820519855336,
+        "raw_mae": 1174.5980769301036,
+        "mean_pathway_raw_r2": -0.0826536688237559
+      },
+      "performance_gate": "WARN_only"
+    },
+    "CPGCR": {
+      "internal": {
+        "patient_balanced_z_mse": 0.37884676456451416,
+        "pooled_z_mse": 0.37359189987182617,
+        "z_mae": 0.45302313566207886,
+        "pooled_pcc": 0.7980001061374338,
+        "raw_mae": 882.2698941695495,
+        "mean_pathway_raw_r2": 0.6363792520170242
+      },
+      "external": {
+        "patient_balanced_z_mse": 0.6568323969841003,
+        "pooled_z_mse": 0.6568324565887451,
+        "z_mae": 0.6181831955909729,
+        "pooled_pcc": 0.6549320912886041,
+        "raw_mae": 1173.9017809544964,
+        "mean_pathway_raw_r2": -0.08011925888060413
+      },
+      "performance_gate": "WARN_only"
+    }
+  },
+  "external_metric_ranges": {
+    "z-MSE": 0.005244314670562744,
+    "z-MAE": 0.0014092326164245605,
+    "PCC": 0.0022240424895949573,
+    "raw MAE": 3.204903260566425,
+    "mean pathway R²": 0.00789738246250278
+  },
+  "max_abs_metric_recompute_difference": 5.365909394594581e-08,
+  "best_epochs": {
+    "RCC": 5,
+    "HCR": 1,
+    "CPGCR": 5
+  },
+  "external_prediction_correlation_with_fbr": {
+    "RCC": 0.9965791288100248,
+    "HCR": 0.9991787848492596,
+    "CPGCR": 0.9976964219687692
+  },
+  "external_mean_abs_prediction_change_from_fbr_z": {
+    "RCC": 0.045051511209421885,
+    "HCR": 0.022391482014116035,
+    "CPGCR": 0.03787090995300138
+  },
+  "zscore_diagnostics": {
+    "pathways_abs_external_mean_gt_0_5z": 24,
+    "median_amplitude_ratio": 0.5937194324792687,
+    "median_regression_slope": 0.2939953736271679,
+    "max_abs_z_vs_raw_pathway_r2_difference": 8.881784197001252e-16
+  },
+  "chart_data": {
+    "external_ranks": [
+      {
+        "metric": "z-MSE",
+        "arm": "FBR",
+        "rank": 4,
+        "value": 0.6620767712593079
+      },
+      {
+        "metric": "z-MSE",
+        "arm": "RCC",
+        "rank": 3,
+        "value": 0.6595339179039001
+      },
+      {
+        "metric": "z-MSE",
+        "arm": "HCR",
+        "rank": 2,
+        "value": 0.6581085324287415
+      },
+      {
+        "metric": "z-MSE",
+        "arm": "CPGCR",
+        "rank": 1,
+        "value": 0.6568324565887451
+      },
+      {
+        "metric": "z-MAE",
+        "arm": "FBR",
+        "rank": 3,
+        "value": 0.6191226840019226
+      },
+      {
+        "metric": "z-MAE",
+        "arm": "RCC",
+        "rank": 4,
+        "value": 0.6195924282073975
+      },
+      {
+        "metric": "z-MAE",
+        "arm": "HCR",
+        "rank": 2,
+        "value": 0.6184862852096558
+      },
+      {
+        "metric": "z-MAE",
+        "arm": "CPGCR",
+        "rank": 1,
+        "value": 0.6181831955909729
+      },
+      {
+        "metric": "PCC",
+        "arm": "FBR",
+        "rank": 3,
+        "value": 0.6548958201828085
+      },
+      {
+        "metric": "PCC",
+        "arm": "RCC",
+        "rank": 4,
+        "value": 0.6537580094959387
+      },
+      {
+        "metric": "PCC",
+        "arm": "HCR",
+        "rank": 1,
+        "value": 0.6559820519855336
+      },
+      {
+        "metric": "PCC",
+        "arm": "CPGCR",
+        "rank": 2,
+        "value": 0.6549320912886041
+      },
+      {
+        "metric": "raw MAE",
+        "arm": "FBR",
+        "rank": 3,
+        "value": 1176.2113734248244
+      },
+      {
+        "metric": "raw MAE",
+        "arm": "RCC",
+        "rank": 4,
+        "value": 1177.1066842150628
+      },
+      {
+        "metric": "raw MAE",
+        "arm": "HCR",
+        "rank": 2,
+        "value": 1174.5980769301036
+      },
+      {
+        "metric": "raw MAE",
+        "arm": "CPGCR",
+        "rank": 1,
+        "value": 1173.9017809544964
+      },
+      {
+        "metric": "mean pathway R²",
+        "arm": "FBR",
+        "rank": 4,
+        "value": -0.08801664134310691
+      },
+      {
+        "metric": "mean pathway R²",
+        "arm": "RCC",
+        "rank": 3,
+        "value": -0.08757129572040458
+      },
+      {
+        "metric": "mean pathway R²",
+        "arm": "HCR",
+        "rank": 2,
+        "value": -0.0826536688237559
+      },
+      {
+        "metric": "mean pathway R²",
+        "arm": "CPGCR",
+        "rank": 1,
+        "value": -0.08011925888060413
+      }
+    ],
+    "training_history": [
+      {
+        "epoch": 1,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3793904781341553,
+        "HCR": 0.3796412944793701,
+        "CPGCR": 0.3798764944076538
+      },
+      {
+        "epoch": 2,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.379326581954956,
+        "HCR": 0.3796358108520508,
+        "CPGCR": 0.3797603547573089
+      },
+      {
+        "epoch": 3,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3786240518093109,
+        "HCR": 0.3796595633029938,
+        "CPGCR": 0.3790437281131744
+      },
+      {
+        "epoch": 4,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3787709474563598,
+        "HCR": 0.3797526657581329,
+        "CPGCR": 0.3791294991970062
+      },
+      {
+        "epoch": 5,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3782516419887543,
+        "HCR": 0.3799358904361725,
+        "CPGCR": 0.3788467645645141
+      },
+      {
+        "epoch": 6,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3797587156295776,
+        "HCR": 0.3803607523441314,
+        "CPGCR": 0.3793153464794159
+      },
+      {
+        "epoch": 7,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3790415525436401,
+        "HCR": 0.3803259432315826,
+        "CPGCR": 0.3787468671798706
+      },
+      {
+        "epoch": 8,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3807003200054168,
+        "HCR": 0.3810640275478363,
+        "CPGCR": 0.3800177574157715
+      },
+      {
+        "epoch": 9,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3814204633235931,
+        "HCR": 0.3811971247196197,
+        "CPGCR": 0.3797545433044433
+      },
+      {
+        "epoch": 10,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3822252750396728,
+        "HCR": 0.3814676105976105,
+        "CPGCR": 0.3796387612819671
+      },
+      {
+        "epoch": 11,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3846056461334228,
+        "HCR": 0.3819451630115509,
+        "CPGCR": 0.380872517824173
+      },
+      {
+        "epoch": 12,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3865412175655365,
+        "HCR": null,
+        "CPGCR": 0.3823932111263275
+      },
+      {
+        "epoch": 13,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3889755010604858,
+        "HCR": null,
+        "CPGCR": 0.3833580911159515
+      },
+      {
+        "epoch": 14,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3936624526977539,
+        "HCR": null,
+        "CPGCR": 0.3878823518753052
+      },
+      {
+        "epoch": 15,
+        "FBR": 0.3807428181171417,
+        "RCC": 0.3943620026111603,
+        "HCR": null,
+        "CPGCR": 0.3874335587024688
+      }
+    ],
+    "domain_summary": [
+      {
+        "diagnostic": "均值偏移 > 0.5z 的通路",
+        "percent": 80.0,
+        "numerator": 24,
+        "denominator": 30
+      },
+      {
+        "diagnostic": "预测/真实振幅比（中位）",
+        "percent": 59.37194324792687,
+        "numerator": null,
+        "denominator": null
+      },
+      {
+        "diagnostic": "回归斜率（中位）",
+        "percent": 29.39953736271679,
+        "numerator": null,
+        "denominator": null
+      }
+    ],
+    "pathway_diagnostics": [
+      {
+        "pathway": "tls",
+        "abs_truth_mean_z": 0.8943239639325407,
+        "amplitude_ratio": 0.44212513159185396,
+        "regression_slope": 0.2935653176009666,
+        "pcc": 0.6639869499026133,
+        "z_r2": 0.3863689515053885,
+        "raw_r2": 0.38636895150538864
+      },
+      {
+        "pathway": "tgfb",
+        "abs_truth_mean_z": 1.0612375081541003,
+        "amplitude_ratio": 0.47201279528129886,
+        "regression_slope": 0.2072300073916197,
+        "pcc": 0.43903472419242306,
+        "z_r2": 0.08320534186966033,
+        "raw_r2": 0.08320534186966022
+      },
+      {
+        "pathway": "emt",
+        "abs_truth_mean_z": 0.5340571548158375,
+        "amplitude_ratio": 0.7877400508777873,
+        "regression_slope": 0.46623745187264565,
+        "pcc": 0.5918671411376282,
+        "z_r2": 0.17257837982630864,
+        "raw_r2": 0.17257837982630864
+      },
+      {
+        "pathway": "hypoxia",
+        "abs_truth_mean_z": 0.5247567983317755,
+        "amplitude_ratio": 0.650169654679649,
+        "regression_slope": 0.2311808601927693,
+        "pcc": 0.3555700554906341,
+        "z_r2": 0.039634184169683784,
+        "raw_r2": 0.03963418416968345
+      },
+      {
+        "pathway": "mhc",
+        "abs_truth_mean_z": 0.4159709064727353,
+        "amplitude_ratio": 0.5850765722439853,
+        "regression_slope": 0.2944254296533692,
+        "pcc": 0.5032254641886252,
+        "z_r2": 0.21835454111648545,
+        "raw_r2": 0.21835454111648567
+      },
+      {
+        "pathway": "icp",
+        "abs_truth_mean_z": 0.43983467708855395,
+        "amplitude_ratio": 0.42397925505468226,
+        "regression_slope": 0.1296702713358119,
+        "pcc": 0.3058410754532973,
+        "z_r2": -0.3077253573348555,
+        "raw_r2": -0.3077253573348555
+      },
+      {
+        "pathway": "ifng",
+        "abs_truth_mean_z": 0.4774809447717154,
+        "amplitude_ratio": 0.5210774257927432,
+        "regression_slope": 0.07847720127043538,
+        "pcc": 0.15060564397132303,
+        "z_r2": -0.374104194993093,
+        "raw_r2": -0.3741041949930932
+      },
+      {
+        "pathway": "toxic",
+        "abs_truth_mean_z": 0.5994487706270079,
+        "amplitude_ratio": 0.4687803906279795,
+        "regression_slope": 0.17825706380913844,
+        "pcc": 0.3802570827895441,
+        "z_r2": 0.11746255493189384,
+        "raw_r2": 0.11746255493189361
+      },
+      {
+        "pathway": "Glycolysis",
+        "abs_truth_mean_z": 1.1849075858539493,
+        "amplitude_ratio": 0.6831948578168981,
+        "regression_slope": 0.414959557585955,
+        "pcc": 0.6073809731412932,
+        "z_r2": -0.405841259882745,
+        "raw_r2": -0.4058412598827448
+      },
+      {
+        "pathway": "Inflammatory_Response",
+        "abs_truth_mean_z": 0.03644625613270049,
+        "amplitude_ratio": 0.5466008427397688,
+        "regression_slope": 0.24537262492624692,
+        "pcc": 0.4489064153219139,
+        "z_r2": 0.19196588092604439,
+        "raw_r2": 0.1919658809260445
+      },
+      {
+        "pathway": "IL6_JAK_STAT3",
+        "abs_truth_mean_z": 1.1211283690922673,
+        "amplitude_ratio": 0.4935029981268329,
+        "regression_slope": 0.2756166602060773,
+        "pcc": 0.5584903460611647,
+        "z_r2": -0.32629064733913826,
+        "raw_r2": -0.32629064733913826
+      },
+      {
+        "pathway": "P53_Pathway",
+        "abs_truth_mean_z": 1.395637971414495,
+        "amplitude_ratio": 0.5194005549831252,
+        "regression_slope": 0.2917723098897383,
+        "pcc": 0.561748167364237,
+        "z_r2": -0.2763090229853058,
+        "raw_r2": -0.2763090229853058
+      },
+      {
+        "pathway": "DNA_Damage_Response",
+        "abs_truth_mean_z": 1.401381732348901,
+        "amplitude_ratio": 0.5974944686676775,
+        "regression_slope": 0.30120976486359385,
+        "pcc": 0.5041214281619145,
+        "z_r2": -0.16611756496707253,
+        "raw_r2": -0.16611756496707275
+      },
+      {
+        "pathway": "Complement",
+        "abs_truth_mean_z": 1.4433387999216236,
+        "amplitude_ratio": 0.7628498003405182,
+        "regression_slope": 0.27560678508460373,
+        "pcc": 0.36128577992886596,
+        "z_r2": -1.6947939916652084,
+        "raw_r2": -1.6947939916652084
+      },
+      {
+        "pathway": "Coagulation",
+        "abs_truth_mean_z": 0.0191375731747809,
+        "amplitude_ratio": 0.6514891940880814,
+        "regression_slope": 0.27923173563389125,
+        "pcc": 0.42860532172716154,
+        "z_r2": 0.13246876601206947,
+        "raw_r2": 0.13246876601206958
+      },
+      {
+        "pathway": "Oxidative_Phosphorylation",
+        "abs_truth_mean_z": 0.9021199518748352,
+        "amplitude_ratio": 0.7649372168915248,
+        "regression_slope": 0.6008051758479276,
+        "pcc": 0.7854307027829283,
+        "z_r2": 0.6128963259396727,
+        "raw_r2": 0.6128963259396727
+      },
+      {
+        "pathway": "Reactive_Oxygen_Species",
+        "abs_truth_mean_z": 1.285918103762265,
+        "amplitude_ratio": 0.4812130493858839,
+        "regression_slope": 0.1350239580489464,
+        "pcc": 0.2805908073799364,
+        "z_r2": -0.5280710535300959,
+        "raw_r2": -0.5280710535300959
+      },
+      {
+        "pathway": "Wound_Healing",
+        "abs_truth_mean_z": 0.9401970554018372,
+        "amplitude_ratio": 0.7945817015623602,
+        "regression_slope": 0.5034289571067383,
+        "pcc": 0.6335773352404949,
+        "z_r2": 0.3363621766910255,
+        "raw_r2": 0.33636217669102564
+      },
+      {
+        "pathway": "Fibrosis",
+        "abs_truth_mean_z": 0.9517083768575842,
+        "amplitude_ratio": 0.7763264694904927,
+        "regression_slope": 0.559431939992431,
+        "pcc": 0.7206142801746659,
+        "z_r2": 0.5121350443810916,
+        "raw_r2": 0.5121350443810915
+      },
+      {
+        "pathway": "MYC_Targets",
+        "abs_truth_mean_z": 1.1270683004437472,
+        "amplitude_ratio": 0.8578634827910606,
+        "regression_slope": 0.6631012702627851,
+        "pcc": 0.772968291068159,
+        "z_r2": 0.40738939471374946,
+        "raw_r2": 0.40738939471374946
+      },
+      {
+        "pathway": "E2F_Targets",
+        "abs_truth_mean_z": 1.3175874114629504,
+        "amplitude_ratio": 0.7180711136722215,
+        "regression_slope": 0.45517682659576203,
+        "pcc": 0.633888229075229,
+        "z_r2": 0.001187342762879351,
+        "raw_r2": 0.00118734276287924
+      },
+      {
+        "pathway": "G2M_Checkpoint",
+        "abs_truth_mean_z": 1.6341079725779475,
+        "amplitude_ratio": 0.6370981474156621,
+        "regression_slope": 0.42956818991378437,
+        "pcc": 0.6742574776842368,
+        "z_r2": -0.1913467766949657,
+        "raw_r2": -0.1913467766949657
+      },
+      {
+        "pathway": "Mitotic_Spindle",
+        "abs_truth_mean_z": 1.5175907290361363,
+        "amplitude_ratio": 0.6172385478777875,
+        "regression_slope": 0.39224162133586843,
+        "pcc": 0.6354781675326147,
+        "z_r2": -0.0996030500006786,
+        "raw_r2": -0.09960305000067837
+      },
+      {
+        "pathway": "Unfolded_Protein_Response",
+        "abs_truth_mean_z": 1.2276449995778709,
+        "amplitude_ratio": 0.5398721136906245,
+        "regression_slope": 0.3253072017249448,
+        "pcc": 0.6025634469265497,
+        "z_r2": 0.13969131852606032,
+        "raw_r2": 0.13969131852606032
+      },
+      {
+        "pathway": "mTOR_Signaling",
+        "abs_truth_mean_z": 0.9083602701791555,
+        "amplitude_ratio": 0.6675725429500381,
+        "regression_slope": 0.44217706861706974,
+        "pcc": 0.6623655710330237,
+        "z_r2": 0.39040138284644776,
+        "raw_r2": 0.39040138284644765
+      },
+      {
+        "pathway": "Interferon_Alpha",
+        "abs_truth_mean_z": 0.6654062941545067,
+        "amplitude_ratio": 0.5487204602870569,
+        "regression_slope": 0.11919971657251405,
+        "pcc": 0.21723213402714395,
+        "z_r2": -2.675105373208978,
+        "raw_r2": -2.6751053732089787
+      },
+      {
+        "pathway": "Angiogenesis",
+        "abs_truth_mean_z": 0.14473601457535654,
+        "amplitude_ratio": 0.58994439629086,
+        "regression_slope": 0.37580600870003134,
+        "pcc": 0.6370193717625345,
+        "z_r2": 0.31508274995808616,
+        "raw_r2": 0.31508274995808605
+      },
+      {
+        "pathway": "Apoptosis",
+        "abs_truth_mean_z": 0.8992083172813143,
+        "amplitude_ratio": 0.5418296936596058,
+        "regression_slope": 0.23040863616938878,
+        "pcc": 0.42524180358808217,
+        "z_r2": 0.09038870631623486,
+        "raw_r2": 0.09038870631623475
+      },
+      {
+        "pathway": "TNF_Signaling",
+        "abs_truth_mean_z": 0.7972393707075104,
+        "amplitude_ratio": 0.5328745607051016,
+        "regression_slope": 0.1620750579333155,
+        "pcc": 0.3041523650873053,
+        "z_r2": -0.27495765145522766,
+        "raw_r2": -0.2749576514552279
+      },
+      {
+        "pathway": "ECM_Organization",
+        "abs_truth_mean_z": 0.9107591209532487,
+        "amplitude_ratio": 0.7868550833973404,
+        "regression_slope": 0.5785585278840571,
+        "pcc": 0.7352796469027839,
+        "z_r2": 0.5321936612713761,
+        "raw_r2": 0.5321936612713762
+      }
+    ]
+  }
+}

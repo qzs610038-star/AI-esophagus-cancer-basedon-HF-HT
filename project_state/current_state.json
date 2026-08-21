@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 243,
-  "updated_at": "2026-08-21T08:02:54+00:00",
-  "source_commit": "a5ce3bf33ce16a97af83710819c30103c6a120f7",
+  "state_revision": 245,
+  "updated_at": "2026-08-21T16:15:16+00:00",
+  "source_commit": "2af03511658329825b32eca8e788c6fbb4d52725",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -29,7 +29,9 @@
     "DIR-20260810-003",
     "DIR-20260815-001",
     "DIR-20260815-002",
-    "DIR-20260818-001"
+    "DIR-20260818-001",
+    "DIR-20260821-001",
+    "DIR-20260822-001"
   ],
   "active_plans": {
     "mpp_training": {

@@ -55,8 +55,9 @@ explicitly confirmed before it can represent a real project fact or document.
 For knowledge-only maintenance, use `agent start-check --strict --task knowledge`.
 This task profile may downgrade experiment-workspace HEAD drift and generated
 navigation drift to WARN, but it never weakens path/branch identity, experiment
-Registry, active normative document, server transport, approval, result, or
-protected-asset failures.
+Registry, server transport, approval, result, or protected-asset failures.
+Active normative document content SHA drift and `document_registry_sha256`
+mismatch are WARN, not HARD.
 
 ## Experiment intake boundary
 
