@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-17T17:01:38+00:00",
-  "state_revision": 241,
+  "updated_at": "2026-08-21T08:11:08+00:00",
+  "state_revision": 243,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -955,9 +955,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-17T17:01:38+00:00",
-      "state_revision": 241,
-      "content_sha256": "2eface2775559bdbbf70ddbcfee0352b71232575c18547845dfd6b4e4dda2bbe",
+      "verified_at": "2026-08-21T08:11:08+00:00",
+      "state_revision": 243,
+      "content_sha256": "f1d8ad3da6f2038f102d971ba3b61bab76339ff87bbf38551781ad6fae62b403",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -976,9 +976,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-17T17:01:38+00:00",
-      "state_revision": 241,
-      "content_sha256": "078dfca90b0719a3aa6ec7c36edc7cc640e49b6cfc8c22dd434a9d742b434c4f",
+      "verified_at": "2026-08-21T08:11:08+00:00",
+      "state_revision": 243,
+      "content_sha256": "9b4e71e51d23b1645d70c349647c9b786868ab89c5a6b9216cda05b271b248eb",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -1799,6 +1799,27 @@
       "verified_at": "2026-07-29T16:52:21+00:00",
       "state_revision": 140,
       "content_sha256": "131263c94a153f6fc0618c29b69079fc24ea4e750b94011636697dd43f387a50",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-636656703c95",
+      "path": "01_指南与解读/分析报告/20260821_Phase2-MPP2审计未能正式推进_阻塞汇总.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-21T08:11:08+00:00",
+      "state_revision": 243,
+      "content_sha256": "952212381c7b5a9c368fc0ea4aa19f504992be63af88798cb9a5a46f933634a4",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5121,9 +5142,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-17T17:01:38+00:00",
-      "state_revision": 241,
-      "content_sha256": "941f06113cd2dd912fb1b762009e712ccdb7c2d5fc76e19f308ba04d1b5403ab",
+      "verified_at": "2026-08-21T08:11:08+00:00",
+      "state_revision": 243,
+      "content_sha256": "628e1d1754cbdb76ae592d017e8b44c1432d86881d85693fe9b72300966e4c78",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5142,9 +5163,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-17T16:24:32+00:00",
-      "state_revision": 239,
-      "content_sha256": "2f68cb67085c5452b8dea87fec2f066a7493b69c30840cbd201f2465ea02411c",
+      "verified_at": "2026-08-21T08:11:08+00:00",
+      "state_revision": 243,
+      "content_sha256": "c4ea432b33935a58cb19393f72f462fa5f708e1307aae85b2bb0eb223d38adac",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5164,9 +5185,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-17T17:01:38+00:00",
-      "state_revision": 241,
-      "content_sha256": "b3144fc0a68bb56eac0a4494aabfb762c3ffa2915495b772d09dad712d541269",
+      "verified_at": "2026-08-21T08:11:08+00:00",
+      "state_revision": 243,
+      "content_sha256": "70f6ae9558b0cb8a2733dbb150407761592b18a5195ae7dabef9f177221fd4e5",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6404,12 +6425,12 @@
     }
   ],
   "summary": {
-    "total": 292,
-    "live": 232,
+    "total": 293,
+    "live": 233,
     "missing": 60,
     "active": 26,
     "superseded": 12,
-    "historical": 176,
+    "historical": 177,
     "pending_review": 0,
     "approved_design": 18
   }
