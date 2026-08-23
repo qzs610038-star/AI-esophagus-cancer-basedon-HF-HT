@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "protocol_revision": "v001",
+  "frozen_before_metric_read": true,
+  "evidence_status": "pending_user_review",
+  "target_pathways": 30,
+  "internal_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+  "external_patient": "XZY",
+  "aggregation": {
+    "internal": "patient_then_pathway; patients equally weighted; PCC uses Fisher-z patient aggregation",
+    "external": "single-patient per-pathway distribution",
+    "cross_pathway_statistics": ["mean", "median", "q1", "q3", "iqr", "min", "max", "valid_pathways"]
+  },
+  "metrics": {
+    "pcc": "Pearson correlation; n>=3 and both variances>0; clip to [-0.999999,0.999999] before Fisher-z aggregation",
+    "ccc": "2*cov_population/(var_true_population+var_pred_population+(mean_true-mean_pred)^2)",
+    "z_rmse": "sqrt(mean((prediction_z-truth_z)^2))",
+    "nrmse_sigma_train": "raw_rmse / frozen train sigma; expected to equal z_rmse",
+    "z_mae": "mean(abs(prediction_z-truth_z))",
+    "raw_mae": "mean(abs(prediction_raw-truth_raw))",
+    "raw_r2": "1-SSE/SST per patient and pathway",
+    "ssim": "7x7 standard grid SSIM when rectangular-grid occupancy>=0.90; otherwise masked_SSIM_PFMval over fully occupied 7x7 local windows",
+    "moran": "rook adjacency at the minimum positive coordinate step; report truth, prediction, prediction-minus-truth delta, absolute delta and signed-error Moran I"
+  },
+  "ssim": {
+    "window_size": 7,
+    "grid_occupancy_threshold": 0.9,
+    "data_range_z": 6.0,
+    "data_range_source": "frozen training z-score scale, fixed as [-3,+3] sigma span; never fitted from XZY",
+    "interpolation": "none",
+    "background": "excluded"
+  },
+  "bootstrap": {
+    "seed": 20260823,
+    "repetitions": 10000,
+    "interval": "percentile_95",
+    "internal_unit": "patient paired resampling",
+    "external_unit": "2048-pixel spatial block paired resampling",
+    "huber": "descriptive per-pathway deltas only because identifiers are absent"
+  },
+  "delta_direction": "positive_always_means_candidate_better",
+  "higher_is_better": ["pcc", "ccc", "ssim"],
+  "lower_is_better": ["z_rmse", "nrmse_sigma_train", "abs_moran_delta"],
+  "na_rules": {
+    "correlation": "n<3 or zero variance",
+    "ssim": "no fully occupied 7x7 window or unreliable coordinates",
+    "moran": "fewer than 3 observations, zero variance or no rook edges",
+    "identifier": "not_computable_missing_identifier"
+  },
+  "numeric_tolerances": {
+    "legacy_pcc_abs": 0.0001,
+    "legacy_z_mse_abs": 0.000001,
+    "legacy_z_mae_abs": 0.000001,
+    "legacy_raw_mae_abs": 0.001,
+    "legacy_mean_pathway_raw_r2_abs": 0.0001,
+    "z_rmse_vs_nrmse_abs": 0.000002
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "unit_tests": {
+    "perfect_prediction": true,
+    "affine_offset": true,
+    "patient_equal_weight": true,
+    "key_shuffle_invariant": true,
+    "missing_key_fails": true,
+    "bootstrap_seed_deterministic": true
+  },
+  "accepted_replay": {
+    "pooled_pcc": {
+      "observed": 0.6548958191047395,
+      "expected": 0.6549,
+      "tolerance": 0.0001,
+      "pass": true
+    },
+    "pooled_z_mse": {
+      "observed": 0.6620768251269324,
+      "expected": 0.6620768,
+      "tolerance": 1e-06,
+      "pass": true
+    },
+    "z_mae": {
+      "observed": 0.6191226727714152,
+      "expected": 0.6191227,
+      "tolerance": 1e-06,
+      "pass": true
+    },
+    "raw_mae": {
+      "observed": 1176.2113741177363,
+      "expected": 1176.2114,
+      "tolerance": 0.001,
+      "pass": true
+    },
+    "mean_pathway_raw_r2": {
+      "observed": -0.08801664087970794,
+      "expected": -0.088,
+      "tolerance": 0.0001,
+      "pass": true
+    }
+  },
+  "ridge_function_regression": {
+    "mean_base_pcc": 0.519386206533347,
+    "mean_base_ccc": 0.39885821145316336,
+    "use": "rejected_excluded_function_regression_only"
+  },
+  "protected_inputs_size_mtime_unchanged": true,
+  "max_z_rmse_nrmse_gap": 6.661338147750939e-16,
+  "all_required_pass": true,
+  "hard_gates": {
+    "registry_status": true,
+    "internal_rows": true,
+    "external_rows": true,
+    "pathways": true,
+    "paired_key_sets_and_truth": true
+  }
+}
