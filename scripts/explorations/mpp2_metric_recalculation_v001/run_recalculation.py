@@ -340,6 +340,73 @@ def quality_checks(legacy, inventory_before, inventory_after, metrics, ridge_pat
             "all_required_pass":all(tests.values()) and all(v["pass"] for v in replay.values()) and protected_unchanged and nrmse_gap<=0.000002}
 
 
+def compare_all_experiments_to_fbr(summary):
+    """逐实验保留原始汇总值，并统一给出相对旗舰 FBR 的改善方向差值。"""
+    table = summary.copy()
+    table["comparison_split"] = table["split"].replace({"XZY": "external_xzy", "external_test": "external_xzy"})
+    baseline = table[table.experiment == "w007_fbr"][["comparison_split", "metric", "mean"]].rename(
+        columns={"mean": "fbr_mean"}
+    )
+    table = table.merge(baseline, on=["comparison_split", "metric"], how="left", validate="many_to_one")
+    lower_is_better = table.metric.isin({"z_rmse", "nrmse_sigma_train", "z_mae", "raw_mae", "abs_moran_delta"})
+    table["delta_candidate_better"] = np.where(
+        lower_is_better,
+        table.fbr_mean - table["mean"],
+        table["mean"] - table.fbr_mean,
+    )
+    table["baseline"] = "w007_fbr"
+    table["delta_definition"] = np.where(
+        lower_is_better,
+        "FBR_mean-candidate_mean (positive=candidate_better)",
+        "candidate_mean-FBR_mean (positive=candidate_better)",
+    )
+    columns = [
+        "experiment", "arm", "evidence_status", "split", "comparison_split", "metric",
+        "mean", "median", "q1", "q3", "iqr", "min", "max", "valid_pathways",
+        "baseline", "fbr_mean", "delta_candidate_better", "delta_definition",
+    ]
+    return table[columns].sort_values(["comparison_split", "experiment", "metric"])
+
+
+def pooled_pcc_by_experiment(long, huber_paths):
+    """补充展示展平全部样本×通路后的PCC；该值不替代逐通路主指标。"""
+    rows = []
+    for (experiment, arm, evidence_status, split), group in long.groupby(
+        ["experiment", "arm", "evidence_status", "split"], sort=True
+    ):
+        rows.append({
+            "experiment": experiment,
+            "arm": arm,
+            "evidence_status": evidence_status,
+            "split": split,
+            "comparison_split": "external_xzy" if split in {"XZY", "external_test"} else split,
+            "pooled_pcc": pcc(group.truth_z.to_numpy(), group.prediction_z.to_numpy()),
+            "scalar_pairs": len(group),
+        })
+    for path, experiment, arm in huber_paths:
+        data = pd.read_csv(path)
+        pathways = [column[5:] for column in data if column.startswith("true_")]
+        truth = np.concatenate([data["true_" + pathway].to_numpy(float) for pathway in pathways])
+        prediction = np.concatenate([data["pred_" + pathway].to_numpy(float) for pathway in pathways])
+        rows.append({
+            "experiment": experiment,
+            "arm": arm,
+            "evidence_status": "accepted",
+            "split": "external_test",
+            "comparison_split": "external_xzy",
+            "pooled_pcc": pcc(truth, prediction),
+            "scalar_pairs": len(truth),
+        })
+    table = pd.DataFrame(rows)
+    baseline = table[table.experiment == "w007_fbr"][["comparison_split", "pooled_pcc"]].rename(
+        columns={"pooled_pcc": "fbr_pooled_pcc"}
+    )
+    table = table.merge(baseline, on="comparison_split", how="left", validate="many_to_one")
+    table["delta_vs_fbr"] = table.pooled_pcc - table.fbr_pooled_pcc
+    table["interpretation"] = "supplementary_flattened_not_pathway_balanced"
+    return table.sort_values(["comparison_split", "experiment"])
+
+
 def main():
     OUT.mkdir(parents=True,exist_ok=True); FIG.mkdir(parents=True,exist_ok=True)
     protocol=json.loads((OUT/"metric_protocol.json").read_text(encoding="utf-8"))
@@ -367,7 +434,7 @@ def main():
     inventory.append(inventory_entry(legacy_path,"accepted","baseline_legacy_replay"))
     hpaths=[ROOT/"automation/returns/W001/A003/R004/artifacts/predictions_external_xzy.csv",ROOT/"automation/returns/W001/A004/R002/artifacts/predictions_external_xzy.csv"]
     inventory.extend([inventory_entry(hpaths[0],"accepted","huber_mse"),inventory_entry(hpaths[1],"accepted","huber_delta1")])
-    protected_paths=[MANIFEST,PARAMS]+list((PROTECTED/"raw_ssgsea").glob("*/*.csv"))+list((PROTECTED/"zscore/group_2_repaired_v003/labels").glob("**/*.csv"))
+    protected_paths=[MANIFEST,PARAMS]+sorted((PROTECTED/"raw_ssgsea").glob("*/*.csv"))+sorted((PROTECTED/"zscore/group_2_repaired_v003/labels").glob("**/*.csv"))
     protected_before={str(p.relative_to(ROOT)):(p.stat().st_size,p.stat().st_mtime_ns) for p in protected_paths}
     inventory.extend(inventory_entry(p,"protected_read_only","protected_label_or_manifest") for p in protected_paths)
     (OUT/"input_inventory.json").write_text(json.dumps({"registry_contract":expected,"files":inventory},ensure_ascii=False,indent=2),encoding="utf-8")
@@ -395,6 +462,10 @@ def main():
     pathway,summary=summarize(metrics,spatial); deltas=delta_tables(pathway)
     blocks=spatial_block_metrics(long); ci=bootstrap_ci(deltas,metrics,windows,blocks)
     metrics.to_csv(OUT/"metrics_long.csv",index=False); summary.to_csv(OUT/"metrics_summary.csv",index=False)
+    compare_all_experiments_to_fbr(summary).to_csv(OUT/"experiment_raw_vs_fbr.csv",index=False)
+    pooled_pcc_by_experiment(long, [(hpaths[0], "huber_mse", "MSE"), (hpaths[1], "huber_delta1", "Huber")]).to_csv(
+        OUT/"experiment_pooled_pcc_vs_fbr.csv", index=False
+    )
     deltas.to_csv(OUT/"paired_deltas.csv",index=False); ci.to_csv(OUT/"bootstrap_ci.csv",index=False); spatial.to_csv(OUT/"spatial_metrics.csv",index=False)
     protected_after={str(p.relative_to(ROOT)):(p.stat().st_size,p.stat().st_mtime_ns) for p in protected_paths}
     ridge_path=ROOT/"automation/results/mpp2-pathway-ridge-calibration-20260717-r003/predictions_external_xzy.csv"
