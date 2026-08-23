@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-21T08:11:08+00:00",
-  "state_revision": 243,
+  "updated_at": "2026-08-23T15:14:57+00:00",
+  "state_revision": 245,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -955,9 +955,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-21T08:11:08+00:00",
-      "state_revision": 243,
-      "content_sha256": "f1d8ad3da6f2038f102d971ba3b61bab76339ff87bbf38551781ad6fae62b403",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "7b8808944a338f96ce359813daa25791652836cbca8f71d21a3ab83685dc5f17",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -976,9 +976,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-21T08:11:08+00:00",
-      "state_revision": 243,
-      "content_sha256": "9b4e71e51d23b1645d70c349647c9b786868ab89c5a6b9216cda05b271b248eb",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "fe28fffc1ec4ac7ef7f23bec8dda8ba779506ad2a84c63d42def6ba9682c2005",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -1922,6 +1922,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-4b2b7eae2b8c",
+      "path": "01_指南与解读/分析报告/Beachum2026与Wang2025_Phase2模型演化及项目实验对比报告_20260822.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "0af8dc83471aa7bc08fd933fd1845d7e09357cfd0c5e784b3c0078756d0d3b3c",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-f170b2048c9f",
       "path": "01_指南与解读/分析报告/CVNN与新型架构可行性调研_2026-06-05.md",
       "category": "分析报告",
@@ -2400,6 +2421,28 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-caa2b560c387",
+      "path": "01_指南与解读/分析报告/MPP2评价指标与同类论文原始数据对比分析_20260823.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "active",
+      "verified_at": "2026-08-23T15:14:49+00:00",
+      "state_revision": 245,
+      "content_sha256": "479fc793e19c94dc7d70c4cd559cd724e616c7f1ee62730deb3330b90d0bf8b5",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only",
+      "lifecycle_override": "active"
+    },
+    {
       "doc_id": "doc-a9e91078fa55",
       "path": "01_指南与解读/分析报告/MPP2逐通路Ridge校准_r003实验总结_20260718.md",
       "category": "分析报告",
@@ -2419,6 +2462,28 @@
       "tags": [],
       "connectivity_modes": [],
       "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-94b4bbd2caeb",
+      "path": "01_指南与解读/分析报告/MPP2首批评价指标复算报告_20260823.md",
+      "category": "分析报告",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "active",
+      "verified_at": "2026-08-23T15:14:49+00:00",
+      "state_revision": 245,
+      "content_sha256": "06e413e781bed9f215120aa366137f8eb509341774d03a51f2d9d32fb71a7bb8",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only",
+      "lifecycle_override": "active"
     },
     {
       "doc_id": "doc-5735d8901a5d",
@@ -3292,6 +3357,27 @@
       "verified_at": "2026-07-29T16:52:21+00:00",
       "state_revision": 140,
       "content_sha256": "f525a1035e6ea9539f9c4c2354cef69f601e6c37a5a44758bcadde948af7d557",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-f00251536388",
+      "path": "01_指南与解读/学习指南/MPP2_基线方案与UNI2-H特征传递学习指南.md",
+      "category": "学习指南",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "6a18feac7caf7fa0d923481c2e7111ac15315f1300336f3daf7ceb8028a7cbbb",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4180,6 +4266,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-d91e5b7eee2f",
+      "path": "01_指南与解读/部署方案/MPP2划分与zscore协议_讨论稿_20260821.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "d75998e2153da7d95962e9fe29979f3d7faa58d008cf7a44d30e166faf3273af",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "doc-9299955f63d9",
       "path": "01_指南与解读/部署方案/MPP2最新模型_Phase3空转基因预测_快速配置.md",
       "category": "部署方案",
@@ -4210,6 +4317,27 @@
       "verified_at": "2026-08-11T11:57:04+00:00",
       "state_revision": 214,
       "content_sha256": "d4d141bd58782c4c5a2a8b8933851d8e558e1b1469035cfd9011cf1e58e8a6e2",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-5ae141ae0419",
+      "path": "01_指南与解读/部署方案/MPP2首批评价指标本地复算部署方案_20260823.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "cdd2f6914f8510abc2b39fcea494f01881f7a62b241f2f94e865998177a7ee97",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4262,6 +4390,48 @@
       "verified_at": "2026-07-29T16:52:21+00:00",
       "state_revision": 140,
       "content_sha256": "fa612db9ee92e874aa7156464fb7dc896728b8f3eed0e7e3cea9d3b278e2bbaa",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-47a70f62911a",
+      "path": "01_指南与解读/部署方案/PFMval安全门最小化与结果防误改治理方案_20260821.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "1528d364f1571a1e9bd8ef88ec6608410ef026f5071963baf7f5dfd3ac529696",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-6d0685899016",
+      "path": "01_指南与解读/部署方案/PFMval知识层门禁降级与冗余规则删减方案_20260821.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "69e50bd006611ed32eda7c3ea8529a66e599ee9cfd7af108a277565cafca99d2",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4667,6 +4837,27 @@
       ],
       "purpose": "",
       "created": "2026-06-13",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "doc-02bc848c6a2a",
+      "path": "01_指南与解读/部署方案/空间转录组评价指标与论文对比建议_20260823.md",
+      "category": "部署方案",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "42664cd618fef0a736d61d242cf7e33683ac23f42e12d1bb1eec753fd06efe90",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
       "tags": [],
       "connectivity_modes": [],
       "availability": "local_only"
@@ -5089,6 +5280,27 @@
       "availability": "local_only"
     },
     {
+      "doc_id": "doc-a8817cf3aba6",
+      "path": "02_组会汇报/组会汇报_空间转录组预测模型演化与项目进展对比_20260822.md",
+      "category": "组会汇报",
+      "scope": "historical_reference",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "e459ee2dfa489c1cb1cef54362d153ab7794281c058c361989693aee60ca7703",
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json"
+      ],
+      "purpose": "",
+      "created": "",
+      "tags": [],
+      "connectivity_modes": [],
+      "availability": "local_only"
+    },
+    {
       "doc_id": "agent-entry",
       "path": "AGENTS.md",
       "category": "项目入口",
@@ -5142,9 +5354,9 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-21T08:11:08+00:00",
-      "state_revision": 243,
-      "content_sha256": "628e1d1754cbdb76ae592d017e8b44c1432d86881d85693fe9b72300966e4c78",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "a6eb46ecaab9892ecbbcd79de85c45c98a4d08b1138c374e9bba9b4c870d5bba",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5163,9 +5375,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-21T08:11:08+00:00",
-      "state_revision": 243,
-      "content_sha256": "c4ea432b33935a58cb19393f72f462fa5f708e1307aae85b2bb0eb223d38adac",
+      "verified_at": "2026-08-23T15:14:49+00:00",
+      "state_revision": 245,
+      "content_sha256": "9e172fd83e9b081cef326fb232561452ddb400dedc40dd9a1064ae5aa957cad4",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5185,9 +5397,9 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-08-21T08:11:08+00:00",
-      "state_revision": 243,
-      "content_sha256": "70f6ae9558b0cb8a2733dbb150407761592b18a5195ae7dabef9f177221fd4e5",
+      "verified_at": "2026-08-23T12:25:24+00:00",
+      "state_revision": 245,
+      "content_sha256": "981803776f5338fa271e3d17e6929162070b386968c973d7ec5650441d1e4297",
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6425,12 +6637,12 @@
     }
   ],
   "summary": {
-    "total": 293,
-    "live": 233,
+    "total": 303,
+    "live": 243,
     "missing": 60,
-    "active": 26,
+    "active": 28,
     "superseded": 12,
-    "historical": 177,
+    "historical": 185,
     "pending_review": 0,
     "approved_design": 18
   }
