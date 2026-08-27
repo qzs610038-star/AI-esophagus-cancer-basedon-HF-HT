@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Phase 2 to Phase 3 evidence bridge</title>
+  <desc id="desc">W007 pathway prediction and W004 compatibility evidence remain separated by a future, not-yet-data-bound integration step.</desc>
+  <defs>
+    <linearGradient id="phase2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8f1fb"/><stop offset="1" stop-color="#c9def4"/>
+    </linearGradient>
+    <linearGradient id="phase3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7ecfa"/><stop offset="1" stop-color="#e7cdef"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#65727e"/>
+    </marker>
+    <style>
+      .title{font:700 28px Arial,sans-serif;fill:#1f2933}.subtitle{font:600 18px Arial,sans-serif;fill:#334e68}
+      .body{font:15px Arial,sans-serif;fill:#243b53}.small{font:13px Arial,sans-serif;fill:#486581}
+      .status{font:700 14px Arial,sans-serif;letter-spacing:.4px}.box{stroke:#829ab1;stroke-width:1.4;rx:16}
+    </style>
+  </defs>
+  <rect width="1200" height="620" fill="#ffffff"/>
+  <text x="600" y="45" text-anchor="middle" class="title">Phase 2 → Phase 3: evidence-bounded manuscript framework</text>
+  <text x="600" y="73" text-anchor="middle" class="small">The dashed bridge is future integration, not a completed end-to-end experiment.</text>
+
+  <rect x="55" y="110" width="485" height="355" fill="url(#phase2)" class="box"/>
+  <text x="85" y="150" class="subtitle">Phase 2 · W007 pathway representation</text>
+  <text x="85" y="181" class="body">Paired H&amp;E + spatial transcriptomics</text>
+  <line x1="298" y1="193" x2="298" y2="225" stroke="#65727e" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="105" y="230" width="385" height="72" fill="#ffffff" class="box"/>
+  <text x="298" y="258" text-anchor="middle" class="body">30-dimensional pathway prediction</text>
+  <text x="298" y="282" text-anchor="middle" class="small">FBR · RCC · HCR · CPGCR (seed = 42)</text>
+  <line x1="298" y1="303" x2="298" y2="335" stroke="#65727e" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="105" y="340" width="385" height="78" fill="#ffffff" class="box"/>
+  <text x="298" y="368" text-anchor="middle" class="body">Patient-balanced multi-metric evaluation</text>
+  <text x="298" y="393" text-anchor="middle" class="small">PCC · CCC · z-RMSE · raw R² · Spearman</text>
+  <text x="85" y="446" class="status" fill="#276749">ACCEPTED · single-seed / single external case</text>
+
+  <rect x="660" y="110" width="485" height="355" fill="url(#phase3)" class="box"/>
+  <text x="690" y="150" class="subtitle">Phase 3 · W004 response bridge</text>
+  <text x="690" y="181" class="body">H&amp;E-derived image and legacy pathway inputs</text>
+  <line x1="902" y1="193" x2="902" y2="225" stroke="#65727e" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="710" y="230" width="385" height="72" fill="#ffffff" class="box"/>
+  <text x="902" y="258" text-anchor="middle" class="body">Four controlled input arms</text>
+  <text x="902" y="282" text-anchor="middle" class="small">absolute · ordinal · spatial · shuffled coordinates</text>
+  <line x1="902" y1="303" x2="902" y2="335" stroke="#65727e" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="710" y="340" width="385" height="78" fill="#ffffff" class="box"/>
+  <text x="902" y="368" text-anchor="middle" class="body">pCR / MPR descriptive classification</text>
+  <text x="902" y="393" text-anchor="middle" class="small">AUROC · AUPRC · Brier · calibration</text>
+  <text x="690" y="446" class="status" fill="#8a4b08">ACCEPTED · COMPATIBILITY_ONLY</text>
+
+  <path d="M540 282 C580 255, 620 255, 660 282" fill="none" stroke="#b7791f" stroke-width="3" stroke-dasharray="9 8" marker-end="url(#arrow)"/>
+  <rect x="515" y="210" width="170" height="54" rx="12" fill="#fffaf0" stroke="#d69e2e"/>
+  <text x="600" y="232" text-anchor="middle" class="small">future integration</text>
+  <text x="600" y="251" text-anchor="middle" class="small">not data-bound</text>
+
+  <rect x="55" y="500" width="1090" height="82" rx="16" fill="#f5f7fa" stroke="#bcccdc"/>
+  <text x="80" y="528" class="subtitle">Evidence boundary</text>
+  <text x="80" y="553" class="body">Exploratory recalculation remains pending_user_review. No raw MPP2, patient-independent utility, fusion synergy,</text>
+  <text x="80" y="576" class="body">stable spatial gain, clinical utility, or “CPGCR is best” claim is supported by the current evidence.</text>
+</svg>

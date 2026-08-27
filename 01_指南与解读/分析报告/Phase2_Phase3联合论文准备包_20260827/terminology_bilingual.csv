@@ -1,0 +1,32 @@
+abbr,english,中文,使用说明
+H&E,Hematoxylin and Eosin,苏木精-伊红染色,常规病理染色
+WSI,Whole-Slide Image,全视野切片图像,数字病理整张切片
+ST,Spatial Transcriptomics,空间转录组学,保留空间位置的转录组测量
+ssGSEA,single-sample Gene Set Enrichment Analysis,单样本基因集富集分析,本项目30维通路活性来源
+PFM,Pathology Foundation Model,病理基础模型,如UNI2-h
+PCC,Pearson Correlation Coefficient,皮尔逊相关系数,衡量线性趋势而非绝对一致性
+CCC,Concordance Correlation Coefficient,一致性相关系数,同时惩罚均值和尺度偏差
+RMSE,Root Mean Squared Error,均方根误差,越小越好
+R²,Coefficient of Determination,决定系数,负值表示不如恒定均值基线
+Spearman ρ,Spearman Rank Correlation,斯皮尔曼秩相关,衡量单调排序一致性
+AUROC,Area Under the ROC Curve,ROC曲线下面积,衡量二分类排序能力
+AUPRC,Area Under the Precision-Recall Curve,精确率-召回率曲线下面积,依赖阳性率并强调阳性类
+Brier,Brier Score,布里尔评分,概率与0/1结局的均方误差
+Calibration intercept,Calibration-in-the-large,校准截距,理想值0
+Calibration slope,Calibration slope,校准斜率,理想值1
+LOPO,Leave-One-Patient-Out,患者留一法,每折完整留出一名患者
+OOF,Out-of-Fold Prediction,折外预测,预测必须来自未训练该样本的模型
+MIL,Multiple Instance Learning,多实例学习,以patch集合构成slide级bag
+pCR,pathological Complete Response,病理完全缓解,建议主要终点
+MPR,Major Pathological Response,主要病理缓解,次要或探索性终点
+FBR,Frozen Baseline Replay,冻结基线复放,W007基准臂
+RCC,Residual-only Control (historical arm code),仅残差对照（保留历史臂代码）,不能单独证明纯容量因果效应
+HCR,Hard-pair Contrastive Residual,硬配对对比残差,W007硬InfoNCE臂
+CPGCR,Continuous Pathway-Geometry Contrastive Residual,连续通路几何对比残差,W007方法候选
+InfoNCE,Information Noise-Contrastive Estimation,对比学习损失,拉近正对并推远负对
+Pathway-aware,Pathway-aware,通路感知,模型显式使用通路结构或语义
+Post hoc,Post hoc analysis,事后分析,未预先规定的派生分析
+Pseudoreplication,Pseudoreplication,伪重复,把同一患者相关切片误当独立病例
+COMPATIBILITY_ONLY,Compatibility-only evidence,仅兼容性证据,不得升级为患者独立或临床证据
+TRIPOD+AI,Transparent Reporting of a multivariable prediction model for Individual Prognosis Or Diagnosis + AI,AI预测模型透明报告规范,约束报告完整性
+PROBAST+AI,Prediction model Risk Of Bias ASsessment Tool + AI,AI预测模型偏倚风险评估工具,评估偏倚与适用性

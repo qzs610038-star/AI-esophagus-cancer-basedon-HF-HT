@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>review_index.md</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .md-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5;color:#37352f;background-color:#fff;max-width:860px;margin:0 auto;padding:40px 0}.md-body::before,.md-body::after{display:table;content:""}.md-body::after{clear:both}.md-body a{color:#2f74c9;text-decoration:none}.md-body a:hover{text-decoration:underline}.md-body h1,.md-body h2,.md-body h3,.md-body h4,.md-body h5,.md-body h6{margin:24px 0 12px;font-weight:700;line-height:1.25;color:#37352f}.md-body h1{font-size:2em}.md-body h2{font-size:1.5em}.md-body h3{font-size:1.17em}.md-body h4{font-size:1em}.md-body p{margin:0 0 12px}.md-body strong{font-weight:700}.md-body code,.md-body tt{padding:0.2em 0.4em;font-size:85%;font-family:ui-monospace,Menlo,Consolas,monospace;background:#f7f6f3;border-radius:3px}.md-body pre{padding:12px 16px;overflow:auto;font-size:14px;line-height:1.5;font-family:ui-monospace,Menlo,Consolas,monospace;color:#37352f;background:#f7f6f3;border-radius:3px;margin:0 0 16px}.md-body pre code{padding:0;background:transparent;border:0;font-size:100%}.md-body blockquote{padding:0 0 0 12px;margin:0 0 12px;color:#9b9a97;border-left:3px solid #2f74c9}.md-body blockquote p{margin:0 0 12px}.md-body ul,.md-body ol{padding-left:1.5em;margin:0 0 12px}.md-body ul ul,.md-body ul ol,.md-body ol ul,.md-body ol ol{margin:0}.md-body li+li{margin-top:0.2em}.md-body table{width:100%;border-collapse:collapse;margin-bottom:16px}.md-body table th{font-weight:700;padding:8px 12px;border:1px solid #e9e9e7;background:#f7f6f3}.md-body table td{padding:8px 12px;border:1px solid #e9e9e7}.md-body table tr{background:#fff;border-top:1px solid #e9e9e7}.md-body table tr:nth-child(2n){background:#f7f6f3}.md-body hr{height:1px;padding:0;margin:24px 0;background:#e9e9e7;border:0}.md-body img{max-width:100%}
+  .md-body img { max-width: 100%; border-radius: 5px; display: block; margin: 16px 0; }
+  .md-body pre::-webkit-scrollbar { height: 6px; }
+  .md-body pre::-webkit-scrollbar-track { background: #1a1a1a; }
+  .md-body pre::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="md-body">
+<h1 id="phase-23">Phase 2–3 联合论文准备包审核索引</h1>
+<blockquote>
+<p>交付状态：<code>pending_user_review</code><br />
+交付整理日期：2026-08-28（材料与检索冻结于 2026-08-27）<br />
+执行边界：本地 <code>main</code>；未连接项目服务器、未训练、未下载模型/训练数据、未推送远端、未写 Google Drive。</p>
+</blockquote>
+<h2 id="1">1. 建议审核顺序</h2>
+<ol>
+<li>先读 <a href="manuscript_zh.md">中文稿</a> 或 <a href="manuscript_en.md">英文稿</a>，确认论文故事与结论边界。</li>
+<li>查看 <a href="evidence_ledger.csv">证据台账</a>，逐条审核允许表述和禁止外推。</li>
+<li>查看 <a href="novelty_matrix.csv">新颖性矩阵</a> 与 <a href="references.bib">引用库</a>，核验文献定位。</li>
+<li>查看 <a href="method_code_mapping.md">方法—代码映射</a> 与 <a href="reanalysis_data_index.md">复算数据索引</a>，核验实现和派生指标。</li>
+<li>查看 <a href="adversarial_review.md">反方审查</a> 与 <a href="reporting_checklist.md">报告清单</a>，决定是否进入投稿定稿。</li>
+</ol>
+<h2 id="2">2. 核心文件</h2>
+<table>
+<thead>
+<tr>
+<th>交付物</th>
+<th>文件</th>
+<th>当前用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>双语 IMRaD 初稿</td>
+<td><code>manuscript_zh.md</code>、<code>manuscript_en.md</code></td>
+<td>通用期刊型 Phase 2+3 叙事</td>
+</tr>
+<tr>
+<td>证据台账</td>
+<td><code>evidence_ledger.csv</code></td>
+<td>claim→来源→治理状态→允许/禁止表述</td>
+</tr>
+<tr>
+<td>新颖性审查</td>
+<td><code>novelty_matrix.csv</code></td>
+<td>44 篇官方来源的差异、研究设计等级与来源适配度矩阵</td>
+</tr>
+<tr>
+<td>引用资产</td>
+<td><code>references.bib</code>、<code>literature_search_log.md</code></td>
+<td>39 个唯一 BibTeX 键；检索与纳排记录</td>
+</tr>
+<tr>
+<td>云端材料路由</td>
+<td><code>cloud_materials_ledger.md</code></td>
+<td><code>internal_audit_only</code>；4 份 2026-08-26 Google Docs 只作为设计建议，公开版移除私有链接</td>
+</tr>
+<tr>
+<td>方法证据</td>
+<td><code>method_code_mapping.md</code></td>
+<td>论文方法→代码/配置→证据状态</td>
+</tr>
+<tr>
+<td>图表</td>
+<td><code>figures/</code>、<code>figures_tables_plan.md</code></td>
+<td>1 张框架图、3 张量化待审图及后续计划</td>
+</tr>
+<tr>
+<td>复算</td>
+<td><code>reanalysis_data_index.md</code></td>
+<td>版本化 CSV、状态与可复算入口</td>
+</tr>
+<tr>
+<td>风险审查</td>
+<td><code>adversarial_review.md</code>、<code>editorial_ethics_review.md</code>、<code>reporting_checklist.md</code></td>
+<td>拒稿风险、独立编辑/伦理处置、报告规范缺口</td>
+</tr>
+<tr>
+<td>术语</td>
+<td><code>terminology_bilingual.csv</code></td>
+<td>31 组中英术语</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-w004">3. W004 治理接纳结果</h2>
+<ul>
+<li>W004 在 Experiment Registry 中仅一条，protocol revision=2。</li>
+<li>四臂共同绑定 <code>W004-STAGE2-A001-A004-GROUP-V001</code>，保留四个 <code>result_ids</code>。</li>
+<li><code>evidence_status=accepted</code>，但永久保留 <code>evidence_scope=COMPATIBILITY_ONLY</code>。</li>
+<li>A002−A001：pCR <code>+0.023182</code>；MPR <code>+0.003958</code>。</li>
+<li>A003−A004：pCR <code>+0.002955</code>；MPR <code>−0.000625</code>。</li>
+<li><code>raw_mpp2_claim=false</code>；不得宣称患者独立泛化、融合协同、临床效用或稳定空间增益。</li>
+<li>A001 保留历史导入；A002–A004 使用 2026-08-27 本次实际登记时间。</li>
+</ul>
+<p>最小 SHA-256 仅覆盖四个回传包、关键协议与事务状态，没有扩展为全仓哈希治理；原回传包未改写。</p>
+<h2 id="4">4. 探索性复算摘要</h2>
+<h3 id="phase-2">Phase 2</h3>
+<ul>
+<li>840 条 patient×pathway 明细，患者等权聚合为 240 条 pathway 主表。</li>
+<li>internal_val 为 6 位患者等权；外部病例 E1 为单外部病例。</li>
+<li>内部逐通路均值：RCC 的 PCC/CCC/raw R² 为 0.6504/0.6112/0.2058；CPGCR 为 0.6503/0.6103/0.1990，差异很小。</li>
+<li>外部病例 E1 四臂逐通路 PCC 为 0.5165–0.5194、CCC 为 0.3978–0.3993，raw R² 全为负。</li>
+<li>840 条 Moran’s I 可计算；热点是无置换检验的描述性象限计数。</li>
+</ul>
+<h3 id="phase-3">Phase 3</h3>
+<ul>
+<li>320 条 per-fit、16 条 pooled、4 条固定 AUC 差值、620 条 <code>case_id</code> 事后描述。</li>
+<li>pCR pooled test：ORD AUPRC/Brier 为 0.8236/0.1361；ABS 为 0.8132/0.1458。</li>
+<li>pooled 620 行来自重复 fit，不是 620 位患者；校准和 AUPRC/Brier 只作描述。</li>
+<li>W004 prediction CSV 无坐标列，Moran’s I/hotspot 为 <code>not_computable</code>；未重建受保护数据。</li>
+</ul>
+<p>全部新复算均为 <code>exploratory_reanalysis / pending_user_review</code>，没有写入 Registry。</p>
+<h2 id="5">5. 新颖性与来源</h2>
+<ul>
+<li>纳入 44 篇官方来源；32 篇发表于 2024–2026，43 篇同行评审，1 篇预印本已降级标注。</li>
+<li>PEaRL 已正式发表于 WACV 2026；HEtoSGEBench 对应 Nature Communications 2025 正式论文；DeepPathway 为 Bioinformatics 2026 accepted manuscript。</li>
+<li>可写创新点是“连续通路几何软目标 + 冻结锚点/零起点残差 + 匹配四臂 + 治理化负证据桥接”的组合，不是“首次通路对比学习”或 SOTA。</li>
+<li>Google Drive 2026-08-26 四份材料只用于指标与实验设计，不作为项目结果。</li>
+</ul>
+<p>关键官方来源：<a href="https://openaccess.thecvf.com/content/WACV2026/html/Majumder_PEaRL_Pathway-Enhanced_Representation_Learning_for_Gene_and_Pathway_Expression_Prediction_WACV_2026_paper.html">PEaRL（CVF）</a>、<a href="https://www.nature.com/articles/s41467-025-56618-y">H&amp;E→SGE benchmark（Nature Communications）</a>、<a href="https://www.bmj.com/content/385/bmj-2023-078378">TRIPOD+AI（BMJ）</a>、<a href="https://www.bmj.com/content/388/bmj-2024-082505">PROBAST+AI（BMJ）</a>。</p>
+<h2 id="6">6. 本地提交</h2>
+<table>
+<thead>
+<tr>
+<th>提交</th>
+<th>内容</th>
+<th>回退方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>605af63</code></td>
+<td>W004 接纳用户指令</td>
+<td>新增 revert 提交</td>
+</tr>
+<tr>
+<td><code>7104bfe</code></td>
+<td>recovery terminal 校验修复</td>
+<td>新增 revert 提交</td>
+</tr>
+<tr>
+<td><code>54958ea</code></td>
+<td>W004 <code>check/apply</code> 与 grouped result 接口</td>
+<td>新增 revert 提交</td>
+</tr>
+<tr>
+<td><code>9859a3c</code></td>
+<td>W004 四臂受限结果组正式接纳</td>
+<td>新增 revert 提交</td>
+</tr>
+<tr>
+<td><code>9e89ab6</code></td>
+<td>RER6 复算脚本与公式测试</td>
+<td>新增 revert 提交</td>
+</tr>
+<tr>
+<td><code>3d0cad7</code></td>
+<td>RER6 待审数据、报告与量化图</td>
+<td>新增 revert 提交</td>
+</tr>
+<tr>
+<td><code>5843043</code></td>
+<td>固定 W004 迁移前测试夹具，避免正式接纳后的基线漂移</td>
+<td>新增 revert 提交</td>
+</tr>
+</tbody>
+</table>
+<p>未使用 <code>reset</code>，未改写既有历史。</p>
+<h2 id="7">7. 验证结果</h2>
+<ul>
+<li>W004 迁移/幂等性最小测试：2/2 通过；覆盖原子 apply、重复 apply 幂等及 grouped result schema。</li>
+<li>指标公式测试：3/3 通过；包含“不等 spot 数时患者仍等权”的合成测试。另有 32 条 pandas 性能警告，不影响公式与结果正确性。</li>
+<li>RER6 输出：W007 8 张 prediction CSV、W004 320 张 prediction CSV；未读写 Registry。</li>
+<li>最终严格门禁、Git 范围审计与 <code>diff --check</code>：待论文包提交完成后记录。</li>
+</ul>
+<h2 id="8">8. 已知局限与必须后续完成的工作</h2>
+<ol>
+<li>W007 仅 seed=42；internal 6 位患者，外部病例 E1 仅 1 位患者。</li>
+<li>W004 是重复切片级留出，患者可能跨 train/test；<code>case_id</code> 聚合不是患者独立 OOF。</li>
+<li>W004 使用 legacy z-score compatibility 输入，未直接绑定 W007/CPGCR 输出。</li>
+<li>当前不能证明 CPGCR 性能最佳、raw MPP2、同源 H&amp;E 双分支融合协同、稳定空间增益或临床效用。</li>
+<li>伦理审批编号、知情同意/豁免、队列完整纳排标准、扫描设备与批次信息待作者填写；在补齐前不得投稿。</li>
+<li>证据升级需要多 seed W007、患者级 Phase 3 OOF、容量匹配负对照、多患者外部验证和校准。</li>
+</ol>
+<h2 id="9">9. 建议用户本轮重点审核</h2>
+<ul>
+<li>是否接受把主线固定为“方法候选 + 多指标可信度 + 受限桥接”，而非性能领先。</li>
+<li>是否接受把 W004 放入次要结果/补充材料，并始终标 <code>COMPATIBILITY_ONLY</code>。</li>
+<li>是否确认伦理、队列与扫描信息由作者后续补齐；当前文件不填入任何推测内容。</li>
+<li>是否批准下一轮制定患者独立 Phase 3 与多 seed W007 的部署方案。</li>
+</ul>
+</div>
+</body>
+</html>
