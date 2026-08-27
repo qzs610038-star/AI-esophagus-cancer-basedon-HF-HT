@@ -473,6 +473,22 @@ def test_policy_aware_training_result_accepts_every_declared_prediction_split(tm
     assert report["status"] == "success"
 
 
+def test_w004_recovery_result_bundle_validates_through_public_interface():
+    bundle = (
+        PROJECT_ROOT
+        / "automation"
+        / "returns"
+        / "W004"
+        / "A001"
+        / "R002-repack-R001"
+    )
+
+    report = validate_result_bundle_v1(PROJECT_ROOT, bundle)
+
+    assert report["status"] == "valid"
+    assert report["result_id"] == "W004-A001-R002-result-repack-v001"
+
+
 def test_raw_predictions_cannot_use_large_artifact_exemption(tmp_path):
     source = _historical_source_bundle(
         tmp_path / "source",

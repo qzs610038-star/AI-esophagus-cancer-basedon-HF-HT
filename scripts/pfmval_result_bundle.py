@@ -203,7 +203,10 @@ def _terminal_status(bundle_dir: Path, result: Mapping[str, Any]) -> str:
     if terminal_artifact is None:
         raise ValueError("result bundle requires an attempt terminal artifact")
     terminal = read_json(bundle_dir / Path(*PurePosixPath(terminal_artifact["path"]).parts))
-    if terminal.get("event_type") != "EXPERIMENT_TERMINAL":
+    if terminal.get("event_type") not in {
+        "EXPERIMENT_TERMINAL",
+        "EXPERIMENT_RECOVERY_TERMINAL",
+    }:
         raise ValueError("terminal artifact has invalid event_type")
     if (
         terminal.get("attempt_id") != result.get("attempt_id")
