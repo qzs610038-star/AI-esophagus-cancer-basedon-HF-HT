@@ -1,5 +1,5 @@
 import json
-import shutil
+import subprocess
 from pathlib import Path
 
 
@@ -7,6 +7,7 @@ from scripts.pfmval_w004_reconciliation import reconcile_w004
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PRE_APPLY_REF = "54958ea"
 MANIFEST = (
     PROJECT_ROOT
     / "project_state"
@@ -26,10 +27,15 @@ BASELINE_FILES = (
 def _copy_baseline(tmp_path: Path) -> Path:
     root = tmp_path / "target"
     for relative in BASELINE_FILES:
-        source = PROJECT_ROOT / relative
         target = root / relative
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, target)
+        content = subprocess.run(
+            ["git", "show", f"{PRE_APPLY_REF}:{relative}"],
+            cwd=PROJECT_ROOT,
+            check=True,
+            capture_output=True,
+        ).stdout
+        target.write_bytes(content)
     return root
 
 
