@@ -1,7 +1,7 @@
 # From H&E-Derived Spatial Pathway Representations to Treatment-Response Bridging: An Evidence-Constrained Two-Phase Computational Pathology Framework
 
 > Status: `pending_user_review`; general-journal IMRaD draft.
-> Accepted-evidence snapshot: local `main` commit `9859a3c`; exploratory reanalysis version: `3d0cad7`. The manuscript package itself remains pending commit and user review.
+> Accepted-evidence snapshot: local `main` commit `9859a3c`; exploratory reanalysis version: `3d0cad7`; manuscript-package baseline: `216083f`. The draft remains pending user review.
 > This is not a submission-ready manuscript. Authors, affiliations, ethics identifiers, full eligibility criteria, and journal-specific formatting remain to be supplied.
 
 ## Abstract

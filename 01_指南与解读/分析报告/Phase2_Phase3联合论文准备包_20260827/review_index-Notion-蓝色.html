@@ -172,6 +172,11 @@
 <td>固定 W004 迁移前测试夹具，避免正式接纳后的基线漂移</td>
 <td>新增 revert 提交</td>
 </tr>
+<tr>
+<td><code>216083f</code></td>
+<td>双语论文、证据/新颖性台账、图表与审核包基线</td>
+<td>新增 revert 提交</td>
+</tr>
 </tbody>
 </table>
 <p>未使用 <code>reset</code>，未改写既有历史。</p>
@@ -180,7 +185,9 @@
 <li>W004 迁移/幂等性最小测试：2/2 通过；覆盖原子 apply、重复 apply 幂等及 grouped result schema。</li>
 <li>指标公式测试：3/3 通过；包含“不等 spot 数时患者仍等权”的合成测试。另有 32 条 pandas 性能警告，不影响公式与结果正确性。</li>
 <li>RER6 输出：W007 8 张 prediction CSV、W004 320 张 prediction CSV；未读写 Registry。</li>
-<li>最终严格门禁、Git 范围审计与 <code>diff --check</code>：待论文包提交完成后记录。</li>
+<li>最终严格门禁：<code>PASS=13 / WARN=2 / FAIL=0</code>；WARN 为文档 Registry 落后一版、标准化标签重复/冲突，均属既知知识层警告。</li>
+<li>Git 范围审计：自执行前基线起共变更 64 个文件；W004 原回传包、<code>histogene/egnv1/egnv2</code>、团队进度文档、服务器路径/remote 配置变更均为 0。</li>
+<li><code>git diff --check</code> 与论文包 pre-commit 检查通过；未推送任何 remote。</li>
 </ul>
 <h2 id="8">8. 已知局限与必须后续完成的工作</h2>
 <ol>

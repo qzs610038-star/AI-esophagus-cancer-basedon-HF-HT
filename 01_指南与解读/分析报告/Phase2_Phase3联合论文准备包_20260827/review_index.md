@@ -78,6 +78,7 @@
 | `9e89ab6` | RER6 复算脚本与公式测试 | 新增 revert 提交 |
 | `3d0cad7` | RER6 待审数据、报告与量化图 | 新增 revert 提交 |
 | `5843043` | 固定 W004 迁移前测试夹具，避免正式接纳后的基线漂移 | 新增 revert 提交 |
+| `216083f` | 双语论文、证据/新颖性台账、图表与审核包基线 | 新增 revert 提交 |
 
 未使用 `reset`，未改写既有历史。
 
@@ -86,7 +87,9 @@
 - W004 迁移/幂等性最小测试：2/2 通过；覆盖原子 apply、重复 apply 幂等及 grouped result schema。
 - 指标公式测试：3/3 通过；包含“不等 spot 数时患者仍等权”的合成测试。另有 32 条 pandas 性能警告，不影响公式与结果正确性。
 - RER6 输出：W007 8 张 prediction CSV、W004 320 张 prediction CSV；未读写 Registry。
-- 最终严格门禁、Git 范围审计与 `diff --check`：待论文包提交完成后记录。
+- 最终严格门禁：`PASS=13 / WARN=2 / FAIL=0`；WARN 为文档 Registry 落后一版、标准化标签重复/冲突，均属既知知识层警告。
+- Git 范围审计：自执行前基线起共变更 64 个文件；W004 原回传包、`histogene/egnv1/egnv2`、团队进度文档、服务器路径/remote 配置变更均为 0。
+- `git diff --check` 与论文包 pre-commit 检查通过；未推送任何 remote。
 
 ## 8. 已知局限与必须后续完成的工作
 
