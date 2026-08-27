@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "migration_id": "W004-STAGE2-RECONCILIATION-V002-20260827",
+  "history_ref": "c4143e685a2ef32adab5bad598b33a652f2ce7fb",
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "workspace_id": "W004",
+  "protocol_revision": 2,
+  "approval_id": "APR-W004-phase3-stage2-v002-20260807",
+  "source_commit": "b898c9d80c2702a32a51773c9cfb8ca75312731a",
+  "confirmation_source": "explicit_user_confirmation:DIR-20260827-001",
+  "evidence_scope": "COMPATIBILITY_ONLY",
+  "critical_contract": {
+    "contract_path": "project_state/governance/phase3_stage2_v002_critical_contract_20260807.json",
+    "input_path": "project_state/governance/phase3_stage2_v002_critical_contract_input_20260807.json",
+    "canonical_sha256": "889ea8736fe94899719b571a1263bfd3d9e82a0938c1050f04f86707c99b893c"
+  },
+  "historical_sources": {
+    "experiment_registry": "experiments/experiment_registry.json",
+    "workspace_registry": "project_state/workspace_registry.json",
+    "approvals": "project_state/experiment_approvals.jsonl",
+    "attempt_events": "project_state/attempt_events.jsonl",
+    "result_import_events": "project_state/result_import_events.jsonl",
+    "scientific_records": "project_state/scientific_records.jsonl",
+    "scientific_record_ids": [
+      "W004-STAGE1-REF-YZQ-0804-42",
+      "W004-STAGE2-RETURN-RECONCILIATION-20260808"
+    ]
+  },
+  "bundles": [
+    {
+      "arm": "A001",
+      "role": "absolute_input",
+      "label": "absolute-value pathway input",
+      "bundle_path": "automation/returns/W004/A001/R002-repack-R001",
+      "history_job_path": "automation/jobs/W004-A001/job.json",
+      "result_id": "W004-A001-R002-result-repack-v001",
+      "job_id": "W004-A001",
+      "attempt_id": "A001",
+      "bundle_sha256": "6e1b1e3b1574a1cee840d3dff2e771793d4aad8c140c02deeaa41907bb22a447"
+    },
+    {
+      "arm": "A002",
+      "role": "ordinal_input",
+      "label": "within-slide ordinal pathway input",
+      "bundle_path": "automation/returns/W004/A002/R001-repack",
+      "history_job_path": "automation/jobs/W004-A002/job.json",
+      "result_id": "W004-A002-result-repack-R001",
+      "job_id": "W004-A002",
+      "attempt_id": "A002",
+      "bundle_sha256": "10db569c26b5226c8c8acdcd5942c062a7d7357773ca978278269ecac3ead60b"
+    },
+    {
+      "arm": "A003",
+      "role": "spatial_identity",
+      "label": "true-coordinate spatial smoothing",
+      "bundle_path": "automation/returns/W004/A003/R001-repack",
+      "history_job_path": "automation/jobs/W004-A003/job.json",
+      "result_id": "W004-A003-result-repack-R001",
+      "job_id": "W004-A003",
+      "attempt_id": "A003",
+      "bundle_sha256": "8f2887f60765905ce54b0d51312cfd07249f278d8cfb756b37844faaae3e2ce0"
+    },
+    {
+      "arm": "A004",
+      "role": "spatial_shuffle_control",
+      "label": "coordinate-shuffle spatial control",
+      "bundle_path": "automation/returns/W004/A004/R001-repack",
+      "history_job_path": "automation/jobs/W004-A004/job.json",
+      "result_id": "W004-A004-result-repack-R001",
+      "job_id": "W004-A004",
+      "attempt_id": "A004",
+      "bundle_sha256": "d68750884e5b541feeda4d57ec4956099b48d69606887355e56beb39fb591dc8"
+    }
+  ],
+  "result_group": {
+    "group_id": "W004-STAGE2-A001-A004-GROUP-V001",
+    "acceptance_event_id": "accept-W004-STAGE2-A001-A004-GROUP-V001",
+    "bundle_hash_profile": "result_bundle_v1_critical_artifacts_only",
+    "contrasts": [
+      {
+        "contrast": "A002-A001",
+        "task": "pCR",
+        "metric": "mean_per_fit_auc",
+        "control_value": 0.8386363636363636,
+        "treatment_value": 0.8618181818181818,
+        "delta": 0.02318181818181819,
+        "interpretation": "supports_further_patient_independent_validation"
+      },
+      {
+        "contrast": "A002-A001",
+        "task": "MPR",
+        "metric": "mean_per_fit_auc",
+        "control_value": 0.8716666666666667,
+        "treatment_value": 0.875625,
+        "delta": 0.003958333333333286,
+        "interpretation": "weak_evidence"
+      },
+      {
+        "contrast": "A003-A004",
+        "task": "pCR",
+        "metric": "mean_per_fit_auc",
+        "control_value": 0.8372727272727273,
+        "treatment_value": 0.8402272727272728,
+        "delta": 0.002954545454545493,
+        "interpretation": "no_stable_spatial_gain"
+      },
+      {
+        "contrast": "A003-A004",
+        "task": "MPR",
+        "metric": "mean_per_fit_auc",
+        "control_value": 0.8722916666666667,
+        "treatment_value": 0.8716666666666667,
+        "delta": -0.0006249999999999867,
+        "interpretation": "no_stable_spatial_gain"
+      }
+    ]
+  },
+  "decision": {
+    "schema_version": "science_decision_v1",
+    "decision_id": "W004-STAGE2-GROUPED-DECISION-20260827",
+    "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+    "result_binding": {
+      "kind": "grouped_result",
+      "result_id": "W004-STAGE2-A001-A004-GROUP-V001",
+      "acceptance_event_id": "accept-W004-STAGE2-A001-A004-GROUP-V001"
+    },
+    "user_confirmation_ref": "user:DIR-20260827-001",
+    "decision_summary": {
+      "primary_metric": "mean_per_fit_pCR_auc",
+      "control_value": 0.8386363636363636,
+      "treatment_value": 0.8618181818181818,
+      "delta": 0.02318181818181819,
+      "direction": "improvement",
+      "stop_rule": "require_patient_independent_validation_before_evidence_upgrade",
+      "uncertainty": "COMPATIBILITY_ONLY repeated slide-level holdout with patient overlap",
+      "open_questions": [
+        "patient-independent Phase 3 validation",
+        "same-protocol image-only and pathway-only controls",
+        "calibration in a sufficiently sized independent cohort"
+      ]
+    },
+    "claim": {
+      "statement": "A002 minus A001 improves mean per-fit pCR AUC by 0.023182 and supports further patient-independent validation; the MPR difference is weaker."
+    },
+    "negative_result": {
+      "route": "stable_spatial_gain_claim",
+      "outcome": "not_supported",
+      "stop_condition": "do not claim stable spatial gain from A003 versus A004",
+      "continue_condition": "open a new patient-independent protocol with prespecified spatial endpoints"
+    },
+    "explanation": {
+      "observation": "A002-A001 mean per-fit AUC is +0.023182 for pCR and +0.003958 for MPR; A003-A004 is +0.002955 for pCR and -0.000625 for MPR.",
+      "interpretation": "Ordinal input is a compatibility signal for follow-up, while the spatial comparison does not show a stable gain.",
+      "recommendation": "Treat the group only as a Phase 2-to-3 bridge and validate in patient-independent data.",
+      "unit": "AUC",
+      "statistic": "mean per-fit AUC difference",
+      "text_description": "Four-arm compatibility-only grouped decision."
+    }
+  },
+  "limitations": [
+    "legacy_zscore_compatibility_input",
+    "raw_mpp2_claim=false",
+    "slide_level_repeated_holdout_with_patient_overlap",
+    "no_patient_independent_generalization_claim",
+    "no_fusion_synergy_claim",
+    "no_clinical_utility_claim",
+    "no_stable_spatial_gain_claim",
+    "no_same_protocol_image_only_or_pathway_only_control"
+  ],
+  "receipt_path": "project_state/governance/w004_stage2_reconciliation_receipt_v002_20260827.json"
+}

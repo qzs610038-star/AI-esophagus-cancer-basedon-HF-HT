@@ -87,6 +87,7 @@ from scripts.pfmval_result_bundle import (  # noqa: E402
     validate_result_bundle_v1,
 )
 from scripts.pfmval_result_pair import finalize_result_pair  # noqa: E402
+from scripts.pfmval_w004_reconciliation import reconcile_w004  # noqa: E402
 from scripts.pfmval_execution_roundtrip import (  # noqa: E402
     build_execution_bundle_v1,
     execute_roundtrip_v1,
@@ -1315,6 +1316,37 @@ def command_attempt(args: argparse.Namespace) -> int:
 
 
 def command_governance(args: argparse.Namespace) -> int:
+    if args.governance_command == "w004-reconcile":
+        result = reconcile_w004(
+            PROJECT_ROOT,
+            Path(args.manifest).resolve(),
+            mode=args.mode,
+        )
+        if args.mode == "apply" and result["status"] == "applied":
+            views = refresh_experiment_views(PROJECT_ROOT)
+            with state_lock(PROJECT_ROOT):
+                state_path = PROJECT_ROOT / "project_state" / "current_state.json"
+                state = read_json(state_path)
+                accepted = list(state.get("latest_accepted_result_ids", []))
+                experiment_id = result["receipt"]["experiment_id"]
+                if experiment_id not in accepted:
+                    accepted.append(experiment_id)
+                state["latest_accepted_result_ids"] = accepted
+                result_ids = set(result["receipt"]["result_ids"])
+                state["pending_result_ids"] = [
+                    item
+                    for item in state.get("pending_result_ids", [])
+                    if item not in result_ids
+                ]
+                write_json_atomic(state_path, state)
+                state = sync_state(PROJECT_ROOT, force_revision=True)
+            result = {
+                **result,
+                "views": views,
+                "state_revision": state["state_revision"],
+            }
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
     if args.governance_command == "contract":
         payload = read_json(Path(args.input).resolve())
         contract = build_critical_contract(payload)
@@ -1960,6 +1992,13 @@ def build_parser() -> argparse.ArgumentParser:
     governance_contract = governance_sub.add_parser("contract")
     governance_contract.add_argument("--input", required=True)
     governance_contract.add_argument("--output", required=True)
+    governance_w004 = governance_sub.add_parser("w004-reconcile")
+    governance_w004.add_argument("--manifest", required=True)
+    governance_w004.add_argument(
+        "--mode",
+        choices=["check", "apply"],
+        required=True,
+    )
     governance_job = governance_sub.add_parser("job-v2")
     governance_job_sub = governance_job.add_subparsers(
         dest="job_v2_command",

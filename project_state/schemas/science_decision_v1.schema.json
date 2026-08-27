@@ -15,7 +15,7 @@
       "additionalProperties": false,
       "required": ["kind", "result_id", "acceptance_event_id"],
       "properties": {
-        "kind": {"enum": ["single_result", "paired_result"]},
+        "kind": {"enum": ["single_result", "paired_result", "grouped_result"]},
         "result_id": {"type": "string", "minLength": 1},
         "acceptance_event_id": {"type": "string", "minLength": 1}
       }

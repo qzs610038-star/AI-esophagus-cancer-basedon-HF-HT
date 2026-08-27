@@ -110,11 +110,17 @@ def _accepted_experiment(
         if isinstance(experiment, Mapping)
         else {}
     )
+    result_group = (
+        experiment.get("result_group", {})
+        if isinstance(experiment, Mapping)
+        else {}
+    )
     accepted_result_ids = {
         str(experiment.get("result_id", ""))
         if isinstance(experiment, Mapping)
         else "",
         str(paired_result.get("pair_id", "")),
+        str(result_group.get("group_id", "")),
         *(
             str(value)
             for value in (
@@ -326,10 +332,15 @@ def _validate_decision_binding(root: Path, decision: Mapping[str, Any]) -> None:
         result_id=str(binding["result_id"]),
     )
     pair_id = str((experiment.get("paired_result") or {}).get("pair_id", ""))
+    group_id = str((experiment.get("result_group") or {}).get("group_id", ""))
     if binding["kind"] == "paired_result" and binding["result_id"] != pair_id:
         raise ValueError("paired science decision must bind the accepted pair_id")
+    if binding["kind"] == "grouped_result" and binding["result_id"] != group_id:
+        raise ValueError("grouped science decision must bind the accepted group_id")
     if binding["kind"] == "single_result" and binding["result_id"] == pair_id:
         raise ValueError("single science decision cannot bind a paired result")
+    if binding["kind"] == "single_result" and binding["result_id"] == group_id:
+        raise ValueError("single science decision cannot bind a grouped result")
 
 
 def _decision_receipt(decision: Mapping[str, Any], projections: Iterable[Mapping[str, Any]]) -> dict[str, Any]:

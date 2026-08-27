@@ -407,6 +407,71 @@ def test_science_decision_v1_supports_accepted_paired_result_only(tmp_path):
     assert (root / "project_state" / "scientific_records.jsonl").read_bytes() == before_conflict
 
 
+def test_science_decision_v1_supports_accepted_grouped_result_only(tmp_path):
+    root = _root(tmp_path)
+    registry_path = root / "experiments" / "experiment_registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    registry["experiments"][0]["result_group"] = {
+        "group_id": "GROUP-exp-a",
+        "member_result_ids": ["res-a", "res-b", "res-c", "res-d"],
+    }
+    registry_path.write_text(
+        json.dumps(registry, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    package = {
+        "schema_version": "science_decision_v1",
+        "decision_id": "decision-grouped-1",
+        "created_at": "2026-08-27T08:00:00+00:00",
+        "experiment_id": "exp-a",
+        "result_binding": {
+            "kind": "grouped_result",
+            "result_id": "GROUP-exp-a",
+            "acceptance_event_id": "accept-GROUP-exp-a",
+        },
+        "user_confirmation_ref": "user:DIR-20260827-001",
+        "decision_summary": {
+            "primary_metric": "mean_per_fit_pCR_auc",
+            "control_value": 0.838636363636,
+            "treatment_value": 0.861818181818,
+            "delta": 0.023181818182,
+            "direction": "improvement",
+            "stop_rule": "require_patient_independent_validation",
+            "uncertainty": "compatibility-only repeated holdout",
+            "open_questions": ["patient-independent validation"],
+        },
+        "claim": {"statement": "Ordinal input supports further validation."},
+        "negative_result": {
+            "route": "stable spatial gain",
+            "outcome": "not supported",
+            "stop_condition": "do not claim stable spatial gain",
+            "continue_condition": "new patient-independent protocol",
+        },
+        "explanation": {
+            "observation": "The four arms have mixed, small deltas.",
+            "interpretation": "Compatibility evidence only.",
+            "recommendation": "Validate in independent patients.",
+            "unit": "AUC",
+            "statistic": "mean per-fit AUC",
+            "text_description": "grouped result decision",
+        },
+    }
+
+    assert record_science_decision(root, package)["status"] == "recorded"
+    with pytest.raises(ValueError, match="cannot bind a grouped result"):
+        record_science_decision(
+            root,
+            {
+                **package,
+                "decision_id": "decision-grouped-invalid",
+                "result_binding": {
+                    **package["result_binding"],
+                    "kind": "single_result",
+                },
+            },
+        )
+
+
 def test_p0c_local_cli_fixture_uses_only_repository_files(
     tmp_path,
     monkeypatch,
