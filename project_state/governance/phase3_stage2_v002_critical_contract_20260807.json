@@ -1,0 +1,212 @@
+{
+  "critical_code": [
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/run_stage2.py",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/server_preflight.py",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/io.py",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/transforms.py",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/models.py",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/engine.py",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/evaluation.py",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/contracts.py",
+    "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_stage2_training_config_v002_20260807.json"
+  ],
+  "data_manifest_id": "phase3_effective_cohort_v001_20260804",
+  "data_manifest_sha256": "53a55499f5a72f8ed1aa440eefdc8099e4f7825874b54ad78c015f933122df7b",
+  "evidence_boundary": {
+    "accepted_evidence_promotion": false,
+    "pathway_input_mode": "legacy_zscore_compatibility",
+    "raw_mpp2_claim": false,
+    "result_import": false,
+    "result_status_after_return": "pending_review",
+    "status": "COMPATIBILITY_ONLY"
+  },
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "external_eval_policy": {
+    "accepted_evidence_promotion": "not_authorized",
+    "external_XZY": "not_read",
+    "external_evaluation": "not_run",
+    "result_import": "not_authorized",
+    "server_access": "only_after_explicit_user_phrase_批准执行服务器训练"
+  },
+  "feature_flags": {
+    "accepted_evidence_promotion": false,
+    "compatibility_only": true,
+    "job_creation": true,
+    "raw_mpp2_claim": false,
+    "result_import": false,
+    "server_preflight_access": true,
+    "server_training_access": true
+  },
+  "input_artifacts": [
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_stage2_training_config_v002_20260807.json",
+      "role": "stage2_resolved_config",
+      "sha256": "60913834ed0a6884a5918617193523aaef76695e30ee1a353bf55a015dea02d8"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/legacy_zscore_compatibility_route_v001_20260805.json",
+      "role": "compatibility_route",
+      "sha256": "adaa5f37e67789fcdcd3c1fe9edd229053397fb152600c5d28494d73a30559cd"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/slide_seed_package_v001/package_manifest.json",
+      "role": "slide_seed_fold_manifest",
+      "sha256": "7477ec6d04702f927fd3c8f1efa3bbfcfa1d0a858a2374ae8e9c73a666ec14cc"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/seed_package_v001/effective_cohort.csv",
+      "role": "effective_cohort_manifest",
+      "sha256": "53a55499f5a72f8ed1aa440eefdc8099e4f7825874b54ad78c015f933122df7b"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/split_package_index_v001_20260804.json",
+      "role": "split_package_index",
+      "sha256": "2d4af2b08ebe9d106b6bc44f6513195639321f3238493da828d8bc1445f73b62"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/run_stage2.py",
+      "role": "stage2_training_entrypoint",
+      "sha256": "3276fca749f06209860977b6b12fc2ce2e2b92bae2c8ae4d7af08716cba9aff5"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/server_preflight.py",
+      "role": "server_preflight_entrypoint",
+      "sha256": "cdd3a4f45cda002f2e7168038b01153c2ae1639f975529df17c78f384f15c94a"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/io.py",
+      "role": "asset_loader",
+      "sha256": "491075a4955134762819cacdeb2701b404a509b955a393f595841639b20827b1"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/transforms.py",
+      "role": "stage2_transforms",
+      "sha256": "2632133c29f563677339498c9e1c2a1d7679320f41da030aa7edf4a89190618c"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/models.py",
+      "role": "stage2_model",
+      "sha256": "43efd7f7933f944453b2d16a56fdb7b0e6b8a56aec3d27b94a151a800b60eba8"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/engine.py",
+      "role": "fit_engine",
+      "sha256": "ca80cb82a5c2eebe06d691aea4f8ddc2c2e7fdb0d36f29c22b983c5ae9949a6e"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/evaluation.py",
+      "role": "evaluation_contract",
+      "sha256": "c739ee5205d93032278d9b7c2b4b6bc3f9a4d645b697906bace3be6dfb98e36a"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_pipeline/contracts.py",
+      "role": "phase3_prediction_contracts",
+      "sha256": "bf197f1caf1188927ffb3333bd7bce6fa1828b7eff815ad4445bc8229e107a09"
+    },
+    {
+      "path": "experiments/phase3_dual_baseline_spatial_pathway_transfer_v001_20260804/phase3_server_asset_manifest.schema.json",
+      "role": "server_asset_manifest_schema",
+      "sha256": "bc22e005c8ae6631cac53ff86214426193a1a0d2336dcffa436010dfe4b70139"
+    },
+    {
+      "path": "configs/server_paths.yaml",
+      "role": "registered_server_path_bindings",
+      "sha256": "45049b7f52b02c21fd9079773c8e1f0d30337aae3d0d0771b761f88d8371eb81"
+    }
+  ],
+  "loss_contract": {
+    "fit_scope": "train_only",
+    "objective": "binary_cross_entropy_with_logits",
+    "patient_weighting": true,
+    "validation_selection_metric": "validation_bce"
+  },
+  "phase": "formal",
+  "protocol_revision": 2,
+  "regularization_contract": {
+    "early_stopping": {
+      "metric": "validation_bce",
+      "patience": 5,
+      "restore_best": true
+    },
+    "implicit_retry": false,
+    "test_evaluation": "single_pass_after_checkpoint_freeze"
+  },
+  "resolved_hyperparameters": {
+    "cards": {
+      "S2-ABS-001": {
+        "spatial_k": null,
+        "spatial_lambda": 0.0,
+        "transform": "absolute_identity"
+      },
+      "S2-ORD-SLIDE-001": {
+        "spatial_k": null,
+        "spatial_lambda": 0.0,
+        "transform": "per_slide_pathway_percentile_rank"
+      },
+      "S2-SPATIAL-IDENTITY-001": {
+        "spatial_k": 5,
+        "spatial_lambda": 0.5,
+        "transform": "spatial_smoothing"
+      },
+      "S2-SPATIAL-SHUFFLE-001": {
+        "permutation": "deterministic_sha256_seeded_coordinate_permutation",
+        "spatial_k": 5,
+        "spatial_lambda": 0.5,
+        "transform": "coordinate_permutation_then_spatial_smoothing"
+      }
+    },
+    "checkpoint_selection": "minimum_validation_bce_restore_best_test_once",
+    "effective_slide_count": 307,
+    "endpoints": [
+      "pCR",
+      "MPR"
+    ],
+    "epochs": 20,
+    "excluded_bad_slide_count": 22,
+    "folds_per_seed": 5,
+    "learning_rate": 0.001,
+    "model": {
+      "class": "MILBagClassifier",
+      "fusion": "adaptive_gated",
+      "hidden_dim": 128,
+      "low_rank_dim": 16,
+      "name": "stage2_mil_adaptive_gated_attention",
+      "num_outputs": 1,
+      "pooling": "attention"
+    },
+    "pathology_dim": 1536,
+    "pathway_dim": 30,
+    "pathway_input_mode": "legacy_zscore_compatibility",
+    "patience": 5,
+    "patient_count": 78,
+    "patient_overlap_policy": "allow_with_warning",
+    "seeds": [
+      1,
+      2,
+      42,
+      61
+    ],
+    "source_slide_count": 329,
+    "split_design": "repeated_stratified_holdout_not_partition_oof",
+    "split_unit": "slide"
+  },
+  "run_limit": 160,
+  "selection_policy": {
+    "checkpoint": "minimum_validation_bce_per_fit",
+    "external_XZY": "not_read_and_not_used_for_selection",
+    "patient_overlap": "WARN_only_under_slide_repeated_holdout",
+    "same_seed_fold_delta_auc": "not_computable_without_same_seed_fold_single_modality_controls",
+    "test": "evaluate_once_after_checkpoint_freeze",
+    "yzq_reference": "reference_only/pending_review_no_absolute_auc_reuse"
+  },
+  "server_asset_manifest_binding": {
+    "content_sha256": "computed_and_returned_by_server_preflight",
+    "drift_rule": "stop_if_server_returned_sha_or_nested_asset_sha_drifts",
+    "local_live_hash_available": false,
+    "path": "D:\\AIPatho\\qzs\\phase3_w004_server_evidence_20260806\\server_asset_manifest_v001.json",
+    "path_id": "phase3_w004_server_asset_manifest"
+  },
+  "source_commit": "b898c9d80c2702a32a51773c9cfb8ca75312731a",
+  "workspace_id": "W004",
+  "canonical_sha256": "889ea8736fe94899719b571a1263bfd3d9e82a0938c1050f04f86707c99b893c"
+}

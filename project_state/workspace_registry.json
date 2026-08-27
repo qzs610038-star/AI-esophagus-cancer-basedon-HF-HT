@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-08-11T11:51:57+00:00",
+  "updated_at": "2026-08-27T15:29:11+00:00",
   "next_workspace_number": 8,
   "workspaces": [
     {
@@ -76,13 +76,13 @@
       "workspace_id": "W004",
       "display_name": "Phase 3 双线基线与跨队列空间通路迁移",
       "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
-      "protocol_revision": 1,
+      "protocol_revision": 2,
       "status": "shadow",
       "active_attempt_id": null,
       "lease": null,
       "opened_at": "2026-08-04T06:10:27+00:00",
-      "last_verified_at": null,
-      "close_eligibility": "blocked_pending_result_reconciliation_and_code_review",
+      "last_verified_at": "2026-08-27T15:29:11+00:00",
+      "close_eligibility": "blocked_pending_worktree_review",
       "retention_policy": "retain_until_explicit_close_approval",
       "hosts": {
         "local": {

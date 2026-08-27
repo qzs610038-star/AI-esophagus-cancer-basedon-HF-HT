@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "migration_id": "W004-STAGE2-RECONCILIATION-V002-20260827",
+  "status": "applied",
+  "recorded_at": "2026-08-27T15:29:11+00:00",
+  "experiment_id": "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+  "workspace_id": "W004",
+  "group_id": "W004-STAGE2-A001-A004-GROUP-V001",
+  "confirmation_source": "explicit_user_confirmation:DIR-20260827-001",
+  "evidence_scope": "COMPATIBILITY_ONLY",
+  "history_ref": "c4143e685a2ef32adab5bad598b33a652f2ce7fb",
+  "restored_counts": {
+    "approvals": 2,
+    "attempt_events": 15,
+    "historical_import_events": 1,
+    "historical_scientific_records": 2
+  },
+  "verification": {
+    "bundle_hash_profile": "result_bundle_v1_critical_artifacts_only",
+    "bundle_sha256": {
+      "A001": "6e1b1e3b1574a1cee840d3dff2e771793d4aad8c140c02deeaa41907bb22a447",
+      "A002": "10db569c26b5226c8c8acdcd5942c062a7d7357773ca978278269ecac3ead60b",
+      "A003": "8f2887f60765905ce54b0d51312cfd07249f278d8cfb756b37844faaae3e2ce0",
+      "A004": "d68750884e5b541feeda4d57ec4956099b48d69606887355e56beb39fb591dc8"
+    },
+    "critical_contract_sha256": "889ea8736fe94899719b571a1263bfd3d9e82a0938c1050f04f86707c99b893c",
+    "embedded_historical_job_matches": 4,
+    "dispatch_job_files_restored": false
+  },
+  "transaction_state": {
+    "registry_before_sha256": "f08cb96f7a02bf5eb3624bce5e71625da0c1b1b7da7d9dd8cdbfe0da3dff9fdb",
+    "registry_after_sha256": "a7cb2130d0b08a49a4cb0b0ac616e14e94b14981da240d87108278bbf886cdf5"
+  },
+  "result_ids": [
+    "W004-A001-R002-result-repack-v001",
+    "W004-A002-result-repack-R001",
+    "W004-A003-result-repack-R001",
+    "W004-A004-result-repack-R001"
+  ],
+  "limitations": [
+    "legacy_zscore_compatibility_input",
+    "raw_mpp2_claim=false",
+    "slide_level_repeated_holdout_with_patient_overlap",
+    "no_patient_independent_generalization_claim",
+    "no_fusion_synergy_claim",
+    "no_clinical_utility_claim",
+    "no_stable_spatial_gain_claim",
+    "no_same_protocol_image_only_or_pathway_only_control"
+  ]
+}

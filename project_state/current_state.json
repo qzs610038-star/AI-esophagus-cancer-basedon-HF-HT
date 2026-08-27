@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "state_revision": 246,
-  "updated_at": "2026-08-27T15:15:43+00:00",
-  "source_commit": "ba8d6c9c8aee35816d8e5166e090fe041346a76a",
+  "state_revision": 247,
+  "updated_at": "2026-08-27T15:29:11+00:00",
+  "source_commit": "54958eaeeb6cb971889dab521538878b0b920b0c",
   "active_directive_ids": [
     "DIR-20260710-001",
     "DIR-20260710-002",
@@ -215,7 +215,8 @@
     "mpp4_barcode_repair_v003_frozen_recheck_20260711",
     "mpp5_barcode_repair_v003_frozen_recheck_20260711",
     "mpp2_huber_loss_paired_v001_20260728",
-    "mpp2_cpgcr_probe_v001_20260811"
+    "mpp2_cpgcr_probe_v001_20260811",
+    "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804"
   ],
   "blocked_actions": [
     "direct_server_connection",
@@ -229,12 +230,12 @@
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
   "source_hashes": {
-    "experiment_registry_sha256": "a3248ee0e34c9ebde57f8959c4ad4f23c801df001fbc60caecf766eebdb0feb1",
-    "experiment_dashboard_sha256": "ff75b0df0093a7d5cba518b44372e930e8efa51dab3e2e9ce6ca55dc063b1daf",
-    "experiment_progress_sha256": "78adab3b4d7500466cb1078c8ee4c24385dd1f53ea6808d81ce93b8bbdb93dd5",
+    "experiment_registry_sha256": "7fb5065c3358bf8a2061068ff444711ff29476e796d47ffcf877f355f8e81f46",
+    "experiment_dashboard_sha256": "ab0ef682663a9ee78e223f2c8180dfefed3608dcf4925dfce871c0f7891a7493",
+    "experiment_progress_sha256": "ae878c15d47b046c8ce34a3e578612b354d9d1e60bf6a9e750f967fe0449a3b6",
     "document_registry_sha256": "0571549ad3846de63207eeff428db45f5fed62b90eee495e24240eea1f63137b",
     "asset_registry_sha256": "e30959ff4af1c99af4ddb1f8ffac5fdad84902da42c8baa84443e4ecb1a4501d",
-    "workspace_registry_sha256": "2b7da802da9cf0692e974c187430925a0674c0e107bf7771ddb3e0da1da059a5",
+    "workspace_registry_sha256": "0a2e7d10bf69843c78ed8aa3ce699a7ce45c76d95cfb900e20b7b3aaaa830b01",
     "workflow_catalog_sha256": "c7a176f5add5939c5399694647648b31cb7571355cdbe0b084dea80ae904de1e",
     "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
     "server_paths_sha256": "dc547227bfe9d99671f1b9567a0fb27a065bb8123c1a2bc6ef5238e83da2cd15",
