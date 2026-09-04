@@ -47,7 +47,7 @@ When applicable, bind the claim to:
 - attempt or protocol revision
 - approval record
 - result envelope and import status
-- critical input and output hashes
+- optional artifact identity evidence when explicitly requested
 
-Missing required identifiers are a `FAIL` for acceptance, even when the artifact
-looks plausible.
+Only identifiers required by the exact claim are mandatory. Missing historical
+workflow metadata is a `WARN` unless it makes that claim unverifiable.

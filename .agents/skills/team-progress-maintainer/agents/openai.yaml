@@ -1,7 +1,0 @@
-interface:
-  display_name: "团队项目进度维护"
-  short_description: "审核后维护五名成员项目进度、三类汇总索引、术语表及追加式修正记录"
-  default_prompt: "Use $team-progress-maintainer to maintain reviewed team progress without overwriting any existing content."
-policy:
-  allow_implicit_invocation: true
-
