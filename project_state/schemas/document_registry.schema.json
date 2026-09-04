@@ -11,7 +11,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["doc_id", "path", "category", "scope", "authority", "lifecycle", "availability", "verified_at", "state_revision", "content_sha256", "supersedes", "superseded_by", "truth_sources"],
+        "required": ["doc_id", "path", "category", "scope", "authority", "lifecycle", "availability", "verified_at", "state_revision", "supersedes", "superseded_by", "truth_sources"],
         "properties": {
           "authority": {"enum": ["normative", "derived", "reference"]},
           "lifecycle": {"enum": ["draft", "pending_review", "approved_design", "active", "superseded", "historical", "missing"]},
