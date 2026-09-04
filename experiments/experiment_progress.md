@@ -1,14 +1,17 @@
 # 实验进度
 
 > 此文件由 `experiments/experiment_registry.json` 自动生成，禁止手工维护。
-> source_sha256: `a7cb2130d0b08a49a4cb0b0ac616e14e94b14981da240d87108278bbf886cdf5`
-> state_revision: `N/A`；updated_at: `2026-08-27T15:29:11+00:00`
+> source_sha256: `8521fd2205040ebe7d42dccbf9137cc7bfab9ce1f08f516e20b3a5f6c58c5f04`
+> state_revision: `N/A`；updated_at: `2026-09-04T21:39:06+08:00`
 
 ## 当前与待处理
 
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | mpp2_online_cache_parity_v003_20260711 | mpp2_online_cache_parity_v003_20260711 | legacy-import-mpp2_online_cache_parity_v003_20260711 | — | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. | preflight | done | planned | 暂无 | 待审查 | prepare_paired_smoke | — |
+| Phase 2 基因预测后通路重建对照 | phase2_gene_reconstruction_comparison_v001_20260904 | — | — | Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed. | formal | planned | planned | 暂无 | 待审查 | define_input_contract_and_scoring_protocol_before_execution | — |
+| Phase 2 多病理模型公平比较 | phase2_pathology_model_benchmark_v001_20260904 | — | — | Historical model numbers are references only until rerun under the common protocol. | formal | planned | planned | 暂无 | 待审查 | confirm_model_shortlist_and_common_protocol_before_execution | — |
+| Phase 2 稀疏训练与稠密测试对照 | phase2_spatial_density_comparison_v001_20260904 | — | — | Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged. | formal | planned | planned | 暂无 | 待审查 | freeze_sampling_and_test_contract_before_execution | — |
 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | — | — | 2026-07-09 superseded: old 3-patient/JFX-affected spatial Token+LoRA gate is tuning reference only. Do not launch before MPP2 new-data LoRA baseline is established. | — | paused | pending | 暂无 | 待审查 | paused_mpp2_lora_first | — |
 
 ## 已接纳结果

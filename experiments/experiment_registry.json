@@ -1,13 +1,31 @@
 {
   "version": 1,
-  "updated_at": "2026-08-27T15:29:11+00:00",
+  "updated_at": "2026-09-04T21:39:06+08:00",
   "current_mpp_policy": {
-    "effective_date": "2026-08-16",
+    "effective_date": "2026-09-04",
     "selected_mpp": 2,
-    "decision": "MPP2 remains the only downstream follow-up scheme. Repaired-data MPP1/3/4/5 frozen rechecks are accepted comparison evidence, not independent training routes. MPP2 LoRA r=8 remains engineering_pass/candidate_effectiveness_fail/no_go_formal.",
-    "rationale": "The repaired MPP2 frozen baseline passed its safety guard; MPP1/3/4/5 rechecks were imported and accepted. Identical LoRA r=8 must not auto-launch (DIR-20260712-002). Latest accepted probe is mpp2_cpgcr_probe_v001_20260811; scientific conclusions await user review (DIR-20260815-001).",
-    "next_recommended_experiment": "Review the pending W007 deep-attribution analysis and interpretation reports; four-arm verification is accepted. Do not auto-launch MPP2 LoRA r=8 formal training.",
-    "reference_doc": "01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md"
+    "decision": "Use the accepted repaired MPP2 frozen baseline as the current quantitative anchor while preparing the assigned Phase 2 supplemental program. The final paper mainline between the seven-patient MPP2 route and the three-sample non-overlap route remains unresolved.",
+    "rationale": "The assigned work now focuses on finalizing the mainline, gene-mediated pathway reconstruction, sparse-train/dense-test evaluation, and a fair pathology-model benchmark. Existing LoRA and W007 results remain registered evidence but are no longer the current preparation priority.",
+    "next_recommended_experiment": "Resolve the paper mainline and input contracts, then complete protocols for the three newly planned Phase 2 experiments before execution. The six-fold leave-one-patient design remains deferred pending the team meeting decision.",
+    "reference_doc": "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md"
+  },
+  "phase2_supplemental_program": {
+    "status": "formal_preparation",
+    "updated_at": "2026-09-04T21:39:06+08:00",
+    "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+    "source_documents": [
+      "团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md",
+      "团队项目进度与结论/lzd/Phase2与Phase3工作计划原文_20260903.md",
+      "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md"
+    ],
+    "planned_experiment_ids": [
+      "phase2_gene_reconstruction_comparison_v001_20260904",
+      "phase2_spatial_density_comparison_v001_20260904",
+      "phase2_pathology_model_benchmark_v001_20260904"
+    ],
+    "deferred_designs": [
+      "six_fold_leave_one_patient_out_pending_team_decision"
+    ]
   },
   "three_patient_evidence_policy": {
     "effective_date": "2026-07-09",
@@ -1980,6 +1998,68 @@
         "no_same_protocol_image_only_or_pathway_only_control"
       ],
       "accepted_at": "2026-08-27T15:29:11+00:00"
+    },
+    {
+      "id": "phase2_gene_reconstruction_comparison_v001_20260904",
+      "display_name": "Phase 2 基因预测后通路重建对照",
+      "family": "phase2_supplemental",
+      "phase": "formal",
+      "status": "planned",
+      "evidence_status": "planned",
+      "priority": "P0",
+      "created_at": "2026-09-04T21:39:06+08:00",
+      "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "objective": "Compare direct H&E-to-pathway prediction with H&E-to-gene prediction followed by pathway reconstruction on the same held-out data.",
+      "missing_inputs": [
+        "gene_set_membership",
+        "spot_or_bin_gene_expression",
+        "gene_identifier_mapping",
+        "pathway_scoring_software_and_parameters",
+        "background_gene_universe"
+      ],
+      "next_action": "define_input_contract_and_scoring_protocol_before_execution",
+      "decision_gate": "Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed."
+    },
+    {
+      "id": "phase2_spatial_density_comparison_v001_20260904",
+      "display_name": "Phase 2 稀疏训练与稠密测试对照",
+      "family": "phase2_supplemental",
+      "phase": "formal",
+      "status": "planned",
+      "evidence_status": "planned",
+      "priority": "P0",
+      "created_at": "2026-09-04T21:39:06+08:00",
+      "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "objective": "Compare dense training, structured spatial sparsification, and sample-count-matched random subsampling on one unchanged dense held-out test set.",
+      "missing_inputs": [
+        "final_mainline_split",
+        "structured_sparse_sampling_rule",
+        "matched_random_control_rule",
+        "dense_held_out_test_definition"
+      ],
+      "excluded_current_design": "six_fold_leave_one_patient_out_pending_team_decision",
+      "next_action": "freeze_sampling_and_test_contract_before_execution",
+      "decision_gate": "Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged."
+    },
+    {
+      "id": "phase2_pathology_model_benchmark_v001_20260904",
+      "display_name": "Phase 2 多病理模型公平比较",
+      "family": "phase2_supplemental",
+      "phase": "formal",
+      "status": "planned",
+      "evidence_status": "planned",
+      "priority": "P0",
+      "created_at": "2026-09-04T21:39:06+08:00",
+      "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "objective": "Benchmark the confirmed pathology encoder shortlist under one dataset, split, target order, training budget, and metric definition.",
+      "missing_inputs": [
+        "final_model_shortlist",
+        "available_weights_and_runtime",
+        "common_feature_or_adapter_contract",
+        "final_mainline_split_and_metrics"
+      ],
+      "next_action": "confirm_model_shortlist_and_common_protocol_before_execution",
+      "decision_gate": "Historical model numbers are references only until rerun under the common protocol."
     }
   ]
 }
