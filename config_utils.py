@@ -113,7 +113,7 @@ def _read_yaml(filepath):
 
 
 def load_server_profile(project_root=None):
-    """读取并校验唯一的服务器机器配置。"""
+    """读取当前服务器机器配置。"""
     root = Path(project_root or get_project_root())
     profile_path = root / "configs" / "server_paths.yaml"
     profile = _read_yaml(profile_path)
@@ -130,12 +130,12 @@ def load_server_profile(project_root=None):
         raise ValueError("runtime.forbid_path_lookup 必须为 true")
 
     transport = profile.get("transport") or {}
-    if transport.get("mode") != "gitee_only" or transport.get("remote") != "gitee":
-        raise ValueError("transport 必须固定为 gitee_only / gitee")
-    if transport.get("fetch_exact_commit_only") is not True:
-        raise ValueError("transport.fetch_exact_commit_only 必须为 true")
-    if transport.get("force_push_allowed") is not False:
-        raise ValueError("transport.force_push_allowed 必须为 false")
+    current_channel = transport.get("current_channel") or transport.get("remote")
+    active_channels = transport.get("active_channels", [current_channel] if current_channel else [])
+    if not current_channel:
+        raise ValueError("transport.current_channel 必须记录当前同步通道")
+    if current_channel not in active_channels:
+        raise ValueError("transport.current_channel 必须包含在 active_channels 中")
     return profile
 
 

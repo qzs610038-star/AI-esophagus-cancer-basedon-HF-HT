@@ -764,9 +764,9 @@ def command_agent(args: argparse.Namespace) -> int:
     )
     report.emit()
     if not report.ok:
-        print("[BLOCKED] Resolve critical state conflicts before continuing.")
+        print("[FAIL] Diagnostics found structural or core-constraint errors in the checked scope.")
         return 1
-    print("[PASS] Agent start gate passed. Read CURRENT_STATE.md before acting.")
+    print("[PASS] Optional project diagnostics completed without blocking errors.")
     return 0
 
 

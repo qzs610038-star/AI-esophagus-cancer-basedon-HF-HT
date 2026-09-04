@@ -1,74 +1,38 @@
 # AGENTS.md
 
-本文件只维护跨 agent 的固定安全边界和事实源读取顺序。可变项目状态不得复制到本文件。
+本文件只维护项目最核心的长期边界。历史方案、工具惯例和可变项目状态不是强制规则；需要时按任务范围读取相关事实源。除下列核心约束外，项目内既有流程、Registry、工作树、预检、哈希和同步约定均为建议或警告，不得自行阻断用户已明确授权的工作。
 
-## 必读顺序
+## 核心约束
 
-1. 从机器事实源 `project_state/current_state.json` 只读取当前任务所需字段；`CURRENT_STATE.md` 仅为人工查看的派生视图，不默认读取，缺失或过期不得单独阻断实验。
-2. 涉及实验状态、性能或下一步决策时，只读取 `experiments/experiment_registry.json` 中相关 experiment/result；`experiments/experiment_dashboard.md` 仅为派生视图。
-3. 涉及服务器训练、缓存、路径或同步时，只读取 `configs/server_paths.yaml` 中相关配置。其 `md_import` 类条目未经服务器现场核验：引用时必须标明来源并提请审查，核验前不得作为训练、派发、路径决策或结果处理的执行依据。未引用的相对路径缺失是知识层 WARN，不是实验结果 HARD。
-4. 只筛选 `project_state/document_registry.json` 中与当前任务相关且 `lifecycle=active` 的记录作为材料路由；不得整表载入，其他生命周期不得作为当前结论。文档 Registry 不是实验结果真实性证据；它与 `active_plans` / Skill / pending plan reviews 的对齐失配不得单独阻断训练或只读审计。
-5. 涉及方案、完成声明、实验结果或 GO/NO-GO 独立校验时，读取 `.agents/skills/pfmval-audit/SKILL.md`；`.agents/skills/` 是项目 Skill 权威源，其他 Agent 工具的路由或适配文件不得复制、覆盖权威规则，且不削弱高危动作门禁。
-6. 涉及 `团队项目进度与结论/` 时读取 `.agents/skills/team-progress-maintainer/SKILL.md`；涉及 `qzs/` 稳定实验结论时，同时读取 `.agents/skills/qzs-stable-conclusion-writer/SKILL.md`。
+1. **用户授权与作用域**：只执行用户指令范围内的操作。训练、外部系统写入、发布以及明显扩大任务范围的操作需要用户明确指令。`团队项目进度与结论/` 根据用户指令修改，智能体不自主修改。
+2. **非破坏性操作**：不得自主删除、覆盖或不可逆迁移原始数据、实验结果、checkpoint、缓存和用户文件。确需执行时，先核对精确目标并取得用户明确指令。
+3. **科研有效性**：避免患者、切片和数据集泄漏；监督学习预处理与模型选择只能使用训练集或内部验证集，不得使用外部测试集拟合参数、选择 checkpoint 或调参。其他性能阈值和实验路线门控只作为警告，由用户决定是否继续。
+4. **事实与结论诚实**：不得虚构运行、结果或批准；明确区分计划、探索结果、待审结果和已确认结果。文件存在、代码实现或测试通过不自动等同于实验结论成立。
 
-训练、修改服务器路径、写 Registry 或 current state 前，仍必须运行 `--strict`，且证据链/治理 HARD 必须 FAIL=0：
+## 任务相关事实源与建议阅读
 
-```powershell
-python deploy/pfmval_ops.py agent start-check --strict
-```
+只读取当前任务涉及的文件和字段，不要求每次会话全量加载。
 
-只读实验审计（含方案/结果 GO-NO-GO 独立校验）：仍运行 `--strict` 并记录新鲜输出。知识层 WARN 不阻断出具判定，包括但不限于：`CURRENT_STATE.md` 缺失或过期、文档 Registry 哈希/修订落后、normative 文档 content SHA、方案/Skill 与文档 Registry 对齐、workflow catalog 与历史 approval/event jsonl 结构、未引用相对服务器路径缺失、非当前 checkout 的其它 W### 身份漂移。下列 HARD FAIL 仍阻断：experiment Registry、Gitee-only、正式批准、`source_commit`、结果导入/inbox、受保护资产、当前 checkout 工作树身份、未完成状态事务或锁。
+| 涉及事项 | 建议优先读取 | 说明 |
+|---|---|---|
+| 项目当前状态、进行中事项和待处理事项 | `project_state/current_state.json` | 当前状态机器源；`CURRENT_STATE.md`、`PROJECT_GUIDE.md` 仅作人工概览 |
+| 已登记实验及正式结果 | `experiments/experiment_registry.json` | 实验与结果主要事实源，只读取相关 experiment/result |
+| 实验进度和结果汇总 | `experiments/experiment_progress.md`、`experiments/experiment_dashboard.md` | 派生视图，便于浏览，不覆盖 Registry |
+| 用户历史决定和规则变更 | `project_state/directives.jsonl` | 仅在需要追溯批准、暂缓或取代关系时读取 |
+| 服务器路径和当前同步方式 | `configs/server_paths.yaml` | 仅在服务器、路径或同步任务中读取 |
+| 论文、方案和其他项目材料 | `project_state/document_registry.json` | 用于定位与任务相关且当前有效的文档 |
 
-只读服务器故障排查可使用：
+## 实验结果登记与阅读
 
-```powershell
-python deploy/pfmval_ops.py agent start-check --task diagnostic
-```
+推荐流程：保留原始运行输出和必要指标；按 `project_state/schemas/result_envelope.schema.json` 或 `result_envelope_v2.schema.json` 形成结果描述；将待登记结果放入 `project_state/inbox/`；使用 `python deploy/pfmval_ops.py result import ...` 导入；导入后以 `experiments/experiment_registry.json` 为准，并按需更新派生视图。
 
-该例外只适用于 allowlisted、非证据性诊断；不得训练、写 Registry/current state、写受保护资产或使用任意 shell。需要回传时先创建 `diagnostic request`，仍只经 Gitee 同步。
+- 未登记结果可以分析，但必须标为探索结果或待登记结果；只有 Registry 中明确标为 `accepted` 的结果才能称为已确认结果。
+- 涉及性能、实验状态或下一步决策时，先核对 Registry 中对应记录；Dashboard、报告、聊天摘要和文件名不能单独证明实验已完成或已接受。
+- 原始结果与 Registry 不一致时应报告差异，不得静默覆盖。登记流程用于维护事实边界，不把固定格式、哈希、W### 或同步通道重新设为通用硬门禁。
 
-## 固定安全边界
+## 当前工具与配置
 
-- 依据 `DIR-20260809-002`，`histogene/`、`egnv1/`、`egnv2/` 已解除特殊保护并转为 MPP1-5 前历史代码迁移候选；不得再作为活跃实验代码继续修改。实际迁移、取消 Git 跟踪或删除仍须用户审核精确清单后另行执行。
-- 禁止 `git clean -fd`；不得自动删除 checkpoints、MPP 数据、缓存或未跟踪训练结果。
-- 服务器与本地当前只允许通过已配置的 Gitee Git remote 同步代码、状态和小型结果；SSH、SCP、HTTP 远程命令、Tunnel 均不是 active 通道。
-- GitHub `origin` 仅是用户逐次明确触发的备份与网页端只读镜像：Agent 不得自动推送、周期同步或将其用作服务器代码、状态、诊断、作业或结果传输通道；该用途不改变 Gitee 作为日常服务器同步唯一通道的规则。
-- 正式训练必须存在绑定 `job_id` 与 `source_commit` 的显式用户批准文件。
-- `diagnostic` 只能使用 allowlisted command id 并记录 source commit、分支、时间和输出校验值；它不是 experiment/job/result import 的替代通道。
-- 本地 `explore` 只允许位于 `scripts/explorations/` 与 `experiments/explorations/`，不得访问服务器、训练数据或生成可比较实验结论。
-- MPP 原始 ssGSEA、标准划分、z-score 参数、manifest 和 group 3/5 embargo 审计为受保护资产；重新生成必须另开任务并比较输入、参数和校验值。
-- 监督学习预处理必须在训练集上拟合，再应用到验证集和外部测试集；不得用 external XZY 拟合 z-score 或选择 checkpoint。
-- `CLAUDE.md`、`.claude/`、`.cursor/rules/` 等本地适配文件只能补充工具特定说明，不得覆盖受跟踪状态包。
-
-## 对话与实验工作树绑定
-
-- 每个实验工作树使用永久、不复用的 `W###` 编号；可附短名帮助记忆，但权威身份始终是编号。
-- 新对话开始实验代码写入前，用户需指定 `本对话工作树：W###`。Agent 必须核对其 experiment、路径、branch、HEAD 和 dirty 状态并回执；未绑定时只允许只读定位，不得默认写 `main`。
-- 本地诊断/探索例外：若任务不涉及服务器对接或同步、模型训练、正式实验调度、结果 import/accept，也不改写受保护资产，可无需指定 `W###`，直接在本地 `main` 开展。开始任何实验代码写入或结果性运行前，必须先将当前非忽略工作区完整提交到本地 Git；该基线提交不得自动推送到任何 remote。此例外不改变服务器实验、训练、证据晋级和 Gitee 往返门禁。
-- 绑定后，本对话后续修改、测试、提交和 job 生成均默认限于该工作树。切换工作树必须由用户显式指定并重新核验，不得使用全局“当前工作树”文件代替逐对话绑定。
-- 一个 experiment 在服务器只对应一个持久工作树；protocol revision、job 和 attempt 不新建工作树。attempt 输出必须写到注册的工作树外运行目录。
-- 服务器与本地代码默认由本地单写者维护；服务器简单兼容适配通过 Gitee 返回 patch/记录，由本地工作树接纳后再下发新 commit，禁止两端同时修改同一代码分支。
-- 编号、次数预算、传输、lease 和关闭规范见 `project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md`。该规范在相应 CLI/schema 完成前不得被解读为已具备自动执行能力。
-
-### 新实验部署方案与实施方案双阶段门
-
-- 新实验的部署方案讨论稿只能创建或更新在 `01_指南与解读/部署方案/`；不得把新的实验部署讨论稿写入历史 Agent 自建的 `project_state/plans/` 或其他旧 plan 目录。历史方案保持原位、只读引用，不因本规则迁移或改写。
-- 只有在用户明确批准最终部署方案、并确认准备绑定实验时，Agent 才能依据该定版部署方案创建一份实施方案文件，命名为 `W###-<工作树名>_实施方案.md`。
-- 实施方案文件统一放在项目智能体管理的 `project_state/implementation_plans/`；该文件必须记录来源部署方案路径与 revision、目标 experiment、拟绑定 W###、代码/配置目录、修改前配置清单、分步任务、验证命令、证据路径和进度状态。
-- 实施方案创建后必须再次经过用户审核和明确批准。批准前不得绑定或创建 W### 工作树，不得在工作树中建立本次改动目录，不得写入实验代码或执行配置。
-- 实施方案获批后，Agent 才能按文件绑定/创建对应 W### 工作树，并先建立本次改动代码目录和修改前配置，再等待用户显式切换到该工作树后进行代码编辑。
-- 代码编辑完成每个实施方案条目后，必须立即追加更新同一实施方案的进度，将该条目标记为 `completed_pending_user_review`，并记录 commit、测试和文件证据；不得只在对话中口头报告完成。
-
-## 状态更新规则
-
-- 用户明确改变方案、优先级、路径、训练协议或安全边界时，通过 `state record-directive` 追加规范化指令。
-- 指令状态仅可显式 append-only 转为 `completed`、`superseded` 或 `cancelled`；生命周期检查只提供人工复核候选，不得自动关闭指令。
-- 新训练先登记 experiment id；服务器结果先进入 inbox，经 `result import` 验证后才可成为 accepted 证据。
-- `CURRENT_STATE.md`、Dashboard、next-steps 和 session-brief 均为生成文件，禁止手工维护事实。
-
-## 团队进度维护固定边界
-
-- `团队项目进度与结论/` 内的正式维护内容必须先经过用户显式审核与批准；未批准内容只能作为对话中的待审概要，不得提前写入。
-- 禁止覆写、删除、替换、重排或移动维护文档内任何既有内容。新增进展必须追加为带日期的新内容。
-- 后期需要修正既有表述时，必须保留原文，只能在需修正位置紧邻追加独立的“补充说明（YYYY-MM-DD，已获用户审核）”块，写明新证据、修正理解和适用边界。
-- 写入前后必须使用对应 Skill 的 append-only 校验脚本比较修改前快照和修改后文件；出现旧内容删除或改写时不得交付。
+- `project_state/current_state.json`、实验 Registry、文档 Registry、W### 工作树和 `start-check` 是可选的组织、检索与诊断工具，不是通用前置门禁。结构损坏或未完成写事务可阻止继续写入，其余不一致原则上报告为 `WARN`。
+- 同步方式按当前配置和用户指令选择。当前已配置的可用通道是 Gitee；未来可增加用户手动压缩包、SSH 或其他通道，不设永久唯一通道。
+- 哈希只在用户要求核验特定关键实验产物，或具体格式无法取消该字段时作为可选完整性证据；不得把同步、普通文档、导航视图或一般维护哈希作为硬门禁。
+- 具体服务器路径、实验状态和论文材料仅在任务相关时读取；派生视图、历史记录和旧方案不得覆盖用户当前指令或实际证据。

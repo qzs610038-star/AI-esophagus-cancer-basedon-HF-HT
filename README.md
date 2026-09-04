@@ -3,10 +3,10 @@
 <!-- project-state:start -->
 ## 当前项目状态（自动生成）
 
-- 状态版本：`247`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
+- 状态版本：`255`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
 - 用户导航：[PROJECT_GUIDE.md](PROJECT_GUIDE.md)；简洁实验进度：[experiments/experiment_progress.md](experiments/experiment_progress.md)。
 - 当前 MPP 主线：**MPP2**；其它统一重跑结果保留为背景/方法参考。
-- 服务器通信：**Gitee-only**；SSH、SCP、HTTP 远程命令和 Tunnel 均非 active 通道。
+- 服务器通信：当前通道为 **gitee**；后续可按用户指令扩展。
 - 实验事实源：`experiments/experiment_registry.json`；Dashboard 为派生视图。
 
 <!-- project-state:end -->

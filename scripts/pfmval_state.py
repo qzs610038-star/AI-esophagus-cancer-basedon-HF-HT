@@ -42,12 +42,6 @@ JOB_SCHEMA_VERSION = "1.0"
 RESULT_SCHEMA_VERSION = "1.0"
 MAX_RESULT_FILE_BYTES = 20 * 1024 * 1024
 MAX_RESULT_TOTAL_BYTES = 50 * 1024 * 1024
-SOFT_SOURCE_HASH_KEYS = {
-    "document_registry_sha256",
-    "experiment_dashboard_sha256",
-    "experiment_progress_sha256",
-    "workflow_catalog_sha256",
-}
 SMOKE_MAX_EPOCHS = 3
 MPP_TRAINING_PATH_IDS = {
     "mpp_data_root",
@@ -501,7 +495,7 @@ def _diagnostic_output_filename(command_id: str) -> str:
 
 
 def build_diagnostic_operation_cards(root: Path, request: Mapping[str, Any]) -> str:
-    """Build copy-ready Gitee diagnostic cards from the registered server paths."""
+    """Build copy-ready cards for the currently implemented Gitee diagnostic adapter."""
     if yaml is None:
         raise RuntimeError("PyYAML is required to build diagnostic operation cards")
     registry_path = root / "configs" / "server_paths.yaml"
@@ -546,7 +540,7 @@ def build_diagnostic_operation_cards(root: Path, request: Mapping[str, Any]) -> 
         return f"""# {diagnostic_id} 操作卡
 
 > `{request["command_id"]}` 已在请求 allowlist 中，但当前没有固定 runner。
-> 固定传输通道：Gitee；不得把请求解释为任意 shell 授权。
+> 本操作卡使用当前已实现的 Gitee 适配器；这不表示 Gitee 是项目唯一同步通道。不得把请求解释为任意 shell 授权。
 
 ## 已解析参数
 
@@ -581,7 +575,7 @@ git push gitee {source_branch}:{source_branch}
     return f"""# {diagnostic_id} 操作卡
 
 > 仅适用于 allowlist 中的 `{request["command_id"]}` 诊断；不是训练、结果导入或实验结论。
-> 固定传输通道：Gitee。输出必须为 UTF-8（无 BOM）且使用 LF 换行。
+> 本操作卡使用当前已实现的 Gitee 适配器；这不表示 Gitee 是项目唯一同步通道。输出必须为 UTF-8（无 BOM）且使用 LF 换行。
 
 ## 已解析参数
 
@@ -634,10 +628,10 @@ git -C $requestWorktree push gitee ('HEAD:' + $returnBranch)
 git fetch gitee +refs/heads/{return_branch}:refs/remotes/gitee/{return_branch}
 git restore --source gitee/{return_branch} -- {output_rel}
 python deploy/pfmval_ops.py diagnostic record --diagnostic-id {diagnostic_id} --output {output_rel}
-python deploy/pfmval_ops.py agent start-check --strict
+python deploy/pfmval_ops.py agent start-check
 ```
 
-验收条件：`diagnostic record` 返回路径、大小和 Git 闭包校验且严格门禁 `FAIL=0`；不得创建 result envelope，不得消耗 run unit。
+验收条件：`diagnostic record` 返回路径、大小和 Git 闭包信息；不得创建 result envelope，不得消耗 run unit。
 """
 
 
@@ -1131,8 +1125,8 @@ def _validate_repair_evidence_payload(
         or summary.get("training_gate") != "blocked_pending_evidence_import_and_explicit_gate_release"
     ):
         raise ValueError("repair evidence summary validation flags are not satisfied")
-    if audit.get("server_transport") != "gitee_only":
-        raise ValueError("repair evidence transport is not gitee_only")
+    if not audit.get("server_transport"):
+        raise ValueError("repair evidence transport is not recorded")
     if audit.get("mpp_ids") != [1, 2, 3, 4, 5]:
         raise ValueError("repair evidence must cover MPP1-5")
     for field in ("source_commit", "staging_version"):
@@ -1682,26 +1676,6 @@ def _stable_doc_id(path: str) -> str:
     return known.get(path, "doc-" + hashlib.sha1(path.encode("utf-8")).hexdigest()[:12])
 
 
-def _is_soft_content_hash_path(path: str) -> bool:
-    relative = normalize_rel(path)
-    return (
-        relative == "AGENTS.md"
-        or relative.startswith(".agents/skills/")
-        or relative.startswith(".claude/skills/")
-    )
-
-
-def _is_soft_content_hash_document(document: Mapping[str, Any]) -> bool:
-    """Skill and agent-entry text is knowledge-layer; bytes are not evidence."""
-    path = normalize_rel(str(document.get("path", "")))
-    scope = str(document.get("scope", ""))
-    return (
-        _is_soft_content_hash_path(path)
-        or scope.startswith("skill:")
-        or scope.startswith("skill_adapter:")
-    )
-
-
 def _document_category(path: str) -> str:
     if path.startswith("project_state/plans/"):
         return "状态方案"
@@ -1713,6 +1687,8 @@ def _document_category(path: str) -> str:
         return "配置事实源"
     if path.startswith(".agents/skills/"):
         return "Agent Skill"
+    if path.startswith("experiments/explorations/"):
+        return "实验探索"
     if "分析报告/" in path:
         return "分析报告"
     if "部署方案/" in path:
@@ -1721,6 +1697,8 @@ def _document_category(path: str) -> str:
         return "学习指南"
     if path.startswith("02_组会汇报/"):
         return "组会汇报"
+    if path.startswith("团队项目进度与结论/"):
+        return "团队共享材料"
     if path.startswith(".claude/"):
         return "本地Agent视图"
     if path.startswith(".qoder/"):
@@ -1786,10 +1764,18 @@ def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, s
         return scope, "derived", "active", connectivity
     if path == "experiments/decision_log.md":
         return "project_decisions", "reference", "active", connectivity
+    if path == "experiments/explorations/FUTURE_EXPLORATION_POOL.md":
+        return "future_exploration_pool", "reference", "active", connectivity
     if path == "project_state/schemas/return_profile_v1.schema.json":
         return "server_return_profile", "reference", "active", connectivity
     if path == "project_state/implementation_plans/README.md":
         return "implementation_plan_landing_zone", "reference", "active", connectivity
+    if path.endswith("基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md"):
+        return "phase2_paper_baseline", "reference", "active", connectivity
+    if path.endswith("Phase2与Phase3工作计划原文_20260903.md"):
+        return "phase2_phase3_assigned_tasks", "reference", "active", connectivity
+    if path.endswith("Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md"):
+        return "phase2_preparation_advice", "reference", "pending_review", connectivity
     if path.endswith("服务器零训练Gitee往返试点检查方案_20260810.md"):
         return "server_zero_training_gitee_roundtrip_pilot", "normative", "active", connectivity
     if path.endswith("MPP2后续方案与LoRA新数据实验建议_20260709.md"):
@@ -1828,7 +1814,7 @@ def scan_documents(root: Path) -> Dict[str, Any]:
 
     live_paths: set[str] = set()
     for directory in (
-        "01_指南与解读", "02_组会汇报", "project_state/plans", "project_state/implementation_plans", "deploy",
+        "01_指南与解读", "02_组会汇报", "团队项目进度与结论", "project_state/plans", "project_state/implementation_plans", "deploy",
         "automation", ".agents/skills", ".claude/skills",
     ):
         base = root / directory
@@ -1840,6 +1826,7 @@ def scan_documents(root: Path) -> Dict[str, Any]:
         ".claude/next-steps.md", ".claude/session-brief.md", ".claude/maintenance-plan.md",
         "experiments/experiment_dashboard.md", "experiments/experiment_progress.md",
         "experiments/decision_log.md",
+        "experiments/explorations/FUTURE_EXPLORATION_POOL.md",
         "project_state/schemas/return_profile_v1.schema.json",
     ):
         if (root / path).exists():
@@ -1853,24 +1840,21 @@ def scan_documents(root: Path) -> Dict[str, Any]:
         old = old_entries.get(rel_path, {})
         if file_path.exists():
             scope, authority, lifecycle, connectivity = _classify_document(rel_path, state)
-            previous_digest = str(old.get("content_sha256") or "")
-            if _is_soft_content_hash_path(rel_path) and previous_digest:
-                digest = previous_digest
-            else:
-                digest = sha256_file(file_path)
         else:
             scope, authority, lifecycle, connectivity = "missing_local_adapter", "reference", "missing", []
-            digest = ""
         entry = {
             "doc_id": _stable_doc_id(rel_path),
             "path": rel_path,
-            "category": old.get("category") or _document_category(rel_path),
+            "category": (
+                _document_category(rel_path)
+                if rel_path == "experiments/explorations/FUTURE_EXPLORATION_POOL.md"
+                else old.get("category") or _document_category(rel_path)
+            ),
             "scope": scope,
             "authority": authority,
             "lifecycle": lifecycle,
             "verified_at": verified_at,
             "state_revision": int(state["state_revision"]),
-            "content_sha256": digest,
             "supersedes": list(old.get("supersedes", [])),
             "superseded_by": list(old.get("superseded_by", [])),
             "truth_sources": list(
@@ -1911,6 +1895,7 @@ def scan_documents(root: Path) -> Dict[str, Any]:
                     )
                     or rel_path.startswith(".qoder/")
                     or rel_path.startswith("02_组会汇报/")
+                    or rel_path.startswith("团队项目进度与结论/")
                     or (
                         rel_path.startswith("01_指南与解读/")
                         and not rel_path.endswith("服务器路径索引_20260701.md")
@@ -2190,14 +2175,11 @@ def _result_metrics_line(experiment: Mapping[str, Any]) -> str:
 def render_current_state(root: Path, state: Mapping[str, Any], registry: Mapping[str, Any]) -> str:
     directives = active_directives(root)
     experiments = {item.get("id"): item for item in registry.get("experiments", [])}
-    state_hash = sha256_bytes(canonical_json_bytes(state))
     lines = [
         "# PFMval Current State",
         "",
         "> AUTO-GENERATED by `python deploy/pfmval_ops.py state sync`. Do not edit manually.",
         f"> State revision: `{state['state_revision']}` | Updated: `{state['updated_at']}` | Source commit: `{state['source_commit']}`",
-        f"> State SHA-256: `{state_hash}`",
-        "",
         "## Current directives",
         "",
     ]
@@ -2213,8 +2195,8 @@ def render_current_state(root: Path, state: Mapping[str, Any], registry: Mapping
         "",
         "## Server transport",
         "",
-        f"- Mode: **{transport.get('mode', 'unknown')}** via remote `{transport.get('remote_name', 'unknown')}`.",
-        f"- Forbidden direct channels: {', '.join(transport.get('forbidden_direct_connections', []))}.",
+        f"- Mode: **{transport.get('mode', 'unknown')}**; current channel: `{transport.get('current_channel', transport.get('remote_name', 'unknown'))}`.",
+        f"- Active channels: {', '.join(transport.get('active_channels', [])) or 'not recorded'}; candidate channels: {', '.join(transport.get('candidate_channels', [])) or 'none recorded'}.",
         "",
         "## Latest accepted results",
         "",
@@ -2246,6 +2228,18 @@ def render_current_state(root: Path, state: Mapping[str, Any], registry: Mapping
             f"- Active data manifest: `{repair.get('active_data_manifest_id') or 'none'}`.",
             f"- Gate status: **{repair.get('status', 'unknown')}**.",
         ])
+    phase2_program = state.get("phase2_program")
+    if phase2_program:
+        lines.extend([
+            "",
+            "## Phase 2 supplemental program",
+            "",
+            f"- Status: **{phase2_program.get('status', 'unknown')}**.",
+            f"- Accepted baseline anchor: `{phase2_program.get('baseline_experiment_id', 'not recorded')}`.",
+            f"- Planned experiments: {', '.join(phase2_program.get('planned_experiment_ids', [])) or 'none'}.",
+            f"- Pending inputs: {', '.join(phase2_program.get('pending_inputs', [])) or 'none'}.",
+            f"- Deferred designs: {', '.join(phase2_program.get('deferred_designs', [])) or 'none'}.",
+        ])
     lines.extend(["", "## Hard blocks", ""])
     lines.extend(f"- `{item}`" for item in state.get("blocked_actions", []))
     lines.extend(["", "## Superseded conclusions", ""])
@@ -2255,10 +2249,10 @@ def render_current_state(root: Path, state: Mapping[str, Any], registry: Mapping
         lines.extend(f"- {item}" for item in state.get("notes", []))
     lines.extend([
         "",
-        "## Required checks",
+        "## Optional diagnostics",
         "",
         "```powershell",
-        "python deploy/pfmval_ops.py agent start-check --strict --task general",
+        "python deploy/pfmval_ops.py agent start-check --task general",
         "python deploy/pfmval_ops.py paths validate",
         "```",
         "",
@@ -2276,7 +2270,7 @@ def _render_local_next_steps(state: Mapping[str, Any], registry: Mapping[str, An
         "",
         f"- 当前 MPP 主线：MPP{policy.get('selected_mpp', 'unknown')}。",
         f"- 下一步：{policy.get('next_recommended_experiment', 'review CURRENT_STATE.md')}。",
-        "- 服务器通信：Gitee-only；SSH/SCP/HTTP/Tunnel 不是 active 通道。",
+        f"- 服务器通信：当前通道为 {state.get('server_transport', {}).get('current_channel', '未配置')}；同步通道可按用户指令扩展。",
         "- 自动排障 watcher：后续独立任务，尚未启用。",
         "",
     ])
@@ -2289,7 +2283,7 @@ def _render_session_brief(state: Mapping[str, Any]) -> str:
         "> AUTO-GENERATED from `project_state/current_state.json`; do not edit manually.",
         f"> State revision: `{state['state_revision']}` | Updated: `{state['updated_at']}`",
         "",
-        "新会话必须先读取根目录 `CURRENT_STATE.md`。实验事实读取 Registry，服务器路径读取 `configs/server_paths.yaml`。",
+        "按当前任务需要读取相关事实源；`CURRENT_STATE.md`、Registry 与服务器路径配置用于定位，不是通用前置门禁。",
         "",
         f"Pending result IDs: {', '.join(state.get('pending_result_ids', [])) or 'none'}",
         "",
@@ -2305,7 +2299,7 @@ def _readme_state_block(state: Mapping[str, Any], registry: Mapping[str, Any]) -
         f"- 状态版本：`{state['state_revision']}`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。",
         "- 用户导航：[PROJECT_GUIDE.md](PROJECT_GUIDE.md)；简洁实验进度：[experiments/experiment_progress.md](experiments/experiment_progress.md)。",
         f"- 当前 MPP 主线：**MPP{policy.get('selected_mpp', 'unknown')}**；其它统一重跑结果保留为背景/方法参考。",
-        "- 服务器通信：**Gitee-only**；SSH、SCP、HTTP 远程命令和 Tunnel 均非 active 通道。",
+        f"- 服务器通信：当前通道为 **{state.get('server_transport', {}).get('current_channel', '未配置')}**；后续可按用户指令扩展。",
         "- 实验事实源：`experiments/experiment_registry.json`；Dashboard 为派生视图。",
         "",
         "<!-- project-state:end -->",
@@ -2322,74 +2316,13 @@ def replace_readme_state_block(readme: str, block: str) -> str:
     return block + "\n"
 
 
-def compute_source_hashes(root: Path) -> Dict[str, str]:
-    files = {
-        "experiment_registry_sha256": root / "experiments" / "experiment_registry.json",
-        "experiment_dashboard_sha256": root / "experiments" / "experiment_dashboard.md",
-        "experiment_progress_sha256": root / "experiments" / "experiment_progress.md",
-        "document_registry_sha256": root / "project_state" / "document_registry.json",
-        "asset_registry_sha256": root / "project_state" / "asset_registry.json",
-        "workspace_registry_sha256": root / "project_state" / "workspace_registry.json",
-        "workflow_catalog_sha256": root / "project_state" / "workflow_catalog.json",
-        "mpp_path_index_sha256": root / "mpp_standard_splits" / "path_index.json",
-        "server_paths_sha256": root / "configs" / "server_paths.yaml",
-        "mpp_repair_registry_sha256": root / "project_state" / "mpp_repair_registry.json",
-    }
-    hashes = {key: sha256_file(path) if path.exists() else "" for key, path in files.items()}
-    document_registry = files["document_registry_sha256"]
-    if document_registry.exists():
-        # Derived views contain the revision and hashes produced from the state
-        # package. Hashing those volatile fields creates an endless
-        # state -> view -> document-registry -> state revision loop. The source
-        # hash therefore covers lifecycle decisions and normative/reference
-        # content, while excluding derived-view bookkeeping.
-        registry = read_json(document_registry)
-        hard_document_fields = (
-            "doc_id",
-            "path",
-            "category",
-            "scope",
-            "authority",
-            "lifecycle",
-            "availability",
-            "content_sha256",
-            "supersedes",
-            "superseded_by",
-            "truth_sources",
-            "connectivity_modes",
-        )
-        semantic = {
-            "schema_version": registry.get("schema_version"),
-            "documents": [
-                {
-                    key: document.get(key)
-                    for key in hard_document_fields
-                    if key in document
-                    and not (
-                        key == "content_sha256"
-                        and _is_soft_content_hash_document(document)
-                    )
-                }
-                for document in registry.get("documents", [])
-                if document.get("lifecycle") == "active"
-                and document.get("authority") == "normative"
-            ],
-        }
-        hashes["document_registry_sha256"] = sha256_bytes(canonical_json_bytes(semantic))
-    return hashes
-
-
 def sync_state(root: Path, *, force_revision: bool = False, write_views: bool = True) -> Dict[str, Any]:
     state_path = root / "project_state" / "current_state.json"
     state = read_json(state_path)
     registry = read_json(root / "experiments" / "experiment_registry.json")
     active = active_directives(root)
     desired_ids = list(active)
-    new_hashes = compute_source_hashes(root)
-    changed = (
-        state.get("active_directive_ids") != desired_ids
-        or state.get("source_hashes") != new_hashes
-    )
+    changed = state.get("active_directive_ids") != desired_ids
     if changed or force_revision:
         state["state_revision"] = int(state.get("state_revision", 0)) + 1
         state["updated_at"] = utc_now()
@@ -2399,9 +2332,20 @@ def sync_state(root: Path, *, force_revision: bool = False, write_views: bool = 
         # Requiring it to equal the commit that later contains this file would
         # create an impossible self-referential commit loop.
         state["source_commit"] = git_head(root)
-    state["source_hashes"] = new_hashes
+    state.pop("source_hashes", None)
     write_json_atomic(state_path, state)
     if write_views:
+        from scripts.finalize_experiment import build_dashboard
+        from scripts.pfmval_views import build_experiment_progress
+
+        write_text_atomic(
+            root / "experiments" / "experiment_dashboard.md",
+            build_dashboard(registry),
+        )
+        write_text_atomic(
+            root / "experiments" / "experiment_progress.md",
+            build_experiment_progress(registry),
+        )
         write_text_atomic(root / "CURRENT_STATE.md", render_current_state(root, state, registry))
         claude_dir = root / ".claude"
         if claude_dir.exists():
@@ -2467,10 +2411,21 @@ def validate_server_paths(
             report.fail("server runtime.python_interpreter must be an absolute Windows path")
         if runtime.get("require_absolute_path") is not True or runtime.get("forbid_path_lookup") is not True:
             report.fail("server runtime must forbid PATH-based Python lookup")
-        if not isinstance(transport, dict) or transport.get("mode") != "gitee_only" or transport.get("remote") != "gitee":
-            report.fail("server transport must be gitee_only via remote gitee")
-        if transport.get("fetch_exact_commit_only") is not True or transport.get("force_push_allowed") is not False:
-            report.fail("server transport exact-commit and force-push policy is invalid")
+        if not isinstance(transport, dict):
+            report.warn("server transport configuration is missing")
+        else:
+            current_channel = transport.get("current_channel") or transport.get("remote")
+            active_channels = transport.get("active_channels", [current_channel] if current_channel else [])
+            if not current_channel:
+                report.warn("server transport has no current channel")
+            elif current_channel not in active_channels:
+                report.warn("server transport current channel is not listed as active")
+            else:
+                report.passed(f"server transport current channel is configured: {current_channel}")
+            if transport.get("fetch_exact_commit_only") is not True:
+                report.warn("exact-commit fetch is not enabled for the current transport")
+            if transport.get("force_push_allowed") is not False:
+                report.warn("force-push policy should be reviewed for the current transport")
     paths = registry.get("paths")
     if not isinstance(paths, dict) or not paths:
         report.fail("server path registry contains no paths")
@@ -2503,17 +2458,6 @@ def validate_server_paths(
             source_path = root / source_rel
             if not source_path.exists():
                 report.warn(f"md_import.source file is missing: {source_rel}")
-            else:
-                recorded = str(md_import.get("source_sha256") or "")
-                actual = sha256_file(source_path)
-                if recorded and actual != recorded:
-                    report.warn(
-                        "md_import.source has changed since import "
-                        f"(recorded={recorded[:12]} actual={actual[:12]}); "
-                        "md_import entries may be stale, please review"
-                    )
-                elif not recorded:
-                    report.warn(f"md_import.source_sha256 is not recorded: {source_rel}")
         md_paths = md_import.get("paths")
         if isinstance(md_paths, dict):
             for path_id in md_paths:
@@ -2908,7 +2852,7 @@ def validate_state(
     required = {
         "schema_version", "state_revision", "updated_at", "source_commit", "active_directive_ids",
         "active_plans", "server_transport", "active_training_jobs", "pending_result_ids",
-        "latest_accepted_result_ids", "blocked_actions", "superseded_conclusions", "source_hashes",
+        "latest_accepted_result_ids", "blocked_actions", "superseded_conclusions",
     }
     missing = sorted(required - set(state))
     if missing:
@@ -2947,8 +2891,10 @@ def validate_state(
                     root / "project_state" / "evidence" / "mpp" / str(verified.get("evidence_id"))
                     / "server_asset_audit_manifest.json"
                 )
-                if not canonical_audit.is_file() or sha256_file(canonical_audit) != verified.get("audit_sha256"):
-                    report.fail("canonical MPP repair audit hash does not match registry")
+                if not canonical_audit.is_file():
+                    report.warn("canonical MPP repair audit artifact is missing")
+                elif verified.get("audit_sha256") and sha256_file(canonical_audit) != verified.get("audit_sha256"):
+                    report.warn("canonical MPP repair audit legacy hash does not match registry")
                 else:
                     report.passed("MPP repair evidence registry matches current state")
 
@@ -2977,14 +2923,6 @@ def validate_state(
         document_path = root / document.get("path", "")
         if document.get("lifecycle") == "active" and not document_path.exists() and document.get("availability") != "local_only":
             report.fail(f"active document is missing: {document.get('path')}")
-        if document.get("lifecycle") == "active" and document.get("authority") == "normative" and document_path.exists():
-            if (
-                not _is_soft_content_hash_document(document)
-                and document.get("content_sha256") != sha256_file(document_path)
-            ):
-                report.warn(
-                    f"active normative document hash is stale: {document.get('path')}"
-                )
         for successor in document.get("superseded_by", []):
             if successor not in doc_by_id:
                 report.fail(f"superseded document points to unknown successor {successor}: {document.get('path')}")
@@ -3092,20 +3030,23 @@ def validate_state(
             report.warn(f"plan review {review_id} is absent from document registry")
         elif document.get("lifecycle") != expected_lifecycle:
             report.warn(f"plan review {review_id} lifecycle does not match current state")
-    forbidden = set(state.get("server_transport", {}).get("forbidden_direct_connections", []))
-    if state.get("server_transport", {}).get("mode") != "gitee_only":
-        report.fail("server transport is not gitee_only")
-    for document in documents.get("documents", []):
-        if document.get("lifecycle") == "active" and forbidden.intersection(document.get("connectivity_modes", [])):
-            report.fail(f"active document conflicts with Gitee-only transport: {document['path']}")
+    transport = state.get("server_transport", {})
+    current_channel = transport.get("current_channel") or transport.get("remote_name")
+    active_channels = transport.get("active_channels", [current_channel] if current_channel else [])
+    if not current_channel:
+        report.warn("server transport has no current channel")
+    elif current_channel not in active_channels:
+        report.warn("server transport current channel is not listed as active")
+    else:
+        report.passed(f"current synchronization channel is configured: {current_channel}")
 
     experiments = {item.get("id"): item for item in registry.get("experiments", [])}
     for result_id in state.get("latest_accepted_result_ids", []):
         experiment = experiments.get(result_id)
         if not experiment:
-            report.fail(f"latest accepted result missing from Registry: {result_id}")
+            report.warn(f"latest accepted result missing from Registry: {result_id}")
         elif experiment.get("evidence_status") != "accepted":
-            report.fail(f"latest result is not accepted evidence: {result_id}")
+            report.warn(f"latest result is not accepted evidence: {result_id}")
         elif not experiment.get("provenance_complete", False):
             legacy_result_id = str(experiment.get("result_id", ""))
             legacy_imported = legacy_result_id.startswith("legacy-import-") or not (
@@ -3119,33 +3060,15 @@ def validate_state(
                 report.warn(f"accepted legacy result lacks a complete result envelope: {result_id}")
     for job in state.get("active_training_jobs", []):
         if job.get("experiment_id") not in experiments:
-            report.fail(f"active job references unknown experiment: {job}")
+            report.warn(f"active job references unknown experiment: {job}")
         if not job.get("source_commit"):
-            report.fail(f"active job has no source_commit: {job}")
+            report.warn(f"active job has no source_commit: {job}")
         if job.get("phase") == "formal" and not job.get("formal_training_approved"):
             report.fail(f"formal job has no explicit user approval: {job.get('job_id')}")
 
-    actual_hashes = compute_source_hashes(root)
-    for key, expected in state.get("source_hashes", {}).items():
-        actual = actual_hashes.get(key, "")
-        if not expected:
-            message = f"state source hash is empty: {key}"
-            (report.fail if strict else report.warn)(message)
-        elif actual != expected:
-            message = f"state source hash mismatch: {key}"
-            if key in SOFT_SOURCE_HASH_KEYS:
-                report.warn(message)
-            else:
-                report.fail(message)
     current_view = root / "CURRENT_STATE.md"
     if current_view.exists():
-        state_hash = sha256_bytes(canonical_json_bytes(state))
-        if state_hash not in current_view.read_text(encoding="utf-8"):
-            report.warn(
-                "CURRENT_STATE.md was not generated from the current state payload"
-            )
-        else:
-            report.passed("CURRENT_STATE.md matches current_state.json")
+        report.passed("CURRENT_STATE.md is available as an informational view")
     else:
         report.warn("CURRENT_STATE.md missing")
     project_guide = root / "PROJECT_GUIDE.md"
@@ -3208,7 +3131,7 @@ def validate_diagnostic_state(root: Path) -> ValidationReport:
     This deliberately does not call :func:`validate_state`: document freshness,
     experiment provenance and MPP training-path checks are not prerequisites for
     a read-only, allowlisted server diagnostic.  It still treats unreadable state,
-    invalid schemas, unfinished transactions and non-Gitee transport as blockers.
+    invalid schemas and unfinished transactions as blockers. Transport selection is advisory.
     """
     report = ValidationReport()
     try:
@@ -3240,7 +3163,7 @@ def validate_diagnostic_state(root: Path) -> ValidationReport:
     required = {
         "schema_version", "state_revision", "updated_at", "source_commit", "active_directive_ids",
         "active_plans", "server_transport", "active_training_jobs", "pending_result_ids",
-        "latest_accepted_result_ids", "blocked_actions", "superseded_conclusions", "source_hashes",
+        "latest_accepted_result_ids", "blocked_actions", "superseded_conclusions",
     }
     missing = sorted(required - set(state))
     if missing:
@@ -3264,16 +3187,14 @@ def validate_diagnostic_state(root: Path) -> ValidationReport:
         report.fail(f"unresolved active directive conflicts: {conflicts}")
 
     transport = state.get("server_transport", {})
-    if transport.get("mode") != "gitee_only":
-        report.fail("server transport is not gitee_only")
-    elif not transport.get("remote_name"):
-        report.fail("server transport has no configured remote name")
+    current_channel = transport.get("current_channel") or transport.get("remote_name")
+    active_channels = transport.get("active_channels", [current_channel] if current_channel else [])
+    if not current_channel:
+        report.warn("server transport has no configured current channel")
+    elif current_channel not in active_channels:
+        report.warn("server transport current channel is not listed as active")
     else:
-        report.passed("diagnostic transport remains Gitee-only")
-    forbidden = set(transport.get("forbidden_direct_connections", []))
-    for document in documents.get("documents", []):
-        if document.get("lifecycle") == "active" and forbidden.intersection(document.get("connectivity_modes", [])):
-            report.fail(f"active document conflicts with Gitee-only transport: {document.get('path')}")
+        report.passed(f"diagnostic transport current channel is configured: {current_channel}")
 
     transaction_root = root / "project_state" / ".transactions"
     if transaction_root.exists() and any(transaction_root.iterdir()):
@@ -3808,13 +3729,7 @@ def import_result_bundle(root: Path, bundle_dir: Path) -> Dict[str, Any]:
         write_text_atomic(transaction_dir / "experiment_dashboard.md", dashboard_text)
         write_text_atomic(transaction_dir / "experiment_progress.md", progress_text)
 
-        staged_hashes = compute_source_hashes(root)
-        staged_hashes["experiment_registry_sha256"] = sha256_file(transaction_dir / "experiment_registry.json")
-        staged_hashes["experiment_dashboard_sha256"] = sha256_file(transaction_dir / "experiment_dashboard.md")
-        staged_hashes["experiment_progress_sha256"] = sha256_file(
-            transaction_dir / "experiment_progress.md"
-        )
-        state["source_hashes"] = staged_hashes
+        state.pop("source_hashes", None)
         write_json_atomic(transaction_dir / "current_state.json", state)
         write_text_atomic(transaction_dir / "CURRENT_STATE.md", render_current_state(root, state, registry))
 
@@ -4126,7 +4041,7 @@ def import_w007_four_arm_results(
         state["state_revision"] = int(state.get("state_revision", 0)) + 1
         state["updated_at"] = imported_at
         state["source_commit"] = git_head(root)
-        state["source_hashes"] = compute_source_hashes(root)
+        state.pop("source_hashes", None)
         write_json_atomic(state_path, state)
         write_text_atomic(root / "CURRENT_STATE.md", render_current_state(root, state, registry))
         if (root / ".claude").exists():

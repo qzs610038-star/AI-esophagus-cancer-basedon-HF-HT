@@ -19,7 +19,6 @@ from scripts.pfmval_state import (
     build_mpp_path_index,
     build_result_envelope,
     create_job_manifest,
-    compute_source_hashes,
     create_diagnostic_request,
     create_exploration_session,
     directive_lifecycle_candidates,
@@ -205,7 +204,7 @@ def make_minimal_project(root: Path) -> Path:
         "source_commit": "unknown",
         "active_directive_ids": ["DIR-20260711-001"],
         "active_plans": {"mpp_training": {"doc_id": "plan-mpp-training", "path": "project_state/plans/mpp_training.md", "status": "active", "approved_at": "2026-07-11T00:00:00+08:00"}},
-        "server_transport": {"mode": "gitee_only", "remote_name": "gitee", "allowed_operations": ["git_fetch"], "forbidden_direct_connections": ["ssh", "scp", "http_remote_command", "remote_tunnel"]},
+        "server_transport": {"mode": "configurable", "current_channel": "gitee", "active_channels": ["gitee"], "candidate_channels": ["manual_archive", "ssh"], "remote_name": "gitee", "allowed_operations": ["git_fetch"]},
         "active_training_jobs": [],
         "pending_result_ids": [],
         "latest_accepted_result_ids": [],
@@ -406,7 +405,7 @@ def test_state_validation_rejects_unresolved_same_topic_directives(tmp_path):
     assert any("directive conflicts" in message for message in report.fail_items)
 
 
-def test_diagnostic_gate_allows_document_freshness_drift_but_keeps_transport_hard(tmp_path):
+def test_diagnostic_gate_treats_document_and_transport_drift_as_warnings(tmp_path):
     root = make_minimal_project(tmp_path)
     # The production diagnostic profile validates the same three state schemas.
     # This focused fixture only needs permissive schema shells; schema semantics
@@ -418,7 +417,7 @@ def test_diagnostic_gate_allows_document_freshness_drift_but_keeps_transport_har
     (root / "project_state" / "plans" / "mpp_training.md").write_text("# changed\n", encoding="utf-8")
     full_report = validate_state(root)
     assert not any("normative document hash is stale" in message for message in full_report.fail_items)
-    assert any("normative document hash is stale" in message for message in full_report.warn_items)
+    assert not any("normative document hash is stale" in message for message in full_report.warn_items)
 
     diagnostic_report = validate_diagnostic_state(root)
     assert diagnostic_report.ok
@@ -426,10 +425,11 @@ def test_diagnostic_gate_allows_document_freshness_drift_but_keeps_transport_har
     state_path = root / "project_state" / "current_state.json"
     state = read_json(state_path)
     state["server_transport"]["mode"] = "ssh"
+    state["server_transport"]["current_channel"] = "ssh"
     write_json(state_path, state)
-    blocked_report = validate_diagnostic_state(root)
-    assert not blocked_report.ok
-    assert "server transport is not gitee_only" in blocked_report.fail_items
+    drift_report = validate_diagnostic_state(root)
+    assert drift_report.ok
+    assert any("current channel" in item for item in drift_report.warn_items)
 
 
 def test_diagnostic_request_is_allowlisted_non_evidence_audit(tmp_path):
@@ -751,6 +751,21 @@ def test_document_scan_preserves_hidden_paths_and_marks_only_missing_qoder(tmp_p
     assert "claude/next-steps.md" not in entries
 
 
+def test_document_scan_registers_future_exploration_pool_as_active_reference(tmp_path):
+    root = make_minimal_project(tmp_path)
+    pool_path = root / "experiments" / "explorations" / "FUTURE_EXPLORATION_POOL.md"
+    pool_path.parent.mkdir(parents=True, exist_ok=True)
+    pool_path.write_text("# future exploration pool\n", encoding="utf-8")
+
+    entries = {item["path"]: item for item in scan_documents(root)["documents"]}
+    entry = entries["experiments/explorations/FUTURE_EXPLORATION_POOL.md"]
+
+    assert entry["scope"] == "future_exploration_pool"
+    assert entry["category"] == "实验探索"
+    assert entry["authority"] == "reference"
+    assert entry["lifecycle"] == "active"
+
+
 def test_document_scan_is_byte_stable_when_inputs_are_unchanged(tmp_path, monkeypatch):
     root = make_minimal_project(tmp_path)
     registry_path = root / "project_state" / "document_registry.json"
@@ -993,7 +1008,7 @@ def test_mpp_index_reports_conflicting_duplicate_barcodes(tmp_path):
     assert index["labels_validated"] is False
 
 
-def test_manual_dashboard_edit_is_detected_as_soft_warning(tmp_path):
+def test_manual_dashboard_edit_does_not_trigger_hash_governance(tmp_path):
     root = make_minimal_project(tmp_path)
     with (root / "experiments" / "experiment_dashboard.md").open("a", encoding="utf-8") as handle:
         handle.write("manual edit\n")
@@ -1002,7 +1017,7 @@ def test_manual_dashboard_edit_is_detected_as_soft_warning(tmp_path):
         "experiment_dashboard_sha256" in message
         for message in report.fail_items
     )
-    assert any(
+    assert not any(
         "experiment_dashboard_sha256" in message
         for message in report.warn_items
     )
@@ -1115,7 +1130,8 @@ def test_server_profile_is_the_only_machine_configuration(monkeypatch):
     profile = load_server_profile(project_root)
     assert profile["schema_version"] == "2.0"
     assert profile["runtime"]["python_interpreter"].endswith("python.exe")
-    assert profile["transport"]["mode"] == "gitee_only"
+    assert profile["transport"]["mode"] == "configurable"
+    assert profile["transport"]["current_channel"] == "gitee"
     assert profile["transport"]["remote"] == "gitee"
     with pytest.raises(ValueError, match="已退役"):
         load_config(project_root / "configs" / "config.server.yaml")
@@ -1884,72 +1900,7 @@ def test_validate_job_rejects_unsafe_job_id_before_git_lookup(tmp_path):
         validate_job_manifest(root, manifest)
 
 
-def test_document_registry_semantic_hash_ignores_derived_view_bookkeeping(tmp_path):
-    root = make_minimal_project(tmp_path)
-    registry_path = root / "project_state" / "document_registry.json"
-    registry = read_json(registry_path)
-    derived_path = root / "CURRENT_STATE.md"
-    registry["documents"].append({
-        "doc_id": "derived-current-state",
-        "path": "CURRENT_STATE.md",
-        "authority": "derived",
-        "lifecycle": "active",
-        "verified_at": "2026-07-11T00:00:00+00:00",
-        "state_revision": 1,
-        "content_sha256": sha256_file(derived_path),
-    })
-    write_json(registry_path, registry)
-    before = compute_source_hashes(root)["document_registry_sha256"]
-    registry["updated_at"] = "2026-07-12T00:00:00+00:00"
-    registry["state_revision"] = 999
-    registry["documents"][-1]["verified_at"] = "2026-07-12T00:00:00+00:00"
-    registry["documents"][-1]["state_revision"] = 999
-    registry["documents"][-1]["content_sha256"] = "f" * 64
-    write_json(registry_path, registry)
-    assert compute_source_hashes(root)["document_registry_sha256"] == before
-    registry["documents"][0]["lifecycle"] = "superseded"
-    write_json(registry_path, registry)
-    assert compute_source_hashes(root)["document_registry_sha256"] != before
-
-
-def test_document_registry_hard_hash_ignores_active_reference_knowledge_metadata(
-    tmp_path,
-):
-    root = make_minimal_project(tmp_path)
-    registry_path = root / "project_state" / "document_registry.json"
-    registry = read_json(registry_path)
-    registry["documents"].append({
-        "doc_id": "guide-a",
-        "path": "01_指南与解读/学习指南/guide-a.md",
-        "category": "学习指南",
-        "scope": "learning_guide",
-        "authority": "reference",
-        "lifecycle": "active",
-        "availability": "tracked",
-        "verified_at": "2026-08-07T00:00:00+00:00",
-        "state_revision": 1,
-        "content_sha256": "a" * 64,
-        "supersedes": [],
-        "superseded_by": [],
-        "truth_sources": ["project_state/current_state.json"],
-        "doc_role": "learning_guide",
-        "source_refs": ["plan-mpp-training"],
-        "dependency_fingerprints": {"plan-mpp-training": "b" * 64},
-        "freshness": "fresh",
-    })
-    write_json(registry_path, registry)
-    before = compute_source_hashes(root)["document_registry_sha256"]
-
-    registry["documents"][-1]["dependency_fingerprints"] = {
-        "plan-mpp-training": "c" * 64,
-    }
-    registry["documents"][-1]["freshness"] = "review_due"
-    write_json(registry_path, registry)
-
-    assert compute_source_hashes(root)["document_registry_sha256"] == before
-
-
-def test_skill_content_hash_drift_is_soft_and_excluded_from_hard_registry_fingerprint(
+def test_skill_content_drift_does_not_block_and_scan_preserves_registered_lifecycle(
     tmp_path,
 ):
     root = make_minimal_project(tmp_path)
@@ -1974,24 +1925,20 @@ def test_skill_content_hash_drift_is_soft_and_excluded_from_hard_registry_finger
     write_json(root / "project_state" / "document_registry.json", scan_documents(root))
     sync_state(root)
 
-    before = compute_source_hashes(root)["document_registry_sha256"]
     skill_entry = next(
         item
         for item in read_json(root / "project_state" / "document_registry.json")["documents"]
         if item["path"] == ".agents/skills/pfmval-audit/SKILL.md"
     )
-    recorded_skill_hash = skill_entry["content_sha256"]
     skill_path.write_text("# skill edited\n", encoding="utf-8")
     (root / "AGENTS.md").write_text("# agents edited\n", encoding="utf-8")
     report = validate_state(root)
     assert not any("hash is stale" in item for item in report.fail_items)
     assert not any("hash is stale" in item for item in report.warn_items)
-    assert compute_source_hashes(root)["document_registry_sha256"] == before
-
     rescanned = {
         item["path"]: item for item in scan_documents(root)["documents"]
     }
-    assert rescanned[".agents/skills/pfmval-audit/SKILL.md"]["content_sha256"] == recorded_skill_hash
+    assert "content_sha256" not in rescanned[".agents/skills/pfmval-audit/SKILL.md"]
     assert rescanned[".agents/skills/pfmval-audit/SKILL.md"]["lifecycle"] == "active"
     assert rescanned[".claude/skills/pfmval-audit/SKILL.md"]["lifecycle"] == "active"
 
@@ -2000,12 +1947,12 @@ def test_skill_content_hash_drift_is_soft_and_excluded_from_hard_registry_finger
     assert not any(
         "normative document hash is stale" in item for item in plan_report.fail_items
     )
-    assert any(
+    assert not any(
         "normative document hash is stale" in item for item in plan_report.warn_items
     )
 
 
-def test_workflow_catalog_hash_mismatch_is_soft_warning(tmp_path):
+def test_workflow_catalog_change_does_not_trigger_hash_governance(tmp_path):
     root = make_minimal_project(tmp_path)
     catalog_path = root / "project_state" / "workflow_catalog.json"
     write_json(catalog_path, {"schema_version": "1.0", "entries": [], "scans": []})
@@ -2015,7 +1962,7 @@ def test_workflow_catalog_hash_mismatch_is_soft_warning(tmp_path):
     catalog_path.write_text('{"schema_version":"1.0","entries":[],"scans":[{"scan_id":"x"}]}\n', encoding="utf-8")
     report = validate_state(root)
     assert not any("workflow_catalog_sha256" in item for item in report.fail_items)
-    assert any("workflow_catalog_sha256" in item for item in report.warn_items)
+    assert not any("workflow_catalog_sha256" in item for item in report.warn_items)
 
 
 def test_document_scan_preserves_optional_relationship_metadata(tmp_path):
@@ -2247,7 +2194,7 @@ def test_document_scan_tracks_return_profile_schema_as_active_reference(tmp_path
     assert document["availability"] == "tracked"
 
 
-def test_generated_view_hash_drift_is_soft_but_registry_drift_remains_hard(
+def test_generated_view_and_registry_changes_do_not_trigger_hash_governance(
     tmp_path,
 ):
     root = make_minimal_project(tmp_path)
@@ -2262,7 +2209,7 @@ def test_generated_view_hash_drift_is_soft_but_registry_drift_remains_hard(
         "experiment_dashboard_sha256" in message
         for message in view_report.fail_items
     )
-    assert any(
+    assert not any(
         "experiment_dashboard_sha256" in message
         for message in view_report.warn_items
     )
@@ -2276,7 +2223,7 @@ def test_generated_view_hash_drift_is_soft_but_registry_drift_remains_hard(
         "CURRENT_STATE.md" in message
         for message in current_view_report.fail_items
     )
-    assert any(
+    assert not any(
         "CURRENT_STATE.md" in message
         for message in current_view_report.warn_items
     )
@@ -2306,9 +2253,9 @@ def test_generated_view_hash_drift_is_soft_but_registry_drift_remains_hard(
     registry_path = root / "experiments" / "experiment_registry.json"
     registry_path.write_text('{"changed": true}\n', encoding="utf-8")
     registry_report = validate_state(root, strict=True)
-    assert any(
+    assert not any(
         "experiment_registry_sha256" in message
-        for message in registry_report.fail_items
+        for message in registry_report.fail_items + registry_report.warn_items
     )
 
 
@@ -2359,7 +2306,7 @@ def test_knowledge_task_downgrades_only_workspace_head_drift(monkeypatch):
     )
 
 
-def test_document_registry_sha256_mismatch_is_soft_warning(tmp_path):
+def test_document_registry_change_does_not_trigger_hash_governance(tmp_path):
     root = make_minimal_project(tmp_path)
     for schema_name in (
         "current_state.schema.json",
@@ -2399,7 +2346,7 @@ def test_document_registry_sha256_mismatch_is_soft_warning(tmp_path):
         or message.startswith("state source hash is empty: document_registry_sha256")
         for message in report.fail_items
     )
-    assert any(
+    assert not any(
         "document_registry_sha256" in message for message in report.warn_items
     )
 

@@ -14,7 +14,10 @@ runtime:
   require_absolute_path: true
   forbid_path_lookup: true
 transport:
-  mode: gitee_only
+  mode: configurable
+  current_channel: gitee
+  active_channels: [gitee]
+  candidate_channels: [manual_archive, ssh]
   remote: gitee
   fetch_exact_commit_only: true
   force_push_allowed: false
@@ -310,7 +313,7 @@ md_import:
       kind: directory
       status: unverified
       stability: unknown
-      note: 远程命令服务遗留文件（cmd_server.py）；与 Gitee-only 边界冲突，仅历史参考，非 active 通道
+      note: 远程命令服务遗留文件（cmd_server.py）；当前未启用，仅作历史参考
     qzs_tools_dir:
       path: 'D:\AIPatho\qzs\tools'
       kind: directory

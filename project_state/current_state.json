@@ -1,38 +1,24 @@
 {
   "schema_version": "1.0",
-  "state_revision": 247,
-  "updated_at": "2026-08-27T15:29:11+00:00",
-  "source_commit": "54958eaeeb6cb971889dab521538878b0b920b0c",
+  "state_revision": 255,
+  "updated_at": "2026-09-04T13:40:59+00:00",
+  "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
-    "DIR-20260710-001",
-    "DIR-20260710-002",
     "DIR-20260710-003",
-    "DIR-20260711-002",
     "DIR-20260711-005",
     "DIR-20260712-002",
-    "DIR-20260714-004",
     "DIR-20260726-001",
-    "DIR-20260726-002",
-    "DIR-20260726-004",
-    "DIR-20260727-001",
-    "DIR-20260730-003",
-    "DIR-20260801-001",
     "DIR-20260801-005",
     "DIR-20260801-006",
-    "DIR-20260801-008",
-    "DIR-20260801-009",
     "DIR-20260803-001",
-    "DIR-20260806-001",
-    "DIR-20260807-001",
-    "DIR-20260809-002",
-    "DIR-20260810-001",
-    "DIR-20260810-003",
     "DIR-20260815-001",
-    "DIR-20260815-002",
-    "DIR-20260818-001",
-    "DIR-20260821-001",
-    "DIR-20260822-001",
-    "DIR-20260827-001"
+    "DIR-20260827-001",
+    "DIR-20260829-001",
+    "DIR-20260829-002",
+    "DIR-20260904-001",
+    "DIR-20260904-003",
+    "DIR-20260904-004",
+    "DIR-20260904-005"
   ],
   "active_plans": {
     "mpp_training": {
@@ -76,18 +62,6 @@
       ],
       "status": "canonical",
       "approved_at": "2026-07-27T04:26:57+08:00"
-    },
-    "qzs-stable-conclusion-writer": {
-      "canonical_path": ".agents/skills/qzs-stable-conclusion-writer/SKILL.md",
-      "adapter_paths": [],
-      "status": "canonical",
-      "approved_at": "2026-08-15T00:00:00+08:00"
-    },
-    "team-progress-maintainer": {
-      "canonical_path": ".agents/skills/team-progress-maintainer/SKILL.md",
-      "adapter_paths": [],
-      "status": "canonical",
-      "approved_at": "2026-08-15T00:00:00+08:00"
     }
   },
   "pending_plan_reviews": {
@@ -183,7 +157,15 @@
     }
   },
   "server_transport": {
-    "mode": "gitee_only",
+    "mode": "configurable",
+    "current_channel": "gitee",
+    "active_channels": [
+      "gitee"
+    ],
+    "candidate_channels": [
+      "manual_archive",
+      "ssh"
+    ],
     "remote_name": "gitee",
     "allowed_operations": [
       "git_ls_remote",
@@ -193,13 +175,7 @@
     "experiment_worktree_update_mode": "fetch_exact_commit_only",
     "canonical_code_writer": "local_numbered_workspace",
     "return_mode": "server_owned_attempt_ref",
-    "force_push_allowed": false,
-    "forbidden_direct_connections": [
-      "ssh",
-      "scp",
-      "http_remote_command",
-      "remote_tunnel"
-    ]
+    "force_push_allowed": false
   },
   "active_training_jobs": [],
   "pending_result_ids": [],
@@ -218,30 +194,42 @@
     "mpp2_cpgcr_probe_v001_20260811",
     "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804"
   ],
+  "phase2_program": {
+    "status": "formal_preparation",
+    "updated_at": "2026-09-04T21:39:06+08:00",
+    "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+    "planned_experiment_ids": [
+      "phase2_gene_reconstruction_comparison_v001_20260904",
+      "phase2_spatial_density_comparison_v001_20260904",
+      "phase2_pathology_model_benchmark_v001_20260904"
+    ],
+    "pending_inputs": [
+      "final_paper_mainline",
+      "gene_set_membership_and_expression_contract",
+      "sparse_sampling_rule_and_matched_random_control",
+      "pathology_model_shortlist_and_common_protocol"
+    ],
+    "deferred_designs": [
+      "six_fold_leave_one_patient_out_pending_team_decision"
+    ],
+    "source_documents": [
+      "团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md",
+      "团队项目进度与结论/lzd/Phase2与Phase3工作计划原文_20260903.md",
+      "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md"
+    ]
+  },
   "blocked_actions": [
-    "direct_server_connection",
     "formal_training_without_user_approval",
-    "implicit_mpp_asset_deletion_or_regeneration",
+    "destructive_or_irreversible_change_without_user_instruction",
+    "scientific_data_leakage",
     "promote_pending_result_to_current_conclusion"
   ],
   "superseded_conclusions": [
-    "SSH, SCP, HTTP command service and Remote Tunnel are not active server channels.",
+    "Gitee is the permanent exclusive server synchronization channel.",
     "Old three-patient LoRA, Token, frequency and spatial-repair results are tuning references only.",
     "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
   ],
-  "source_hashes": {
-    "experiment_registry_sha256": "7fb5065c3358bf8a2061068ff444711ff29476e796d47ffcf877f355f8e81f46",
-    "experiment_dashboard_sha256": "ab0ef682663a9ee78e223f2c8180dfefed3608dcf4925dfce871c0f7891a7493",
-    "experiment_progress_sha256": "ae878c15d47b046c8ce34a3e578612b354d9d1e60bf6a9e750f967fe0449a3b6",
-    "document_registry_sha256": "0571549ad3846de63207eeff428db45f5fed62b90eee495e24240eea1f63137b",
-    "asset_registry_sha256": "e30959ff4af1c99af4ddb1f8ffac5fdad84902da42c8baa84443e4ecb1a4501d",
-    "workspace_registry_sha256": "0a2e7d10bf69843c78ed8aa3ce699a7ce45c76d95cfb900e20b7b3aaaa830b01",
-    "workflow_catalog_sha256": "c7a176f5add5939c5399694647648b31cb7571355cdbe0b084dea80ae904de1e",
-    "mpp_path_index_sha256": "e5a7978618f9c62457aa9a1940d64a11078b45fa649f037a979cdc7fb7bdc3ad",
-    "server_paths_sha256": "dc547227bfe9d99671f1b9567a0fb27a065bb8123c1a2bc6ef5238e83da2cd15",
-    "mpp_repair_registry_sha256": "cb9565694282aee5cc56a0d02386a90b1e9db93e3f1bbe361ef055acfdc1cf18"
-  },
-  "last_gitee_poll_at": null,
+  "last_sync_check_at": null,
   "notes": [
     "Registry is the accepted experiment fact root; raw returned run artifacts take precedence until import completes.",
     "Automated repair watchers remain deferred to a separate task.",

@@ -7,7 +7,7 @@
     "schema_version", "state_revision", "updated_at", "source_commit",
     "active_directive_ids", "active_plans", "server_transport",
     "active_training_jobs", "pending_result_ids", "latest_accepted_result_ids",
-    "blocked_actions", "superseded_conclusions", "source_hashes"
+    "blocked_actions", "superseded_conclusions"
   ],
   "properties": {
     "schema_version": {"const": "1.0"},
@@ -20,15 +20,19 @@
     "pending_plan_reviews": {"type": "object", "additionalProperties": {"$ref": "#/$defs/plan_review"}},
     "server_transport": {
       "type": "object",
-      "required": ["mode", "remote_name", "allowed_operations", "forbidden_direct_connections"],
-      "properties": {"mode": {"const": "gitee_only"}}
+      "required": ["mode", "current_channel", "active_channels"],
+      "properties": {
+        "mode": {"type": "string"},
+        "current_channel": {"type": "string"},
+        "active_channels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "candidate_channels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
     },
     "active_training_jobs": {"type": "array"},
     "pending_result_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "latest_accepted_result_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "blocked_actions": {"type": "array", "items": {"type": "string"}},
     "superseded_conclusions": {"type": "array", "items": {"type": "string"}},
-    "source_hashes": {"type": "object"},
     "mpp_repair": {
       "type": "object",
       "required": ["verified_evidence_id", "verified_data_manifest_id", "active_data_manifest_id", "status"],
