@@ -1,0 +1,20 @@
+[
+  "AGENTS.md",
+  ".agents/skills/pfmval-governance/SKILL.md",
+  ".agents/skills/pfmval-audit/SKILL.md",
+  "experiments/workspaces/_template/README.md",
+  "automation/README.md",
+  "deploy/SYNC_GUIDE.md",
+  "configs/server_paths.yaml",
+  ".gitignore",
+  "01_指南与解读/学习指南/GIT_INDEX.md",
+  "01_指南与解读/部署方案/GIT_INDEX.md",
+  "02_组会汇报/GIT_INDEX.md",
+  "团队项目进度与结论/GIT_INDEX.md",
+  "project_state/current_state.json",
+  "project_state/directives.jsonl",
+  "README.md",
+  "CURRENT_STATE.md",
+  "PROJECT_GUIDE.md",
+  "project_state/document_registry.json"
+]

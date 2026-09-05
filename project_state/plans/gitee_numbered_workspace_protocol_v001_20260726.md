@@ -1,3 +1,5 @@
+> **历史流程，2026-09-05 起不再执行。** 原文保留追溯；当前使用独立实验包与用户手动回传，Gitee 暂停、工作树仅用户明确要求时创建。当前说明见项目根目录 `project_state/governance/独立实验包与手动回传_20260905.md`。
+
 # PFMval 编号工作树与 Gitee 实验往返协议 v001
 
 > lifecycle: approved-protocol

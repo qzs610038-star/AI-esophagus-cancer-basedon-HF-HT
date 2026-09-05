@@ -1,3 +1,5 @@
+> **历史流程，已由 2026-09-05 用户决定取代。** 下文仅供追溯，不是当前操作指令。新实验使用 `experiments/_template/`，手动上传/回传，工作树仅在用户明确要求时创建，Gitee 暂停。当前说明：`project_state/governance/独立实验包与手动回传_20260905.md`。
+
 # PFMval 手动同步操作指南
 
 > ⚠️ **historical / superseded**：本文中的共享盘、旧目录或非 Gitee 流程不再是当前执行方案。当前使用 `automation/README.md` 与 `deploy/pfmval_ops.py`，服务器仅通过 Gitee 交换代码、状态和小型结果。

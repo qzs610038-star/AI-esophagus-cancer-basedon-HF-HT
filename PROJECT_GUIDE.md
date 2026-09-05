@@ -1,7 +1,24 @@
 # PFMval 项目导航
 
 > 面向用户的生成入口；不承载实验事实，也不替代 Registry。
-> source_sha256: `091dd05f7898af021d77c64823619e84494a2ee90fc1fce92cefd6a124902dea`
+> 本次按会议决策更新相关导航；不生成普通文档哈希。
+
+## 当前 Phase 2 会议决策（2026-09-05）
+
+- 当前主线：软对比联合学习，优先针对本数据改进；冻结UNI2-h加两层MLP保留为对照。
+- 全部指标暂时待定且继续保留；逐通路平均PCC与展平/整体PCC均记录，最终发表指标后续再定。
+- 比较范围：本项目内部前后及方案对照；暂不进行跨论文实验数值优劣比较。
+- 排序：先改进软对比指标；六折留一患者暂缓；基因重建、密度、多基础模型及Phase 2/3衔接补充实验后置。
+- 用户倾向后续选取有优势的指标发表；两种PCC的绝对高低不能互证优越，需保留完整结果和明确计算定义。
+- 本轮只登记决定，未训练、未产生或接纳新结果。详细记录：[project_state/governance/Phase2会议决策_20260905.md](project_state/governance/Phase2会议决策_20260905.md)。
+
+
+## 当前交付方式（2026-09-05）
+
+新实验在 `experiments/<实验名>/` 独立包维护；工作树仅用户明确要求时创建；Gitee 暂停，Windows QZS 服务器直接复制代码和 runs 文件夹；默认不生成压缩包。GitHub 只备份和网页查阅，提交推送由用户触发。
+
+- [模板与一键运行](experiments/_template/README.md)
+- [完整操作说明](project_state/governance/独立实验包与手动回传_20260905.md)
 
 ## 我要找什么
 
@@ -10,7 +27,7 @@
 | 当前结论与阻塞 | [CURRENT_STATE.md](CURRENT_STATE.md) |
 | 简洁实验进度 | [experiments/experiment_progress.md](experiments/experiment_progress.md) |
 | 实验机器事实 | [experiments/experiment_registry.json](experiments/experiment_registry.json) |
-| 工作树身份与 lease | [project_state/workspace_registry.json](project_state/workspace_registry.json) |
+| 历史工作树身份（仅追溯） | [project_state/workspace_registry.json](project_state/workspace_registry.json) |
 | 资产分类与保护 | [project_state/asset_registry.json](project_state/asset_registry.json) |
 | 完整运维视图 | [experiments/experiment_dashboard.md](experiments/experiment_dashboard.md) |
 | 服务器路径 | [configs/server_paths.yaml](configs/server_paths.yaml) |
@@ -20,8 +37,8 @@
 
 | 目录 | 用途 | 读者 | 事实角色 | 修改方式 | lifecycle |
 |---|---|---|---|---|---|
-| `project_state/` | 机器治理状态与 schema | agent | source | CLI-only | active |
-| `experiments/` | 实验事实与两类生成视图 | shared | source/generated_view | CLI-only/generated | active |
+| `project_state/` | 机器治理状态与 schema | agent | source | 按用户授权维护 | active |
+| `experiments/` | 独立实验包、实验事实与派生视图 | shared | source/generated_view | 实验包直接维护，视图按需更新 | active |
 | `01_指南与解读/` | 方案、指南与学习材料 | user | reference | manual/approval-required | active-by-registry |
 | `02_组会汇报/` | 组会材料 | user | reference | manual | active-by-registry |
 | `.agents/` | Skill 与 Agent 规则 | agent | reference | approval-required | active |
@@ -29,9 +46,11 @@
 
 ## 部署方案与学习指南
 
-### Active 部署方案
+### 当前部署方式
 
-- [doc-c1e997e52610](01_指南与解读/部署方案/服务器零训练Gitee往返试点检查方案_20260810.md)
+- [独立实验包与手动回传](project_state/governance/独立实验包与手动回传_20260905.md)
+- [零训练模板与运行说明](experiments/_template/README.md)
+- 原 Gitee 往返试点仅作历史追溯，不是当前部署方案。
 
 ### Active 学习指南
 
@@ -52,12 +71,10 @@
 - [doc-9328df98eb69](01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md)
 - [doc-caa2b560c387](01_指南与解读/分析报告/MPP2评价指标与同类论文原始数据对比分析_20260823.md)
 - [doc-94b4bbd2caeb](01_指南与解读/分析报告/MPP2首批评价指标复算报告_20260823.md)
-- [doc-c1e997e52610](01_指南与解读/部署方案/服务器零训练Gitee往返试点检查方案_20260810.md)
 - [agent-entry](AGENTS.md)
 - [doc-2d5d10cfc503](CLAUDE.md)
 - [view-current-state](CURRENT_STATE.md)
 - [doc-8ec9a00bfd09](README.md)
-- [doc-f4e7bea90c0b](automation/README.md)
 - [doc-1a3b660607c7](configs/server_paths.yaml)
 - [doc-9e8fc4dbabef](experiments/decision_log.md)
 - [doc-cab153659acd](experiments/experiment_dashboard.md)
@@ -66,11 +83,12 @@
 - [doc-21798b23e36d](project_state/implementation_plans/README.md)
 - [doc-2f635595aea6](project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md)
 - [plan-mpp-training](project_state/plans/mpp_training.md)
-- [plan-server-maintenance](project_state/plans/server_maintenance.md)
-- [doc-a567a7562613](project_state/plans/workflow_governance_v3_20260726.md)
 - [doc-c24f25f468a8](project_state/schemas/return_profile_v1.schema.json)
 - [doc-07650117cd84](团队项目进度与结论/lzd/Phase2与Phase3工作计划原文_20260903.md)
 - [doc-7c2da512fa3e](团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md)
+
+- [独立实验包与手动回传](project_state/governance/独立实验包与手动回传_20260905.md)
+- [独立实验包模板](experiments/_template/README.md)
 
 ## 历史与过时资料
 

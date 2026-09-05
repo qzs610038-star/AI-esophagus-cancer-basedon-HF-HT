@@ -214,11 +214,11 @@ archive/
 !01_指南与解读/
 01_指南与解读/*
 
-# Deployment material is local-only; synchronize its directory index only.
+# Deployment non-Markdown attachments stay local; Markdown rules are below.
 !01_指南与解读/部署方案/
 01_指南与解读/部署方案/*
 
-# Analysis reports are fully version-controlled and synchronize with worktrees.
+# Preserve existing analysis-report tracking.
 !01_指南与解读/分析报告/
 !01_指南与解读/分析报告/**
 
@@ -289,22 +289,6 @@ egnv2/training_history*.csv
 account_migration_export/
 account_migration_export_*.zip
 
-# Learning guides: synchronize only the directory boundary, not guide content.
-!01_指南与解读/学习指南/
-01_指南与解读/学习指南/*
-!01_指南与解读/学习指南/GIT_INDEX.md
-
-!01_指南与解读/部署方案/GIT_INDEX.md
-
-# Team collaboration: synchronize only the directory boundary, not member material.
-团队项目进度与结论/*
-!团队项目进度与结论/GIT_INDEX.md
-
-# Meeting materials: synchronize only the directory boundary, not meeting content.
-!02_组会汇报/
-02_组会汇报/*
-!02_组会汇报/GIT_INDEX.md
-
 # Historical reference package remains local-only until an explicit index is approved.
 historical_file/
 
@@ -313,3 +297,57 @@ historical_code/
 
 # Ad-hoc teammate delivery package; include only when explicitly needed.
 phase3_qzs_share/
+
+# 2026-09-05: project knowledge Markdown bodies are eligible for user-triggered Git backup.
+!/01_指南与解读/
+/01_指南与解读/**
+!/01_指南与解读/**/
+!/01_指南与解读/**/*.md
+!/02_组会汇报/
+/02_组会汇报/**
+!/02_组会汇报/**/
+!/02_组会汇报/**/*.md
+!/团队项目进度与结论/
+/团队项目进度与结论/**
+!/团队项目进度与结论/**/
+!/团队项目进度与结论/**/*.md
+!/docs/
+/docs/**
+!/docs/**/
+!/docs/**/*.md
+!/archive/
+/archive/**
+!/archive/**/
+!/archive/**/*.md
+!/Ai病理项目文献汇总/
+/Ai病理项目文献汇总/**
+!/Ai病理项目文献汇总/**/
+!/Ai病理项目文献汇总/**/*.md
+
+# Preserve the prior analysis-report policy; runtime exclusions still apply.
+!/01_指南与解读/分析报告/**
+!experiments/explorations/**/
+!experiments/explorations/**/*.md
+
+# New experiment packages remain source-controlled; raw runs/derived output are local.
+experiments/**/runs/
+experiments/**/analysis/
+experiments/**/checkpoints/
+experiments/**/*.pt
+experiments/**/*.pth
+experiments/**/*.ckpt
+experiments/**/__pycache__/
+experiments/**/*.py[cod]
+experiments/_template/tests/work/
+work/manual_package_validation/
+**/*.log
+# Runtime artifacts remain excluded even inside the existing analysis-report exception.
+/01_指南与解读/分析报告/**/*.pth
+/01_指南与解读/分析报告/**/*.pt
+/01_指南与解读/分析报告/**/*.ckpt
+/01_指南与解读/分析报告/**/*.npz
+/01_指南与解读/分析报告/**/*.zip
+/01_指南与解读/分析报告/**/*.tar.gz
+/01_指南与解读/分析报告/**/cache/
+/01_指南与解读/分析报告/**/__pycache__/
+/01_指南与解读/分析报告/**/runs/

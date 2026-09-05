@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-09-04T14:13:27+00:00",
-  "state_revision": 255,
+  "updated_at": "2026-09-05T23:02:01+08:00",
+  "state_revision": 257,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -3439,9 +3439,9 @@
       "category": "学习指南",
       "scope": "historical_reference",
       "authority": "reference",
-      "lifecycle": "historical",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "active",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -3451,7 +3451,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked",
+      "lifecycle_override": "active",
+      "git_tracking_policy": "markdown_bodies_eligible_user_triggered_commit"
     },
     {
       "doc_id": "doc-08c643bb284f",
@@ -4276,9 +4278,9 @@
       "category": "部署方案",
       "scope": "historical_reference",
       "authority": "reference",
-      "lifecycle": "historical",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "active",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -4288,7 +4290,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked",
+      "lifecycle_override": "active",
+      "git_tracking_policy": "markdown_bodies_eligible_user_triggered_commit"
     },
     {
       "doc_id": "doc-c7d6b9f304a2",
@@ -4948,12 +4952,14 @@
       "path": "01_指南与解读/部署方案/服务器零训练Gitee往返试点检查方案_20260810.md",
       "category": "部署方案",
       "scope": "server_zero_training_gitee_roundtrip_pilot",
-      "authority": "normative",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -4962,7 +4968,8 @@
       "tags": [],
       "connectivity_modes": [],
       "availability": "tracked",
-      "doc_role": "deployment_plan"
+      "doc_role": "deployment_plan",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-2733f1449740",
@@ -5074,9 +5081,9 @@
       "category": "组会汇报",
       "scope": "historical_reference",
       "authority": "reference",
-      "lifecycle": "historical",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "active",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5086,7 +5093,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked",
+      "lifecycle_override": "active",
+      "git_tracking_policy": "markdown_bodies_eligible_user_triggered_commit"
     },
     {
       "doc_id": "doc-0de9c192c699",
@@ -5537,12 +5546,14 @@
       "path": "automation/README.md",
       "category": "项目入口",
       "scope": "gitee_job_protocol",
-      "authority": "normative",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -5550,7 +5561,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-0ac22bde05aa",
@@ -5818,12 +5830,13 @@
       "category": "项目入口",
       "scope": "historical_guidance",
       "authority": "reference",
-      "lifecycle": "superseded",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
       "superseded_by": [
-        "plan-server-maintenance"
+        "plan-server-maintenance",
+        "manual-experiment-delivery-20260905"
       ],
       "truth_sources": [
         "project_state/current_state.json"
@@ -5832,7 +5845,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-9e8fc4dbabef",
@@ -6020,11 +6034,13 @@
       "category": "状态方案",
       "scope": "plan_review:gitee_numbered_workspace_protocol_v001",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6032,7 +6048,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-795c370926ca",
@@ -6219,12 +6236,14 @@
       "path": "project_state/plans/server_maintenance.md",
       "category": "状态方案",
       "scope": "server_maintenance",
-      "authority": "normative",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6232,7 +6251,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-56bb83e3d8ef",
@@ -6279,12 +6299,14 @@
       "path": "project_state/plans/workflow_governance_v3_20260726.md",
       "category": "状态方案",
       "scope": "workflow_governance_v3",
-      "authority": "normative",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6292,7 +6314,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-92f924374faa",
@@ -6320,11 +6343,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_p0a",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6332,7 +6357,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-686ca9d0dd89",
@@ -6340,11 +6366,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_p0b",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6352,7 +6380,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-a101405626c1",
@@ -6360,11 +6389,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_p0c",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6372,7 +6403,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-a06d0ae3cd57",
@@ -6380,11 +6412,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r0",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6392,7 +6426,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-3b2fb6fea40d",
@@ -6400,11 +6435,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r10",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6412,7 +6449,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-4880e4d43070",
@@ -6420,11 +6458,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r11",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6432,7 +6472,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-50667ae25d3e",
@@ -6440,11 +6481,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r1",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6452,7 +6495,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-8a5c428a6578",
@@ -6460,11 +6504,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r2",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6472,7 +6518,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-6ab835dcf4da",
@@ -6480,11 +6527,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r3",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6492,7 +6541,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-d0ad3eb7db9b",
@@ -6500,11 +6550,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r4",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6512,7 +6564,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-83440384a8e3",
@@ -6520,11 +6573,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r5",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6532,7 +6587,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-7f802fe3ca69",
@@ -6540,11 +6596,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r5b",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6552,7 +6610,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-37646fcb3cab",
@@ -6560,11 +6619,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r6",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6572,7 +6633,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-077723f5bf1b",
@@ -6580,11 +6642,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r7",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6592,7 +6656,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-1c1a47b0eadd",
@@ -6600,11 +6665,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r8",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6612,7 +6679,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-ea8e1a83811f",
@@ -6620,11 +6688,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_r9",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6632,7 +6702,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-542d6960864e",
@@ -6660,11 +6731,13 @@
       "category": "状态方案",
       "scope": "plan_review:workflow_governance_v3_refactor_review",
       "authority": "reference",
-      "lifecycle": "approved_design",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
-      "superseded_by": [],
+      "superseded_by": [
+        "manual-experiment-delivery-20260905"
+      ],
       "truth_sources": [
         "project_state/current_state.json"
       ],
@@ -6672,7 +6745,8 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "lifecycle_override": "historical"
     },
     {
       "doc_id": "doc-d11c3567d955",
@@ -6720,9 +6794,9 @@
       "category": "团队共享材料",
       "scope": "historical_reference",
       "authority": "reference",
-      "lifecycle": "historical",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "active",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6732,7 +6806,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked",
+      "lifecycle_override": "active",
+      "git_tracking_policy": "markdown_bodies_eligible_user_triggered_commit"
     },
     {
       "doc_id": "doc-622015f2f7fa",
@@ -7333,13 +7409,79 @@
       "tags": [],
       "connectivity_modes": [],
       "availability": "local_only"
+    },
+    {
+      "doc_id": "phase2-meeting-decision-20260905",
+      "path": "project_state/governance/Phase2会议决策_20260905.md",
+      "category": "会议决策",
+      "scope": "phase2",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-09-05T19:25:48+08:00",
+      "state_revision": 256,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/directives.jsonl",
+        "project_state/current_state.json"
+      ],
+      "purpose": "登记软对比优先、全部指标待定保留、项目内部对照及六折与补充实验暂缓的用户决定",
+      "created": "2026-09-05",
+      "tags": [
+        "Phase2",
+        "会议决策"
+      ],
+      "connectivity_modes": [
+        "offline"
+      ],
+      "availability": "local_only"
+    },
+    {
+      "doc_id": "manual-experiment-delivery-20260905",
+      "path": "project_state/governance/独立实验包与手动回传_20260905.md",
+      "category": "实验交付",
+      "scope": "manual_experiment_delivery",
+      "authority": "normative",
+      "lifecycle": "active",
+      "availability": "local_only",
+      "git_tracking_policy": "eligible_user_triggered_commit",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "AGENTS.md",
+        "configs/server_paths.yaml",
+        "project_state/directives.jsonl"
+      ],
+      "decision_id": "DIR-20260905-002"
+    },
+    {
+      "doc_id": "manual-experiment-template-20260905",
+      "path": "experiments/_template/README.md",
+      "category": "实验交付",
+      "scope": "manual_experiment_delivery",
+      "authority": "normative",
+      "lifecycle": "active",
+      "availability": "local_only",
+      "git_tracking_policy": "eligible_user_triggered_commit",
+      "verified_at": "2026-09-05T23:02:01+08:00",
+      "state_revision": 257,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "AGENTS.md",
+        "configs/server_paths.yaml",
+        "project_state/directives.jsonl"
+      ],
+      "decision_id": "DIR-20260905-002"
     }
   ],
   "summary": {
-    "total": 353,
-    "live": 281,
+    "total": 354,
+    "live": 282,
     "missing": 72,
-    "active": 29,
+    "active": 30,
     "superseded": 12,
     "historical": 221,
     "pending_review": 1,

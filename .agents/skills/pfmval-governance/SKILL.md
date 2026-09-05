@@ -12,13 +12,14 @@ Use the smallest set of current sources needed for the request. The user's curre
 - Distinguish current facts, confirmed experimental evidence, user decisions, assumptions, and missing inputs.
 - Preview consequential state changes when the user has not already specified the exact outcome.
 - Use existing project commands and registries when they are helpful; direct, scoped file maintenance is also allowed when authorized.
-- Treat W### worktrees, implementation plans, Registry entries, lifecycle labels, `start-check`, source commits and hashes as optional organization or audit mechanisms unless the task specifically requires one.
+- Worktree rules are retired historical requirements. Create a worktree only on an explicit user instruction; work directly in experiments/<experiment_name>/ using experiments/_template/. Keep each package self-contained.
+- Do not check Git cleanliness or run start-check before ordinary experiments. GitHub commits/pushes are user-triggered backups; arrange a user-triggered backup commit before large changes. Do not calculate hashes without the user's explicit approval.
 - Treat schema damage and unfinished write transactions as operational errors. Other navigation, documentation, workflow, transport, Registry or hash drift should normally be reported as `WARN`, not used to stop the task.
 
 ## Boundaries
 
 Follow the four core constraints in `AGENTS.md`: user authorization and scope, non-destructive operation, scientific validity, and truthful facts/conclusions. Do not infer permission for training, publication, external writes or destructive changes from a planning or maintenance request.
 
-Synchronization is configurable. Gitee is the currently configured channel, not a permanent exclusive channel; user-managed archives, SSH or other channels may be added later. Do not require synchronization hashes for ordinary transfers or maintenance.
+Current transport is direct user-managed folder copying (manual_directory). Give exact code/return folder paths; do not auto-create archives locally or on the server. The user compresses files if needed, unless explicitly requesting the agent to do so; Gitee is paused and SSH is unused. Read only this project's configs/server_paths.yaml for the Windows server: QZS code and runs directories are separate. Preserve runs when replacing code. Compute derived metrics and register results locally, not on the server. For concrete package instructions, read experiments/_template/README.md. Designated project Markdown bodies are eligible for Git backup; this does not authorize commits, pushes or changes to team content.
 
 Use `pfmval-audit` only when the user requests independent verification or a formal decision, not as a mandatory layer for routine work.

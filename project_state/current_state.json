@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "state_revision": 255,
-  "updated_at": "2026-09-04T13:40:59+00:00",
+  "state_revision": 258,
+  "updated_at": "2026-09-05T23:52:50+08:00",
   "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
     "DIR-20260710-003",
@@ -15,10 +15,12 @@
     "DIR-20260827-001",
     "DIR-20260829-001",
     "DIR-20260829-002",
-    "DIR-20260904-001",
     "DIR-20260904-003",
     "DIR-20260904-004",
-    "DIR-20260904-005"
+    "DIR-20260904-005",
+    "DIR-20260905-001",
+    "DIR-20260905-002",
+    "DIR-20260905-003"
   ],
   "active_plans": {
     "mpp_training": {
@@ -33,17 +35,11 @@
       "status": "active",
       "approved_at": "2026-07-17T20:19:30+08:00"
     },
-    "server_maintenance": {
-      "doc_id": "plan-server-maintenance",
-      "path": "project_state/plans/server_maintenance.md",
+    "manual_experiment_delivery": {
+      "doc_id": "manual-experiment-delivery-20260905",
+      "path": "project_state/governance/独立实验包与手动回传_20260905.md",
       "status": "active",
-      "approved_at": "2026-07-11T00:00:00+08:00"
-    },
-    "workflow_governance_v3": {
-      "doc_id": "doc-a567a7562613",
-      "path": "project_state/plans/workflow_governance_v3_20260726.md",
-      "status": "active",
-      "approved_at": "2026-07-26T18:26:19+08:00"
+      "approved_at": "2026-09-05T23:02:01+08:00"
     }
   },
   "active_skills": {
@@ -64,118 +60,30 @@
       "approved_at": "2026-07-27T04:26:57+08:00"
     }
   },
-  "pending_plan_reviews": {
-    "gitee_numbered_workspace_protocol_v001": {
-      "path": "project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-26T20:02:02+08:00"
-    },
-    "workflow_governance_v3_refactor_review": {
-      "path": "project_state/plans/workflow_governance_v3_refactor_review_20260726.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_p0a": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_p0b": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_p0c": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r0": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r1": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R1_workspace_registry_shadow.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r2": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R2_persistent_experiment_workspace.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r3": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R3_protocol_approval_and_run_budget.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r4": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R4_critical_contract_and_gate_tiering.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r5": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R5_result_artifact_tiering.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r5b": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R5b_document_registry_and_state_gates.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r6": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R6_asset_registry_shadow.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r7": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R7_shared_dependency_extraction.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r8": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r9": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r10": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    },
-    "workflow_governance_v3_refactor_r11": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md",
-      "status": "approved_design",
-      "approved_at": "2026-07-27T03:25:05+08:00"
-    }
-  },
+  "pending_plan_reviews": {},
   "server_transport": {
     "mode": "configurable",
-    "current_channel": "gitee",
+    "current_channel": "manual_directory",
     "active_channels": [
+      "manual_directory"
+    ],
+    "paused_channels": [
       "gitee"
     ],
     "candidate_channels": [
-      "manual_archive",
       "ssh"
     ],
-    "remote_name": "gitee",
+    "remote_name": null,
     "allowed_operations": [
-      "git_ls_remote",
-      "git_fetch",
-      "git_push"
+      "user_manual_copy",
+      "user_manual_return"
     ],
-    "experiment_worktree_update_mode": "fetch_exact_commit_only",
-    "canonical_code_writer": "local_numbered_workspace",
-    "return_mode": "server_owned_attempt_ref",
-    "force_push_allowed": false
+    "canonical_code_writer": "local_experiment_package",
+    "return_mode": "user_owned_run_directory",
+    "code_root_key": "server_manual_code",
+    "runs_root_key": "server_manual_runs",
+    "force_push_allowed": false,
+    "auto_archive": false
   },
   "active_training_jobs": [],
   "pending_result_ids": [],
@@ -195,8 +103,8 @@
     "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804"
   ],
   "phase2_program": {
-    "status": "formal_preparation",
-    "updated_at": "2026-09-04T21:39:06+08:00",
+    "status": "soft_contrastive_improvement_first",
+    "updated_at": "2026-09-05T19:25:48+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
     "planned_experiment_ids": [
       "phase2_gene_reconstruction_comparison_v001_20260904",
@@ -204,19 +112,65 @@
       "phase2_pathology_model_benchmark_v001_20260904"
     ],
     "pending_inputs": [
-      "final_paper_mainline",
-      "gene_set_membership_and_expression_contract",
-      "sparse_sampling_rule_and_matched_random_control",
-      "pathology_model_shortlist_and_common_protocol"
+      "targeted_soft_contrastive_model_revision",
+      "improvement_criterion_and_internal_selection_protocol",
+      "final_publication_metric_selection",
+      "final_cohort_and_input_contracts"
     ],
     "deferred_designs": [
-      "six_fold_leave_one_patient_out_pending_team_decision"
+      "six_fold_leave_one_patient_out_deferred_by_user_20260905"
     ],
     "source_documents": [
       "团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md",
       "团队项目进度与结论/lzd/Phase2与Phase3工作计划原文_20260903.md",
-      "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md"
-    ]
+      "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md",
+      "project_state/governance/Phase2会议决策_20260905.md"
+    ],
+    "decision_id": "DIR-20260905-001",
+    "current_method": "软对比联合学习（现有残差纠错方案作为改进起点）",
+    "method_reference_experiment_id": "mpp2_cpgcr_probe_v001_20260811",
+    "method_reference_arm": "CPGCR",
+    "baseline_role": "冻结UNI2-h加两层MLP作为固定对照；不是当前选定研究主线",
+    "supplementary_execution_status": "deferred_until_soft_contrastive_improvement_review",
+    "priority_order": [
+      "先诊断并针对本数据改进软对比联合学习",
+      "指标改善后再推进基因重建、密度、多模型及Phase 2/3衔接补充实验"
+    ],
+    "training_authorized_by_this_decision": false,
+    "publication_metric_policy": {
+      "status": "all_metrics_retained_publication_selection_pending",
+      "decision_id": "DIR-20260905-001",
+      "paper_primary": [],
+      "paper_supplementary": [],
+      "retained_metrics": [
+        "mean_per_pathway_pcc",
+        "pooled_pcc",
+        "mean_per_pathway_z_rmse",
+        "mean_per_pathway_ccc",
+        "mean_per_pathway_spearman",
+        "mean_residual_morans_i",
+        "mean_per_pathway_masked_ssim",
+        "mean_per_pathway_raw_r2",
+        "mean_per_pathway_z_mae",
+        "mean_per_pathway_raw_mae",
+        "pooled_z_mse",
+        "train_sd_normalized_nrmse",
+        "mean_spot_topk_pathway_overlap"
+      ],
+      "retain_distribution_summaries_and_95ci_metadata": true,
+      "comparison_scope": "within_project_before_after_and_matched_experiments",
+      "cross_paper_numeric_ranking": "deferred_by_user",
+      "literature_method_reference": "retained",
+      "user_publication_preference": "后续根据本项目及对比验证实验，选择有优势的指标发表；两种PCC暂时都保留，后续看哪个较高再选择。",
+      "pcc_name_mapping": {
+        "逐通路平均PCC": "mean_per_pathway_pcc",
+        "用户所称平均池化PCC": "pooled_pcc（目前已有的展平/整体PCC，不是先做图像平均池化）"
+      },
+      "methodological_warning": "两种PCC的统计对象与汇总不同，不能因某一种绝对值更高就认定模型更好。发表选择如在观察结果后形成，应说明其探索性并保留完整指标，不能隐藏不利结果或冒充预先指定主终点；文献定义不清也不能使两种公式等价。此为方法说明，不改变用户的暂缓裁决。",
+      "model_selection_boundary": "监督预处理、模型改动、超参数及checkpoint选择仅使用训练或内部验证数据，不使用外部测试成绩调参。",
+      "applicability": "全部保留不等于强行填值；SSIM无有效窗口、Top-k未预定义、单患者泛化CI不可估计等情况保留明确状态。"
+    },
+    "decision_record": "project_state/governance/Phase2会议决策_20260905.md"
   },
   "blocked_actions": [
     "formal_training_without_user_approval",
@@ -227,7 +181,13 @@
   "superseded_conclusions": [
     "Gitee is the permanent exclusive server synchronization channel.",
     "Old three-patient LoRA, Token, frequency and spatial-repair results are tuning references only.",
-    "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes."
+    "MPP1, MPP3, MPP4 and MPP5 are not active follow-up training routes.",
+    "2026-09-05会议前建议将直接通路回归作为默认研究主线；当前用户选择软对比联合学习，直接回归保留对照。",
+    "既有指标合同中的发表主副线为历史登记口径；当前全部指标保留、最终发表选择待定。",
+    "2026-09-04补充实验优先准备排序被2026-09-05软对比改进优先取代；原计划与已有结果继续保留。",
+    "Worktrees are an optional default experiment organization tool; new creation now requires an explicit user instruction.",
+    "Gitee is the current server transport; it is now paused in favor of manual packages.",
+    "Learning, deployment and team Markdown bodies are local-only; designated directories now permit Git backup."
   ],
   "last_sync_check_at": null,
   "notes": [
@@ -272,5 +232,192 @@
         "raw_r2_drop": -0.06740000000000002
       }
     }
+  },
+  "legacy_server_transport": {
+    "mode": "configurable",
+    "current_channel": "gitee",
+    "active_channels": [
+      "gitee"
+    ],
+    "candidate_channels": [
+      "manual_archive",
+      "ssh"
+    ],
+    "remote_name": "gitee",
+    "allowed_operations": [
+      "git_ls_remote",
+      "git_fetch",
+      "git_push"
+    ],
+    "experiment_worktree_update_mode": "fetch_exact_commit_only",
+    "canonical_code_writer": "local_numbered_workspace",
+    "return_mode": "server_owned_attempt_ref",
+    "force_push_allowed": false
+  },
+  "experiment_delivery": {
+    "decision_id": "DIR-20260905-002",
+    "guide": "project_state/governance/独立实验包与手动回传_20260905.md",
+    "template": "experiments/_template",
+    "local_package_pattern": "experiments/<experiment_name>",
+    "worktree_policy": "historical_only_create_on_explicit_user_instruction",
+    "routine_git_precheck": false,
+    "github_role": "backup_and_web_reading",
+    "commit_push_policy": "user_triggered_only",
+    "before_large_changes": "arrange_user_triggered_backup_commit",
+    "server_outputs": "raw_training_outputs_and_training_selection_metrics",
+    "derived_metrics_and_registration": "local",
+    "preserve_all_previously_retained_metrics": true,
+    "replace_code_preserve_runs": true,
+    "default_resume": false,
+    "transfer_preference_directive_id": "DIR-20260905-003",
+    "default_transfer": "directory_copy",
+    "auto_archive": false
+  },
+  "historical_plans": {
+    "workflow_governance_v3": {
+      "doc_id": "doc-a567a7562613",
+      "path": "project_state/plans/workflow_governance_v3_20260726.md",
+      "status": "historical",
+      "approved_at": "2026-07-26T18:26:19+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "server_maintenance": {
+      "doc_id": "plan-server-maintenance",
+      "path": "project_state/plans/server_maintenance.md",
+      "status": "historical",
+      "approved_at": "2026-07-11T00:00:00+08:00",
+      "superseded_by": "DIR-20260905-002"
+    }
+  },
+  "historical_plan_reviews": {
+    "gitee_numbered_workspace_protocol_v001": {
+      "path": "project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md",
+      "status": "historical",
+      "approved_at": "2026-07-26T20:02:02+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_review": {
+      "path": "project_state/plans/workflow_governance_v3_refactor_review_20260726.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_p0a": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_p0b": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_p0c": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r0": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r1": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R1_workspace_registry_shadow.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r2": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R2_persistent_experiment_workspace.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r3": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R3_protocol_approval_and_run_budget.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r4": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R4_critical_contract_and_gate_tiering.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r5": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R5_result_artifact_tiering.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r5b": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R5b_document_registry_and_state_gates.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r6": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R6_asset_registry_shadow.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r7": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R7_shared_dependency_extraction.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r8": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r9": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r10": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    },
+    "workflow_governance_v3_refactor_r11": {
+      "path": "project_state/plans/workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md",
+      "status": "historical",
+      "approved_at": "2026-07-27T03:25:05+08:00",
+      "superseded_by": "DIR-20260905-002"
+    }
+  },
+  "last_server_load_check": {
+    "source_report": "experiments/server_load_check_20260905/deliverables/20260905_234330_776_3c6878e3/report.json",
+    "run_id": "20260905_234330_776_3c6878e3",
+    "server_run_ended_at": "2026-09-05T23:46:06.0393825+08:00",
+    "reviewed_at": "2026-09-05T23:52:50+08:00",
+    "counts": {
+      "PASS": 47,
+      "WARN": 3,
+      "FAIL": 0
+    },
+    "scope": "sample_loading_only_not_full_training_readiness",
+    "python": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:37:03) [MSC v.1929 64 bit (AMD64)]",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "gpu": "NVIDIA GeForce RTX 4080",
+    "warning_ids": [
+      "import_h5py",
+      "import_anndata",
+      "server_phase3_escc_mpp2_raw_scores"
+    ]
   }
 }

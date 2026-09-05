@@ -3,10 +3,11 @@
 <!-- project-state:start -->
 ## 当前项目状态（自动生成）
 
-- 状态版本：`255`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
+- 状态版本：`258`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
 - 用户导航：[PROJECT_GUIDE.md](PROJECT_GUIDE.md)；简洁实验进度：[experiments/experiment_progress.md](experiments/experiment_progress.md)。
 - 当前 MPP 主线：**MPP2**；其它统一重跑结果保留为背景/方法参考。
-- 服务器通信：当前通道为 **gitee**；后续可按用户指令扩展。
+- 服务器通信：**直接复制文件夹回传，不自动压缩**；Gitee 暂停。新实验使用 [独立包模板](experiments/_template/README.md)，工作树仅在用户明确要求时创建。
+- GitHub：仅备份与网页查阅，提交推送由用户触发；日常实验不进行 Git 干净状态预检。
 - 实验事实源：`experiments/experiment_registry.json`；Dashboard 为派生视图。
 
 <!-- project-state:end -->

@@ -1,5 +1,5 @@
 schema_version: "2.0"
-updated_at: "2026-08-10T00:00:00+08:00"
+updated_at: "2026-09-05T23:52:50+08:00"
 inventory:
   source: '01_指南与解读\部署方案\服务器路径索引_20260701.md'
   generated_at: "2026-07-01"
@@ -15,6 +15,19 @@ runtime:
   forbid_path_lookup: true
 transport:
   mode: configurable
+  current_channel: manual_directory
+  active_channels: [manual_directory]
+  auto_archive: false
+  paused_channels: [gitee]
+  candidate_channels: [ssh]
+  remote: null
+  fetch_exact_commit_only: false
+  force_push_allowed: false
+  code_root_key: server_manual_code
+  runs_root_key: server_manual_runs
+# Historical Gitee configuration; not the current execution policy.
+legacy_transport:
+  mode: configurable
   current_channel: gitee
   active_channels: [gitee]
   candidate_channels: [manual_archive, ssh]
@@ -22,6 +35,26 @@ transport:
   fetch_exact_commit_only: true
   force_push_allowed: false
 paths:
+  server_manual_code:
+    path: 'D:\AIPatho\qzs\code'
+    kind: directory
+    status: active
+    required_on: server
+    stability: user_selected
+    role: manual_experiment_package_root
+    write_policy: user_replaces_experiment_code_only
+    live_verification_required: true
+    note: User-selected destination; not created or verified on the server by this change.
+  server_manual_runs:
+    path: 'D:\AIPatho\qzs\runs'
+    kind: directory
+    status: active
+    required_on: server
+    stability: user_selected
+    role: manual_experiment_run_root
+    write_policy: new_run_directory_only
+    live_verification_required: true
+    note: Preserve existing runs when replacing code; not created on the server by this change.
   server_qzs_root:
     path: 'D:\AIPatho\qzs'
     kind: directory
@@ -39,14 +72,14 @@ paths:
   server_governance_checkout:
     path: 'D:\AIPatho\qzs\pfmval_governance'
     kind: git_worktree
-    status: active
+    status: legacy
     required_on: server
     stability: medium_low
     role: governance_dispatch_checkout
   server_experiment_worktrees:
     path: 'D:\AIPatho\qzs\pfmval_automation'
     kind: directory
-    status: active
+    status: legacy
     required_on: server
     stability: medium_low
     role: persistent_numbered_workspace_root
@@ -60,14 +93,14 @@ paths:
   server_experiment_runs:
     path: 'D:\AIPatho\qzs\pfmval_experiment_runs'
     kind: directory
-    status: active
+    status: legacy
     required_on: server
     stability: medium_low
     role: attempt_output_root
   server_result_returns:
     path: 'D:\AIPatho\qzs\pfmval_result_returns'
     kind: directory
-    status: active
+    status: legacy
     required_on: server
     stability: medium_low
     role: result_bundle_staging_root
@@ -82,7 +115,7 @@ paths:
   server_runtime_bundles:
     path: 'D:\AIPatho\qzs\pfmval_runtime_bundles'
     kind: directory
-    status: active
+    status: legacy
     required_on: server
     stability: medium_low
     role: immutable_runtime_bundle_root
@@ -417,3 +450,24 @@ md_import:
     - 原始 ssGSEA 禁止直接用于训练：任何训练前必须先生成标准化标签，参数只在训练集上拟合。
 
 
+
+# User-returned diagnostic observation; does not promote every recorded path to verified.
+last_load_check:
+  source_report: experiments/server_load_check_20260905/deliverables/20260905_234330_776_3c6878e3/report.json
+  run_id: 20260905_234330_776_3c6878e3
+  server_run_ended_at: '2026-09-05T23:46:06.0393825+08:00'
+  reviewed_at: '2026-09-05T23:52:50+08:00'
+  counts:
+    PASS: 47
+    WARN: 3
+    FAIL: 0
+  scope: sample_loading_only_not_full_training_readiness
+  python: 3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:37:03) [MSC
+    v.1929 64 bit (AMD64)]
+  torch: 2.6.0+cu124
+  cuda: '12.4'
+  gpu: NVIDIA GeForce RTX 4080
+  warning_ids:
+  - import_h5py
+  - import_anndata
+  - server_phase3_escc_mpp2_raw_scores

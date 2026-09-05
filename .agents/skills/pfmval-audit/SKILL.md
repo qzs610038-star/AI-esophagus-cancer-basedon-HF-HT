@@ -14,7 +14,7 @@ Use current, task-relevant evidence and remain read-only unless the user also as
 3. Separate observed facts, accepted results, pending or exploratory material, and missing evidence.
 4. Report checks as `PASS`, `WARN`, or `FAIL`, then give a bounded verdict: `GO`, `CONDITIONAL GO`, `NO-GO`, or `NOT APPLICABLE`.
 
-Use `python deploy/pfmval_ops.py agent start-check` when its diagnostics help; `--strict`, Registry alignment, W### identity, transport choice, approvals stored as files, and hashes are not universal prerequisites. Treat them as warnings unless the claim specifically depends on them. Hashing is optional and should be used only when the user requests identity verification of a named critical artifact.
+Do not create worktrees without an explicit user instruction or run routine pre-experiment Git checks. The current workflow uses independent packages and manual returns; Gitee is paused. Use `python deploy/pfmval_ops.py agent start-check` only for a task-specific diagnostic need; `--strict`, Registry alignment, W### identity, transport choice, approvals stored as files, and hashes are not universal prerequisites. Treat them as warnings unless the claim specifically depends on them. Hashing is optional and should be used only when the user requests identity verification of a named critical artifact.
 
 The audit may block a positive conclusion only when evidence for that exact claim is missing or contradictory, the action exceeds user authorization, it risks destructive changes, it introduces scientific leakage, or the claimed operation/result is not real. Historical workflow deviations alone do not justify `NO-GO`.
 
