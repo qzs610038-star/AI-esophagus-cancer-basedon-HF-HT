@@ -1,0 +1,443 @@
+{
+  "python_interpreter": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+  "runs_root": "D:\\AIPatho\\qzs\\runs",
+  "checks": [
+    {
+      "id": "runtime",
+      "label": "Windows 与实际 Python",
+      "kind": "runtime",
+      "required": true,
+      "source": "configs/server_paths.yaml:runtime"
+    },
+    {
+      "id": "import_torch",
+      "label": "PyTorch",
+      "kind": "module",
+      "required": true,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "torch"
+    },
+    {
+      "id": "import_torchvision",
+      "label": "图像预处理 torchvision",
+      "kind": "module",
+      "required": true,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "torchvision"
+    },
+    {
+      "id": "import_timm",
+      "label": "模型库 timm",
+      "kind": "module",
+      "required": true,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "timm"
+    },
+    {
+      "id": "import_numpy",
+      "label": "NumPy",
+      "kind": "module",
+      "required": true,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "numpy"
+    },
+    {
+      "id": "import_pandas",
+      "label": "pandas",
+      "kind": "module",
+      "required": true,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "pandas"
+    },
+    {
+      "id": "import_PIL",
+      "label": "Pillow 图像读取",
+      "kind": "module",
+      "required": true,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "PIL"
+    },
+    {
+      "id": "import_scipy",
+      "label": "SciPy",
+      "kind": "module",
+      "required": false,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "scipy"
+    },
+    {
+      "id": "import_sklearn",
+      "label": "scikit-learn",
+      "kind": "module",
+      "required": false,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "sklearn"
+    },
+    {
+      "id": "import_h5py",
+      "label": "HDF5 读取",
+      "kind": "module",
+      "required": false,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "h5py"
+    },
+    {
+      "id": "import_anndata",
+      "label": "AnnData 读取",
+      "kind": "module",
+      "required": false,
+      "source": "项目数据/模型读取代码的实际依赖",
+      "module": "anndata"
+    },
+    {
+      "id": "cuda",
+      "label": "CUDA 小张量计算（默认 GPU 0）",
+      "kind": "cuda",
+      "required": true,
+      "source": "模型运行环境"
+    },
+    {
+      "id": "uni2_weights",
+      "label": "UNI2-h 权重抽样读取（CPU）",
+      "kind": "weights",
+      "required": true,
+      "source": "shared_huggingface_cache + uni2h/uni2h_utils.py 本地缓存布局",
+      "path": "D:\\AIPatho\\shared\\.cache\\huggingface\\hub\\models--MahmoodLab--UNI2-h\\snapshots"
+    },
+    {
+      "id": "path_shared_cache_root",
+      "label": "shared_cache_root 目录",
+      "kind": "directory",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\shared\\.cache"
+    },
+    {
+      "id": "path_shared_huggingface_cache",
+      "label": "shared_huggingface_cache 目录",
+      "kind": "directory",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\shared\\.cache\\huggingface"
+    },
+    {
+      "id": "path_shared_torch_cache",
+      "label": "shared_torch_cache 目录",
+      "kind": "directory",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\shared\\.cache\\torch"
+    },
+    {
+      "id": "path_mpp_data_root",
+      "label": "mpp_data_root 目录",
+      "kind": "directory",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch"
+    },
+    {
+      "id": "path_server_mpp_flat_cache",
+      "label": "server_mpp_flat_cache 目录",
+      "kind": "directory",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache"
+    },
+    {
+      "id": "path_server_mpp_partner_cache",
+      "label": "server_mpp_partner_cache 目录",
+      "kind": "directory",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache"
+    },
+    {
+      "id": "mpp2_image_HYZ15040",
+      "label": "MPP2 HYZ15040 图像读取",
+      "kind": "image",
+      "required": true,
+      "source": "templates:mpp_patient_patch_images (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\HYZ15040\\patch_images"
+    },
+    {
+      "id": "mpp2_label_HYZ15040",
+      "label": "MPP2 HYZ15040 原始标签读取",
+      "kind": "csv",
+      "required": true,
+      "source": "templates:mpp_patient_raw_ssgsea (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\HYZ15040\\HYZ15040_ssGSEA.csv"
+    },
+    {
+      "id": "mpp2_cache_HYZ15040",
+      "label": "MPP2 HYZ15040 1536 维特征读取",
+      "kind": "cache_candidates",
+      "required": true,
+      "source": "server_mpp_partner_cache/server_mpp_flat_cache + dataset_mpp_manifest.py",
+      "candidates": [
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\MPP2_UNI\\HYZ15040",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\2\\HYZ15040",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\MPP2_UNI\\HYZ15040",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\2\\HYZ15040"
+      ]
+    },
+    {
+      "id": "mpp2_image_JFX",
+      "label": "MPP2 JFX 图像读取",
+      "kind": "image",
+      "required": true,
+      "source": "templates:mpp_patient_patch_images (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\JFX\\patch_images"
+    },
+    {
+      "id": "mpp2_label_JFX",
+      "label": "MPP2 JFX 原始标签读取",
+      "kind": "csv",
+      "required": true,
+      "source": "templates:mpp_patient_raw_ssgsea (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\JFX\\JFX_ssGSEA.csv"
+    },
+    {
+      "id": "mpp2_cache_JFX",
+      "label": "MPP2 JFX 1536 维特征读取",
+      "kind": "cache_candidates",
+      "required": true,
+      "source": "server_mpp_partner_cache/server_mpp_flat_cache + dataset_mpp_manifest.py",
+      "candidates": [
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\MPP2_UNI\\JFX",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\2\\JFX",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\MPP2_UNI\\JFX",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\2\\JFX"
+      ]
+    },
+    {
+      "id": "mpp2_image_LMZ12939",
+      "label": "MPP2 LMZ12939 图像读取",
+      "kind": "image",
+      "required": true,
+      "source": "templates:mpp_patient_patch_images (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\LMZ12939\\patch_images"
+    },
+    {
+      "id": "mpp2_label_LMZ12939",
+      "label": "MPP2 LMZ12939 原始标签读取",
+      "kind": "csv",
+      "required": true,
+      "source": "templates:mpp_patient_raw_ssgsea (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\LMZ12939\\LMZ12939_ssGSEA.csv"
+    },
+    {
+      "id": "mpp2_cache_LMZ12939",
+      "label": "MPP2 LMZ12939 1536 维特征读取",
+      "kind": "cache_candidates",
+      "required": true,
+      "source": "server_mpp_partner_cache/server_mpp_flat_cache + dataset_mpp_manifest.py",
+      "candidates": [
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\MPP2_UNI\\LMZ12939",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\2\\LMZ12939",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\MPP2_UNI\\LMZ12939",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\2\\LMZ12939"
+      ]
+    },
+    {
+      "id": "mpp2_image_TGC",
+      "label": "MPP2 TGC 图像读取",
+      "kind": "image",
+      "required": true,
+      "source": "templates:mpp_patient_patch_images (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\TGC\\patch_images"
+    },
+    {
+      "id": "mpp2_label_TGC",
+      "label": "MPP2 TGC 原始标签读取",
+      "kind": "csv",
+      "required": true,
+      "source": "templates:mpp_patient_raw_ssgsea (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\TGC\\TGC_ssGSEA.csv"
+    },
+    {
+      "id": "mpp2_cache_TGC",
+      "label": "MPP2 TGC 1536 维特征读取",
+      "kind": "cache_candidates",
+      "required": true,
+      "source": "server_mpp_partner_cache/server_mpp_flat_cache + dataset_mpp_manifest.py",
+      "candidates": [
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\MPP2_UNI\\TGC",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\2\\TGC",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\MPP2_UNI\\TGC",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\2\\TGC"
+      ]
+    },
+    {
+      "id": "mpp2_image_XSL",
+      "label": "MPP2 XSL 图像读取",
+      "kind": "image",
+      "required": true,
+      "source": "templates:mpp_patient_patch_images (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XSL\\patch_images"
+    },
+    {
+      "id": "mpp2_label_XSL",
+      "label": "MPP2 XSL 原始标签读取",
+      "kind": "csv",
+      "required": true,
+      "source": "templates:mpp_patient_raw_ssgsea (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XSL\\XSL_ssGSEA.csv"
+    },
+    {
+      "id": "mpp2_cache_XSL",
+      "label": "MPP2 XSL 1536 维特征读取",
+      "kind": "cache_candidates",
+      "required": true,
+      "source": "server_mpp_partner_cache/server_mpp_flat_cache + dataset_mpp_manifest.py",
+      "candidates": [
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\MPP2_UNI\\XSL",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\2\\XSL",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\MPP2_UNI\\XSL",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\2\\XSL"
+      ]
+    },
+    {
+      "id": "mpp2_image_XZY",
+      "label": "MPP2 XZY 图像读取",
+      "kind": "image",
+      "required": true,
+      "source": "templates:mpp_patient_patch_images (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XZY\\patch_images"
+    },
+    {
+      "id": "mpp2_label_XZY",
+      "label": "MPP2 XZY 原始标签读取",
+      "kind": "csv",
+      "required": true,
+      "source": "templates:mpp_patient_raw_ssgsea (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XZY\\XZY_ssGSEA.csv"
+    },
+    {
+      "id": "mpp2_cache_XZY",
+      "label": "MPP2 XZY 1536 维特征读取",
+      "kind": "cache_candidates",
+      "required": true,
+      "source": "server_mpp_partner_cache/server_mpp_flat_cache + dataset_mpp_manifest.py",
+      "candidates": [
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\MPP2_UNI\\XZY",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\2\\XZY",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\MPP2_UNI\\XZY",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\2\\XZY"
+      ]
+    },
+    {
+      "id": "mpp2_image_ZHZ",
+      "label": "MPP2 ZHZ 图像读取",
+      "kind": "image",
+      "required": true,
+      "source": "templates:mpp_patient_patch_images (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\ZHZ\\patch_images"
+    },
+    {
+      "id": "mpp2_label_ZHZ",
+      "label": "MPP2 ZHZ 原始标签读取",
+      "kind": "csv",
+      "required": true,
+      "source": "templates:mpp_patient_raw_ssgsea (group=2)",
+      "path": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\ZHZ\\ZHZ_ssGSEA.csv"
+    },
+    {
+      "id": "mpp2_cache_ZHZ",
+      "label": "MPP2 ZHZ 1536 维特征读取",
+      "kind": "cache_candidates",
+      "required": true,
+      "source": "server_mpp_partner_cache/server_mpp_flat_cache + dataset_mpp_manifest.py",
+      "candidates": [
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\MPP2_UNI\\ZHZ",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache\\2\\ZHZ",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\MPP2_UNI\\ZHZ",
+        "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache\\2\\ZHZ"
+      ]
+    },
+    {
+      "id": "phase2_patch_root",
+      "label": "旧 Phase2 图像抽样",
+      "kind": "image",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\qzs\\data-phase2\\patch"
+    },
+    {
+      "id": "phase2_ssgsea_zscore_root",
+      "label": "旧 Phase2 标准化标签抽样",
+      "kind": "csv",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\qzs\\data-phase2\\ssGSEA_zscore"
+    },
+    {
+      "id": "server_mpp_standard_splits",
+      "label": "服务器历史划分 CSV 抽样",
+      "kind": "csv",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_standard_splits"
+    },
+    {
+      "id": "server_mpp2_frozen_baseline_checkpoint",
+      "label": "冻结基线 checkpoint 读取",
+      "kind": "weights",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\checkpoints\\mpp_uni2h_mlp\\mpp2_barcode_repair_v003_frozen_baseline_20260711\\best_checkpoint.pth"
+    },
+    {
+      "id": "server_phase3_escc_uni2h_features",
+      "label": "Phase3 UNI2-h 特征抽样",
+      "kind": "tensor",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\yzq\\ESCC_uni2h_features"
+    },
+    {
+      "id": "server_phase3_escc_mpp2_raw_scores",
+      "label": "Phase3 MPP2 原始特征抽样",
+      "kind": "tensor",
+      "required": false,
+      "source": "configs/server_paths.yaml:paths",
+      "path": "D:\\AIPatho\\yzq\\patch_329_scores_mpp2_20260711"
+    },
+    {
+      "id": "phase2_token_cache_hyz_train",
+      "label": "历史记录：HYZ train token 缓存",
+      "kind": "tensor",
+      "required": false,
+      "source": "configs/server_paths.yaml:md_import（历史快照，待服务器核验）",
+      "path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache_tokens\\HYZ15040\\train"
+    },
+    {
+      "id": "phase2_token_cache_hyz_val",
+      "label": "历史记录：HYZ val token 缓存",
+      "kind": "tensor",
+      "required": false,
+      "source": "configs/server_paths.yaml:md_import（历史快照，待服务器核验）",
+      "path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache_tokens\\HYZ15040\\val"
+    },
+    {
+      "id": "hf_cache_openmidnight_dir",
+      "label": "历史记录：OpenMidnight 缓存目录",
+      "kind": "directory",
+      "required": false,
+      "source": "configs/server_paths.yaml:md_import（历史快照，待服务器核验）",
+      "path": "D:\\AIPatho\\shared\\.cache\\huggingface\\hub\\models--SophontAI--OpenMidnight"
+    },
+    {
+      "id": "torch_hub_checkpoints",
+      "label": "历史记录：Torch Hub 权重抽样",
+      "kind": "weights",
+      "required": false,
+      "source": "configs/server_paths.yaml:md_import（历史快照，待服务器核验）",
+      "path": "D:\\AIPatho\\shared\\.cache\\torch\\hub\\checkpoints"
+    }
+  ],
+  "source_record": {
+    "file": "configs/server_paths.yaml",
+    "recorded_at": "2026-09-05T23:52:50+08:00"
+  }
+}

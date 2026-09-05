@@ -1,31 +1,234 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T21:39:06+08:00",
+  "updated_at": "2026-09-05T19:25:48+08:00",
   "current_mpp_policy": {
-    "effective_date": "2026-09-04",
+    "effective_date": "2026-09-05",
     "selected_mpp": 2,
-    "decision": "Use the accepted repaired MPP2 frozen baseline as the current quantitative anchor while preparing the assigned Phase 2 supplemental program. The final paper mainline between the seven-patient MPP2 route and the three-sample non-overlap route remains unresolved.",
-    "rationale": "The assigned work now focuses on finalizing the mainline, gene-mediated pathway reconstruction, sparse-train/dense-test evaluation, and a fair pathology-model benchmark. Existing LoRA and W007 results remain registered evidence but are no longer the current preparation priority.",
-    "next_recommended_experiment": "Resolve the paper mainline and input contracts, then complete protocols for the three newly planned Phase 2 experiments before execution. The six-fold leave-one-patient design remains deferred pending the team meeting decision.",
-    "reference_doc": "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md"
+    "decision": "Phase 2选定软对比联合学习作为当前研究主线，优先针对本数据调优，使其相对冻结UNI2-h加两层MLP的对照获得更清楚的指标改善；具体模型改动后续讨论。全部已列指标暂时待定，后续实验保留计算和记录，逐通路平均PCC与展平/整体PCC均保留，论文采用及主副线后续再定。指标主要用于本项目内部前后与实验对照，暂不开展跨论文实验数值优劣比较。六折留一患者继续暂缓；基因重建、稠密/稀疏验证、多基础模型和Phase 2/3衔接补充实验后置，在软对比指标改善后再推进。本次只登记决策，不启动训练或改变既有结果确认状态。",
+    "rationale": "用户本轮会议选择软对比学习继续作为主线；已有成绩尚未证实相对简单回归有稳定优势，提升是后续目标。",
+    "next_recommended_experiment": "优先讨论针对本数据的软对比改进方案；六折暂缓，其余补充实验后置；本轮不执行实验。",
+    "reference_doc": "project_state/governance/Phase2会议决策_20260905.md",
+    "directive_id": "DIR-20260905-001"
   },
   "phase2_supplemental_program": {
-    "status": "formal_preparation",
-    "updated_at": "2026-09-04T21:39:06+08:00",
+    "status": "soft_contrastive_improvement_first",
+    "updated_at": "2026-09-05T19:25:48+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
     "source_documents": [
       "团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md",
       "团队项目进度与结论/lzd/Phase2与Phase3工作计划原文_20260903.md",
-      "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md"
+      "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md",
+      "project_state/governance/Phase2会议决策_20260905.md"
     ],
     "planned_experiment_ids": [
       "phase2_gene_reconstruction_comparison_v001_20260904",
       "phase2_spatial_density_comparison_v001_20260904",
       "phase2_pathology_model_benchmark_v001_20260904"
     ],
+    "metric_registration_contract": {
+      "id": "phase2_all_metrics_retained_v3_20260905",
+      "status": "active",
+      "effective_at": "2026-09-05T19:25:48+08:00",
+      "guide_reference": "01_指南与解读/学习指南/Phase2_空间转录组核心评估指标体系与论文对比学习指南_20260904.md",
+      "scope": "当前软对比主线、冻结直接回归对照及后续Phase 2实验；最终发表指标待定",
+      "metric_roles": {
+        "paper_primary": [],
+        "paper_supplementary": [],
+        "retained_candidates": [
+          "mean_per_pathway_pcc",
+          "pooled_pcc",
+          "mean_per_pathway_z_rmse",
+          "mean_per_pathway_ccc",
+          "mean_per_pathway_spearman",
+          "mean_residual_morans_i",
+          "mean_per_pathway_masked_ssim",
+          "mean_per_pathway_raw_r2",
+          "mean_per_pathway_z_mae",
+          "mean_per_pathway_raw_mae",
+          "pooled_z_mse",
+          "train_sd_normalized_nrmse",
+          "mean_spot_topk_pathway_overlap"
+        ]
+      },
+      "distribution_summary_fields": [
+        "mean",
+        "median",
+        "q1",
+        "q3",
+        "iqr",
+        "n_pathways"
+      ],
+      "aggregation_protocol": {
+        "unit_order": "patient_then_pathway",
+        "pcc_across_patients": "fisher_z_mean_then_inverse_transform",
+        "other_metrics_across_patients": "arithmetic_mean",
+        "pathway_distribution": "summarize_the_30_pathway_level_estimates",
+        "pooled_pcc": "在每个评价集合将点位×通路矩阵展平后计算PCC；与患者优先逐通路平均结果分开记录"
+      },
+      "uncertainty_policy": {
+        "ci_is_uncertainty_metadata_not_a_performance_metric": true,
+        "confidence_level": 0.95,
+        "preferred_use": "paired_candidate_minus_control_delta",
+        "preferred_resampling_unit": "independent_patient_or_slide",
+        "required_fields_when_reported": [
+          "method",
+          "confidence_level",
+          "resampling_unit",
+          "n_independent_units",
+          "repetitions",
+          "estimate",
+          "lower",
+          "upper",
+          "evidence_scope"
+        ],
+        "single_external_patient_rule": "patient_level_generalization_ci_not_estimable; any spatial_block_ci_must_be_labeled_within_slide_only"
+      },
+      "conditional_metric_rules": {
+        "mean_per_pathway_masked_ssim": "compute_only_when_a_valid_spatial_grid_and_occupied_windows_exist",
+        "mean_spot_topk_pathway_overlap": "compute_only_when_top_k_has_been_predefined_without_external_test_set_selection"
+      },
+      "legacy_field_aliases": {
+        "best_val_loss": "internal_val_selection_z_mse",
+        "best_val_pcc": "legacy_pooled_internal_val_pcc",
+        "external_xzy_pcc": "legacy_pooled_external_xzy_pcc",
+        "test_loss": "legacy_pooled_external_xzy_z_mse",
+        "external_xzy_mae": "legacy_pooled_external_xzy_z_mae",
+        "external_xzy_mae_raw": "legacy_pooled_external_xzy_raw_mae",
+        "external_xzy_r2_raw": "mean_per_pathway_raw_r2",
+        "external_xzy_r2": "mean_per_pathway_raw_r2"
+      },
+      "registration_rules": [
+        "recompute_metrics_from_each_experiment_own_prediction_outputs",
+        "do_not_use_external_test_data_to_choose_thresholds_k_pathway_whitelists_or_checkpoints",
+        "record_unavailable_or_inapplicable_metrics_with_explicit_status_instead_of_fabricating_values"
+      ],
+      "supersedes_publication_roles_of": "phase2_pathway_metrics_v2_20260905",
+      "publication_selection_policy": {
+        "status": "all_metrics_retained_publication_selection_pending",
+        "decision_id": "DIR-20260905-001",
+        "paper_primary": [],
+        "paper_supplementary": [],
+        "retained_metrics": [
+          "mean_per_pathway_pcc",
+          "pooled_pcc",
+          "mean_per_pathway_z_rmse",
+          "mean_per_pathway_ccc",
+          "mean_per_pathway_spearman",
+          "mean_residual_morans_i",
+          "mean_per_pathway_masked_ssim",
+          "mean_per_pathway_raw_r2",
+          "mean_per_pathway_z_mae",
+          "mean_per_pathway_raw_mae",
+          "pooled_z_mse",
+          "train_sd_normalized_nrmse",
+          "mean_spot_topk_pathway_overlap"
+        ],
+        "retain_distribution_summaries_and_95ci_metadata": true,
+        "comparison_scope": "within_project_before_after_and_matched_experiments",
+        "cross_paper_numeric_ranking": "deferred_by_user",
+        "literature_method_reference": "retained",
+        "user_publication_preference": "后续根据本项目及对比验证实验，选择有优势的指标发表；两种PCC暂时都保留，后续看哪个较高再选择。",
+        "pcc_name_mapping": {
+          "逐通路平均PCC": "mean_per_pathway_pcc",
+          "用户所称平均池化PCC": "pooled_pcc（目前已有的展平/整体PCC，不是先做图像平均池化）"
+        },
+        "methodological_warning": "两种PCC的统计对象与汇总不同，不能因某一种绝对值更高就认定模型更好。发表选择如在观察结果后形成，应说明其探索性并保留完整指标，不能隐藏不利结果或冒充预先指定主终点；文献定义不清也不能使两种公式等价。此为方法说明，不改变用户的暂缓裁决。",
+        "model_selection_boundary": "监督预处理、模型改动、超参数及checkpoint选择仅使用训练或内部验证数据，不使用外部测试成绩调参。",
+        "applicability": "全部保留不等于强行填值；SSIM无有效窗口、Top-k未预定义、单患者泛化CI不可估计等情况保留明确状态。"
+      }
+    },
     "deferred_designs": [
-      "six_fold_leave_one_patient_out_pending_team_decision"
-    ]
+      "six_fold_leave_one_patient_out_deferred_by_user_20260905"
+    ],
+    "metric_registration_contract_history": [
+      {
+        "id": "phase2_pathway_metrics_v2_20260905",
+        "status": "active",
+        "effective_at": "2026-09-05T10:29:11+08:00",
+        "guide_reference": "01_指南与解读/学习指南/Phase2_空间转录组核心评估指标体系与论文对比学习指南_20260904.md",
+        "scope": "MPP2 accepted baseline and subsequent Phase 2 supplemental experiments",
+        "metric_roles": {
+          "paper_primary": [
+            "mean_per_pathway_pcc",
+            "mean_per_pathway_z_rmse"
+          ],
+          "paper_supplementary": [
+            "mean_per_pathway_ccc",
+            "mean_per_pathway_spearman",
+            "mean_residual_morans_i"
+          ],
+          "internal_diagnostic": [
+            "mean_per_pathway_raw_r2"
+          ],
+          "conditional": [
+            "mean_per_pathway_masked_ssim",
+            "mean_spot_topk_pathway_overlap"
+          ]
+        },
+        "distribution_summary_fields": [
+          "mean",
+          "median",
+          "q1",
+          "q3",
+          "iqr",
+          "n_pathways"
+        ],
+        "aggregation_protocol": {
+          "unit_order": "patient_then_pathway",
+          "pcc_across_patients": "fisher_z_mean_then_inverse_transform",
+          "other_metrics_across_patients": "arithmetic_mean",
+          "pathway_distribution": "summarize_the_30_pathway_level_estimates"
+        },
+        "uncertainty_policy": {
+          "ci_is_uncertainty_metadata_not_a_performance_metric": true,
+          "confidence_level": 0.95,
+          "preferred_use": "paired_candidate_minus_control_delta",
+          "preferred_resampling_unit": "independent_patient_or_slide",
+          "required_fields_when_reported": [
+            "method",
+            "confidence_level",
+            "resampling_unit",
+            "n_independent_units",
+            "repetitions",
+            "estimate",
+            "lower",
+            "upper",
+            "evidence_scope"
+          ],
+          "single_external_patient_rule": "patient_level_generalization_ci_not_estimable; any spatial_block_ci_must_be_labeled_within_slide_only"
+        },
+        "conditional_metric_rules": {
+          "mean_per_pathway_masked_ssim": "compute_only_when_a_valid_spatial_grid_and_occupied_windows_exist",
+          "mean_spot_topk_pathway_overlap": "compute_only_when_top_k_has_been_predefined_without_external_test_set_selection"
+        },
+        "legacy_field_aliases": {
+          "best_val_loss": "internal_val_selection_z_mse",
+          "best_val_pcc": "legacy_pooled_internal_val_pcc",
+          "external_xzy_pcc": "legacy_pooled_external_xzy_pcc",
+          "test_loss": "legacy_pooled_external_xzy_z_mse",
+          "external_xzy_mae": "legacy_pooled_external_xzy_z_mae",
+          "external_xzy_mae_raw": "legacy_pooled_external_xzy_raw_mae",
+          "external_xzy_r2_raw": "mean_per_pathway_raw_r2",
+          "external_xzy_r2": "mean_per_pathway_raw_r2"
+        },
+        "registration_rules": [
+          "recompute_metrics_from_each_experiment_own_prediction_outputs",
+          "do_not_use_external_test_data_to_choose_thresholds_k_pathway_whitelists_or_checkpoints",
+          "record_unavailable_or_inapplicable_metrics_with_explicit_status_instead_of_fabricating_values"
+        ]
+      }
+    ],
+    "decision_id": "DIR-20260905-001",
+    "current_method": "软对比联合学习（现有残差纠错方案作为改进起点）",
+    "method_reference_experiment_id": "mpp2_cpgcr_probe_v001_20260811",
+    "method_reference_arm": "CPGCR",
+    "baseline_role": "冻结UNI2-h加两层MLP作为固定对照；不是当前选定研究主线",
+    "supplementary_execution_status": "deferred_until_soft_contrastive_improvement_review",
+    "priority_order": [
+      "先诊断并针对本数据改进软对比联合学习",
+      "指标改善后再推进基因重建、密度、多模型及Phase 2/3衔接补充实验"
+    ],
+    "training_authorized_by_this_decision": false
   },
   "three_patient_evidence_policy": {
     "effective_date": "2026-07-09",
@@ -1046,7 +1249,202 @@
       "best_epoch": 15,
       "test_loss": 0.6621,
       "external_xzy_r2_raw": -0.088,
-      "external_xzy_r2": -0.088
+      "external_xzy_r2": -0.088,
+      "phase2_formal_metrics": {
+        "schema_version": "1.0",
+        "metric_contract_id": "phase2_pathway_metrics_v2_20260905",
+        "registration_status": "accepted",
+        "registered_at": "2026-09-05T10:29:11+08:00",
+        "approval_basis": "explicit_user_directive_20260905",
+        "source_artifacts": [
+          "experiments/explorations/mpp2_metric_recalculation_v001/metrics_summary.csv",
+          "experiments/explorations/mpp2_metric_recalculation_v001/spatial_metrics.csv",
+          "experiments/explorations/mpp2_metric_recalculation_v001/bootstrap_ci.csv",
+          "experiments/explorations/phase2_phase3_reanalysis_v002/w007_pathway_metrics.csv",
+          "experiments/explorations/phase2_phase3_reanalysis_v002/w007_spatial_metrics.csv",
+          "automation/results/mpp2-repair-v003-frozen-20260711-r002/attempt-003/metrics.json",
+          "automation/results/mpp2-repair-v003-frozen-20260711-r002/attempt-003/training_history.csv"
+        ],
+        "calculation_code": [
+          "scripts/explorations/mpp2_metric_recalculation_v001/run_recalculation.py",
+          "scripts/explorations/phase2_phase3_reanalysis_v002/run_reanalysis.py"
+        ],
+        "raw_prediction_sources": {
+          "internal_validation": "project_state/inbox/W007/quarantine/FBR/automation/returns/W007/20260815-000106-184005-formal-batch/FBR/internal_val_predictions.csv",
+          "external_benchmark_xzy": "project_state/inbox/W007/quarantine/FBR/automation/returns/W007/20260815-000106-184005-formal-batch/FBR/XZY_predictions.csv",
+          "legacy_internal_validation": "automation/results/mpp2-repair-v003-frozen-20260711-r002/attempt-003/training_history.csv",
+          "legacy_external_xzy": "checkpoints/mpp_uni2h_mlp/mpp2_barcode_repair_v003_frozen_baseline_20260711/predictions_external_xzy.csv"
+        },
+        "aggregation_protocol_ref": "phase2_supplemental_program.metric_registration_contract.aggregation_protocol",
+        "internal_validation": {
+          "evidence_scope": "internal_validation",
+          "n_patients": 6,
+          "n_spots": 1078,
+          "n_pathways": 30,
+          "metrics": {
+            "mean_per_pathway_pcc": {
+              "value": 0.6673692342133599,
+              "role": "paper_primary",
+              "median": 0.6951850865853662,
+              "q1": 0.5875740594063987,
+              "q3": 0.7416053292446327,
+              "iqr": 0.154031269838234
+            },
+            "mean_per_pathway_z_rmse": {
+              "value": 0.595960664292921,
+              "role": "paper_primary",
+              "median": 0.5927236086013099,
+              "q1": 0.5455298674524438,
+              "q3": 0.6383389178354801,
+              "iqr": 0.09280905038303633
+            },
+            "mean_per_pathway_ccc": {
+              "value": 0.6078239843350842,
+              "role": "paper_supplementary",
+              "median": 0.6328158901656019,
+              "q1": 0.5192922682214149,
+              "q3": 0.6948912073022628,
+              "iqr": 0.1755989390808479
+            },
+            "mean_per_pathway_spearman": {
+              "value": 0.6074504890058042,
+              "role": "paper_supplementary",
+              "median": 0.6280941040535901,
+              "q1": 0.5147838722942748,
+              "q3": 0.6879940239720134,
+              "iqr": 0.17321015167773857
+            },
+            "mean_per_pathway_raw_r2": {
+              "value": 0.14269255869469882,
+              "role": "internal_diagnostic",
+              "median": 0.4396863126681352,
+              "q1": 0.29552697589072413,
+              "q3": 0.519703908718071,
+              "iqr": 0.2241769328273469
+            },
+            "mean_residual_morans_i": {
+              "value": 0.16051288470030556,
+              "role": "paper_supplementary",
+              "median": 0.15074947207397216,
+              "q1": 0.11349094871606444,
+              "q3": 0.1831455844675408,
+              "iqr": 0.06965463575147637
+            },
+            "mean_per_pathway_masked_ssim": {
+              "status": "not_computable",
+              "role": "conditional",
+              "reason": "no_valid_fully_occupied_7x7_windows"
+            },
+            "mean_spot_topk_pathway_overlap": {
+              "status": "not_computed_not_applicable",
+              "role": "conditional",
+              "reason": "current_phase3_input_is_a_continuous_30_dimensional_pathway_vector_without_a_predefined_top_k_selection"
+            }
+          },
+          "spatial_context": {
+            "mean_truth_morans_i": 0.5044628322662763,
+            "mean_prediction_morans_i": 0.6420546086694909
+          }
+        },
+        "external_benchmark_xzy": {
+          "evidence_scope": "single_external_patient_benchmark",
+          "n_patients": 1,
+          "n_spots": 1039,
+          "n_pathways": 30,
+          "metrics": {
+            "mean_per_pathway_pcc": {
+              "value": 0.519386206636611,
+              "role": "paper_primary",
+              "median": 0.5601192567127009,
+              "q1": 0.3915032629891786,
+              "q3": 0.6366340707050546,
+              "iqr": 0.24513080771587603
+            },
+            "mean_per_pathway_z_rmse": {
+              "value": 0.7672245654708524,
+              "role": "paper_primary",
+              "median": 0.7238223869730366,
+              "q1": 0.5363426106206141,
+              "q3": 0.907690706115238,
+              "iqr": 0.371348095494624
+            },
+            "mean_per_pathway_ccc": {
+              "value": 0.3988582103332689,
+              "role": "paper_supplementary",
+              "median": 0.3847409725416536,
+              "q1": 0.2980295109618367,
+              "q3": 0.514651683400062,
+              "iqr": 0.21662217243822524
+            },
+            "mean_per_pathway_spearman": {
+              "value": 0.42618749884550505,
+              "role": "paper_supplementary",
+              "median": 0.4295866337343385,
+              "q1": 0.3025741952643568,
+              "q3": 0.5715773918884872,
+              "iqr": 0.2690031966241304
+            },
+            "mean_per_pathway_raw_r2": {
+              "value": -0.08801664134310691,
+              "role": "internal_diagnostic",
+              "median": 0.08679702409294748,
+              "q1": -0.2759711801027863,
+              "q3": 0.29090069774768595,
+              "iqr": 0.5668718778504722
+            },
+            "mean_residual_morans_i": {
+              "value": 0.3304170513815611,
+              "role": "paper_supplementary",
+              "median": 0.33129418307419034,
+              "q1": 0.24149482855931256,
+              "q3": 0.39285735458714705,
+              "iqr": 0.15136252602783448
+            },
+            "mean_per_pathway_masked_ssim": {
+              "value": 0.3093753110282321,
+              "role": "conditional",
+              "median": 0.26382121927667324,
+              "q1": 0.18563271692942007,
+              "q3": 0.45206579350517184,
+              "iqr": 0.26643307657575177
+            },
+            "mean_spot_topk_pathway_overlap": {
+              "status": "not_computed_not_applicable",
+              "role": "conditional",
+              "reason": "current_phase3_input_is_a_continuous_30_dimensional_pathway_vector_without_a_predefined_top_k_selection"
+            }
+          },
+          "spatial_context": {
+            "mean_truth_morans_i": 0.49674200653515377,
+            "mean_prediction_morans_i": 0.4465059012084179
+          }
+        },
+        "legacy_metrics": {
+          "legacy_pooled_internal_val_pcc": 0.797126,
+          "internal_val_selection_z_mse": 0.374886,
+          "legacy_pooled_external_xzy_pcc": 0.6548958191047395,
+          "legacy_pooled_external_xzy_z_mse": 0.6620768251269324,
+          "legacy_pooled_external_xzy_z_mae": 0.6191226727714152,
+          "legacy_pooled_external_xzy_raw_mae": 1176.2113741177363,
+          "mean_per_pathway_external_xzy_raw_r2": -0.08801664087970794,
+          "status": "retained_for_backward_compatibility_and_internal_diagnostics"
+        },
+        "uncertainty": {
+          "absolute_baseline_95ci": {
+            "status": "not_computed"
+          },
+          "internal_patient_level_95ci": {
+            "status": "computable_but_not_registered",
+            "n_independent_units": 6
+          },
+          "external_xzy_patient_level_95ci": {
+            "status": "not_estimable",
+            "n_independent_units": 1,
+            "reason": "single_external_patient"
+          },
+          "paired_comparison_95ci_artifact": "experiments/explorations/mpp2_metric_recalculation_v001/bootstrap_ci.csv"
+        }
+      }
     },
     {
       "id": "mpp1_barcode_repair_v003_frozen_recheck_20260711",
@@ -2006,9 +2404,48 @@
       "phase": "formal",
       "status": "planned",
       "evidence_status": "planned",
-      "priority": "P0",
+      "priority": "P2",
       "created_at": "2026-09-04T21:39:06+08:00",
       "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
+      "metric_registration_status": "pending_not_run",
+      "planned_metric_registration": {
+        "paper_primary": [],
+        "paper_supplementary": [],
+        "conditional": {
+          "mean_per_pathway_masked_ssim": "pending_spatial_grid_applicability_check",
+          "mean_spot_topk_pathway_overlap": "pending_predefined_top_k_applicability_check"
+        },
+        "distribution_summaries": [
+          "mean",
+          "median",
+          "q1",
+          "q3",
+          "iqr",
+          "n_pathways"
+        ],
+        "uncertainty": {
+          "status": "pending_not_run",
+          "preferred_output": "paired_candidate_minus_control_95ci",
+          "external_test_not_for_selection": true
+        },
+        "retained_candidates": [
+          "mean_per_pathway_pcc",
+          "pooled_pcc",
+          "mean_per_pathway_z_rmse",
+          "mean_per_pathway_ccc",
+          "mean_per_pathway_spearman",
+          "mean_residual_morans_i",
+          "mean_per_pathway_masked_ssim",
+          "mean_per_pathway_raw_r2",
+          "mean_per_pathway_z_mae",
+          "mean_per_pathway_raw_mae",
+          "pooled_z_mse",
+          "train_sd_normalized_nrmse",
+          "mean_spot_topk_pathway_overlap"
+        ],
+        "publication_selection_status": "pending"
+      },
       "objective": "Compare direct H&E-to-pathway prediction with H&E-to-gene prediction followed by pathway reconstruction on the same held-out data.",
       "missing_inputs": [
         "gene_set_membership",
@@ -2017,8 +2454,10 @@
         "pathway_scoring_software_and_parameters",
         "background_gene_universe"
       ],
-      "next_action": "define_input_contract_and_scoring_protocol_before_execution",
-      "decision_gate": "Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed."
+      "next_action": "deferred_soft_contrastive_improvement_first_then_revisit_protocol",
+      "decision_gate": "Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed.",
+      "execution_schedule": "deferred_until_soft_contrastive_improvement_review",
+      "schedule_decision_id": "DIR-20260905-001"
     },
     {
       "id": "phase2_spatial_density_comparison_v001_20260904",
@@ -2027,9 +2466,48 @@
       "phase": "formal",
       "status": "planned",
       "evidence_status": "planned",
-      "priority": "P0",
+      "priority": "P2",
       "created_at": "2026-09-04T21:39:06+08:00",
       "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
+      "metric_registration_status": "pending_not_run",
+      "planned_metric_registration": {
+        "paper_primary": [],
+        "paper_supplementary": [],
+        "conditional": {
+          "mean_per_pathway_masked_ssim": "pending_spatial_grid_applicability_check",
+          "mean_spot_topk_pathway_overlap": "pending_predefined_top_k_applicability_check"
+        },
+        "distribution_summaries": [
+          "mean",
+          "median",
+          "q1",
+          "q3",
+          "iqr",
+          "n_pathways"
+        ],
+        "uncertainty": {
+          "status": "pending_not_run",
+          "preferred_output": "paired_candidate_minus_control_95ci",
+          "external_test_not_for_selection": true
+        },
+        "retained_candidates": [
+          "mean_per_pathway_pcc",
+          "pooled_pcc",
+          "mean_per_pathway_z_rmse",
+          "mean_per_pathway_ccc",
+          "mean_per_pathway_spearman",
+          "mean_residual_morans_i",
+          "mean_per_pathway_masked_ssim",
+          "mean_per_pathway_raw_r2",
+          "mean_per_pathway_z_mae",
+          "mean_per_pathway_raw_mae",
+          "pooled_z_mse",
+          "train_sd_normalized_nrmse",
+          "mean_spot_topk_pathway_overlap"
+        ],
+        "publication_selection_status": "pending"
+      },
       "objective": "Compare dense training, structured spatial sparsification, and sample-count-matched random subsampling on one unchanged dense held-out test set.",
       "missing_inputs": [
         "final_mainline_split",
@@ -2037,9 +2515,11 @@
         "matched_random_control_rule",
         "dense_held_out_test_definition"
       ],
-      "excluded_current_design": "six_fold_leave_one_patient_out_pending_team_decision",
-      "next_action": "freeze_sampling_and_test_contract_before_execution",
-      "decision_gate": "Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged."
+      "excluded_current_design": "six_fold_leave_one_patient_out_deferred_by_user_20260905",
+      "next_action": "deferred_soft_contrastive_improvement_first_then_revisit_protocol",
+      "decision_gate": "Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged.",
+      "execution_schedule": "deferred_until_soft_contrastive_improvement_review",
+      "schedule_decision_id": "DIR-20260905-001"
     },
     {
       "id": "phase2_pathology_model_benchmark_v001_20260904",
@@ -2048,9 +2528,48 @@
       "phase": "formal",
       "status": "planned",
       "evidence_status": "planned",
-      "priority": "P0",
+      "priority": "P2",
       "created_at": "2026-09-04T21:39:06+08:00",
       "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
+      "metric_registration_status": "pending_not_run",
+      "planned_metric_registration": {
+        "paper_primary": [],
+        "paper_supplementary": [],
+        "conditional": {
+          "mean_per_pathway_masked_ssim": "pending_spatial_grid_applicability_check",
+          "mean_spot_topk_pathway_overlap": "pending_predefined_top_k_applicability_check"
+        },
+        "distribution_summaries": [
+          "mean",
+          "median",
+          "q1",
+          "q3",
+          "iqr",
+          "n_pathways"
+        ],
+        "uncertainty": {
+          "status": "pending_not_run",
+          "preferred_output": "paired_candidate_minus_control_95ci",
+          "external_test_not_for_selection": true
+        },
+        "retained_candidates": [
+          "mean_per_pathway_pcc",
+          "pooled_pcc",
+          "mean_per_pathway_z_rmse",
+          "mean_per_pathway_ccc",
+          "mean_per_pathway_spearman",
+          "mean_residual_morans_i",
+          "mean_per_pathway_masked_ssim",
+          "mean_per_pathway_raw_r2",
+          "mean_per_pathway_z_mae",
+          "mean_per_pathway_raw_mae",
+          "pooled_z_mse",
+          "train_sd_normalized_nrmse",
+          "mean_spot_topk_pathway_overlap"
+        ],
+        "publication_selection_status": "pending"
+      },
       "objective": "Benchmark the confirmed pathology encoder shortlist under one dataset, split, target order, training budget, and metric definition.",
       "missing_inputs": [
         "final_model_shortlist",
@@ -2058,8 +2577,10 @@
         "common_feature_or_adapter_contract",
         "final_mainline_split_and_metrics"
       ],
-      "next_action": "confirm_model_shortlist_and_common_protocol_before_execution",
-      "decision_gate": "Historical model numbers are references only until rerun under the common protocol."
+      "next_action": "deferred_soft_contrastive_improvement_first_then_revisit_protocol",
+      "decision_gate": "Historical model numbers are references only until rerun under the common protocol.",
+      "execution_schedule": "deferred_until_soft_contrastive_improvement_review",
+      "schedule_decision_id": "DIR-20260905-001"
     }
   ]
 }

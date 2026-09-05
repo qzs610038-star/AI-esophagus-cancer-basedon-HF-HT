@@ -1,0 +1,3 @@
+# Do not install automatically: this package checks existing server dependencies.
+# Core: torch torchvision timm numpy pandas Pillow
+# Additional: scipy scikit-learn h5py anndata

@@ -1,0 +1,65 @@
+{
+  "analysis_id": "mpp2_xzy_fewshot_intercept_20260725",
+  "disclaimer": "XZY truth is used only in calibration anchors; results are evaluated on disjoint held-out XZY spots and are not zero-shot external evidence.",
+  "input": {
+    "external_rows": 1039,
+    "metrics_sha256": "2cc21b74d546b3f61b77c72463f91db085ca9b5f93d423738b5de786bd7dc1e4",
+    "pathways": 30,
+    "predictions_external_xzy_sha256": "d4775efe75e43f950bb6651bc40f8264195a560f85b33db3990a69e57aa1681b",
+    "result_dir": "D:\\AI空间转录病理研究\\PFMval_new_result_mpp2_ridge_r003_20260718\\automation\\results\\mpp2-pathway-ridge-calibration-20260717-r003",
+    "zscore_params": "D:\\AI空间转录病理研究\\PFMval_new\\data\\protected_local\\mpp2_r2_root_cause_20260725\\source_snapshot\\zscore\\group_2_repaired_v003\\zscore_params_from_train.json",
+    "zscore_params_sha256": "fd65f6ab3a2dda2d8d9f8f17babe59818ea7d93f2480c5da2bcd6384ca37b2c8"
+  },
+  "parameters": {
+    "fractions": [
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.2
+    ],
+    "repeats": 200,
+    "sampling_methods": [
+      "random",
+      "spatial_stratified"
+    ],
+    "seed": 20260725,
+    "selection_rule": "smallest spatial_stratified fraction with delta R2 p05 > 0 and median gain >= 80% of maximum median gain"
+  },
+  "recommendation": {
+    "baseline_mean_r2_median": -0.08597245616686507,
+    "baseline_mean_raw_mae_median": 1176.3397081993642,
+    "calibrated_mean_ccc_median": 0.445974858230386,
+    "calibrated_mean_r2_median": 0.21116806274894911,
+    "calibrated_mean_raw_mae_median": 986.2597125363052,
+    "calibration_fraction": 0.01,
+    "delta_mean_r2_median": 0.2973611068983093,
+    "delta_mean_r2_p05": 0.25675539718452983,
+    "delta_mean_r2_p95": 0.32624294757579925,
+    "delta_mean_raw_mae_median": -190.2349769822366,
+    "n_calibration": 10,
+    "n_test": 1029,
+    "repeats": 200,
+    "sampling_method": "spatial_stratified"
+  },
+  "representative_split": {
+    "baseline_mean_ccc": 0.39907063783986657,
+    "baseline_mean_pcc": 0.5197953087482993,
+    "baseline_mean_r2": -0.08694571620717766,
+    "baseline_mean_raw_mae": 1176.2447676889221,
+    "calibrated_mean_ccc": 0.4450178491088196,
+    "calibrated_mean_pcc": 0.5197953087482993,
+    "calibrated_mean_r2": 0.2105016179656297,
+    "calibrated_mean_raw_mae": 994.6390846520317,
+    "calibration_fraction": 0.01,
+    "delta_mean_r2": 0.2974473341728073,
+    "delta_mean_raw_mae": -181.60568303689064,
+    "n_calibration": 10,
+    "n_test": 1029,
+    "repeat": 130,
+    "sampling_method": "spatial_stratified",
+    "seed": 20260855
+  },
+  "schema_version": "1.0",
+  "status": "local_target_patient_fewshot_nonaccepted"
+}

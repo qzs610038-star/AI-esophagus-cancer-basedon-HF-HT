@@ -1,0 +1,8 @@
+{
+  "experiment_id": "template_demo",
+  "code_version": "v001",
+  "entrypoint": "src/demo.py",
+  "args": [],
+  "demo_only": true,
+  "code_sources": []
+}

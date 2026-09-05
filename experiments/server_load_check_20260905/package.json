@@ -1,0 +1,14 @@
+{
+  "experiment_id": "server_load_check_20260905",
+  "code_version": "v002",
+  "entrypoint": "src/check_server.py",
+  "args": [],
+  "demo_only": false,
+  "diagnostic_only": true,
+  "code_sources": [
+    {
+      "path": "experiments/_template/run.ps1,runner.py",
+      "date": "2026-09-05"
+    }
+  ]
+}

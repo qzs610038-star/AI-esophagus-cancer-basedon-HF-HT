@@ -1,17 +1,27 @@
 # 实验进度
 
-> 此文件由 `experiments/experiment_registry.json` 自动生成，禁止手工维护。
-> source_sha256: `8521fd2205040ebe7d42dccbf9137cc7bfab9ce1f08f516e20b3a5f6c58c5f04`
-> state_revision: `N/A`；updated_at: `2026-09-04T21:39:06+08:00`
+> 依据实验登记生成；本次按用户会议决定更新相关进度。
+> 本次按会议决策更新相关导航；不生成普通文档哈希。
+> state_revision: `256`；updated_at: `2026-09-05T19:25:48+08:00`
+
+## 当前 Phase 2 会议决策（2026-09-05）
+
+- 当前主线：软对比联合学习，优先针对本数据改进；冻结UNI2-h加两层MLP保留为对照。
+- 全部指标暂时待定且继续保留；逐通路平均PCC与展平/整体PCC均记录，最终发表指标后续再定。
+- 比较范围：本项目内部前后及方案对照；暂不进行跨论文实验数值优劣比较。
+- 排序：先改进软对比指标；六折留一患者暂缓；基因重建、密度、多基础模型及Phase 2/3衔接补充实验后置。
+- 用户倾向后续选取有优势的指标发表；两种PCC的绝对高低不能互证优越，需保留完整结果和明确计算定义。
+- 本轮只登记决定，未训练、未产生或接纳新结果。详细记录：[project_state/governance/Phase2会议决策_20260905.md](../project_state/governance/Phase2会议决策_20260905.md)。
+
 
 ## 当前与待处理
 
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | mpp2_online_cache_parity_v003_20260711 | mpp2_online_cache_parity_v003_20260711 | legacy-import-mpp2_online_cache_parity_v003_20260711 | — | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. | preflight | done | planned | 暂无 | 待审查 | prepare_paired_smoke | — |
-| Phase 2 基因预测后通路重建对照 | phase2_gene_reconstruction_comparison_v001_20260904 | — | — | Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed. | formal | planned | planned | 暂无 | 待审查 | define_input_contract_and_scoring_protocol_before_execution | — |
-| Phase 2 多病理模型公平比较 | phase2_pathology_model_benchmark_v001_20260904 | — | — | Historical model numbers are references only until rerun under the common protocol. | formal | planned | planned | 暂无 | 待审查 | confirm_model_shortlist_and_common_protocol_before_execution | — |
-| Phase 2 稀疏训练与稠密测试对照 | phase2_spatial_density_comparison_v001_20260904 | — | — | Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged. | formal | planned | planned | 暂无 | 待审查 | freeze_sampling_and_test_contract_before_execution | — |
+| Phase 2 基因预测后通路重建对照 | phase2_gene_reconstruction_comparison_v001_20260904 | — | — | Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed. | formal | planned | planned | 暂无 | 待审查 | 暂缓：先改进软对比，再补协议与实验 | — |
+| Phase 2 多病理模型公平比较 | phase2_pathology_model_benchmark_v001_20260904 | — | — | Historical model numbers are references only until rerun under the common protocol. | formal | planned | planned | 暂无 | 待审查 | 暂缓：先改进软对比，再补协议与实验 | — |
+| Phase 2 稀疏训练与稠密测试对照 | phase2_spatial_density_comparison_v001_20260904 | — | — | Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged. | formal | planned | planned | 暂无 | 待审查 | 暂缓：先改进软对比，再补协议与实验 | — |
 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | — | — | 2026-07-09 superseded: old 3-patient/JFX-affected spatial Token+LoRA gate is tuning reference only. Do not launch before MPP2 new-data LoRA baseline is established. | — | paused | pending | 暂无 | 待审查 | paused_mpp2_lora_first | — |
 
 ## 已接纳结果

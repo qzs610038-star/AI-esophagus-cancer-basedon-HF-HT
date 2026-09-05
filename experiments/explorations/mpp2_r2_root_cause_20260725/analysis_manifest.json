@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "mpp2_r2_root_cause_20260725",
+  "status": "local_non_evidentiary_diagnostic",
+  "disclaimer": "r003 failed and is not accepted; XZY-label-aware transforms are oracle upper bounds only and may not be used as formal calibration.",
+  "input_commit": "b8014a201f63e3d281830f1b1bf34dc8863f92d6",
+  "result_id": "mpp2-pathway-ridge-calibration-20260717-r003-result-20260718000516-8f133e77",
+  "result_status": "failed",
+  "result_json_sha256": "9fa873a5d857a6919f18aa20f76e5cb7fcca8120c41410bb3327f73ff622ef91",
+  "result_artifact_hashes": {
+    "metrics.json": "2cc21b74d546b3f61b77c72463f91db085ca9b5f93d423738b5de786bd7dc1e4",
+    "nested_lopo_metrics.json": "2786ad22b556025ac9230f29c74d6e6e11fb50339a9fda6f83d1309e5bdf4f39",
+    "pathway_decisions.csv": "483a7132b2e09266752a4d645388789c610ee16bf873e38adf705c30eb6b20ba",
+    "calibrator.json": "0b496a95363011cfcd4a083fa161a22724e9e72021605d037e22558c9f1a7c70",
+    "pathway_order.json": "19d80f296242c73caf8a16feb10dac0b87794396efe69b4e762ad251587784f8",
+    "model_provenance.json": "1cc975d7c310acf2adb938e36bde56c81052624d4dc000156a9ec24a8ca2245f",
+    "predictions_internal_val_base.csv": "6153040d1c31e8299409c8e4c131c19b1578344cf3afa525d6e82428d9996a18",
+    "predictions_external_xzy.csv": "d4775efe75e43f950bb6651bc40f8264195a560f85b33db3990a69e57aa1681b",
+    "per_pathway_metrics.csv": "8e8208e0de0d72aa7c9b08cf29abc698b2d4a8c46ceb9844e70c13cd46e3a14f",
+    "spatial_sensitivity.json": "f099330a06b6e4ce515af69423352b43305366bfe698cdc3c33bb5deb293ce9c"
+  },
+  "zscore_params_path": "D:\\AI空间转录病理研究\\PFMval_new\\data\\protected_local\\mpp2_r2_root_cause_20260725\\source_snapshot\\zscore\\group_2_repaired_v003\\zscore_params_from_train.json",
+  "zscore_params_sha256": "fd65f6ab3a2dda2d8d9f8f17babe59818ea7d93f2480c5da2bcd6384ca37b2c8",
+  "split_manifest_sha256": "babfa2b1d9aa7d7b2e56ac0ac18b95dcb006f66a41e4a86761bbe8a746d2f824",
+  "run_parameters": {
+    "bootstrap_seed": 20260725,
+    "bootstrap_replicates": 20000,
+    "grid_sizes_px": [
+      1024,
+      2048,
+      4096
+    ],
+    "outlier_sensitivity_fractions": [
+      0.01,
+      0.05
+    ]
+  },
+  "preflight": {
+    "internal_rows": 1078,
+    "external_rows": 1039,
+    "pathways": 30,
+    "internal_truth_z_max_abs_error": 1.958948230296187e-07,
+    "external_truth_z_max_abs_error": 2.319923693150372e-07,
+    "metric_reproduction": {
+      "mean_per_pathway_raw_r2": -0.08801663997401364,
+      "mean_per_pathway_pcc": 0.519386206533347,
+      "mean_raw_mae": 1176.2113718162536
+    },
+    "metric_reproduction_abs_error": {
+      "r2": 5.551115123125783e-17,
+      "pcc": 0.0,
+      "mae": 0.0
+    }
+  },
+  "summary": {
+    "baseline": {
+      "internal_mean_raw_r2": 0.6351241617460038,
+      "external_mean_raw_r2": -0.08801663997401364,
+      "external_mean_pcc": 0.519386206533347,
+      "external_legacy_pooled_pcc": 0.6548958198682089,
+      "ridge_delta_mean_raw_r2": -2.024156087892711e-05
+    },
+    "distribution_shift": {
+      "pathways_xzy_true_mean_outside_internal_patient_range": 11,
+      "pathways_xzy_true_std_outside_internal_patient_range": 4,
+      "mean_bias_share_of_mse": 0.23215979506533857
+    },
+    "concentration": {
+      "worst_three_pathways": [
+        "Interferon_Alpha",
+        "Complement",
+        "Reactive_Oxygen_Species"
+      ],
+      "worst_three_share_of_negative_r2_deficit": 0.6690973383845799
+    },
+    "oracle": {
+      "intercept_gain": {
+        "mean_delta_raw_r2": 0.35738507847360557,
+        "ci95_low": 0.19127274463251528,
+        "ci95_high": 0.5773093417568721,
+        "supported": true
+      },
+      "location_scale_gain": {
+        "mean_delta_raw_r2": 0.1267890530407077,
+        "ci95_low": -0.03640123812317878,
+        "ci95_high": 0.3322877652589412,
+        "supported": false
+      },
+      "location_scale_increment": {
+        "mean_delta_raw_r2": -0.2305960254328979,
+        "ci95_low": -0.2854662107456827,
+        "ci95_high": -0.17930506491184098,
+        "supported": false
+      },
+      "positive_affine_gain": {
+        "mean_delta_raw_r2": 0.385801504368238,
+        "ci95_low": 0.2131870736576405,
+        "ci95_high": 0.6154130282550904,
+        "supported": true
+      },
+      "positive_affine_increment_over_intercept": {
+        "mean_delta_raw_r2": 0.028416425894632478,
+        "ci95_low": 0.014783544884721491,
+        "ci95_high": 0.044402526394434254,
+        "supported": true
+      },
+      "trim_1pct_gain": {
+        "mean_delta_raw_r2": 0.024672085832181476,
+        "ci95_low": 0.014196498644894603,
+        "ci95_high": 0.03531218950198989,
+        "supported": true
+      },
+      "trim_5pct_gain": {
+        "mean_delta_raw_r2": -0.6101169762988564,
+        "ci95_low": -2.0527484866203745,
+        "ci95_high": 0.1255040661801146,
+        "supported": false
+      },
+      "patient_balanced_pcc_gap": {
+        "mean_delta_raw_r2": 0.12907788857072472,
+        "ci95_low": 0.09092255493135447,
+        "ci95_high": 0.16865427689158086,
+        "supported": true
+      },
+      "patient_balanced_r2_gap": {
+        "mean_delta_raw_r2": 0.23070921551108428,
+        "ci95_low": -0.48636491203782356,
+        "ci95_high": 0.7081954849077389,
+        "supported": false
+      }
+    },
+    "gap_decomposition": {
+      "pooled_internal_mean_r2": 0.6351241617460038,
+      "patient_balanced_internal_mean_r2": 0.14269257553707065,
+      "patient_balanced_internal_mean_pcc": 0.6484640951040718,
+      "external_mean_r2": -0.08801663997401364,
+      "apparent_pooled_internal_to_external_gap": 0.7231408017200175,
+      "aggregation_grain_component": 0.4924315862089332,
+      "patient_balanced_internal_to_external_gap": 0.2307092155110843,
+      "xzy_intercept_oracle_gain": 0.35738507847360557,
+      "xzy_slope_gain_after_intercept": 0.028416425894632478,
+      "external_positive_affine_ceiling_mean_r2": 0.29778486439422436
+    },
+    "spatial": {
+      "1024": {
+        "cells": 67,
+        "median_cell_mae_cv_across_pathways": 0.33436373471461056
+      },
+      "2048": {
+        "cells": 21,
+        "median_cell_mae_cv_across_pathways": 0.2779994477230052
+      },
+      "4096": {
+        "cells": 8,
+        "median_cell_mae_cv_across_pathways": 0.18263806146444175
+      }
+    }
+  }
+}
