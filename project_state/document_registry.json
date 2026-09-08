@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-09-05T23:02:01+08:00",
+  "updated_at": "2026-09-08T13:30:57+08:00",
   "state_revision": 257,
   "documents": [
     {
@@ -7475,16 +7475,82 @@
         "project_state/directives.jsonl"
       ],
       "decision_id": "DIR-20260905-002"
+    },
+    {
+      "doc_id": "phase2-softlink-v21-results-mechanism-report-20260908",
+      "path": "01_指南与解读/分析报告/Phase2软连接v2_1_实验结果与机制分析_20260908.md",
+      "category": "分析报告",
+      "scope": "phase2_softlink_local_v2",
+      "authority": "derived",
+      "lifecycle": "pending_review",
+      "availability": "local_only",
+      "git_tracking_policy": "eligible_user_triggered_commit",
+      "verified_at": "2026-09-08T16:37:41+08:00",
+      "state_revision": 257,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "experiments/experiment_registry.json",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/batch_manifest.json",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/registration_metrics_by_seed.csv",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/registration_verification.json",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/mechanism_analysis.json",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/GPT事实包与报告大纲_20260908.md",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/pathway_summary_20260908.csv",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/pathway_seed_metrics_20260908.csv",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/pathway_paired_deltas_20260908.csv",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/pathway_facts_20260908.json",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/三个问题_GPT事实与推理_20260908.md",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/三问参数核对_20260908.json",
+        "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/三问划分图核对_20260908.json"
+      ],
+      "doc_role": "experiment_results_and_mechanism_analysis",
+      "freshness": "fresh",
+      "freshness_reason": "Registered returned results, recomputed metrics and descriptive mechanism checks; causal interpretation remains pending review.",
+      "related_experiment_id": "phase2_softlink_local_v2",
+      "result_id": "phase2-softlink-local-v2-20260908-005325-result",
+      "moved_from": "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/实验结果快速分析_20260908.md",
+      "archived_original": "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/原快速报告_历史底稿.md",
+      "figures": [
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/关键结果总览.png",
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/关键结果总览.svg",
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/通路四臂PCC全景.png",
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/通路四臂PCC全景.svg",
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/通路收益与误差对照.png",
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/通路收益与误差对照.svg"
+      ],
+      "authorship": {
+        "facts_and_causal_reasoning": "GPT / Codex",
+        "prose_and_visual_design": "Gemini 3.8 Flash High",
+        "final_fact_and_artifact_review": "GPT / Codex"
+      },
+      "tags": [
+        "Phase2",
+        "软连接",
+        "空间修正",
+        "关系约束",
+        "实验结果",
+        "机制分析"
+      ],
+      "supplementary_reports": [
+        "01_指南与解读/分析报告/Phase2四臂逐通路指标附表_20260908.md"
+      ],
+      "followup_topics": [
+        "已完成固定平滑与待做消融区别",
+        "同患者空间块划分和邻域边界",
+        "跨患者关系目标与PEaRL对齐",
+        "可训练参数与小范围LoRA预算"
+      ]
     }
   ],
   "summary": {
-    "total": 354,
-    "live": 282,
+    "total": 357,
+    "live": 285,
     "missing": 72,
-    "active": 30,
-    "superseded": 12,
-    "historical": 221,
-    "pending_review": 1,
-    "approved_design": 18
+    "active": 32,
+    "superseded": 11,
+    "historical": 240,
+    "pending_review": 2,
+    "approved_design": 0
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "state_revision": 258,
-  "updated_at": "2026-09-05T23:52:50+08:00",
+  "state_revision": 260,
+  "updated_at": "2026-09-08T13:00:00+08:00",
   "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
     "DIR-20260710-003",
@@ -20,7 +20,9 @@
     "DIR-20260904-005",
     "DIR-20260905-001",
     "DIR-20260905-002",
-    "DIR-20260905-003"
+    "DIR-20260905-003",
+    "DIR-20260908-001",
+    "DIR-20260908-002"
   ],
   "active_plans": {
     "mpp_training": {
@@ -82,6 +84,7 @@
     "return_mode": "user_owned_run_directory",
     "code_root_key": "server_manual_code",
     "runs_root_key": "server_manual_runs",
+    "weights_root_key": "server_manual_weights",
     "force_push_allowed": false,
     "auto_archive": false
   },
@@ -271,7 +274,20 @@
     "default_resume": false,
     "transfer_preference_directive_id": "DIR-20260905-003",
     "default_transfer": "directory_copy",
-    "auto_archive": false
+    "auto_archive": false,
+    "local_result_root": "experiments/results",
+    "local_result_pattern": "experiments/results/<experiment_name>/<run_id>",
+    "derived_analysis_location": "<returned_run>/analysis",
+    "code_result_separation": true,
+    "legacy_result_policy": "preserve_original_paths_no_automatic_migration",
+    "result_storage_directive_id": "DIR-20260908-001",
+    "server_weight_root": "D:\\AIPatho\\qzs\\weights",
+    "server_weight_pattern": "D:\\AIPatho\\qzs\\weights\\<experiment_name>\\<batch_id>\\<run_id>",
+    "routine_return_includes_weight_files": false,
+    "required_weight_registry": "model_weights.json",
+    "weight_registry_contents": "per-run server absolute paths and production status",
+    "legacy_weight_policy": "current_return_unchanged_new_policy_starts_next_run",
+    "weight_storage_directive_id": "DIR-20260908-002"
   },
   "historical_plans": {
     "workflow_governance_v3": {

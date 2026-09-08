@@ -329,6 +329,13 @@ phase3_qzs_share/
 !experiments/explorations/**/
 !experiments/explorations/**/*.md
 
+!experiments/_template/
+!experiments/_template/**
+!experiments/server_load_check_20260905/
+!experiments/server_load_check_20260905/**
+!experiments/mpp2_uni2h_mlp_baseline_20260906/
+!experiments/mpp2_uni2h_mlp_baseline_20260906/**
+
 # New experiment packages remain source-controlled; raw runs/derived output are local.
 experiments/**/runs/
 experiments/**/analysis/
@@ -339,6 +346,7 @@ experiments/**/*.ckpt
 experiments/**/__pycache__/
 experiments/**/*.py[cod]
 experiments/_template/tests/work/
+experiments/mpp2_uni2h_mlp_baseline_20260906/tests/work/
 work/manual_package_validation/
 **/*.log
 # Runtime artifacts remain excluded even inside the existing analysis-report exception.

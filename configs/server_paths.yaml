@@ -25,6 +25,7 @@ transport:
   force_push_allowed: false
   code_root_key: server_manual_code
   runs_root_key: server_manual_runs
+  weights_root_key: server_manual_weights
 # Historical Gitee configuration; not the current execution policy.
 legacy_transport:
   mode: configurable
@@ -55,6 +56,17 @@ paths:
     write_policy: new_run_directory_only
     live_verification_required: true
     note: Preserve existing runs when replacing code; not created on the server by this change.
+  server_manual_weights:
+    path: 'D:\AIPatho\qzs\weights'
+    kind: directory
+    status: active
+    required_on: server
+    stability: user_selected
+    role: server_only_model_weight_root
+    write_policy: new_experiment_batch_run_directory_only
+    return_policy: registry_only_exclude_weight_files_by_default
+    live_verification_required: true
+    note: From DIR-20260908-002 onward, new training checkpoints are stored here and are not included in routine local result returns.
   server_qzs_root:
     path: 'D:\AIPatho\qzs'
     kind: directory

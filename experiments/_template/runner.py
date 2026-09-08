@@ -13,6 +13,7 @@ import traceback
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-dir", required=True, type=Path)
+    parser.add_argument("--weights-dir", required=True, type=Path)
     args = parser.parse_args()
     run_dir = args.run_dir.resolve()
     package_dir = Path(__file__).resolve().parent
@@ -22,7 +23,9 @@ def main():
         command = [
             sys.executable, "-u", str(package_dir / package["entrypoint"]),
             "--config", str(run_dir / "config.json"),
-            "--run-dir", str(run_dir), *package["args"],
+            "--run-dir", str(run_dir),
+            "--weights-dir", str(args.weights_dir.resolve()),
+            *package["args"],
         ]
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"

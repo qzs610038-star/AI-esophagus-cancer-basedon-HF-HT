@@ -1,7 +1,8 @@
 param(
     [string]$Config = (Join-Path $PSScriptRoot 'config.json'),
     [string]$PythonInterpreter,
-    [string]$RunsRoot
+    [string]$RunsRoot,
+    [string]$WeightsRoot
 )
 
 $ErrorActionPreference = 'Stop'
@@ -16,6 +17,7 @@ $configData = Get-Content -LiteralPath $Config -Raw -Encoding UTF8 | ConvertFrom
 $package = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'package.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 if ($PythonInterpreter) { $configData.python_interpreter = $PythonInterpreter }
 if ($RunsRoot) { $configData.runs_root = $RunsRoot }
+if ($WeightsRoot) { $configData.weights_root = $WeightsRoot }
 # The experiment identifier is one directory name, never a path.
 if ($package.experiment_id -notmatch '^[\p{L}\p{N}_-]+$') {
     throw 'experiment_id must contain only letters, digits, underscores or hyphens.'
@@ -23,11 +25,15 @@ if ($package.experiment_id -notmatch '^[\p{L}\p{N}_-]+$') {
 $runId = (Get-Date -Format 'yyyyMMdd_HHmmss_fff') + '_' + ([guid]::NewGuid().ToString('N').Substring(0, 8))
 $experimentRoot = Join-Path $configData.runs_root $package.experiment_id
 $runDir = Join-Path $experimentRoot $runId
+$weightExperimentRoot = Join-Path $configData.weights_root $package.experiment_id
+$weightDir = Join-Path $weightExperimentRoot $runId
 $null = New-Item -ItemType Directory -Path $runDir
-foreach ($name in @('logs', 'raw', 'checkpoints')) {
+foreach ($name in @('logs', 'raw')) {
     $null = New-Item -ItemType Directory -Path (Join-Path $runDir $name)
 }
+$null = New-Item -ItemType Directory -Path $weightDir
 $runDir = (Resolve-Path -LiteralPath $runDir).Path
+$weightDir = (Resolve-Path -LiteralPath $weightDir).Path
 $record = [ordered]@{
     experiment_id = $package.experiment_id
     code_version = $package.code_version
@@ -39,6 +45,8 @@ $record = [ordered]@{
     exit_code = $null
     code_directory = $PSScriptRoot
     run_directory = $runDir
+    weight_directory = $weightDir
+    weight_registry = (Join-Path $runDir 'model_weights.json')
     python_interpreter = $configData.python_interpreter
     entrypoint = $package.entrypoint
     arguments = $package.args
@@ -49,11 +57,19 @@ try {
     Write-JsonFile $recordPath $record
     Write-JsonFile (Join-Path $runDir 'config.json') $configData
     Write-JsonFile (Join-Path $runDir 'package.json') $package
+    Write-JsonFile (Join-Path $runDir 'model_weights.json') ([ordered]@{
+        schema_version = '1.0'
+        experiment_id = $package.experiment_id
+        run_id = $runId
+        weight_directory = $weightDir
+        files = @()
+        return_policy = 'server_weights_excluded_from_local_result_copy'
+    })
     [System.IO.File]::WriteAllText((Join-Path $runDir 'logs/startup.log'), "Run directory: $runDir`r`n", $utf8)
     Write-Host "Run directory: $runDir"
     $record.status = 'running'
     Write-JsonFile $recordPath $record
-    & $configData.python_interpreter -X utf8 -u (Join-Path $PSScriptRoot 'runner.py') --run-dir $runDir
+    & $configData.python_interpreter -X utf8 -u (Join-Path $PSScriptRoot 'runner.py') --run-dir $runDir --weights-dir $weightDir
     $exitCode = $LASTEXITCODE
 } catch {
     $message = ($_ | Out-String)

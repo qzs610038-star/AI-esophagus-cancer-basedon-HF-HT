@@ -19,10 +19,11 @@ class LauncherTest(unittest.TestCase):
         package = root / "code" / "中文 实验包"
         shutil.copytree(template, package, ignore=shutil.ignore_patterns("tests", "__pycache__"))
         runs = root / "runs"
+        weights = root / "weights"
         # A config filename with spaces exercises PowerShell argument handling too.
         config_file = package / "实际 配置.json"
         config = json.loads((package / "config.json").read_text(encoding="utf-8"))
-        config.update(python_interpreter=sys.executable, runs_root=str(runs))
+        config.update(python_interpreter=sys.executable, runs_root=str(runs), weights_root=str(weights))
         config_file.write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
 
         def launch(python_override=None):
@@ -42,6 +43,13 @@ class LauncherTest(unittest.TestCase):
         self.assertEqual(first_record["status"], "succeeded")
         self.assertEqual(first_record["exit_code"], 0)
         self.assertTrue(first_record["demo_only"])
+        weight_dir = weights / "template_demo" / first.name
+        self.assertEqual(Path(first_record["weight_directory"]), weight_dir.resolve())
+        self.assertTrue(weight_dir.is_dir())
+        self.assertFalse((first / "checkpoints").exists())
+        registry = json.loads((first / "model_weights.json").read_text(encoding="utf-8"))
+        self.assertEqual(Path(registry["weight_directory"]), weight_dir.resolve())
+        self.assertEqual(registry["files"], [])
         self.assertIn("零训练演示", (first / "logs/stdout.log").read_text(encoding="utf-8"))
         self.assertTrue((first / "raw/demo.json").is_file())
         self.assertEqual(json.loads((first / "metrics.json").read_text())["metrics"], {})

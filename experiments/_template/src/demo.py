@@ -9,6 +9,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True, type=Path)
     parser.add_argument("--run-dir", required=True, type=Path)
+    parser.add_argument("--weights-dir", required=True, type=Path)
     parser.add_argument("--fail", action="store_true", help="Exercise error logging without training")
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8-sig"))
