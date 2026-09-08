@@ -1,0 +1,34 @@
+{
+  "experiment_id": "mpp2_uni2h_mlp_baseline_20260906",
+  "code_version": "v001",
+  "entrypoint": "src/main.py",
+  "args": [],
+  "demo_only": false,
+  "code_sources": [
+    {
+      "path": "experiments/_template/run.ps1,runner.py",
+      "note": "独立包启动器与日志入口",
+      "date": "2026-09-06"
+    },
+    {
+      "path": "dataset_mpp_manifest.py",
+      "note": "manifest 特征数据集；已去掉仓库根依赖，并补身份列",
+      "date": "2026-09-06"
+    },
+    {
+      "path": "pfmval_core/metrics.py",
+      "note": "训练期 MSE/MAE/R2/PCC",
+      "date": "2026-09-06"
+    },
+    {
+      "path": "train_mpp_uni2h_mlp.py",
+      "note": "MPPMLPHead 与 manifest 训练协议；已去掉 path_registry 与状态门禁",
+      "date": "2026-09-06"
+    },
+    {
+      "path": "mpp_standard_splits/group_2/split_manifest.csv,split_info.json,zscore_manifest.json,zscore_params_from_train.json",
+      "note": "仅划分与 z-score 元数据，不含全量标签 CSV",
+      "date": "2026-09-06"
+    }
+  ]
+}

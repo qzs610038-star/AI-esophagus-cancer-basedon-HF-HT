@@ -1,0 +1,33 @@
+{
+  "python_interpreter": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+  "runs_root": "D:\\AIPatho\\qzs\\runs",
+  "inputs": {
+    "cache_root": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache",
+    "flat_cache_root": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache",
+    "labels_root": "D:\\AIPatho\\Patch\\mpp_zscore_repair_staging\\barcode-repair-20260711-d626ad8-v003\\group_2\\labels",
+    "gene_labels_root": "",
+    "accepted_checkpoint": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\checkpoints\\mpp_uni2h_mlp\\mpp2_barcode_repair_v003_frozen_baseline_20260711\\best_checkpoint.pth",
+    "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355"
+  },
+  "parameters": {
+    "target_id": "pathway_ssgsea",
+    "sampling_id": "dense",
+    "model_id": "uni2h_mlp",
+    "train_mpp_id": 2,
+    "external_mpp_id": 2,
+    "external_patient": "XZY",
+    "train_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+    "batch_size": 32,
+    "lr": 0.0001,
+    "seed": 42,
+    "dropout": 0.3,
+    "hidden_dim": 1024,
+    "num_threads": 8,
+    "loss": "mse",
+    "allow_missing": false,
+    "stride_x": 2,
+    "stride_y": 2,
+    "phase_x": 0,
+    "phase_y": 0
+  }
+}
