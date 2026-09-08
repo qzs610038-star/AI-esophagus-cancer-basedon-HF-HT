@@ -1,0 +1,182 @@
+{
+  "plan_version": "v2.1",
+  "experiment_id": "phase2_softlink_local_v2",
+  "config_version": "v2.1.1",
+  "comparison_name": "formal_mpp2_256_v21",
+  "run_kind": "formal",
+  "data": {
+    "split_id": "MPP2/group_2",
+    "split_directory": "inputs/mpp2",
+    "split_manifest_file": "inputs/mpp2/split_manifest.csv",
+    "split_info_file": "inputs/mpp2/split_info.json",
+    "zscore_manifest_file": "inputs/mpp2/zscore_manifest.json",
+    "slide_mapping_file": "inputs/slide_mapping.csv",
+    "slide_mapping_status_file": "inputs/slide_mapping_status.json",
+    "slide_geometry_file": "inputs/slide_geometry.csv",
+    "labels_root": "D:\\AIPatho\\Patch\\mpp_zscore_repair_staging\\barcode-repair-20260711-d626ad8-v003\\group_2\\labels",
+    "normalization_file": "inputs/mpp2/zscore_params_from_train.json",
+    "feature_source_manifest": "inputs/feature_source_manifest.json",
+    "external_point_table": null,
+    "input_status_file": "inputs/input_status.json",
+    "label_version": "barcode-repair-v003",
+    "repair_evidence_id": "barcode-repair-20260711-d626ad8-v003",
+    "data_manifest_id": "barcode-repair-20260711-d626ad8-v003:1204018178a4d355",
+    "input_dim": 1536,
+    "output_dim": 30,
+    "expected_train_points": 9472,
+    "expected_internal_val_points": 1078,
+    "expected_external_points": 1039,
+    "external_patient": "XZY",
+    "mpp_id": 2
+  },
+  "model": {
+    "hidden_dim": 256,
+    "relation_dim": 256,
+    "dropout": 0.3,
+    "activation": "gelu_exact",
+    "shared_bias": true,
+    "readout_bias": true,
+    "relation_bias": false,
+    "spatial_bias": false,
+    "spatial_initialization": "zeros",
+    "normalization_epsilon": 1e-12
+  },
+  "relation": {
+    "distance": "mean_squared_standardized_pathways",
+    "support": "truncated",
+    "threshold_pairs": 200000,
+    "threshold_seed": 20260907,
+    "near_quantile": 0.1,
+    "far_quantile": 0.5,
+    "quantile_method": "linear",
+    "max_near": 8,
+    "max_far": 32,
+    "tau_y": 1,
+    "tau_z": 0.1,
+    "far_patient_scope": "all"
+  },
+  "graph": {
+    "hops": 1,
+    "radius_in_native_steps": 1.5,
+    "max_neighbors": 8,
+    "distance_sigma": 1,
+    "use_image_similarity": true,
+    "image_temperature": 0.2,
+    "self_raw_weight": 1,
+    "directed": true
+  },
+  "training": {
+    "batch_size": 256,
+    "keep_last_batch": true,
+    "seeds": [42, 43, 44],
+    "arms": ["point", "relation", "spatial", "joint"],
+    "optimizer": "AdamW",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "betas": [0.9, 0.999],
+    "optimizer_epsilon": 1e-8,
+    "relation_warmup_epochs": 5,
+    "relation_ramp_epochs": 10,
+    "relation_lambda_max": 0.05,
+    "max_epochs": 60,
+    "precision": "float32",
+    "amp": false,
+    "tf32": false,
+    "num_workers": 0,
+    "cpu_threads": 8
+  },
+  "selection": {
+    "metric": "patient_macro_pathway_pcc",
+    "tie_metric": "patient_macro_z_mse_selection",
+    "formal_start_epoch": 6,
+    "checkpoint_tolerance": 0.000001,
+    "early_stop_count_start_epoch": 16,
+    "early_stop_min_delta": 0.0001,
+    "early_stop_patience": 10,
+    "constant_prediction_selection_penalty": -1
+  },
+  "precheck": {
+    "relation_seed": 20260908,
+    "relation_complete_shuffles": 3,
+    "graph_splits": ["train", "internal_val"],
+    "automatic_parameter_changes": false,
+    "low_valid_rate_warn": 0.2
+  },
+  "diagnostics": {
+    "training_epochs": [6, 15]
+  },
+  "analysis": {
+    "same_epoch_comparisons": [15, 25],
+    "fixed_prediction_smoothing": {
+      "enabled": true,
+      "beta": 1,
+      "source_arm": "point",
+      "split": "internal_val",
+      "fit_beta": false,
+      "used_for_selection": false
+    },
+    "degree_strata": [
+      {"name": "孤立", "minimum": 0, "maximum": 0},
+      {"name": "少邻居", "minimum": 1, "maximum": 3},
+      {"name": "较多邻居", "minimum": 4, "maximum": null}
+    ],
+    "block_bootstrap_default": false
+  },
+  "runtime": {
+    "python_interpreter": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+    "server_code_root": "D:\\AIPatho\\qzs\\code\\phase2_softlink_local_v2",
+    "runs_root": "D:\\AIPatho\\qzs\\runs\\phase2_softlink_local_v2",
+    "weights_root": "D:\\AIPatho\\qzs\\weights"
+  },
+  "documentation": {
+    "configuration_status": "v2.1完整代码包唯一配置：划分与训练拟合标准化参数已放入包内；labels_root 与特征缓存按活动修复登记和 server_paths 主表填写，本机不存在，服务器现场仍需验证。slide_mapping 与 external_point_table 保持明确缺口，不得用 patient_id 顶替 slide_id，不得用标签构图。本文件不是训练已完成的证据。",
+    "path_source": "configs/server_paths.yaml + project_state/mpp_repair_registry.json + 本轮已核实的 labels 路径",
+    "input_resolution_required": [
+      "slide_mapping verified slide_id",
+      "server live feature cache",
+      "server live labels_root",
+      "data.external_point_table"
+    ],
+    "supported_exploration": "调整已实现的维数、标量参数、graph.use_image_similarity 和 relation.far_patient_scope；替换损失或复杂图需另外实现，不接受无效开关",
+    "parameter_help": {
+      "model.hidden_dim": "共享任务特征h的维数；改变后从头训练，中心头和空间B随之调整。",
+      "model.relation_dim": "关系投影z的维数，独立于h维数。",
+      "relation.tau_y": "通路教师温度；更小使已选近例权重更集中，不改变近例资格。",
+      "relation.tau_z": "图像关系温度；缩放余弦logits，改变概率和梯度，不能只看损失值比较强度。",
+      "relation.max_near / relation.max_far": "每个中心最多选择的近例/远例数，实际数量受批内候选限制。",
+      "relation.near_quantile / relation.far_quantile": "训练标签距离的固定分位阈值；改变后生成新的阈值与比较组。",
+      "relation.far_patient_scope": "all允许所有训练患者远例；same_patient只限制远例为同患者，正式默认all。",
+      "graph.image_temperature": "形态权重温度；在余弦低于1时，越小对不相似邻居抑制越强。",
+      "graph.radius_in_native_steps / graph.max_neighbors": "相对原生步长的半径与邻居上限；不等于统一微米范围。",
+      "graph.self_raw_weight": "中心原始权重；与所有邻居b共同归一化，默认1。",
+      "graph.use_image_similarity": "true使用距离和形态乘积；false仅用距离，属于单项探索。",
+      "training.batch_size": "中心批次大小，也改变关系候选集合；不是只影响显存。",
+      "training.relation_lambda_max": "关系项最大系数；需结合共享层实际梯度量级解释。",
+      "training.relation_warmup_epochs / training.relation_ramp_epochs": "纯回归预热轮数与关系权重爬坡轮数。",
+      "selection.early_stop_count_start_epoch": "开始早停计数的轮次；其前一轮结束参考窗口，默认16。",
+      "training.learning_rate / training.weight_decay": "优化器学习率与权重衰减。",
+      "config_version / comparison_name / run_kind": "新探索使用新的人工配置版本和比较名称，并设run_kind为exploration；旧运行保留。"
+    }
+  },
+  "randomness": {
+    "model_seed_offset": 0,
+    "center_seed_offset": 100000,
+    "dropout_seed_offset": 200000,
+    "diagnostic_seed_offset": 300000,
+    "diagnostic_relation_epoch": 0,
+    "diagnostic_relation_batch": 0
+  },
+  "preparation": {
+    "slide_group_policy": "one_complete_feature_source_group_per_patient",
+    "physical_slide_accession_claimed": false,
+    "expected_native_step": {
+      "HYZ15040": 336,
+      "JFX": 448,
+      "LMZ12939": 336,
+      "TGC": 224,
+      "XSL": 224,
+      "ZHZ": 224
+    },
+    "external_step_policy": "infer_from_complete_xzy_feature_coordinates"
+  }
+}

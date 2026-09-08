@@ -1,0 +1,26 @@
+{
+  "schema": "phase2_softlink_feature_source_v1",
+  "mpp_id": 2,
+  "expected_dim": 1536,
+  "token_policy": "first_cls_if_2d",
+  "partner_cache_root": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache",
+  "flat_cache_root": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache",
+  "path_source": "configs/server_paths.yaml paths.server_mpp_partner_cache and paths.server_mpp_flat_cache",
+  "candidate_subdirs_partner": [
+    "MPP{mpp_id}_UNI/{patient}",
+    "MPP{mpp_id}_UNI/{patient}/train",
+    "MPP{mpp_id}_UNI/{patient}/val",
+    "{mpp_id}/{patient}"
+  ],
+  "candidate_subdirs_flat": [
+    "{mpp_id}/{patient}",
+    "MPP{mpp_id}_UNI/{patient}"
+  ],
+  "local_existence_checked_at": "2026-09-07",
+  "local_existence": {
+    "partner_cache_root": false,
+    "flat_cache_root": false
+  },
+  "server_live_verification": "required",
+  "note_zh": "路径来自本项目 server_paths 主表。本机未找到这两个缓存目录。基线读取规则：二维token特征取第0行CLS，期待1536维。服务器现场仍需验证文件存在与dtype。"
+}

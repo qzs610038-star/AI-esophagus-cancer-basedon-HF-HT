@@ -1,0 +1,28 @@
+{
+  "experiment_id": "phase2_softlink_local_v2",
+  "code_version": "v2.1.2",
+  "plan_version": "v2.1",
+  "config_version": "v2.1.1",
+  "entrypoint": "src/run_experiments.py",
+  "args": ["--scope", "all"],
+  "demo_only": false,
+  "implementation_batch": "complete_independent_package",
+  "note": "完整独立代码包：服务器输入自动准备、预检、4臂×3种子训练、内部冻结、XZY无标签预测、本地派生分析。代码通过不等于正式训练完成。",
+  "code_sources": [
+    {
+      "path": "01_指南与解读/部署方案/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "note": "v2.1实现规格与科研边界",
+      "date": "2026-09-07"
+    },
+    {
+      "path": "01_指南与解读/部署方案/Phase2软连接升级_集中配置_v2_1_20260907.json",
+      "note": "统一配置来源；包内config.json是唯一运行配置",
+      "date": "2026-09-07"
+    },
+    {
+      "path": "mpp_standard_splits/group_2",
+      "note": "划分及训练集拟合标准化参数副本，不含大数据和权重",
+      "date": "2026-09-07"
+    }
+  ]
+}

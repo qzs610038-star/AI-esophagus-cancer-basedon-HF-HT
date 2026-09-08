@@ -1,0 +1,10 @@
+{
+  "status": "missing",
+  "error_code": "SLIDE_MAPPING_UNVERIFIED",
+  "verified_row_rule": "status 必须为 verified 且 slide_id 非空；禁止把 patient_id 自动写成 slide_id",
+  "split_manifest_columns": ["mpp_id", "patient", "patch_stem", "x", "y", "split", "block_id"],
+  "message_zh": "MPP2 split_manifest 没有独立 slide_id。当前限定事实源不能证明每患者只有一张切片，因此映射保持缺失。point/relation 的核心计算可以不依赖图；spatial、joint 以及预检图在映射补齐前必须失败，并给出本错误码。",
+  "blocked_until_verified": ["graph.build_split_graph", "precheck.graph", "arm=spatial", "arm=joint"],
+  "allowed_without_graph": ["point", "relation", "normalization.inverse_transform", "relation support/loss"],
+  "patients_listed": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ", "XZY"]
+}

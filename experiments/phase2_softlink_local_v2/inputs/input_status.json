@@ -1,0 +1,43 @@
+{
+  "checked_at": "2026-09-07",
+  "items": {
+    "split_manifest": {
+      "status": "copied_in_package",
+      "path": "inputs/mpp2/split_manifest.csv",
+      "counts": {"train": 9472, "internal_val": 1078, "total": 10550},
+      "has_slide_id": false
+    },
+    "normalization": {
+      "status": "copied_in_package",
+      "path": "inputs/mpp2/zscore_params_from_train.json",
+      "fit_split": "train",
+      "n_pathways": 30,
+      "n_train_samples": 9472,
+      "refit": false
+    },
+    "labels_root": {
+      "status": "configured_from_active_repair_not_present_on_this_machine",
+      "path": "D:\\AIPatho\\Patch\\mpp_zscore_repair_staging\\barcode-repair-20260711-d626ad8-v003\\group_2\\labels",
+      "repair_evidence_id": "barcode-repair-20260711-d626ad8-v003",
+      "local_exists": false,
+      "fallback_to_repo_labels": false,
+      "note_zh": "活动修复登记与任务已核实的服务器标签根。本机 Test-Path 为 False。不得回退 mpp_standard_splits/group_2/labels。"
+    },
+    "feature_caches": {
+      "status": "configured_from_server_paths_not_present_on_this_machine",
+      "local_exists": false,
+      "server_live_verification": "required"
+    },
+    "slide_mapping": {
+      "status": "missing",
+      "error_code": "SLIDE_MAPPING_UNVERIFIED"
+    },
+    "external_point_table": {
+      "status": "unverified",
+      "path": null,
+      "interface": "predict.load_external_point_table",
+      "required_columns": ["patient_id", "slide_id", "spot_id", "x", "y", "feature_path"],
+      "note_zh": "本机未核实 XZY 完整无标签点表。禁止用标签构图或伪造点表；服务器现场补齐后由预测入口按身份键读取。"
+    }
+  }
+}

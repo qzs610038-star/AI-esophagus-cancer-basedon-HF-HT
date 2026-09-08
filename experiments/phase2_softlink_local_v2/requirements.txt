@@ -1,0 +1,6 @@
+# Do not install automatically. Use the configured server interpreter.
+# Server check on record (2026-09-05): Python 3.13.5, torch 2.6.0+cu124
+torch
+numpy
+pandas
+pytest

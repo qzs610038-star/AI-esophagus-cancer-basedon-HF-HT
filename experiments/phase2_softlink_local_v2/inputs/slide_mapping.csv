@@ -1,0 +1,8 @@
+patient_id,slide_id,status,evidence_source,notes
+HYZ15040,,missing,,MPP2 split_manifest 只有 patient/patch_stem/x/y/split；限定事实源不足以确认每患者单切片，未填写 slide_id，也未用 patient_id 顶替
+JFX,,missing,,同上
+LMZ12939,,missing,,同上
+TGC,,missing,,同上
+XSL,,missing,,同上
+ZHZ,,missing,,同上
+XZY,,missing,,外部患者同样没有可审计 slide_id；完整点表需服务器现场验证，不得用标签构图
