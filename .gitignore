@@ -359,3 +359,5 @@ work/manual_package_validation/
 /01_指南与解读/分析报告/**/cache/
 /01_指南与解读/分析报告/**/__pycache__/
 /01_指南与解读/分析报告/**/runs/
+/01_指南与解读/分析报告/**/*.html
+draw_metrics_comparison.py
