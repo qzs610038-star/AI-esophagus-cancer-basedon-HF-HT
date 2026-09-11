@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T13:33:32+08:00",
+  "updated_at": "2026-09-10T20:03:24+08:00",
   "current_mpp_policy": {
     "effective_date": "2026-09-05",
     "selected_mpp": 2,
@@ -13942,6 +13942,328 @@
         "new_training_performed": false,
         "external_fixed_smoothing_performed": false
       }
+    },
+    {
+      "id": "phase2_softlink_contrastive_v3",
+      "display_name": "Phase 2 软连接对比学习改进实验 v3（设计 v4）",
+      "family": "phase2_softlink",
+      "phase": "formal",
+      "status": "done",
+      "registration_status": "registered",
+      "evidence_status": "pending",
+      "analysis_status": "pending_user_review",
+      "created_at": "2026-09-09T10:16:23+08:00",
+      "updated_at": "2026-09-10T13:38:50+08:00",
+      "result_id": "phase2-softlink-contrastive-v3-20260909-101623-result",
+      "result_phase": "formal",
+      "batch_id": "v4_full_diagnostic",
+      "run_id": "20260909_101623_341_f0de1302",
+      "result_root": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302",
+      "plan_version": "v4",
+      "config_version": "v4.0.0",
+      "code_versions": [
+        "v3.0.0",
+        "v3.0.4",
+        "v3.0.5"
+      ],
+      "objective": "在原六患者空间块划分、种子42下比较冻结回归、软对比LoRA和阶段二点位/空间头，并在训练与模型选择结束后对XZY作只读参考评估。",
+      "registration_scope": "用户授权登记完整训练与XZY外部推理事实；登记不等同结果accepted或机制因果结论确认。",
+      "completion_evidence": {
+        "latest_training_resume": {
+          "event": "completed",
+          "code_version": "v3.0.4",
+          "status": "succeeded",
+          "exit_code": 0
+        },
+        "engine_tasks": 58,
+        "engine_tasks_completed": 58,
+        "weight_entries": 37,
+        "bad_weight_entries": 0,
+        "fixed_stage2_tasks": 22,
+        "best_epoch_extra_stage2_tasks": 8,
+        "external_xzy": {
+          "code_version": "v3.0.5",
+          "status": "completed",
+          "exit_code": 0,
+          "task_count": 40,
+          "completed_task_count": 40,
+          "training_performed": false,
+          "selection_used": false,
+          "input_mode": "read_only"
+        },
+        "immutable_snapshot_note": "初始run.json保留首次失败快照；最终完成状态以raw/engine_state.json和logs/resume_history.jsonl末条成功记录共同判定。"
+      },
+      "data_contract": {
+        "split_id": "MPP2/group_2",
+        "n_train": 9472,
+        "n_internal_val": 1078,
+        "n_external": 1039,
+        "n_internal_patients": 6,
+        "n_external_patients": 1,
+        "n_pathways": 30,
+        "seeds": [
+          42
+        ],
+        "normalization": "仅使用训练块拟合的30通路均值与标准差；内部验证及XZY不拟合参数。",
+        "internal_evidence_scope": "同患者空间块内部验证，不是患者独立验证。",
+        "external_evidence_scope": "XZY历史已见，只作外部参考评估，不是全新盲测队列。",
+        "external_native_step": 224
+      },
+      "selection_contract": {
+        "lora_learning_rate": 0.00001,
+        "learning_rate_selection": "种子42的r8_regression固定第5轮内部验证patient_macro_pathway_pcc，继以zMSE及较小学习率打平。",
+        "stage1_fixed_endpoint": 5,
+        "stage1_best_epoch_sensitivity": 3,
+        "stage2_selection_start_epoch": 6,
+        "stage2_max_epochs": 60,
+        "external_xzy_excluded_from_selection": true,
+        "fixed_five_epoch_and_best_epoch_sensitivity_kept_separate": true,
+        "v4_model_selection_rule_unchanged": true
+      },
+      "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
+      "metric_registration_status": "primary_pcc_metrics_registered_full_metrics_retained_in_raw_sources",
+      "metric_definitions": {
+        "patient_macro_pathway_pcc": "逐患者逐通路PCC后患者与通路等权平均；XZY单患者时为30通路PCC算术平均。",
+        "pooled_pcc": "全部点位乘通路的z分数整体展平后计算一次PCC。",
+        "aggregation_note": "两种PCC聚合和标度不同，必须并列报告，不能以数值高低互证优越。"
+      },
+      "metric_rows": {
+        "n_total": 40,
+        "stage1_fixed_e5": 6,
+        "stage1_best_epoch_sensitivity": 4,
+        "stage2_fixed_e5": 22,
+        "stage2_best_epoch_sensitivity": 8,
+        "n_seeds": 1,
+        "seed_mean_sd_status": "not_applicable_single_seed",
+        "source": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/analysis/pcc_side_by_side.csv"
+      },
+      "registered_highlights": {
+        "stage1_fixed_e5_best_external_patient_macro": {
+          "cell": "frozen_centered_contrastive",
+          "internal_validation_pcc": 0.6648857008678841,
+          "external_xzy_pcc": 0.5430108025445193
+        },
+        "stage1_fixed_e5_best_external_pooled": {
+          "cell": "frozen_regression",
+          "internal_validation_pooled_pcc": 0.8034420824708937,
+          "external_xzy_pooled_pcc": 0.6632679723520138
+        },
+        "stage1_sensitivity_best_external_patient_macro": {
+          "cell": "r2_regression",
+          "endpoint": 3,
+          "internal_validation_pcc": 0.6649702637314127,
+          "external_xzy_pcc": 0.5446429575070889,
+          "external_xzy_pooled_pcc": 0.6615173537618628
+        },
+        "stage2_fixed_e5_best_external_patient_macro": {
+          "cell": "r8_global_contrastive",
+          "h_mode": "reset",
+          "head": "spatial",
+          "internal_validation_pcc": 0.622299105660084,
+          "internal_validation_pooled_pcc": 0.776481458709902,
+          "external_xzy_pcc": 0.5392910475588775,
+          "external_xzy_pooled_pcc": 0.6597420867417644
+        },
+        "stage2_fixed_e5_best_external_pooled": {
+          "cell": "r8_centered_contrastive",
+          "h_mode": "reset",
+          "head": "spatial",
+          "internal_validation_pcc": 0.6223125022961898,
+          "internal_validation_pooled_pcc": 0.7764947447106451,
+          "external_xzy_pcc": 0.5392864153648539,
+          "external_xzy_pooled_pcc": 0.6597557987442868
+        }
+      },
+      "weights": {
+        "server_weight_directory": "D:\\AIPatho\\qzs\\weights\\phase2_softlink_contrastive_v3\\v4_full_diagnostic\\20260909_101623_341_f0de1302",
+        "returned_locally": false,
+        "registry_source": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/model_weights.json"
+      },
+      "sources": {
+        "registration_summary": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/analysis/registration_summary.json",
+        "pcc_side_by_side": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/analysis/pcc_side_by_side.csv",
+        "engine_state": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/raw/engine_state.json",
+        "resume_history": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/logs/resume_history.jsonl",
+        "external_summary": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/external_xzy/summary.json",
+        "external_metrics": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/external_xzy/metrics_summary.csv"
+      },
+      "result_interpretation_boundary": "当前为已登记待审结果；未标记accepted，不形成机制因果结论，原因分析与报告撰写另行进行。"
+    },
+    {
+      "id": "phase2_spatial_warmstart_v1",
+      "display_name": "Phase 2 完整继承单点模型与空间修正 v1",
+      "family": "phase2_spatial_warmstart",
+      "phase": "formal",
+      "status": "done",
+      "registration_status": "registered",
+      "evidence_status": "accepted",
+      "analysis_status": "reviewed_and_accepted",
+      "created_at": "2026-09-10T19:06:20+08:00",
+      "updated_at": "2026-09-10T20:03:24+08:00",
+      "accepted_at": "2026-09-10T20:03:24+08:00",
+      "result_id": "phase2-spatial-warmstart-v1-20260910-190620-result",
+      "result_phase": "formal",
+      "batch_id": "warmstart_no_lora_v1",
+      "run_id": "20260910_190620_252_10e4d946",
+      "result_root": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946",
+      "plan_version": "v1.1",
+      "code_version": "v0.2.0",
+      "objective": "从阶段一冻结纯回归第5轮完整继承H/C，比较仅训练空间残差B、继续训练H/C及联合训练H/C/B，并在内部验证选模冻结后对XZY作外部评估。",
+      "registration_scope": "用户在完整结果审核后明确授权登记并接纳；接纳限于该单种子、单外部患者运行事实，不构成广泛泛化或机制因果结论。",
+      "completion_evidence": {
+        "training_status": "succeeded",
+        "training_exit_code": 0,
+        "trained_arms": [
+          "spatial_residual_only",
+          "point_continue",
+          "spatial_joint"
+        ],
+        "external_xzy_status": "completed",
+        "external_training_performed": false,
+        "external_selection_used": false,
+        "server_metric_max_abs_difference_after_local_recompute": 0.0
+      },
+      "data_contract": {
+        "split_id": "MPP2/group_2",
+        "n_train": 9472,
+        "n_internal_val": 1078,
+        "n_external": 1039,
+        "n_internal_patients": 6,
+        "n_external_patients": 1,
+        "n_pathways": 30,
+        "seeds": [
+          42
+        ],
+        "normalization": "仅使用来源训练集z-score；内部验证及XZY不拟合参数。",
+        "internal_evidence_scope": "同患者空间块内部验证，不是患者独立验证。",
+        "external_evidence_scope": "XZY为单患者且历史已见，只作外部参考评估，不是全新盲测队列。",
+        "external_native_step": 224
+      },
+      "selection_contract": {
+        "selection_split": "internal_val",
+        "primary_metric": "patient_macro_pathway_pcc",
+        "tie_order": [
+          "min_zMSE",
+          "min_update",
+          "declared_architecture_complexity"
+        ],
+        "selected_arm": "spatial_joint",
+        "selected_update": 300,
+        "external_xzy_excluded_from_selection": true,
+        "fixed_beta1_diagnostic_excluded_from_selection": true
+      },
+      "metric_contract_id": "phase2_spatial_warmstart_dual_pcc_v1_20260910",
+      "metric_definitions": {
+        "patient_macro_pathway_pcc": "逐患者逐通路PCC后等权平均；XZY单患者时等于30通路PCC算术平均。",
+        "flattened_pooled_pcc": "全部点位乘通路的训练z-score矩阵整体展平后计算一次PCC；pooled_pcc为同义别名。",
+        "zMSE": "全部点位乘通路的训练z-score尺度均方误差。",
+        "aggregation_note": "两种PCC聚合不同，必须并列报告，不能以绝对数值高低互证优越。"
+      },
+      "results": {
+        "internal_val": {
+          "step0_source_e5": {
+            "patient_macro_pathway_pcc": 0.6648814635868446,
+            "flattened_pooled_pcc": 0.8034331487323852,
+            "zMSE": 0.3645681321419921
+          },
+          "spatial_residual_only": {
+            "best_update": 320,
+            "patient_macro_pathway_pcc": 0.6710109544475593,
+            "flattened_pooled_pcc": 0.8072812259975646,
+            "zMSE": 0.35850830321347377
+          },
+          "point_continue": {
+            "best_update": 350,
+            "patient_macro_pathway_pcc": 0.6665652743602383,
+            "flattened_pooled_pcc": 0.8051459184990346,
+            "zMSE": 0.361636113901702
+          },
+          "spatial_joint": {
+            "best_update": 300,
+            "patient_macro_pathway_pcc": 0.6734038286371965,
+            "flattened_pooled_pcc": 0.809046177273417,
+            "zMSE": 0.3551967751696145
+          }
+        },
+        "external_xzy": {
+          "step0_source_e5": {
+            "patient_macro_pathway_pcc": 0.5424705514974782,
+            "flattened_pooled_pcc": 0.6632679723520137,
+            "zMSE": 0.6639290133017339
+          },
+          "selected_spatial_joint": {
+            "patient_macro_pathway_pcc": 0.5582179858436133,
+            "flattened_pooled_pcc": 0.6720286629693794,
+            "zMSE": 0.64184458371383,
+            "zRMSE": 0.8011520353302674,
+            "zMAE": 0.6099317409502995,
+            "valid_patient_pathway_count": 30,
+            "invalid_patient_pathway_count": 0
+          },
+          "fixed_beta1_diagnostic": {
+            "used_for_selection": false,
+            "patient_macro_pathway_pcc": 0.5779261503487785,
+            "flattened_pooled_pcc": 0.6821466356222068,
+            "zMSE": 0.6447389446329925,
+            "zRMSE": 0.8029563777895986,
+            "zMAE": 0.6210746752556474
+          }
+        },
+        "seed_summary": {
+          "n_seeds": 1,
+          "mean_equals_seed42": true,
+          "sample_sd": null,
+          "sample_sd_status": "not_applicable_single_seed"
+        }
+      },
+      "paired_findings": {
+        "selected_external_minus_step0": {
+          "patient_macro_pathway_pcc": 0.015747434346135014,
+          "flattened_pooled_pcc": 0.008760690617365618,
+          "zMSE": -0.02208442958790391,
+          "pathways_improved_pcc": 21,
+          "pathways_declined_pcc": 9
+        },
+        "external_minus_internal_selected": {
+          "patient_macro_pathway_pcc": -0.11518584279358324,
+          "flattened_pooled_pcc": -0.13701751430403764,
+          "zMSE": 0.2866478085442155
+        }
+      },
+      "graph_validation": {
+        "directed_edge_count": 7666,
+        "isolated_point_count": 0,
+        "degree_min": 2,
+        "degree_mean": 7.378248315688162,
+        "degree_max": 8,
+        "max_weight_sum_error": 3.725290298461914e-08
+      },
+      "weights": {
+        "server_weight_directory": "D:\\AIPatho\\qzs\\weights\\phase2_spatial_warmstart_v1\\warmstart_no_lora_v1\\20260910_190620_252_10e4d946",
+        "selected_model_bundle": "D:\\AIPatho\\qzs\\weights\\phase2_spatial_warmstart_v1\\warmstart_no_lora_v1\\20260910_190620_252_10e4d946\\spatial_joint\\seed_42\\model_bundle.pt",
+        "returned_locally": false,
+        "registry_source": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/model_weights.json"
+      },
+      "sources": {
+        "selection": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/selection.json",
+        "training_metrics": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/metrics.json",
+        "external_metrics": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/external_xzy/spatial_joint/metrics.json",
+        "external_recomputed": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_recomputed.json",
+        "external_per_pathway": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_per_pathway.csv",
+        "external_review": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_review.md"
+      },
+      "unavailable_metrics": {
+        "raw_scale_metrics": {
+          "status": "not_computed",
+          "reason": "当前warm-start bundle未嵌入来源训练集mean/std，不能审计原始尺度反变换。"
+        },
+        "patient_level_external_confidence_interval": {
+          "status": "not_estimable",
+          "reason": "外部仅XZY一名患者。"
+        }
+      },
+      "accepted_conclusion": "在预定内部验证规则下spatial_joint被选中；其XZY双PCC和zMSE均优于来源step0。固定beta=1诊断的双PCC更高但zMSE略差，且未参与选择。结果仅支持该单种子、单外部患者范围，不证明全面优于固定平滑或广泛跨患者泛化。",
+      "next_action": "closed_registered_accepted_no_external_tuning"
     }
   ]
 }

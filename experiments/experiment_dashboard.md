@@ -1,5 +1,13 @@
 # Experiment Dashboard
 
+## 空间热启动 v1 已审核接纳（2026-09-10）
+
+- `phase2_spatial_warmstart_v1` / `20260910_190620_252_10e4d946`：`registered`、`accepted`，单种子42。
+- 已选`spatial_joint`内部双PCC=`0.6734 / 0.8090`、zMSE=`0.3552`；XZY双PCC=`0.5582 / 0.6720`、zMSE=`0.6418`。
+- XZY相对来源step0双PCC提高`0.0157 / 0.0088`，zMSE降低`0.0221`；固定β=1仅为不参与选择的诊断。
+- 边界：外部仅一名患者，单种子无样本标准差，不能声称广泛跨患者泛化；原始尺度指标不可审计。
+- [完整审核结果](results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_review.md)
+
 ## 本轮软连接实验已完整登记（2026-09-08）
 
 - 实验：`phase2_softlink_local_v2`；批次：`20260908_005325_810_8d306c10`；12次正式训练及12次XZY预测完成。
