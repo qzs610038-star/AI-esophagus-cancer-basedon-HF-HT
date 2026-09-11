@@ -1,0 +1,44 @@
+{
+  "experiment_id": "phase2_spatial_warmstart_v1",
+  "code_version": "v0.2.0",
+  "plan_version": "v1.1",
+  "entrypoint": "src/main.py",
+  "args": ["train", "--arm", "all"],
+  "demo_only": false,
+  "implementation_status": "implemented",
+  "code_sources": [
+    {
+      "path": "experiments/_template",
+      "copied_files": [
+        "runner.py",
+        "run.ps1",
+        "config.json",
+        "package.json",
+        "README.md",
+        "requirements.txt"
+      ],
+      "date": "2026-09-10",
+      "note": "模板启动器与目录合同；配置说明已定制，run.ps1增加未实现状态提示"
+    },
+    {
+      "path": "experiments/phase2_softlink_contrastive_v3",
+      "status": "logic_reimplemented_in_package",
+      "copied_files": ["src/model.py", "src/spatial.py", "src/metrics.py", "src/data.py"],
+      "date": "2026-09-10",
+      "note": "复用H/C/B、固定图、指标与缓存合同；已移除LoRA、教师和旧60轮逻辑，运行时不导入旧包"
+    },
+    {
+      "path": "experiments/phase2_softlink_local_v2",
+      "status": "logic_reimplemented_in_package",
+      "copied_files": ["src/model.py", "src/spatial.py", "src/training.py", "src/predict.py"],
+      "date": "2026-09-10",
+      "note": "参考空间残差、配对dropout与固定平滑；恢复和训练循环为本包新实现"
+    },
+    {
+      "path": "experiments/phase2_softlink_contrastive_v3/inputs",
+      "status": "copied_metadata",
+      "manifest": "docs/input_sources.json",
+      "date": "2026-09-10"
+    }
+  ]
+}

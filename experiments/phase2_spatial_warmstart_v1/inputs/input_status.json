@@ -1,0 +1,45 @@
+{
+  "checked_at": "2026-09-08",
+  "design_version": "v4",
+  "items": {
+    "split_manifest": {
+      "status": "packaged",
+      "path": "inputs/mpp2/split_manifest.csv",
+      "counts": {"train": 9472, "internal_val": 1078, "total": 10550},
+      "patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+      "external_xzy_in_manifest": false
+    },
+    "normalization": {
+      "status": "fit_at_runtime",
+      "fit_scope": "current_protocol_or_fold_training_rows_only",
+      "ddof": 1,
+      "precomputed_parameters_used_for_lopo": false,
+      "note_zh": "原入口和每个 LOPO 折均重新从训练块原始标签拟合；包内旧 zscore_manifest 只作通路与历史来源参考。"
+    },
+    "raw_labels": {
+      "status": "configured_not_verified_on_this_machine",
+      "template": "D:\\AIPatho\\Patch\\visiumhd_patch\\{group}\\{patient}\\{patient}_ssGSEA.csv",
+      "selection_use": "train_and_internal_validation_only",
+      "held_out_use": "post_selection_evaluation_only"
+    },
+    "patch_images": {
+      "status": "configured_not_verified_on_this_machine",
+      "template": "D:\\AIPatho\\Patch\\visiumhd_patch\\{group}\\{patient}\\patch_images\\{patch_stem}.png"
+    },
+    "uni2_h": {
+      "status": "exact_snapshot_configured_not_live_verified",
+      "snapshot": "D:\\AIPatho\\shared\\.cache\\huggingface\\hub\\models--MahmoodLab--UNI2-h\\snapshots\\d517a8dd47902dd7c308b3c36f63bce47e7b9a43",
+      "network_download": false
+    },
+    "feature_cache": {
+      "status": "optional_read_only_legacy_input_not_verified_on_this_machine",
+      "path": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache",
+      "online_cache_parity_required": true
+    },
+    "server_runtime": {
+      "status": "configured_not_live_verified",
+      "python": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+      "gpu_memory_and_batch": "requires resource short test"
+    }
+  }
+}

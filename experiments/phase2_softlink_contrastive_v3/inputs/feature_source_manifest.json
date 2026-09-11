@@ -1,0 +1,21 @@
+{
+  "schema": "phase2_softlink_contrastive_feature_source_v4",
+  "mpp_id": 2,
+  "expected_dim": 1536,
+  "online_source": {
+    "patch_template": "D:\\AIPatho\\Patch\\visiumhd_patch\\{group}\\{patient}\\patch_images\\{patch_stem}.png",
+    "backbone": "MahmoodLab/UNI2-h",
+    "checkpoint_snapshot": "D:\\AIPatho\\shared\\.cache\\huggingface\\hub\\models--MahmoodLab--UNI2-h\\snapshots\\d517a8dd47902dd7c308b3c36f63bce47e7b9a43",
+    "checkpoint_status": "unverified_server_path_from_configs/server_paths.yaml",
+    "token_policy": "forward_features_first_CLS",
+    "network_download": false
+  },
+  "optional_frozen_cache": {
+    "root": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache",
+    "write_policy": "read_only_input",
+    "precision_must_match_online_check": true
+  },
+  "graph_policy": "weights use frozen UNI2-h CLS; LoRA prediction features never alter graph weights",
+  "server_live_verification": "required",
+  "note_zh": "本机未验证大数据、缓存或真实 UNI2-h 权重；微型测试不替代服务器现场核验。"
+}

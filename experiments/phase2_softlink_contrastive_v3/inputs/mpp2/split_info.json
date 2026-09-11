@@ -1,0 +1,161 @@
+{
+  "mpp_id": 2,
+  "embargo_enabled": false,
+  "overlap_policy": "none_100pct_stride",
+  "block_size": 672,
+  "block_size_candidates": [
+    672,
+    1120,
+    1568
+  ],
+  "seed": 42,
+  "val_ratio_target": 0.1,
+  "val_ratio_range": [
+    0.08,
+    0.12
+  ],
+  "fit_patients": [
+    "HYZ15040",
+    "JFX",
+    "LMZ12939",
+    "TGC",
+    "XSL",
+    "ZHZ"
+  ],
+  "excluded_from_zscore_fit": [
+    "internal_val",
+    "embargo",
+    "external_test"
+  ],
+  "patch_size_for_bbox": "per_patient (见 per_patient_effective_patch_size)",
+  "per_patient_main_stride": {
+    "HYZ15040": {
+      "main_dx": 336,
+      "main_dy": 336
+    },
+    "JFX": {
+      "main_dx": 448,
+      "main_dy": 448
+    },
+    "LMZ12939": {
+      "main_dx": 336,
+      "main_dy": 336
+    },
+    "TGC": {
+      "main_dx": 224,
+      "main_dy": 224
+    },
+    "XSL": {
+      "main_dx": 224,
+      "main_dy": 224
+    },
+    "ZHZ": {
+      "main_dx": 224,
+      "main_dy": 224
+    }
+  },
+  "per_patient_effective_patch_size": {
+    "HYZ15040": 336,
+    "JFX": 448,
+    "LMZ12939": 336,
+    "TGC": 224,
+    "XSL": 224,
+    "ZHZ": 224
+  },
+  "overlap_mpp_physical_resolution": "MPP-3=0.27MPP, MPP-5=0.54MPP (医生确认)",
+  "effective_patch_size_formula": "(2 if 50pct_stride else 1) * main_dx",
+  "leakage_pairs": 0,
+  "per_patient_summary": [
+    {
+      "mpp_id": 2,
+      "patient": "HYZ15040",
+      "block_size": 672,
+      "total_n": 1454,
+      "train_n": 1309,
+      "val_n": 145,
+      "embargo_n": 0,
+      "val_ratio": 0.0997,
+      "embargo_ratio": 0.0,
+      "train_ratio": 0.9003,
+      "n_val_blocks": 37,
+      "embargo_enabled": false,
+      "leakage_pairs": 0
+    },
+    {
+      "mpp_id": 2,
+      "patient": "JFX",
+      "block_size": 672,
+      "total_n": 2029,
+      "train_n": 1826,
+      "val_n": 203,
+      "embargo_n": 0,
+      "val_ratio": 0.1,
+      "embargo_ratio": 0.0,
+      "train_ratio": 0.9,
+      "n_val_blocks": 54,
+      "embargo_enabled": false,
+      "leakage_pairs": 0
+    },
+    {
+      "mpp_id": 2,
+      "patient": "LMZ12939",
+      "block_size": 672,
+      "total_n": 3351,
+      "train_n": 3014,
+      "val_n": 337,
+      "embargo_n": 0,
+      "val_ratio": 0.1006,
+      "embargo_ratio": 0.0,
+      "train_ratio": 0.8994,
+      "n_val_blocks": 88,
+      "embargo_enabled": false,
+      "leakage_pairs": 0
+    },
+    {
+      "mpp_id": 2,
+      "patient": "TGC",
+      "block_size": 672,
+      "total_n": 1116,
+      "train_n": 998,
+      "val_n": 118,
+      "embargo_n": 0,
+      "val_ratio": 0.1057,
+      "embargo_ratio": 0.0,
+      "train_ratio": 0.8943,
+      "n_val_blocks": 16,
+      "embargo_enabled": false,
+      "leakage_pairs": 0
+    },
+    {
+      "mpp_id": 2,
+      "patient": "XSL",
+      "block_size": 672,
+      "total_n": 1526,
+      "train_n": 1365,
+      "val_n": 161,
+      "embargo_n": 0,
+      "val_ratio": 0.1055,
+      "embargo_ratio": 0.0,
+      "train_ratio": 0.8945,
+      "n_val_blocks": 20,
+      "embargo_enabled": false,
+      "leakage_pairs": 0
+    },
+    {
+      "mpp_id": 2,
+      "patient": "ZHZ",
+      "block_size": 672,
+      "total_n": 1074,
+      "train_n": 960,
+      "val_n": 114,
+      "embargo_n": 0,
+      "val_ratio": 0.1061,
+      "embargo_ratio": 0.0,
+      "train_ratio": 0.8939,
+      "n_val_blocks": 15,
+      "embargo_enabled": false,
+      "leakage_pairs": 0
+    }
+  ],
+  "status": "OK"
+}

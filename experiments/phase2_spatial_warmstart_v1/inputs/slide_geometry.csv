@@ -1,0 +1,8 @@
+patient_id,slide_id,s,coordinate_unit,patch_coverage_size,source,status
+HYZ15040,,336,native_split_manifest_xy,336,mpp_standard_splits/group_2/split_info.json:per_patient_main_stride,pending_slide_binding
+JFX,,448,native_split_manifest_xy,448,mpp_standard_splits/group_2/split_info.json:per_patient_main_stride,pending_slide_binding
+LMZ12939,,336,native_split_manifest_xy,336,mpp_standard_splits/group_2/split_info.json:per_patient_main_stride,pending_slide_binding
+TGC,,224,native_split_manifest_xy,224,mpp_standard_splits/group_2/split_info.json:per_patient_main_stride,pending_slide_binding
+XSL,,224,native_split_manifest_xy,224,mpp_standard_splits/group_2/split_info.json:per_patient_main_stride,pending_slide_binding
+ZHZ,,224,native_split_manifest_xy,224,mpp_standard_splits/group_2/split_info.json:per_patient_main_stride,pending_slide_binding
+XZY,,,native_split_manifest_xy,,unverified_external_not_in_split_info,unverified

@@ -1,0 +1,29 @@
+{
+  "experiment_id": "phase2_softlink_contrastive_v3",
+  "code_version": "v3.0.5",
+  "plan_version": "v4",
+  "config_version": "v4.0.0",
+  "entrypoint": "runner.py",
+  "external_xzy_entrypoint": "xzy_runner.py",
+  "args": [],
+  "demo_only": false,
+  "implementation_batch": "v4_full_diagnostic",
+  "code_sources": [
+    {
+      "path": "01_指南与解读/部署方案/Phase2软连接_对比学习改进实验方案_v4_最终建议版_20260908.md",
+      "note": "v4 双入口、损失、阶段二、诊断和部署合同；本包设计版本",
+      "date": "2026-09-08"
+    },
+    {
+      "path": "configs/server_paths.yaml",
+      "note": "服务器代码、runs、weights 根目录及大数据路径来源；现场可用性仍需核验",
+      "date": "2026-09-08"
+    },
+    {
+      "path": "experiments/phase2_softlink_contrastive_v3/inputs/mpp2",
+      "note": "包内小型划分、清单和标准化元数据副本；不含大数据、特征缓存或权重",
+      "date": "2026-09-08"
+    }
+  ],
+  "scientific_status": "planned_not_run"
+}

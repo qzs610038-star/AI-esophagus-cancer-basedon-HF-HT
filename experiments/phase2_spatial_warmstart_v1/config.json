@@ -1,0 +1,129 @@
+{
+  "experiment_id": "phase2_spatial_warmstart_v1",
+  "plan_version": "v1.1",
+  "implementation_status": "implemented",
+  "batch_id": "warmstart_no_lora_v1",
+  "python_interpreter": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+  "runs_root": "D:\\AIPatho\\qzs\\runs",
+  "weights_root": "D:\\AIPatho\\qzs\\weights",
+  "inputs": {
+    "source_experiment": "phase2_softlink_contrastive_v3",
+    "source_run_id": "20260909_101623_341_f0de1302",
+    "source_cell": "frozen_regression",
+    "source_seed": 42,
+    "source_endpoint": 5,
+    "source_prediction_precision": "bf16",
+    "stage1_checkpoint": "D:\\AIPatho\\qzs\\weights\\phase2_softlink_contrastive_v3\\v4_full_diagnostic\\20260909_101623_341_f0de1302\\original\\original\\seed_42\\frozen_regression\\epoch_5\\epoch_5.pt",
+    "feature_cache": "D:\\AIPatho\\qzs\\runs\\phase2_softlink_contrastive_v3\\v4_full_diagnostic\\20260909_101623_341_f0de1302\\raw\\original\\original\\seed_42\\cache\\frozen_regression\\e5\\stage1_predictions.npz",
+    "graph_feature_cache": "D:\\AIPatho\\qzs\\runs\\phase2_softlink_contrastive_v3\\v4_full_diagnostic\\20260909_101623_341_f0de1302\\raw\\original\\original\\seed_42\\cache\\frozen_uni_graph.npz",
+    "source_paths_status": "recorded_server_paths_require_preflight",
+    "small_inputs": "inputs",
+    "xzy_source": "resolve_from_source_manifest_at_implementation",
+    "source_selection": {
+      "eligible_scope": "no_lora_and_no_contrastive_frozen_regression",
+      "within_arm_selection": "max_internal_patient_macro_pathway_pcc_over_stage1_epochs_1_to_5",
+      "all_stage1_champion_claim": false,
+      "external_metrics_used_for_source_selection": false
+    }
+  },
+  "parameters": {
+    "arms": [
+      {
+        "id": "point_continue",
+        "train_H": true,
+        "train_C": true,
+        "train_B": false,
+        "lr_HC": 3e-05,
+        "lr_B": null
+      },
+      {
+        "id": "spatial_residual_only",
+        "train_H": false,
+        "train_C": false,
+        "train_B": true,
+        "lr_HC": null,
+        "lr_B": 0.0003
+      },
+      {
+        "id": "spatial_joint",
+        "train_H": true,
+        "train_C": true,
+        "train_B": true,
+        "lr_HC": 3e-05,
+        "lr_B": 0.0003
+      }
+    ],
+    "source_checkpoint_shared_across_all_arms_and_seeds": true,
+    "primary_seed": 42,
+    "confirmatory_head_seeds": [],
+    "repeat_schedule": "single_seed42_only",
+    "residual_only_repeats": 1,
+    "seed_scope": "stage2_conditional_on_single_seed42_stage1_checkpoint",
+    "backbone_trainable": false,
+    "lora_enabled": false,
+    "contrastive_enabled": false,
+    "input_dim": 1536,
+    "hidden_dim": 256,
+    "output_dim": 30,
+    "dropout": 0.3,
+    "regression_initialization": "inherit_stage1_C",
+    "shared_initialization": "inherit_stage1_H",
+    "spatial_initialization": "zeros",
+    "baseline_step0_selectable": true,
+    "batch_mode": "full_batch",
+    "loss": "all_point_pathway_mean_zMSE",
+    "optimizer": "AdamW",
+    "weight_decay": 0.0001,
+    "lr_schedule": "constant",
+    "initial_update_budget": 1000,
+    "hard_max_updates": 2000,
+    "extend_at_1000_if_not_early_stopped": true,
+    "validation_every_updates": 10,
+    "min_updates_before_early_stop": 200,
+    "patience_validation_checks": 20,
+    "min_delta_patient_macro_pcc": 0.0001,
+    "selection_order": [
+      "max_patient_macro_pathway_pcc",
+      "min_zMSE",
+      "min_update"
+    ],
+    "graph": {
+      "radius_in_native_steps": 1.5,
+      "max_neighbors": 8,
+      "distance_sigma": 1.0,
+      "image_temperature": 0.2,
+      "self_raw_weight": 1.0,
+      "scope": "within_patient_and_partition",
+      "use_labels": false
+    },
+    "evaluation_precision": "float32",
+    "initial_prediction_max_abs_tolerance": 1e-06,
+    "source_cache_prediction_max_abs_tolerance": 0.02,
+    "external_selection_allowed": false,
+    "execution_order": [
+      "spatial_residual_only",
+      "point_continue",
+      "spatial_joint"
+    ]
+  },
+  "diagnostics": {
+    "fixed_prediction_smoothing": {
+      "enabled": true,
+      "compute_location": "local_return_analysis",
+      "beta": 1.0,
+      "source": "step0_stage1_predictions",
+      "formula": "p + beta * sum_j a_ij * (p_j - p_i)",
+      "include_self_weight_in_normalization": true,
+      "used_for_selection": false,
+      "external_status": "compute_only_if_fixed_predictions_and_matching_graph_metadata_available"
+    },
+    "ridge_optional": {
+      "enabled": false,
+      "lambda": null,
+      "fit_intercept": false,
+      "objective": "sum_squared_residual_error_plus_lambda_times_B_frobenius_squared",
+      "status": "optional_solver_requires_prespecified_lambda_protocol_not_a_required_run",
+      "guaranteed_external_improvement": false
+    }
+  }
+}

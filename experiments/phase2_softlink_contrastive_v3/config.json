@@ -1,0 +1,309 @@
+{
+  "plan_version": "v4",
+  "config_version": "v4.0.0",
+  "experiment_id": "phase2_softlink_contrastive_v3",
+  "batch_id": "v4_full_diagnostic",
+  "python_interpreter": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+  "runs_root": "D:\\AIPatho\\qzs\\runs",
+  "weights_root": "D:\\AIPatho\\qzs\\weights",
+  "runtime": {
+    "python_interpreter": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+    "server_code_root": "D:\\AIPatho\\qzs\\code",
+    "server_code_directory": "D:\\AIPatho\\qzs\\code\\phase2_softlink_contrastive_v3",
+    "runs_root": "D:\\AIPatho\\qzs\\runs",
+    "weights_root": "D:\\AIPatho\\qzs\\weights",
+    "run_layout": "D:\\AIPatho\\qzs\\runs\\phase2_softlink_contrastive_v3\\<batch>\\<run>",
+    "weights_layout": "D:\\AIPatho\\qzs\\weights\\phase2_softlink_contrastive_v3\\<batch>\\<run>",
+    "weights_return_policy": "server_only_registry_path_no_weight_files"
+  },
+  "protocol_defaults": {
+    "original": {
+      "protocol": "original",
+      "seeds": [42],
+      "folds": [],
+      "lopo": false,
+      "description": "原六患者 9472 训练 / 1078 内部验证；空间块划分不变；不触发 LOPO"
+    },
+    "lopo6": {
+      "protocol": "lopo6",
+      "seeds": [42, 43, 44],
+      "folds": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+      "lopo": true,
+      "description": "完整六折，每折留出一名患者；五名患者保留各自训练/内部验证块"
+    }
+  },
+  "data": {
+    "split_id": "MPP2/group_2",
+    "split_directory": "inputs/mpp2",
+    "split_manifest_file": "inputs/mpp2/split_manifest.csv",
+    "split_info_file": "inputs/mpp2/split_info.json",
+    "zscore_manifest_file": "inputs/mpp2/zscore_manifest.json",
+    "slide_mapping_file": "inputs/slide_mapping.csv",
+    "slide_geometry_file": "inputs/slide_geometry.csv",
+    "feature_source_manifest": "inputs/feature_source_manifest.json",
+    "input_status_file": "inputs/input_status.json",
+    "patch_images_root": "D:\\AIPatho\\Patch\\visiumhd_patch",
+    "labels_root": "D:\\AIPatho\\Patch\\visiumhd_patch\\{group}\\{patient}\\{patient}_ssGSEA.csv",
+    "raw_labels_template": "D:\\AIPatho\\Patch\\visiumhd_patch\\{group}\\{patient}\\{patient}_ssGSEA.csv",
+    "raw_label_template": "D:\\AIPatho\\Patch\\visiumhd_patch\\{group}\\{patient}\\{patient}_ssGSEA.csv",
+    "image_template": "D:\\AIPatho\\Patch\\visiumhd_patch\\{group}\\{patient}\\patch_images\\{patch_stem}.png",
+    "precomputed_zscore_root": "D:\\AIPatho\\qzs\\data-phase2\\ssGSEA_zscore",
+    "feature_cache_root": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache",
+    "uni2_h_weights": "D:\\AIPatho\\shared\\.cache\\huggingface\\hub\\models--MahmoodLab--UNI2-h\\snapshots\\d517a8dd47902dd7c308b3c36f63bce47e7b9a43",
+    "uni2_h_checkpoint": "D:\\AIPatho\\shared\\.cache\\huggingface\\hub\\models--MahmoodLab--UNI2-h\\snapshots\\d517a8dd47902dd7c308b3c36f63bce47e7b9a43",
+    "external_xzy_labels": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XZY\\XZY_ssGSEA.csv",
+    "external_patient": "XZY",
+    "patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+    "input_dim": 1536,
+    "output_dim": 30,
+    "expected_original_train_points": 9472,
+    "expected_original_internal_val_points": 1078,
+    "expected_external_points": 1039,
+    "large_inputs_are_absolute": true,
+    "small_split_files_are_packaged": true,
+    "label_fit_policy": "read_raw_labels_template_and_refit_zscore_on_training_blocks_per_protocol_or_fold",
+    "precomputed_zscore_use": "reference_only_not_a_LOPO_label_source",
+    "uni2_checkpoint_status": "active_cache_root_is_configured; loader_requires_one_complete_pytorch_model_bin_and_server_live_verification",
+    "path_status": "absolute_paths_from_active_server_path_table_or_user_selected_cache; live_verify_before_training"
+  },
+  "model": {
+    "input_dim": 1536,
+    "hidden_dim": 256,
+    "output_dim": 30,
+    "activation": "gelu_exact",
+    "dropout": 0.3,
+    "h": {"input_dim": 1536, "output_dim": 256},
+    "c": {"input_dim": 256, "output_dim": 30, "bias": true},
+    "teacher_projection_t": {"layers": [30, 128, 256], "activation": "gelu_exact", "bias": true},
+    "readout_bias": true,
+    "spatial_bias": false,
+    "spatial_initialization": "zeros"
+  },
+  "adaptation": {
+    "backbone": "UNI2-h",
+    "adapted_blocks": [20, 21, 22, 23],
+    "adapted_module_scope": "last_four_blocks",
+    "trainable_targets": ["q_proj", "v_proj"],
+    "frozen_targets": ["k_proj", "out_proj", "mlp", "layer_norm", "bias"],
+    "primary_rank": 8,
+    "primary_alpha": 16,
+    "capacity_diagnostic_rank": 2,
+    "capacity_diagnostic_alpha": 4,
+    "alpha_over_rank": 2,
+    "dropout": 0.05,
+    "k_update": "zero",
+    "same_scope_for_r2": true,
+    "zero_increment_tolerance": {"rtol": 1e-05, "atol": 1e-06}
+  },
+  "arms": {
+    "primary": [
+      "frozen_regression",
+      "frozen_centered_contrastive",
+      "r8_regression",
+      "r8_global_contrastive",
+      "r8_centered_contrastive"
+    ],
+    "capacity_diagnostic": ["r2_regression"],
+    "all": [
+      "frozen_regression",
+      "frozen_centered_contrastive",
+      "r8_regression",
+      "r8_global_contrastive",
+      "r8_centered_contrastive",
+      "r2_regression"
+    ],
+    "definitions": {
+      "frozen_regression": {"role": "primary", "backbone": "frozen", "teacher": "none", "loss": "global_z_mse"},
+      "frozen_centered_contrastive": {"role": "primary", "backbone": "frozen", "teacher": "centered", "loss": "global_z_mse_plus_soft_contrastive"},
+      "r8_regression": {"role": "primary", "backbone": "lora_r8", "teacher": "none", "loss": "global_z_mse"},
+      "r8_global_contrastive": {"role": "primary", "backbone": "lora_r8", "teacher": "global", "loss": "global_z_mse_plus_soft_contrastive"},
+      "r8_centered_contrastive": {"role": "primary", "backbone": "lora_r8", "teacher": "centered", "loss": "global_z_mse_plus_soft_contrastive"},
+      "r2_regression": {"role": "capacity_diagnostic", "backbone": "lora_r2", "teacher": "none", "loss": "global_z_mse"}
+    }
+  },
+  "teacher": {
+    "global_input": "z",
+    "centered_input": "z_minus_training_patient_pathway_mean",
+    "mean_fit_scope": "training_blocks_only",
+    "distance": "mean_squared_distance_over_30_pathways",
+    "rho": 0.25,
+    "tau_z": 0.1,
+    "tau_y_candidates": [0.03, 0.1, 0.3, 1, 3],
+    "tau_y_selection": {
+      "seed": 20260908,
+      "balanced_training_batches": 20,
+      "target_mean_non_diagonal_normalized_entropy": 0.7,
+      "tie_break": "larger_tau_y",
+      "fit_per_protocol_or_fold": true
+    },
+    "diagonal_weight": "rho",
+    "off_diagonal_weight": "one_minus_rho_times_exp_negative_distance_over_tau_y",
+    "two_direction_normalization": true,
+    "stop_gradient": true,
+    "stable_softmax_and_diagonal_mask": true
+  },
+  "graph": {
+    "hops": 1,
+    "radius_in_native_steps": 1.5,
+    "max_neighbors": 8,
+    "distance_sigma": 1,
+    "use_image_similarity": true,
+    "image_temperature": 0.2,
+    "self_raw_weight": 1,
+    "directed": true,
+    "normalization": "geometry_times_morphology",
+    "cross_patient_edges": false,
+    "formula": "C_h_i_plus_B_sum_a_ij_times_h_j_minus_h_i",
+    "native_steps": {
+      "HYZ15040": 336,
+      "JFX": 448,
+      "LMZ12939": 336,
+      "TGC": 224,
+      "XSL": 224,
+      "ZHZ": 224
+    }
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "weight_decay": 0.0001,
+    "betas": [0.9, 0.999],
+    "epsilon": 1e-08,
+    "fixed_epochs": 5,
+    "max_epochs": 5,
+    "batch_size_candidates": [64, 128],
+    "batch_size": "selected_after_resource_short_test",
+    "gradient_checkpointing": {
+      "enabled": true,
+      "unsupported_policy": "warn_and_continue_without_checkpointing"
+    },
+    "patient_balanced": true,
+    "no_duplicate_points_within_batch": true,
+    "weak_augmentation": {
+      "enabled": true,
+      "resample_each_point_draw": true,
+      "horizontal_flip_p": 0.5,
+      "vertical_flip_p": 0.5,
+      "color_jitter": {"brightness": 0.1, "contrast": 0.1, "saturation": 0.1, "hue": 0.02},
+      "evaluation_and_diagnostics_enabled": false
+    },
+    "common_warmup": {"epochs": 60, "max_epochs": 60, "h_lr": 0.0003, "c_lr": 0.0003},
+    "learning_rates": {
+      "lora_candidates": [0.00001, 0.00003, 0.0001],
+      "lora_selection_scope": "r8_regression_seed42_per_protocol_or_fold",
+      "lora_selected_for_all_r8_and_r2": true,
+      "h_lr": 0.00003,
+      "c_lr": 0.00003,
+      "t_lr": 0.0003,
+      "stage2_h_lr": 0.00003,
+      "stage2_c_and_b_lr": 0.0003
+    },
+    "contrastive": {
+      "lambda_start": 0,
+      "lambda_ramp": "linear_first_epoch_to_max",
+      "lambda_max": 0.05,
+      "directions": ["image_to_label", "label_to_image"],
+      "direction_reduction": "equal_mean_after_anchor_mean",
+      "logits": "cosine_over_tau_z"
+    },
+    "precision": {
+      "stage1": "bf16",
+      "cache": "float32",
+      "softmax_and_normalization": "float32",
+      "tf32": false
+    },
+    "sampler": {"insufficient_points": "cycle_with_rotating_remainder", "record_draw_counts": true}
+  },
+  "selection": {
+    "learning_rate_metric": "patient_macro_pathway_pcc_at_epoch_5",
+    "learning_rate_tie_metric": "patient_macro_z_mse",
+    "learning_rate_tie_break": "smaller_lora_lr",
+    "formal_start_epoch": 6,
+    "early_stop_count_start_epoch": 16,
+    "patience": 10,
+    "early_stop_patience": 10,
+    "early_stop_min_delta": 0.0001,
+    "model_selection_uses": ["training", "internal_validation"],
+    "external_and_heldout_excluded_from_selection": true,
+    "best_epoch_sensitivity": {
+      "enabled": true,
+      "candidate_epochs": [1, 2, 3, 4, 5],
+      "validation_mode": "no_augmentation_internal_validation",
+      "metric": "patient_macro_pathway_pcc",
+      "tie_break": ["patient_macro_z_mse", "earlier_epoch"],
+      "stage2_runs_after_epoch_selection": true,
+      "fixed_five_epoch_results_kept_separate": true,
+      "does_not_select_on_heldout_or_xzy": true
+    },
+    "stage2_internal_rule": "same_internal_selection_rule_as_preheat_with_up_to_60_epochs_for_checks_only"
+  },
+  "resource_short_test": {
+    "enabled": true,
+    "batch_sizes": [64, 128],
+    "warmup_updates_max": 10,
+    "timed_updates": 30,
+    "minimum_memory_margin_bytes": 2147483648,
+    "scope": "training_data_only",
+    "records": ["graphs_per_second", "updates_per_second", "allocated_memory", "reserved_memory", "free_memory_after_measurement", "device_total_memory", "precision", "evaluation_time"],
+    "selects_prediction_model": false,
+    "formal_training_resets_from_common_start": true,
+    "fallback": "64_if_128_not_stable_or_below_2gib_reserved_and_free_margin_or_lower_image_throughput",
+    "selection_memory_basis": "max_reserved_memory_and_post_measurement_device_free_memory",
+    "gradient_checkpointing_may_be_retested": true,
+    "insufficient_memory_margin_policy": "warn_and_continue_with_batch64",
+    "shared_memory_slowdown_is_non_blocking": true
+  },
+  "diagnostics": {
+    "edition": "full",
+    "diagnostic_points_per_training_patient": 32,
+    "online_counts": {"original_seed42": 8, "lopo6_seed42": 48},
+    "fixed_endpoint_cache_heads": {"original_seed42": 22, "lopo6_seed42": 132},
+    "best_epoch_extra_heads_max": {"original_seed42": 12, "lopo6_seed42": 72},
+    "three_seed_budget": {"original_online_total": 20, "original_cache_heads": 66, "lopo6_online_total": 120, "lopo6_cache_heads": 396},
+    "tracked_distributions": ["cls_cosine_to_frozen_uni", "cls_relative_l2_change", "h_change_from_common_warmup", "delta_w_frobenius_ratio", "uv_off_diagonal_cosine_mean_and_sd", "centered_covariance_effective_rank", "gradient_norm_and_direction", "teacher_entropy", "effective_candidate_count", "diagonal_and_cross_patient_mass", "actual_batch", "lambda"],
+    "metrics": ["pathway_macro_pcc", "pooled_pcc", "ccc", "zrmse", "zmae", "rawmae", "r2", "bias_z", "prediction_truth_sd_ratio", "per_patient_per_pathway_metrics", "spatial_residual_metrics", "demeaned_zrmse", "demeaned_ccc", "mse_demeaned_error_and_mean_bias_squared"],
+    "pcc_definitions": {
+      "pathway_macro_pcc": "patient_pathway_pcc_then_equal_weight_mean",
+      "pooled_pcc": "flatten_all_point_by_pathway_z_scores_then_one_pcc",
+      "pooled_pathway_pcc": "optional_distinct_merged_point_per_pathway_average"
+    },
+    "minimum_checks": ["patient_and_point_identity_isolation", "teacher_rows_sum_to_one_and_anchor_correct", "lora_zero_increment", "online_cache_fp32_consistency", "qv_only_gradients_and_zero_k_delta", "stage2_h_and_b_initialization", "short_test_raw_predictions_config_parameters_and_weight_paths"]
+  },
+  "budgets": {
+    "variant": "full_diagnostic",
+    "original_seed42": {"common_warmup": 1, "lr_pilot": 3, "online_new": 5, "online_total": 8, "fixed_cache_heads": 22, "best_epoch_extra_max": 12},
+    "original_three_seeds": {"common_warmup": 3, "lr_pilot": 3, "online_new": 17, "online_total": 20, "fixed_cache_heads": 66, "best_epoch_extra_max": 36},
+    "lopo6_seed42": {"common_warmup": 6, "lr_pilot": 18, "online_new": 30, "online_total": 48, "fixed_cache_heads": 132, "best_epoch_extra_max": 72},
+    "lopo6_three_seeds": {"common_warmup": 18, "lr_pilot": 18, "online_new": 102, "online_total": 120, "fixed_cache_heads": 396, "best_epoch_extra_max": 216}
+  },
+  "disabled_features": {
+    "EVA": {"enabled": false},
+    "label_queue": {"enabled": false},
+    "activation_centering": {"enabled": false},
+    "patient_internal_activation_centering": {"enabled": false},
+    "early_zHZ_single_fold": {"enabled": false},
+    "automatic_lopo_from_original": {"enabled": false}
+  },
+  "features": {
+    "EVA": {"enabled": false},
+    "queue": {"enabled": false},
+    "activation_centering": {"enabled": false}
+  },
+  "outputs": {
+    "raw_subdirectory": "raw",
+    "logs_subdirectory": "logs",
+    "metrics_file": "metrics.json",
+    "model_weights_file": "model_weights.json",
+    "checkpoint_kinds": ["warmup", "formal", "last"],
+    "checkpoint_policy": "weights_directory_only_and_absolute_paths_registered",
+    "local_return_excludes_weight_files": true,
+    "local_return_destination": "experiments/results/phase2_softlink_contrastive_v3/<run>"
+  },
+  "scientific_boundaries": {
+    "status_before_run": "planned_not_run",
+    "original_claim": "same_patient_spatial_block_holdout_candidate_gain_pending_patient_holdout_review",
+    "lopo_claim": "patient_holdout_recheck_not_new_blind_external_cohort",
+    "xzy_claim": "historically_seen_reference_only_not_new_blind_test",
+    "accepted_result_requires_registry_status": "accepted",
+    "live_verification_required": ["real_uni2_h_weights", "server_gpu_memory", "large_data_paths", "labels_and_feature_cache", "actual_training_outputs"]
+  }
+}
