@@ -1,8 +1,8 @@
-> **历史流程，已由 2026-09-05 用户决定取代。** 下文仅供追溯，不是当前操作指令。新实验使用 `experiments/_template/`，手动上传/回传，工作树仅在用户明确要求时创建，Gitee 暂停。当前说明：`project_state/governance/独立实验包与手动回传_20260905.md`。
+> **历史流程，已由 2026-09-05 用户决定取代。** 下文全部仅供追溯，不是当前操作指令。当前有效说明仅见 `project_state/governance/独立实验包与手动回传_20260905.md`。
 
 # PFMval 手动同步操作指南
 
-> ⚠️ **historical / superseded**：本文中的共享盘、旧目录或非 Gitee 流程不再是当前执行方案。当前使用 `automation/README.md` 与 `deploy/pfmval_ops.py`，服务器仅通过 Gitee 交换代码、状态和小型结果。
+> ⚠️ **historical / superseded**：本文保留当时的共享盘、旧目录、Git、手动同步、服务器操作、训练和结果回传示例，仅供追溯。当前流程只以顶部所指独立实验包指南为准。
 
 > 网络不通时的替代方案：本地开发 + 手动复制代码到服务器训练 + 回收结果。
 
@@ -41,7 +41,9 @@ dir D:\AIPatho\qzs\train_histogene_uni_tokens_augmix.py
 > 2026-06-04 已因此丢失 lora_r4 Fold1 + Fold3 等训练结果。`git clean` 会删除 checkpoints/ 下未 commit 的结果文件。
 > 正确的服务器同步命令见下方。
 
-### Git 方式（推荐，增量同步）
+### 历史 Git 方式（已停用，仅供追溯）
+
+> 以下 Gitee/GitHub 双推和服务器拉取命令保留历史证据，不是当前同步指令。
 
 **本地**（双推：Gitee 给服务器用，GitHub 备份）：
 ```bash
@@ -58,7 +60,9 @@ git reset --hard gitee/main
 # ❌ 绝对不要加 git clean -fd！会删除 checkpoints/ 下训练结果
 ```
 
-### 手动方式（网络不通时的替代）
+### 历史手动文件同步示例（仅供追溯）
+
+> 以下 `sync_list.sh`、服务器 `Copy-Item` 以及后续服务器操作命令均为历史示例，不得据此激活旧同步或覆盖操作。
 
 ```bash
 # 1. 生成同步文件清单
