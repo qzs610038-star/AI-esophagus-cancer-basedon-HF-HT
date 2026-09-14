@@ -1,5 +1,5 @@
 schema_version: "2.0"
-updated_at: "2026-09-05T23:52:50+08:00"
+updated_at: "2026-09-12T15:20:00+08:00"
 inventory:
   source: '01_指南与解读\部署方案\服务器路径索引_20260701.md'
   generated_at: "2026-07-01"
@@ -26,6 +26,7 @@ transport:
   code_root_key: server_manual_code
   runs_root_key: server_manual_runs
   weights_root_key: server_manual_weights
+  feature_caches_root_key: server_manual_feature_caches
 # Historical Gitee configuration; not the current execution policy.
 legacy_transport:
   mode: configurable
@@ -67,6 +68,22 @@ paths:
     return_policy: registry_only_exclude_weight_files_by_default
     live_verification_required: true
     note: From DIR-20260908-002 onward, new training checkpoints are stored here and are not included in routine local result returns.
+  server_manual_feature_caches:
+    path: 'D:\AIPatho\qzs\feature_caches'
+    kind: directory
+    status: active
+    required_on: server
+    stability: user_selected
+    role: server_only_feature_cache_root
+    write_policy: new_feature_cache_outside_runs_only
+    return_policy: registry_only_exclude_feature_cache_files_by_default
+    live_verification_required: true
+    note: >-
+      From DIR-20260912-001 onward, newly extracted feature caches for subsequent
+      experiments/runs are stored under this root (not under runs). Routine local
+      returns must include path registry files such as feature_caches.json with
+      server absolute paths, but must not copy the cache files. Legacy feature
+      cache locations remain active and usable; do not retire or force-migrate them.
   server_qzs_root:
     path: 'D:\AIPatho\qzs'
     kind: directory

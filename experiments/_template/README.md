@@ -13,7 +13,7 @@
 
 ## Windows 服务器运行
 
-仅使用 PFMval 服务器：代码包放 `D:\AIPatho\qzs\code\<实验名>`，运行产物放 `D:\AIPatho\qzs\runs\<实验名>\<运行编号>`。
+仅使用 PFMval 服务器：代码包放 `D:\AIPatho\qzs\code\<实验名>`，运行产物放 `D:\AIPatho\qzs\runs\<实验名>\<运行编号>`；模型权重放 `D:\AIPatho\qzs\weights\...`。自 DIR-20260912-001 起，后续新实验新提取的特征缓存放 `D:\AIPatho\qzs\feature_caches\`，不写入 `runs`。
 
 `config.json` 默认解释器来自本项目配置：`C:\Users\AIPatho1\pfmval_env\Scripts\python.exe`。路径是配置记录，未经过本次服务器实测；若有变化，由用户修改配置。依赖在训练前按具体实验安装，启动器不自动联网安装。
 
@@ -38,6 +38,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\run.ps1
 - `logs/startup.log`：启动位置；`logs/stdout.log`：标准输出；`logs/errors.log`：错误输出和异常；`logs/console.log`：合并日志（标注输出来源，跨流顺序不保证严格时间一致）。
 - `raw/`：具体实验的原始训练历史、预测、标签、样本标识和指标重算所需元数据；`metrics.json`：训练、早停和模型选择所需指标。权重单独写入 `weights_root/<实验名>/<运行编号>/`，不放入结果目录。
 - `model_weights.json` 记录服务器权重目录、具体文件路径和产出状态；常规回传不包含权重文件。
+- 后续新实验：新特征缓存写入 `feature_caches` 根目录；运行目录用 `feature_caches.json`（或等价路径登记）记录服务器绝对路径并随结果回传，不复制缓存文件。可继续引用未退役的旧缓存路径。
 - 最佳方法、最佳轮次、选择指标名称和值、选用数据划分和 checkpoint 服务器绝对路径由训练入口记录；只能使用训练或内部验证数据选择模型。
 - 启动器不制造训练结果，也不替训练入口决定科学输出。演示只有 `raw/demo.json` 和空指标，始终明确标注 `demo_only`。
 - 报错返回非零退出码。输出目录建立后可记录解释器无法启动等错误；若配置无法解析、输出磁盘不可写，则只能回传终端信息。断电、强杀后可能停留在 `running`，不能据此认定训练仍在运行或成功。
@@ -46,7 +47,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\run.ps1
 
 失败时回传 `logs/`、`run.json`、配置和版本快照；Agent 在本地同名实验包修复并递增代码版本。训练停止后，由用户替换服务器对应 `code/<实验名>`，保留 `runs/`，再次启动产生新运行目录。
 
-完成后直接复制所需运行文件夹，放到本地 `experiments/results/<实验名>/<运行编号>/`，不放入可继续调整的代码包。常规回传不复制服务器 `weights/`，但必须包含 `model_weights.json` 路径登记。原始输出保持不变，派生指标和图表写入对应运行目录的 `analysis/`；全部既定指标仍保留，只把可重算部分移到本地。既有结果保留原地，不自动迁移。
+完成后直接复制所需运行文件夹，放到本地 `experiments/results/<实验名>/<运行编号>/`，不放入可继续调整的代码包。常规回传不复制服务器 `weights/` 与 `feature_caches/`，但必须包含 `model_weights.json`，以及后续新实验适用的特征缓存路径登记（如 `feature_caches.json`）。原始输出保持不变，派生指标和图表写入对应运行目录的 `analysis/`；全部既定指标仍保留，只把可重算部分移到本地。既有结果保留原地，不自动迁移。
 
 交付和回传均直接提供文件夹路径，不自动创建压缩包；需要时由用户自行压缩。
 
