@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-10T20:03:24+08:00",
+  "updated_at": "2026-09-12T19:17:14+08:00",
   "current_mpp_policy": {
     "effective_date": "2026-09-05",
     "selected_mpp": 2,
@@ -11,14 +11,15 @@
     "directive_id": "DIR-20260905-001"
   },
   "phase2_supplemental_program": {
-    "status": "soft_contrastive_improvement_first",
-    "updated_at": "2026-09-05T19:25:48+08:00",
+    "status": "classic_spatial_fixed_paper_preparation",
+    "updated_at": "2026-09-12T19:17:14+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
     "source_documents": [
       "团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md",
       "团队项目进度与结论/lzd/Phase2与Phase3工作计划原文_20260903.md",
       "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md",
-      "project_state/governance/Phase2会议决策_20260905.md"
+      "project_state/governance/Phase2会议决策_20260905.md",
+      "project_state/governance/Phase2组会决策与论文后续任务_20260912.md"
     ],
     "planned_experiment_ids": [
       "phase2_gene_reconstruction_comparison_v001_20260904",
@@ -30,7 +31,7 @@
       "status": "active",
       "effective_at": "2026-09-05T19:25:48+08:00",
       "guide_reference": "01_指南与解读/学习指南/Phase2_空间转录组核心评估指标体系与论文对比学习指南_20260904.md",
-      "scope": "当前软对比主线、冻结直接回归对照及后续Phase 2实验；最终发表指标待定",
+      "scope": "经典空间残差、单点基线及后续 Phase2 补充实验；最终发表指标待定；两种PCC按2026-09-08展示政策并列",
       "metric_roles": {
         "paper_primary": [],
         "paper_supplementary": [],
@@ -218,15 +219,17 @@
         ]
       }
     ],
-    "decision_id": "DIR-20260905-001",
-    "current_method": "软对比联合学习（现有残差纠错方案作为改进起点）",
-    "method_reference_experiment_id": "mpp2_cpgcr_probe_v001_20260811",
-    "method_reference_arm": "CPGCR",
-    "baseline_role": "冻结UNI2-h加两层MLP作为固定对照；不是当前选定研究主线",
-    "supplementary_execution_status": "deferred_until_soft_contrastive_improvement_review",
+    "decision_id": "DIR-20260912-002",
+    "current_method": "经典空间残差（第一轮 spatial 臂），方案已确定，不再改进",
+    "method_reference_experiment_id": "phase2_softlink_local_v2",
+    "method_reference_arm": "spatial",
+    "baseline_role": "第一轮 point 单点预测臂作为基础模型替换对照；旧冻结 MPP2 基线保留为历史量化锚点",
+    "supplementary_execution_status": "handoff_contract_alignment_and_baseline_ablation_planning",
     "priority_order": [
-      "先诊断并针对本数据改进软对比联合学习",
-      "指标改善后再推进基因重建、密度、多模型及Phase 2/3衔接补充实验"
+      "暂停 Phase2 方法改进，固定经典空间残差",
+      "对齐任务2与任务3的输入、输出和操作，交团队成员实践",
+      "在单点基线上准备基础模型替换消融",
+      "围绕论文整理指标、代码与关键架构图"
     ],
     "training_authorized_by_this_decision": false,
     "pcc_presentation_policy": {
@@ -257,6 +260,62 @@
       ],
       "selection_metric_unchanged": true,
       "note_zh": "两个主PCC必须并列；合并点位逐通路PCC另列。整体值包含跨患者/通路差异，不能按绝对数值高低互证优越。平均池化不是新增网络层。"
+    },
+    "decision_record": "project_state/governance/Phase2组会决策与论文后续任务_20260912.md",
+    "method_improvement_status": "paused_by_user",
+    "baseline_model_ablation": {
+      "status": "planned",
+      "reference_experiment_id": "phase2_softlink_local_v2",
+      "reference_arm": "point",
+      "reference_model": "UNI2-h",
+      "additional_model_count": [
+        2,
+        3
+      ],
+      "candidate_examples": [
+        "Virchow2"
+      ],
+      "final_shortlist_status": "pending",
+      "replacement_scope": "仅替换第一轮单点预测基线的病理特征提取模型；不替换或改造经典空间残差方案",
+      "expected_paper_narrative": "比较若干基础模型后，若结果支持 UNI2-h 最优，则解释为何选用 UNI2-h 开展后续改善",
+      "narrative_evidence_status": "hypothesis_pending_experiment",
+      "selection_boundary": "模型与超参数选择仅使用训练集或内部验证集，外部测试仅用于冻结方案评估"
+    },
+    "task_2_3_handoff": {
+      "status": "pending_contract_alignment",
+      "executor": "另一位团队成员（姓名待定）",
+      "existing_materials": [
+        "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
+        "experiments/phase2_softlink_local_v2/队友同步说明.md"
+      ],
+      "tasks": [
+        {
+          "task_number": 2,
+          "name": "基因预测后重建通路",
+          "deliverable": "明确30个通路对应基因、标签与标度、基因预测转通路评分步骤、与直接通路预测的对齐输出和评价合同"
+        },
+        {
+          "task_number": 3,
+          "name": "稀疏训练与稠密测试",
+          "deliverable": "明确训练集隔点规则、输入坐标与划分、稠密测试集合、空间邻域处理、对照与结果输出合同"
+        }
+      ],
+      "alignment_checklist": [
+        "准确输入文件、字段、点位身份与顺序",
+        "操作步骤、运行入口与模型初始化来源",
+        "输出预测、标度、指标、日志和验收方式",
+        "核对已有交接材料与队友实现；文件存在不代表接口已对齐或实验已完成"
+      ]
+    },
+    "paper_preparation": {
+      "status": "planned",
+      "tasks": [
+        "论文结构与结果叙事",
+        "正文及补充材料指标选择",
+        "终版方法与复现代码整理",
+        "关键架构图的内容与绘制方案"
+      ],
+      "publication_metrics_finalized": false
     }
   },
   "three_patient_evidence_policy": {
@@ -2435,7 +2494,7 @@
       "evidence_status": "planned",
       "priority": "P2",
       "created_at": "2026-09-04T21:39:06+08:00",
-      "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "baseline_experiment_id": "phase2_softlink_local_v2",
       "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
       "metric_registration_status": "pending_not_run",
       "planned_metric_registration": {
@@ -2483,10 +2542,16 @@
         "pathway_scoring_software_and_parameters",
         "background_gene_universe"
       ],
-      "next_action": "deferred_soft_contrastive_improvement_first_then_revisit_protocol",
+      "next_action": "align_input_output_and_operations_for_teammate_handoff",
       "decision_gate": "Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed.",
-      "execution_schedule": "deferred_until_soft_contrastive_improvement_review",
-      "schedule_decision_id": "DIR-20260905-001"
+      "execution_schedule": "planned_after_meeting_20260912",
+      "schedule_decision_id": "DIR-20260912-002",
+      "baseline_arm": "spatial",
+      "handoff_status": "pending_contract_alignment",
+      "handoff_materials": [
+        "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
+        "experiments/phase2_softlink_local_v2/队友同步说明.md"
+      ]
     },
     {
       "id": "phase2_spatial_density_comparison_v001_20260904",
@@ -2497,7 +2562,7 @@
       "evidence_status": "planned",
       "priority": "P2",
       "created_at": "2026-09-04T21:39:06+08:00",
-      "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "baseline_experiment_id": "phase2_softlink_local_v2",
       "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
       "metric_registration_status": "pending_not_run",
       "planned_metric_registration": {
@@ -2545,10 +2610,16 @@
         "dense_held_out_test_definition"
       ],
       "excluded_current_design": "six_fold_leave_one_patient_out_deferred_by_user_20260905",
-      "next_action": "deferred_soft_contrastive_improvement_first_then_revisit_protocol",
+      "next_action": "align_input_output_and_operations_for_teammate_handoff",
       "decision_gate": "Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged.",
-      "execution_schedule": "deferred_until_soft_contrastive_improvement_review",
-      "schedule_decision_id": "DIR-20260905-001"
+      "execution_schedule": "planned_after_meeting_20260912",
+      "schedule_decision_id": "DIR-20260912-002",
+      "baseline_arm": "spatial",
+      "handoff_status": "pending_contract_alignment",
+      "handoff_materials": [
+        "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
+        "experiments/phase2_softlink_local_v2/队友同步说明.md"
+      ]
     },
     {
       "id": "phase2_pathology_model_benchmark_v001_20260904",
@@ -2559,7 +2630,7 @@
       "evidence_status": "planned",
       "priority": "P2",
       "created_at": "2026-09-04T21:39:06+08:00",
-      "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "baseline_experiment_id": "phase2_softlink_local_v2",
       "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
       "metric_registration_status": "pending_not_run",
       "planned_metric_registration": {
@@ -2599,17 +2670,36 @@
         ],
         "publication_selection_status": "pending"
       },
-      "objective": "Benchmark the confirmed pathology encoder shortlist under one dataset, split, target order, training budget, and metric definition.",
+      "objective": "在第一轮 point 单点预测基线中，用2至3个其他病理基础模型与UNI2-h作统一协议比较；只替换编码器，不改经典空间残差。",
       "missing_inputs": [
         "final_model_shortlist",
         "available_weights_and_runtime",
         "common_feature_or_adapter_contract",
         "final_mainline_split_and_metrics"
       ],
-      "next_action": "deferred_soft_contrastive_improvement_first_then_revisit_protocol",
+      "next_action": "finalize_point_baseline_encoder_shortlist_and_comparison_contract",
       "decision_gate": "Historical model numbers are references only until rerun under the common protocol.",
-      "execution_schedule": "deferred_until_soft_contrastive_improvement_review",
-      "schedule_decision_id": "DIR-20260905-001"
+      "execution_schedule": "planned_after_meeting_20260912",
+      "schedule_decision_id": "DIR-20260912-002",
+      "baseline_arm": "point",
+      "model_ablation_scope": {
+        "status": "planned",
+        "reference_experiment_id": "phase2_softlink_local_v2",
+        "reference_arm": "point",
+        "reference_model": "UNI2-h",
+        "additional_model_count": [
+          2,
+          3
+        ],
+        "candidate_examples": [
+          "Virchow2"
+        ],
+        "final_shortlist_status": "pending",
+        "replacement_scope": "仅替换第一轮单点预测基线的病理特征提取模型；不替换或改造经典空间残差方案",
+        "expected_paper_narrative": "比较若干基础模型后，若结果支持 UNI2-h 最优，则解释为何选用 UNI2-h 开展后续改善",
+        "narrative_evidence_status": "hypothesis_pending_experiment",
+        "selection_boundary": "模型与超参数选择仅使用训练集或内部验证集，外部测试仅用于冻结方案评估"
+      }
     },
     {
       "id": "phase2_softlink_local_v2",
@@ -2618,10 +2708,12 @@
       "phase": "formal",
       "status": "done",
       "registration_status": "registered",
-      "evidence_status": "pending",
-      "analysis_status": "pending_user_review",
+      "evidence_status": "accepted",
+      "analysis_status": "reviewed_and_accepted",
       "created_at": "2026-09-07T16:53:25.851009+00:00",
-      "updated_at": "2026-09-08T13:33:32+08:00",
+      "updated_at": "2026-09-11T15:53:39+08:00",
+      "accepted_at": "2026-09-11T15:53:39+08:00",
+      "acceptance_scope": "用户已审查并接受本批已登记的四臂三种子运行事实、双PCC、误差指标及逐通路描述性结果。接受不把外部单患者XZY改写为全新盲测，也不把空间收益解释为已证明的机制因果关系。",
       "result_id": "phase2-softlink-local-v2-20260908-005325-result",
       "result_phase": "formal",
       "batch_id": "20260908_005325_810_8d306c10",
@@ -13794,10 +13886,11 @@
         "project_state/inbox/W007/quarantine/FBR/automation/returns/W007/20260815-000106-184005-formal-batch/FBR/internal_val_predictions.csv"
       ],
       "decision_summary": {
-        "status": "descriptive_evidence_pending_review",
+        "status": "accepted_descriptive_evidence",
         "statement": "本批主要收益来自spatial；relation增量小且不稳定；joint未显示稳定额外优势。空间收益原因尚为待验证解释；外部仅XZY。"
       },
-      "next_action": "复核本轮完整指标与机制假设，后续方案另行决定；不自动启动训练",
+      "accepted_conclusion": "四臂三种子运行及其描述性指标已核对并由用户接受。经典spatial相对同配方point在内部和XZY均有增益，XZY逐通路平均PCC由0.5131升至0.5580，30条通路中28条平均PCC上升；外部仅XZY一名患者，不能据此声称广泛跨患者泛化或机制因果成立。",
+      "next_action": "closed_registered_accepted_no_automatic_training",
       "pcc_presentation": {
         "policy": {
           "effective_date": "2026-09-08",
@@ -13921,7 +14014,7 @@
         "source": "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/pcc_side_by_side.csv"
       },
       "pathway_analysis": {
-        "status": "descriptive_pending_review",
+        "status": "accepted_descriptive_evidence",
         "endpoint": "best",
         "n_seed_rows": 720,
         "n_groups": 240,
@@ -13950,10 +14043,12 @@
       "phase": "formal",
       "status": "done",
       "registration_status": "registered",
-      "evidence_status": "pending",
-      "analysis_status": "pending_user_review",
+      "evidence_status": "accepted",
+      "analysis_status": "reviewed_and_accepted",
       "created_at": "2026-09-09T10:16:23+08:00",
-      "updated_at": "2026-09-10T13:38:50+08:00",
+      "updated_at": "2026-09-11T15:53:39+08:00",
+      "accepted_at": "2026-09-11T15:53:39+08:00",
+      "acceptance_scope": "用户已审查并接受本批完整训练、内部验证及XZY只读参考评估的运行事实和数值结果，包括配方升级后的frozen_regression单点基座。接受负结果与无增量结果本身，不将LoRA或对比学习解释为已带来有效增益。",
       "result_id": "phase2-softlink-contrastive-v3-20260909-101623-result",
       "result_phase": "formal",
       "batch_id": "v4_full_diagnostic",
@@ -14087,7 +14182,9 @@
         "external_summary": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/external_xzy/summary.json",
         "external_metrics": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302/external_xzy/metrics_summary.csv"
       },
-      "result_interpretation_boundary": "当前为已登记待审结果；未标记accepted，不形成机制因果结论，原因分析与报告撰写另行进行。"
+      "accepted_conclusion": "本批运行及指标已核对并由用户接受。配方升级后的frozen_regression第5轮单点基座内部双PCC/zMSE为0.6649/0.8034/0.3646，XZY双PCC/zMSE/rawMAE为0.5425/0.6633/0.6639/1188.44；LoRA与对比学习臂未显示超出该纯回归基座的明确增量。",
+      "result_interpretation_boundary": "结果已接受为该单种子、既定划分和XZY历史参考范围内的真实运行证据；不形成机制因果结论，不证明广泛跨患者泛化。",
+      "next_action": "closed_registered_accepted_no_automatic_training"
     },
     {
       "id": "phase2_spatial_warmstart_v1",
@@ -14166,6 +14263,17 @@
             "flattened_pooled_pcc": 0.8034331487323852,
             "zMSE": 0.3645681321419921
           },
+          "fixed_beta1_diagnostic": {
+            "evidence_status": "accepted",
+            "evidence_role": "diagnostic_reference_not_original_model_selection",
+            "used_for_selection": false,
+            "beta": 1.0,
+            "patient_macro_pathway_pcc": 0.6759280084111086,
+            "flattened_pooled_pcc": 0.8102324226776456,
+            "zMSE": 0.35442932389929344,
+            "rawMAE_pooled": 855.554354827568,
+            "rawMAE_patient_pathway": 849.2720715889749
+          },
           "spatial_residual_only": {
             "best_update": 320,
             "patient_macro_pathway_pcc": 0.6710109544475593,
@@ -14189,7 +14297,8 @@
           "step0_source_e5": {
             "patient_macro_pathway_pcc": 0.5424705514974782,
             "flattened_pooled_pcc": 0.6632679723520137,
-            "zMSE": 0.6639290133017339
+            "zMSE": 0.6639290133017339,
+            "rawMAE": 1188.4383071709656
           },
           "selected_spatial_joint": {
             "patient_macro_pathway_pcc": 0.5582179858436133,
@@ -14197,16 +14306,21 @@
             "zMSE": 0.64184458371383,
             "zRMSE": 0.8011520353302674,
             "zMAE": 0.6099317409502995,
+            "rawMAE": 1155.2528417016738,
             "valid_patient_pathway_count": 30,
             "invalid_patient_pathway_count": 0
           },
           "fixed_beta1_diagnostic": {
+            "evidence_status": "accepted",
+            "evidence_role": "diagnostic_reference_not_original_model_selection",
             "used_for_selection": false,
+            "beta": 1.0,
             "patient_macro_pathway_pcc": 0.5779261503487785,
             "flattened_pooled_pcc": 0.6821466356222068,
             "zMSE": 0.6447389446329925,
             "zRMSE": 0.8029563777895986,
-            "zMAE": 0.6210746752556474
+            "zMAE": 0.6210746752556474,
+            "rawMAE": 1177.3892131037915
           }
         },
         "seed_summary": {
@@ -14250,12 +14364,20 @@
         "external_metrics": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/external_xzy/spatial_joint/metrics.json",
         "external_recomputed": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_recomputed.json",
         "external_per_pathway": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_per_pathway.csv",
-        "external_review": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_review.md"
+        "external_review": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_review.md",
+        "fixed_beta1_internal_metrics": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/fixed_smoothing.json",
+        "fixed_beta1_internal_predictions": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/fixed_smoothing_predictions.npz",
+        "fixed_beta1_external_predictions": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_fixed_beta1_predictions.npz",
+        "raw_scale_recomputation": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/xzy_rawmae_inverse_from_train_zscore.json"
       },
       "unavailable_metrics": {
         "raw_scale_metrics": {
-          "status": "not_computed",
-          "reason": "当前warm-start bundle未嵌入来源训练集mean/std，不能审计原始尺度反变换。"
+          "status": "computed_after_registration",
+          "method": "使用来源训练集z-score均值/标准差对保存的预测与真值各逆变换一次后计算；未使用内部验证或XZY拟合参数。",
+          "source_zscore_params": "experiments/phase2_softlink_local_v2/inputs/mpp2/zscore_params_from_train.json",
+          "selected_spatial_joint_external_rawMAE": 1155.2528417016738,
+          "fixed_beta1_external_rawMAE": 1177.3892131037915,
+          "source": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/xzy_rawmae_inverse_from_train_zscore.json"
         },
         "patient_level_external_confidence_interval": {
           "status": "not_estimable",

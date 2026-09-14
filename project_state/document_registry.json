@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-09-08T13:30:57+08:00",
-  "state_revision": 257,
+  "updated_at": "2026-09-12T19:17:14+08:00",
+  "state_revision": 262,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -7541,13 +7541,40 @@
         "跨患者关系目标与PEaRL对齐",
         "可训练参数与小范围LoRA预算"
       ]
+    },
+    {
+      "doc_id": "phase2-meeting-decision-20260912",
+      "path": "project_state/governance/Phase2组会决策与论文后续任务_20260912.md",
+      "category": "会议决策",
+      "scope": "phase2",
+      "authority": "derived",
+      "lifecycle": "active",
+      "verified_at": "2026-09-12T19:17:14+08:00",
+      "state_revision": 262,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/directives.jsonl",
+        "project_state/current_state.json"
+      ],
+      "purpose": "固定经典空间残差、任务2/3交接、单点基线基础模型消融与论文准备",
+      "created": "2026-09-12",
+      "tags": [
+        "Phase2",
+        "会议决策",
+        "论文准备"
+      ],
+      "connectivity_modes": [
+        "offline"
+      ],
+      "availability": "local_only"
     }
   ],
   "summary": {
-    "total": 357,
-    "live": 285,
+    "total": 358,
+    "live": 286,
     "missing": 72,
-    "active": 32,
+    "active": 33,
     "superseded": 11,
     "historical": 240,
     "pending_review": 2,

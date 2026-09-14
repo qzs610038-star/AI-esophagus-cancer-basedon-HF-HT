@@ -1,8 +1,10 @@
 # PFMval Current State
 
-> 按机器状态和用户决策维护；本次补充代码包与本地结果分离存储决定。
-> State revision: `260` | Updated: `2026-09-08T13:00:00+08:00`
+> 按机器状态和用户决策维护；本次更新组会决定与论文后续任务。
+> State revision: `262` | Updated: `2026-09-12T19:17:14+08:00`
 ## Current directives
+
+- `DIR-20260912-002`：固定经典空间残差，暂停改进；任务2/3转入交接对齐；单点基线补基础模型替换；准备论文指标、代码与架构图。
 
 - `DIR-20260908-002`：从下一次服务器训练起，模型权重单独写入 `D:\AIPatho\qzs\weights\<实验名>\<批次>\<运行>\`，不随常规结果包回传。回传包必须包含 `model_weights.json`，登记每项实验权重的服务器绝对路径和产出状态。本次已回传结果不改动。
 
@@ -12,7 +14,7 @@
 
 - `DIR-20260905-002`：用户批准独立实验包与手动回传策略：工作树要求彻底退役，仅用户明确指令可创建；新实验在 experiments/<实验名> 自包含代码包内维护；PFMval Windows 服务器 D:\AIPatho\qzs 下分 code/runs，手动上传与回传，修复替换代码保留运行结果；Gitee 暂停，GitHub 仅备份和网页查阅，提交推送由用户触发，不做日常实验前 Git 预检；服务器只产出原始结果与训练选择必需指标，其余指标和登记移到本地；指定文档目录 Markdown 正文允许 Git 跟踪。本次仅规则、配置、通用零训练模板，不迁移旧实验、不训练、不操作服务器、不提交推送。
 
-- `DIR-20260905-001` [phase2/meeting_decision]: Phase 2选定软对比联合学习作为当前研究主线，优先针对本数据调优，使其相对冻结UNI2-h加两层MLP的对照获得更清楚的指标改善；具体模型改动后续讨论。全部已列指标暂时待定，后续实验保留计算和记录，逐通路平均PCC与展平/整体PCC均保留，论文采用及主副线后续再定。指标主要用于本项目内部前后与实验对照，暂不开展跨论文实验数值优劣比较。六折留一患者继续暂缓；基因重建、稠密/稀疏验证、多基础模型和Phase 2/3衔接补充实验后置，在软对比指标改善后再推进。本次只登记决策，不启动训练或改变既有结果确认状态。
+- `DIR-20260905-001` [历史方法与排序已由 DIR-20260912-002 取代；其余有效条款保留]: Phase 2选定软对比联合学习作为当前研究主线，优先针对本数据调优，使其相对冻结UNI2-h加两层MLP的对照获得更清楚的指标改善；具体模型改动后续讨论。全部已列指标暂时待定，后续实验保留计算和记录，逐通路平均PCC与展平/整体PCC均保留，论文采用及主副线后续再定。指标主要用于本项目内部前后与实验对照，暂不开展跨论文实验数值优劣比较。六折留一患者继续暂缓；基因重建、稠密/稀疏验证、多基础模型和Phase 2/3衔接补充实验后置，在软对比指标改善后再推进。本次只登记决策，不启动训练或改变既有结果确认状态。
 
 - `DIR-20260710-003` [automation/repair_loop_rollout]: Keep the automated repair loop as a separate later task; validate Codex CLI first and retain adapter interfaces for Claude Code and other verified non-interactive CLIs.
 - `DIR-20260711-005` [server_maintenance/launcher_argument_contract]: Preserve training argparse option spelling exactly, keep explicit compatibility aliases only, and never let launcher event cleanup mask Python stderr or exit codes; retire failed pre-training job mpp2-repair-v003-frozen-20260711 and require a new source commit/job ID.
@@ -68,14 +70,16 @@
 - Active data manifest: `barcode-repair-20260711-d626ad8-v003:1204018178a4d355`.
 - Gate status: **active**.
 
-## 当前 Phase 2 会议决策（2026-09-05）
+## 当前 Phase2 组会决策（2026-09-12）
 
-- 当前主线：软对比联合学习，优先针对本数据改进；冻结UNI2-h加两层MLP保留为对照。
-- 全部指标暂时待定且继续保留；逐通路平均PCC与展平/整体PCC均记录，最终发表指标后续再定。
-- 比较范围：本项目内部前后及方案对照；暂不进行跨论文实验数值优劣比较。
-- 排序：先改进软对比指标；六折留一患者暂缓；基因重建、密度、多基础模型及Phase 2/3衔接补充实验后置。
-- 用户倾向后续选取有优势的指标发表；两种PCC的绝对高低不能互证优越，需保留完整结果和明确计算定义。
-- 本轮只登记决定，未训练、未产生或接纳新结果。详细记录：[project_state/governance/Phase2会议决策_20260905.md](project_state/governance/Phase2会议决策_20260905.md)。
+- 方法已固定：第一轮 `phase2_softlink_local_v2` 的 `spatial`（经典空间残差）臂；暂停进一步改进。
+- 任务2（基因预测→通路重建）、任务3（隔点训练→稠密测试）：核对已有材料，准确对齐输入、输出及操作后交另一位团队成员实践，当前待交接对齐。
+- 基础模型消融：在同轮 `point`（单点预测）基线上比较 UNI2-h 与另外2至3个模型，Virchow2为候选；名单与协议待定。空间残差方案保持固定。
+- “UNI2-h最好”是待实验验证的论文叙事；尚无本次新增模型比较结果。
+- 后续重心：论文结构与指标选择、代码整理、关键架构图。全部指标继续保留，两种PCC并列，论文主副指标待定。
+- 本次只更新状态；旧改进优先排序被取代，既有实验结果与接纳状态不变。
+
+- [完整组会决策与后续任务](project_state/governance/Phase2组会决策与论文后续任务_20260912.md)
 ## Hard blocks
 
 - `formal_training_without_user_approval`

@@ -11,7 +11,7 @@
 ## 本轮软连接实验已完整登记（2026-09-08）
 
 - 实验：`phase2_softlink_local_v2`；批次：`20260908_005325_810_8d306c10`；12次正式训练及12次XZY预测完成。
-- 登记状态：`registered`；证据状态：`pending`（已登记、待复核，未标为accepted）。
+- 登记状态：`registered`；证据状态：`accepted`（按当前实验登记核对；本次未改变接纳状态）。
 - 注册表已录入23种明确口径指标的汇总与逐种子值，并保留逐患者、逐通路、同轮15/25、固定平滑及历史参考；未计算项写明原因。
 - PCC依次为“逐通路平均 PCC（即患者—通路等权平均 PCC） / 平均池化 pooled PCC（整体展平 PCC）”，两种口径同时保留（下表依此次序）：
 
@@ -31,21 +31,20 @@
 >
 > 🟢 **JFX0729 数据更正状态**：更正数据已同步、本地处理并通过 7/7 checks passed；旧 JFX 相关结果仅作历史参考。下一步：defer JFX token-cache rebuild; a new data transformation is planned and caches/retraining should be rebuilt only after that transform is finalized and applied consistently。
 >
-> ✅ **当前主线（2026-09-05）**：软对比联合学习；冻结UNI2-h加两层MLP保留为固定对照。
-> 下一步：优先针对本数据讨论软对比改进，指标提升后再开展后续补充；六折继续暂缓。
+> 当前主线：固定经典空间残差；后续准备任务交接、单点基线模型消融与论文材料。
 >
 > ⚠️ **旧三患者实验结论**：Old 3-patient LoRA/Token/frequency/spatial-repair conclusions must not be used as formal evidence. They may only seed hyperparameters and risk checks for new MPP2 experiments.
 
-## 当前 Phase 2 会议决策（2026-09-05）
+## 当前 Phase2 组会决策（2026-09-12）
 
-- 当前主线：软对比联合学习，优先针对本数据改进；冻结UNI2-h加两层MLP保留为对照。
-- 全部指标暂时待定且继续保留；逐通路平均PCC与展平/整体PCC均记录，最终发表指标后续再定。
-- 比较范围：本项目内部前后及方案对照；暂不进行跨论文实验数值优劣比较。
-- 排序：先改进软对比指标；六折留一患者暂缓；基因重建、密度、多基础模型及Phase 2/3衔接补充实验后置。
-- 用户倾向后续选取有优势的指标发表；两种PCC的绝对高低不能互证优越，需保留完整结果和明确计算定义。
-- 本轮只登记决定，未训练、未产生或接纳新结果。详细记录：[project_state/governance/Phase2会议决策_20260905.md](../project_state/governance/Phase2会议决策_20260905.md)。
+- 方法已固定：第一轮 `phase2_softlink_local_v2` 的 `spatial`（经典空间残差）臂；暂停进一步改进。
+- 任务2（基因预测→通路重建）、任务3（隔点训练→稠密测试）：核对已有材料，准确对齐输入、输出及操作后交另一位团队成员实践，当前待交接对齐。
+- 基础模型消融：在同轮 `point`（单点预测）基线上比较 UNI2-h 与另外2至3个模型，Virchow2为候选；名单与协议待定。空间残差方案保持固定。
+- “UNI2-h最好”是待实验验证的论文叙事；尚无本次新增模型比较结果。
+- 后续重心：论文结构与指标选择、代码整理、关键架构图。全部指标继续保留，两种PCC并列，论文主副指标待定。
+- 本次只更新状态；旧改进优先排序被取代，既有实验结果与接纳状态不变。
 
-
+- [完整组会决策与后续任务](../project_state/governance/Phase2组会决策与论文后续任务_20260912.md)
 ## Status Overview
 
 | ID | Family | Status | Fold | Encoder | Tokens | Best Val PCC | Best Val Loss | Train-Val Gap | Epoch |
@@ -104,9 +103,9 @@
 | P0 | mpp2_paired_s1_lora_r8_smoke_20260712 | done | close_current_lora_r8_configuration_after_prediction_diagnostics |
 | P0 | mpp2_lora_r8_dropout10_smoke_20260714 | done | close_dropout10_route_no_retry_or_tuning_after_internal_first_failure |
 | P0 | mpp2_pathway_ridge_calibration_v001_20260717 | failed | validate gate-correction regression then create one bound replacement formal job manifest |
-| P2 | phase2_gene_reconstruction_comparison_v001_20260904 | planned | 暂缓：先改进软对比，再补协议与实验 |
-| P2 | phase2_spatial_density_comparison_v001_20260904 | planned | 暂缓：先改进软对比，再补协议与实验 |
-| P2 | phase2_pathology_model_benchmark_v001_20260904 | planned | 暂缓：先改进软对比，再补协议与实验 |
+| P2 | phase2_gene_reconstruction_comparison_v001_20260904 | planned | 准备输入输出与操作合同；模型替换限单点基线 |
+| P2 | phase2_spatial_density_comparison_v001_20260904 | planned | 准备输入输出与操作合同；模型替换限单点基线 |
+| P2 | phase2_pathology_model_benchmark_v001_20260904 | planned | 准备输入输出与操作合同；模型替换限单点基线 |
 | baseline | online_tokens_gfnet_fold1_65t_legacy | done | archived_as_legacy_baseline |
 | baseline | smoke_gfnet_65t | done | archived |
 | baseline | online_tokens_transformer_fold1_65t | done_incomplete_data | archived |

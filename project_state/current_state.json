@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "state_revision": 260,
-  "updated_at": "2026-09-08T13:00:00+08:00",
+  "state_revision": 262,
+  "updated_at": "2026-09-12T19:17:14+08:00",
   "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
     "DIR-20260710-003",
@@ -22,7 +22,9 @@
     "DIR-20260905-002",
     "DIR-20260905-003",
     "DIR-20260908-001",
-    "DIR-20260908-002"
+    "DIR-20260908-002",
+    "DIR-20260912-001",
+    "DIR-20260912-002"
   ],
   "active_plans": {
     "mpp_training": {
@@ -106,8 +108,8 @@
     "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804"
   ],
   "phase2_program": {
-    "status": "soft_contrastive_improvement_first",
-    "updated_at": "2026-09-05T19:25:48+08:00",
+    "status": "classic_spatial_fixed_paper_preparation",
+    "updated_at": "2026-09-12T19:17:14+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
     "planned_experiment_ids": [
       "phase2_gene_reconstruction_comparison_v001_20260904",
@@ -115,10 +117,11 @@
       "phase2_pathology_model_benchmark_v001_20260904"
     ],
     "pending_inputs": [
-      "targeted_soft_contrastive_model_revision",
-      "improvement_criterion_and_internal_selection_protocol",
+      "task_2_3_input_output_and_operation_contracts",
+      "handoff_team_member_identity",
+      "foundation_model_shortlist_and_comparison_protocol",
       "final_publication_metric_selection",
-      "final_cohort_and_input_contracts"
+      "paper_code_and_architecture_figure_plan"
     ],
     "deferred_designs": [
       "six_fold_leave_one_patient_out_deferred_by_user_20260905"
@@ -127,17 +130,20 @@
       "团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md",
       "团队项目进度与结论/lzd/Phase2与Phase3工作计划原文_20260903.md",
       "团队项目进度与结论/方案共享/Phase2补充任务现状盘点与Phase3并行推进建议_20260903.md",
-      "project_state/governance/Phase2会议决策_20260905.md"
+      "project_state/governance/Phase2会议决策_20260905.md",
+      "project_state/governance/Phase2组会决策与论文后续任务_20260912.md"
     ],
-    "decision_id": "DIR-20260905-001",
-    "current_method": "软对比联合学习（现有残差纠错方案作为改进起点）",
-    "method_reference_experiment_id": "mpp2_cpgcr_probe_v001_20260811",
-    "method_reference_arm": "CPGCR",
-    "baseline_role": "冻结UNI2-h加两层MLP作为固定对照；不是当前选定研究主线",
-    "supplementary_execution_status": "deferred_until_soft_contrastive_improvement_review",
+    "decision_id": "DIR-20260912-002",
+    "current_method": "经典空间残差（第一轮 spatial 臂），方案已确定，不再改进",
+    "method_reference_experiment_id": "phase2_softlink_local_v2",
+    "method_reference_arm": "spatial",
+    "baseline_role": "第一轮 point 单点预测臂作为基础模型替换对照；旧冻结 MPP2 基线保留为历史量化锚点",
+    "supplementary_execution_status": "handoff_contract_alignment_and_baseline_ablation_planning",
     "priority_order": [
-      "先诊断并针对本数据改进软对比联合学习",
-      "指标改善后再推进基因重建、密度、多模型及Phase 2/3衔接补充实验"
+      "暂停 Phase2 方法改进，固定经典空间残差",
+      "对齐任务2与任务3的输入、输出和操作，交团队成员实践",
+      "在单点基线上准备基础模型替换消融",
+      "围绕论文整理指标、代码与关键架构图"
     ],
     "training_authorized_by_this_decision": false,
     "publication_metric_policy": {
@@ -173,7 +179,62 @@
       "model_selection_boundary": "监督预处理、模型改动、超参数及checkpoint选择仅使用训练或内部验证数据，不使用外部测试成绩调参。",
       "applicability": "全部保留不等于强行填值；SSIM无有效窗口、Top-k未预定义、单患者泛化CI不可估计等情况保留明确状态。"
     },
-    "decision_record": "project_state/governance/Phase2会议决策_20260905.md"
+    "decision_record": "project_state/governance/Phase2组会决策与论文后续任务_20260912.md",
+    "method_improvement_status": "paused_by_user",
+    "baseline_model_ablation": {
+      "status": "planned",
+      "reference_experiment_id": "phase2_softlink_local_v2",
+      "reference_arm": "point",
+      "reference_model": "UNI2-h",
+      "additional_model_count": [
+        2,
+        3
+      ],
+      "candidate_examples": [
+        "Virchow2"
+      ],
+      "final_shortlist_status": "pending",
+      "replacement_scope": "仅替换第一轮单点预测基线的病理特征提取模型；不替换或改造经典空间残差方案",
+      "expected_paper_narrative": "比较若干基础模型后，若结果支持 UNI2-h 最优，则解释为何选用 UNI2-h 开展后续改善",
+      "narrative_evidence_status": "hypothesis_pending_experiment",
+      "selection_boundary": "模型与超参数选择仅使用训练集或内部验证集，外部测试仅用于冻结方案评估"
+    },
+    "task_2_3_handoff": {
+      "status": "pending_contract_alignment",
+      "executor": "另一位团队成员（姓名待定）",
+      "existing_materials": [
+        "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
+        "experiments/phase2_softlink_local_v2/队友同步说明.md"
+      ],
+      "tasks": [
+        {
+          "task_number": 2,
+          "name": "基因预测后重建通路",
+          "deliverable": "明确30个通路对应基因、标签与标度、基因预测转通路评分步骤、与直接通路预测的对齐输出和评价合同"
+        },
+        {
+          "task_number": 3,
+          "name": "稀疏训练与稠密测试",
+          "deliverable": "明确训练集隔点规则、输入坐标与划分、稠密测试集合、空间邻域处理、对照与结果输出合同"
+        }
+      ],
+      "alignment_checklist": [
+        "准确输入文件、字段、点位身份与顺序",
+        "操作步骤、运行入口与模型初始化来源",
+        "输出预测、标度、指标、日志和验收方式",
+        "核对已有交接材料与队友实现；文件存在不代表接口已对齐或实验已完成"
+      ]
+    },
+    "paper_preparation": {
+      "status": "planned",
+      "tasks": [
+        "论文结构与结果叙事",
+        "正文及补充材料指标选择",
+        "终版方法与复现代码整理",
+        "关键架构图的内容与绘制方案"
+      ],
+      "publication_metrics_finalized": false
+    }
   },
   "blocked_actions": [
     "formal_training_without_user_approval",
@@ -190,7 +251,8 @@
     "2026-09-04补充实验优先准备排序被2026-09-05软对比改进优先取代；原计划与已有结果继续保留。",
     "Worktrees are an optional default experiment organization tool; new creation now requires an explicit user instruction.",
     "Gitee is the current server transport; it is now paused in favor of manual packages.",
-    "Learning, deployment and team Markdown bodies are local-only; designated directories now permit Git backup."
+    "Learning, deployment and team Markdown bodies are local-only; designated directories now permit Git backup.",
+    "2026-09-05软对比改进优先、指标改善后再做补充实验的排序已由DIR-20260912-002取代；经典空间残差固定，转向补充交接与论文准备。"
   ],
   "last_sync_check_at": null,
   "notes": [
@@ -287,7 +349,14 @@
     "required_weight_registry": "model_weights.json",
     "weight_registry_contents": "per-run server absolute paths and production status",
     "legacy_weight_policy": "current_return_unchanged_new_policy_starts_next_run",
-    "weight_storage_directive_id": "DIR-20260908-002"
+    "weight_storage_directive_id": "DIR-20260908-002",
+    "server_feature_cache_root": "D:\\AIPatho\\qzs\\feature_caches",
+    "routine_return_includes_feature_cache_files": false,
+    "required_feature_cache_registry": "feature_caches.json",
+    "feature_cache_registry_contents": "per-run server absolute paths of used or newly written feature caches",
+    "feature_cache_write_policy": "new_caches_under_feature_caches_root_not_under_runs",
+    "legacy_feature_cache_policy": "keep_old_paths_active_no_retirement_or_forced_migration_existing_experiments_unchanged",
+    "feature_cache_storage_directive_id": "DIR-20260912-001"
   },
   "historical_plans": {
     "workflow_governance_v3": {
