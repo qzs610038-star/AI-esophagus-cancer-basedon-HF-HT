@@ -1,203 +1,121 @@
-# PFMval_new — 食管癌病理空间转录组预测
+# PFMval_new — 食管癌病理图像预测空间通路活性
 
 <!-- project-state:start -->
 ## 当前项目状态（自动生成）
 
-- 状态版本：`258`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
-- 用户导航：[PROJECT_GUIDE.md](PROJECT_GUIDE.md)；简洁实验进度：[experiments/experiment_progress.md](experiments/experiment_progress.md)。
-- 当前 MPP 主线：**MPP2**；其它统一重跑结果保留为背景/方法参考。
-- 服务器通信：**直接复制文件夹回传，不自动压缩**；Gitee 暂停。新实验使用 [独立包模板](experiments/_template/README.md)，工作树仅在用户明确要求时创建。
-- GitHub：仅备份与网页查阅，提交推送由用户触发；日常实验不进行 Git 干净状态预检。
-- 实验事实源：`experiments/experiment_registry.json`；Dashboard 为派生视图。
+- 状态版本：`265`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。
+- 项目导航：[PROJECT_GUIDE.md](PROJECT_GUIDE.md)；实验进度：[experiments/experiment_progress.md](experiments/experiment_progress.md)。
+- 数据方案固定为 **MPP2**。固定经典空间残差，暂停方法改进；推进补充实验合同、团队交接与论文准备。
+- 两种 PCC 并列保留；实验是否接纳以 [实验注册器](experiments/experiment_registry.json) 为准。文件存在或代码验证不等于科研结论成立。
 
 <!-- project-state:end -->
 
+本仓库现在先开放给团队成员，方便查阅已经整理出来的 Phase 2 结果与分析。完整的 Phase 2 探索路径、方法取舍说明和正式交接材料会另作整理后再发给大家。下面的数字只来自已登记并接纳的实验；未接纳、待审或早期三患者结果不能当作当前结论。
 
-> 基于食管癌 H&E 病理切片，使用深度学习模型预测 30 条基因通路的 ssGSEA 活性评分（Z-score 标准化）。
+GitHub 里主要是文档、实验代码包和登记表。原始病理图像、特征缓存、模型权重和大部分原始预测文件不在本仓库中。克隆后不能直接复现训练或推理。
 
----
+## 建议阅读顺序
 
-## 🎯 项目目标
+1. 本页：问题、当前方法和已接纳结果的范围。
+2. [2026-09-19 组会汇报](02_组会汇报/组会汇报_全视野修复_超参搜索_基础模型消融与任务二奇异性研讨_20260919.md)：全视野交付检查点、三编码器消融，以及任务 2 待核对事项。
+3. [全视野通俗导读](01_指南与解读/学习指南/Phase2_全视野修复与超参数重搜索_通俗导读与学习指南_20260916.md)：为什么改输入视野、怎样读本轮实验。
+4. [软连接三轮分析与模型选择建议](01_指南与解读/分析报告/Phase2软连接三轮实验综合分析与Phase3模型选择建议_20260910.md)：为什么固定经典空间残差。
+5. 需要核验接纳范围或逐项指标时，再打开 [实验总览](experiments/experiment_dashboard.md) 或 [实验注册器](experiments/experiment_registry.json)。
 
-输入：H&E 病理切片图像（patch 级，224×224）
-输出：30 条基因通路的 **ssGSEA 活性评分**（已 Z-score 标准化）
-评估指标：**PCC**（Pearson 相关系数，逐通路计算后取均值）
+仓库中另有一份 9 月 19 日首版阅读材料：[Phase2完整交接包_20260919_首版](团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md)。它可以帮助理解现有证据，但还不是后续会单独整理的完整探索路径与正式交接文件。
 
----
+## 我们在解决什么问题
 
-## 📊 数据集概况
+Phase 2 用食管癌 H&E 病理图像块，预测每个空间点位上 30 条基因通路的 ssGSEA 活性（用训练集拟合的 z-score）。训练时一个图像块对应一个空间点位及其通路标签；推理时还可以使用同一切片上邻居点的**图像**信息，不能把验证或外部真值当作邻域输入。
 
-3 个食管癌患者（**非肺癌**）的空间转录组 + H&E 病理数据：
+Phase 3 再研究这些通路预测能否帮助疗效预测。Phase 2 的相关性本身不能证明疗效预测有效。
 
-| 患者 ID | Patch 数量 | 用途 |
-|---------|-----------|------|
-| HYZ15040 | 2,655 | 主验证集 / 跨患者测试集 |
-| JFX0729 | 7,788 | 训练集 / 跨患者训练（2026-06-16 更正数据） |
-| LMZ12939 | 7,513 | 训练集 / 跨患者训练 |
+当前数据方案是 **MPP2**：开发集六名患者（HYZ15040、JFX、LMZ12939、TGC、XSL、ZHZ），外部参考患者 XZY。标签版本为 barcode-repair-v003。早期三患者探索以及 MPP1 / MPP3 / MPP4 / MPP5 只作历史背景，不再作为正式证据。
 
-数据路径：`data_new_3ST/patch_noov_spilt/{patient}_noov_split/`
-（路径 typo `spilt` 为原始数据，**不可修正**）
+## 当前方法
 
----
+冻结的病理编码器把完整正方形图像块缩到 224×224（协议 `full_fov_224_bicubic_v1`），不再使用历史上默认的中心裁剪。共享映射 H 把图像特征整理到 256 维；中心读出 C 给出 30 维基础预测；空间残差 B 用邻居相对中心的特征差给出修正。最终输出为 **C + B**。
 
-## 🧬 模型演进时间线
-
-| 时间 | 模型 | 特征 | 备注 | 最优 PCC |
-|------|------|------|------|---------|
-| Phase 0 | EGN-v1 | ResNet50 (2048d) | **已淘汰** | — |
-| Phase 1 | HisToGene 原版 | ViT 直接输入 | 基线 | — |
-| Phase 2 | HisToGene-UNI | UNI2-h CLS (1536d) | 单 token | 0.5336 (单患者) |
-| Phase 3 | **HisToGene-UNI Token** | UNI2-h Tokens [265,1536] | **主力模型** | **0.5217** (HYZ AugMix) |
-| Phase 3.5 | HisToGene-UNI + GAT | UNI2-h + 图结构 | 实验完成（提升不显著） | 0.4068 (Fold1) |
-| Phase 4 | **OmiCLIP (Loki)** | coca_ViT-L-14 [255,768] | **新增（特征已提取）** | 训练验证中 |
-
----
-
-## 🏆 当前最优结果
-
-> ✅ **2026-07-09 当前主线**：团队讨论后决定，后续 MPP 方案只使用 **MPP2**；MPP1 / MPP3 / MPP4 / MPP5 暂时弃用，仅作背景对照。旧三患者 LoRA / Token+LoRA / 频域实验不再作为正式证据，只能作为 MPP2 新数据 LoRA 调参参考。详见 `01_指南与解读/分析报告/MPP2后续方案与LoRA新数据实验建议_20260709.md`。
->
-> 🚨 **JFX0729 数据错误（2026-06-30 更新）**：JFX 更正数据已于 2026-06-16 同步到本地并完成 split+z-score 验证（7010 train / 778 val, 7/7 checks passed）。旧数据已归档。**下表跨患者结果仍为历史参考**。JFX token cache 重建暂缓：后续会先统一处理新的数据变换，再重建缓存并启动 P0 重跑矩阵。详见 `01_指南与解读/分析报告/JFX0729数据替换后重跑实验清单.md`。
-> 
-> ⚠️ 本表同时过时于 Phase 2-4 旧离线 Token 体系。旧在线训练体系（UNI2-h LoRA + GFNet Token+LoRA）已降级为调参参考，当前口径以 **[CURRENT_STATE.md](CURRENT_STATE.md)** 为准。9 患者数据此前预计 2026 年 7 月初到齐；截至 2026-06-30，本仓库尚未确认全量数据到齐。
-
-| 场景 | 模型 | PCC | JFX影响 |
-|------|------|-----|:---:|
-| 单患者验证（HYZ15040） | HisToGene-UNI Token AugMix | **0.5217** | ✅ 不涉及JFX |
-| 单患者验证（HYZ15040） | 🆕 UNI2-h CLS LoRA r=8 | **0.5462** | ✅ 不涉及JFX |
-| 跨患者 Fold1（JFX+LMZ→HYZ） | 🆕 UNI2-h CLS LoRA r=8 | ~~0.4322~~ | 🔴 训练含错误JFX |
-| 跨患者 Fold1（JFX+LMZ→HYZ） | 🆕 UNI2-h GFNet Token + LoRA r=8 | ~~0.4169~~ | 🔴 训练含错误JFX |
-| 跨患者 3 折平均 | HisToGene-UNI Token | ~~0.3812~~ | 🔴 含JFX相关Fold |
-
----
-
-## ⚡ 快速启动
-
-### 环境一：在线训练（历史 LoRA 调参入口，需按 MPP2 新数据重新验证）
-
-```powershell
-# Python 3.13, PyTorch 2.6.0+cu118
-$env:PYTHONIOENCODING = "utf-8"
-# CLS LoRA 训练（当前最强）
-& "C:\Program Files\Python313\python.exe" train_online_cls.py --mode lora --lora_rank 8 --cross_patient --fold 1 --dataset_name online_cls_cross_fold1_lora_r8_jfxfix20260616 --epochs 50
-# Token + GFNet LoRA 训练
-& "C:\Program Files\Python313\python.exe" train_online_tokens.py --encoder_type gfnet --mode lora --lora_rank 8 --cross_patient --fold 1 --dataset_name online_tokens_cross_fold1_65t_gfnet_lora_r8_jfxfix20260616 --epochs 50
+```mermaid
+flowchart LR
+    A["H&E 图像块<br/>完整方形视野缩至 224×224"] --> B["冻结病理编码器"]
+    B --> C["共享映射 H"]
+    C --> D["中心读出 C<br/>30 维基础预测"]
+    C --> E["邻居相对中心的特征差"]
+    E --> F["空间残差 B<br/>30 维修正"]
+    D --> G["相加：30 维通路预测"]
+    F --> G
+    G --> H["交给 Phase 3<br/>另行评价疗效"]
 ```
 
-### 环境二：旧离线 Token 训练（HisToGene-UNI，历史基线）
+向 Phase 3 交付的检查点是 **UNI2-h 空间臂、预先指定种子 45、正式第 28 轮**。种子不是按外部 XZY 分数事后挑选的。编码器消融里 Virchow2 在部分内部指标上略高，不自动改变这一交付选择。运行接口见 [当前模型交接说明](团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md)；权重文件不在 GitHub 中。
 
-```powershell
-& "C:\Program Files\Python313\python.exe" extract_uni_tokens.py --patient HYZ15040
-& "C:\Program Files\Python313\python.exe" train_histogene_uni_tokens_augmix.py --patient HYZ15040 --epochs 50
-```
+## 目前可以先看的结果
 
-### 环境三：OmiCLIP 特征提取（新）
+下列为已接纳批次 `phase2_fullfov_hpo_v1` / `20260916_231813_101_7b1b9a79` 中，全视野最终消融、三种子（45/46/47）均值。主指标 PCC 是患者—通路等权平均；展平 PCC 是全部点位×通路 z 分数拉直后算一次相关。两种口径回答不同问题，不能互相证明优劣。
 
-```powershell
-# Python 3.9, open_clip 2.26.1
-& "D:\conda_envs\loki_env\python.exe" extract_omiclip_features.py --patient HYZ15040
-# 训练仍用 Python313
-& "C:\Program Files\Python313\python.exe" train_histogene_omiclip.py --patient HYZ15040 --epochs 50
-```
+| 编码器 | 空间臂 内部主指标 / 展平 PCC | 空间臂 外部 XZY 主指标 / 展平 PCC |
+|--------|------------------------------|-----------------------------------|
+| UNI | 0.661765 / 0.801208 | 0.559422 / 0.656756 |
+| UNI2-h | 0.676986 / 0.810549 | 0.571073 / 0.683748 |
+| Virchow2 | 0.679243 / 0.811346 | 0.577756 / 0.678311 |
 
-### 通用：可视化结果
+相对同配方的去 B 臂，三个编码器的空间臂在内部和外部主指标上都有描述性提高。外部只有 XZY 一名患者，且不是全新盲测，不能写成广泛跨患者泛化已经解决。三种子标准差只描述本批种子波动。
 
-```powershell
-& "C:\Program Files\Python313\python.exe" visualize_results.py --model_dir .
-```
+实际交给 Phase 3 的是 UNI2-h 空间臂 **seed 45** 这一份检查点，不是上表三种子均值，也不是按 XZY 另选的最优种子。更完整的对照表、去 B / 单点结果和读数边界见：
 
-### 服务器迁移
+- [已接纳全视野三模型结果](团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/已接纳全视野三模型结果.md)
+- [2026-09-19 组会汇报](02_组会汇报/组会汇报_全视野修复_超参搜索_基础模型消融与任务二奇异性研讨_20260919.md)
+- [实验总览](experiments/experiment_dashboard.md)
 
-项目已全面支持 **Linux 服务器迁移**，只需编辑 `config.yaml` 即可适配不同数据路径：
+空间方法是在第一轮四臂比较后固定的，不是用全视野消融事后倒推出来的。四臂已接纳结果（旧裁剪协议、种子 42/43/44）见 [软连接 v2.1 实验分析](01_指南与解读/分析报告/Phase2软连接v2_1_实验结果与机制分析_20260908.md)。
 
-```bash
-# 1. 创建 conda 环境
-conda env create -f env_histogene.yml
-# 2. 编辑 config.yaml 中的路径
-# 3. 验证配置
-python config_utils.py
-# 4. 开始训练
-python train_histogene_uni_tokens_augmix.py --patient HYZ15040 --epochs 150
-```
+## 怎样读这些数字
 
-详见 **[服务器迁移指南（初学者版）](01_指南与解读/服务器迁移指南_初学者版.md)**。
+- **患者—通路等权 PCC**：每位患者、每条通路分别算点位相关，再等权平均。这是本批内部选模用的主指标。
+- **整体展平 PCC**：把全部点位×通路的 z 分数拉直后算一次相关。数值通常更高，但口径不同。
+- **内部验证**：来自同一批六名开发患者的留出点，不是新的跨患者验证。
+- **外部 XZY**：一名患者的固定评估；未用于选配方或选种子。
+- 是否“已确认”以 [实验注册器](experiments/experiment_registry.json) 的 `accepted` 为准。文件存在、代码能跑或 Dashboard 有数字，都不自动等于科研结论成立。
 
----
+任务 2（基因预测后重建通路）和任务 3（稀疏训练、稠密测试）目前只有接口和部分待审材料，没有与主线全视野协议对齐的已接纳结论。任务 2 标签合同仍待负责同学核对。
 
-## 📁 目录结构
+## 仓库里有什么，没有什么
 
-```
+| 在 GitHub 里 | 不在 GitHub 里 |
+|--------------|----------------|
+| 分析报告、学习指南、组会汇报、审计记录 | 原始病理图像与标签大数据 |
+| 实验登记表、进度和总览 | 特征缓存、模型权重、大部分原始预测 |
+| 部分实验代码包和团队 Markdown 材料 | 服务器上的 runs / weights / feature_caches 实体 |
+
+本地完整工作树里，原始回传通常在 `experiments/results/<实验名>/<运行编号>/`；那部分默认不同步到 GitHub。
+
+## 目录导览
+
+```text
 PFMval_new/
-├── 01_指南与解读/                  # 各类设计文档与初学者指南
-│   ├── 服务器迁移指南_初学者版.md   # 服务器迁移手把手教程
-│   └── 项目全貌与迁移指南.md       # 跨 AI 平台上下文文档
-├── 02_组会汇报/                    # 周报与汇报材料
-├── .qoder/
-│   ├── basic_rule.md              # 项目硬性规则（AI 自动加载）
-│   ├── experience.md              # 经验索引（AI 自动加载）
-│   ├── skills/                    # 分领域经验
-│   └── repowiki/zh/content/       # 结构化技术参考（7文件，按需查阅）
-├── config.yaml                     # 🔧 统一配置文件（数据路径、训练参数）
-├── config_utils.py                 # 🔧 配置工具库（所有脚本通过它读取路径）
-├── env_histogene.yml               # conda 环境定义（HisToGene 系列）
-├── env_egnv2.yml                   # conda 环境定义（EGN-v2 / GAT）
-├── data_new_3ST/                   # 三患者原始数据
-├── uni2h_cache_tokens/             # UNI2-h tokens 缓存
-├── uni2h_cache_tokens_aug/         # AugMix 增强缓存
-├── omiclip_cache/                  # OmiCLIP 特征缓存
-├── pretrained_omiclip/             # OmiCLIP 权重
-├── histogene/  egnv1/  egnv2/      # ⚠️ 只读目录，禁止修改
-├── extract_uni_tokens.py           # UNI tokens 提取
-├── extract_omiclip_features.py     # OmiCLIP 特征提取
-├── train_histogene_uni_tokens_augmix.py  # 主力训练脚本
-├── model_uni_tokens.py             # HisToGeneUNITokens 模型
-├── dataset_uni_tokens_augmix.py    # 主数据集类
-├── config_utils.py / notify_utils.py
-├── visualize_results.py / split.py / zscore.py
-└── README.md
+├── README.md                          # 本页，团队阅读入口
+├── CURRENT_STATE.md                   # 当前状态概览
+├── PROJECT_GUIDE.md                   # 按问题找文档
+├── 01_指南与解读/                     # 分析报告、学习指南、部署方案
+├── 02_组会汇报/                       # 组会材料
+├── 03审计报告/                        # 审计记录（待审不等于已接纳）
+├── 团队项目进度与结论/                # 成员材料与交接草稿
+├── experiments/                       # 实验包、登记表、总览
+├── project_state/                     # 状态、指令与文档登记
+└── configs/                           # 服务器路径等配置
 ```
 
----
+根目录里仍可能看到 `histogene/`、`train_histogene_uni_tokens_augmix.py` 等早期入口。它们属于三患者探索阶段，**不是**当前 MPP2 训练或评估入口。
 
-## ⚠️ 重要约束（绝对不可违反）
+## 后续交接
 
-1. **只读目录**：`histogene/`、`egnv1/`、`egnv2/` 目录下文件**禁止修改**，所有适配通过根目录新建独立文件实现
-2. **路径 typo**：`patch_noov_spilt`（spilt）是原始数据路径拼写，**不可修正**
-3. **最优 epoch 选取**：以 **val_loss 最小**为准，不是 val_pcc 最大
-4. **predictions.csv 列名**：必须为 `true_xxx` / `pred_xxx` 格式（visualize_results.py 约定）
-5. **Windows 编码**：所有训练命令前缀 `$env:PYTHONIOENCODING = "utf-8"`（Linux 不需要）
-6. **PowerShell 语法**：不支持 `&&`，使用 `;` 分隔
-7. **路径统一管理**：所有训练/提取脚本的数据路径通过 `config_utils.py` 的函数获取（`get_patient_paths()`、`get_project_root()` 等），禁止在脚本中硬编码绝对路径
-8. **config.yaml 是唯一配置入口**：迁移到服务器时只需修改此文件，如需新增路径配置项，扩展 `config.yaml` + `config_utils.py`，不得在各脚本中散落硬编码路径
+完整的 Phase 2 探索路径（含成功、未改善和停止的路线）以及面向队友的正式交接文件，会在这次 GitHub 共享之后另行整理。收到那份材料前，请以本页、已接纳结果表和组会汇报为准，不要把早期 HisToGene / LoRA / OmiCLIP 数字写进当前结论。
 
----
+需要核验当前状态、文档用途或实验接纳时：
 
-## 🚀 下一步计划
-
-- **🚨 短期（P0）**：暂缓 JFX0729 token cache 重建；等待新的数据变换方案确定后，统一处理数据、重建缓存，再使用 `_jfxfix20260616` 后缀或后续指定命名重跑 P0 实验矩阵
-- **中期**：9 患者数据到齐并验收后全量重训；Virchow2 / BLEEP 探索
-- **长期**：多中心验证；论文投稿
-
----
-
-## 📚 文档索引
-
-### AI 自动加载（每次会话必读）
-- [`CURRENT_STATE.md`](CURRENT_STATE.md) — 当前用户指令、活跃方案、最新已验收结果与阻塞项（自动生成）
-- [`AGENTS.md`](AGENTS.md) — 跨 agent 固定安全边界与读取顺序
-- [`.qoder/basic_rule.md`](.qoder/basic_rule.md) — 项目硬性规则
-- [`.qoder/experience.md`](.qoder/experience.md) — 经验索引 + 踩坑记录
-
-### 技术参考（按需查阅）
-- [`.qoder/repowiki/zh/content/项目概述.md`](.qoder/repowiki/zh/content/项目概述.md) — 项目目标、数据集、模型矩阵
-- [`.qoder/repowiki/zh/content/环境与配置.md`](.qoder/repowiki/zh/content/环境与配置.md) — Python 环境、CUDA、编码
-- [`.qoder/repowiki/zh/content/数据系统.md`](.qoder/repowiki/zh/content/数据系统.md) — 数据路径、config_utils API
-- [`.qoder/repowiki/zh/content/模型体系/模型体系.md`](.qoder/repowiki/zh/content/模型体系/模型体系.md) — 模型架构详情
-- [`.qoder/repowiki/zh/content/训练系统/训练指南.md`](.qoder/repowiki/zh/content/训练系统/训练指南.md) — 训练脚本与命令
-- [`.qoder/repowiki/zh/content/推理评估/推理与评估.md`](.qoder/repowiki/zh/content/推理评估/推理与评估.md) — 推理评估规范
-- [`.qoder/repowiki/zh/content/故障排除.md`](.qoder/repowiki/zh/content/故障排除.md) — 常见问题速查
-
-### 指南与方案（存档参考）
-- [`01_指南与解读/`](01_指南与解读/) — 分析报告、设计方案、部署记录
-- [`02_组会汇报/`](02_组会汇报/) — 历史组会汇报
-- [`docs/`](docs/) — 实验报告与修复记录
+- [CURRENT_STATE.md](CURRENT_STATE.md) / [current_state.json](project_state/current_state.json)
+- [PROJECT_GUIDE.md](PROJECT_GUIDE.md)
+- [实验注册器](experiments/experiment_registry.json)
+- [文档注册器](project_state/document_registry.json)
+- [AGENTS.md](AGENTS.md)（仓库维护边界，不是科研结论）

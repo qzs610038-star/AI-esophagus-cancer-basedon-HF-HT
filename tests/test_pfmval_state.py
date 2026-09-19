@@ -908,12 +908,12 @@ def test_document_scan_registers_canonical_skills_adapters_and_review_lifecycle(
     assert canonical_entry["scope"] == "skill:train"
     assert canonical_entry["authority"] == "normative"
     assert canonical_entry["lifecycle"] == "active"
-    assert canonical_entry["availability"] == "tracked"
+    assert canonical_entry["availability"] == "local_only"  # Fixture has no Git index.
     adapter_entry = entries[".claude/skills/train/SKILL.md"]
     assert adapter_entry["scope"] == "skill_adapter:train"
     assert adapter_entry["authority"] == "reference"
     assert adapter_entry["lifecycle"] == "active"
-    assert adapter_entry["availability"] == "tracked"
+    assert adapter_entry["availability"] == "local_only"  # Fixture has no Git index.
     assert entries["project_state/plans/workspace_protocol.md"]["lifecycle"] == "approved_design"
     assert entries["project_state/plans/asset_refactor.md"]["lifecycle"] == "pending_review"
 
@@ -2074,7 +2074,7 @@ def test_document_scan_tracks_return_profile_schema_as_active_reference(tmp_path
 
     assert document["lifecycle"] == "active"
     assert document["authority"] == "reference"
-    assert document["availability"] == "tracked"
+    assert document["availability"] == "local_only"  # Fixture has no Git index.
 
 
 def test_document_scan_tracks_implementation_plan_landing_zone(tmp_path):
@@ -2098,10 +2098,10 @@ def test_document_scan_tracks_implementation_plan_landing_zone(tmp_path):
 
     assert document["lifecycle"] == "active"
     assert document["authority"] == "reference"
-    assert document["availability"] == "tracked"
+    assert document["availability"] == "local_only"  # Fixture has no Git index.
 
 
-def test_document_scan_treats_zero_training_gitee_pilot_plan_as_tracked_deployment_plan(tmp_path):
+def test_document_scan_treats_zero_training_gitee_pilot_plan_as_local_deployment_plan(tmp_path):
     root = make_minimal_project(tmp_path)
     plan = (
         root
@@ -2121,7 +2121,7 @@ def test_document_scan_treats_zero_training_gitee_pilot_plan_as_tracked_deployme
 
     assert document["lifecycle"] == "active"
     assert document["doc_role"] == "deployment_plan"
-    assert document["availability"] == "tracked"
+    assert document["availability"] == "local_only"  # Fixture has no Git index.
 
 
 def test_server_path_index_marks_old_config_files_as_retired_pointers():
@@ -2191,7 +2191,7 @@ def test_document_scan_tracks_return_profile_schema_as_active_reference(tmp_path
 
     assert document["lifecycle"] == "active"
     assert document["authority"] == "reference"
-    assert document["availability"] == "tracked"
+    assert document["availability"] == "local_only"  # Fixture has no Git index.
 
 
 def test_generated_view_and_registry_changes_do_not_trigger_hash_governance(
@@ -2257,6 +2257,25 @@ def test_generated_view_and_registry_changes_do_not_trigger_hash_governance(
         "experiment_registry_sha256" in message
         for message in registry_report.fail_items + registry_report.warn_items
     )
+
+
+def test_live_readme_contains_generated_state_block():
+    root = Path(__file__).resolve().parents[1]
+    state = read_json(root / "project_state" / "current_state.json")
+    registry = read_json(root / "experiments" / "experiment_registry.json")
+    block = state_module._readme_state_block(state, registry)
+    readme = (root / "README.md").read_text(encoding="utf-8").replace("\r\n", "\n")
+    assert block in readme
+
+
+def test_readme_state_block_uses_mpp_policy_and_omits_server_channel():
+    block = state_module._readme_state_block(
+        {"state_revision": 1},
+        {"current_mpp_policy": {"selected_mpp": 2, "decision": "固定经典空间残差。"}},
+    )
+    assert "数据方案固定为 **MPP2**。固定经典空间残差。" in block
+    assert "服务器通信" not in block
+    assert "实验注册器" in block
 
 
 def test_knowledge_task_downgrades_only_workspace_head_drift(monkeypatch):
