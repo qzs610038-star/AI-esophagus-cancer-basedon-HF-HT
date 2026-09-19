@@ -1,10 +1,27 @@
 # 实验进度
 
+> 当前状态版本 `265`，核对时间 `2026-09-19T18:15:10+08:00`。本页为派生导航，接纳状态以 [Registry（实验注册器）](experiment_registry.json) 为准。
+
+## 当前进展与新补登记（2026-09-19）
+
+| 对象 | 状态及下一步 |
+|---|---|
+| 全视野三编码器批次 | accepted（已接纳）；保留单 XZY 和物理支持域未确认的局限 |
+| [当前模型包](../团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md) / [首版交接包](../团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md) | 本地材料已生成；实际发送、队友验收未确认 |
+| [任务3全视野密度对照](phase2_task3_fullfov_density_ablation_v1/README.md) | 1.0.1 包已登记，本地验证完成；无正式结果登记 |
+| [第二批空间头基础模型替换](phase2_backbone_spatial_ablation_batch2_20260919/README.md) | v002 代码补登；planned，不代表训练启动或完成 |
+| [MPP2 独立复用包](mpp2_uni2h_mlp_baseline_20260906/README.md) | v001 代码补登，不替代旧 accepted 基线 |
+| LJQ 任务2/3旧协议回传 | full 与 smoke 分开登记；full 待审，smoke 仅诊断；不替代中央任务2/3新计划 |
+| Ridge / 旧 MPP 训练合同 | 已退出活跃计划；Ridge 原 rejected 状态保留 |
+
+[当前机器状态](../project_state/current_state.json) · [待决事项与建议风险](../maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md)。下方保留原数值表和旧记录，旧 next_action、W### 或门控文字仅供追溯。
+
+
 ## Phase2 全视野修复与调参结果已复核接纳（2026-09-18）
 
 - 实验 `phase2_fullfov_hpo_v1`，批次 `20260916_231813_101_7b1b9a79`：111/111 次训练和 51/51 份 XZY 外部正式预测完成。登记状态 `registered`，证据状态 `accepted`；接纳范围限本批与单外部患者。
 - 最终空间臂三种子均值：UNI2-h 内部双 PCC `0.676986 / 0.810549`、XZY 双 PCC `0.571073 / 0.683748`；Virchow2 分别为 `0.679243 / 0.811346`、`0.577756 / 0.678311`。前者是患者—通路等权平均 PCC，后者是整体展平 PCC。
-- [完整结果汇报](results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md) · [复核接纳记录](results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md)；Phase3 合同尚未回传。
+- [完整结果汇报](results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md) · [复核接纳记录](results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md)；原批次 Phase3 合同未回传；后续独立模型交接包已生成。
 
 ## 空间热启动 v1 已审核接纳（2026-09-10）
 
@@ -35,9 +52,9 @@
 
 > 依据实验登记生成；本次按用户会议决定更新相关进度。
 > 本次按会议决策更新相关导航；不生成普通文档哈希。
-> state_revision: `262`；updated_at: `2026-09-12T19:17:14+08:00`
+> state_revision: `265`；updated_at: `2026-09-19T18:15:10+08:00`
 
-## 当前 Phase2 组会决策（2026-09-12）
+## 9月12日决策及后续单点消融记录（历史时点）
 
 - 方法已固定：第一轮 `phase2_softlink_local_v2` 的 `spatial`（经典空间残差）臂；暂停进一步改进。
 - 任务2（基因预测→通路重建）、任务3（隔点训练→稠密测试）：核对已有材料，准确对齐输入、输出及操作后交另一位团队成员实践，当前待交接对齐。
@@ -47,7 +64,7 @@
 - 本次完成基础模型消融结果登记；其余组会任务和既有实验接纳状态不变。
 
 - [完整组会决策与后续任务](../project_state/governance/Phase2组会决策与论文后续任务_20260912.md)
-## 当前与待处理
+## 旧版登记明细（历史时点；下一步列不作当前调度）
 
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -82,7 +99,7 @@
 
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| mpp2_pathway_ridge_calibration_v001_20260717 | mpp2_pathway_ridge_calibration_v001_20260717 | mpp2-pathway-ridge-calibration-20260717-r003-result-20260718000516-8f133e77 | — | DIR-20260717-003 authorizes exactly one replacement execution after r002's gate-semantic failure. Internal nested-LOPO must pass before calibrator freeze and external evaluation; fold-specific OOF PCC differences are diagnostic only, while PCC invariance is checked on the final single frozen calibrator. XZY must remain unread until that freeze is recorded. | formal | failed | rejected | 暂无 | 已拒绝 | validate gate-correction regression then create one bound replacement formal job manifest | 2026-07-17T16:07:20+00:00 |
+| mpp2_pathway_ridge_calibration_v001_20260717 | mpp2_pathway_ridge_calibration_v001_20260717 | mpp2-pathway-ridge-calibration-20260717-r003-result-20260718000516-8f133e77 | — | DIR-20260717-003 authorizes exactly one replacement execution after r002's gate-semantic failure. Internal nested-LOPO must pass before calibrator freeze and external evaluation; fold-specific OOF PCC differences are diagnostic only, while PCC invariance is checked on the final single frozen calibrator. XZY must remain unread until that freeze is recorded. | formal | failed | rejected | 暂无 | 已拒绝 | closed_failed_rejected_no_automatic_rerun_or_deployment | 2026-07-17T16:07:20+00:00 |
 | 零训练Gitee往返试点W006 | gitee_roundtrip_pilot_w006_v001_20260810 | — | W006 | 未登记 | preflight | closed | pending | 暂无 | 待审查 | closed_user_approved_retained_worktree | 2026-08-11T00:00:00+00:00 |
 | online_tokens_gfnet_fold1_65t_legacy | online_tokens_gfnet_fold1_65t_legacy | legacy-import-online_tokens_gfnet_fold1_65t_legacy | — | 未登记 | — | done | historical | Val PCC=0.3914；Val loss=0.3337 | 仅历史参考 | archived_as_legacy_baseline | 2026-06-10T02:30:59 |
 | online_tokens_transformer_fold1_65t | online_tokens_transformer_fold1_65t | legacy-import-online_tokens_transformer_fold1_65t | — | 未登记 | — | done_incomplete_data | historical | Val PCC=0.3821 | 仅历史参考 | archived | 2026-06-09 |

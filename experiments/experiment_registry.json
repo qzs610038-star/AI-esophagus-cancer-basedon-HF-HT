@@ -1,18 +1,19 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T21:31:00+08:00",
+  "updated_at": "2026-09-19T18:23:22+08:00",
   "current_mpp_policy": {
-    "effective_date": "2026-09-05",
+    "effective_date": "2026-09-12",
     "selected_mpp": 2,
-    "decision": "Phase 2选定软对比联合学习作为当前研究主线，优先针对本数据调优，使其相对冻结UNI2-h加两层MLP的对照获得更清楚的指标改善；具体模型改动后续讨论。全部已列指标暂时待定，后续实验保留计算和记录，逐通路平均PCC与展平/整体PCC均保留，论文采用及主副线后续再定。指标主要用于本项目内部前后与实验对照，暂不开展跨论文实验数值优劣比较。六折留一患者继续暂缓；基因重建、稠密/稀疏验证、多基础模型和Phase 2/3衔接补充实验后置，在软对比指标改善后再推进。本次只登记决策，不启动训练或改变既有结果确认状态。",
-    "rationale": "用户本轮会议选择软对比学习继续作为主线；已有成绩尚未证实相对简单回归有稳定优势，提升是后续目标。",
-    "next_recommended_experiment": "优先讨论针对本数据的软对比改进方案；六折暂缓，其余补充实验后置；本轮不执行实验。",
-    "reference_doc": "project_state/governance/Phase2会议决策_20260905.md",
-    "directive_id": "DIR-20260905-001"
+    "decision": "固定经典空间残差，暂停方法改进；推进补充实验合同、团队交接与论文准备。",
+    "rationale": "同步已存在 DIR-20260912-002；本轮没有新增路线决定。",
+    "next_recommended_experiment": "按已登记补充计划和后续明确指令推进；此治理登记不授权训练。",
+    "reference_doc": "project_state/governance/Phase2组会决策与论文后续任务_20260912.md",
+    "directive_id": "DIR-20260912-002",
+    "governance_refreshed_at": "2026-09-19T18:15:10+08:00"
   },
   "phase2_supplemental_program": {
     "status": "classic_spatial_fixed_paper_preparation",
-    "updated_at": "2026-09-15T22:58:45+08:00",
+    "updated_at": "2026-09-19T18:15:10+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
     "source_documents": [
       "团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md",
@@ -59,11 +60,16 @@
         "n_pathways"
       ],
       "aggregation_protocol": {
-        "unit_order": "patient_then_pathway",
-        "pcc_across_patients": "fisher_z_mean_then_inverse_transform",
+        "unit_order": "within_patient_and_pathway_then_equal_arithmetic_mean",
+        "pcc_across_patients": "equal_arithmetic_mean_after_within_patient_pathway_pearson",
         "other_metrics_across_patients": "arithmetic_mean",
         "pathway_distribution": "summarize_the_30_pathway_level_estimates",
-        "pooled_pcc": "在每个评价集合将点位×通路矩阵展平后计算PCC；与患者优先逐通路平均结果分开记录"
+        "pooled_pcc": "在每个评价集合将点位×通路矩阵展平后计算PCC；与患者优先逐通路平均结果分开记录",
+        "pcc_display_directive_ids": [
+          "DIR-20260908-003",
+          "DIR-20260908-004"
+        ],
+        "historical_metric_boundary": "Fisher 汇总、患者—通路等权算术平均和整体展平是不同指标；旧值保持原义。展示修订不改变既定选模指标。"
       },
       "uncertainty_policy": {
         "ci_is_uncertainty_metadata_not_a_performance_metric": true,
@@ -135,7 +141,21 @@
         "methodological_warning": "两种PCC的统计对象与汇总不同，不能因某一种绝对值更高就认定模型更好。发表选择如在观察结果后形成，应说明其探索性并保留完整指标，不能隐藏不利结果或冒充预先指定主终点；文献定义不清也不能使两种公式等价。此为方法说明，不改变用户的暂缓裁决。",
         "model_selection_boundary": "监督预处理、模型改动、超参数及checkpoint选择仅使用训练或内部验证数据，不使用外部测试成绩调参。",
         "applicability": "全部保留不等于强行填值；SSIM无有效窗口、Top-k未预定义、单患者泛化CI不可估计等情况保留明确状态。"
-      }
+      },
+      "aggregation_protocol_history": [
+        {
+          "recorded_under_contract": "phase2_all_metrics_retained_v3_20260905",
+          "status": "historical_definition_not_current_pcc_display",
+          "aggregation_protocol": {
+            "unit_order": "patient_then_pathway",
+            "pcc_across_patients": "fisher_z_mean_then_inverse_transform",
+            "other_metrics_across_patients": "arithmetic_mean",
+            "pathway_distribution": "summarize_the_30_pathway_level_estimates",
+            "pooled_pcc": "在每个评价集合将点位×通路矩阵展平后计算PCC；与患者优先逐通路平均结果分开记录"
+          },
+          "note": "历史 Fisher 汇总数值保持原定义，不按新展示规则重命名或覆盖。"
+        }
+      ]
     },
     "deferred_designs": [
       "six_fold_leave_one_patient_out_deferred_by_user_20260905"
@@ -219,11 +239,11 @@
       }
     ],
     "decision_id": "DIR-20260912-002",
-    "current_method": "经典空间残差（第一轮 spatial 臂），方案已确定，不再改进",
+    "current_method": "经典空间残差方法保持固定；当前模型交付采用已接纳 full-FOV 批次的 UNI2-h spatial seed45，第一轮 spatial 保留为方法来源。",
     "method_reference_experiment_id": "phase2_softlink_local_v2",
     "method_reference_arm": "spatial",
     "baseline_role": "第一轮 point 单点预测臂作为基础模型替换对照；旧冻结 MPP2 基线保留为历史量化锚点",
-    "supplementary_execution_status": "handoff_contract_alignment_baseline_ablation_completed_and_paper_preparation",
+    "supplementary_execution_status": "fullfov_accepted_handoff_materials_ready_task3_code_ready_team_return_pending_review",
     "priority_order": [
       "暂停 Phase2 方法改进，固定经典空间残差",
       "对齐任务2与任务3的输入、输出和操作，交团队成员实践",
@@ -287,7 +307,7 @@
       "selection_boundary": "模型与超参数选择仅使用训练集或内部验证集，外部测试仅用于冻结方案评估"
     },
     "task_2_3_handoff": {
-      "status": "pending_contract_alignment",
+      "status": "task2_contract_pending_task3_new_code_ready_team_return_pending_review",
       "executor": "另一位团队成员（姓名待定）",
       "existing_materials": [
         "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
@@ -310,18 +330,53 @@
         "操作步骤、运行入口与模型初始化来源",
         "输出预测、标度、指标、日志和验收方式",
         "核对已有交接材料与队友实现；文件存在不代表接口已对齐或实验已完成"
-      ]
+      ],
+      "task3_experiment_id": "phase2_spatial_density_comparison_v001_20260904",
+      "task3_current_package": "experiments/phase2_task3_fullfov_density_ablation_v1",
+      "task3_code_status": "local_package_validated_formal_training_not_started",
+      "team_return_experiment_id": "mpp2_task23_scratch_ablation_20260915",
+      "team_return_evidence_status": "pending",
+      "task2_diagnostic_report": "03审计报告/Phase2任务二_319基因ssGSEA重构通路与BarcodeRepairV003标签差异_专项审计报告_20260919.md",
+      "task2_diagnostic_merge_status": "pending_user_decision_do_not_merge_into_handoff_plan"
     },
     "paper_preparation": {
-      "status": "planned",
+      "status": "first_handoff_materials_ready_team_review_and_paper_writing_pending",
       "tasks": [
         "论文结构与结果叙事",
         "正文及补充材料指标选择",
         "终版方法与复现代码整理",
         "关键架构图的内容与绘制方案"
       ],
-      "publication_metrics_finalized": false
-    }
+      "publication_metrics_finalized": false,
+      "handoff_entry": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md",
+      "delivery_check": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/版本与交付检查.md",
+      "team_delivery_status": "not_confirmed",
+      "teammate_review_status": "not_confirmed"
+    },
+    "current_model_delivery": {
+      "path": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918",
+      "entry": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md",
+      "package_version": "1.1.0",
+      "source_experiment_id": "phase2_fullfov_hpo_v1",
+      "source_result_id": "phase2-fullfov-hpo-v1-20260916-231813-result",
+      "model": "UNI2-h",
+      "arm": "spatial",
+      "seed": 45,
+      "selected_formal_epoch": 28,
+      "local_checkpoint": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/weights/formal_best.pt",
+      "local_checkpoint_exists": true,
+      "local_checkpoint_size_bytes": 4920186,
+      "validation_evidence": [
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/audit/handoff_validation.json",
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/audit/experiment_consistency.json"
+      ],
+      "validation_boundary": "记录既有本地交付验证与实体存在；不代表真实 Phase3 队列已运行或服务器现存路径已核验。",
+      "team_delivery_status": "not_confirmed"
+    },
+    "registered_code_only_experiment_ids": [
+      "phase2_backbone_spatial_ablation_batch2_20260919",
+      "mpp2_uni2h_mlp_baseline_20260906"
+    ]
   },
   "three_patient_evidence_policy": {
     "effective_date": "2026-07-09",
@@ -1940,7 +1995,7 @@
       "execution_approved_at": "2026-07-17T20:59:49+08:00",
       "created_at": "2026-07-17",
       "superseded_execution_directive_id": "DIR-20260717-002",
-      "next_action": "validate gate-correction regression then create one bound replacement formal job manifest",
+      "next_action": "closed_failed_rejected_no_automatic_rerun_or_deployment",
       "decision_gate": "DIR-20260717-003 authorizes exactly one replacement execution after r002's gate-semantic failure. Internal nested-LOPO must pass before calibrator freeze and external evaluation; fold-specific OOF PCC differences are diagnostic only, while PCC invariance is checked on the final single frozen calibrator. XZY must remain unread until that freeze is recorded.",
       "evidence_status": "rejected",
       "provenance_complete": true,
@@ -1961,7 +2016,9 @@
       "path_index_version": "1.0",
       "result_manifest_sha256": "9fa873a5d857a6919f18aa20f76e5cb7fcca8120c41410bb3327f73ff622ef91",
       "imported_at": "2026-07-17T16:07:20+00:00",
-      "result_phase": "formal"
+      "result_phase": "formal",
+      "historical_next_action": "validate gate-correction regression then create one bound replacement formal job manifest",
+      "governance_note": "2026-09-19 对齐既有 closed_failed 方案和 rejected 记录；保留旧授权与实验数值，不再把旧 replacement job 建议作为当前待办。"
     },
     {
       "id": "mpp5_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
@@ -14862,7 +14919,7 @@
       "code_version": "v001",
       "result_root": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79",
       "report_path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md",
-      "registration_scope": "completed_run_and_metrics_recorded_pending_user_review_no_acceptance",
+      "registration_scope": "completed_run_and_metrics_reviewed_and_accepted_with_recorded_limitations",
       "completion_evidence": {
         "training_tasks_completed": 111,
         "training_tasks_planned": 111,
@@ -16672,6 +16729,180 @@
       "review_record_path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md",
       "decision_summary": "独立重算162份原始预测及17组双PCC/误差汇总，与审核报告一致；一处六位小数差值尾数已修正。冻结配方仅依据内部验证，正式外部预测及身份/标准化记录匹配。",
       "accepted_conclusion": "本批固定协议下，全视野相对旧裁剪在UNI2-h历史与候选配方的内部和XZY配对主指标均较高；三编码器全视野空间臂的内部和XZY主指标均高于同空间配方去B臂。Virchow2空间臂XZY患者—通路等权PCC均值最高，UNI2-h空间臂XZY整体展平PCC更高；结论限定为本批、三种子和单外部患者。"
+    },
+    {
+      "id": "phase2_backbone_spatial_ablation_batch2_20260919",
+      "display_name": "Phase2 第二批全视野空间头基础模型替换",
+      "family": "phase2_supplemental",
+      "status": "planned",
+      "evidence_status": "planned",
+      "accepted": false,
+      "registration_status": "registered",
+      "registered_at": "2026-09-19T18:15:10+08:00",
+      "updated_at": "2026-09-19T18:15:10+08:00",
+      "registration_scope": "code_package_metadata_only_no_result_or_training_authorization",
+      "experiment_package": "experiments/phase2_backbone_spatial_ablation_batch2_20260919",
+      "code_version": "v002",
+      "entrypoint": "src/dispatch.py",
+      "code_status": "local_package_present",
+      "package_role": "planned_new_experiment_code",
+      "metric_registration_status": "no_returned_result_registered",
+      "source_evidence": [
+        "experiments/phase2_backbone_spatial_ablation_batch2_20260919/package.json",
+        "experiments/phase2_backbone_spatial_ablation_batch2_20260919/README.md"
+      ],
+      "training_authorized_by_this_registration": false,
+      "next_action": "retain_code_registration_and_follow_separate_execution_instruction",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "protocol_version": "fullfov-spatial-backbone-batch2-v1",
+      "baseline_experiment_id": "phase2_fullfov_hpo_v1"
+    },
+    {
+      "id": "mpp2_uni2h_mlp_baseline_20260906",
+      "display_name": "MPP2 UNI2-h MLP 独立复用代码包",
+      "family": "phase2_supplemental",
+      "status": "planned",
+      "evidence_status": "planned",
+      "accepted": false,
+      "registration_status": "registered",
+      "registered_at": "2026-09-19T18:15:10+08:00",
+      "updated_at": "2026-09-19T18:15:10+08:00",
+      "registration_scope": "code_package_metadata_only_no_result_or_training_authorization",
+      "experiment_package": "experiments/mpp2_uni2h_mlp_baseline_20260906",
+      "code_version": "v001",
+      "entrypoint": "src/main.py",
+      "code_status": "local_package_present",
+      "package_role": "reusable_code_not_new_accepted_baseline",
+      "metric_registration_status": "no_returned_result_registered",
+      "source_evidence": [
+        "experiments/mpp2_uni2h_mlp_baseline_20260906/package.json",
+        "experiments/mpp2_uni2h_mlp_baseline_20260906/README.md"
+      ],
+      "training_authorized_by_this_registration": false,
+      "next_action": "retain_code_registration_and_follow_separate_execution_instruction",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+      "notes": "本条只登记独立复用包，不替代原 accepted 基线，也不把默认 smoke 视为正式训练。"
+    },
+    {
+      "id": "mpp2_task23_scratch_ablation_20260915",
+      "display_name": "LJQ 任务2/3 从零训练回传（待审）",
+      "family": "phase2_team_return",
+      "status": "returned_pending_review",
+      "registration_status": "registered",
+      "evidence_status": "pending",
+      "accepted": false,
+      "registered_at": "2026-09-19T18:15:10+08:00",
+      "updated_at": "2026-09-19T18:15:10+08:00",
+      "experiment_package": "团队项目进度与结论/ljq/mpp2_task23_scratch_ablation_20260915",
+      "result_root": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915",
+      "result_id": "mpp2-task23-scratch-ablation-20260915-full-pending-result",
+      "result_phase": "returned_full_run_not_accepted",
+      "registration_scope": "returned_run_inventory_and_metric_paths_only_no_scientific_acceptance",
+      "returned_runs": [
+        {
+          "run_id": "full_20260915_105210_140_d7df166e",
+          "run_kind": "full",
+          "result_root": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915/full_20260915_105210_140_d7df166e",
+          "summary_path": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915/full_20260915_105210_140_d7df166e/batch_summary.json",
+          "metrics_path": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915/full_20260915_105210_140_d7df166e/summary_metrics.csv",
+          "reported_package_check_status": "verified",
+          "evidence_status": "pending",
+          "accepted": false,
+          "metric_rows": 10,
+          "arms": [
+            "task2_direct_reconstructed_common_truth",
+            "task2_gene_then_reconstruct",
+            "task3_dense_scratch",
+            "task3_random_equal_scratch",
+            "task3_spatial_stride_scratch"
+          ],
+          "splits": [
+            "external",
+            "internal_val"
+          ],
+          "reported_optimizer_updates": [
+            14800
+          ],
+          "verification_scope": "local_metadata_and_csv_presence_only_not_independent_scientific_acceptance"
+        },
+        {
+          "run_id": "smoke_20260915_104353_630_3e3fa2e8",
+          "run_kind": "smoke",
+          "result_root": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915/smoke_20260915_104353_630_3e3fa2e8",
+          "summary_path": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915/smoke_20260915_104353_630_3e3fa2e8/batch_summary.json",
+          "metrics_path": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915/smoke_20260915_104353_630_3e3fa2e8/summary_metrics.csv",
+          "reported_package_check_status": "verified",
+          "evidence_status": "diagnostic",
+          "accepted": false,
+          "metric_rows": 10,
+          "arms": [
+            "task2_direct_reconstructed_common_truth",
+            "task2_gene_then_reconstruct",
+            "task3_dense_scratch",
+            "task3_random_equal_scratch",
+            "task3_spatial_stride_scratch"
+          ],
+          "splits": [
+            "external",
+            "internal_val"
+          ],
+          "reported_optimizer_updates": [
+            4
+          ],
+          "verification_scope": "local_metadata_and_csv_presence_only_not_independent_scientific_acceptance"
+        }
+      ],
+      "related_experiment_ids": [
+        "phase2_gene_reconstruction_comparison_v001_20260904",
+        "phase2_spatial_density_comparison_v001_20260904"
+      ],
+      "metric_definitions_status": "raw_columns_preserved_aggregation_and_target_contract_pending_review",
+      "reported_pcc_columns": [
+        "patient_pathway_macro_pcc",
+        "flattened_pcc"
+      ],
+      "metric_source_boundary": "数值留在各运行 summary_metrics.csv；未跨任务、标签或种子合并，未生成 accepted 指标。",
+      "review_required": [
+        "任务2标签、背景基因集合与评分合同",
+        "任务3旧输入协议与新全视野方案的比较边界",
+        "full 与 smoke 分开复核"
+      ],
+      "evidence_paths": [
+        "团队项目进度与结论/ljq/任务2和任务3消融实验报告_20260915.docx",
+        "团队项目进度与结论/ljq/任务2对照组与历史基线差异说明_20260916.docx"
+      ],
+      "next_action": "user_decides_target_contract_and_bounded_acceptance_review",
+      "training_authorized_by_this_registration": false,
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "notes": "包内 verified 仅是包自身检查状态，不等于 Registry accepted；本条不替代中央任务2/3的计划记录。",
+      "known_conflicts": [
+        {
+          "reported_claim": "batch_summary.json: task2_identical_common_truth_scale = true",
+          "diagnostic_evidence": "03审计报告/Phase2任务二_319基因ssGSEA重构通路与BarcodeRepairV003标签差异_专项审计报告_20260919.md",
+          "diagnostic_finding": "专项审计C5记录两臂保存真值并不一致；与包内自检声明冲突。",
+          "status": "pending_target_contract_and_user_review",
+          "boundary": "只记录现有诊断冲突，不在治理任务中重算、修改预测或作科学接纳。"
+        }
+      ]
+    }
+  ],
+  "current_mpp_policy_history": [
+    {
+      "effective_date": "2026-09-05",
+      "selected_mpp": 2,
+      "decision": "Phase 2选定软对比联合学习作为当前研究主线，优先针对本数据调优，使其相对冻结UNI2-h加两层MLP的对照获得更清楚的指标改善；具体模型改动后续讨论。全部已列指标暂时待定，后续实验保留计算和记录，逐通路平均PCC与展平/整体PCC均保留，论文采用及主副线后续再定。指标主要用于本项目内部前后与实验对照，暂不开展跨论文实验数值优劣比较。六折留一患者继续暂缓；基因重建、稠密/稀疏验证、多基础模型和Phase 2/3衔接补充实验后置，在软对比指标改善后再推进。本次只登记决策，不启动训练或改变既有结果确认状态。",
+      "rationale": "用户本轮会议选择软对比学习继续作为主线；已有成绩尚未证实相对简单回归有稳定优势，提升是后续目标。",
+      "next_recommended_experiment": "优先讨论针对本数据的软对比改进方案；六折暂缓，其余补充实验后置；本轮不执行实验。",
+      "reference_doc": "project_state/governance/Phase2会议决策_20260905.md",
+      "directive_id": "DIR-20260905-001",
+      "status": "historical_partially_superseded",
+      "superseded_clauses_by": "DIR-20260912-002",
+      "retained_clauses": [
+        "MPP2 selected",
+        "all metrics retained",
+        "six-fold deferred"
+      ]
     }
   ]
 }

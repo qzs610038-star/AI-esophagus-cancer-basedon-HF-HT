@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-09-12T19:17:14+08:00",
-  "state_revision": 262,
+  "updated_at": "2026-09-19T18:20:43+08:00",
+  "state_revision": 265,
   "documents": [
     {
       "doc_id": "doc-fe4b048ff34a",
@@ -407,11 +407,11 @@
       "doc_id": "doc-3bbbee463565",
       "path": ".agents/skills/pfmval-audit/assets/audit-report-template.md",
       "category": "Agent Skill",
-      "scope": "historical_reference",
+      "scope": "skill_reference:pfmval-audit",
       "authority": "reference",
-      "lifecycle": "historical",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "active",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -421,17 +421,20 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "doc_role": "skill_reference",
+      "freshness": "fresh",
+      "freshness_reason": "当前审查技能实际引用，不能误标为退役技能；以主技能及 AGENTS.md 范围为准。"
     },
     {
       "doc_id": "doc-eea543c941ec",
       "path": ".agents/skills/pfmval-audit/references/evidence-boundaries.md",
       "category": "Agent Skill",
-      "scope": "historical_reference",
+      "scope": "skill_reference:pfmval-audit",
       "authority": "reference",
-      "lifecycle": "historical",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "active",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -441,7 +444,10 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "doc_role": "skill_reference",
+      "freshness": "fresh",
+      "freshness_reason": "当前审查技能实际引用，不能误标为退役技能；以主技能及 AGENTS.md 范围为准。"
     },
     {
       "doc_id": "doc-caaf0fece4e6",
@@ -930,8 +936,8 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -941,7 +947,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "local_only",
+      "freshness": "fresh",
+      "freshness_reason": "本轮定向刷新对应机器事实的导航状态。"
     },
     {
       "doc_id": "doc-06ca1fc82608",
@@ -950,8 +958,8 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -961,7 +969,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "local_only",
+      "freshness": "fresh",
+      "freshness_reason": "本轮定向刷新对应机器事实的导航状态。"
     },
     {
       "doc_id": "doc-b9e51b0eb0d0",
@@ -1722,7 +1732,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-dcade5200ce3",
@@ -1742,7 +1752,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-636656703c95",
@@ -1762,7 +1772,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b4b14aed4452",
@@ -1782,7 +1792,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-71cf9cc2a635",
@@ -1802,7 +1812,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-02c5515b6f5f",
@@ -1822,7 +1832,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-ad0270f260ab",
@@ -1848,7 +1858,7 @@
         "PCC"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-4b2b7eae2b8c",
@@ -1868,7 +1878,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f170b2048c9f",
@@ -1893,7 +1903,7 @@
         "初学者"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-aa1f5a70c671",
@@ -1913,7 +1923,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-8e4214c3095b",
@@ -1933,7 +1943,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-6219876457ef",
@@ -1960,7 +1970,7 @@
         "跨患者"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a4682a464e68",
@@ -1980,7 +1990,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-8e602e15a033",
@@ -2000,7 +2010,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-682cad4c0cc1",
@@ -2022,7 +2032,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c2d325598121",
@@ -2042,7 +2052,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-12f7b32ededd",
@@ -2062,7 +2072,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-23cf869fac6c",
@@ -2082,7 +2092,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-7e63204560b9",
@@ -2104,7 +2114,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-02dd0d031b77",
@@ -2124,7 +2134,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c8131c8195ec",
@@ -2133,8 +2143,8 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:20:43+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -2144,7 +2154,16 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked",
+      "covered_documents": [
+        "01_指南与解读/分析报告/report_figures/lora_vis_20260713/chart1_mpp_comparison.pdf",
+        "01_指南与解读/分析报告/report_figures/lora_vis_20260713/chart2_lora_comparison.pdf",
+        "01_指南与解读/分析报告/report_figures/lora_vis_20260713/chart3_patient_slope.pdf",
+        "01_指南与解读/分析报告/report_figures/lora_vis_20260713/chart4_bootstrap_ci.pdf",
+        "01_指南与解读/分析报告/report_figures/lora_vis_20260713/chart5_pathway_comparison.pdf",
+        "01_指南与解读/分析报告/report_figures/lora_vis_20260713/combined_dashboard.pdf"
+      ],
+      "coverage_policy": "导航覆盖本报告/代码包的图表、附件或协议文件；未以文件名推定内容逐字一致，也不赋予附件额外科学接纳状态。"
     },
     {
       "doc_id": "doc-62ef6f4047db",
@@ -2164,7 +2183,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-788bf4046027",
@@ -2184,7 +2203,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c7d309b77926",
@@ -2204,7 +2223,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-4ddcb830325e",
@@ -2224,7 +2243,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-e80cbb0dc4bd",
@@ -2244,7 +2263,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-4c04d5240205",
@@ -2264,7 +2283,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-9328df98eb69",
@@ -2272,9 +2291,9 @@
       "category": "分析报告",
       "scope": "mpp_training_reference",
       "authority": "reference",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -2284,7 +2303,10 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "review_due",
+      "freshness_reason": "已被后续明确决策或结案取代其当前执行用途；保留历史内容和既有科研接纳边界。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md"
     },
     {
       "doc_id": "doc-bb735af1a6b1",
@@ -2304,7 +2326,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-477858d72fcf",
@@ -2324,7 +2346,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-46539423c410",
@@ -2344,7 +2366,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-caa2b560c387",
@@ -2364,7 +2386,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only",
+      "availability": "tracked",
       "lifecycle_override": "active"
     },
     {
@@ -2385,7 +2407,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-94b4bbd2caeb",
@@ -2405,7 +2427,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only",
+      "availability": "tracked",
       "lifecycle_override": "active"
     },
     {
@@ -2428,7 +2450,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-943290bcd1e6",
@@ -2448,7 +2470,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-ac85f5635eb4",
@@ -2468,7 +2490,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-d5ac37d94c3e",
@@ -2498,7 +2520,7 @@
         "可行性评估"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-8fe357c9bfac",
@@ -2518,7 +2540,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-54de45fef40e",
@@ -2543,7 +2565,7 @@
         "改进方向"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-858237055309",
@@ -2563,7 +2585,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f09cdbaf0403",
@@ -2583,7 +2605,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-0e7a5b0645fa",
@@ -2603,7 +2625,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a9230fcc5c27",
@@ -2623,7 +2645,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a3b21c17ddd6",
@@ -2643,7 +2665,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-53de4675b773",
@@ -2663,7 +2685,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-ba98b4cc83ff",
@@ -2683,7 +2705,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-3d7601e99121",
@@ -2703,7 +2725,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-6f981b814ddc",
@@ -2723,7 +2745,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-863339b6e06e",
@@ -2743,7 +2765,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-4d06e2f274e8",
@@ -2763,7 +2785,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-1b010d9def2c",
@@ -2783,7 +2805,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-804f4fbfedff",
@@ -2803,7 +2825,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-207193a7a7ea",
@@ -2823,7 +2845,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-5e32cd85ef74",
@@ -2843,7 +2865,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-09f2221baaab",
@@ -2869,7 +2891,7 @@
         "特征天花板"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a42e78bfe1f8",
@@ -2889,7 +2911,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f0d70db9e127",
@@ -2909,7 +2931,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-e27e5de180af",
@@ -2935,7 +2957,7 @@
         "在线训练"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-15d9f62cccd4",
@@ -2955,7 +2977,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-bfa363c7c3a9",
@@ -2975,7 +2997,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-946579a70614",
@@ -2995,7 +3017,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f3092657ca03",
@@ -3020,7 +3042,7 @@
         "HE"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-45a8eb08a3d1",
@@ -3040,7 +3062,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-3baf38dc1317",
@@ -3060,7 +3082,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-ed7fb303d91d",
@@ -3086,7 +3108,7 @@
         "实验规划"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b33f15dd0971",
@@ -3111,7 +3133,7 @@
         "综述"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-fce62ad81714",
@@ -3131,7 +3153,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a66d838cd4b0",
@@ -3153,7 +3175,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-905f1ffbb3af",
@@ -3175,7 +3197,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-9739aa4b7aeb",
@@ -3200,7 +3222,7 @@
         "架构设计"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-cf69a7bdaf91",
@@ -3220,7 +3242,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-30e164b2d426",
@@ -3246,7 +3268,7 @@
         "通路分布"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-088b1ab72e4c",
@@ -3271,7 +3293,7 @@
         "评估"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-515c5e16512f",
@@ -3291,7 +3313,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-02d2881f162c",
@@ -3318,7 +3340,7 @@
         "RTX4080"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b3a0045b24d7",
@@ -3338,7 +3360,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-28a15deb2a7e",
@@ -3358,7 +3380,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-d61539f485f0",
@@ -3384,7 +3406,7 @@
         "交接模板"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-44aabc89d933",
@@ -3411,7 +3433,7 @@
         "Implementation Packet"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-342650294076",
@@ -3431,7 +3453,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-7116dbd3c118",
@@ -3473,7 +3495,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-408ca0730228",
@@ -3493,7 +3515,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-25365ec02764",
@@ -3513,7 +3535,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f00251536388",
@@ -3533,7 +3555,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-7c1ae9ff3486",
@@ -3553,7 +3575,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-29671fc27444",
@@ -3573,7 +3595,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-79e954b079da",
@@ -3593,7 +3615,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-e0558a77299b",
@@ -3613,7 +3635,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b66bfc74b3e2",
@@ -3643,7 +3665,7 @@
         "学习指南"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-379b96e712aa",
@@ -3663,7 +3685,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-624fb900b6c2",
@@ -3683,7 +3705,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-081fee8475ee",
@@ -3703,7 +3725,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-beee219cfe1d",
@@ -3723,7 +3745,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-ce20d727038e",
@@ -3743,7 +3765,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f0d642418ca1",
@@ -3763,7 +3785,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-00ccc7ed68eb",
@@ -3783,7 +3805,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-bece8ee254c0",
@@ -3810,7 +3832,7 @@
         "方案选择"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-5c6f3862cc1e",
@@ -3837,7 +3859,7 @@
       "connectivity_modes": [
         "ssh"
       ],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-204c5e1dcc4e",
@@ -3868,7 +3890,7 @@
       "connectivity_modes": [
         "ssh"
       ],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b2f3af7c6cb5",
@@ -3888,7 +3910,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-7a93ec4e548d",
@@ -3908,7 +3930,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-417d1e19e6f9",
@@ -3934,7 +3956,7 @@
         "初学者"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-e8e9907f441d",
@@ -3954,7 +3976,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-35b99c569e2c",
@@ -3974,7 +3996,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-2c7136131bbe",
@@ -3994,7 +4016,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-980a6556fda8",
@@ -4014,7 +4036,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-bda7a76d46b7",
@@ -4034,7 +4056,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-af2d1a9d78d6",
@@ -4054,7 +4076,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f6001397634d",
@@ -4074,7 +4096,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-7adf61389868",
@@ -4094,7 +4116,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-97be16e8d4b6",
@@ -4121,7 +4143,7 @@
         "初学者"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-093592103841",
@@ -4146,7 +4168,7 @@
         "初学者"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-80dd9010dc70",
@@ -4170,7 +4192,7 @@
         "架构"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-2c1189ed0fb0",
@@ -4190,7 +4212,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f311b63ea8f2",
@@ -4210,7 +4232,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-5b97bb4672c9",
@@ -4230,7 +4252,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-7dac00a3b364",
@@ -4250,7 +4272,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c152680e6a3a",
@@ -4270,7 +4292,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-d6c83332bf6b",
@@ -4312,7 +4334,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-931fb38fe2d8",
@@ -4332,7 +4354,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-6124b85413ab",
@@ -4352,7 +4374,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b1dee7a99232",
@@ -4372,7 +4394,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c2c997fcc3af",
@@ -4392,7 +4414,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-d91e5b7eee2f",
@@ -4412,7 +4434,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-9299955f63d9",
@@ -4432,7 +4454,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-1787f584a79d",
@@ -4452,7 +4474,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-5ae141ae0419",
@@ -4472,7 +4494,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-bf1e3b39e68c",
@@ -4502,7 +4524,7 @@
         "实验"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a8af2d7e8bbf",
@@ -4522,7 +4544,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f84a76bd2a03",
@@ -4544,7 +4566,7 @@
       "connectivity_modes": [
         "ssh"
       ],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-47a70f62911a",
@@ -4564,7 +4586,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-6d0685899016",
@@ -4584,7 +4606,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a90dfe973942",
@@ -4612,7 +4634,7 @@
         "通路选择"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c6d1332d60a1",
@@ -4645,7 +4667,7 @@
       "connectivity_modes": [
         "ssh"
       ],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-40e205e92e9d",
@@ -4665,7 +4687,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-822053816e9a",
@@ -4687,7 +4709,7 @@
       "connectivity_modes": [
         "remote_tunnel"
       ],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-d03361d527e6",
@@ -4712,7 +4734,7 @@
         "已关闭"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-6f59b25187c6",
@@ -4732,7 +4754,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c4bfb80248ae",
@@ -4752,7 +4774,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a4883d7b6b95",
@@ -4772,7 +4794,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-63eb93c65117",
@@ -4792,7 +4814,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-058364e7c37b",
@@ -4820,7 +4842,7 @@
         "部署方案"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-72112b3ed30e",
@@ -4840,7 +4862,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-e3de1edd8875",
@@ -4867,7 +4889,7 @@
         "手动"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-8908905b102c",
@@ -4895,7 +4917,7 @@
         "监控"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-2a8751c5530f",
@@ -4945,7 +4967,7 @@
         "Windows"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c1e997e52610",
@@ -4989,7 +5011,7 @@
       "created": "2026-06-13",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-02bc848c6a2a",
@@ -5009,7 +5031,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-47c2f8b8395b",
@@ -5033,7 +5055,7 @@
         "执行方案"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-5eebe5c279e3",
@@ -5053,7 +5075,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-3ba844a84b95",
@@ -5073,7 +5095,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-dfba8163f05f",
@@ -5115,7 +5137,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b059eaec8307",
@@ -5142,7 +5164,7 @@
         "网络通道"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-4c9dc9320139",
@@ -5162,7 +5184,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c8aa1aa25c35",
@@ -5182,7 +5204,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-344dc7e07c9a",
@@ -5202,7 +5224,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-337e14634b32",
@@ -5222,7 +5244,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f5e9f0be4915",
@@ -5242,7 +5264,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-97edf96fc8e6",
@@ -5262,7 +5284,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-bc240626561c",
@@ -5289,7 +5311,7 @@
         "W22"
       ],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-90fdd451d07c",
@@ -5309,7 +5331,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f5e0fc1e50ec",
@@ -5329,7 +5351,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-d3277b2759f7",
@@ -5349,7 +5371,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-ddc15476eddc",
@@ -5369,7 +5391,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-9a856fc78252",
@@ -5389,7 +5411,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-800548382a8e",
@@ -5409,7 +5431,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a8817cf3aba6",
@@ -5429,7 +5451,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "agent-entry",
@@ -5483,8 +5505,8 @@
       "scope": "current_state",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5494,7 +5516,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "fresh",
+      "freshness_reason": "本轮定向刷新对应机器事实的导航状态。"
     },
     {
       "doc_id": "doc-a1c5cb1e1e09",
@@ -5503,8 +5527,8 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5515,7 +5539,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "fresh",
+      "freshness_reason": "本轮定向刷新对应机器事实的导航状态。"
     },
     {
       "doc_id": "doc-8ec9a00bfd09",
@@ -5524,22 +5550,24 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
         "project_state/current_state.json"
       ],
-      "purpose": "项目门面文档，面向人类读者的项目概览与快速入门",
+      "purpose": "面向团队成员的项目概览：当前方法、已接纳结果入口，以及后续完整交接前的阅读边界",
       "created": "2026-04-18",
       "tags": [
         "README",
         "项目概览",
-        "快速入门"
+        "团队共享"
       ],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "fresh",
+      "freshness_reason": "2026-09-19 重写为面向团队共享的当前方法与已接纳结果入口。"
     },
     {
       "doc_id": "doc-f4e7bea90c0b",
@@ -5854,9 +5882,9 @@
       "category": "项目入口",
       "scope": "project_decisions",
       "authority": "reference",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5866,7 +5894,10 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "review_due",
+      "freshness_reason": "已被后续明确决策或结案取代其当前执行用途；保留历史内容和既有科研接纳边界。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md"
     },
     {
       "doc_id": "doc-cab153659acd",
@@ -5875,8 +5906,8 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5886,7 +5917,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "fresh",
+      "freshness_reason": "本轮定向刷新对应机器事实的导航状态。"
     },
     {
       "doc_id": "doc-97369b0611f5",
@@ -5895,8 +5928,8 @@
       "scope": "project_summary",
       "authority": "derived",
       "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5906,7 +5939,9 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "fresh",
+      "freshness_reason": "本轮定向刷新对应机器事实的导航状态。"
     },
     {
       "doc_id": "doc-67255eb7187b",
@@ -5934,9 +5969,9 @@
       "category": "项目入口",
       "scope": "implementation_plan_landing_zone",
       "authority": "reference",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -5946,7 +5981,10 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "review_due",
+      "freshness_reason": "已被后续明确决策或结案取代其当前执行用途；保留历史内容和既有科研接纳边界。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md"
     },
     {
       "doc_id": "doc-4907e5870007",
@@ -6096,10 +6134,10 @@
       "path": "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md",
       "category": "状态方案",
       "scope": "mpp2_pathway_ridge_calibration",
-      "authority": "normative",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6109,7 +6147,10 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "review_due",
+      "freshness_reason": "已被后续明确决策或结案取代其当前执行用途；保留历史内容和既有科研接纳边界。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md"
     },
     {
       "doc_id": "doc-ce94fd42b6c4",
@@ -6156,10 +6197,10 @@
       "path": "project_state/plans/mpp_training.md",
       "category": "状态方案",
       "scope": "mpp_training",
-      "authority": "normative",
-      "lifecycle": "active",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "authority": "reference",
+      "lifecycle": "historical",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -6169,7 +6210,10 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "tracked"
+      "availability": "tracked",
+      "freshness": "review_due",
+      "freshness_reason": "已被后续明确决策或结案取代其当前执行用途；保留历史内容和既有科研接纳边界。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md"
     },
     {
       "doc_id": "doc-6f9670b9c076",
@@ -6828,7 +6872,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-07650117cd84",
@@ -6848,7 +6892,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-7c2da512fa3e",
@@ -6868,7 +6912,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-0f46e9da3328",
@@ -6888,7 +6932,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f1a1a312a5ee",
@@ -6908,7 +6952,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-e2760e0fce42",
@@ -6928,7 +6972,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b53a59041f53",
@@ -6948,7 +6992,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-81e34fb6ee43",
@@ -6968,7 +7012,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-225c2a13baa1",
@@ -6988,7 +7032,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-6ae6cb20fbb9",
@@ -7008,7 +7052,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-2eb5eb1aeef3",
@@ -7028,7 +7072,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-ca177435559a",
@@ -7048,7 +7092,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f319595b93e2",
@@ -7068,7 +7112,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a02b4d3ed8d8",
@@ -7088,7 +7132,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f000545b8356",
@@ -7097,8 +7141,8 @@
       "scope": "historical_reference",
       "authority": "reference",
       "lifecycle": "historical",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "verified_at": "2026-09-19T18:20:43+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -7108,7 +7152,11 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked",
+      "covered_documents": [
+        "团队项目进度与结论/yzq/2026-07-18_病理课题最新进展_已审核/图片和附件/病理模型详细调研.docx"
+      ],
+      "coverage_policy": "导航覆盖本报告/代码包的图表、附件或协议文件；未以文件名推定内容逐字一致，也不赋予附件额外科学接纳状态。"
     },
     {
       "doc_id": "doc-4e56bb4272e8",
@@ -7128,7 +7176,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-e5a827664852",
@@ -7148,7 +7196,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-077187c93c61",
@@ -7168,7 +7216,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c9b4911a2c02",
@@ -7188,7 +7236,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-1324050c2be3",
@@ -7208,7 +7256,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-f273703af094",
@@ -7216,9 +7264,9 @@
       "category": "团队共享材料",
       "scope": "phase2_preparation_advice",
       "authority": "reference",
-      "lifecycle": "pending_review",
-      "verified_at": "2026-09-04T13:41:05+00:00",
-      "state_revision": 255,
+      "lifecycle": "historical",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -7228,7 +7276,10 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked",
+      "freshness": "review_due",
+      "freshness_reason": "已被后续明确决策或结案取代其当前执行用途；保留历史内容和既有科研接纳边界。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md"
     },
     {
       "doc_id": "doc-9408e6e3a004",
@@ -7248,7 +7299,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-3c0f07f64415",
@@ -7268,7 +7319,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-5bd60b9466d1",
@@ -7288,7 +7339,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-c99db4e32500",
@@ -7308,7 +7359,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-8159d1ed1ea3",
@@ -7328,7 +7379,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-a7c0bdae16fe",
@@ -7348,7 +7399,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-16db9359d294",
@@ -7368,7 +7419,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-b3bd0e946325",
@@ -7388,7 +7439,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "doc-ec1fe3177c0a",
@@ -7408,7 +7459,7 @@
       "created": "",
       "tags": [],
       "connectivity_modes": [],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "phase2-meeting-decision-20260905",
@@ -7434,7 +7485,7 @@
       "connectivity_modes": [
         "offline"
       ],
-      "availability": "local_only"
+      "availability": "tracked"
     },
     {
       "doc_id": "manual-experiment-delivery-20260905",
@@ -7443,7 +7494,7 @@
       "scope": "manual_experiment_delivery",
       "authority": "normative",
       "lifecycle": "active",
-      "availability": "local_only",
+      "availability": "tracked",
       "git_tracking_policy": "eligible_user_triggered_commit",
       "verified_at": "2026-09-05T23:02:01+08:00",
       "state_revision": 257,
@@ -7463,7 +7514,7 @@
       "scope": "manual_experiment_delivery",
       "authority": "normative",
       "lifecycle": "active",
-      "availability": "local_only",
+      "availability": "tracked",
       "git_tracking_policy": "eligible_user_triggered_commit",
       "verified_at": "2026-09-05T23:02:01+08:00",
       "state_revision": 257,
@@ -7482,11 +7533,11 @@
       "category": "分析报告",
       "scope": "phase2_softlink_local_v2",
       "authority": "derived",
-      "lifecycle": "pending_review",
-      "availability": "local_only",
+      "lifecycle": "active",
+      "availability": "tracked",
       "git_tracking_policy": "eligible_user_triggered_commit",
-      "verified_at": "2026-09-08T16:37:41+08:00",
-      "state_revision": 257,
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
       "supersedes": [],
       "superseded_by": [],
       "truth_sources": [
@@ -7505,8 +7556,8 @@
         "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/三问划分图核对_20260908.json"
       ],
       "doc_role": "experiment_results_and_mechanism_analysis",
-      "freshness": "fresh",
-      "freshness_reason": "Registered returned results, recomputed metrics and descriptive mechanism checks; causal interpretation remains pending review.",
+      "freshness": "review_due",
+      "freshness_reason": "对应实验9月11日已接纳描述性结果；历史待审字样已由后续接纳记录推进，机制因果解释不自动获接纳。",
       "related_experiment_id": "phase2_softlink_local_v2",
       "result_id": "phase2-softlink-local-v2-20260908-005325-result",
       "moved_from": "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/实验结果快速分析_20260908.md",
@@ -7540,7 +7591,13 @@
         "同患者空间块划分和邻域边界",
         "跨患者关系目标与PEaRL对齐",
         "可训练参数与小范围LoRA预算"
-      ]
+      ],
+      "covered_documents": [
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/Gemini设计说明.md",
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/原快速报告_历史底稿.md",
+        "01_指南与解读/分析报告/report_figures/phase2_softlink_v21_20260908/最终图示说明.md"
+      ],
+      "coverage_policy": "图示说明和历史底稿的导航覆盖；底稿仍是历史文档。"
     },
     {
       "doc_id": "phase2-meeting-decision-20260912",
@@ -7567,17 +7624,2584 @@
       "connectivity_modes": [
         "offline"
       ],
-      "availability": "local_only"
+      "availability": "tracked"
+    },
+    {
+      "doc_id": "phase2-softlink-four-arm-metrics-20260908",
+      "path": "01_指南与解读/分析报告/Phase2四臂逐通路指标附表_20260908.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "本表保留原结果时点。对应 phase2_softlink_local_v2 的描述性结果已于9月11日接纳，后续接纳记录覆盖原“待审”措辞；机制因果解释仍受原边界限制。 本轮只治理状态与引用边界，未复算或逐条重审正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-softlink-v21-results-mechanism-report-20260908"
+      ],
+      "governance_status_banner_added_at": "2026-09-19T18:23:22+08:00"
+    },
+    {
+      "doc_id": "phase2-softlink-three-rounds-selection-20260910",
+      "path": "01_指南与解读/分析报告/Phase2软连接三轮实验综合分析与Phase3模型选择建议_20260910.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "本报告保留9月10日的分析与候选建议。相关实验已有后续接纳记录；当前模型交付已推进至全视野 UNI2-h spatial seed45，本文旧候选顺序和“待审”措辞不作为当前状态。 本轮只治理状态与引用边界，未复算或逐条重审正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "governance_status_banner_added_at": "2026-09-19T18:23:22+08:00"
+    },
+    {
+      "doc_id": "phase2-softlink-improvement-analysis-20260910",
+      "path": "01_指南与解读/分析报告/Phase2软连接改进前后对照与原因分析报告_20260910.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "相关第一轮与对比学习批次的描述性运行和指标已于9月11日接纳，覆盖正文原“待审”时点；本次不扩大机制因果结论，也不改写原数值。 本轮只治理状态与引用边界，未复算或逐条重审正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-softlink-v21-results-mechanism-report-20260908",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "governance_status_banner_added_at": "2026-09-19T18:23:22+08:00"
+    },
+    {
+      "doc_id": "phase2-softlink-improvement-metric-table-20260910",
+      "path": "01_指南与解读/分析报告/Phase2软连接改进前后_完整指标附表_20260910.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "对应批次后续已登记接纳；保留本表原数值与指标定义，原待审说明只表示编写时点，不覆盖后续接纳记录。 本轮只治理状态与引用边界，未复算或逐条重审正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-softlink-improvement-analysis-20260910"
+      ],
+      "governance_status_banner_added_at": "2026-09-19T18:23:22+08:00"
+    },
+    {
+      "doc_id": "phase2-softlink-v4-learning-guide-20260909",
+      "path": "01_指南与解读/学习指南/Phase2软连接_从初版困境到v4对比学习改进_进阶学习指南_20260909.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "独立教学材料，明确关联结果报告和v4方案；在9月12日暂停软对比继续改进、转向经典空间路线后，不宜继续作为当前执行指南。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-meeting-decision-20260912",
+        "phase2-final-handoff-package-20260919-first"
+      ]
+    },
+    {
+      "doc_id": "phase2-fullfov-hpo-learning-guide-20260916",
+      "path": "01_指南与解读/学习指南/Phase2_全视野修复与超参数重搜索_通俗导读与学习指南_20260916.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "本导读保留建包前的教学叙述。对应代码已生成，实验已于9月18日接纳，独立模型交接包及首版资料已生成；“即将新建”等措辞不表示当前仍未实施。 本轮只治理状态与引用边界，未复算或逐条重审正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "governance_status_banner_added_at": "2026-09-19T18:23:22+08:00"
+    },
+    {
+      "doc_id": "phase2-fullfov-hpo-deployment-plan-20260916",
+      "path": "01_指南与解读/部署方案/Phase2全视野修复与超参数重搜索_部署与修复方案_20260916.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "历史实施方案快照：对应全视野批次已完成并于9月18日接纳，保留用于复现和理解当时设计，不作为未执行的训练授权。 本轮只治理状态与引用边界，未复算或逐条重审正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "governance_status_banner_added_at": "2026-09-19T18:23:22+08:00"
+    },
+    {
+      "doc_id": "phase2-fullfov-hpo-implementation-spec-20260916",
+      "path": "01_指南与解读/部署方案/Phase2全视野修复与超参数重搜索_实施细则_20260916.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "历史实施规格快照：对应批次已完成并接纳；当时的部署步骤保留用于追溯，不自动授权重复运行。 本轮只治理状态与引用边界，未复算或逐条重审正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "governance_status_banner_added_at": "2026-09-19T18:23:22+08:00"
+    },
+    {
+      "doc_id": "phase2-backbone-point-ablation-plan-20260914",
+      "path": "01_指南与解读/部署方案/Phase2_UNI与Virchow2基础模型替换消融_完整部署方案_20260914.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "历史单点输入方案：该批三种子结果已于9月15日接纳；与后续全视野空间头方案的输入及比较范围不同，不直接混排，也不自动授权重复运行。 本轮只治理状态与引用边界，未复算或逐条重审正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first",
+        "phase2-backbone-spatial-batch2-plan-20260919"
+      ],
+      "governance_status_banner_added_at": "2026-09-19T18:23:22+08:00"
+    },
+    {
+      "doc_id": "phase2-backbone-spatial-batch2-plan-20260919",
+      "path": "01_指南与解读/部署方案/Phase2第二批病理基础模型替换消融_全视野空间头探索与部署方案_20260919.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "draft",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "9月19日最新独立实施规格，指向新实验包和全视野空间头；属于后续待审方案，不能与已接纳结果混称。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": []
+    },
+    {
+      "doc_id": "phase2-handoff-paper-preparation-plan-20260919",
+      "path": "01_指南与解读/部署方案/Phase2实验汇总交接与论文准备_部署方案_20260919.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "与首版交接包同日形成的交接/论文准备方案，属于当前文档导航和后续协作事实源。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ]
+    },
+    {
+      "doc_id": "audit-reports-index-20260919",
+      "path": "03审计报告/README.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "整个03审计报告目录当前0/28登记；README是目录入口，应单独登记以避免审计材料完全脱离文档事实源。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": []
+    },
+    {
+      "doc_id": "audit-mpp2-registration-20260905",
+      "path": "03审计报告/MPP2基线与后续实验指标补充登记审计报告_20260905.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "独立的结果登记审计报告；后续实验注册与交接包已接替其当前导航作用，但报告保留审计证据。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ]
+    },
+    {
+      "doc_id": "audit-phase2-backbone-plan-20260915",
+      "path": "03审计报告/Phase2_UNI与Virchow2基础模型替换消融部署方案_独立审计报告_20260915.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "针对9月14日方案的独立审计，内容影响实验合同和当前全视野/历史单点边界，应作为审计事实源登记。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-backbone-spatial-batch2-plan-20260919"
+      ]
+    },
+    {
+      "doc_id": "audit-uni2h-patch-resolution-20260915",
+      "path": "03审计报告/UNI2h_输入Patch视野裁剪与分辨率历史溯源_专项审计报告_20260915.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "该审计直接支撑全视野修复的研究动机与输入协议边界，不能仅作为实验包内部日志。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ]
+    },
+    {
+      "doc_id": "audit-training-chain-bias-20260915",
+      "path": "03审计报告/模型训练链隐性偏差与超参数设置_专项审查报告_20260915.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "独立审查训练链与超参数，影响全视野结果解释和方法边界，应登记为审计来源。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ]
+    },
+    {
+      "doc_id": "audit-project-document-governance-20260915",
+      "path": "03审计报告/项目治理与文档登记审查报告_含文档统一管理探索_20260915.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "本报告直接涉及文档登记规则与统一管理探索，是本轮登记清理的前置审计证据；应登记但需由当前规则覆盖其旧建议。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ]
+    },
+    {
+      "doc_id": "audit-phase2-task2-ssgsea-label-gap-20260919",
+      "path": "03审计报告/Phase2任务二_319基因ssGSEA重构通路与BarcodeRepairV003标签差异_专项审计报告_20260919.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "pending_review",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "最新专项审计，直接影响任务2/任务3结果能否与历史主线比较，属于当前交接的关键待审证据。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [],
+      "handoff_plan_merge_status": "pending_user_decision_existing_hold_preserved"
+    },
+    {
+      "doc_id": "team-phase2-softlink-selection-summary-20260910",
+      "path": "团队项目进度与结论/qzs/Phase2软连接模型选型决策与三轮实验总结_20260910.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "团队共享的模型选择和技术演进总结，面向Phase3同学，属于跨目录交接入口；当前最终全视野模型已替代旧软连接交付，需更新关联而非删除正文。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ]
+    },
+    {
+      "doc_id": "team-phase2-paper-fill-guide-20260911",
+      "path": "团队项目进度与结论/qzs/Phase2基线与三份空间候选_论文填写说明_20260911.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:20:43+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "面向论文填写的团队材料，明确引用模型选择总结和论文基线；全视野接纳批次出现后需复核其候选顺序与可引用边界。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "covered_documents": [
+        "团队项目进度与结论/qzs/Phase2基线与三份空间候选_论文填写说明_20260911.pdf"
+      ],
+      "coverage_policy": "导航覆盖本报告/代码包的图表、附件或协议文件；未以文件名推定内容逐字一致，也不赋予附件额外科学接纳状态。"
+    },
+    {
+      "doc_id": "phase2-final-model-handoff-20260918",
+      "path": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "model_handoff_package",
+      "freshness": "review_due",
+      "freshness_reason": "这是首版完整交接包的直接前身，包含正式权重、输入合同和复现入口；9月19日首版包以快照方式引用它，仍需作为来源登记或与新包建立替代关系。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "coverage_scope": "enumerated_local_bundle_members",
+      "covered_documents": [
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/audit_summary.md",
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/training_reference/README.md",
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/独立复核记录_20260918.md",
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/给智能体的交接合同.md",
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/给队友的交接说明.md"
+      ],
+      "coverage_policy": "包内页及复制件通过本入口定位；不因此取得独立规范性权威或科学接纳状态。"
+    },
+    {
+      "doc_id": "phase2-final-handoff-package-20260919-first",
+      "path": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "paper_handoff_package",
+      "freshness": "review_due",
+      "freshness_reason": "9月19日最新交接包入口，汇总当前模型、已接纳全视野结果、实验档案、评审与论文填写；应作为一个包级独立登记对象，其内部材料通过 related_docs/source_refs 关联。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [],
+      "coverage_scope": "enumerated_local_bundle_members",
+      "covered_documents": [
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/01_看懂Phase2/我们在做什么.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/01_看懂Phase2/数据流程与当前模型.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/01_看懂Phase2/方法演进与未采用路线.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/01_MPP1-5同协议选择.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/02_标签修复_复核与缓存一致性.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/03_S0_S1_LoRA配对.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/04_LoRA_dropout10.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/05_Ridge校准失败与探索边界.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/06_Huber损失比较.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/07_W007四臂残差探针.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/08_softlink_local_v2四臂.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/09_softlink_contrastive_v3.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/10_空间热启动.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/11_历史单点编码器替换.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验卡片/12_全视野修复与三编码器概述.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验总表.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/已接纳全视野三模型结果.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/03_队友评审/评审任务与已知问题.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/03_队友评审/评审反馈表.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/03_队友评审/问题处理与结论变更记录.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/04_论文填写/可引用事实卡.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/04_论文填写/图表清单与图注要点.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/04_论文填写/对照现有大纲逐段填写.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/04_论文填写/缺失材料与填写建议表.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/05_后续增补/任务2交接口径.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/05_后续增补/任务3交接口径.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/05_后续增补/新模型消融交接口径.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/当前模型源码/原训练参考说明.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/当前模型源码/阅读说明.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/七月基线修复与探索说明.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/全视野代码包既有审查.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/全视野修复方案快照.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/全视野复核接纳记录.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/全视野实施细则快照.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/全视野结果汇报.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/历史单点编码器分析报告.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/原论文大纲快照.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/当前模型交接说明.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/方法冻结与后续任务记录.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/热启动外部复核说明.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/接纳记录与结果/第一轮空间四臂分析报告.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/06_证据摘录/方案代码原始结果路径表.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/交接执行与返还说明.md",
+        "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/版本与交付检查.md"
+      ],
+      "coverage_policy": "包内页及复制件通过本入口定位；不因此取得独立规范性权威或科学接纳状态。"
+    },
+    {
+      "doc_id": "phase2-task23-spatial-ablation-design-20260912",
+      "path": "团队项目进度与结论/ljq/Phase2_任务2与任务3_空间消融设计报告_20260912.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "任务2/3的原始设计输入，涉及稀疏/稠密和基因重建比较；当前9月19日专项审计发现任务2真值差异，需在交接中保留并复核。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-task23-correction-20260912",
+        "audit-phase2-task2-ssgsea-label-gap-20260919"
+      ]
+    },
+    {
+      "doc_id": "phase2-task23-correction-20260912",
+      "path": "团队项目进度与结论/ljq/Phase2任务2与任务3_重新训练与交接更正说明_20260912.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "该更正说明决定旧任务2/3包不能直接用于新合同，是当前实验包和专项审计之间的关键连接文档。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "audit-phase2-task2-ssgsea-label-gap-20260919"
+      ]
+    },
+    {
+      "doc_id": "phase3-classic-spatial-package-20260912",
+      "path": "团队项目进度与结论/qzs/Phase3_方案A经典空间残差_开箱包_20260912/README.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "superseded",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [
+        "phase2-final-model-handoff-20260918"
+      ],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "old_model_handoff_package",
+      "freshness": "review_due",
+      "freshness_reason": "旧方案A交付包，当前Phase2最终全视野模型交接包已成为新入口；仍应登记为历史交付，避免旧空间模型被误当作当前模型。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-final-model-handoff-20260918",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "replacement_scope": "当前模型交付入口；不否定旧实验的 accepted 结果。",
+      "coverage_scope": "enumerated_local_bundle_members",
+      "covered_documents": [
+        "团队项目进度与结论/qzs/Phase3_方案A经典空间残差_开箱包_20260912/同步说明.md"
+      ],
+      "coverage_policy": "包内页及复制件通过本入口定位；不因此取得独立规范性权威或科学接纳状态。"
+    },
+    {
+      "doc_id": "phase2-task23-ablation-report-20260915",
+      "path": "团队项目进度与结论/ljq/任务2和任务3消融实验报告_20260915.docx",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "pending_review",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "近期Office格式实验报告，与ljq的scratch/full结果目录同日对应；当前实验结果尚未进入中央experiments/experiment_registry，不能只因不是Markdown而漏掉。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "audit-phase2-task2-ssgsea-label-gap-20260919"
+      ]
+    },
+    {
+      "doc_id": "phase2-task2-baseline-gap-report-20260916",
+      "path": "团队项目进度与结论/ljq/任务2对照组与历史基线差异说明_20260916.docx",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "pending_review",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "近期差异说明直接关联任务2真值/基线解释，且9月19日专项审计核查同一类ssGSEA与BarcodeRepairV003差异；应登记为当前待审材料。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "audit-phase2-task2-ssgsea-label-gap-20260919"
+      ]
+    },
+    {
+      "doc_id": "phase2-new-model-meeting-report-20260912",
+      "path": "02_组会汇报/组会汇报_Phase2新模型成果与空间残差方案汇报_20260912.md",
+      "category": "02_组会汇报",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:20:43+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "02_组会汇报目录唯一近期漏登Markdown，主题直接承接9月12日方法决策；同目录qzs下有PDF导出件，PDF应作为派生复制件关联而非重复独立登记。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_docs": [
+        "phase2-meeting-decision-20260912",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "covered_documents": [
+        "团队项目进度与结论/qzs/组会汇报_Phase2新模型成果与空间残差方案汇报_20260912.pdf"
+      ],
+      "coverage_policy": "导航覆盖本报告/代码包的图表、附件或协议文件；未以文件名推定内容逐字一致，也不赋予附件额外科学接纳状态。"
+    },
+    {
+      "doc_id": "phase2-fullfov-accepted-results-20260919",
+      "path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "active",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "experiment_report",
+      "freshness": "review_due",
+      "freshness_reason": "实验已接纳，限已登记批次；标题保留审核前原名，状态见接纳记录。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_experiment_id": "phase2_fullfov_hpo_v1"
+    },
+    {
+      "doc_id": "phase2-fullfov-acceptance-record-20260918",
+      "path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "acceptance_record",
+      "freshness": "review_due",
+      "freshness_reason": "本条定位已存在的 9月18日接纳记录，本轮未新增接纳。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_experiment_id": "phase2_fullfov_hpo_v1"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-001",
+      "path": "团队项目进度与结论/ljq/mpp2_task23_scratch_ablation_20260915/README.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "pending_review",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "returned_experiment_package",
+      "freshness": "review_due",
+      "freshness_reason": "已核实文件存在；本轮未逐条审核正文，不作为已确认结论或当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "coverage_scope": "enumerated_local_bundle_members",
+      "covered_documents": [
+        "团队项目进度与结论/ljq/mpp2_task23_scratch_ablation_20260915/实验设计.md"
+      ],
+      "coverage_policy": "包内页及复制件通过本入口定位；不因此取得独立规范性权威或科学接纳状态。",
+      "related_experiment_id": "mpp2_task23_scratch_ablation_20260915"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-002",
+      "path": "团队项目进度与结论/ljq/mpp2_softlink_spatial_task23_20260912/mpp2_softlink_spatial_task23_20260912/README.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "retired_finetuning_package",
+      "freshness": "review_due",
+      "freshness_reason": "已核实文件存在；本轮未逐条审核正文，不作为已确认结论或当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "coverage_scope": "enumerated_local_bundle_members",
+      "covered_documents": [
+        "团队项目进度与结论/ljq/mpp2_softlink_spatial_task23_20260912/mpp2_softlink_spatial_task23_20260912/实验设计.md"
+      ],
+      "coverage_policy": "包内页及复制件通过本入口定位；不因此取得独立规范性权威或科学接纳状态。"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-003",
+      "path": "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/00_总管任务包.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "historical_audit_bundle",
+      "freshness": "review_due",
+      "freshness_reason": "已核实文件存在；本轮未逐条审核正文，不作为已确认结论或当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "coverage_scope": "enumerated_local_bundle_members",
+      "covered_documents": [
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/CA2代码审计报告_20260821.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/CA2代码审计报告_20260821_R2.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/划分与zscore诊断报告_20260821.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/回传模板_审批报告.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/审批回传_CA2代码审计_20260821.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/审批回传_CA2代码审计_20260821_R2.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/审批回传_划分与zscore诊断_20260821.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/审批回传_超参数审查_20260821.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/总管汇总_A与B下一步_20260821.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/总管汇总_C与是否写讨论稿_20260821.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/提示词_CA2代码审计.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/提示词_CA2代码审计_R2.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/提示词_划分与zscore诊断.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/提示词_总管汇审C并起草讨论稿.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/提示词_超参数审查.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/独立复核补充_训练绑定清单与Git留档_20260821.md",
+        "03审计报告/20260821_Phase2-MPP2-PCC瓶颈/超参数审查报告_20260821.md"
+      ],
+      "coverage_policy": "包内页及复制件通过本入口定位；不因此取得独立规范性权威或科学接纳状态。"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-004",
+      "path": "03审计报告/待审核/W007_精简结论包_20260821/审核入口.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "pending_review",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "pending_audit_bundle",
+      "freshness": "review_due",
+      "freshness_reason": "已核实文件存在；本轮未逐条审核正文，不作为已确认结论或当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "coverage_scope": "enumerated_local_bundle_members",
+      "covered_documents": [
+        "03审计报告/待审核/W007_精简结论包_20260821/source_notes.md"
+      ],
+      "coverage_policy": "包内页及复制件通过本入口定位；不因此取得独立规范性权威或科学接纳状态。"
+    },
+    {
+      "doc_id": "maintenance-log-index",
+      "path": "maintenance_logs/README.md",
+      "category": "maintenance_logs",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "maintenance_index",
+      "freshness": "review_due",
+      "freshness_reason": "维护摘要入口，日志不覆盖机器事实或用户授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "covered_documents": [
+        "maintenance_logs/daily/2026-08-30.md",
+        "maintenance_logs/daily/2026-08-31.md",
+        "maintenance_logs/daily/2026-09-03.md",
+        "maintenance_logs/daily/2026-09-04.md",
+        "maintenance_logs/daily/2026-09-07.md",
+        "maintenance_logs/daily/2026-09-08.md",
+        "maintenance_logs/daily/2026-09-10.md",
+        "maintenance_logs/daily/2026-09-15.md",
+        "maintenance_logs/daily/2026-09-16.md",
+        "maintenance_logs/daily/_template.md",
+        "maintenance_logs/weekly/2026-W35_CRH4.md",
+        "maintenance_logs/weekly/2026-W35_EWC5.md",
+        "maintenance_logs/weekly/2026-W36_CRH4.md",
+        "maintenance_logs/weekly/2026-W36_WKM3.md",
+        "maintenance_logs/weekly/2026-W37_EWC5.md",
+        "maintenance_logs/weekly/2026-W38_CRH4.md",
+        "maintenance_logs/weekly/2026-W38_EWC5.md",
+        "maintenance_logs/weekly/2026-W38_WKM3.md",
+        "maintenance_logs/weekly/_template.md"
+      ],
+      "coverage_policy": "定期维护摘要和模板按目录入口登记；不是当前结论或批准记录。"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-005",
+      "path": "01_指南与解读/分析报告/Phase2基线选择_代码缺陷与论文创新路线分析_20260905.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-006",
+      "path": "01_指南与解读/分析报告/Phase2基线选择与创新方案_通俗讲解版_20260905.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-007",
+      "path": "01_指南与解读/分析报告/Phase2整体分析报告_模型指标与补充实验_20260905.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-008",
+      "path": "01_指南与解读/分析报告/Phase2软连接升级_Fable5.1独立评审原文_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-009",
+      "path": "01_指南与解读/分析报告/Phase2软连接升级_Fable5.1评审建议筛选_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-010",
+      "path": "01_指南与解读/分析报告/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-011",
+      "path": "01_指南与解读/分析报告/Phase2软连接升级_扩展文献调研与改进方向_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-012",
+      "path": "01_指南与解读/分析报告/评审材料/Phase2软连接升级_Fable5.1评审输入与调用记录_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-013",
+      "path": "01_指南与解读/学习指南/Phase2软连接升级_三项关键审核_学习指南_v2_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-014",
+      "path": "01_指南与解读/学习指南/Phase2软连接升级_从数据流到设计判断_学习指南_v1_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-015",
+      "path": "01_指南与解读/学习指南/Phase2软连接改进前后对照与原因分析_学习指南_20260910.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-016",
+      "path": "01_指南与解读/学习指南/从关系对齐到远端借力_三轮软连接对比学习回顾_20260912.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "pending_review",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "已核实文件存在；正文现行范围尚未逐项复核，保守待审。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-017",
+      "path": "01_指南与解读/学习指南/软连接方案三轮改进后的疑问_20260911.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-018",
+      "path": "01_指南与解读/部署方案/Phase2_DualRelation_Experiment_Plan_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-019",
+      "path": "01_指南与解读/部署方案/Phase2完整继承单点模型与空间修正_部署方案_v1_20260910.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-020",
+      "path": "01_指南与解读/部署方案/Phase2软连接_LoRA任务适配调研与方案补充_20260908.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-021",
+      "path": "01_指南与解读/部署方案/Phase2软连接_对比学习改进实验方案_v3_20260908.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-022",
+      "path": "01_指南与解读/部署方案/Phase2软连接_对比学习改进实验方案_v4_最终建议版_20260908.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-023",
+      "path": "01_指南与解读/部署方案/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-024",
+      "path": "01_指南与解读/部署方案/Phase2软连接升级_决策与执行记录_v2_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-025",
+      "path": "01_指南与解读/部署方案/Phase2软连接升级_新对话编码提示词_v2_1_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-026",
+      "path": "01_指南与解读/部署方案/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-027",
+      "path": "01_指南与解读/部署方案/Phase2软连接升级_最终部署方案_v2_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-028",
+      "path": "01_指南与解读/部署方案/Phase2软连接升级_通路关系与局部空间联合方案_v1_20260907.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-029",
+      "path": "01_指南与解读/部署方案/Phase2软连接改进与空间网络调研_GPT引导方案_20260906.md",
+      "category": "01_指南与解读",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-030",
+      "path": "project_state/governance/G10_W001_mpp2_huber_loss_audit_receipt_20260728.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-031",
+      "path": "project_state/governance/G11_W001_diagnostic_ux_improvement_receipt_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-032",
+      "path": "project_state/governance/G11_W001_environment_probe_audit_receipt_20260728.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-033",
+      "path": "project_state/governance/G12_R_W001_result_bundle_final_audit_receipt_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-034",
+      "path": "project_state/governance/G12_R_W001_result_bundle_server_operation_card_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-035",
+      "path": "project_state/governance/G12_W001_mpp2_huber_loss_execution_audit_receipt_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-036",
+      "path": "project_state/governance/G12_W001_mpp2_huber_loss_run_return_receipt_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-037",
+      "path": "project_state/governance/G12_job_runner_v2_repair_receipt_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-038",
+      "path": "project_state/governance/G12_server_roundtrip_troubleshooting_review_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-039",
+      "path": "project_state/governance/G13_W001_dual_bundle_atomic_import_audit_receipt_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-040",
+      "path": "project_state/governance/G14_W001_paired_scientific_closeout_receipt_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-041",
+      "path": "project_state/governance/G15_main_integration_and_G16_readiness_receipt_20260730.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-042",
+      "path": "project_state/governance/G15_server_execution_roundtrip_v1_audit_receipt_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-043",
+      "path": "project_state/governance/G15_server_execution_roundtrip_v1_implementation_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-044",
+      "path": "project_state/governance/G15_server_execution_roundtrip_v1_test_matrix_20260729.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-045",
+      "path": "project_state/governance/G16_scientific_records_lifecycle_v1_audit_receipt_20260730.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-046",
+      "path": "project_state/governance/W001_W004_local_code_recovery_audit_20260809.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-047",
+      "path": "project_state/governance/W006_pilot_finding_active_workspace_head_check_20260810.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-048",
+      "path": "project_state/governance/g10_mpp2_huber_loss_paired_v001_20260728_user_approval.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-049",
+      "path": "project_state/governance/local_code_git_governance_v1_execution_record_20260809.md",
+      "category": "project_state",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-050",
+      "path": "maintenance_logs/指令与技能冲突修复_20260911.md",
+      "category": "maintenance_logs",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-051",
+      "path": "maintenance_logs/独立实验包实施与验收_20260905.md",
+      "category": "maintenance_logs",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-052",
+      "path": "maintenance_logs/规则技能自检修复_20260912.md",
+      "category": "maintenance_logs",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "旧路线、旧回传流程或已发生事件的历史材料；保留当时证据，不作为当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-053",
+      "path": "团队项目进度与结论/ljq/Phase2任务2与任务3_智能体交接合同_20260914.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "9月14日队友从零训练合同入口；对实际9月15日回传的适用性与科研结论仍待审。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-054",
+      "path": "团队项目进度与结论/ljq/Phase2任务2与任务3_队友交接说明_20260914.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "9月14日队友从零训练合同入口；对实际9月15日回传的适用性与科研结论仍待审。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-055",
+      "path": "团队项目进度与结论/ljq/README.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "pending_review",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "已核实文件存在；正文现行范围尚未逐项复核，保守待审。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-056",
+      "path": "团队项目进度与结论/qzs/Phase2软连接方案升级指南.md",
+      "category": "团队项目进度与结论",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "pending_review",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "已核实文件存在；正文现行范围尚未逐项复核，保守待审。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-057",
+      "path": "03审计报告/GIT_INDEX.md",
+      "category": "03审计报告",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:23:22+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "reference_document",
+      "freshness": "review_due",
+      "freshness_reason": "8月目录状态快照，当前审计约束与入口以 AGENTS.md、pfmval-audit 和 03审计报告/README.md 为准。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-058",
+      "path": "experiments/phase2_task3_fullfov_density_ablation_v1/README.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "experiment_package_readme",
+      "freshness": "review_due",
+      "freshness_reason": "仅登记实际代码包使用说明；实验、训练与接纳状态分别以对应 Registry 记录为准。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_experiment_id": "phase2_spatial_density_comparison_v001_20260904"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-059",
+      "path": "experiments/phase2_backbone_point_ablation_20260914/README.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:20:43+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "experiment_package_readme",
+      "freshness": "review_due",
+      "freshness_reason": "仅登记实际代码包使用说明；实验、训练与接纳状态分别以对应 Registry 记录为准。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_experiment_id": "phase2_pathology_model_benchmark_v001_20260904",
+      "covered_documents": [
+        "experiments/phase2_backbone_point_ablation_20260914/docs/protocol.md"
+      ],
+      "coverage_policy": "导航覆盖本报告/代码包的图表、附件或协议文件；未以文件名推定内容逐字一致，也不赋予附件额外科学接纳状态。"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-060",
+      "path": "experiments/results/phase2_backbone_point_ablation_20260914/20260915_141640_852394_125780/analysis/three_seed/三种子统一分析报告.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "experiment_evidence_document",
+      "freshness": "review_due",
+      "freshness_reason": "已核实文件存在；本轮未逐条审核正文，不作为已确认结论或当前执行授权。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_experiment_id": "phase2_pathology_model_benchmark_v001_20260904"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-061",
+      "path": "experiments/phase2_fullfov_hpo_v1/README.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "experiment_package_readme",
+      "freshness": "review_due",
+      "freshness_reason": "仅登记实际代码包使用说明；实验、训练与接纳状态分别以对应 Registry 记录为准。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_experiment_id": "phase2_fullfov_hpo_v1"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-062",
+      "path": "experiments/phase2_backbone_spatial_ablation_batch2_20260919/README.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "experiment_package_readme",
+      "freshness": "review_due",
+      "freshness_reason": "仅登记实际代码包使用说明；实验、训练与接纳状态分别以对应 Registry 记录为准。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_experiment_id": "phase2_backbone_spatial_ablation_batch2_20260919"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-063",
+      "path": "experiments/mpp2_uni2h_mlp_baseline_20260906/README.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "experiment_package_readme",
+      "freshness": "review_due",
+      "freshness_reason": "仅登记实际代码包使用说明；实验、训练与接纳状态分别以对应 Registry 记录为准。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "related_experiment_id": "mpp2_uni2h_mlp_baseline_20260906"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-064",
+      "path": ".agents/skills/pfmval-audit/references/minimal-review.md",
+      "category": ".agents",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "skill_reference",
+      "freshness": "review_due",
+      "freshness_reason": "当前 pfmval-audit 主技能直接使用的操作参考；随技能主源适用，不增加独立审批。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-supplement-20260919-065",
+      "path": ".agents/skills/pfmval-audit/assets/minimal-review-record.md",
+      "category": ".agents",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "skill_reference",
+      "freshness": "review_due",
+      "freshness_reason": "当前 pfmval-audit 主技能直接使用的操作参考；随技能主源适用，不增加独立审批。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "server-load-check-package-20260905",
+      "path": "experiments/server_load_check_20260905/README.md",
+      "category": "experiments",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "historical",
+      "availability": "tracked",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "diagnostic_package_readme",
+      "freshness": "review_due",
+      "freshness_reason": "仅服务器抽样读取诊断包；已有47 PASS、3 WARN记录，不等于科研结果或完整训练就绪。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-health-scan-20260919",
+      "path": "maintenance_logs/项目事实与规则健康扫描_20260919.md",
+      "category": "maintenance_logs",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "historical",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "maintenance_report",
+      "freshness": "review_due",
+      "freshness_reason": "这是治理执行前的状态快照；已修复项以同日完成记录为准。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "governance-health-refresh-20260919",
+      "path": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "category": "maintenance_logs",
+      "scope": "phase2_handoff_governance",
+      "authority": "derived",
+      "lifecycle": "active",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:15:10+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "project_state/current_state.json",
+        "experiments/experiment_registry.json",
+        "project_state/directives.jsonl"
+      ],
+      "doc_role": "maintenance_report",
+      "freshness": "review_due",
+      "freshness_reason": "本次确定治理工作的执行记录和待用户裁决项。",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance"
+    },
+    {
+      "doc_id": "phase2-meeting-fullfov-task2-discussion-20260919",
+      "path": "02_组会汇报/组会汇报_全视野修复_超参搜索_基础模型消融与任务二奇异性研讨_20260919.md",
+      "category": "组会汇报",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "pending_review",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:20:43+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "experiments/experiment_registry.json",
+        "project_state/current_state.json"
+      ],
+      "freshness": "review_due",
+      "freshness_reason": "本轮新增材料已登记待审；发现XZY盲测和显著/机制证明表述超出现有接纳范围，正文保留，待用户决定定向修订。",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+      "review_findings": [
+        {
+          "line_at_review": 88,
+          "claim": "外部盲测集 XZY",
+          "concern": "已接纳记录明确XZY不是全新盲测；建议改为外部测试患者并保留复用限制。"
+        },
+        {
+          "line_at_review": 194,
+          "claim": "有力证明……显著补偿",
+          "concern": "已接纳范围为本批描述性指标差异，不自动包含统计显著性或机制因果证明；建议降为限定范围的描述。"
+        }
+      ]
+    },
+    {
+      "doc_id": "phase2-spatial-warmstart-external-review-20260910",
+      "path": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946/analysis/external_xzy_review.md",
+      "category": "实验复核",
+      "scope": "phase2_handoff_governance",
+      "authority": "reference",
+      "lifecycle": "active",
+      "availability": "local_only",
+      "verified_at": "2026-09-19T18:20:43+08:00",
+      "state_revision": 265,
+      "supersedes": [],
+      "superseded_by": [],
+      "truth_sources": [
+        "experiments/experiment_registry.json",
+        "project_state/current_state.json"
+      ],
+      "freshness": "review_due",
+      "freshness_reason": "既有空间热启动 accepted 记录的直接复核文档；接纳限单种子与单外部患者，非本轮新增接纳。",
+      "verification_scope": "existence_and_document_role_not_automatic_content_acceptance",
+      "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md"
     }
   ],
   "summary": {
-    "total": 358,
-    "live": 286,
+    "total": 459,
+    "live": 387,
     "missing": 72,
-    "active": 33,
-    "superseded": 11,
-    "historical": 240,
-    "pending_review": 2,
-    "approved_design": 0
+    "active": 59,
+    "superseded": 12,
+    "historical": 306,
+    "pending_review": 9,
+    "approved_design": 0,
+    "draft": 1
   }
 }

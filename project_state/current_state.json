@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "state_revision": 264,
-  "updated_at": "2026-09-18T18:08:47+08:00",
+  "state_revision": 265,
+  "updated_at": "2026-09-19T18:15:10+08:00",
   "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
     "DIR-20260710-003",
@@ -24,21 +24,11 @@
     "DIR-20260908-001",
     "DIR-20260908-002",
     "DIR-20260912-001",
-    "DIR-20260912-002"
+    "DIR-20260912-002",
+    "DIR-20260908-003",
+    "DIR-20260908-004"
   ],
   "active_plans": {
-    "mpp_training": {
-      "doc_id": "plan-mpp-training",
-      "path": "project_state/plans/mpp_training.md",
-      "status": "active",
-      "approved_at": "2026-07-09T00:00:00+08:00"
-    },
-    "mpp2_pathway_ridge_calibration": {
-      "doc_id": "doc-2f635595aea6",
-      "path": "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md",
-      "status": "active",
-      "approved_at": "2026-07-17T20:19:30+08:00"
-    },
     "manual_experiment_delivery": {
       "doc_id": "manual-experiment-delivery-20260905",
       "path": "project_state/governance/独立实验包与手动回传_20260905.md",
@@ -97,27 +87,33 @@
       "owner": "用户",
       "due_date": "2026-09-18",
       "due_time": "今晚",
-      "status": "todo",
+      "status": "materials_ready_delivery_unconfirmed",
       "task": "把修复好的最新 Phase 2 基线方案模型及配置教程发给团队成员",
       "deliverables": [
         "最新 Phase 2 基线方案与模型文件或准确权重位置",
         "配置教程与运行说明"
       ],
-      "note": "发送前明确对应批次及待审核结果状态；本记录不表示已发送或模型权重实体已在本机核实。"
+      "note": "全视野结果已于 9月18日接纳；本地正式权重与配置交接包存在。没有实际发送或队友验收的确认记录。",
+      "materials_status": "ready",
+      "delivery_status": "not_confirmed",
+      "materials_path": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918"
     },
     {
       "id": "20260918_19_phase2_exploration_materials",
       "owner": "用户",
       "start_date": "2026-09-18",
       "due_date": "2026-09-19",
-      "status": "todo",
+      "status": "first_version_ready_delivery_and_review_unconfirmed",
       "task": "整理 MPP2 确定后的 Phase 2 实验完整资料，汇总给团队成员供后续论文撰写",
       "scope": "纳入成功、未改善及失败的探索，逐项保留方案、代码与配置、数据和评估口径、内部与外部结果、停止原因及结论状态。",
-      "note": "整理与发送均为待办；不能把待审核结果写为已接纳结论。"
+      "note": "9月19日首版交接包已生成并完成既有文字修订；实际发送、队友评审及论文填写未确认。",
+      "materials_status": "first_version_ready",
+      "delivery_status": "not_confirmed",
+      "materials_path": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版"
     }
   ],
   "pending_result_ids": [
-    "phase2-fullfov-hpo-v1-20260916-231813-result"
+    "mpp2-task23-scratch-ablation-20260915-full-pending-result"
   ],
   "latest_accepted_result_ids": [
     "mpp1_std10val_xzy_ext_uni2h_mlp_20260706",
@@ -133,35 +129,42 @@
     "mpp2_huber_loss_paired_v001_20260728",
     "mpp2_cpgcr_probe_v001_20260811",
     "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
-    "phase2-backbone-point-ablation-20260915-three-seed-result"
+    "phase2-backbone-point-ablation-20260915-three-seed-result",
+    "phase2-softlink-local-v2-20260908-005325-result",
+    "phase2-softlink-contrastive-v3-20260909-101623-result",
+    "phase2-spatial-warmstart-v1-20260910-190620-result",
+    "phase2-fullfov-hpo-v1-20260916-231813-result"
   ],
   "phase2_program": {
     "status": "classic_spatial_fixed_paper_preparation",
-    "updated_at": "2026-09-18T18:08:47+08:00",
+    "updated_at": "2026-09-19T18:15:10+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
     "latest_result_review": {
       "experiment_id": "phase2_fullfov_hpo_v1",
       "result_id": "phase2-fullfov-hpo-v1-20260916-231813-result",
       "batch_id": "20260916_231813_101_7b1b9a79",
-      "status": "registered_pending_user_review",
+      "status": "accepted",
       "training_tasks_completed": 111,
       "internal_predictions_scored": 111,
       "external_xzy_predictions_scored": 51,
-      "finding": "全视野输入相对旧裁剪在本批配对实验中提升内部和XZY逐患者逐通路平均PCC；最终三种子消融中经典空间臂相对同配方去B臂为正。此为待审核探索结果，不改变已接纳结论。",
+      "finding": "本批固定协议下，全视野相对旧裁剪在UNI2-h历史与候选配方的内部和XZY配对主指标均较高；三编码器全视野空间臂的内部和XZY主指标均高于同空间配方去B臂。Virchow2空间臂XZY患者—通路等权PCC均值最高，UNI2-h空间臂XZY整体展平PCC更高；结论限定为本批、三种子和单外部患者。",
       "limitations": [
-        "外部仅XZY一名患者，且不是全新盲测",
-        "patch_coverage_size缺失，物理图像支持域与划分无重叠尚未独立确认",
-        "Phase3合同导出尚未回传"
+        "外部仅 XZY 一名患者，且不是全新盲测",
+        "patch_coverage_size 缺失，物理图像支持域与划分无重叠尚未独立确认",
+        "原训练批次 Phase3 合同导出未回传；后续独立模型交接包已在本地生成，两者分别记录"
       ],
-      "report_path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md"
+      "report_path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md",
+      "accepted_at": "2026-09-18T21:31:00+08:00",
+      "review_record_path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md"
     },
     "planned_experiment_ids": [
       "phase2_gene_reconstruction_comparison_v001_20260904",
       "phase2_spatial_density_comparison_v001_20260904"
     ],
     "pending_inputs": [
-      "task_2_3_input_output_and_operation_contracts",
-      "handoff_team_member_identity",
+      "task2_target_and_scoring_contract",
+      "team_return_acceptance_scope",
+      "handoff_delivery_and_member_confirmation",
       "final_publication_metric_selection",
       "paper_code_and_architecture_figure_plan"
     ],
@@ -176,11 +179,11 @@
       "project_state/governance/Phase2组会决策与论文后续任务_20260912.md"
     ],
     "decision_id": "DIR-20260912-002",
-    "current_method": "经典空间残差（第一轮 spatial 臂），方案已确定，不再改进",
+    "current_method": "经典空间残差方法保持固定；当前模型交付采用已接纳 full-FOV 批次的 UNI2-h spatial seed45，第一轮 spatial 保留为方法来源。",
     "method_reference_experiment_id": "phase2_softlink_local_v2",
     "method_reference_arm": "spatial",
     "baseline_role": "第一轮 point 单点预测臂作为基础模型替换对照；旧冻结 MPP2 基线保留为历史量化锚点",
-    "supplementary_execution_status": "baseline_ablation_accepted_fullfov_result_pending_review_and_team_materials_preparation",
+    "supplementary_execution_status": "fullfov_accepted_handoff_materials_ready_task3_code_ready_team_return_pending_review",
     "priority_order": [
       "暂停 Phase2 方法改进，固定经典空间残差",
       "对齐任务2与任务3的输入、输出和操作，交团队成员实践",
@@ -248,7 +251,7 @@
       "selection_boundary": "模型与超参数选择仅使用训练集或内部验证集，外部测试仅用于冻结方案评估"
     },
     "task_2_3_handoff": {
-      "status": "pending_contract_alignment",
+      "status": "task2_contract_pending_task3_new_code_ready_team_return_pending_review",
       "executor": "另一位团队成员（姓名待定）",
       "existing_materials": [
         "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
@@ -271,18 +274,53 @@
         "操作步骤、运行入口与模型初始化来源",
         "输出预测、标度、指标、日志和验收方式",
         "核对已有交接材料与队友实现；文件存在不代表接口已对齐或实验已完成"
-      ]
+      ],
+      "task3_experiment_id": "phase2_spatial_density_comparison_v001_20260904",
+      "task3_current_package": "experiments/phase2_task3_fullfov_density_ablation_v1",
+      "task3_code_status": "local_package_validated_formal_training_not_started",
+      "team_return_experiment_id": "mpp2_task23_scratch_ablation_20260915",
+      "team_return_evidence_status": "pending",
+      "task2_diagnostic_report": "03审计报告/Phase2任务二_319基因ssGSEA重构通路与BarcodeRepairV003标签差异_专项审计报告_20260919.md",
+      "task2_diagnostic_merge_status": "pending_user_decision_do_not_merge_into_handoff_plan"
     },
     "paper_preparation": {
-      "status": "planned",
+      "status": "first_handoff_materials_ready_team_review_and_paper_writing_pending",
       "tasks": [
         "论文结构与结果叙事",
         "正文及补充材料指标选择",
         "终版方法与复现代码整理",
         "关键架构图的内容与绘制方案"
       ],
-      "publication_metrics_finalized": false
-    }
+      "publication_metrics_finalized": false,
+      "handoff_entry": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md",
+      "delivery_check": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/版本与交付检查.md",
+      "team_delivery_status": "not_confirmed",
+      "teammate_review_status": "not_confirmed"
+    },
+    "current_model_delivery": {
+      "path": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918",
+      "entry": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md",
+      "package_version": "1.1.0",
+      "source_experiment_id": "phase2_fullfov_hpo_v1",
+      "source_result_id": "phase2-fullfov-hpo-v1-20260916-231813-result",
+      "model": "UNI2-h",
+      "arm": "spatial",
+      "seed": 45,
+      "selected_formal_epoch": 28,
+      "local_checkpoint": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/weights/formal_best.pt",
+      "local_checkpoint_exists": true,
+      "local_checkpoint_size_bytes": 4920186,
+      "validation_evidence": [
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/audit/handoff_validation.json",
+        "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/audit/experiment_consistency.json"
+      ],
+      "validation_boundary": "记录既有本地交付验证与实体存在；不代表真实 Phase3 队列已运行或服务器现存路径已核验。",
+      "team_delivery_status": "not_confirmed"
+    },
+    "registered_code_only_experiment_ids": [
+      "phase2_backbone_spatial_ablation_batch2_20260919",
+      "mpp2_uni2h_mlp_baseline_20260906"
+    ]
   },
   "blocked_actions": [
     "formal_training_without_user_approval",
@@ -420,6 +458,22 @@
       "status": "historical",
       "approved_at": "2026-07-11T00:00:00+08:00",
       "superseded_by": "DIR-20260905-002"
+    },
+    "mpp_training": {
+      "doc_id": "plan-mpp-training",
+      "path": "project_state/plans/mpp_training.md",
+      "status": "historical",
+      "approved_at": "2026-07-09T00:00:00+08:00",
+      "archived_at": "2026-09-19T18:15:10+08:00",
+      "archive_reason": "历史 MPP 训练合同；当前交付与方法入口已转为独立包及 Phase2 经典空间路线，旧 accepted 基线保留。"
+    },
+    "mpp2_pathway_ridge_calibration": {
+      "doc_id": "doc-2f635595aea6",
+      "path": "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md",
+      "status": "historical",
+      "approved_at": "2026-07-17T20:19:30+08:00",
+      "archived_at": "2026-09-19T18:15:10+08:00",
+      "archive_reason": "方案已有 closed_failed 结案，实验 rejected，不再作为活跃执行计划。"
     }
   },
   "historical_plan_reviews": {
@@ -552,5 +606,11 @@
       "import_anndata",
       "server_phase3_escc_mpp2_raw_scores"
     ]
+  },
+  "governance_maintenance": {
+    "updated_at": "2026-09-19T18:15:10+08:00",
+    "record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
+    "scope": "confirmed_registration_and_document_governance_only",
+    "new_result_acceptances": 0
   }
 }

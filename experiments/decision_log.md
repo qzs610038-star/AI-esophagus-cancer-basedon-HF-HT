@@ -3,6 +3,8 @@
 > Key architectural and strategic decisions for the PFMval project.
 > See `experiment_registry.json` for per-experiment decision gates.
 
+> **历史记录边界（2026-09-19）**：下表保留当时的决策原文和后果，日期较早的 Gitee、W###、工作树、SSH/Tunnel 或旧 LoRA 建议不得直接解释为当前执行指令。当前项目约束见 [`AGENTS.md`](../AGENTS.md)，当前实验交付见 [`独立实验包与手动回传`](../project_state/governance/独立实验包与手动回传_20260905.md)，当前实验状态和接纳结论以 [`experiment_registry.json`](experiment_registry.json) 及对应接纳记录为准。引用旧决策时须同时标注其历史范围和是否已被后续同一对象决策替代。
+
 | Date | Decision | Reason | Consequence |
 |------|----------|--------|-------------|
 | 2026-07-11 | **Tracked project state and Gitee-only server exchange become mandatory** | Mutable instructions were duplicated across ignored CLAUDE/.claude files, while old SSH/Tunnel guidance remained searchable. The server currently has no allowed direct connection channel. | `project_state/current_state.json` + directives/document registry become the mutable state source; `CURRENT_STATE.md` and Dashboard are generated views. Server jobs/results use bounded Gitee envelopes. Direct HTTP command scripts are disabled. |
