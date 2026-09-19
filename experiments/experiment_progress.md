@@ -1,5 +1,11 @@
 # 实验进度
 
+## Phase2 全视野修复与调参结果已复核接纳（2026-09-18）
+
+- 实验 `phase2_fullfov_hpo_v1`，批次 `20260916_231813_101_7b1b9a79`：111/111 次训练和 51/51 份 XZY 外部正式预测完成。登记状态 `registered`，证据状态 `accepted`；接纳范围限本批与单外部患者。
+- 最终空间臂三种子均值：UNI2-h 内部双 PCC `0.676986 / 0.810549`、XZY 双 PCC `0.571073 / 0.683748`；Virchow2 分别为 `0.679243 / 0.811346`、`0.577756 / 0.678311`。前者是患者—通路等权平均 PCC，后者是整体展平 PCC。
+- [完整结果汇报](results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md) · [复核接纳记录](results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md)；Phase3 合同尚未回传。
+
 ## 空间热启动 v1 已审核接纳（2026-09-10）
 
 - 实验：`phase2_spatial_warmstart_v1`；运行：`20260910_190620_252_10e4d946`；单种子42。
@@ -35,10 +41,10 @@
 
 - 方法已固定：第一轮 `phase2_softlink_local_v2` 的 `spatial`（经典空间残差）臂；暂停进一步改进。
 - 任务2（基因预测→通路重建）、任务3（隔点训练→稠密测试）：核对已有材料，准确对齐输入、输出及操作后交另一位团队成员实践，当前待交接对齐。
-- 基础模型消融：在同轮 `point`（单点预测）基线上比较 UNI2-h 与另外2至3个模型，Virchow2为候选；名单与协议待定。空间残差方案保持固定。
-- “UNI2-h最好”是待实验验证的论文叙事；尚无本次新增模型比较结果。
+- 基础模型消融：UNI2-h、UNI 与 Virchow2-CLS 已在统一单点预测协议下完成三随机种子比较，结果已复核并登记为 accepted（已接纳）。空间残差方案保持固定。
+- 登记结论：在固定历史输入与统一单点预测协议下，Virchow2-CLS 在三种子内部验证的预定选模指标上稳定、小幅优于 UNI2-h；外部 XZY 的逐通路等权 PCC 较高，但整体展平 PCC和误差指标未优于 UNI2-h。UNI 在内部与外部均整体落后
 - 后续重心：论文结构与指标选择、代码整理、关键架构图。全部指标继续保留，两种PCC并列，论文主副指标待定。
-- 本次只更新状态；旧改进优先排序被取代，既有实验结果与接纳状态不变。
+- 本次完成基础模型消融结果登记；其余组会任务和既有实验接纳状态不变。
 
 - [完整组会决策与后续任务](../project_state/governance/Phase2组会决策与论文后续任务_20260912.md)
 ## 当前与待处理
@@ -47,7 +53,6 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | mpp2_online_cache_parity_v003_20260711 | mpp2_online_cache_parity_v003_20260711 | legacy-import-mpp2_online_cache_parity_v003_20260711 | — | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. | preflight | done | planned | 暂无 | 待审查 | prepare_paired_smoke | — |
 | Phase 2 基因预测后通路重建对照 | phase2_gene_reconstruction_comparison_v001_20260904 | — | — | Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed. | formal | planned | planned | 暂无 | 待审查 | 准备输入输出与操作合同；模型替换限单点基线 | — |
-| Phase 2 多病理模型公平比较 | phase2_pathology_model_benchmark_v001_20260904 | — | — | Historical model numbers are references only until rerun under the common protocol. | formal | planned | planned | 暂无 | 待审查 | 准备输入输出与操作合同；模型替换限单点基线 | — |
 | Phase 2 稀疏训练与稠密测试对照 | phase2_spatial_density_comparison_v001_20260904 | — | — | Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged. | formal | planned | planned | 暂无 | 待审查 | 准备输入输出与操作合同；模型替换限单点基线 | — |
 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | — | — | 2026-07-09 superseded: old 3-patient/JFX-affected spatial Token+LoRA gate is tuning reference only. Do not launch before MPP2 new-data LoRA baseline is established. | — | paused | pending | 暂无 | 待审查 | paused_mpp2_lora_first | — |
 
@@ -64,6 +69,7 @@
 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | mpp3_barcode_repair_v003_frozen_recheck_20260711 | mpp3-repair-v003-recheck-20260711-result-20260711204217-fb8a85ac | — | DIR-20260711-006 satisfied by validated result import with bbox embargo preserved; use this repaired formal result for reporting and do not redispatch automatically. | formal | done | accepted | Val PCC=0.8225；Val loss=0.3488；XZY PCC=0.6436；XZY MAE=0.6383；Test loss=0.6880 | 已接纳 | closed_use_accepted_repaired_result_for_reporting | 2026-07-11T12:51:00+00:00 |
 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | mpp4_barcode_repair_v003_frozen_recheck_20260711 | mpp4-repair-v003-recheck-20260711-result-20260711204236-49f9726f | — | DIR-20260711-006 satisfied by validated result import; use this repaired formal result for reporting and do not redispatch automatically. | formal | done | accepted | Val PCC=0.8209；Val loss=0.3198；XZY PCC=0.6151；XZY MAE=0.5094；Test loss=0.4635 | 已接纳 | closed_use_accepted_repaired_result_for_reporting | 2026-07-11T12:51:01+00:00 |
 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | mpp5_barcode_repair_v003_frozen_recheck_20260711 | mpp5-repair-v003-recheck-20260711-result-20260711204418-eef816b8 | — | DIR-20260711-006 satisfied by validated result import with bbox embargo preserved; use this repaired formal result for reporting and do not redispatch automatically. | formal | done | accepted | Val PCC=0.8347；Val loss=0.3166；XZY PCC=0.6072；XZY MAE=0.5082；Test loss=0.4723 | 已接纳 | closed_use_accepted_repaired_result_for_reporting | 2026-07-11T12:51:02+00:00 |
+| Phase 2 多病理模型公平比较 | phase2_pathology_model_benchmark_v001_20260904 | phase2-backbone-point-ablation-20260915-three-seed-result | — | 在固定输入、划分与单点预测头下，对比 UNI2-h、UNI 与 Virchow2-CLS 三个病理编码器。 | formal | done | accepted | 内部逐通路等权PCC：Virchow2=0.6581，UNI2-h=0.6533，UNI=0.6356；外部XZY：0.5251、0.5131、0.4968 | 在固定历史输入与统一单点预测协议下，Virchow2-CLS 在三种子内部验证的预定选模指标上稳定、小幅优于 UNI2-h；外部 XZY 的逐通路等权 PCC 较高，但整体展平 PCC和误差指标未优于 UNI2-h。UNI 在内部与外部均整体落后 | closed_registered_accepted_no_automatic_training | 2026-09-15T22:58:45+08:00 |
 | MPP2连续通路几何软对比残差四臂探针 | mpp2_cpgcr_probe_v001_20260811 | W007-four-arm-seed42-result-R001 | W007 | 未登记 | formal | done | accepted | 暂无 | four-arm verification accepted on 2026-08-16: single-seed differences are small and mixed; no residual arm is a clear winner. Deep-attribution analysis and interpretation reports remain pending_user_review. | review_four_arm_analysis_no_redispatch | 2026-08-15T07:16:45+00:00 |
 | MPP2 paired MSE vs Huber delta1 | mpp2_huber_loss_paired_v001_20260728 | PAIR-W001-A003-A004 | W001 | 未登记 | formal | done | accepted | Control PCC=0.6549；Treatment PCC=0.6527；ΔPCC=-0.0022 | Huber(delta=1)未提升external XZY pooled PCC；相同合同不得重试。 | closed_no_retry | 2026-07-29T13:20:03+00:00 |
 | Phase 3 双线基线与跨队列空间通路迁移 | phase3_dual_baseline_spatial_pathway_transfer_v001_20260804 | — | W004 | 未登记 | formal | done | accepted | Control PCC=0.8386；Treatment PCC=0.8618；ΔPCC=+0.0232 | A002 minus A001 improves mean per-fit pCR AUC by 0.023182 and supports further patient-independent validation; the MPR difference is weaker. | open_new_patient_independent_protocol | 2026-08-27T15:29:11+00:00 |

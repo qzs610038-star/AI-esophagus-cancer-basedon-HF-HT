@@ -1,5 +1,11 @@
 # Experiment Dashboard
 
+## Phase2 全视野修复与调参结果已复核接纳（2026-09-18）
+
+- `phase2_fullfov_hpo_v1` / `20260916_231813_101_7b1b9a79`：111 次训练、51 份 XZY 外部预测已完成；`registered`、`accepted`，接纳范围限本批与单外部患者。
+- 最终空间臂 XZY 双 PCC（患者—通路等权平均 / 整体展平）：UNI `0.559422 / 0.656756`，UNI2-h `0.571073 / 0.683748`，Virchow2 `0.577756 / 0.678311`；均为三种子均值，其他臂及标准差见[审核前结果汇报](results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md)。
+- [复核接纳记录](results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md)；Phase3 合同尚未回传，单一 XZY 患者的结果不用于重新选择已冻结的配方。
+
 ## 空间热启动 v1 已审核接纳（2026-09-10）
 
 - `phase2_spatial_warmstart_v1` / `20260910_190620_252_10e4d946`：`registered`、`accepted`，单种子42。
@@ -39,10 +45,10 @@
 
 - 方法已固定：第一轮 `phase2_softlink_local_v2` 的 `spatial`（经典空间残差）臂；暂停进一步改进。
 - 任务2（基因预测→通路重建）、任务3（隔点训练→稠密测试）：核对已有材料，准确对齐输入、输出及操作后交另一位团队成员实践，当前待交接对齐。
-- 基础模型消融：在同轮 `point`（单点预测）基线上比较 UNI2-h 与另外2至3个模型，Virchow2为候选；名单与协议待定。空间残差方案保持固定。
-- “UNI2-h最好”是待实验验证的论文叙事；尚无本次新增模型比较结果。
+- 基础模型消融：UNI2-h、UNI 与 Virchow2-CLS 已在统一单点预测协议下完成三随机种子比较，结果已复核并登记为 accepted（已接纳）。空间残差方案保持固定。
+- 登记结论：在固定历史输入与统一单点预测协议下，Virchow2-CLS 在三种子内部验证的预定选模指标上稳定、小幅优于 UNI2-h；外部 XZY 的逐通路等权 PCC 较高，但整体展平 PCC和误差指标未优于 UNI2-h。UNI 在内部与外部均整体落后
 - 后续重心：论文结构与指标选择、代码整理、关键架构图。全部指标继续保留，两种PCC并列，论文主副指标待定。
-- 本次只更新状态；旧改进优先排序被取代，既有实验结果与接纳状态不变。
+- 本次完成基础模型消融结果登记；其余组会任务和既有实验接纳状态不变。
 
 - [完整组会决策与后续任务](../project_state/governance/Phase2组会决策与论文后续任务_20260912.md)
 ## Status Overview
@@ -62,7 +68,7 @@
 | mpp2_pathway_ridge_calibration_v001_20260717 | mpp_posthoc_pathway_calibration | :red_circle: failed | — |  | — | — | — | — | — |
 | phase2_gene_reconstruction_comparison_v001_20260904 | phase2_supplemental | :large_blue_circle: planned | — |  | — | — | — | — | — |
 | phase2_spatial_density_comparison_v001_20260904 | phase2_supplemental | :large_blue_circle: planned | — |  | — | — | — | — | — |
-| phase2_pathology_model_benchmark_v001_20260904 | phase2_supplemental | :large_blue_circle: planned | — |  | — | — | — | — | — |
+| phase2_pathology_model_benchmark_v001_20260904 | phase2_supplemental | :white_check_mark: done | — |  | — | — | — | — | — |
 | online_tokens_gfnet_fold1_65t_legacy | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3914 | 0.3337 | 0.1683 | 2 |
 | smoke_gfnet_65t | online_tokens | :white_check_mark: done | 1 | gfnet | 65 | 0.3933 | 0.3314 | 0.0935 | 1 |
 | online_tokens_transformer_fold1_65t | online_tokens | :warning: done_incomplete_data | 1 | transformer | 65 | 0.3821 | — | — | 4 |
@@ -105,7 +111,7 @@
 | P0 | mpp2_pathway_ridge_calibration_v001_20260717 | failed | validate gate-correction regression then create one bound replacement formal job manifest |
 | P2 | phase2_gene_reconstruction_comparison_v001_20260904 | planned | 准备输入输出与操作合同；模型替换限单点基线 |
 | P2 | phase2_spatial_density_comparison_v001_20260904 | planned | 准备输入输出与操作合同；模型替换限单点基线 |
-| P2 | phase2_pathology_model_benchmark_v001_20260904 | planned | 准备输入输出与操作合同；模型替换限单点基线 |
+| P2 | phase2_pathology_model_benchmark_v001_20260904 | done | closed_registered_accepted_no_automatic_training |
 | baseline | online_tokens_gfnet_fold1_65t_legacy | done | archived_as_legacy_baseline |
 | baseline | smoke_gfnet_65t | done | archived |
 | baseline | online_tokens_transformer_fold1_65t | done_incomplete_data | archived |
@@ -148,7 +154,7 @@
 | mpp2_pathway_ridge_calibration_v001_20260717 | DIR-20260717-003 authorizes exactly one replacement execution after r002's gate-semantic failure. Internal nested-LOPO must pass before calibrator freeze and external evaluation; fold-specific OOF PCC differences are diagnostic only, while PCC invariance is checked on the final single frozen calibrator. XZY must remain unread until that freeze is recorded. |
 | phase2_gene_reconstruction_comparison_v001_20260904 | Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed. |
 | phase2_spatial_density_comparison_v001_20260904 | Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged. |
-| phase2_pathology_model_benchmark_v001_20260904 | Historical model numbers are references only until rerun under the common protocol. |
+| phase2_pathology_model_benchmark_v001_20260904 | 在固定历史输入与统一单点预测协议下，Virchow2-CLS 在三种子内部验证的预定选模指标上稳定、小幅优于 UNI2-h；外部 XZY 的逐通路等权 PCC 较高，但整体展平 PCC和误差指标未优于 UNI2-h。UNI 在内部与外部均整体落后 |
 | C1_gfnet_lora_65t_fold1 | 2026-07-09 superseded: old 3-patient/JFX-affected Token+LoRA result is tuning reference only. Do not expand old Fold2/3 as evidence; rerun LoRA claims under MPP2/new-data protocol. |
 | mpp1_std10val_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |
 | mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706 | 2026-07-09: archived because team selected MPP2 as the only follow-up MPP scheme. |
