@@ -1,0 +1,501 @@
+{
+  "date": "2026-09-19",
+  "status": "proposal_only_not_registry_import",
+  "review_rules": [
+    "review_due 是 freshness 值，不是 lifecycle；候选编号尚未写入正式注册器。",
+    "相关来源或产出不能自动填为 superseded_by；只有明确替代相同用途的文档才建立替代链。",
+    "不把候选文档提为规范性权威，不推断计划批准或实验接纳。",
+    "availability 须按实际本地/Git索引状态另核，不复制扫描器的目录硬编码，也不将可跟踪等同已提交。"
+  ],
+  "items": [
+    {
+      "number": 1,
+      "path": "01_指南与解读/分析报告/Phase2四臂逐通路指标附表_20260908.md",
+      "candidate_doc_id": "phase2-softlink-four-arm-metrics-20260908",
+      "disposition": "independent_registration_candidate",
+      "authority": "derived",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "近期结果附表，包含两种PCC及逐通路指标，承担可复核证据表角色；不能仅由分析报告标题或实验登记入口替代。",
+      "related_document_candidates": [
+        "phase2-softlink-v21-results-mechanism-report-20260908"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 2,
+      "path": "01_指南与解读/分析报告/Phase2软连接三轮实验综合分析与Phase3模型选择建议_20260910.md",
+      "candidate_doc_id": "phase2-softlink-three-rounds-selection-20260910",
+      "disposition": "independent_registration_candidate",
+      "authority": "derived",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "跨三轮实验的模型选择与交付建议，是Phase3交接的重要推理来源；正文仍写结果待审，而实验注册器后来已接纳相关实验，存在时效冲突。",
+      "related_document_candidates": [
+        "phase2-final-handoff-package-20260919-first",
+        "phase2-fullfov-accepted-results-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 3,
+      "path": "01_指南与解读/分析报告/Phase2软连接改进前后对照与原因分析报告_20260910.md",
+      "candidate_doc_id": "phase2-softlink-improvement-analysis-20260910",
+      "disposition": "independent_registration_candidate",
+      "authority": "derived",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "该报告解释对比学习/LoRA批次的结果与机制边界，明确引用实验结果文件；正文第七节仍称两批待审，需与当前accepted状态并列登记。",
+      "related_document_candidates": [
+        "phase2-softlink-v21-results-mechanism-report-20260908",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 4,
+      "path": "01_指南与解读/分析报告/Phase2软连接改进前后_完整指标附表_20260910.md",
+      "candidate_doc_id": "phase2-softlink-improvement-metric-table-20260910",
+      "disposition": "independent_registration_candidate",
+      "authority": "derived",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "独立的组合指标表，供逐项复核；主报告明确把它作为配套附表，建议登记为关联证据并保留‘待审’旧时点说明。",
+      "related_document_candidates": [
+        "phase2-softlink-improvement-analysis-20260910"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 5,
+      "path": "01_指南与解读/学习指南/Phase2软连接_从初版困境到v4对比学习改进_进阶学习指南_20260909.md",
+      "candidate_doc_id": "phase2-softlink-v4-learning-guide-20260909",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "historical",
+      "freshness_suggestion": "review_due",
+      "reason": "独立教学材料，明确关联结果报告和v4方案；在9月12日暂停软对比继续改进、转向经典空间路线后，不宜继续作为当前执行指南。",
+      "related_document_candidates": [
+        "phase2-meeting-decision-20260912",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 6,
+      "path": "01_指南与解读/学习指南/Phase2_全视野修复与超参数重搜索_通俗导读与学习指南_20260916.md",
+      "candidate_doc_id": "phase2-fullfov-hpo-learning-guide-20260916",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "面向成员解释全视野修复、输入协议和三编码器消融，是当前路线的阅读入口之一；但正文末仍以‘即将新建代码包’叙述，已被9月18日接纳结果和交接包推进。",
+      "related_document_candidates": [
+        "phase2-fullfov-accepted-results-20260919",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 7,
+      "path": "01_指南与解读/部署方案/Phase2全视野修复与超参数重搜索_部署与修复方案_20260916.md",
+      "candidate_doc_id": "phase2-fullfov-hpo-deployment-plan-20260916",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "historical",
+      "freshness_suggestion": "review_due",
+      "reason": "这是全视野代码包和实验的原始部署设计，实验已完成并接纳，文档应保留为方案快照，不再作为未执行计划。",
+      "related_document_candidates": [
+        "phase2-fullfov-accepted-results-20260919",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 8,
+      "path": "01_指南与解读/部署方案/Phase2全视野修复与超参数重搜索_实施细则_20260916.md",
+      "candidate_doc_id": "phase2-fullfov-hpo-implementation-spec-20260916",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "historical",
+      "freshness_suggestion": "review_due",
+      "reason": "与部署报告配套的可执行规格；实验已完成，当前仅适合作为复现和审计快照。",
+      "related_document_candidates": [
+        "phase2-fullfov-accepted-results-20260919",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 9,
+      "path": "01_指南与解读/部署方案/Phase2_UNI与Virchow2基础模型替换消融_完整部署方案_20260914.md",
+      "candidate_doc_id": "phase2-backbone-point-ablation-plan-20260914",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "historical",
+      "freshness_suggestion": "review_due",
+      "reason": "该方案面向历史单点输入；后续全视野三模型批次已完成，9月19日又形成全视野空间头第二批方案，当前交接包明确把旧单点编码器替换列为历史。",
+      "related_document_candidates": [
+        "phase2-fullfov-accepted-results-20260919",
+        "phase2-backbone-spatial-batch2-plan-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 10,
+      "path": "01_指南与解读/部署方案/Phase2第二批病理基础模型替换消融_全视野空间头探索与部署方案_20260919.md",
+      "candidate_doc_id": "phase2-backbone-spatial-batch2-plan-20260919",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "draft",
+      "freshness_suggestion": "review_due",
+      "reason": "9月19日最新独立实施规格，指向新实验包和全视野空间头；属于后续待审方案，不能与已接纳结果混称。",
+      "related_document_candidates": [],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false,
+      "note": "当前代码存在，不能仅凭存在判断方案审批状态；draft为保守候选标记，实际登记时核对已授权范围。"
+    },
+    {
+      "number": 11,
+      "path": "01_指南与解读/部署方案/Phase2实验汇总交接与论文准备_部署方案_20260919.md",
+      "candidate_doc_id": "phase2-handoff-paper-preparation-plan-20260919",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "与首版交接包同日形成的交接/论文准备方案，属于当前文档导航和后续协作事实源。",
+      "related_document_candidates": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 12,
+      "path": "03审计报告/README.md",
+      "candidate_doc_id": "audit-reports-index-20260919",
+      "disposition": "independent_registration_candidate",
+      "authority": "derived",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "整个03审计报告目录当前0/28登记；README是目录入口，应单独登记以避免审计材料完全脱离文档事实源。",
+      "related_document_candidates": [],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 13,
+      "path": "03审计报告/MPP2基线与后续实验指标补充登记审计报告_20260905.md",
+      "candidate_doc_id": "audit-mpp2-registration-20260905",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "historical",
+      "freshness_suggestion": "review_due",
+      "reason": "独立的结果登记审计报告；后续实验注册与交接包已接替其当前导航作用，但报告保留审计证据。",
+      "related_document_candidates": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 14,
+      "path": "03审计报告/Phase2_UNI与Virchow2基础模型替换消融部署方案_独立审计报告_20260915.md",
+      "candidate_doc_id": "audit-phase2-backbone-plan-20260915",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "针对9月14日方案的独立审计，内容影响实验合同和当前全视野/历史单点边界，应作为审计事实源登记。",
+      "related_document_candidates": [
+        "phase2-backbone-spatial-batch2-plan-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 15,
+      "path": "03审计报告/UNI2h_输入Patch视野裁剪与分辨率历史溯源_专项审计报告_20260915.md",
+      "candidate_doc_id": "audit-uni2h-patch-resolution-20260915",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "该审计直接支撑全视野修复的研究动机与输入协议边界，不能仅作为实验包内部日志。",
+      "related_document_candidates": [
+        "phase2-fullfov-accepted-results-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 16,
+      "path": "03审计报告/模型训练链隐性偏差与超参数设置_专项审查报告_20260915.md",
+      "candidate_doc_id": "audit-training-chain-bias-20260915",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "独立审查训练链与超参数，影响全视野结果解释和方法边界，应登记为审计来源。",
+      "related_document_candidates": [
+        "phase2-fullfov-accepted-results-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 17,
+      "path": "03审计报告/项目治理与文档登记审查报告_含文档统一管理探索_20260915.md",
+      "candidate_doc_id": "audit-project-document-governance-20260915",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "本报告直接涉及文档登记规则与统一管理探索，是本轮登记清理的前置审计证据；应登记但需由当前规则覆盖其旧建议。",
+      "related_document_candidates": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 18,
+      "path": "03审计报告/Phase2任务二_319基因ssGSEA重构通路与BarcodeRepairV003标签差异_专项审计报告_20260919.md",
+      "candidate_doc_id": "audit-phase2-task2-ssgsea-label-gap-20260919",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "pending_review",
+      "freshness_suggestion": "review_due",
+      "reason": "最新专项审计，直接影响任务2/任务3结果能否与历史主线比较，属于当前交接的关键待审证据。",
+      "related_document_candidates": [],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false,
+      "note": "现有审计报告含用户暂不合入交接部署方案的说明；本轮只登记线索，不改交接计划。"
+    },
+    {
+      "number": 19,
+      "path": "团队项目进度与结论/qzs/Phase2软连接模型选型决策与三轮实验总结_20260910.md",
+      "candidate_doc_id": "team-phase2-softlink-selection-summary-20260910",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "团队共享的模型选择和技术演进总结，面向Phase3同学，属于跨目录交接入口；当前最终全视野模型已替代旧软连接交付，需更新关联而非删除正文。",
+      "related_document_candidates": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 20,
+      "path": "团队项目进度与结论/qzs/Phase2基线与三份空间候选_论文填写说明_20260911.md",
+      "candidate_doc_id": "team-phase2-paper-fill-guide-20260911",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "面向论文填写的团队材料，明确引用模型选择总结和论文基线；全视野接纳批次出现后需复核其候选顺序与可引用边界。",
+      "related_document_candidates": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 21,
+      "path": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md",
+      "candidate_doc_id": "phase2-final-model-handoff-20260918",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "这是首版完整交接包的直接前身，包含正式权重、输入合同和复现入口；9月19日首版包以快照方式引用它，仍需作为来源登记或与新包建立替代关系。",
+      "related_document_candidates": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 22,
+      "path": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/audit_summary.md",
+      "candidate_doc_id": "phase2-final-model-handoff-audit-20260918",
+      "disposition": "covered_by_package",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "交接包GO裁决和边界的直接审计记录；应登记为交接审计来源，且指向9月19日首版包的当前入口。",
+      "related_document_candidates": [
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false,
+      "note": "通过包入口的 related_docs/source_refs 导航，不默认创建独立条目。"
+    },
+    {
+      "number": 23,
+      "path": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md",
+      "candidate_doc_id": "phase2-final-handoff-package-20260919-first",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "9月19日最新交接包入口，汇总当前模型、已接纳全视野结果、实验档案、评审与论文填写；应作为一个包级独立登记对象，其内部材料通过 related_docs/source_refs 关联。",
+      "related_document_candidates": [],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 24,
+      "path": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/01_看懂Phase2/数据流程与当前模型.md",
+      "candidate_doc_id": "phase2-handoff-current-model-20260919",
+      "disposition": "covered_by_package",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "该页是当前模型和Phase3接口的事实核心，建议单独登记并作为首版交接包的related_docs，而不是让包内核心事实不可检索。",
+      "related_document_candidates": [],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false,
+      "note": "通过包入口的 related_docs/source_refs 导航，不默认创建独立条目。"
+    },
+    {
+      "number": 25,
+      "path": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/实验总表.md",
+      "candidate_doc_id": "phase2-handoff-experiment-index-20260919",
+      "disposition": "covered_by_package",
+      "authority": "derived",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "包内实验导航，明确状态以experiments/experiment_registry.json为准；适合作为派生登记视图，与实验注册器建立truth_sources。",
+      "related_document_candidates": [],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false,
+      "note": "通过包入口的 related_docs/source_refs 导航，不默认创建独立条目。"
+    },
+    {
+      "number": 26,
+      "path": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/02_实验档案/已接纳全视野三模型结果.md",
+      "candidate_doc_id": "phase2-fullfov-accepted-results-20260919",
+      "disposition": "covered_by_package",
+      "authority": "derived",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "当前全视野三模型结果的可读结果专页，注明数据表、种子和实验ID；虽源自实验注册器和CSV，仍是论文/交接实际引用入口。",
+      "related_document_candidates": [],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false,
+      "note": "通过包入口的 related_docs/source_refs 导航，不默认创建独立条目。"
+    },
+    {
+      "number": 27,
+      "path": "团队项目进度与结论/ljq/Phase2_任务2与任务3_空间消融设计报告_20260912.md",
+      "candidate_doc_id": "phase2-task23-spatial-ablation-design-20260912",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "任务2/3的原始设计输入，涉及稀疏/稠密和基因重建比较；当前9月19日专项审计发现任务2真值差异，需在交接中保留并复核。",
+      "related_document_candidates": [
+        "phase2-task23-correction-20260912",
+        "audit-phase2-task2-ssgsea-label-gap-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 28,
+      "path": "团队项目进度与结论/ljq/Phase2任务2与任务3_重新训练与交接更正说明_20260912.md",
+      "candidate_doc_id": "phase2-task23-correction-20260912",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "该更正说明决定旧任务2/3包不能直接用于新合同，是当前实验包和专项审计之间的关键连接文档。",
+      "related_document_candidates": [
+        "audit-phase2-task2-ssgsea-label-gap-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 29,
+      "path": "团队项目进度与结论/qzs/Phase3_方案A经典空间残差_开箱包_20260912/README.md",
+      "candidate_doc_id": "phase3-classic-spatial-package-20260912",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "superseded",
+      "freshness_suggestion": "review_due",
+      "reason": "旧方案A交付包，当前Phase2最终全视野模型交接包已成为新入口；仍应登记为历史交付，避免旧空间模型被误当作当前模型。",
+      "related_document_candidates": [
+        "phase2-final-model-handoff-20260918",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [
+        "phase2-final-model-handoff-20260918"
+      ],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 30,
+      "path": "团队项目进度与结论/ljq/任务2和任务3消融实验报告_20260915.docx",
+      "candidate_doc_id": "phase2-task23-ablation-report-20260915",
+      "disposition": "independent_registration_candidate",
+      "authority": "derived",
+      "lifecycle_suggestion": "pending_review",
+      "freshness_suggestion": "review_due",
+      "reason": "近期Office格式实验报告，与ljq的scratch/full结果目录同日对应；当前实验结果尚未进入中央experiments/experiment_registry，不能只因不是Markdown而漏掉。",
+      "related_document_candidates": [
+        "audit-phase2-task2-ssgsea-label-gap-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 31,
+      "path": "团队项目进度与结论/ljq/任务2对照组与历史基线差异说明_20260916.docx",
+      "candidate_doc_id": "phase2-task2-baseline-gap-report-20260916",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "pending_review",
+      "freshness_suggestion": "review_due",
+      "reason": "近期差异说明直接关联任务2真值/基线解释，且9月19日专项审计核查同一类ssGSEA与BarcodeRepairV003差异；应登记为当前待审材料。",
+      "related_document_candidates": [
+        "audit-phase2-task2-ssgsea-label-gap-20260919"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    },
+    {
+      "number": 32,
+      "path": "02_组会汇报/组会汇报_Phase2新模型成果与空间残差方案汇报_20260912.md",
+      "candidate_doc_id": "phase2-new-model-meeting-report-20260912",
+      "disposition": "independent_registration_candidate",
+      "authority": "reference",
+      "lifecycle_suggestion": "active",
+      "freshness_suggestion": "review_due",
+      "reason": "02_组会汇报目录唯一近期漏登Markdown，主题直接承接9月12日方法决策；同目录qzs下有PDF导出件，PDF应作为派生复制件关联而非重复独立登记。",
+      "related_document_candidates": [
+        "phase2-meeting-decision-20260912",
+        "phase2-final-handoff-package-20260919-first"
+      ],
+      "superseded_by_suggestion": [],
+      "approval_or_acceptance_inferred": false
+    }
+  ],
+  "summary": {
+    "raw_candidates": 32,
+    "independent_candidates": 28,
+    "covered_by_package": 4
+  }
+}

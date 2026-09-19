@@ -1,0 +1,23 @@
+{
+  "report": "maintenance_logs/项目事实与规则健康扫描_20260919.md",
+  "unique_local_links": 50,
+  "missing_links": [],
+  "missing_candidate_paths": [],
+  "invalid_lifecycle_suggestions": [],
+  "document_counts": {
+    "markdown_paths": 386,
+    "unregistered_paths": 178
+  },
+  "review_candidate_counts": {
+    "raw_candidates": 32,
+    "independent_candidates": 28,
+    "covered_by_package": 4
+  },
+  "source_snapshot_still_matches": {
+    "state_revision": 264,
+    "state_updated_at": "2026-09-18T18:08:47+08:00",
+    "experiment_registry_updated_at": "2026-09-18T21:31:00+08:00",
+    "fullfov_evidence_status": "accepted"
+  },
+  "limitations": "仅验证扫描交付物的解析、路径、枚举、计数和引用快照；不是全仓科学审查"
+}

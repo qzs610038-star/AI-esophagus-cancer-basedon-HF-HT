@@ -1,0 +1,70 @@
+{
+  "scanned_at": "2026-09-19T16:15:16+08:00",
+  "scope": "只读项目事实/规则/登记扫描，不证明服务器备份、训练有效性或真实Phase3完成",
+  "source_timestamps": {
+    "current_state": "2026-09-18T18:08:47+08:00",
+    "document_registry": "2026-09-12T19:17:14+08:00",
+    "experiment_registry": "2026-09-18T21:31:00+08:00"
+  },
+  "counts": {
+    "documents": 358,
+    "experiments": 42
+  },
+  "duplicates": {
+    "document_ids": {},
+    "document_paths": {},
+    "experiment_ids": {},
+    "directive_declarations": {
+      "DIR-20260912-001": 2
+    }
+  },
+  "pending_but_accepted": [
+    {
+      "result_id": "phase2-fullfov-hpo-v1-20260916-231813-result",
+      "experiment_id": "phase2_fullfov_hpo_v1",
+      "accepted_at": "2026-09-18T21:31:00+08:00",
+      "evidence_path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md"
+    }
+  ],
+  "missing_active_document_paths": [],
+  "stale_missing_document_paths": [],
+  "broken_document_successors": [],
+  "recent_directives_missing_from_state": [
+    "DIR-20260908-003",
+    "DIR-20260908-004"
+  ],
+  "registered_active_plans_with_closed_experiments": [
+    {
+      "plan_name": "mpp2_pathway_ridge_calibration",
+      "path": "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md",
+      "experiment_id": "mpp2_pathway_ridge_calibration_v001_20260717",
+      "status": "failed",
+      "evidence_status": "rejected"
+    }
+  ],
+  "schema_validation": {
+    "project_state/current_state.json": {
+      "errors": []
+    },
+    "project_state/document_registry.json": {
+      "errors": []
+    },
+    "project_state/asset_registry.json": {
+      "errors": []
+    }
+  },
+  "duplicate_directive_details": [
+    {
+      "directive_id": "DIR-20260912-001",
+      "count": 2,
+      "records_identical": true
+    }
+  ],
+  "experiment_registry_json_parse": "PASS; no dedicated experiment_registry.schema.json present",
+  "legacy_directive_reader_check": {
+    "status": "FAIL",
+    "exception": "ValueError",
+    "message": "directive DIR-20260908-003 missing fields: effective_from_revision",
+    "execution": "从当前源码AST仅提取并执行原read_directive_events函数，无模块级副作用、写入或哈希"
+  }
+}

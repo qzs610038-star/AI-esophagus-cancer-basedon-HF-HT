@@ -5,11 +5,21 @@
   "oneOf": [
     {
       "type": "object",
-      "required": ["event_type", "directive_id", "issued_at", "summary", "scope", "topic", "status", "supersedes", "effective_from_revision", "affected_files", "source"],
+      "required": ["event_type", "directive_id", "issued_at", "summary", "scope", "topic", "status", "source"],
       "properties": {
         "event_type": {"const": "directive"},
         "status": {"enum": ["active", "completed", "superseded", "cancelled"]},
-        "source": {"const": "explicit_user_instruction"}
+        "source": {"const": "explicit_user_instruction"},
+        "supersedes": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "effective_from_revision": {"type": "integer", "minimum": 1},
+        "affected_files": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
       }
     },
     {

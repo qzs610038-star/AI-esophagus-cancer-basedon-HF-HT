@@ -16,13 +16,19 @@
           "authority": {"enum": ["normative", "derived", "reference"]},
           "lifecycle": {"enum": ["draft", "pending_review", "approved_design", "active", "superseded", "historical", "missing"]},
           "lifecycle_override": {
-            "description": "显式人工生命周期覆盖；存在时扫描器优先采用该值而非自动分类，且 authority 固定为 reference",
+            "description": "显式人工生命周期覆盖；扫描刷新保留已登记的 lifecycle 与 authority，不自动改写人工治理结论",
             "type": ["string", "null"],
             "enum": [null, "draft", "pending_review", "approved_design", "active", "superseded", "historical"]
           },
           "availability": {"enum": ["tracked", "local_only"]},
           "doc_role": {"type": "string", "minLength": 1},
           "related_docs": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "covered_documents": {
+            "description": "Explicit repository-relative member paths covered for navigation by this existing parent document; does not promote member evidence or delete existing independent entries.",
             "type": "array",
             "items": {"type": "string", "minLength": 1},
             "uniqueItems": true

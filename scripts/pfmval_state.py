@@ -1440,7 +1440,7 @@ def state_lock(root: Path) -> Iterator[None]:
 def read_directive_events(root: Path) -> List[Dict[str, Any]]:
     path = root / "project_state" / "directives.jsonl"
     events: List[Dict[str, Any]] = []
-    seen_directives: set[str] = set()
+    seen_directives: Dict[str, Dict[str, Any]] = {}
     if not path.exists():
         raise FileNotFoundError(path)
     for line_number, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
@@ -1455,18 +1455,23 @@ def read_directive_events(root: Path) -> List[Dict[str, Any]]:
         if not directive_id:
             raise ValueError(f"directive event missing directive_id at line {line_number}")
         if event_type == "directive":
-            if directive_id in seen_directives:
-                raise ValueError(f"duplicate directive id: {directive_id}")
-            seen_directives.add(directive_id)
+            previous = seen_directives.get(str(directive_id))
+            if previous is not None:
+                if previous != event:
+                    raise ValueError(f"duplicate directive id conflict: {directive_id}")
+                # Append-only logs may contain a byte-for-byte/semantic replay of a
+                # directive. It is idempotent and must not trigger a rewrite.
+                events.append(event)
+                continue
+            seen_directives[str(directive_id)] = event
             required = {
-                "issued_at", "summary", "scope", "topic", "status", "supersedes",
-                "effective_from_revision", "affected_files", "source",
+                "issued_at", "summary", "scope", "topic", "status", "source",
             }
             missing = sorted(required - set(event))
             if missing:
                 raise ValueError(f"directive {directive_id} missing fields: {', '.join(missing)}")
         elif event_type == "status_update":
-            if directive_id not in seen_directives:
+            if str(directive_id) not in seen_directives:
                 raise ValueError(f"status update references unknown directive: {directive_id}")
         else:
             raise ValueError(f"unknown directive event_type at line {line_number}: {event_type}")
@@ -1476,10 +1481,18 @@ def read_directive_events(root: Path) -> List[Dict[str, Any]]:
 
 def fold_directives(events: Sequence[Mapping[str, Any]]) -> Dict[str, Dict[str, Any]]:
     directives: Dict[str, Dict[str, Any]] = {}
+    declarations: Dict[str, Dict[str, Any]] = {}
     superseded_by: Dict[str, str] = {}
     for event in events:
         directive_id = str(event["directive_id"])
         if event["event_type"] == "directive":
+            if directive_id in declarations:
+                if declarations[directive_id] != dict(event):
+                    raise ValueError(f"duplicate directive id conflict: {directive_id}")
+                # Replaying the original declaration must not undo a later
+                # completion/cancellation event in the append-only history.
+                continue
+            declarations[directive_id] = dict(event)
             directives[directive_id] = dict(event)
             for old_id in event.get("supersedes", []):
                 if old_id == directive_id:
@@ -1673,7 +1686,16 @@ def _stable_doc_id(path: str) -> str:
         "CURRENT_STATE.md": "view-current-state",
         "AGENTS.md": "agent-entry",
     }
-    return known.get(path, "doc-" + hashlib.sha1(path.encode("utf-8")).hexdigest()[:12])
+    if path in known:
+        return known[path]
+    # This is a reversible path encoding, not a content or dependency hash. It
+    # keeps new scan-created IDs explainable and collision-free without making
+    # document discovery depend on fingerprints.
+    encoded = "".join(
+        char if char.isalnum() else f"_u{ord(char):04x}_"
+        for char in normalize_rel(path)
+    )
+    return f"doc-path-{encoded}"
 
 
 def _document_category(path: str) -> str:
@@ -1799,6 +1821,115 @@ def _classify_document(path: str, state: Mapping[str, Any]) -> Tuple[str, str, s
     return "historical_reference", "reference", "historical", connectivity
 
 
+def _registered_document_paths(root: Path) -> set[str]:
+    """Return only document paths explicitly named by registered experiments."""
+    registry_path = root / "experiments" / "experiment_registry.json"
+    if not registry_path.exists():
+        return set()
+    try:
+        registry = read_json(registry_path)
+    except (OSError, ValueError, json.JSONDecodeError):
+        return set()
+
+    paths: set[str] = set()
+
+    def visit(value: Any, key: str = "") -> None:
+        if isinstance(value, Mapping):
+            for child_key, child_value in value.items():
+                visit(child_value, str(child_key))
+            return
+        if isinstance(value, list):
+            for child in value:
+                visit(child, key)
+            return
+        if not isinstance(value, str):
+            return
+        lower_key = key.lower()
+        if not any(token in lower_key for token in ("report", "review", "evidence")):
+            return
+        candidate = normalize_rel(value)
+        if Path(candidate).suffix.lower() not in {".md", ".docx", ".pdf"}:
+            return
+        if (root / candidate).is_file():
+            paths.add(candidate)
+
+    visit(registry)
+    return paths
+
+
+def _declared_experiment_readmes(root: Path) -> set[str]:
+    """Discover package README files only when an experiment record names it."""
+    registry_path = root / "experiments" / "experiment_registry.json"
+    if not registry_path.exists():
+        return set()
+    try:
+        registry = read_json(registry_path)
+    except (OSError, ValueError, json.JSONDecodeError):
+        return set()
+    paths: set[str] = set()
+    for record in registry.get("experiments", []):
+        if not isinstance(record, Mapping):
+            continue
+        package = record.get("experiment_package")
+        if not isinstance(package, str):
+            continue
+        package_path = normalize_rel(package)
+        if not package_path.startswith("experiments/"):
+            continue
+        readme = root / package_path / "README.md"
+        if readme.is_file():
+            paths.add(normalize_rel(readme.relative_to(root)))
+    return paths
+
+
+def _is_tool_artifact_path(rel_path: str) -> bool:
+    return any(part in {".git", ".pytest_cache", "__pycache__"} for part in Path(rel_path).parts)
+
+
+def _git_indexed_paths(root: Path) -> set[str]:
+    """Read the Git index once without inspecting working-tree cleanliness."""
+    try:
+        completed = subprocess.run(
+            ["git", "ls-files", "-z"],
+            cwd=root,
+            check=False,
+            capture_output=True,
+        )
+    except OSError:
+        return set()
+    if completed.returncode != 0:
+        return set()
+    return {
+        normalize_rel(item.decode("utf-8"))
+        for item in completed.stdout.split(b"\0")
+        if item
+    }
+
+
+def _covered_document_paths(root: Path, old_entries: Mapping[str, Mapping[str, Any]]) -> set[str]:
+    """Honor explicit parent coverage only while that parent document exists."""
+    covered: set[str] = set()
+    for parent_path, parent in old_entries.items():
+        if not (root / parent_path).is_file():
+            continue
+        children = parent.get("covered_documents", [])
+        if not isinstance(children, list):
+            continue
+        for child in children:
+            if not isinstance(child, str):
+                continue
+            normalized = normalize_rel(child)
+            if (
+                not normalized
+                or normalized == ".."
+                or normalized.startswith("../")
+                or Path(normalized).is_absolute()
+            ):
+                continue
+            covered.add(normalized)
+    return covered
+
+
 def scan_documents(root: Path) -> Dict[str, Any]:
     state = read_json(root / "project_state" / "current_state.json")
     tracked_path = root / "project_state" / "document_registry.json"
@@ -1815,11 +1946,35 @@ def scan_documents(root: Path) -> Dict[str, Any]:
     live_paths: set[str] = set()
     for directory in (
         "01_指南与解读", "02_组会汇报", "团队项目进度与结论", "project_state/plans", "project_state/implementation_plans", "deploy",
-        "automation", ".agents/skills", ".claude/skills",
+        "automation", ".agents/skills", ".claude/skills", "03审计报告",
+        "project_state/governance", "maintenance_logs",
     ):
         base = root / directory
         if base.exists():
-            live_paths.update(normalize_rel(path.relative_to(root)) for path in base.rglob("*.md"))
+            live_paths.update(
+                rel_path
+                for path in base.rglob("*.md")
+                if not _is_tool_artifact_path(rel_path := normalize_rel(path.relative_to(root)))
+            )
+    for directory in (
+        "01_指南与解读",
+        "02_组会汇报",
+        "03审计报告",
+        "团队项目进度与结论",
+        "project_state/governance",
+        "maintenance_logs",
+    ):
+        base = root / directory
+        if base.exists():
+            for suffix in ("*.docx", "*.pdf"):
+                live_paths.update(
+                    rel_path
+                    for path in base.rglob(suffix)
+                    if not _is_tool_artifact_path(rel_path := normalize_rel(path.relative_to(root)))
+                )
+    live_paths.update(_declared_experiment_readmes(root))
+    live_paths.update(_registered_document_paths(root))
+    live_paths = {path for path in live_paths if not _is_tool_artifact_path(path)}
     for path in (
         "README.md", "PROJECT_GUIDE.md", "AGENTS.md", "CURRENT_STATE.md", "CLAUDE.md",
         "configs/server_paths.yaml",
@@ -1832,18 +1987,41 @@ def scan_documents(root: Path) -> Dict[str, Any]:
         if (root / path).exists():
             live_paths.add(path)
 
+    covered_paths = _covered_document_paths(root, old_entries)
     all_paths = sorted(live_paths | set(old_entries))
+    tracked_paths = _git_indexed_paths(root)
     verified_at = utc_now()
     documents: List[Dict[str, Any]] = []
     for rel_path in all_paths:
         file_path = root / rel_path
         old = old_entries.get(rel_path, {})
+        if rel_path in covered_paths and not old:
+            continue
         if file_path.exists():
             scope, authority, lifecycle, connectivity = _classify_document(rel_path, state)
         else:
             scope, authority, lifecycle, connectivity = "missing_local_adapter", "reference", "missing", []
-        entry = {
-            "doc_id": _stable_doc_id(rel_path),
+        if old:
+            # Existing registry fields are managed facts. A scan refreshes only
+            # observation timestamps and fills missing legacy fields; it does not
+            # resurrect historical documents or downgrade curated active ones.
+            entry = dict(old)
+            entry["doc_id"] = old.get("doc_id") or _stable_doc_id(rel_path)
+            entry["path"] = rel_path
+            entry.setdefault("category", _document_category(rel_path))
+            entry.setdefault("scope", scope)
+            entry.setdefault("authority", authority)
+            entry.setdefault("lifecycle", lifecycle)
+            entry.setdefault("availability", "tracked" if rel_path in tracked_paths else "local_only")
+            entry.setdefault("supersedes", [])
+            entry.setdefault("superseded_by", [])
+            entry.setdefault("truth_sources", [])
+            entry.setdefault("connectivity_modes", connectivity)
+            entry["verified_at"] = verified_at
+            entry["state_revision"] = int(state["state_revision"])
+        else:
+            entry = {
+                "doc_id": _stable_doc_id(rel_path),
             "path": rel_path,
             "category": (
                 _document_category(rel_path)
@@ -1882,30 +2060,15 @@ def scan_documents(root: Path) -> Dict[str, Any]:
             "created": old.get("created", ""),
             "tags": list(old.get("tags", [])),
             "connectivity_modes": connectivity,
-            "availability": (
-                "tracked"
-                if not (
-                    rel_path == "CLAUDE.md"
-                    or (
-                        rel_path.startswith(".claude/")
-                        and not (
-                            rel_path.startswith(".claude/skills/")
-                            and rel_path.endswith("/SKILL.md")
-                        )
-                    )
-                    or rel_path.startswith(".qoder/")
-                    or rel_path.startswith("02_组会汇报/")
-                    or rel_path.startswith("团队项目进度与结论/")
-                    or (
-                        rel_path.startswith("01_指南与解读/")
-                        and not rel_path.endswith("服务器路径索引_20260701.md")
-                        and not rel_path.endswith("MPP2后续方案与LoRA新数据实验建议_20260709.md")
-                        and not rel_path.endswith("服务器零训练Gitee往返试点检查方案_20260810.md")
-                    )
-                )
-                else "local_only"
-            ),
-        }
+                "availability": "tracked" if rel_path in tracked_paths else "local_only",
+            }
+            # Unknown files are candidates for human governance, not automatic
+            # evidence or active policy. Explicitly classified current sources
+            # (plans, state, skills, and entrypoints) keep their known status.
+            if lifecycle in {"historical", "superseded"} and authority == "reference":
+                entry["lifecycle"] = "draft"
+                entry["freshness"] = "review_due"
+                entry["freshness_reason"] = "newly_discovered_requires_human_classification"
         for relationship_field, default in (
             ("doc_role", None),
             ("related_docs", []),
@@ -1915,28 +2078,21 @@ def scan_documents(root: Path) -> Dict[str, Any]:
             ("freshness_reason", None),
             ("changed_dependencies", []),
         ):
-            if relationship_field in old:
+            if relationship_field in old and relationship_field not in entry:
                 value = old.get(relationship_field, default)
                 if isinstance(default, list):
                     value = list(value or [])
                 elif isinstance(default, dict):
                     value = dict(value or {})
                 entry[relationship_field] = value
-        # P0-1: lifecycle_override 是显式人工覆盖，扫描器优先采用；
-        # 被覆盖文档的 authority 固定为 reference（人工管理，不再视为自动 normative）。
-        override = old.get("lifecycle_override")
-        if override and file_path.exists():
-            entry["lifecycle"] = override
-            if entry.get("authority") == "normative":
-                entry["authority"] = "reference"
-        if override:
-            entry["lifecycle_override"] = override
-        if lifecycle == "active" and "doc_role" not in entry:
+        # lifecycle_override 与其他人工字段已随旧条目整体保留；新发现文档
+        # 不会凭扫描结果获得人工覆盖或治理状态。
+        if not old and lifecycle == "active" and "doc_role" not in entry:
             if entry["category"] == "部署方案":
                 entry["doc_role"] = "deployment_plan"
             elif entry["category"] == "学习指南":
                 entry["doc_role"] = "learning_guide"
-        if lifecycle == "superseded":
+        if not old and lifecycle == "superseded":
             if scope == "historical_guidance" and "mpp" in rel_path.lower():
                 entry["superseded_by"] = ["plan-mpp-training"]
             elif scope == "historical_guidance":
@@ -2292,15 +2448,25 @@ def _render_session_brief(state: Mapping[str, Any]) -> str:
 
 def _readme_state_block(state: Mapping[str, Any], registry: Mapping[str, Any]) -> str:
     policy = registry.get("current_mpp_policy", {})
+    selected = policy.get("selected_mpp", "unknown")
+    decision = str(policy.get("decision") or "").strip()
+    if decision:
+        mpp_line = f"- 数据方案固定为 **MPP{selected}**。{decision}"
+        if not mpp_line.endswith("。"):
+            mpp_line += "。"
+    else:
+        mpp_line = (
+            f"- 数据方案固定为 **MPP{selected}**；"
+            "其它统一重跑结果保留为背景/方法参考。"
+        )
     return "\n".join([
         "<!-- project-state:start -->",
         "## 当前项目状态（自动生成）",
         "",
         f"- 状态版本：`{state['state_revision']}`；完整入口：[CURRENT_STATE.md](CURRENT_STATE.md)。",
-        "- 用户导航：[PROJECT_GUIDE.md](PROJECT_GUIDE.md)；简洁实验进度：[experiments/experiment_progress.md](experiments/experiment_progress.md)。",
-        f"- 当前 MPP 主线：**MPP{policy.get('selected_mpp', 'unknown')}**；其它统一重跑结果保留为背景/方法参考。",
-        f"- 服务器通信：当前通道为 **{state.get('server_transport', {}).get('current_channel', '未配置')}**；后续可按用户指令扩展。",
-        "- 实验事实源：`experiments/experiment_registry.json`；Dashboard 为派生视图。",
+        "- 项目导航：[PROJECT_GUIDE.md](PROJECT_GUIDE.md)；实验进度：[experiments/experiment_progress.md](experiments/experiment_progress.md)。",
+        mpp_line,
+        "- 两种 PCC 并列保留；实验是否接纳以 [实验注册器](experiments/experiment_registry.json) 为准。文件存在或代码验证不等于科研结论成立。",
         "",
         "<!-- project-state:end -->",
     ])

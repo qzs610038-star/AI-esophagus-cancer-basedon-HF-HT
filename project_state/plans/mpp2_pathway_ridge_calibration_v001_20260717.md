@@ -1,10 +1,13 @@
 # MPP2 逐通路 Ridge 校准第一次实验方案（已完成并以外部门失败关闭）
 
 > experiment_id: `mpp2_pathway_ridge_calibration_v001_20260717`
-> status: `execution_approved_pending_bound_replacement_job`
-> lifecycle: `active`
+> status: `closed_failed`
+> lifecycle: `historical`
 > created_at: `2026-07-17`
+> closed_at: `2026-08-01`
 > owner: `PFMval MPP2`
+
+> **当前入口**：本页只保留已关闭实验合同和失败边界。当前 Phase 2/Phase 3 方法与模型入口见 [`Phase2组会决策与论文后续任务`](../governance/Phase2组会决策与论文后续任务_20260912.md) 和 [`Phase2最终模型_Phase3交接包`](../../团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md)。不得依据本页重新启动校准、恢复旧执行状态或把校准输出交给 Phase 3。
 
 > **2026-08-01 用户批准的最终边界**：正式 r003 已完成，Registry 状态为 `failed / rejected`。校准后 XZY mean raw R² `-0.08803688`、mean raw MAE `1176.22480`，均未优于原始冻结基线，因此本方案以下“交付 CalibratedMPP2”的步骤仅保留为历史实验合同，不得再次执行。`CalibratedMPP2` 不进入 Phase 3 或部署。用户已决定后续 Phase 3 研究采用 H&E 与 accepted 修复版冻结 MPP2 原始输出联合输入，待队友基线包到位后比较“直接拼接 vs 特征融合”；不再重复判断是否采用 MPP2。
 > directive_id: `DIR-20260717-001`（方案登记） + `DIR-20260717-003`（r002 门控语义修正后的一次替代正式执行；取代 `DIR-20260717-002`）
@@ -24,7 +27,7 @@ UNI2-h feature -> frozen MPP2 head -> pathway-wise calibration -> raw ssGSEA sco
 
 ## 2. 当前事实源与固定资产
 
-执行前必须重新读取 `CURRENT_STATE.md`、`project_state/current_state.json`、`experiments/experiment_registry.json` 及 active `project_state/plans/mpp_training.md`。本方案采用的基线快照如下；若 live 文件冲突，以 live 文件为准并停止执行。
+本历史合同的事实来源是 `CURRENT_STATE.md`、`project_state/current_state.json`、`experiments/experiment_registry.json` 及当时的 `project_state/plans/mpp_training.md`。本方案采用的基线快照如下；若需解释当前状态，以当前机器事实源和实验注册器为准，不得把本页的历史快照恢复为执行授权。
 
 | 项目 | 固定值 |
 |---|---|
@@ -280,7 +283,7 @@ mpp2_calibrated_raw_v001/
 - 任一通路 `Var(pred_z)<1e-6` 却仍被启用，或 `k` 稳定性阈值不满足；
 - 内部稳定性门失败；
 - 需要修改 protected MPP 资产、服务器路径或新增训练权限；
-- 缺少显式 directive、experiment 登记、job approval、source commit 或 Gitee 回传路径。
+- 缺少显式 directive、experiment 登记、job approval、source commit 或当时的 Gitee 回传路径。
 
 阻塞时只提交证据、差异和下一步所需的用户决策，不继续执行。
 

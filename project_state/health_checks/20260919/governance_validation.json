@@ -1,0 +1,52 @@
+{
+  "verified_at": "2026-09-19T18:26:22+08:00",
+  "status": "PASS",
+  "state_revision": 265,
+  "json_schema_validation": "PASS",
+  "directive_events_validated": 136,
+  "active_directive_alignment": "PASS",
+  "document_count": 459,
+  "new_document_count": 101,
+  "document_summary": {
+    "total": 459,
+    "live": 387,
+    "missing": 72,
+    "active": 59,
+    "superseded": 12,
+    "historical": 306,
+    "pending_review": 9,
+    "approved_design": 0,
+    "draft": 1
+  },
+  "explicitly_covered_documents": 102,
+  "missing_nonmissing_documents": [],
+  "restored_historical_missing_documents": [],
+  "broken_document_relations": [],
+  "missing_covered_documents": [],
+  "rescan_existing_metadata_changes": [],
+  "rescan_new_candidates": [],
+  "rescan_hash_calls": 0,
+  "experiment_count": 45,
+  "new_experiment_records": 3,
+  "new_result_acceptances": 0,
+  "pending_and_accepted_overlap": [],
+  "checked_navigation_links": 51,
+  "broken_navigation_links": [],
+  "source_diff_dispositions": {
+    "independently_registered": 84,
+    "covered_by_registered_bundle": 92,
+    "excluded_tool_cache": 2
+  },
+  "limits": [
+    "服务器实体未现场核验",
+    "任务2/3待审回传未作科研接纳",
+    "新组会稿未逐条审核全文",
+    "旧全量sync与哈希治理命令未运行"
+  ],
+  "targeted_tests": {
+    "command": "python -m pytest tests/test_governance_health_refresh.py tests/test_pfmval_state.py -q -k \"governance_health_refresh or document_scan or directive_supersession or directive_completion or directive_lifecycle\"",
+    "passed": 19,
+    "deselected": 69,
+    "exit_code": 0
+  }
+}

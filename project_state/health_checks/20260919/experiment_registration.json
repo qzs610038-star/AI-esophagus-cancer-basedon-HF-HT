@@ -1,0 +1,298 @@
+{
+  "scan_id": "experiment_registration_20260919",
+  "scanned_at": "2026-09-19",
+  "mode": "read_only_registration_scan",
+  "scope": {
+    "registry": "experiments/experiment_registry.json (42 records)",
+    "time_focus": "2026-09-08 through 2026-09-19",
+    "examined": [
+      "current experiment packages",
+      "returned runs under experiments/results",
+      "project_state/current_state.json",
+      "recent team handoff materials under 团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版"
+    ],
+    "excluded": [
+      "training, remote-server access, hash computation, prediction-array inspection, raw-result modification",
+      "pre-2026-09-08 historical results are not treated as missing fields required by later policy"
+    ]
+  },
+  "authority": {
+    "accepted_fact_source": "experiments/experiment_registry.json",
+    "current_state_snapshot": {
+      "path": "project_state/current_state.json",
+      "updated_at": "2026-09-18T18:08:47+08:00",
+      "limitation": "This earlier snapshot cannot override the Registry update at 2026-09-18T21:31:00+08:00."
+    },
+    "server_path_policy": "configs/server_paths.yaml: active server roots require live verification; local path registration does not prove that server files exist."
+  },
+  "package_and_result_mapping": [
+    {
+      "package": "experiments/phase2_fullfov_hpo_v1",
+      "local_package_exists": true,
+      "registry_experiment_id": "phase2_fullfov_hpo_v1",
+      "result_root": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79",
+      "result_id": "phase2-fullfov-hpo-v1-20260916-231813-result",
+      "classification": "accepted",
+      "registry_evidence": "status=done; registration_status=registered; evidence_status=accepted; accepted=true; accepted_at=2026-09-18T21:31:00+08:00",
+      "local_evidence": [
+        "analysis/审核前结果汇报_20260918.md exists",
+        "analysis/复核接纳记录_20260918.md exists",
+        "9 stage-level model_weights.json and 9 feature_caches.json registries exist"
+      ],
+      "handoff_consistency": "The 20260919 handoff calls the full-FOV three-encoder results accepted and explicitly notes the earlier pending snapshot."
+    },
+    {
+      "package": "experiments/phase2_backbone_point_ablation_20260914",
+      "local_package_exists": true,
+      "registry_experiment_id": "phase2_pathology_model_benchmark_v001_20260904",
+      "execution_experiment_id": "phase2_backbone_point_ablation_20260914",
+      "result_roots": [
+        "experiments/results/phase2_backbone_point_ablation_20260914/20260915_133634_621147_64740",
+        "experiments/results/phase2_backbone_point_ablation_20260914/20260915_141640_852394_125780"
+      ],
+      "result_id": "phase2-backbone-point-ablation-20260915-three-seed-result",
+      "classification": "accepted",
+      "registry_evidence": "status=done; registration_status=registered; evidence_status=accepted; analysis_status=reviewed_and_accepted; accepted_at=2026-09-15T22:58:45+08:00",
+      "local_evidence": [
+        "three_seed/三种子统一分析报告.md exists",
+        "both returned batches contain model_weights.json and feature_caches.json"
+      ]
+    },
+    {
+      "package": "experiments/phase2_softlink_local_v2",
+      "local_package_exists": true,
+      "registry_experiment_id": "phase2_softlink_local_v2",
+      "formal_result_root": "experiments/results/phase2_softlink_local_v2/20260908_005325_810_8d306c10",
+      "result_id": "phase2-softlink-local-v2-20260908-005325-result",
+      "classification": "accepted",
+      "registry_evidence": "status=done; registration_status=registered; evidence_status=accepted; analysis_status=reviewed_and_accepted; accepted_at=2026-09-11T15:53:39+08:00",
+      "related_nonresult_runs": [
+        "20260908_004804_826_098da7fa: precheck only",
+        "20260908_005145_189_b6eb9d1f: precheck only"
+      ],
+      "weight_registry_assessment": "No model_weights.json in these three roots. All began before DIR-20260908-002 was issued at 13:00, so this is not a missing post-policy registration."
+    },
+    {
+      "package": "experiments/phase2_softlink_contrastive_v3",
+      "local_package_exists": true,
+      "registry_experiment_id": "phase2_softlink_contrastive_v3",
+      "formal_result_root": "experiments/results/phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302",
+      "result_id": "phase2-softlink-contrastive-v3-20260909-101623-result",
+      "classification": "accepted",
+      "registry_evidence": "status=done; registration_status=registered; evidence_status=accepted; analysis_status=reviewed_and_accepted; accepted_at=2026-09-11T15:53:39+08:00",
+      "weight_registry_assessment": "model_weights.json exists and all 37 registered weight-directory paths use D:\\AIPatho\\qzs\\weights.",
+      "feature_cache_assessment": "No feature_caches.json required: the feature-cache directive was issued later, on 2026-09-12."
+    },
+    {
+      "package": "experiments/phase2_spatial_warmstart_v1",
+      "local_package_exists": true,
+      "registry_experiment_id": "phase2_spatial_warmstart_v1",
+      "formal_result_root": "experiments/results/phase2_spatial_warmstart_v1/warmstart_no_lora_v1/20260910_190620_252_10e4d946",
+      "result_id": "phase2-spatial-warmstart-v1-20260910-190620-result",
+      "classification": "accepted",
+      "registry_evidence": "status=done; registration_status=registered; evidence_status=accepted; analysis_status=reviewed_and_accepted; accepted_at=2026-09-10T20:03:24+08:00",
+      "weight_registry_assessment": "model_weights.json exists.",
+      "feature_cache_assessment": "No feature_caches.json required: the feature-cache directive was issued later, on 2026-09-12."
+    },
+    {
+      "package": "experiments/phase2_task3_fullfov_density_ablation_v1",
+      "local_package_exists": true,
+      "registry_experiment_id": "phase2_spatial_density_comparison_v001_20260904",
+      "classification": "registered_planned_package_only",
+      "registry_evidence": "status=planned; evidence_status=planned; metric_registration_status=pending_not_run; code_status=local_package_validated_formal_training_not_started",
+      "result_assessment": "No returned run under experiments/results; do not represent this as executed, registered-result, or accepted.",
+      "handoff_status": "new_package_ready_local_validation_complete"
+    },
+    {
+      "package": "experiments/phase2_backbone_spatial_ablation_batch2_20260919",
+      "local_package_exists": true,
+      "registry_experiment_id": null,
+      "classification": "package_only_unregistered_not_run",
+      "local_evidence": "README defines a future 3 models x 3 seeds comparison and says results can only be called pending registration or exploratory before Registry acceptance.",
+      "result_assessment": "No matching returned result root found; this package must not be upgraded to accepted."
+    },
+    {
+      "package": null,
+      "registry_experiment_id": "phase2_gene_reconstruction_comparison_v001_20260904",
+      "classification": "registered_plan_only",
+      "registry_evidence": "status=planned; evidence_status=planned; metric_registration_status=pending_not_run; handoff_status=pending_contract_alignment",
+      "result_assessment": "No declared package or returned result; the listed input contracts remain missing."
+    },
+    {
+      "result_root": "experiments/results/phase2_softlink_contrastive_v3/v4_full_diagnostic",
+      "classification": "diagnostic_only_unregistered",
+      "result_assessment": "A diagnostic directory is present but it has no matching Registry result; it is not accepted evidence."
+    }
+  ],
+  "path_and_registration_checks": {
+    "declared_local_paths": "PASS: all examined package, result-root, report_path, and review_record_path references resolve locally.",
+    "post_20260908_weight_metadata": {
+      "PASS": [
+        "phase2_softlink_contrastive_v3 has model_weights.json with 37 D:\\AIPatho\\qzs\\weights registrations.",
+        "phase2_spatial_warmstart_v1 has model_weights.json.",
+        "phase2_backbone_point_ablation_20260914 has two model_weights.json registries, 6 successful entries and 24 registered weight/checkpoint paths, all under D:\\AIPatho\\qzs\\weights.",
+        "phase2_fullfov_hpo_v1 has stage-level model_weights.json registries for its returned workflow; registered weight/checkpoint paths checked all use D:\\AIPatho\\qzs\\weights."
+      ],
+      "not_applicable": "phase2_softlink_local_v2 runs began before the 2026-09-08T13:00 directive, including its formal root at 00:53."
+    },
+    "post_20260912_feature_cache_metadata": {
+      "PASS": [
+        "phase2_backbone_point_ablation_20260914 has two feature_caches.json registries; 12 checked cache path fields use D:\\AIPatho\\qzs\\feature_caches, while legacy UNI2-h reuse is explicitly marked historical.",
+        "phase2_fullfov_hpo_v1 has stage-level feature_caches.json registries; all checked cache path fields use D:\\AIPatho\\qzs\\feature_caches."
+      ],
+      "not_applicable": "Results returned before DIR-20260912-001 are not required to add feature_caches.json retroactively."
+    },
+    "server_existence": "UNVERIFIED: this scan verified local registration syntax and root prefixes only. configs/server_paths.yaml requires live server verification, which was outside scope."
+  },
+  "supplemental_repository_coverage": {
+    "top_level_run_capable_packages": {
+      "count": 9,
+      "covered_count": 9,
+      "covered_packages": [
+        "mpp2_uni2h_mlp_baseline_20260906",
+        "server_load_check_20260905",
+        "phase2_softlink_local_v2",
+        "phase2_softlink_contrastive_v3",
+        "phase2_spatial_warmstart_v1",
+        "phase2_backbone_point_ablation_20260914",
+        "phase2_fullfov_hpo_v1",
+        "phase2_task3_fullfov_density_ablation_v1",
+        "phase2_backbone_spatial_ablation_batch2_20260919"
+      ],
+      "classification_additions": [
+        {
+          "package": "experiments/mpp2_uni2h_mlp_baseline_20260906",
+          "registry_match": false,
+          "classification": "unregistered_reuse_ready_package_not_run",
+          "evidence": "README says it is not a replacement for the accepted baseline; default run_kind=smoke; no matching experiments/results root or Registry entry was found.",
+          "accepted_reference": "mpp2_barcode_repair_v003_frozen_baseline_20260711"
+        },
+        {
+          "package": "experiments/server_load_check_20260905",
+          "registry_match": false,
+          "classification": "diagnostic_only_completed_not_experiment_evidence",
+          "evidence": "Returned report declares diagnostic_only and records 47 PASS, 3 WARN, 0 FAIL. README and SERVER_RETURN_REVIEW state that it sampled loading only, performed no training, and does not establish full training readiness or scientific results.",
+          "returned_diagnostic": "experiments/server_load_check_20260905/deliverables/20260905_234330_776_3c6878e3/report.json"
+        }
+      ]
+    },
+    "team_ljq_task2_task3": {
+      "central_registry_status": "No exact match in the 42 Registry records for any listed LJQ package or result. This prevents acceptance, but does not mean that no team-run artifacts exist.",
+      "items": [
+        {
+          "package": "团队项目进度与结论/ljq/mpp2_softlink_spatial_task23_20260912/mpp2_softlink_spatial_task23_20260912",
+          "classification": "historical_superseded_code_reference_no_local_return_found",
+          "evidence": "README's 2026-09-12 correction says it is an older fine-tuning implementation loading dense-training weights and cannot directly implement the corrected task-2/task-3 scratch-training route. Default run_kind is smoke. No matching result was found under 团队项目进度与结论/ljq/result.",
+          "status_boundary": "Keep as historical implementation reference; do not treat as the current central task-2/task-3 plan or accepted result."
+        },
+        {
+          "package": "团队项目进度与结论/ljq/mpp2_task23_scratch_ablation_20260915",
+          "classification": "unregistered_team_exploratory_results_present",
+          "result_root": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915",
+          "evidence": [
+            "full_20260915_105210_140_d7df166e/batch_summary.json: status=verified; run_kind=full; metric metadata present.",
+            "Its summary_metrics.csv has 10 rows: five arms (two task-2 and three task-3) across internal_val and external, all recording 14,800 optimizer updates.",
+            "smoke_20260915_104353_630_3e3fa2e8/batch_summary.json: status=verified; run_kind=smoke; the corresponding table records the same five arms with 4 updates.",
+            "Team-root documents 任务2和任务3消融实验报告_20260915.docx and 任务2对照组与历史基线差异说明_20260916.docx exist; their scientific narrative was not re-audited in this registration scan."
+          ],
+          "status_boundary": "These are actual locally retained team exploratory/diagnostic results, not Central Registry results and not accepted evidence. The central Registry's task-2/task-3 plan-only wording applies only to the central planned records, not to the non-registered LJQ artifacts."
+        },
+        {
+          "candidate_name": "mpp2_phase3_baseline_share_20260917",
+          "classification": "not_present_not_assessed",
+          "evidence": "No directory of that candidate name was found under 团队项目进度与结论; it was not treated as a missing result."
+        }
+      ]
+    },
+    "results_directory_boundary": {
+      "direct_result_roots_discovered": 17,
+      "focused_roots_checked": 9,
+      "focused_roots": [
+        "phase2_backbone_point_ablation_20260914/20260915_133634_621147_64740",
+        "phase2_backbone_point_ablation_20260914/20260915_141640_852394_125780",
+        "phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79",
+        "phase2_softlink_contrastive_v3/20260909_101623_341_f0de1302",
+        "phase2_softlink_contrastive_v3/v4_full_diagnostic",
+        "phase2_softlink_local_v2/20260908_004804_826_098da7fa",
+        "phase2_softlink_local_v2/20260908_005145_189_b6eb9d1f",
+        "phase2_softlink_local_v2/20260908_005325_810_8d306c10",
+        "phase2_spatial_warmstart_v1/warmstart_no_lora_v1"
+      ],
+      "not_fully_reviewed": [
+        "attnpool (file-only top level)",
+        "ensemble/fusion_tv_virchow2",
+        "ensemble/fusion_unni_virchow2",
+        "HYZ_analysis (file-only top level)",
+        "phase3_search (file-only top level)",
+        "tv_3fold_cv (file-only top level)",
+        "tv_loss_search (file-only top level)",
+        "tv_sweep (file-only top level)"
+      ],
+      "boundary": "The eight listed non-Phase2/legacy result locations were inventoried only by directory name and were not independently registered, path, metric, or acceptance audited."
+    }
+  },
+  "pcc_dual_definition_check": {
+    "scope": "Five result-bearing Registry records created or accepted in the 2026-09-08 to 2026-09-18 period. Historical records predating DIR-20260908-003/004 were not failed for later display fields.",
+    "status": "PASS",
+    "records": {
+      "phase2_softlink_local_v2": "metric_contract_aliases maps mean_per_pathway_pcc and pooled_pcc; pcc_presentation is present.",
+      "phase2_softlink_contrastive_v3": "metric_definitions contains patient_macro_pathway_pcc and pooled_pcc.",
+      "phase2_spatial_warmstart_v1": "metric_definitions contains patient_macro_pathway_pcc and flattened_pooled_pcc.",
+      "phase2_pathology_model_benchmark_v001_20260904": "retained_metric_status labels mean_per_pathway_pcc as patient-macro pathway PCC and pooled_pcc as pooled flattened PCC; definitions keep pooled_pathway_pcc separate.",
+      "phase2_fullfov_hpo_v1": "metric_definitions contains patient_macro_pathway_pcc and pooled_pcc; pcc_presentation records paired metrics, splits, and seed mean/sample SD."
+    },
+    "method_limit": "Field and label presence only; no PCC values were recalculated."
+  },
+  "inconsistencies": [
+    {
+      "severity": "WARN",
+      "subject": "phase2_fullfov_hpo_v1 current_state snapshot",
+      "evidence": "project_state/current_state.json at 2026-09-18T18:08:47+08:00 retains pending_result_ids and latest_result_review.status=registered_pending_user_review, while Registry records accepted=true and accepted_at=2026-09-18T21:31:00+08:00.",
+      "interpretation": "The snapshot is stale. Registry is the accepted-fact source; the full-FOV result is accepted within its declared scope.",
+      "safe_repair": "Update only the corresponding current_state pending/latest-review fields to the later Registry acceptance, preserving the stated limitations."
+    },
+    {
+      "severity": "WARN",
+      "subject": "phase2_fullfov_hpo_v1 internal Registry status",
+      "evidence": "The same accepted Registry record still has registration_scope=completed_run_and_metrics_recorded_pending_user_review_no_acceptance, but also has accepted=true, evidence_status=accepted, analysis_status=reviewed_and_accepted, accepted_at, acceptance_scope, review_record_path, and accepted_conclusion.",
+      "interpretation": "This is an obsolete subordinate field, not evidence that the result is pending.",
+      "safe_repair": "Replace registration_scope with wording consistent with the recorded acceptance scope; do not alter metrics or expand the acceptance claim."
+    }
+  ],
+  "team_handoff_consistency": {
+    "status": "PASS_WITH_DOCUMENTED_STALENESS",
+    "evidence": [
+      "00_从这里开始.md calls the latest full-FOV three-encoder result accepted and explicitly explains the earlier pending state.",
+      "版本与交付检查.md states that new-model and task-2/task-3 materials contain interfaces and placeholders only, with no actual results.",
+      "问题处理与结论变更记录.md preserves the old state machine without rewriting it and records the discrepancy."
+    ],
+    "boundary": "The handoff material does not promote new-model work or task 2/3 to accepted evidence."
+  },
+  "current_model_handoff_check": {
+    "package": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918",
+    "classification": "local_delivered_current_model_pointer",
+    "status": "PASS_WITH_DECLARED_LIMITS",
+    "local_artifacts": [
+      "README.md exists and identifies formal package version 1.1.0.",
+      "weights/formal_best.pt exists locally (4,920,186 bytes).",
+      "assets/model_provenance.json exists: UNI2-h, spatial arm, seed 45, formal epoch 28, full_fov_224_bicubic_v1, evidence_status=accepted, weight_present=true.",
+      "server_locations.json exists and identifies the source batch, formal checkpoint, training run, feature-cache root, and copied local weight destination.",
+      "audit/handoff_validation.json exists with status=PASS; its synthetic isolated launch used weights/formal_best.pt and completed with the declared geometry warnings.",
+      "audit/experiment_consistency.json exists with status=PASS for local returned artifacts and recorded source; it ties the bundle to the accepted full-FOV batch and reports no failures."
+    ],
+    "registration_chain": "The package points to the same phase2_fullfov_hpo_v1 batch and formal UNI2-h spatial seed-45 checkpoint recorded by the accepted Registry result.",
+    "distinction_from_old_batch_status": "The Registry field next_action=accepted_result_record; phase3_contract_not_returned applies to the original full-FOV run's Phase3 contract return. It does not negate the separate local delivery package, its copied formal weight, or its local audit records.",
+    "limits": [
+      "The handoff validation used synthetic input and did not launch formal training.",
+      "The real Phase3 cohort and remote server assets were not inspected in this scan.",
+      "The bundle's recorded server paths remain local metadata, not proof of live server-file existence."
+    ],
+    "safe_follow_up": "If the handoff index needs a single current-model pointer, point to this package and its local weights/formal_best.pt together with model_provenance.json; do not replace the Registry result record."
+  },
+  "user_decisions_needed": [
+    "Whether to apply the two safe metadata repairs above to current_state.json and the full-FOV registration_scope field. This scan makes no such edits.",
+    "Whether and when to register a formal plan record for phase2_backbone_spatial_ablation_batch2_20260919; it currently has a local code package but no Registry experiment/result and no returned run.",
+    "Whether to create executable task-2 materials after the required input/output/operation contract is resolved; the central record remains a plan, while the separate LJQ scratch artifacts remain unregistered exploratory evidence."
+  ],
+  "conclusion": "The clean central fact source for the Phase2 handoff is the Registry: full-FOV is accepted as of 2026-09-18T21:31:00+08:00; its separate current-model delivery package has a locally present formal seed-45 weight and PASS audit chain. In the central Registry, new-model work and task 2/3 remain package/plan-only. Separately, LJQ retains unregistered task-2/task-3 scratch-run artifacts that are exploratory, not accepted. Two stale metadata fields should be repaired only if the user authorizes it."
+}

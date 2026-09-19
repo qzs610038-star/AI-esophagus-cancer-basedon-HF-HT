@@ -1,0 +1,73 @@
+{
+  "scan_date": "2026-09-19",
+  "purpose": "健康扫描发现与建议，不是新的项目规则、实验接纳或执行授权",
+  "canonical_files_modified": false,
+  "findings": [
+    {
+      "id": "STATE-FULLFOV",
+      "severity": "high",
+      "fact": "全视野结果于2026-09-18 21:31已接纳，current_state 18:08仍在pending_result_ids和latest_result_review中写待审，CURRENT_STATE.md同步保留待审句。",
+      "sources": ["project_state/current_state.json", "CURRENT_STATE.md", "experiments/experiment_registry.json", "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md"],
+      "refresh": "按既有接纳范围同步状态与当前入口；不新增科研接纳、不移除外部单患者和物理覆盖范围限制。"
+    },
+    {
+      "id": "STATE-RIDGE",
+      "severity": "high",
+      "fact": "Ridge校准结果已failed/rejected关闭，仍列在current_state.active_plans和document_registry的active；计划正文已说明不得再执行，页首却仍标execution_approved_pending_bound_replacement_job。",
+      "sources": ["project_state/current_state.json", "project_state/document_registry.json", "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md", "experiments/experiment_registry.json"],
+      "refresh": "移出活跃执行计划，登记为historical；保留失败实验合同、用户决定和原始结果。"
+    },
+    {
+      "id": "STATE-CURRENT-MODEL",
+      "severity": "high",
+      "fact": "active的mpp_training.md仍把旧冻结MPP2作为当前Phase3输出来源；20260918交付包已指向UNI2-h全视野空间臂seed45、epoch28。方法家族冻结、最新输入协议、具体交付模型尚未分字段表达。",
+      "sources": ["project_state/plans/mpp_training.md", "project_state/current_state.json", "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md", "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/server_locations.json"],
+      "refresh": "把旧方案限定为历史合同；为当前方法、当前输入协议和当前交付模型分别建指针，保留旧accepted结果作为历史锚点。"
+    },
+    {
+      "id": "SKILL-AUTHORITY",
+      "severity": "high",
+      "fact": "pfmval-audit主技能仍链接evidence-boundaries.md；该参考把机器状态一律排在实验记录前，可能使较早pending覆盖较晚accepted。文档注册器却将该仍被调用的参考标为historical。",
+      "sources": [".agents/skills/pfmval-audit/SKILL.md", ".agents/skills/pfmval-audit/references/evidence-boundaries.md", "AGENTS.md", "project_state/document_registry.json"],
+      "refresh": "改为按事实类型路由：任务状态查current_state，实验接纳及指标查experiment_registry与对应接纳证据，决定查directives，路径查server_paths；冲突核查相同对象、时间和作用域，不以统一层级压过更新事实。"
+    },
+    {
+      "id": "DOCS-SCANNER",
+      "severity": "medium",
+      "fact": "scan_documents的目录清单未覆盖独立实验包与results分析、governance和maintenance_logs；默认把多数未知路径标historical，availability仍硬编码大量指南/团队正文local_only；路径ID与依赖机制中存在哈希代码。",
+      "sources": ["scripts/pfmval_state.py:1669", "scripts/pfmval_state.py:1709", "scripts/pfmval_state.py:1816", "scripts/pfmval_state.py:1885", "scripts/update_doc_registry.py"],
+      "refresh": "先修订扫描范围与保留人工生命周期/ID的行为，再运行写入；新增ID可直接用有语义的字符串，不需哈希。local_only不能代表禁止Git备份，也不能因允许跟踪就断言已提交。",
+      "boundary": "本轮未执行该扫描器；已有lifecycle_override保护的历史条目不等于当前已经被复活。"
+    },
+    {
+      "id": "DIRECTIVES-INDEX",
+      "severity": "high",
+      "fact": "DIR-20260908-003/004双PCC展示与统一名称约定在指令日志中active，却未进入current_state.active_directive_ids；DIR-20260912-001有两条完全相同的声明。AGENTS与交付模板已包含双PCC及缓存分离约定。",
+      "sources": ["project_state/directives.jsonl", "project_state/current_state.json", "AGENTS.md", "experiments/_template/README.md"],
+      "refresh": "补齐有效指令索引；适配旧读取器对新手工记录的兼容性，重复事件保留审计轨迹并在读取/维护时识别。不要补造历史revision或把重复次数当两次授权。",
+      "runtime_evidence": "只读执行当前源码原read_directive_events函数，实际抛出ValueError: directive DIR-20260908-003 missing fields: effective_from_revision。下一条003/004旧字段缺口及001重复声明还会分别触发该读取器检查；未执行会写状态的CLI。",
+      "boundary": "指令JSON本身可解析，用户决定的效力不因旧CLI必填字段而失效。故障是旧工具与近期手工登记不兼容。"
+    },
+    {
+      "id": "VIEWS-STALE",
+      "severity": "medium",
+      "fact": "PROJECT_GUIDE仍称基础编码器名单/协议待定及尚无比较结果；README版本258、Claude两份状态视图版本255。README仍推荐缺失.qoder文件为每会话必读；maintenance-plan指向旧.claude/doc-registry及旧训练启动流程。",
+      "sources": ["PROJECT_GUIDE.md", "README.md", ".claude/next-steps.md", ".claude/session-brief.md", ".claude/maintenance-plan.md", "AGENTS.md"],
+      "refresh": "更新当前导航与短状态摘要；旧维护说明加历史标记；去掉失效必读入口并按任务查源。不要将历史会议记录整体改写为今天的状态。"
+    },
+    {
+      "id": "HANDOFF-MATERIALS",
+      "severity": "medium",
+      "fact": "关联任务及首版交付检查确认Phase2完整交接包已产出并小修，原部署方案仍使用建议路径及尚未组建措辞，状态机待办未区分整理完成与发送/评审未完成。",
+      "sources": ["01_指南与解读/部署方案/Phase2实验汇总交接与论文准备_部署方案_20260919.md", "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/版本与交付检查.md", "project_state/current_state.json"],
+      "refresh": "登记实际包根与入口；将材料产出、发送、队友评审、论文定稿分开记录。不能推断已向队友发送。"
+    },
+    {
+      "id": "RULES-CURRENT-BOUNDARIES",
+      "severity": "info",
+      "fact": "AGENTS、governance主技能、交付指南、server_paths及模板已反映手动文件夹交付、代码与结果分离、服务器权重/缓存分离、不自动哈希/工作树/Git前检、最小专项审查。project_facts三条旧分工仍为candidate，不是现行任务授权。",
+      "sources": ["AGENTS.md", ".agents/skills/pfmval-governance/SKILL.md", "project_state/governance/独立实验包与手动回传_20260905.md", "configs/server_paths.yaml", "experiments/_template/README.md", "project_state/project_facts.jsonl"],
+      "refresh": "保留已有有效规则；只刷新错位的引用、状态与附属参考，不再新增通用门禁。"
+    }
+  ]
+}

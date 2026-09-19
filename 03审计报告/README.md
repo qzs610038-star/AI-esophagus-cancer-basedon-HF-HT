@@ -4,6 +4,8 @@
 
 这些文件默认只是待审审计产物，不是实验结论，也不是训练或改代码授权。
 
+> **当前引用边界（2026-09-19）**：本目录沿用审计记录的历史与待审属性。审计报告可以在当前已授权任务中被读取、比较和引用，但必须保留其 `pending_review`、`accepted` 或 `historical` 状态；“待审”不等于正式实验结论。是否可作为正式实验依据，以 `experiments/experiment_registry.json` 及对应接纳/复核记录为准，不要求另开对话，也不要求先把文档登记为 `active` 才能引用。当前项目约束和交付入口见 [`AGENTS.md`](../AGENTS.md)、[`独立实验包与手动回传`](../project_state/governance/独立实验包与手动回传_20260905.md)。
+
 ## 目录约定
 
 ```text
@@ -32,7 +34,7 @@
 |---|---|---|
 | 已写入本目录 | 查找对话已落盘，待用户审核 | 否 |
 | 用户在对话中接受 | 可作为该次审计的已审记录 | 仅覆盖该次审计范围 |
-| 已登记 `document_registry` 且 `lifecycle=active` | 后续任务可引用 | 是，且不得超出登记范围 |
+| 已登记 `document_registry` 且 `lifecycle=active` | 可作为当前文档入口引用 | 仅说明文档生命周期，不把文档自动升级为实验结论 |
 
 未完成后两步的报告，一律按 `pending_review` 处理。不得用本目录文件覆盖 `project_state/current_state.json`、`experiments/experiment_registry.json` 或受保护资产。
 
@@ -42,7 +44,7 @@
 - 新实验部署讨论稿仍只写 `01_指南与解读/部署方案/`。
 - 实施方案仍只写 `project_state/implementation_plans/`。
 - 禁止在本目录存放 checkpoints、原始训练数据、密钥、服务器凭据。
-- 查找对话必须只读；修复代码、重训、重生成划分/z-score 必须另开对话并获得用户明确批准。
+- 审计正文和诊断过程保持只读；修复代码、重训、重生成划分/z-score 或修改受保护资产，须有用户明确授权并遵守当前项目边界。无需因审计结果自动另开对话，也不因文档尚未登记为 `active` 而阻断已授权的只读核验。
 
 ## 权威模板
 
