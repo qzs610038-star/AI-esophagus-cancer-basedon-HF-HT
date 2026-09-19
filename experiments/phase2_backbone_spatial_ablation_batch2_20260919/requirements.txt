@@ -1,0 +1,14 @@
+# Record only. Launchers never install or upgrade packages.
+# Server evidence on 2026-09-05: Python 3.13.5, torch 2.6.0+cu124, torchvision 0.21, timm 1.0.27.
+# Do not upgrade or downgrade torch/torchvision. transformers is required for Phikon-v2;
+# pin a compatible version only after the server strict-load preflight passes.
+numpy>=2.0,<3
+pandas>=2.0,<3
+Pillow>=11,<13
+torch>=2.6,<2.7
+torchvision>=0.21,<0.22
+timm==1.0.27
+safetensors>=0.4,<1
+huggingface_hub>=0.30,<2
+transformers>=4.40,<5
+pytest>=8,<10

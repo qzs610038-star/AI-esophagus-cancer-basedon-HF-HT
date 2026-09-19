@@ -1,0 +1,48 @@
+{
+  "experiment_id": "phase2_task3_fullfov_density_ablation_v1",
+  "registry_experiment_id": "phase2_spatial_density_comparison_v001_20260904",
+  "code_version": "1.0.1",
+  "protocol_version": "phase2-task3-fullfov-density-ablation-v1",
+  "status": "planned_code_ready_not_run",
+  "entrypoint": "src/main.py",
+  "task2_training_included": false,
+  "formal_training_started": false,
+  "fix_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-09-19",
+      "change": "将spatial_bias修正为false，与已验收phase2_fullfov_hpo_v1和冻结seed45 checkpoint结构一致；check-inputs新增冻结checkpoint严格结构加载。"
+    }
+  ],
+  "source_packages_read_only": [
+    "experiments/phase2_fullfov_hpo_v1",
+    "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915"
+  ],
+  "code_sources": {
+    "accepted_fullfov_core": "experiments/phase2_fullfov_hpo_v1/src",
+    "accepted_fullfov_core_copied_files": [
+      "data.py",
+      "errors.py",
+      "feature_cache.py",
+      "graph.py",
+      "input_data.py",
+      "model.py",
+      "run_io.py",
+      "selection.py",
+      "transforms.py"
+    ],
+    "audit_helper": {
+      "source": ".agents/skills/pfmval-audit/assets/minimal_checks.py",
+      "destination": "tests/minimal_checks.py",
+      "copied_on": "2026-09-19"
+    },
+    "local_adaptations": [
+      "src/data_runtime.py",
+      "src/sampling.py",
+      "src/train_density.py",
+      "src/metrics_export.py",
+      "src/label_audit.py",
+      "src/main.py"
+    ]
+  }
+}

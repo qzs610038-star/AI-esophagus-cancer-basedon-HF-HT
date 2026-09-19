@@ -1,0 +1,8 @@
+patient_id,slide_id,s,coordinate_unit,patch_coverage_size,source,status
+HYZ15040,MPP2_HYZ15040_source01,336.0,source_pixel_coordinate,,complete_split_manifest:D:\AIPatho\qzs\code\phase2_softlink_local_v2\inputs\mpp2\split_manifest.csv,verified_observed_grid
+JFX,MPP2_JFX_source01,448.0,source_pixel_coordinate,,complete_split_manifest:D:\AIPatho\qzs\code\phase2_softlink_local_v2\inputs\mpp2\split_manifest.csv,verified_observed_grid
+LMZ12939,MPP2_LMZ12939_source01,336.0,source_pixel_coordinate,,complete_split_manifest:D:\AIPatho\qzs\code\phase2_softlink_local_v2\inputs\mpp2\split_manifest.csv,verified_observed_grid
+TGC,MPP2_TGC_source01,224.0,source_pixel_coordinate,,complete_split_manifest:D:\AIPatho\qzs\code\phase2_softlink_local_v2\inputs\mpp2\split_manifest.csv,verified_observed_grid
+XSL,MPP2_XSL_source01,224.0,source_pixel_coordinate,,complete_split_manifest:D:\AIPatho\qzs\code\phase2_softlink_local_v2\inputs\mpp2\split_manifest.csv,verified_observed_grid
+ZHZ,MPP2_ZHZ_source01,224.0,source_pixel_coordinate,,complete_split_manifest:D:\AIPatho\qzs\code\phase2_softlink_local_v2\inputs\mpp2\split_manifest.csv,verified_observed_grid
+XZY,MPP2_XZY_source01,224.0,source_pixel_coordinate,,complete_external_feature_directory:D:\AIPatho\qzs\pfmval_deploy_git\mpp_uni2h_cache\2\XZY,verified_observed_grid

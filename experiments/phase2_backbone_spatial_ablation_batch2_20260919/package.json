@@ -1,0 +1,15 @@
+{
+  "experiment_id": "phase2_backbone_spatial_ablation_batch2_20260919",
+  "code_version": "v002",
+  "protocol_version": "fullfov-spatial-backbone-batch2-v1",
+  "entrypoint": "src/dispatch.py",
+  "args": [],
+  "demo_only": false,
+  "hashes_used": false,
+  "code_sources": [
+    {"source": "experiments/_template", "use": "独立包启动、运行/权重分离与日志约定", "copied_on": "2026-09-19"},
+    {"source": "experiments/phase2_backbone_point_ablation_20260914/src/download_models.py and docs", "use": "固定 revision 下载、离线加载、401/403 访问失败、模型清单", "copied_on": "2026-09-19"},
+    {"source": "experiments/phase2_fullfov_hpo_v1/src", "use": "全视野几何、H/C/B、图、训练、选模、外部评估、本地分析、MPP2 划分", "copied_on": "2026-09-19"},
+    {"source": ".agents/skills/pfmval-audit/assets/minimal_checks.py", "use": "身份顺序、约定比较、结果覆盖辅助检查", "copied_on": "2026-09-19"}
+  ]
+}

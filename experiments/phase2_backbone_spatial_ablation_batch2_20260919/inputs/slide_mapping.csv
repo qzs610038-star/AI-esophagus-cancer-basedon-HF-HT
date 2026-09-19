@@ -1,0 +1,8 @@
+patient_id,slide_id,status,evidence_source,notes
+HYZ15040,MPP2_HYZ15040_source01,verified,D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache\MPP2_UNI\HYZ15040,单一完整特征来源组；slide_id是可审计空间分组ID，不冒充物理切片条码
+JFX,MPP2_JFX_source01,verified,D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache\MPP2_UNI\JFX,单一完整特征来源组；slide_id是可审计空间分组ID，不冒充物理切片条码
+LMZ12939,MPP2_LMZ12939_source01,verified,D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache\MPP2_UNI\LMZ12939,单一完整特征来源组；slide_id是可审计空间分组ID，不冒充物理切片条码
+TGC,MPP2_TGC_source01,verified,D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache\MPP2_UNI\TGC,单一完整特征来源组；slide_id是可审计空间分组ID，不冒充物理切片条码
+XSL,MPP2_XSL_source01,verified,D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache\MPP2_UNI\XSL,单一完整特征来源组；slide_id是可审计空间分组ID，不冒充物理切片条码
+ZHZ,MPP2_ZHZ_source01,verified,D:\AIPatho\qzs\pfmval_deploy_git\uni2h_cache\MPP2_UNI\ZHZ,单一完整特征来源组；slide_id是可审计空间分组ID，不冒充物理切片条码
+XZY,MPP2_XZY_source01,verified,D:\AIPatho\qzs\pfmval_deploy_git\mpp_uni2h_cache\2\XZY,完整无标签外部特征来源组；未读取XZY标签

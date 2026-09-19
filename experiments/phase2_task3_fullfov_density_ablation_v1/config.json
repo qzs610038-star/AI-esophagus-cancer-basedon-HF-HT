@@ -1,0 +1,124 @@
+{
+  "experiment_id": "phase2_task3_fullfov_density_ablation_v1",
+  "protocol_version": "phase2-task3-fullfov-density-ablation-v1",
+  "paths": {
+    "runs_root": "D:\\AIPatho\\qzs\\runs",
+    "weights_root": "D:\\AIPatho\\qzs\\weights",
+    "feature_caches_root": "D:\\AIPatho\\qzs\\feature_caches",
+    "labels_root": "D:\\AIPatho\\Patch\\mpp_zscore_repair_staging\\barcode-repair-20260711-d626ad8-v003\\group_2\\labels",
+    "accepted_feature_cache": "D:\\AIPatho\\qzs\\feature_caches\\phase2_fullfov_hpo_v1\\uni2h\\full_fov_224_bicubic_v1\\all",
+    "accepted_common_manifest": "D:\\AIPatho\\qzs\\feature_caches\\phase2_fullfov_hpo_v1\\common_identity_v1\\common_identity_manifest.csv",
+    "frozen_seed45_checkpoint": "D:\\AIPatho\\qzs\\weights\\phase2_fullfov_hpo_v1\\20260916_231813_101_7b1b9a79\\final-ablation_20260918_002437_956_adc7bf35\\final-ablation__uni2h__full_fov_224_bicubic_v1__spatial__45__frozen_spatial__attempt01\\formal_best.pt"
+  },
+  "inputs": {
+    "split_manifest": "inputs/mpp2/split_manifest.csv",
+    "zscore_manifest": "inputs/mpp2/zscore_manifest.json",
+    "dense_zscore_params": "inputs/mpp2/zscore_params_from_train.json",
+    "slide_mapping": "inputs/slide_mapping.csv",
+    "slide_geometry": "inputs/slide_geometry.csv",
+    "model_manifest": "inputs/model_manifest.json"
+  },
+  "data": {
+    "mpp_id": 2,
+    "external_patient": "XZY",
+    "input_dim": 1536,
+    "output_dim": 30,
+    "expected_counts": {
+      "train": 9472,
+      "internal_val": 1078,
+      "external_test": 1039
+    },
+    "slide_geometry_file": "inputs/slide_geometry.csv",
+    "full_fov_protocol": "full_fov_224_bicubic_v1",
+    "resize": 224,
+    "interpolation": "bicubic",
+    "crop": null,
+    "augmentation": false
+  },
+  "model": {
+    "hidden_dim": 256,
+    "dropout": 0.3,
+    "activation": "gelu_exact",
+    "shared_bias": true,
+    "readout_bias": true,
+    "spatial_bias": false,
+    "spatial_zero_init": true,
+    "normalization_epsilon": 1e-12
+  },
+  "graph": {
+    "hops": 1,
+    "directed": true,
+    "radius_in_native_steps": 2.0,
+    "max_neighbors": 12,
+    "distance_sigma": 0.5,
+    "use_image_similarity": true,
+    "image_temperature": 0.7716396069760084,
+    "self_raw_weight": 0.5
+  },
+  "optimizer": {
+    "name": "Adam",
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0,
+    "schedule": "constant",
+    "batch_size": 32,
+    "keep_last_batch": true
+  },
+  "training": {
+    "seeds": [45, 46, 47],
+    "arms": ["dense", "stride_2x2", "random_equal"],
+    "max_updates": 14800,
+    "early_stopping": false,
+    "precision": "float32",
+    "amp": false,
+    "tf32": false
+  },
+  "selection": {
+    "primary": {
+      "name": "equal_updates",
+      "every_updates": 296,
+      "opportunities": 50,
+      "checkpoint_name": "best_equal_updates.pt"
+    },
+    "sensitivity": {
+      "name": "equal_50_epochs",
+      "epochs": 50,
+      "opportunities": 50,
+      "checkpoint_name": "best_equal_50_epochs.pt"
+    },
+    "metric": "patient_macro_pathway_pcc",
+    "tie_breaker": "patient_macro_z_mse_selection",
+    "external_used_for_selection": false
+  },
+  "sampling": {
+    "stride_phase": [0, 0],
+    "expected_dense": 9472,
+    "expected_sparse": 2383,
+    "random_stream_offset": 700000
+  },
+  "randomness": {
+    "model_init_offset": 0,
+    "batch_order_offset": 100000,
+    "dropout_offset": 200000,
+    "random_sampling_offset": 700000
+  },
+  "feature_cache_contract": {
+    "source_experiment_id": "phase2_fullfov_hpo_v1",
+    "protocol_version": "fullfov-hpo-v1",
+    "model": "uni2h",
+    "dataset": "all",
+    "dtype": "float32"
+  },
+  "label_audit": {
+    "source_root": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915/full_20260915_105210_140_d7df166e",
+    "reconstructed_internal": "task2_direct_reconstructed_common_truth/raw/pathway_predictions_internal_val_common_scale.csv",
+    "reconstructed_external": "task2_direct_reconstructed_common_truth/raw/pathway_predictions_external_common_scale.csv",
+    "original_internal": "task3_dense_scratch/raw/pathway_predictions_internal_val_common_scale.csv",
+    "original_external": "task3_dense_scratch/raw/pathway_predictions_external_common_scale.csv",
+    "legacy_gene_branch_internal": "task2_gene_then_reconstruct/raw/reconstructed_pathways_internal_val.csv",
+    "legacy_gene_branch_external": "task2_gene_then_reconstruct/raw/reconstructed_pathways_external.csv",
+    "expected_internal": 1078,
+    "expected_external": 1039,
+    "expected_pathways": 30,
+    "join_keys": ["patient_id", "patch_id", "x", "y", "split", "slide_id"]
+  }
+}
