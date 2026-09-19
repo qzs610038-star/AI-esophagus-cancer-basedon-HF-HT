@@ -1,0 +1,10 @@
+# Record only; launchers never install or upgrade packages automatically.
+# Server evidence on 2026-09-05 reported torch 2.6.0+cu124, torchvision 0.21.0+cu124 and timm 1.0.27.
+numpy>=2.0,<3
+Pillow>=11,<13
+torch>=2.6,<2.7
+torchvision>=0.21,<0.22
+timm==1.0.27
+safetensors>=0.4,<1
+huggingface_hub>=0.30,<2
+pytest>=8,<10

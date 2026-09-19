@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "protocol_version": "v1.1-20260915",
+  "experiment_id": "phase2_backbone_point_ablation_20260914",
+  "python_interpreter": "C:\\Users\\AIPatho1\\pfmval_env\\Scripts\\python.exe",
+  "paths": {
+    "code_root": "D:\\AIPatho\\qzs\\code",
+    "runs_root": "D:\\AIPatho\\qzs\\runs",
+    "weights_root": "D:\\AIPatho\\qzs\\weights",
+    "feature_caches_root": "D:\\AIPatho\\qzs\\feature_caches",
+    "hf_home": "D:\\AIPatho\\shared\\.cache\\huggingface",
+    "image_root": "D:\\AIPatho\\Patch\\visiumhd_patch\\2",
+    "labels_root": "D:\\AIPatho\\Patch\\mpp_zscore_repair_staging\\barcode-repair-20260711-d626ad8-v003\\group_2\\labels",
+    "historical_reference_root": "D:\\AIPatho\\qzs\\runs\\phase2_softlink_local_v2\\20260908_005325_810_8d306c10",
+    "uni2h_partner_cache_root": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\uni2h_cache",
+    "uni2h_flat_cache_root": "D:\\AIPatho\\qzs\\pfmval_deploy_git\\mpp_uni2h_cache"
+  },
+  "inputs": {
+    "split_manifest": "inputs/mpp2/split_manifest.csv",
+    "split_info": "inputs/mpp2/split_info.json",
+    "zscore_manifest": "inputs/mpp2/zscore_manifest.json",
+    "normalization": "inputs/mpp2/zscore_params_from_train.json",
+    "model_manifest": "inputs/model_manifest.json",
+    "baseline_reference_manifest": "inputs/baseline_reference_manifest.json"
+  },
+  "data": {
+    "split_id": "MPP2/group_2",
+    "label_version": "barcode-repair-v003",
+    "mpp_id": 2,
+    "development_patients": ["HYZ15040", "JFX", "LMZ12939", "TGC", "XSL", "ZHZ"],
+    "external_patient": "XZY",
+    "expected_counts": {
+      "train": 9472,
+      "internal_val": 1078,
+      "external_test": 1039
+    },
+    "output_dim": 30,
+    "source_group_template": "MPP2_{patient}_source01"
+  },
+  "preprocessing": {
+    "steps": [
+      "rgb",
+      "resize_shorter_side_256_bicubic_antialias",
+      "center_crop_224",
+      "to_float_tensor_0_1",
+      "imagenet_normalize"
+    ],
+    "resize_shorter_side": 256,
+    "crop_size": 224,
+    "interpolation": "bicubic",
+    "antialias": true,
+    "mean": [0.485, 0.456, 0.406],
+    "std": [0.229, 0.224, 0.225],
+    "random_augmentation": false
+  },
+  "model": {
+    "hidden_dim": 256,
+    "output_dim": 30,
+    "dropout": 0.3,
+    "activation": "gelu_exact",
+    "projection_bias": true,
+    "readout_bias": true
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "betas": [0.9, 0.999],
+    "optimizer_epsilon": 1e-8,
+    "batch_size": 256,
+    "keep_last_batch": true,
+    "max_epochs": 60,
+    "precision": "float32",
+    "amp": false,
+    "tf32": false,
+    "num_workers": 0,
+    "cpu_threads": 8,
+    "resume_supported": false
+  },
+  "selection": {
+    "metric": "patient_macro_pathway_pcc",
+    "tie_metric": "patient_macro_z_mse_selection",
+    "formal_start_epoch": 6,
+    "checkpoint_tolerance": 1e-6,
+    "early_stop_count_start_epoch": 16,
+    "early_stop_min_delta": 0.0001,
+    "early_stop_patience": 10,
+    "constant_prediction_selection_penalty": -1.0
+  },
+  "randomness": {
+    "model_seed_offset": 0,
+    "center_seed_offset": 100000,
+    "dropout_seed_offset": 200000
+  },
+  "feature_extraction": {
+    "feature_version": "cls_meanpatch_fp32_resize256_centercrop224_v1",
+    "initial_batch_size": 16,
+    "fallback_batch_sizes": [8, 4, 2, 1],
+    "dtype": "float32",
+    "amp": false,
+    "tf32": false,
+    "save_mean_patch": true,
+    "overwrite_existing": false
+  },
+  "execution": {
+    "default_scope": "seed42",
+    "baseline_model": "uni2h",
+    "train_models": ["uni", "virchow2"],
+    "scopes": {
+      "seed42": [42],
+      "remaining": [43, 44]
+    },
+    "stop_on_first_failure": true,
+    "external_after_formal_lock_only": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "experiment_id": "phase2_fullfov_hpo_v1",
+  "code_version": "v001",
+  "protocol_version": "fullfov-hpo-v1",
+  "entrypoint": "src/dispatch.py",
+  "args": [],
+  "demo_only": false,
+  "hashes_used": false,
+  "code_sources": [
+    {"source": "experiments/_template", "use": "独立包启动及路径约定", "copied_on": "2026-09-16"},
+    {"source": "experiments/phase2_softlink_local_v2/src", "use": "H/C/B、图、训练及PCC选模", "copied_on": "2026-09-16"},
+    {"source": "experiments/phase2_backbone_point_ablation_20260914/src and inputs/mpp2", "use": "编码器、输入、缓存及划分", "copied_on": "2026-09-16"},
+    {"source": "团队项目进度与结论/ljq/result/mpp2_task23_scratch_ablation_20260915/full_20260915_105210_140_d7df166e/task3_dense_scratch/raw/slide_mapping.csv and slide_geometry.csv", "use": "来源组及观测网格；非物理切片证明", "copied_on": "2026-09-16"}
+  ]
+}

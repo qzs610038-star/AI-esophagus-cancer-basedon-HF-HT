@@ -1,0 +1,81 @@
+{
+  "mpp_id": 2,
+  "fit_split": "train",
+  "fit_patients": [
+    "HYZ15040",
+    "JFX",
+    "LMZ12939",
+    "TGC",
+    "XSL",
+    "ZHZ"
+  ],
+  "excluded_splits": [
+    "internal_val",
+    "external_test",
+    "embargo"
+  ],
+  "ddof": 1,
+  "clip_applied_after_transform": true,
+  "clip_range": [
+    -100.0,
+    100.0
+  ],
+  "split_seed": 42,
+  "val_ratio_target": 0.1,
+  "overlap_policy": "none_100pct_stride",
+  "raw_label_source": {
+    "HYZ15040": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\HYZ15040\\HYZ15040_ssGSEA.csv",
+    "JFX": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\JFX\\JFX_ssGSEA.csv",
+    "LMZ12939": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\LMZ12939\\LMZ12939_ssGSEA.csv",
+    "TGC": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\TGC\\TGC_ssGSEA.csv",
+    "XSL": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XSL\\XSL_ssGSEA.csv",
+    "ZHZ": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\ZHZ\\ZHZ_ssGSEA.csv",
+    "XZY": "D:\\AIPatho\\Patch\\visiumhd_patch\\2\\XZY\\XZY_ssGSEA.csv"
+  },
+  "n_pathways": 30,
+  "pathway_names": [
+    "tls",
+    "tgfb",
+    "emt",
+    "hypoxia",
+    "mhc",
+    "icp",
+    "ifng",
+    "toxic",
+    "Glycolysis",
+    "Inflammatory_Response",
+    "IL6_JAK_STAT3",
+    "P53_Pathway",
+    "DNA_Damage_Response",
+    "Complement",
+    "Coagulation",
+    "Oxidative_Phosphorylation",
+    "Reactive_Oxygen_Species",
+    "Wound_Healing",
+    "Fibrosis",
+    "MYC_Targets",
+    "E2F_Targets",
+    "G2M_Checkpoint",
+    "Mitotic_Spindle",
+    "Unfolded_Protein_Response",
+    "mTOR_Signaling",
+    "Interferon_Alpha",
+    "Angiogenesis",
+    "Apoptosis",
+    "TNF_Signaling",
+    "ECM_Organization"
+  ],
+  "n_train_samples": 9472,
+  "n_val_samples": 1078,
+  "n_external_samples": 1039,
+  "fit_verification": {
+    "train_z_mean_range": [
+      -3.120626880027467e-16,
+      5.281060873892637e-16
+    ],
+    "train_z_std_range": [
+      0.9999999999999998,
+      1.0000000000000002
+    ]
+  }
+}

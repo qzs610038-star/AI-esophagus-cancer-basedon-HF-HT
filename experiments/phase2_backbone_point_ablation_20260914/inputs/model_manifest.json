@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "models": {
+    "uni2h": {
+      "role": "historical_reference_only",
+      "repo_id": "MahmoodLab/UNI2-h",
+      "revision": null,
+      "architecture": "vit_giant_patch14_224",
+      "cls_dim": 1536,
+      "mean_patch_dim": 1536,
+      "total_tokens": 265,
+      "cls_index": 0,
+      "patch_start": 9,
+      "patch_count": 256,
+      "register_count": 8,
+      "extract_in_this_package": false
+    },
+    "uni": {
+      "role": "candidate",
+      "repo_id": "MahmoodLab/UNI",
+      "revision": "b55a5ec6cade1a39edfe6534189a9b8ca7a022f0",
+      "architecture": "vit_large_patch16_224",
+      "checkpoint_filename": "pytorch_model.bin",
+      "config_filename": "config.json",
+      "snapshot_path": null,
+      "download_status": "not_downloaded",
+      "strict_load_status": "not_run",
+      "cls_dim": 1024,
+      "mean_patch_dim": 1024,
+      "total_tokens": 197,
+      "cls_index": 0,
+      "patch_start": 1,
+      "patch_count": 196,
+      "register_count": 0,
+      "extract_in_this_package": true
+    },
+    "virchow2": {
+      "role": "candidate",
+      "repo_id": "paige-ai/Virchow2",
+      "revision": "3158645804b69e3f3bc4439d4116edddf0840a72",
+      "architecture": "vit_huge_patch14_224",
+      "checkpoint_filename": "model.safetensors",
+      "config_filename": "config.json",
+      "snapshot_path": null,
+      "download_status": "not_downloaded",
+      "strict_load_status": "not_run",
+      "cls_dim": 1280,
+      "mean_patch_dim": 1280,
+      "total_tokens": 261,
+      "cls_index": 0,
+      "patch_start": 5,
+      "patch_count": 256,
+      "register_count": 4,
+      "extract_in_this_package": true
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# Phase2 全视野修复与调参代码包最小自检
+
+日期：2026-09-16；代码版本：`package.json` v001；阶段：代码交付。范围是新独立包的输入、缓存、训练、搜索、评估、导出入口。本记录不代表服务器特征已提取、正式训练已完成或新性能结论成立。
+
+| 模块／检查 | 状态 | 实际证据 | 未核实部分／影响范围 |
+|---|---|---|---|
+| 实验约定与超参数 | PASS | `config.json`、`src/config.py`、`src/dispatch.py` 固定12+12、30+30、27=111次；实际 `prepare_training_state` 优化器对象：历史单点 H/C 为 AdamW、3e-4、衰减1e-4；历史空间 H/C/B 同值；候选空间 Adam、1e-4、衰减0。`tests/test_train_search.py` 检查 B 倍率与逐更新日程。 | 真实服务器更新次数和最终早停轮次待正式运行。 |
+| 数据与输入边界 | PASS / WARN | `inputs/mpp2/split_manifest.csv` 本地按患者和 split 计数为训练9472、内部验证1078；`src/stage_runtime.py` 核验训练/验证患者集合、来源组映射、缓存身份顺序、模型/变换/维度；外部标签仅在正式预测固定后加载。 | 本机无服务器图像/标签；来源组不是物理切片范围证明，`patch_coverage_size` 缺失。 |
+| 学习行为 | PASS | 合成空间前向反向对 H/C/B 权重均产生有限非零梯度；单点与去B的 B 参数冻结且不进入优化器；`tests/test_dispatch.py`、`tests/test_train_search.py` 覆盖两参数组及小样本训练。 | 未加载真实编码器；实际 GPU 性能与数值待服务器验证。 |
+| 选模与结果交付 | PASS | `tests/test_dispatch.py` 检查正式第6/1轮、早停第16/41轮及同分zMSE；小训练检查配对第5轮 warmup 检查点与第6轮正式窗口；`src/stage_runtime.py` 冻结只用内部验证，外部评估要求24+27个正式检查点；`tests/test_export_report.py` 验证正式检查点与导出端同输入预测一致。`src/local_report.py` 分别计算患者—通路等权 PCC 和整体展平 pooled PCC，并按数据集合、配方/种子分组。 | 无真实运行结果；真实覆盖与两类PCC尚无可报告数值。 |
+| 输入与缓存补充 | PASS / WARN | 合成四边标记图经实际变换验证全视野保留四边、历史中心裁剪移除；非方图拒绝；缓存读取需 `COMPLETE`、身份、模型 revision、实际快照/权重路径、预处理、维度匹配；可选 mean_patch 缺失不影响主 CLS 输入。UNI、Virchow2 实际路径已从旧运行回传填入，UNI2-h 路径据本地服务器路径表作候选登记。 | 三模型快照当前存在性、UNI2-h 历史特征对应的权重 revision、完整权重和 patch 实际物理支持域待现场核验。 |
+| 空间补充 | PASS / WARN | `tests/test_train_search.py` 真实小图构图检查同组同 split、邻居上限、形态权重路径；图输入只用特征与坐标，不用标签。 | `slide_geometry.csv` 的物理 patch 覆盖为空；不得将来源组当物理切片条码。 |
+| 历史与恢复补充 | PASS | `tests/test_dispatch.py` 模拟失败后新建 attempt，原失败目录和记录保留；训练接口拒绝以旧 checkpoint 冒充完整续训。 | 不提供优化器/随机状态完整续训。 |
+| 入口与包内测试 | PASS | `python -m pytest tests -q`：21 passed；`run.ps1 -Action check-inputs` 及同一 `-BatchDir` 再次显式调用均返回退出码0和 WARN；默认入口未提取特征、未训练。 | `prepare-features`、正式训练、外部评估需服务器资产，按本轮范围未执行。 |
+
+## 关键参数
+
+| 参数 | 设定值 | 生效值或待验证 | 作用位置 | 设置依据 |
+|---|---|---|---|---|
+| 视野 | 历史短边256+中心224；全视野方图直缩224 | 合成四边标记 PASS；实际服务器图片待检查 | `src/transforms.py` | 配对比较 |
+| 编码器与输入维度 | UNI2-h 1536；UNI 1024；Virchow2 1280；均取 CLS | token布局及缓存合同合成 PASS；严格快照加载待服务器 | `src/adapters.py`、`src/feature_cache.py` | 固定编码器对照 |
+| 历史/候选优化器 | AdamW 3e-4、批256、衰减1e-4；Adam 1e-4、批32、衰减0 | 优化器对象与设定一致；单点仅 H/C，空间 H/C/B | `src/train.py` | 配对配方 |
+| B学习率倍率与日程 | 倍率0.3/1/3；常数或逐更新预热余弦 | 小模型实际参数组和 scheduler 测试通过 | `src/train.py` | HPO 搜索空间 |
+| 搜索容量与正则 | 隐藏128/256/512；dropout 0/0.1/0.2/0.3/0.5；AdamW衰减1e-6至1e-2 | 固定种子计划生成与名额测试通过；真实性能未验证 | `src/search.py` | 有限预算探索 |
+| 图参数 | 半径/邻居成对选，距离σ、形态温度、自环权重 | 小图构图与空间前向测试通过；物理支持域未知 | `src/graph.py`、`src/search.py` | 图结构对照 |
+| 选模窗口 | 配对最多60轮、正式6、计数16、耐心10；搜索最多120轮、正式1、计数41、耐心20 | 合成历史检查通过；正式运行待验证 | `src/selection.py`、`src/config.py` | 既定内部验证选模 |
+
+结论：代码入口和合成验收达到本轮交付范围。服务器现场必须确认预填模型快照仍可用并核对原图支持域；输入检查的 WARN 不能解释为物理范围已获证明。外部测试不会用于拟合、选配方或择种子；当前没有新实验指标，也没有 Registry accepted 结果。

@@ -1,0 +1,23 @@
+{
+  "experiment_id": "phase2_backbone_point_ablation_20260914",
+  "code_version": "v001",
+  "protocol_version": "v1.1-20260915",
+  "entrypoint": "runner.py",
+  "default_scope": "seed42",
+  "demo_only": false,
+  "hashes_used": false,
+  "code_sources": [
+    {
+      "source": "experiments/phase2_softlink_local_v2/source_snapshot/src/model.py, train.py, selection.py, data.py",
+      "use": "accepted point-head equation, random streams, MSE, patient-macro selection, identity-key joins",
+      "adaptation": "point-only; native UNI/Virchow2 dimensions; external weights/features separated",
+      "copied_on": "2026-09-15"
+    },
+    {
+      "source": "experiments/_template",
+      "use": "independent package, manual server deployment, run/weight/result separation",
+      "adaptation": "default launcher restricted to seed 42",
+      "copied_on": "2026-09-15"
+    }
+  ]
+}
