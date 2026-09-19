@@ -348,6 +348,9 @@ experiments/**/*.py[cod]
 experiments/_template/tests/work/
 experiments/mpp2_uni2h_mlp_baseline_20260906/tests/work/
 work/manual_package_validation/
+work/ljq_baseline_review_20260916/
+work/ljq_metrics_review_20260916/
+work/phase2_report_revision_20260916/
 **/*.log
 # Runtime artifacts remain excluded even inside the existing analysis-report exception.
 /01_指南与解读/分析报告/**/*.pth

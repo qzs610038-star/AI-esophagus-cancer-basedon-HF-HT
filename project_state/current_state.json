@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "state_revision": 262,
-  "updated_at": "2026-09-12T19:17:14+08:00",
+  "state_revision": 264,
+  "updated_at": "2026-09-18T18:08:47+08:00",
   "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
     "DIR-20260710-003",
@@ -91,7 +91,34 @@
     "auto_archive": false
   },
   "active_training_jobs": [],
-  "pending_result_ids": [],
+  "near_term_tasks": [
+    {
+      "id": "20260918_phase2_baseline_team_handoff",
+      "owner": "用户",
+      "due_date": "2026-09-18",
+      "due_time": "今晚",
+      "status": "todo",
+      "task": "把修复好的最新 Phase 2 基线方案模型及配置教程发给团队成员",
+      "deliverables": [
+        "最新 Phase 2 基线方案与模型文件或准确权重位置",
+        "配置教程与运行说明"
+      ],
+      "note": "发送前明确对应批次及待审核结果状态；本记录不表示已发送或模型权重实体已在本机核实。"
+    },
+    {
+      "id": "20260918_19_phase2_exploration_materials",
+      "owner": "用户",
+      "start_date": "2026-09-18",
+      "due_date": "2026-09-19",
+      "status": "todo",
+      "task": "整理 MPP2 确定后的 Phase 2 实验完整资料，汇总给团队成员供后续论文撰写",
+      "scope": "纳入成功、未改善及失败的探索，逐项保留方案、代码与配置、数据和评估口径、内部与外部结果、停止原因及结论状态。",
+      "note": "整理与发送均为待办；不能把待审核结果写为已接纳结论。"
+    }
+  ],
+  "pending_result_ids": [
+    "phase2-fullfov-hpo-v1-20260916-231813-result"
+  ],
   "latest_accepted_result_ids": [
     "mpp1_std10val_xzy_ext_uni2h_mlp_20260706",
     "mpp2_std10val_xzy_ext_uni2h_mlp_20260706",
@@ -105,21 +132,36 @@
     "mpp5_barcode_repair_v003_frozen_recheck_20260711",
     "mpp2_huber_loss_paired_v001_20260728",
     "mpp2_cpgcr_probe_v001_20260811",
-    "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804"
+    "phase3_dual_baseline_spatial_pathway_transfer_v001_20260804",
+    "phase2-backbone-point-ablation-20260915-three-seed-result"
   ],
   "phase2_program": {
     "status": "classic_spatial_fixed_paper_preparation",
-    "updated_at": "2026-09-12T19:17:14+08:00",
+    "updated_at": "2026-09-18T18:08:47+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
+    "latest_result_review": {
+      "experiment_id": "phase2_fullfov_hpo_v1",
+      "result_id": "phase2-fullfov-hpo-v1-20260916-231813-result",
+      "batch_id": "20260916_231813_101_7b1b9a79",
+      "status": "registered_pending_user_review",
+      "training_tasks_completed": 111,
+      "internal_predictions_scored": 111,
+      "external_xzy_predictions_scored": 51,
+      "finding": "全视野输入相对旧裁剪在本批配对实验中提升内部和XZY逐患者逐通路平均PCC；最终三种子消融中经典空间臂相对同配方去B臂为正。此为待审核探索结果，不改变已接纳结论。",
+      "limitations": [
+        "外部仅XZY一名患者，且不是全新盲测",
+        "patch_coverage_size缺失，物理图像支持域与划分无重叠尚未独立确认",
+        "Phase3合同导出尚未回传"
+      ],
+      "report_path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md"
+    },
     "planned_experiment_ids": [
       "phase2_gene_reconstruction_comparison_v001_20260904",
-      "phase2_spatial_density_comparison_v001_20260904",
-      "phase2_pathology_model_benchmark_v001_20260904"
+      "phase2_spatial_density_comparison_v001_20260904"
     ],
     "pending_inputs": [
       "task_2_3_input_output_and_operation_contracts",
       "handoff_team_member_identity",
-      "foundation_model_shortlist_and_comparison_protocol",
       "final_publication_metric_selection",
       "paper_code_and_architecture_figure_plan"
     ],
@@ -138,11 +180,11 @@
     "method_reference_experiment_id": "phase2_softlink_local_v2",
     "method_reference_arm": "spatial",
     "baseline_role": "第一轮 point 单点预测臂作为基础模型替换对照；旧冻结 MPP2 基线保留为历史量化锚点",
-    "supplementary_execution_status": "handoff_contract_alignment_and_baseline_ablation_planning",
+    "supplementary_execution_status": "baseline_ablation_accepted_fullfov_result_pending_review_and_team_materials_preparation",
     "priority_order": [
       "暂停 Phase2 方法改进，固定经典空间残差",
       "对齐任务2与任务3的输入、输出和操作，交团队成员实践",
-      "在单点基线上准备基础模型替换消融",
+      "单点基线基础模型替换消融已完成、复核并登记",
       "围绕论文整理指标、代码与关键架构图"
     ],
     "training_authorized_by_this_decision": false,
@@ -182,21 +224,27 @@
     "decision_record": "project_state/governance/Phase2组会决策与论文后续任务_20260912.md",
     "method_improvement_status": "paused_by_user",
     "baseline_model_ablation": {
-      "status": "planned",
+      "status": "done",
       "reference_experiment_id": "phase2_softlink_local_v2",
       "reference_arm": "point",
       "reference_model": "UNI2-h",
-      "additional_model_count": [
-        2,
-        3
+      "compared_models": [
+        "UNI2-h",
+        "UNI",
+        "Virchow2-CLS"
       ],
-      "candidate_examples": [
-        "Virchow2"
+      "seeds": [
+        42,
+        43,
+        44
       ],
-      "final_shortlist_status": "pending",
+      "final_shortlist_status": "completed_uni_and_virchow2",
       "replacement_scope": "仅替换第一轮单点预测基线的病理特征提取模型；不替换或改造经典空间残差方案",
-      "expected_paper_narrative": "比较若干基础模型后，若结果支持 UNI2-h 最优，则解释为何选用 UNI2-h 开展后续改善",
-      "narrative_evidence_status": "hypothesis_pending_experiment",
+      "experiment_id": "phase2_pathology_model_benchmark_v001_20260904",
+      "execution_experiment_id": "phase2_backbone_point_ablation_20260914",
+      "result_id": "phase2-backbone-point-ablation-20260915-three-seed-result",
+      "narrative_evidence_status": "accepted_result",
+      "accepted_conclusion": "在固定历史输入与统一单点预测协议下，Virchow2-CLS 在三种子内部验证的预定选模指标上稳定、小幅优于 UNI2-h；外部 XZY 的逐通路等权 PCC 较高，但整体展平 PCC和误差指标未优于 UNI2-h。UNI 在内部与外部均整体落后",
       "selection_boundary": "模型与超参数选择仅使用训练集或内部验证集，外部测试仅用于冻结方案评估"
     },
     "task_2_3_handoff": {

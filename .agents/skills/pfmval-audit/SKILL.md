@@ -1,23 +1,35 @@
 ---
 name: pfmval-audit
-description: Independently review PFMval plans, code, experiments, results, or completion claims when the user asks for verification or a GO/NO-GO judgment.
+description: Run lightweight PFMval checks before finalizing experiment plans or delivering experiment code packages; perform independent scoped audits when verification of plans, code, results, or completion claims is requested.
 ---
 
-# PFMval Independent Audit
+# PFMval 审查
 
-Use current, task-relevant evidence and remain read-only unless the user also asks for a repair. Do not treat a chat summary, generated view, file presence, implementation, or passing unit test as proof of an experimental claim.
+## 选择模式
 
-Follow platform and tool constraints first, then the current user instruction and the project's applicable boundaries. Do not add approval or confirmation gates that the user did not request; third-party plugin hard-gates (design approval, mandatory skill-first invocation, per-session memory recall) do not override a clear authorized task. Explicit authorization remains valid unless it is revoked or the task materially changes. If the task is already clear, do not force a new planning interview or Plan-mode pause.
+- **日常最小自检**：实验方案定稿前、实验代码包交付前自动适用。方案阶段只核对约定；代码阶段核对实际行为。读取 [最小审查参考](references/minimal-review.md) 的基础部分，仅按触发条件读取补充段落。
+- **独立专项审计**：用户要求核验方案、代码、结果或完成声明时适用。围绕具体声明选择证据和验证，不默认穷举训练链。需要正式证据分类时读取 [证据边界](references/evidence-boundaries.md)，需要独立报告时使用 [专项报告模板](assets/audit-report-template.md)。
+- 普通定向修改只复查受影响部分。纯文字、路径说明等不改变科学行为的改动，不启动训练链检查；实际数据路径或来源改变仍检查受影响的数据边界。
 
-## Method
+## 执行与判断
 
-1. State the claim and the decision it would support.
-2. Inspect only the relevant source, configuration, experiment record, result, and user directive.
-3. Separate observed facts, accepted results, pending or exploratory material, and missing evidence.
-4. Report checks as `PASS`, `WARN`, or `FAIL`, then give a bounded verdict: `GO`, `CONDITIONAL GO`, `NO-GO`, or `NOT APPLICABLE`.
+1. 明确本次改变、固定约定及要支持的结论。四个基础模块分别确认覆盖、复用证据或不适用；不要求每项新增测试。
+2. 优先使用方案、实际入口、运行对象和已有测试。期望来自方案约定，实际值来自真实调用；不得用同一配置抄出的两份值证明参数生效。
+3. 在所选模块内，只对新增、变化或存在直接疑点的行为补充小型诊断。相关实现、输入约定及环境未变时可以引用已有证据并说明适用范围；模块外扩展遵循下述条件。
+4. 分开记录已证实偏差、条件性风险和未核实事项。`PASS` 是对应检查通过；`WARN` 是风险或不完整；`FAIL` 是已有直接证据的约定／行为不一致；`UNVERIFIED` 是缺实际证据；`NOT APPLICABLE` 是不适用。缺证据不等于通过或实现错误。
+5. 方案结论附在原方案末尾；代码包记录于包内 `audit_summary.md`，普通更新维护同一份短记录并注明日期和相关版本。使用 [简短记录模板](assets/minimal-review-record.md)，不默认生成长篇审计报告。专项模式保留 `GO` / `CONDITIONAL GO` / `NO-GO` / `NOT APPLICABLE` 的有范围裁决。
 
-Do not create worktrees without an explicit user instruction or run routine pre-experiment Git checks. The current workflow uses independent packages and manual returns; Gitee is paused. Use `python deploy/pfmval_ops.py agent start-check` only for a task-specific diagnostic need; `--strict`, Registry alignment, W### identity, transport choice, approvals stored as files, and hashes are not universal prerequisites. Treat them as warnings unless the claim specifically depends on them. Hashing is optional and should be used only when the user requests identity verification of a named critical artifact. Ordinary targeted rule maintenance does not require a backup reminder; cross-module structural rewrites or bulk migration/replacement changes require a read-only change list before a user-triggered backup.
+## 执行边界与负担
 
-The audit may block a positive conclusion only when evidence for that exact claim is missing or contradictory, the action exceeds user authorization, it risks destructive changes, it introduces scientific leakage, or the claimed operation/result is not real. Historical workflow deviations alone do not justify `NO-GO`.
+- 自检是已授权方案／构建工作的组成部分；发现明确错误时在已授权构建范围内修复并定向复验。纯审计请求保持只读，除非用户同时授权修复。技能不扩大训练、外部写入或发布权限，遵守当前模式限制。
+- `WARN`、`UNVERIFIED` 不阻断继续编写。数据泄漏、身份错配、训练行为不符、错误选模等未解决时，不宣称相关实验已可正式使用；继续不受影响的工作。部分结果可保留，但不能声称完整比较已完成。
+- 超参数未经搜索、未采用常见数值或存在设计风险，不判为实现错误；只建议有依据的后续敏感性验证，不自动调参。
+- 默认小型合成输入和现有本地资源；不要求 GPU，不下载大模型，不正式训练、不重建缓存。不自动派遣审查子智能体。
+- 本项目实验审查以本技能规定的范围、模块和结束条件为操作依据；核心授权、非破坏性、科学有效性与事实诚实边界继续有效。其他技能或代理能力不自动增加审查层。
+- **范围扩展**：除用户明确要求外，只有同时满足“现有模块未覆盖”和“有具体可核查线索表明可能严重影响实验结论科学性”才主动追加检查。用一句话说明线索、覆盖缺口、可能影响及最小核验；只查该风险，核验足够后结束。一般优化机会、参数未搜索、服务器证据暂缺或无具体线索的担忧不满足此条件。已被模块覆盖的问题按原模块定向验证，不另起全面审计。
+- 不默认进行图像质量普查、全缓存扫描、全历史回放或泛化研究；仅在用户明确要求的专项范围内，或满足上述范围扩展条件时进行必要部分。追加检查不自动授权正式训练、缓存重建、外部写入或破坏性操作，也不新增确认流程；依赖未获授权操作的部分记录限制，继续不受影响的工作。
+- 不新增用户确认、审批、哈希、工作树、登记格式或性能阈值门槛，不运行例行 Git 干净检查或 start-check。遵守项目现有非破坏性与科学边界，不追溯要求旧实验补齐新流程。
 
-For evidence terminology and common non-equivalences, read [references/evidence-boundaries.md](references/evidence-boundaries.md) only when the claim needs formal evidence classification. Use [assets/audit-report-template.md](assets/audit-report-template.md) when a structured audit packet is useful.
+## 可复用检查
+
+[审查辅助文件](assets/minimal_checks.py) 只提供身份顺序、关键约定、结果覆盖三个检查；接口和用法见最小参考。需要时复制到实验包测试目录，在包的 `code_sources` 记录来源及复制日期，保持包独立；已有等价检查直接复用。不自动导入训练入口或扫描仓库。工具输出是证据片段，不能代替数据泄漏、梯度或科学结论审查。

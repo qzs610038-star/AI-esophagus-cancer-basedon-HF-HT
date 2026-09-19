@@ -1,7 +1,18 @@
 # PFMval Current State
 
-> 按机器状态和用户决策维护；本次更新组会决定与论文后续任务。
-> State revision: `262` | Updated: `2026-09-12T19:17:14+08:00`
+> 按机器状态和用户决策维护；本次更新近期实验状态与近两日待办。
+> State revision: `264` | Updated: `2026-09-18T18:08:47+08:00`
+## 当前状况（2026-09-18）
+
+- Phase 2 方法以经典空间残差为当前方案；已接纳的第一轮 `phase2_softlink_local_v2` 四臂三种子结果和 9 月 15 日基础模型替换消融仍是正式登记证据。基础模型替换消融中，Virchow2-CLS 在统一单点协议的内部选模指标上小幅领先 UNI2-h；外部两种 PCC 与误差并未同向领先，不能概括为全面最优。
+- 最新 `phase2_fullfov_hpo_v1` 全视野修复与调参批次已完成 111/111 次头部训练，111 份内部预测及 51 份外部 XZY 预测已复算、登记。配对比较显示全视野相对旧裁剪的逐患者逐通路平均 PCC 在本批内部验证和 XZY 均提高；最终消融中，空间臂相对同配方去 B 臂的该指标在三个编码器上为正。**该批证据状态为 pending（待审核），尚未接纳。**外部仅 XZY 一人，`patch_coverage_size` 仍缺，Phase 3 合同导出尚未回传。详见[审核前结果汇报](experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/审核前结果汇报_20260918.md)。
+- 论文准备与团队交接正在推进：任务 2/3 的输入输出及操作合同仍待对齐；MPP2 确定后的 Phase 2 探索资料需要汇总，包含失败及未改善的探索，并逐项标明结论状态。
+
+## 近两日待办
+
+1. **9 月 18 日今晚**：由用户把修复好的最新 Phase 2 基线方案模型及配置教程发给团队成员。交付时标明所用批次和结果待审核状态；目前记录为待办，尚未发送。
+2. **9 月 18—19 日**：由用户整理 MPP2 确定后的 Phase 2 完整实验资料，涵盖成功、未改善和失败探索，汇总给团队成员用于后续论文撰写；保留方案、代码配置、数据及评估口径、内部与外部结果、停止原因和结论状态。目前记录为待办，尚未发送。
+
 ## Current directives
 
 - `DIR-20260912-002`：固定经典空间残差，暂停改进；任务2/3转入交接对齐；单点基线补基础模型替换；准备论文指标、代码与架构图。
@@ -62,6 +73,7 @@
   - decision_summary: four-arm verification accepted on 2026-08-16: single-seed differences are small and mixed; no residual arm is a clear winner. Deep-attribution analysis and interpretation reports remain pending_user_review.; next=review_four_arm_analysis_no_redispatch
 - `phase3_dual_baseline_spatial_pathway_transfer_v001_20260804` (accepted): metrics recorded in Registry
   - decision_summary: mean_per_fit_pCR_auc Δ=0.02318181818181819; next=open_new_patient_independent_protocol
+- `phase2-backbone-point-ablation-20260915-three-seed-result` (accepted): 三模型、三随机种子、内部验证与外部XZY指标已登记；见 `phase2_pathology_model_benchmark_v001_20260904`。
 
 ## MPP repair evidence
 
@@ -74,10 +86,10 @@
 
 - 方法已固定：第一轮 `phase2_softlink_local_v2` 的 `spatial`（经典空间残差）臂；暂停进一步改进。
 - 任务2（基因预测→通路重建）、任务3（隔点训练→稠密测试）：核对已有材料，准确对齐输入、输出及操作后交另一位团队成员实践，当前待交接对齐。
-- 基础模型消融：在同轮 `point`（单点预测）基线上比较 UNI2-h 与另外2至3个模型，Virchow2为候选；名单与协议待定。空间残差方案保持固定。
-- “UNI2-h最好”是待实验验证的论文叙事；尚无本次新增模型比较结果。
+- 基础模型消融：UNI2-h、UNI 与 Virchow2-CLS 已在统一单点预测协议下完成三随机种子比较，结果已复核并登记为 accepted（已接纳）。空间残差方案保持固定。
+- 登记结论：在固定历史输入与统一单点预测协议下，Virchow2-CLS 在三种子内部验证的预定选模指标上稳定、小幅优于 UNI2-h；外部 XZY 的逐通路等权 PCC 较高，但整体展平 PCC和误差指标未优于 UNI2-h。UNI 在内部与外部均整体落后
 - 后续重心：论文结构与指标选择、代码整理、关键架构图。全部指标继续保留，两种PCC并列，论文主副指标待定。
-- 本次只更新状态；旧改进优先排序被取代，既有实验结果与接纳状态不变。
+- 本次完成基础模型消融结果登记；其余组会任务和既有实验接纳状态不变。
 
 - [完整组会决策与后续任务](project_state/governance/Phase2组会决策与论文后续任务_20260912.md)
 ## Hard blocks
