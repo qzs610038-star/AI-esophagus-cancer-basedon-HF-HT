@@ -364,3 +364,10 @@ work/phase2_report_revision_20260916/
 /01_指南与解读/分析报告/**/runs/
 /01_指南与解读/分析报告/**/*.html
 draw_metrics_comparison.py
+
+# User-managed cloud sync copies, kept outside the Git backup.
+/云端同步资料/
+/AI空转病例项目云端同步资料/
+
+# Local Obsidian workspace state.
+/.obsidian/
