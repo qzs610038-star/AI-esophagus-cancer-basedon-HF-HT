@@ -98,6 +98,11 @@ def _development_table(config: dict, *, model_name: str):
     ), path_train, names
 
 
+def _attempt_directory_name(task, attempt_no: int) -> str:
+    """Keep Windows output paths short while task records retain the full task ID."""
+    return f"{task.model}_s{task.seed}_a{attempt_no:02d}"
+
+
 def _run_task(config: dict, task, *, run_dir: Path, weights_dir: Path, device: str, table_cache: dict) -> dict:
     from train import train_arm
     batch = _batch(run_dir)
@@ -117,8 +122,9 @@ def _run_task(config: dict, task, *, run_dir: Path, weights_dir: Path, device: s
     table, cache_dir, _ = table_cache[task.model]
     attempt_no = len(record["attempts"]) + 1
     attempt_id = f"{task.task_id}__attempt{attempt_no:02d}"
-    task_run = run_dir / "raw" / attempt_id
-    task_weights = weights_dir / attempt_id
+    directory_name = _attempt_directory_name(task, attempt_no)
+    task_run = run_dir / "raw" / directory_name
+    task_weights = weights_dir / directory_name
     if task_run.exists() or task_weights.exists():
         raise ConfigError(f"尝试目录已存在，拒绝覆盖: {attempt_id}")
     task_run.mkdir(parents=True, exist_ok=False)
@@ -173,14 +179,15 @@ def _record_preflight_failure(task, *, run_dir: Path, weights_dir: Path, exc: Ex
     record = _read(path) if path.is_file() else {"task_id": task.task_id, "spec": vars(task), "attempts": []}
     attempt_no = len(record["attempts"]) + 1
     attempt_id = f"{task.task_id}__attempt{attempt_no:02d}"
+    directory_name = _attempt_directory_name(task, attempt_no)
     now = utc_now()
     attempt = {
         "attempt_id": attempt_id,
         "status": "failed",
         "started_at": now,
         "ended_at": now,
-        "run_dir": str((run_dir / "raw" / attempt_id).resolve()),
-        "weights_dir": str((weights_dir / attempt_id).resolve()),
+        "run_dir": str((run_dir / "raw" / directory_name).resolve()),
+        "weights_dir": str((weights_dir / directory_name).resolve()),
         "cache_dir": None,
         "error": f"{type(exc).__name__}: {exc}",
         "traceback": traceback.format_exc(),

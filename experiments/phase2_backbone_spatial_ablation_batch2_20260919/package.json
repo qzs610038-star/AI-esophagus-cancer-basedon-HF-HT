@@ -1,6 +1,6 @@
 {
   "experiment_id": "phase2_backbone_spatial_ablation_batch2_20260919",
-  "code_version": "v002",
+  "code_version": "v006",
   "protocol_version": "fullfov-spatial-backbone-batch2-v1",
   "entrypoint": "src/dispatch.py",
   "args": [],

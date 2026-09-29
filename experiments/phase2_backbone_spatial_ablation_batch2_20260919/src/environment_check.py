@@ -37,7 +37,7 @@ def build_environment_report(config: dict, *, require_server_assets: bool = Fals
         item = {"name": f"import:{module}", **_import_status(module)}
         if module == "transformers" and item["status"] != "ok":
             item["status"] = "unverified"
-            item["note"] = "Phikon-v2 需要 transformers；请在服务器显式安装后用下载预检固定兼容版本，不要改 torch"
+            item["note"] = "Phikon-v2 需要 transformers；请显式运行 .\\install_phikon_offline.ps1，再对全部三模型重跑 -RegisterOnly"
         checks.append(item)
     try:
         import torch

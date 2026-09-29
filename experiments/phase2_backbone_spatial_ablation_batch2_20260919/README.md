@@ -1,8 +1,8 @@
 # Phase2 第二批全视野空间头：病理基础编码器替换消融
 
-本包实现 2026-09-19 部署方案：在冻结的全视野空间头 `spatial-11`、数据、图、训练与选模规则下，比较 H-optimus-0、H-optimus-1、Phikon-v2 相对已接纳 UNI2-h / UNI / Virchow2 全视野空间臂的变化。代码版本 `v002`，协议 `fullfov-spatial-backbone-batch2-v1`。
+本包实现 2026-09-19 部署方案：在冻结的全视野空间头 `spatial-11`、数据、图、训练与选模规则下，比较 H-optimus-0、H-optimus-1、Phikon-v2 相对已接纳 UNI2-h / UNI / Virchow2 全视野空间臂的变化。代码版本 `v006`，协议 `fullfov-spatial-backbone-batch2-v1`。
 
-本交付只包含独立代码包和本地零训练测试。未下载模型、未提取特征、未训练、未修改 Registry 或团队结论。任何真实下载与训练须由用户在服务器显式启动。
+本包含独立代码、小型配置和约 29 MB 的 Phikon-v2 离线 Python 依赖包，不内置模型权重。截至 2026-09-27 的用户回传报告，三款模型严格加载、三组特征缓存、v006 九项训练及九份 XZY 外部预测均已完成；首次训练失败记录仍保留。回传结果已完成本地复核，并于 2026-09-28 在 Registry 中接纳。接受范围限共享冻结 `spatial-11` 配方下的 9 项成功训练及 9 份内部、9 份 XZY 预测；外部仅一名患者，结论为描述性观察，不改变预先指定的 UNI2-h 下游模型。服务器事实依据用户回传报告，本次文档更新未实时连接服务器。
 
 ## 实验边界
 
@@ -20,45 +20,46 @@
 
 ## 服务器部署顺序
 
+**当前状态：**本批服务器准备、输入检查、三模型特征缓存、九项训练及九项 XZY 外部预测均已完成，回传结果已在 Registry 接纳。以下顺序和命令保留作历史记录／复验入口，不是当前待办；重新运行会生成新的动作记录，且不会自动替换已接纳结果。
+
 将整个目录复制到：
 
 ```text
 D:\AIPatho\qzs\code\phase2_backbone_spatial_ablation_batch2_20260919
 ```
 
-以下命令都在该目录执行。启动器不安装依赖、不改科学超参数、默认不训练。
+以下命令都在该目录执行。依赖安装仅由显式调用的 `install_phikon_offline.ps1` 执行；下载登记与实验启动器不自行安装依赖、不改科学超参数、默认不训练。
 
-1. 只读检查环境（不下载、不训练）。模型尚未下载时，snapshot 项为未核实属于预期。
+1. **已完成，命令留作复验入口**：三款模型已由用户手动传输并在服务器解压；离线依赖安装与三模型登记报告均通过。以下命令仅供需要复验时使用；不要求服务器代理或 Hugging Face 登录。
+
+   ```powershell
+   .\install_phikon_offline.ps1
+   .\download_models.ps1 -RegisterOnly -Report D:\AIPatho\qzs\pfmval_diagnostics\phase2_batch2_model_registration.json
+   ```
+
+   脚本从服务器缓存登记快照路径，用合成 224×224 图严格验证：H-optimus 应为 `[1,1536]`，Phikon-v2 应为 `[1,1024]`。一个模型失败不会取消已成功模型；三个模型全部通过后再进入特征提取。本动作本身不提取特征、不训练。
+
+   安装脚本只针对 `config.json` 指定的 Python 3.13 环境，并会把与 `transformers 4.57.1` 不兼容的 `huggingface_hub 1.31.0` 调整为兼容版本；不主动安装 torch / torchvision。随后必须重新验证全部三模型，单模型报告不算整批通过。
+
+2. **已完成（回报 `status: ok`）；命令留作复验入口。**只读检查环境（不下载、不训练）。
 
    ```powershell
    .\run.ps1 -Action check-environment
    ```
 
-2. 默认动作：只读核对包内输入、基线清单和模型路径登记。
-
-   ```powershell
-   .\run.ps1
-   # 等价于
-   .\run.ps1 -Action check-inputs
-   ```
-
-   记下终端打印的 `Run directory` 的**父目录**作为本批次 `$BatchDir`。后续动作必须显式传入该批次，否则会另开新批次。
+   记下终端打印的 `Run directory` 的**父目录**作为本批次 `$BatchDir`；后续动作必须传入该批次，否则会另开新批次。
 
    ```powershell
    $BatchDir = 'D:\AIPatho\qzs\runs\phase2_backbone_spatial_ablation_batch2_20260919\<batch_id>'
    ```
 
-3. 按操作卡在浏览器完成 H-optimus-0 / H-optimus-1 条款同意（后者通常需机构邮箱人工审批），交互式 `hf auth login`，再下载固定 revision。该步骤**不是** `run.ps1` 的动作。
+3. **已完成（`errors: []`）；命令留作复验入口。**在同一批次只读核对包内输入、基线清单和模型路径登记。
 
    ```powershell
-   .\download_models.ps1 -Model all -Report D:\AIPatho\qzs\inspection\phase2_batch2_download.json
+   .\run.ps1 -Action check-inputs -BatchDir $BatchDir
    ```
 
-   一个模型失败不会取消已成功模型。H-optimus-1 未获访问时，可单独重跑 `-Model hoptimus1`；不得把 401/403 当网络抖动无限重试。下载后立即离线严格加载，并用一张合成 224×224 图检查形状：H-optimus `[1,1536]`，Phikon-v2 `[1,1024]`。不提取特征、不训练。
-
-   Phikon-v2 需要 `transformers`。若环境检查显示缺失，只对该解释器显式安装，**不要改** torch / torchvision。兼容版本以本次严格加载预检通过为准，不要预先锁死未验证的旧版。
-
-4. 三个模型就绪后，提取/复用特征。缓存键包含模型与预处理配置，例如 H-optimus 不得与 ImageNet 归一化缓存混用。
+4. **已完成（3 组缓存，`overall_cache_status: complete`）；命令留作复验入口。**三个模型就绪后，提取/复用特征。缓存键包含模型与预处理配置，例如 H-optimus 不得与 ImageNet 归一化缓存混用。
 
    ```powershell
    .\run.ps1 -Action prepare-features -BatchDir $BatchDir
@@ -70,7 +71,9 @@ D:\AIPatho\qzs\code\phase2_backbone_spatial_ablation_batch2_20260919
    .\run.ps1 -Action prepare-features -BatchDir $BatchDir -Models hoptimus0,phikonv2
    ```
 
-5. 训练冻结空间头。完整比较仍要求 3 模型 × 3 种子共 9 次；某模型缓存缺失时，该模型的任务会登记失败，后续模型继续。
+5. **已完成（9 项训练，`failed: 0`）；命令留作复验入口。**训练冻结空间头。完整比较仍要求 3 模型 × 3 种子共 9 次；某模型缓存缺失时，该模型的任务会登记失败，后续模型继续。
+
+   若从 v005 的九项路径过长失败恢复：复制整个 v006 代码包并合并覆盖服务器代码目录，然后重跑 `download_models.ps1 -RegisterOnly`，使覆盖后的模型清单重新登记服务器快照路径；保留原 `$BatchDir`，直接执行下述 `train-spatial`，无需再次提取特征。每项会新增 attempt02，旧失败记录和运行目录保留。
 
    ```powershell
    .\run.ps1 -Action train-spatial -BatchDir $BatchDir
@@ -82,7 +85,7 @@ D:\AIPatho\qzs\code\phase2_backbone_spatial_ablation_batch2_20260919
    .\run.ps1 -Action train-spatial -BatchDir $BatchDir -Models hoptimus0,phikonv2
    ```
 
-6. 对已有正式检查点执行 XZY 推理。默认核对全部 9 个任务，缺失项登记失败但不会阻止其他任务；也可用相同的 `-Models` 参数定向评估已完成模型。
+6. **已完成，命令留作复验入口**：对已有正式检查点执行 XZY 推理。默认核对全部 9 个任务，缺失项登记失败但不会阻止其他任务；也可用相同的 `-Models` 参数定向评估已完成模型。
 
    ```powershell
    .\run.ps1 -Action external-eval -BatchDir $BatchDir
@@ -92,13 +95,13 @@ D:\AIPatho\qzs\code\phase2_backbone_spatial_ablation_batch2_20260919
    .\run.ps1 -Action external-eval -BatchDir $BatchDir -Models hoptimus0,phikonv2
    ```
 
-7. 回传运行目录到本地 `experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/<运行编号>/`。常规回传必须包含 `model_weights.json` 与 `feature_caches.json`，**不复制**权重文件和特征缓存本体。然后本地合并分析：
+7. **已完成**：运行目录已回传至 `experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/`，本地分析和结果复核已完成，Registry 已接纳。下列回传与分析命令保留作流程复验入口；常规回传包含 `model_weights.json` 与 `feature_caches.json`，**不复制**权重文件和特征缓存本体：
 
    ```powershell
    .\run.ps1 -Action analyze-local -BatchDir <本地回传批次目录> -PythonInterpreter <本地python.exe> -RunsRoot <本地runs根> -WeightsRoot <任意占位权重根>
    ```
 
-   若在服务器上分析，同样使用 `-Action analyze-local -BatchDir $BatchDir`。缺少任一新任务或基线时，报告必须标为不完整，不能称为三模型最终结论。结果在 Registry 接纳前只能称为待登记或探索结果。
+   若对其他批次或尚未接纳的结果重新分析，缺少任一新任务或基线时，报告必须标为不完整，不能称为三模型最终结论；仅在 Registry 接纳前，相关结果称为待登记或探索结果。本批已接纳状态以 Registry 为准。
 
 ## 路径
 

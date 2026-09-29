@@ -246,10 +246,14 @@ def _load_checkpoint(checkpoint: Path) -> Mapping[str, torch.Tensor]:
 
 def _timm_kwargs(config_payload: dict, spec: ModelSpec) -> dict:
     args = dict(config_payload.get("model_args") or {})
+    input_size = (config_payload.get("pretrained_cfg") or {}).get("input_size")
+    if input_size != [3, 224, 224]:
+        raise OfflineModelError(f"{spec.name} 本地 config.json 输入尺寸不符合 3×224×224: {input_size}")
     args.setdefault("pretrained", False)
     args.setdefault("num_classes", 0)
     args.setdefault("init_values", 1e-5)
     args.setdefault("dynamic_img_size", False)
+    args["img_size"] = 224
     args["pretrained"] = False
     args["num_classes"] = 0
     if spec.architecture and "model_name" in args:
@@ -263,9 +267,14 @@ def _build_timm_model(spec: ModelSpec, config_path: Path) -> nn.Module:
     except ImportError as exc:
         raise OfflineModelError("缺少 timm，不能构造 H-optimus") from exc
     payload = _read_json(config_path)
-    architecture = spec.architecture or payload.get("architecture")
+    architecture = payload.get("architecture")
     if not architecture:
         raise OfflineModelError(f"{spec.name} 本地 config.json 没有 architecture，不能猜测结构")
+    if spec.architecture != architecture:
+        raise OfflineModelError(
+            f"{spec.name} 清单 architecture 与本地 config.json 不一致: "
+            f"manifest={spec.architecture}, snapshot={architecture}"
+        )
     kwargs = _timm_kwargs(payload, spec)
     try:
         return timm.create_model(str(architecture), **kwargs)
@@ -283,11 +292,23 @@ def _build_transformers_model(snapshot: Path) -> nn.Module:
     try:
         from transformers import AutoModel
     except ImportError as exc:
-        raise OfflineModelError("缺少 transformers，不能加载 Phikon-v2") from exc
+        raise OfflineModelError(f"transformers 导入失败: {exc}；先运行 .\\install_phikon_offline.ps1") from exc
     try:
-        return AutoModel.from_pretrained(str(snapshot), local_files_only=True)
+        model, loading_info = AutoModel.from_pretrained(
+            str(snapshot), local_files_only=True, use_safetensors=True, output_loading_info=True
+        )
     except Exception as exc:
         raise OfflineModelError(f"Phikon-v2 本地严格加载失败: {exc}") from exc
+    fields = ("missing_keys", "unexpected_keys", "mismatched_keys", "error_msgs")
+    if not isinstance(loading_info, dict) or any(
+        field not in loading_info or loading_info[field] for field in fields
+    ):
+        summary = {
+            field: loading_info.get(field, "not_reported") if isinstance(loading_info, dict) else "not_reported"
+            for field in fields
+        }
+        raise OfflineModelError(f"Phikon-v2 权重加载不完整: {summary}")
+    return model
 
 
 def load_local_encoder(spec: ModelSpec, device: str | torch.device) -> EncoderAdapter:

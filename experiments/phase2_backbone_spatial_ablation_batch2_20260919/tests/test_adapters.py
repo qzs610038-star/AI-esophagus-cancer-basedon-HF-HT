@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 import torch
@@ -9,6 +11,8 @@ from torch import nn
 
 from errors import ConfigError, NonFiniteDataError, OfflineModelError
 from model_adapters import (
+    _build_timm_model,
+    _build_transformers_model,
     EncoderAdapter,
     adapt_encoder_output,
     fake_spec,
@@ -98,3 +102,52 @@ def test_packaged_manifest_pins_three_new_encoders():
     assert specs["hoptimus0"].checkpoint_filename == "pytorch_model.bin"
     assert "pytorch_model.bin" in specs["hoptimus0"].allow_patterns
     assert "model.safetensors" not in specs["hoptimus0"].allow_patterns
+    assert specs["hoptimus0"].architecture == "vit_giant_patch14_reg4_dinov2"
+    assert specs["hoptimus1"].architecture == "vit_giant_patch14_reg4_dinov2"
+
+
+def test_hoptimus_constructor_uses_snapshot_architecture_and_224_grid(tmp_path: Path, monkeypatch):
+    config = tmp_path / "config.json"
+    config.write_text(json.dumps({
+        "architecture": "vit_giant_patch14_reg4_dinov2",
+        "pretrained_cfg": {"input_size": [3, 224, 224]},
+    }), encoding="utf-8")
+    calls = []
+    monkeypatch.setitem(sys.modules, "timm", SimpleNamespace(create_model=lambda name, **kwargs: calls.append((name, kwargs)) or object()))
+    spec = fake_spec(name="hoptimus0", architecture="vit_giant_patch14_reg4_dinov2")
+    _build_timm_model(spec, config)
+    assert calls[0][0] == spec.architecture
+    assert calls[0][1]["img_size"] == 224
+    assert calls[0][1]["pretrained"] is False
+    with pytest.raises(OfflineModelError, match="architecture 与本地 config.json 不一致"):
+        _build_timm_model(fake_spec(name="hoptimus0", architecture="vit_giant_patch14_224"), config)
+
+
+def test_phikon_requires_empty_transformers_loading_info(tmp_path: Path, monkeypatch):
+    model = object()
+    calls = []
+
+    class FakeAutoModel:
+        @staticmethod
+        def from_pretrained(path, **kwargs):
+            calls.append((path, kwargs))
+            return model, {
+                "missing_keys": [], "unexpected_keys": [],
+                "mismatched_keys": [], "error_msgs": [],
+            }
+
+    monkeypatch.setitem(sys.modules, "transformers", SimpleNamespace(AutoModel=FakeAutoModel))
+    assert _build_transformers_model(tmp_path) is model
+    assert calls[0][1]["local_files_only"] is True
+    assert calls[0][1]["use_safetensors"] is True
+    assert calls[0][1]["output_loading_info"] is True
+
+    def incomplete_load(*_args, **_kwargs):
+        return model, {
+            "missing_keys": ["encoder.layer.0.attention.weight"],
+            "unexpected_keys": [], "mismatched_keys": [], "error_msgs": [],
+        }
+
+    monkeypatch.setattr(FakeAutoModel, "from_pretrained", incomplete_load)
+    with pytest.raises(OfflineModelError, match="权重加载不完整"):
+        _build_transformers_model(tmp_path)

@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
+import torch
 
 from analyze import coverage_records
 from baseline_reference import load_baseline_reference, planned_baseline_task_ids
@@ -128,6 +129,37 @@ def test_download_continues_after_one_model_fails(tmp_path: Path, monkeypatch):
     assert report["failures"][0]["model"] == "hoptimus1"
     assert report["feature_extraction_started"] is False
     assert report["training_started"] is False
+
+
+def test_register_only_checks_each_model_without_requiring_other_snapshots(tmp_path: Path, monkeypatch):
+    source = Path(__file__).resolve().parents[1] / "inputs" / "model_manifest.json"
+    payload = json.loads(source.read_text(encoding="utf-8-sig"))
+    manifest = tmp_path / "model_manifest.json"
+    manifest.write_text(json.dumps(payload), encoding="utf-8")
+    hub = tmp_path / "hub"
+    for spec in payload["models"].values():
+        snapshot = hub / ("models--" + spec["repo_id"].replace("/", "--")) / "snapshots" / spec["revision"]
+        snapshot.mkdir(parents=True)
+        (snapshot / spec["config_filename"]).write_text("{}", encoding="utf-8")
+        (snapshot / spec["checkpoint_filename"]).write_bytes(b"fake weights")
+
+    class FakeAdapter:
+        def __init__(self, feature_dim):
+            self.feature_dim = feature_dim
+
+        def encode(self, batch):
+            return torch.ones((batch.shape[0], self.feature_dim), dtype=torch.float32)
+
+    monkeypatch.setattr("download_models.load_local_encoder", lambda spec, _device: FakeAdapter(spec.feature_dim))
+    monkeypatch.setattr("download_models.build_transform", lambda *_args: lambda _image: torch.zeros(3, 224, 224))
+    config = {"inputs": {"model_manifest": str(manifest)}, "paths": {"hf_home": str(tmp_path)}}
+    report = run_models(config, ["hoptimus0", "hoptimus1", "phikonv2"], verify_device="cpu", register_only=True)
+
+    assert report["status"] == "complete"
+    assert [item["model"] for item in report["entries"]] == ["hoptimus0", "hoptimus1", "phikonv2"]
+    assert report["failures"] == []
+    recorded = json.loads(manifest.read_text(encoding="utf-8"))
+    assert all(item["strict_load_status"] == "passed" for item in recorded["models"].values())
 
 
 def test_partial_exit_semantics_are_action_specific():

@@ -1,8 +1,18 @@
-# 代码包验收记录
+# 代码包验收记录与当前结果状态
 
-结论：2026-09-19 部署方案对应的独立代码包已完成本地工程验收。服务器模型下载、特征提取、正式训练和科研结果验收尚未开始。不能把本记录解释为实验结果已经完成或 accepted。
+## 当前 v006 结果状态（2026-09-28）
+
+实验 Registry 已将 v006 第二批登记为 `accepted`。接受范围为三个编码器各种子 45/46/47 的 9 项成功训练，以及对应的 9 份内部验证、9 份 XZY 外部预测；失败的 `attempt01` 保留，正式结果使用成功的 `attempt02`。训练与外部评估动作报告、本地复核记录及指标产物见 `experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/` 和 `experiments/experiment_registry.json` 中同 ID 条目。
+
+Registry 接纳结论限定为共享冻结 `spatial-11` 配方和当前评价集合：H-optimus-1 的 XZY 双 PCC 均值在六个编码器空间臂中最高；H-optimus-0 相对 UNI2-h 指标方向不一；Phikon-v2 内部略高于 UNI、外部较低。XZY 仅一名患者，这些是单患者描述性观察，不代表跨患者泛化；既定 UNI2-h 下游模型不变。服务器模型加载、训练与预测状态依据用户 2026-09-27 回传的报告，本次更新未实时核验服务器。
+
+## 2026-09-19：v002 初始代码包验收记录
+
+下文保留当时的 v002 工程验收与阶段性待办，作为历史记录；其中的服务器待完成项和“结果尚未 accepted”结论不代表当前 v006 状态。后续 v003–v006 的修复、复验和当前边界见 `audit_summary.md` 与 `修复日志_20260927_v005.md`。
 
 验收日期：2026-09-19。代码版本：`v002`。协议：`fullfov-spatial-backbone-batch2-v1`。
+
+以下各项是 v002 当时的证据与待办。
 
 ## 已完成范围
 
@@ -36,7 +46,7 @@ python -m compileall -q src runner.py
 - 基线：缺臂、种子或包内 accepted 指标会报错；原始来源路径在当前机器不存在时不阻断 `check-inputs` 或分析，且不会触发基线重训。
 - 下载：401/403 不当作可重试网络失败；一个下载失败不阻止其余模型尝试；H-optimus-0 固定 revision 使用实际存在的 `pytorch_model.bin`。
 
-## 服务器待完成项
+## v002 阶段的服务器待完成项（历史）
 
 1. `run.ps1 -Action check-environment`
 2. 按 `docs/服务器HuggingFace登录与三模型下载操作卡.md` 完成授权、固定 revision 下载及严格加载形状检查

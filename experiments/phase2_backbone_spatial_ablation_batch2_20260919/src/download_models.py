@@ -85,7 +85,9 @@ def _verify_registered(config: dict, model_name: str, verify_device: str) -> dic
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["TRANSFORMERS_OFFLINE"] = "1"
     manifest_path = Path(config["inputs"]["model_manifest"])
-    spec = load_model_specs(manifest_path, require_local_files=True)[model_name]
+    # Parse the fixed contracts for all models, but validate local files only for this model.
+    # Other snapshots may not yet be registered during per-model download or offline registration.
+    spec = load_model_specs(manifest_path, require_local_files=False)[model_name]
     adapter = load_local_encoder(spec, verify_device)
     image = Image.new("RGB", (224, 224), (12, 34, 56))
     tensor = build_transform(GEOMETRY_PROTOCOL, spec.normalization_profile)(image).unsqueeze(0)
