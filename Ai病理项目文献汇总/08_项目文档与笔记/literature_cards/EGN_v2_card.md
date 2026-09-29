@@ -1,10 +1,10 @@
 # [文献卡片] LIT-01-002: EGN / EGN-v2 原型引导网络
 
-- **文献标题**: Exemplar Guided Deep Neural Network for Spatial Transcriptomics Analysis (WACV 2023 / PR 2026)
+- **文献标题**: Exemplar Guided Deep Neural Network for Spatial Transcriptomics Analysis (WACV 2023；EGN-v2 期刊版本待核对)
 - **作者/机构**: Yang et al.
-- **发表期刊/年份**: WACV 2023 / Pattern Recognition 2026 (EGN-v2)
+- **发表期刊/年份**: WACV 2023；EGN-v2 期刊版本未由本地附件证实
 - **文件路径与本地源码**: 
-  - PDF: [EGN Yang WACV 2023.pdf](file:///D:/AI%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%97%85%E7%90%86%E7%A0%94%E7%A9%B6/PFMval_new/Ai%E7%97%85%E7%90%86%E9%A1%B9%E7%9B%AE%E6%96%87%E7%8C%AE%E6%B1%87%E6%80%BB/01_HE映射空间转录组模型/EGN%20Yang_Exemplar_Guided_Deep_Neural_Network_for_Spatial_Transcriptomics_Analysis_of_WACV_2023_paper.pdf)
+  - PDF: [EGN Yang WACV 2023.pdf](file:///D:/personal_knowlege_base/%E8%AE%BA%E6%96%87PDF%E5%BA%93/AI%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%97%85%E7%90%86%E7%A0%94%E7%A9%B6/EGN%20Yang_Exemplar_Guided_Deep_Neural_Network_for_Spatial_Transcriptomics_Analysis_of_WACV_2023_paper.pdf)
   - 本地 PyTorch 源码: `Ai病理项目文献汇总/09_EGN-v2补充材料/EGN-v2/`
 
 ---

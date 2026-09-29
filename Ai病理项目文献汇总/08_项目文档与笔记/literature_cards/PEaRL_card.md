@@ -3,7 +3,7 @@
 - **文献标题**: PEaRL: Pathway-Enhanced Representation Learning for Gene and Pathway Expression Prediction
 - **作者/机构**: Majumder et al., WACV 2026
 - **发表期刊/年份**: WACV (2026)
-- **文件路径**: [Majumder_PEaRL.pdf](file:///D:/AI%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%97%85%E7%90%86%E7%A0%94%E7%A9%B6/PFMval_new/Ai%E7%97%85%E7%90%86%E9%A1%B9%E7%9B%AE%E6%96%87%E7%8C%AE%E6%B1%87%E6%80%BB/01_HE映射空间转录组模型/Majumder_PEaRL_Pathway-Enhanced_Representation_Learning_for_Gene_and_Pathway_Expression_Prediction_WACV_2026_paper.pdf)
+- **文件路径**: [Majumder_PEaRL.pdf](file:///D:/personal_knowlege_base/%E8%AE%BA%E6%96%87PDF%E5%BA%93/AI%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%97%85%E7%90%86%E7%A0%94%E7%A9%B6/Majumder_PEaRL_Pathway-Enhanced_Representation_Learning_for_Gene_and_Pathway_Expression_Prediction_WACV_2026_paper.pdf)
 
 ---
 

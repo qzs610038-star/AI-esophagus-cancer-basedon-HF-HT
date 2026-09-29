@@ -3,7 +3,7 @@
 - **文献标题**: Hist2ST: Spatial transcriptomics prediction from histology images
 - **作者/机构**: Zeng et al., 中山大学 / 华南理工大学
 - **发表期刊/年份**: Nature Machine Intelligence (2023)
-- **文件路径**: [Hist2ST.pdf](file:///D:/AI%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%97%85%E7%90%86%E7%A0%94%E7%A9%B6/PFMval_new/Ai%E7%97%85%E7%90%86%E9%A1%B9%E7%9B%AE%E6%96%87%E7%8C%AE%E6%B1%87%E6%80%BB/01_HE映射空间转录组模型/Hist2ST.pdf)
+- **文件路径**: [Hist2ST.pdf](file:///D:/personal_knowlege_base/%E8%AE%BA%E6%96%87PDF%E5%BA%93/AI%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%97%85%E7%90%86%E7%A0%94%E7%A9%B6/Hist2ST.pdf)
 - **开源代码**: https://github.com/diannaa/Hist2ST
 
 ---

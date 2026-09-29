@@ -47,11 +47,13 @@
         {
           "id": "LIT-02-002",
           "title": "Towards a general-purpose foundation model for computational pathology (UNI / UNI2-h)",
-          "file_name": "[12]_Towards a general-purpose foundation model for computational pathology.pdf",
+          "file_name": null,
           "year": 2024,
           "journal": "Nature Medicine",
           "doi": "10.1038/s41591-024-02857-3",
           "source_url": "https://www.nature.com/articles/s41591-024-02857-3",
+          "availability": "metadata_only",
+          "local_pdf_note": "旧文件名 [12]_Towards...pdf 实际为 Virchow（AI-PAPER-012），不能作为 UNI 全文；本批迁移未发现 UNI 论文 PDF。",
           "tags": ["UNI2h", "FixedTeacher", "FeatureExtraction"],
           "relevance_to_mpp2": "UNI family paper background for the fixed teacher backbone; use the UNI2-h model card for the exact 1536-dimensional configuration"
         },

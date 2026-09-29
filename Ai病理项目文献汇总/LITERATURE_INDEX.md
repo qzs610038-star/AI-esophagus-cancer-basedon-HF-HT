@@ -2,7 +2,7 @@
 
 > **版本号**: v1.2  
 > **更新时间**: 2026-08-03  
-> **根路径**: `D:\AI空间转录病理研究\PFMval_new\Ai病理项目文献汇总`  
+> **项目索引根路径**: `D:\AI空间转录病理研究\PFMval_new\Ai病理项目文献汇总`（分类目录仅保留 Markdown 与历史项目视图；PDF 现址见下列条目）
 > **检索说明**: 本索引专为人类研究员及 AI Agent 设计。包含 11 个子目录分类、80+ 篇文献/笔记、98个即插即用AI模块及相关开源代码库的结构化导览。
 
 ---
@@ -28,26 +28,28 @@
 ## 详细文件清单与元数据索引 (File Registry)
 
 ### 01_HE映射空间转录组模型 (13 篇)
-- `Hist2ST.pdf`: [Hist2ST: 结合 Transformer 与 Graph 邻域建模预测空间转录组] (*Nature Machine Intelligence 2023*)
-- `EGN Yang_Exemplar_Guided_Deep_Neural_Network_for_Spatial_Transcriptomics_Analysis_of_WACV_2023_paper.pdf`: [EGN: 基于 Exemplar 引导的双分支可解释空间转录组预测] (*WACV 2023*)
-- `Majumder_PEaRL_Pathway-Enhanced_Representation_Learning_for_Gene_and_Pathway_Expression_Prediction_WACV_2026_paper.pdf`: [PEaRL: 通路增强表示学习与多任务预测] (*WACV 2026*)
-- `FmH2ST foundation model-based spatial transcriptomics.pdf`: [FmH2ST: 基于病理基础模型 (UNI) Adapter 微调的空间表达映射] (*2024*)
-- `AI-Driven Spatial Transcriptomics Unlocks Large-Scale Breast.pdf`: [Path2Space: DINOv2 Backbone + MIL 端到端预后与空间映射] (*2025 bioRxiv*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\Hist2ST.pdf`（AI-PAPER-004）: [Hist2ST: 结合 Transformer 与 Graph 邻域建模预测空间转录组] (*Nature Machine Intelligence 2023*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\EGN Yang_Exemplar_Guided_Deep_Neural_Network_for_Spatial_Transcriptomics_Analysis_of_WACV_2023_paper.pdf`（AI-PAPER-002）: [EGN: 基于 Exemplar 引导的双分支可解释空间转录组预测] (*WACV 2023*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\Majumder_PEaRL_Pathway-Enhanced_Representation_Learning_for_Gene_and_Pathway_Expression_Prediction_WACV_2026_paper.pdf`（AI-PAPER-007）: [PEaRL: 通路增强表示学习与多任务预测] (*WACV 2026*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\FmH2ST foundation model-based spatial transcriptomics.pdf`（AI-PAPER-003）: [FmH2ST: 基于病理基础模型 (UNI) Adapter 微调的空间表达映射] (*2024*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\AI-Driven Spatial Transcriptomics Unlocks Large-Scale Breast.pdf`（AI-PAPER-001）: [Path2Space: DINOv2 Backbone + MIL 端到端预后与空间映射] (*2025 bioRxiv*)
 
-### 02_病理基础模型_FoundationModels (固定教师基模 UNI2-h)
-- `[12]_Towards a general-purpose foundation model for computational pathology.pdf`: [UNI / UNI2-h: 项目指定固定教师模型 (Teacher Model) 用于 H&E 特征预提取] (*Nature Medicine 2024*)
-- `[15]_A whole-slide foundation model for digital pathology from real-world data.pdf`: [Prov-GigaPath: 17万 WSI 预训练整张切片 Foundation Model] (*Nature 2024*)
+### 02_病理基础模型_FoundationModels（项目教师基模 UNI2-h 与邻近模型）
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\A foundation model for clinical-grade computational pathology.pdf`（AI-PAPER-012）: [Virchow: 旧编号 12 文件名误写 UNI，PDF 实际为 Virchow，DOI 10.1038/s41591-024-03141-0；不能作为 UNI / UNI2-h 的论文证据] (*Nature Medicine 2024*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\A whole-slide foundation model for digital pathology from real-world data.pdf`（AI-PAPER-014）: [Prov-GigaPath: 17万 WSI 预训练整张切片 Foundation Model] (*Nature 2024*)
+
+> UNI / UNI2-h 为项目指定教师模型；本批迁移 PDF 未包含 UNI 论文，模型依据见 [官方模型卡](https://huggingface.co/MahmoodLab/UNI2-h)。
 
 ### 03_多实例学习MIL与WSI分类 (Phase 3 CLAM)
-- `[7]_Attention-based deep multiple instance learning.pdf`: [Attention-based MIL：CLAM 注意力 bag 聚合的直接方法基础] (*ICML 2018*)
-- `[8]_Clinical-grade computational pathology using weakly supervised deep learning on whole slide images.pdf`: [大规模弱监督 WSI 分类背景] (*Nature Medicine 2019*)
-- `[9]_Data-efficient and weakly supervised computational pathology on whole-slide images.pdf`: [CLAM 原论文与本次 Phase 3 主模型直接依据] (*Nature Biomedical Engineering 2021*)
-- `[11]_TransMIL Transformer based correlated multiple instance learning for whole slide image classification.pdf`: [空间/相关性 MIL 邻近对照；当前基线包未实现] (*NeurIPS 2021*)
-- `Pancancer outcome prediction via a unified weakly supervised.pdf`: [PROGPATH 病理-临床多模态预后邻近工作；终点不同] (*Signal Transduction and Targeted Therapy 2025*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\Attention-based deep multiple instance learning.pdf`（AI-PAPER-018）: [Attention-based MIL：CLAM 注意力 bag 聚合的直接方法基础] (*ICML 2018*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\Clinical-grade computational pathology using weakly supervised deep learning on whole slide images.pdf`（AI-PAPER-019）: [大规模弱监督 WSI 分类背景] (*Nature Medicine 2019*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\Data-efficient and weakly supervised computational pathology on whole-slide images.pdf`（AI-PAPER-020）: [CLAM 原论文与本次 Phase 3 主模型直接依据] (*Nature Biomedical Engineering 2021*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\TransMIL Transformer based correlated multiple instance learning for whole slide image classification.pdf`（AI-PAPER-017）: [空间/相关性 MIL 邻近对照；当前基线包未实现] (*NeurIPS 2021*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\Pancancer outcome prediction via a unified weakly supervised.pdf`（AI-PAPER-016）: [PROGPATH 病理-临床多模态预后邻近工作；终点不同] (*Signal Transduction and Targeted Therapy 2025*)
 - Phase 3 CLAM 逐篇关系、DOI 和 metadata-only 候选见 [PHASE3_CLAM_LITERATURE_REGISTRY_20260803.md](./PHASE3_CLAM_LITERATURE_REGISTRY_20260803.md)。
 
 ### 05_多模态融合与预后预测 (Phase 3 融合背景)
-- `[6]_Pathomic fusion an integrated framework for fusing histopathology and genomic features for cancer diagnosis and prognosis.pdf`: [Pathomic Fusion：病理-组学融合背景；当前代码不是原模型逐式复现] (*IEEE TMI*)
+- `D:\personal_knowlege_base\论文PDF库\AI空间转录病理研究\Pathomic fusion an integrated framework for fusing histopathology and genomic features for cancer diagnosis and prognosis.pdf`（AI-PAPER-032）: [Pathomic Fusion：本地附件为 arXiv:1912.08937v3；IEEE TMI 期刊版 DOI 10.1109/TMI.2020.3021387，版本对应待核对；当前代码不是原模型逐式复现]
 - Cross-attention、External Attention、Low-rank Fusion 与 FiLM 的 metadata-only 条目已登记到 Phase 3 CLAM 专表及 `literature_manifest.json`。
 
 ### 11_98个即插即用的AI模块-阿飞 (98 算子库)
