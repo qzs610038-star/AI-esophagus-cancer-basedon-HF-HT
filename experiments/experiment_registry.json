@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-19T18:23:22+08:00",
+  "updated_at": "2026-09-28T12:29:36+08:00",
   "current_mpp_policy": {
     "effective_date": "2026-09-12",
     "selected_mpp": 2,
@@ -12,8 +12,8 @@
     "governance_refreshed_at": "2026-09-19T18:15:10+08:00"
   },
   "phase2_supplemental_program": {
-    "status": "classic_spatial_fixed_paper_preparation",
-    "updated_at": "2026-09-19T18:15:10+08:00",
+    "status": "paper_v2_with_batch2_and_task2_first_batch_accepted",
+    "updated_at": "2026-09-28T12:29:36+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
     "source_documents": [
       "团队项目进度与结论/lzd/基于HE图像的空间通路活性重建用于增强食管鳞癌新辅助免疫治疗疗效预测.md",
@@ -22,10 +22,7 @@
       "project_state/governance/Phase2会议决策_20260905.md",
       "project_state/governance/Phase2组会决策与论文后续任务_20260912.md"
     ],
-    "planned_experiment_ids": [
-      "phase2_gene_reconstruction_comparison_v001_20260904",
-      "phase2_spatial_density_comparison_v001_20260904"
-    ],
+    "planned_experiment_ids": [],
     "metric_registration_contract": {
       "id": "phase2_all_metrics_retained_v3_20260905",
       "status": "active",
@@ -243,12 +240,12 @@
     "method_reference_experiment_id": "phase2_softlink_local_v2",
     "method_reference_arm": "spatial",
     "baseline_role": "第一轮 point 单点预测臂作为基础模型替换对照；旧冻结 MPP2 基线保留为历史量化锚点",
-    "supplementary_execution_status": "fullfov_accepted_handoff_materials_ready_task3_code_ready_team_return_pending_review",
+    "supplementary_execution_status": "batch2_complete_and_task2_first_batch_accepted_task3_accepted",
     "priority_order": [
-      "暂停 Phase2 方法改进，固定经典空间残差",
-      "对齐任务2与任务3的输入、输出和操作，交团队成员实践",
-      "单点基线基础模型替换消融已完成、复核并登记",
-      "围绕论文整理指标、代码与关键架构图"
+      "暂停 Phase2 方法改进，固定经典空间残差及已接纳结果的适用边界",
+      "第二批模型消融与任务3已接纳；整理其证据和代码供论文使用",
+      "任务2首批已接纳但完整比较未完成；真值来源及同目标对照按可选补证清单处理",
+      "审阅论文 v2，决定最终发表指标，并确认团队材料实际交付状态"
     ],
     "training_authorized_by_this_decision": false,
     "pcc_presentation_policy": {
@@ -307,7 +304,7 @@
       "selection_boundary": "模型与超参数选择仅使用训练集或内部验证集，外部测试仅用于冻结方案评估"
     },
     "task_2_3_handoff": {
-      "status": "task2_contract_pending_task3_new_code_ready_team_return_pending_review",
+      "status": "task2_first_batch_accepted_task3_accepted_optional_followups",
       "executor": "另一位团队成员（姓名待定）",
       "existing_materials": [
         "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
@@ -333,14 +330,17 @@
       ],
       "task3_experiment_id": "phase2_spatial_density_comparison_v001_20260904",
       "task3_current_package": "experiments/phase2_task3_fullfov_density_ablation_v1",
-      "task3_code_status": "local_package_validated_formal_training_not_started",
+      "task3_code_status": "formal_result_registered_and_user_accepted_20260920",
       "team_return_experiment_id": "mpp2_task23_scratch_ablation_20260915",
       "team_return_evidence_status": "pending",
       "task2_diagnostic_report": "03审计报告/Phase2任务二_319基因ssGSEA重构通路与BarcodeRepairV003标签差异_专项审计报告_20260919.md",
-      "task2_diagnostic_merge_status": "pending_user_decision_do_not_merge_into_handoff_plan"
+      "task2_diagnostic_merge_status": "recorded_in_internal_rigor_note_20260927",
+      "task2_first_batch_result_id": "phase2-task2-gene-pathway-first-batch-20260923-result",
+      "task2_complete_comparison": false,
+      "task2_followups_block_writing": false
     },
     "paper_preparation": {
-      "status": "first_handoff_materials_ready_team_review_and_paper_writing_pending",
+      "status": "paper_v2_draft_ready",
       "tasks": [
         "论文结构与结果叙事",
         "正文及补充材料指标选择",
@@ -351,7 +351,22 @@
       "handoff_entry": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md",
       "delivery_check": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/版本与交付检查.md",
       "team_delivery_status": "not_confirmed",
-      "teammate_review_status": "not_confirmed"
+      "teammate_review_status": "not_confirmed",
+      "writing_package": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922",
+      "writing_entry": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/00_阅读入口.md",
+      "internal_rigor_note": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/严谨性与待补证据说明.md",
+      "updated_at": "2026-09-28T00:17:04+08:00",
+      "validation_record": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/04_证据与对应/v2_validation.json",
+      "draft_entry": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v2/README.md",
+      "figure_entry": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/README.md",
+      "completed_scope": [
+        "accepted_result_registration",
+        "bilingual_draft_v2",
+        "two_new_figures_with_data_and_code",
+        "evidence_and_code_source_update",
+        "separate_internal_rigor_note"
+      ],
+      "external_publication_performed": false
     },
     "current_model_delivery": {
       "path": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918",
@@ -374,8 +389,20 @@
       "team_delivery_status": "not_confirmed"
     },
     "registered_code_only_experiment_ids": [
-      "phase2_backbone_spatial_ablation_batch2_20260919",
       "mpp2_uni2h_mlp_baseline_20260906"
+    ],
+    "accepted_result_additions": {
+      "backbone_batch2": "phase2-backbone-spatial-ablation-batch2-20260927-result",
+      "task2_first_batch": "phase2-task2-gene-pathway-first-batch-20260923-result",
+      "task2_complete_comparison": false,
+      "optional_followups_block_writing": false
+    },
+    "historical_planned_experiment_ids": [
+      "phase2_gene_reconstruction_comparison_v001_20260904",
+      "phase2_spatial_density_comparison_v001_20260904"
+    ],
+    "optional_followup_experiment_ids": [
+      "phase2_gene_reconstruction_comparison_v001_20260904"
     ]
   },
   "three_patient_evidence_policy": {
@@ -2552,13 +2579,16 @@
       "display_name": "Phase 2 基因预测后通路重建对照",
       "family": "phase2_supplemental",
       "phase": "formal",
-      "status": "planned",
-      "evidence_status": "planned",
+      "status": "partial",
+      "evidence_status": "accepted",
       "priority": "P2",
       "created_at": "2026-09-04T21:39:06+08:00",
+      "updated_at": "2026-09-28T00:01:47+08:00",
       "baseline_experiment_id": "phase2_softlink_local_v2",
+      "current_frozen_baseline_reference_experiment_id": "phase2_fullfov_hpo_v1",
+      "baseline_reference_role": "latest accepted UNI2-h full-field spatial seed45 epoch28 checkpoint is reference-only and must not initialize either Task-2 arm",
       "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
-      "metric_registration_status": "pending_not_run",
+      "metric_registration_status": "available_first_batch_metrics_registered",
       "planned_metric_registration": {
         "paper_primary": [],
         "paper_supplementary": [],
@@ -2598,21 +2628,136 @@
       },
       "objective": "Compare direct H&E-to-pathway prediction with H&E-to-gene prediction followed by pathway reconstruction on the same held-out data.",
       "missing_inputs": [
-        "gene_set_membership",
-        "spot_or_bin_gene_expression",
-        "gene_identifier_mapping",
-        "pathway_scoring_software_and_parameters",
-        "background_gene_universe"
+        "source_training_effective_configuration_and_selection_trace",
+        "complete_truth_provenance_confirmation"
       ],
-      "next_action": "align_input_output_and_operations_for_teammate_handoff",
-      "decision_gate": "Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed.",
+      "next_action": "paper_v2_with_accepted_first_batch_optional_matched_arm_and_repeats_no_automatic_training",
+      "decision_gate": "Task-2 may start without another approval after gene inputs, aggregation algorithm, identity/order and train-only standardization are checked and one common reconstructed 30D truth is frozen for both arms. Comparison with V003 is diagnostic, not a mandatory pointwise reproduction gate; a different target must be reported separately from the mainline baseline.",
       "execution_schedule": "planned_after_meeting_20260912",
       "schedule_decision_id": "DIR-20260912-002",
       "baseline_arm": "spatial",
-      "handoff_status": "pending_contract_alignment",
+      "handoff_status": "first_batch_return_reviewed_and_accepted",
+      "training_authorized_by_this_handoff": true,
+      "training_authorization_condition": "gene_inputs_aggregation_and_identity_checked_shared_reconstructed_30d_truth_frozen_train_only_standardization_xzy_isolated",
+      "prior_return_or_reapproval_required": false,
+      "handoff_package": "团队项目进度与结论/qzs/Phase2任务二_通路聚合复核交接包_20260920",
       "handoff_materials": [
+        "团队项目进度与结论/qzs/Phase2任务二_通路聚合复核交接包_20260920/README.md",
+        "团队项目进度与结论/qzs/Phase2任务二_通路聚合复核交接包_20260920/给队友的交接说明.md",
+        "团队项目进度与结论/qzs/Phase2任务二_通路聚合复核交接包_20260920/给智能体的交接合同.md",
+        "团队项目进度与结论/qzs/Phase2任务二_通路聚合复核交接包_20260920/Phase2原始30维通路分数处理全流程.md",
+        "团队项目进度与结论/qzs/Phase2任务二_通路聚合复核交接包_20260920/legacy_task2_reference/修改位置索引.md"
+      ],
+      "historical_handoff_materials": [
         "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
         "experiments/phase2_softlink_local_v2/队友同步说明.md"
+      ],
+      "aggregation_review_gate": {
+        "status": "first_batch_accepted_with_nonblocking_warnings",
+        "canonical_evaluation_truth": "verified_once_generated_gene_reconstruction_30d_shared_by_both_arms",
+        "mainline_reference_truth": "barcode-repair-20260711-d626ad8-v003/group_2",
+        "pass_condition": "verify_gene_inputs_aggregation_identity_and_order_then_freeze_one_shared_true_gene_30d_target_with_train_only_standardization",
+        "v003_comparison": "independent_diagnostic_not_a_training_gate",
+        "v003_difference_action": "report_as_separate_reconstructed_target_do_not_directly_compare_mainline_scores_or_replace_v003",
+        "optional_local_records": [
+          "complete_aggregation_contract",
+          "gene_to_pathway_mapping_and_gene_universe",
+          "reproducible_script_and_dependency_versions",
+          "raw_and_train_standardized_30d_scores",
+          "identity_manifest_and_difference_report"
+        ],
+        "minimal_postrun_summary": "团队项目进度与结论/qzs/Phase2任务二_通路聚合复核交接包_20260920/return_template/最简结果说明模板.md",
+        "immutable_inputs": [
+          "MPP2_group_2_identity_split",
+          "full_fov_224_bicubic_UNI2h_CLS1536",
+          "30_pathway_names_and_order",
+          "latest_phase2_model_graph_training_and_selection_contract",
+          "XZY_external_test_isolation"
+        ],
+        "formal_training_ready": false,
+        "formal_training_readiness_note": "首批结果已接纳；原定同目标两臂完整设计未完成。此字段不阻塞首批登记或论文，后续补训由用户另定。",
+        "direct_start_after_input_review_and_shared_truth_freeze": true,
+        "training_entrypoint_in_handoff_package": false
+      },
+      "accepted": true,
+      "registration_status": "registered",
+      "accepted_at": "2026-09-28T00:01:47+08:00",
+      "result_id": "phase2-task2-gene-pathway-first-batch-20260923-result",
+      "result_phase": "smoke",
+      "result_root": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923",
+      "report_path": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/首批结果接纳与内部核验_20260927.md",
+      "review_record_path": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/task2_review.json",
+      "execution_experiment_id": "mpp2_uni2h_mlp_gene_ssgsea_20260910",
+      "source_run_id": "20260910_154315_123_2d81878b",
+      "run_kind": "smoke",
+      "evaluation_delivery": "delivery_20260923",
+      "acceptance_scope": "用户已明确接纳任务二首批单臂运行事实与复算结果，允许论文与已有基线作描述性并列。保留原始smoke和provenance_pending；不代表同目标两臂及三种子比较已经完成。",
+      "accepted_conclusion": "基因路线首批单次结果：内部患者—通路等权PCC/整体展平PCC为0.496128/0.436066，XZY为0.416020/0.717011；接纳为可写入论文的首批结果，不据此宣布两路线整体优劣。",
+      "comparison_complete": false,
+      "additional_training_required_before_writing": false,
+      "training_seed": null,
+      "n_runs": 1,
+      "sample_sd": null,
+      "truth_status": "provenance_pending",
+      "training_contract_status": "unverified_from_returned_material",
+      "missing_inputs_policy": "non_blocking_warning_for_first_batch_registration_and_writing",
+      "metric_definitions": {
+        "pcc_macro": "逐患者逐通路点位 Pearson 相关，再对通路与患者等权平均",
+        "pcc_pooled": "当前划分全部点位×30通路的训练标度 z 值整体展平后计算一次 Pearson 相关",
+        "z_mse": "全部点位×30通路训练标度 z 值的均方误差",
+        "raw_mae": "候选 ssGSEA 原始 ES 尺度上全部点位×30通路的平均绝对误差",
+        "sample_sd": "只有一个来源运行，跨运行样本标准差不可计算，故为 null"
+      },
+      "results_summary": [
+        {
+          "split": "internal_val",
+          "n_points": 1078,
+          "n_patients": 6,
+          "n_pathways": 30,
+          "n_runs": 1,
+          "pcc_macro": 0.4961280493625188,
+          "pcc_pooled": 0.4360656397309733,
+          "z_mse": 1.7984891662000024,
+          "raw_mae": 31.83825777796683,
+          "training_seed": null,
+          "sample_sd": null
+        },
+        {
+          "split": "XZY",
+          "n_points": 1039,
+          "n_patients": 1,
+          "n_pathways": 30,
+          "n_runs": 1,
+          "pcc_macro": 0.4160200834383632,
+          "pcc_pooled": 0.7170107823351617,
+          "z_mse": 0.8333175177628201,
+          "raw_mae": 20.871656491529084,
+          "training_seed": null,
+          "sample_sd": null
+        }
+      ],
+      "metric_artifacts": {
+        "summary": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/task2_summary.csv",
+        "per_patient_pathway": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/patient_pathway_metrics.csv",
+        "descriptive_comparison": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/baseline_descriptive_comparison.csv",
+        "recompute": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/recompute_review.py"
+      },
+      "non_blocking_warnings": [
+        "候选真值的科学来源合同待最终核实",
+        "来源运行未交付训练源码、有效配置、训练种子、轮数、空间特征和选模记录",
+        "尚缺同目标直接通路臂及匹配重复运行",
+        "逐点真值对齐诊断存在差异，详见团队内部说明"
+      ],
+      "internal_rigor_note": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/严谨性与待补证据说明.md",
+      "optional_followups": [
+        "优先补同一静态真值上的直接通路臂",
+        "核对源运行训练配置后补匹配重复"
+      ],
+      "training_authorized_by_this_registration": false,
+      "source_evidence": [
+        "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/inputs/prediction_run/run.json",
+        "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/results/evaluation_summary.json",
+        "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/task2_review.json"
       ]
     },
     {
@@ -2620,54 +2765,56 @@
       "display_name": "Phase 2 稀疏训练与稠密测试对照",
       "family": "phase2_supplemental",
       "phase": "formal",
-      "status": "planned",
-      "evidence_status": "planned",
+      "status": "done",
+      "registration_status": "registered",
+      "evidence_status": "accepted",
+      "analysis_status": "reviewed_and_accepted",
       "priority": "P2",
       "created_at": "2026-09-04T21:39:06+08:00",
-      "updated_at": "2026-09-19T14:11:22+08:00",
+      "updated_at": "2026-09-20T14:36:23+08:00",
+      "accepted_at": "2026-09-20T14:36:23+08:00",
+      "acceptance_scope": "用户已审核正式批次 formal_20260919_151714 并明确授权登记；accepted_conclusion 按用户指定原文记录。技术审核为163项PASS、0项FAIL；外部证据范围限XZY单患者。",
+      "result_id": "phase2-task3-fullfov-density-ablation-v1-formal-20260919-151714-result",
+      "result_phase": "formal",
+      "execution_experiment_id": "phase2_task3_fullfov_density_ablation_v1",
       "baseline_experiment_id": "phase2_fullfov_hpo_v1",
       "baseline_role": "已验收seed45 checkpoint仅作冻结参考评估；任务三三臂均从零训练，不继承或续训该权重",
       "experiment_package": "experiments/phase2_task3_fullfov_density_ablation_v1",
       "protocol_version": "phase2-task3-fullfov-density-ablation-v1",
       "code_version": "1.0.1",
-      "code_status": "local_package_validated_formal_training_not_started",
+      "code_status": "formal_completed_result_reviewed_and_accepted",
+      "batch_ids": [
+        "formal_20260919_151714"
+      ],
+      "result_roots": [
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714"
+      ],
+      "report_path": "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/结果审核报告.md",
       "metric_contract_id": "phase2_all_metrics_retained_v3_20260905",
-      "metric_registration_status": "pending_not_run",
-      "planned_metric_registration": {
+      "metric_registration_status": "complete_available_protocol_metrics_registered",
+      "metric_registration": {
         "paper_primary": [],
         "paper_supplementary": [],
         "conditional": {
-          "mean_per_pathway_masked_ssim": "pending_spatial_grid_applicability_check",
-          "mean_spot_topk_pathway_overlap": "pending_predefined_top_k_applicability_check"
+          "mean_per_pathway_masked_ssim": "not_computed_no_frozen_spatial_grid_definition",
+          "mean_spot_topk_pathway_overlap": "not_computed_no_predefined_top_k"
         },
-        "distribution_summaries": [
-          "mean",
-          "median",
-          "q1",
-          "q3",
-          "iqr",
-          "n_pathways"
-        ],
         "uncertainty": {
-          "status": "pending_not_run",
-          "preferred_output": "paired_candidate_minus_control_95ci",
+          "status": "three_seed_sample_sd_and_descriptive_paired_t_95ci_registered",
+          "paired_seed_count": 3,
+          "external_patient_count": 1,
+          "interpretation": "配对t区间仅作描述性不确定性，不作为跨患者泛化置信区间。",
           "external_test_not_for_selection": true
         },
-        "retained_candidates": [
-          "mean_per_pathway_pcc",
-          "pooled_pcc",
-          "mean_per_pathway_z_rmse",
-          "mean_per_pathway_ccc",
-          "mean_per_pathway_spearman",
-          "mean_residual_morans_i",
-          "mean_per_pathway_masked_ssim",
-          "mean_per_pathway_raw_r2",
-          "mean_per_pathway_z_mae",
-          "mean_per_pathway_raw_mae",
-          "pooled_z_mse",
-          "train_sd_normalized_nrmse",
-          "mean_spot_topk_pathway_overlap"
-        ],
+        "retained_metric_status": {
+          "mean_per_pathway_pcc": "registered_as_patient_macro_pathway_pcc",
+          "pooled_pcc": "registered_as_pooled_flattened_pcc",
+          "pooled_z_mse": "registered_as_z_mse",
+          "raw_mae": "registered",
+          "per_patient_per_pathway_details": "registered_in_returned_run",
+          "mean_per_pathway_masked_ssim": "not_computed_no_frozen_spatial_grid_definition",
+          "mean_spot_topk_pathway_overlap": "not_computed_no_predefined_top_k"
+        },
         "publication_selection_status": "pending"
       },
       "objective": "在已验收full-FOV Phase2底座上比较稠密训练、固定相位2×2规则隔点和逐患者等量随机抽样；内部验证与外部XZY保持稠密。",
@@ -2698,18 +2845,234 @@
         "checkpoint_role": "evaluation_only_not_initialization",
         "server_checkpoint": "D:\\AIPatho\\qzs\\weights\\phase2_fullfov_hpo_v1\\20260916_231813_101_7b1b9a79\\final-ablation_20260918_002437_956_adc7bf35\\final-ablation__uni2h__full_fov_224_bicubic_v1__spatial__45__frozen_spatial__attempt01\\formal_best.pt"
       },
+      "metric_definitions": {
+        "patient_macro_pathway_pcc": "逐患者逐通路计算PCC后，对患者和通路等权算术平均；为预定内部选模指标。",
+        "pooled_flattened_pcc": "全部点位×通路的z分数展平后计算一次Pearson相关。",
+        "z_mse": "全部点位×通路z域均方误差。",
+        "raw_mae": "统一转换到稠密训练集定义尺度后的原始域绝对误差均值。"
+      },
+      "aggregation_notes": {
+        "seed_summary": "45/46/47三个配对种子的算术平均与样本标准差，样本标准差ddof=1。",
+        "primary_selector": "equal_updates；每296次更新验证，共50次机会；患者—通路等权PCC选模，z-MSE打破并列。",
+        "sensitivity_selector": "equal_50_epochs；同一训练轨迹前50轮各验证一次。",
+        "external_selection_boundary": "外部XZY仅在checkpoint冻结后评估，不参与选模。"
+      },
+      "results_summary": [
+        {
+          "split": "internal_val",
+          "arm": "dense",
+          "selector": "equal_updates",
+          "n_seeds": 3,
+          "n_points": 1078,
+          "n_patients": 6,
+          "mean": {
+            "patient_macro_pathway_pcc": 0.6769864628672311,
+            "pooled_flattened_pcc": 0.8105488539699754,
+            "z_mse": 0.352796562632074,
+            "raw_mae": 847.4795026516455
+          },
+          "sample_sd": {
+            "patient_macro_pathway_pcc": 0.0004020262927825188,
+            "pooled_flattened_pcc": 0.00022804952621958288,
+            "z_mse": 0.0004271922432131057,
+            "raw_mae": 1.0688903760292705
+          }
+        },
+        {
+          "split": "internal_val",
+          "arm": "stride_2x2",
+          "selector": "equal_updates",
+          "n_seeds": 3,
+          "n_points": 1078,
+          "n_patients": 6,
+          "mean": {
+            "patient_macro_pathway_pcc": 0.6394296378611812,
+            "pooled_flattened_pcc": 0.789546228683241,
+            "z_mse": 0.38776595541297454,
+            "raw_mae": 905.1032951010094
+          },
+          "sample_sd": {
+            "patient_macro_pathway_pcc": 0.00048039369468313726,
+            "pooled_flattened_pcc": 0.0003959365484212146,
+            "z_mse": 0.0004740339624956601,
+            "raw_mae": 1.0594363068536348
+          }
+        },
+        {
+          "split": "internal_val",
+          "arm": "random_equal",
+          "selector": "equal_updates",
+          "n_seeds": 3,
+          "n_points": 1078,
+          "n_patients": 6,
+          "mean": {
+            "patient_macro_pathway_pcc": 0.6381476401460862,
+            "pooled_flattened_pcc": 0.7886404143238147,
+            "z_mse": 0.3886999049746603,
+            "raw_mae": 903.0166963120344
+          },
+          "sample_sd": {
+            "patient_macro_pathway_pcc": 0.0030366617022031463,
+            "pooled_flattened_pcc": 0.001287299066082171,
+            "z_mse": 0.002079029775889344,
+            "raw_mae": 2.0390785975412444
+          }
+        },
+        {
+          "split": "external_test",
+          "arm": "dense",
+          "selector": "equal_updates",
+          "n_seeds": 3,
+          "n_points": 1039,
+          "n_patients": 1,
+          "mean": {
+            "patient_macro_pathway_pcc": 0.5710726818710616,
+            "pooled_flattened_pcc": 0.6837477881721096,
+            "z_mse": 0.6330090220740581,
+            "raw_mae": 1145.3423080524758
+          },
+          "sample_sd": {
+            "patient_macro_pathway_pcc": 0.0033060791215300226,
+            "pooled_flattened_pcc": 0.0015266335280091376,
+            "z_mse": 0.006889743645302348,
+            "raw_mae": 18.408009080333308
+          }
+        },
+        {
+          "split": "external_test",
+          "arm": "stride_2x2",
+          "selector": "equal_updates",
+          "n_seeds": 3,
+          "n_points": 1039,
+          "n_patients": 1,
+          "mean": {
+            "patient_macro_pathway_pcc": 0.5553977746370464,
+            "pooled_flattened_pcc": 0.671487399629766,
+            "z_mse": 0.6431155122743896,
+            "raw_mae": 1163.5729544055573
+          },
+          "sample_sd": {
+            "patient_macro_pathway_pcc": 0.004882161666326014,
+            "pooled_flattened_pcc": 0.003019648350194081,
+            "z_mse": 0.008752894268226124,
+            "raw_mae": 15.410886248516379
+          }
+        },
+        {
+          "split": "external_test",
+          "arm": "random_equal",
+          "selector": "equal_updates",
+          "n_seeds": 3,
+          "n_points": 1039,
+          "n_patients": 1,
+          "mean": {
+            "patient_macro_pathway_pcc": 0.5412037272535892,
+            "pooled_flattened_pcc": 0.6683195273567838,
+            "z_mse": 0.6572905846762056,
+            "raw_mae": 1177.8406143846148
+          },
+          "sample_sd": {
+            "patient_macro_pathway_pcc": 0.00440240538478558,
+            "pooled_flattened_pcc": 0.006083262633447912,
+            "z_mse": 0.03196222776495766,
+            "raw_mae": 46.41757102406988
+          }
+        }
+      ],
+      "primary_paired_differences_vs_dense": [
+        {
+          "split": "internal_val",
+          "arm": "stride_2x2",
+          "patient_macro_pathway_pcc_mean_delta": -0.03755682500604989,
+          "pooled_flattened_pcc_mean_delta": -0.02100262528673437,
+          "all_three_seeds_same_direction": true
+        },
+        {
+          "split": "internal_val",
+          "arm": "random_equal",
+          "patient_macro_pathway_pcc_mean_delta": -0.03883882272114489,
+          "pooled_flattened_pcc_mean_delta": -0.02190843964616067,
+          "all_three_seeds_same_direction": true
+        },
+        {
+          "split": "external_test",
+          "arm": "stride_2x2",
+          "patient_macro_pathway_pcc_mean_delta": -0.01567490723401516,
+          "pooled_flattened_pcc_mean_delta": -0.01226038854234357,
+          "all_three_seeds_same_direction": true
+        },
+        {
+          "split": "external_test",
+          "arm": "random_equal",
+          "patient_macro_pathway_pcc_mean_delta": -0.02986895461747243,
+          "pooled_flattened_pcc_mean_delta": -0.01542826081532582,
+          "all_three_seeds_same_direction": true
+        }
+      ],
+      "sensitivity_summary": {
+        "selector": "equal_50_epochs",
+        "status": "same_overall_conclusion",
+        "patient_macro_pathway_pcc_mean": {
+          "internal_val": {
+            "dense": 0.6769864628672311,
+            "stride_2x2": 0.6400946870243533,
+            "random_equal": 0.638694671694399
+          },
+          "external_test": {
+            "dense": 0.5710726818710616,
+            "stride_2x2": 0.5549174862210217,
+            "random_equal": 0.5458379590813192
+          }
+        }
+      },
+      "technical_audit": {
+        "status": "pass",
+        "checks_passed": 163,
+        "checks_failed": 0,
+        "metrics_recomputed_from_npz": true,
+        "max_metric_abs_difference": "<5e-6",
+        "external_used_for_selection": false,
+        "task2_training_called": false,
+        "frozen_reference_used_for_initialization": false,
+        "checkpoint_binary_returned": false,
+        "checkpoint_paths_registered": true
+      },
+      "interpretation_limits": [
+        "抽稀同时改变训练样本数量、空间覆盖与训练图结构；接受结论适用于本实验固定图参数的系统级比较。",
+        "外部证据仅包含XZY一名患者，不能外推为已估计患者间泛化不确定性。",
+        "三个配对种子支持方向一致性与均值/标准差描述，不作强统计显著性宣称。"
+      ],
       "task2_scope": "training_paused; only read-only true-label audit materials are included in the new task3 package; task2 registry remains unchanged",
       "excluded_current_design": "six_fold_leave_one_patient_out_deferred_by_user_20260905",
-      "next_action": "server_check_inputs_then_user_authorized_smoke_or_formal_run",
-      "decision_gate": "Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged.",
-      "execution_schedule": "planned_code_ready_formal_not_started",
+      "decision_summary": {
+        "status": "accepted_descriptive_evidence",
+        "statement": "消融实验结果符合预期，证明了Visume HD 10x提供的稠密点位确实能提升预测效果",
+        "statement_source": "accepted_conclusion"
+      },
+      "accepted_conclusion": "消融实验结果符合预期，证明了Visume HD 10x提供的稠密点位确实能提升预测效果",
+      "next_action": "closed_registered_accepted_no_automatic_training",
+      "decision_gate": "completed_under_internal_selection_external_evaluation_only",
+      "execution_schedule": "completed_20260919_reviewed_accepted_20260920",
       "schedule_decision_id": "DIR-20260912-002",
       "baseline_arm": "spatial",
-      "handoff_status": "new_package_ready_local_validation_complete",
+      "handoff_status": "formal_result_registered_and_user_accepted",
       "handoff_materials": [
         "experiments/phase2_task3_fullfov_density_ablation_v1/README.md",
         "experiments/phase2_task3_fullfov_density_ablation_v1/docs/task2_ssgsea_truth_gap.md",
-        "experiments/phase2_task3_fullfov_density_ablation_v1/audit_summary.md"
+        "experiments/phase2_task3_fullfov_density_ablation_v1/audit_summary.md",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/结果审核报告.md",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/audit_summary.md"
+      ],
+      "evidence_paths": [
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/batch_manifest.json",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/model_weights.json",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/feature_caches.json",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/review_arm_summary.csv",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/review_paired_contrasts.csv",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/review_pathway_pcc_contrasts.csv",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/review_audit.json",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/registration_record.json",
+        "experiments/results/phase2_task3_fullfov_density_ablation_v1/formal_20260919_151714/analysis/结果审核报告.md"
       ]
     },
     {
@@ -16734,28 +17097,391 @@
       "id": "phase2_backbone_spatial_ablation_batch2_20260919",
       "display_name": "Phase2 第二批全视野空间头基础模型替换",
       "family": "phase2_supplemental",
-      "status": "planned",
-      "evidence_status": "planned",
-      "accepted": false,
+      "status": "done",
+      "evidence_status": "accepted",
+      "accepted": true,
       "registration_status": "registered",
-      "registered_at": "2026-09-19T18:15:10+08:00",
-      "updated_at": "2026-09-19T18:15:10+08:00",
-      "registration_scope": "code_package_metadata_only_no_result_or_training_authorization",
+      "registered_at": "2026-09-28T00:01:47+08:00",
+      "updated_at": "2026-09-28T00:01:47+08:00",
+      "registration_scope": "completed_second_batch_9_tasks_and_internal_external_results",
       "experiment_package": "experiments/phase2_backbone_spatial_ablation_batch2_20260919",
-      "code_version": "v002",
+      "code_version": "v006",
       "entrypoint": "src/dispatch.py",
-      "code_status": "local_package_present",
-      "package_role": "planned_new_experiment_code",
-      "metric_registration_status": "no_returned_result_registered",
+      "code_status": "completed_reviewed_accepted",
+      "package_role": "completed_experiment_code",
+      "metric_registration_status": "available_metrics_registered",
       "source_evidence": [
         "experiments/phase2_backbone_spatial_ablation_batch2_20260919/package.json",
-        "experiments/phase2_backbone_spatial_ablation_batch2_20260919/README.md"
+        "experiments/phase2_backbone_spatial_ablation_batch2_20260919/README.md",
+        "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/local_review.json",
+        "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/train-spatial_20260927_201914_019_c013511a/action_result.json",
+        "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/external-eval_20260927_230506_451_f28decdf/action_result.json"
       ],
       "training_authorized_by_this_registration": false,
-      "next_action": "retain_code_registration_and_follow_separate_execution_instruction",
+      "next_action": "use_accepted_results_for_paper_v2_no_new_training",
       "governance_record": "maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md",
       "protocol_version": "fullfov-spatial-backbone-batch2-v1",
-      "baseline_experiment_id": "phase2_fullfov_hpo_v1"
+      "baseline_experiment_id": "phase2_fullfov_hpo_v1",
+      "accepted_at": "2026-09-28T00:01:47+08:00",
+      "result_id": "phase2-backbone-spatial-ablation-batch2-20260927-result",
+      "result_phase": "formal",
+      "batch_id": "20260927_154318_475_2242f53b",
+      "result_root": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b",
+      "report_path": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/复核接纳记录_20260927.md",
+      "review_record_path": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/local_review.json",
+      "acceptance_scope": "用户已明确授权接纳第二批三个编码器各45/46/47种子的9项成功训练及9份内部、9份XZY预测；限共享冻结spatial-11配方与当前评价集合。失败attempt01保留，使用成功attempt02。",
+      "accepted_conclusion": "共享冻结空间配方下，H-optimus-1的XZY双PCC均值在六编码器空间臂中最高；H-optimus-0对UNI2-h呈混合指标方向；Phikon-v2相对UNI内部略高、外部较低。单XZY描述性观察，不改变预先指定的UNI2-h下游模型。",
+      "coverage": {
+        "new_training_tasks": 9,
+        "failed_attempt01": 9,
+        "completed_attempt02": 9,
+        "new_internal_predictions": 9,
+        "new_external_predictions": 9,
+        "weight_paths_registered": 9,
+        "cache_task_paths_registered": 9,
+        "prepared_feature_caches": 3,
+        "baseline_internal_predictions": 9,
+        "baseline_external_predictions": 9,
+        "identity_and_truth_equal_across_36_predictions": true,
+        "per_patient_pathway_records": 3780
+      },
+      "metric_definitions": {
+        "pcc_macro": "先逐患者逐通路计算点位 PCC，再对有效患者—通路等权平均",
+        "pcc_pooled": "全部点位×30通路的 z 分数展平后计算一次 PCC",
+        "z_mse": "全部点位×30通路的 z 分数均方误差",
+        "patient_macro_z_mse": "逐患者计算点位×通路 z MSE，再对患者等权平均",
+        "raw_mae": "全部点位×30通路原始标度绝对误差平均；真值由 target_z×训练集 std+mean 还原",
+        "raw_rmse": "全部点位×30通路原始标度均方根误差",
+        "sd": "三个种子间的样本标准差，ddof=1"
+      },
+      "metric_artifacts": {
+        "summary": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/six_model_summary.csv",
+        "per_seed": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/six_model_per_seed.csv",
+        "per_patient_pathway": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/six_model_patient_pathway.csv",
+        "recompute": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/recompute_review.py"
+      },
+      "selection_contract": {
+        "recipe": "spatial-11",
+        "seeds": [
+          45,
+          46,
+          47
+        ],
+        "selection_split": "internal_val",
+        "metric": "patient_macro_pathway_pcc",
+        "tie_metric": "patient_macro_z_mse",
+        "external_test_used_for_selection": false,
+        "downstream_model_unchanged": "UNI2-h spatial seed45"
+      },
+      "actual_optimizer": {
+        "name": "Adam",
+        "lr": 0.0001,
+        "weight_decay": 0.0,
+        "evidence": "paired actual optimizer_effective.json records, not root search defaults"
+      },
+      "asset_registries": {
+        "weights": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/train-spatial_20260927_201914_019_c013511a/model_weights.json",
+        "features": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/train-spatial_20260927_201914_019_c013511a/feature_caches.json"
+      },
+      "runtime_source": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/train-spatial_20260927_201914_019_c013511a/provenance/src",
+      "limitations": [
+        "外部仅XZY一患者；三种子SD不等于跨患者置信区间",
+        "共享配方不代表各模型分别优化后的最优表现",
+        "物理图像尺度关系未完整核实；服务器权重/缓存实体未在本机复验"
+      ],
+      "results_summary": [
+        {
+          "stage": "backbone-batch2",
+          "model": "hoptimus0",
+          "protocol": "full_fov_224_bicubic_v1",
+          "arm": "spatial",
+          "recipe": "frozen_spatial",
+          "internal_val": {
+            "n_seeds": 3,
+            "seeds": [
+              45,
+              46,
+              47
+            ],
+            "n_points_per_seed": 1078,
+            "n_patients": 6,
+            "mean": {
+              "patient_macro_pathway_pcc": 0.6788584066111308,
+              "pooled_pcc": 0.8104739648723482,
+              "pooled_z_mse": 0.35321205743654144,
+              "raw_mae": 850.8761048423994
+            },
+            "sample_sd": {
+              "patient_macro_pathway_pcc": 0.0008523403862319101,
+              "pooled_pcc": 0.0005024592075498881,
+              "pooled_z_mse": 0.0009287453756646346,
+              "raw_mae": 4.556574448596241
+            },
+            "per_seed": [
+              {
+                "seed": 45,
+                "patient_macro_pathway_pcc": 0.6798018126131292,
+                "pooled_pcc": 0.8109254529782104,
+                "pooled_z_mse": 0.3524963868834822,
+                "raw_mae": 846.5439821645316
+              },
+              {
+                "seed": 46,
+                "patient_macro_pathway_pcc": 0.6786295471205395,
+                "pooled_pcc": 0.8099326512978369,
+                "pooled_z_mse": 0.35426157885391196,
+                "raw_mae": 850.4562610141769
+              },
+              {
+                "seed": 47,
+                "patient_macro_pathway_pcc": 0.678143860099724,
+                "pooled_pcc": 0.8105637903409975,
+                "pooled_z_mse": 0.3528782065722302,
+                "raw_mae": 855.62807134849
+              }
+            ]
+          },
+          "external_test": {
+            "n_seeds": 3,
+            "seeds": [
+              45,
+              46,
+              47
+            ],
+            "n_points_per_seed": 1039,
+            "n_patients": 1,
+            "mean": {
+              "patient_macro_pathway_pcc": 0.5814818802691838,
+              "pooled_pcc": 0.6753934287961764,
+              "pooled_z_mse": 0.616459845774878,
+              "raw_mae": 1109.7631130069578
+            },
+            "sample_sd": {
+              "patient_macro_pathway_pcc": 0.0032490586089993162,
+              "pooled_pcc": 0.00501078410631415,
+              "pooled_z_mse": 0.012431478439512273,
+              "raw_mae": 15.07217093879834
+            },
+            "per_seed": [
+              {
+                "seed": 45,
+                "patient_macro_pathway_pcc": 0.5784922656029804,
+                "pooled_pcc": 0.6729488691661355,
+                "pooled_z_mse": 0.6307062202736843,
+                "raw_mae": 1125.4034846402853
+              },
+              {
+                "seed": 46,
+                "patient_macro_pathway_pcc": 0.5810137726893488,
+                "pooled_pcc": 0.672074117092635,
+                "pooled_z_mse": 0.6108605569544652,
+                "raw_mae": 1095.3319954717758
+              },
+              {
+                "seed": 47,
+                "patient_macro_pathway_pcc": 0.584939602515222,
+                "pooled_pcc": 0.6811573001297584,
+                "pooled_z_mse": 0.6078127600964844,
+                "raw_mae": 1108.5538589088126
+              }
+            ]
+          }
+        },
+        {
+          "stage": "backbone-batch2",
+          "model": "hoptimus1",
+          "protocol": "full_fov_224_bicubic_v1",
+          "arm": "spatial",
+          "recipe": "frozen_spatial",
+          "internal_val": {
+            "n_seeds": 3,
+            "seeds": [
+              45,
+              46,
+              47
+            ],
+            "n_points_per_seed": 1078,
+            "n_patients": 6,
+            "mean": {
+              "patient_macro_pathway_pcc": 0.6781905672668272,
+              "pooled_pcc": 0.8120379590360409,
+              "pooled_z_mse": 0.3506231669860172,
+              "raw_mae": 846.8474359655229
+            },
+            "sample_sd": {
+              "patient_macro_pathway_pcc": 0.001757333856283196,
+              "pooled_pcc": 0.001002061682100671,
+              "pooled_z_mse": 0.0022005846169228754,
+              "raw_mae": 1.457786271388922
+            },
+            "per_seed": [
+              {
+                "seed": 45,
+                "patient_macro_pathway_pcc": 0.6779039307397403,
+                "pooled_pcc": 0.8120368994120063,
+                "pooled_z_mse": 0.35037417282274097,
+                "raw_mae": 846.6119408961752
+              },
+              {
+                "seed": 46,
+                "patient_macro_pathway_pcc": 0.6800735986988109,
+                "pooled_pcc": 0.8130405501099739,
+                "pooled_z_mse": 0.3485576699840496,
+                "raw_mae": 845.5217336855912
+              },
+              {
+                "seed": 47,
+                "patient_macro_pathway_pcc": 0.6765941723619308,
+                "pooled_pcc": 0.8110364275861425,
+                "pooled_z_mse": 0.35293765815126116,
+                "raw_mae": 848.4086333148023
+              }
+            ]
+          },
+          "external_test": {
+            "n_seeds": 3,
+            "seeds": [
+              45,
+              46,
+              47
+            ],
+            "n_points_per_seed": 1039,
+            "n_patients": 1,
+            "mean": {
+              "patient_macro_pathway_pcc": 0.5907546696082697,
+              "pooled_pcc": 0.6901435040808487,
+              "pooled_z_mse": 0.5787557444304438,
+              "raw_mae": 1076.7779693294142
+            },
+            "sample_sd": {
+              "patient_macro_pathway_pcc": 0.006036334583324599,
+              "pooled_pcc": 0.0105540946281182,
+              "pooled_z_mse": 0.006904152579256396,
+              "raw_mae": 2.6550002278172347
+            },
+            "per_seed": [
+              {
+                "seed": 45,
+                "patient_macro_pathway_pcc": 0.5920695888531264,
+                "pooled_pcc": 0.6941592283426964,
+                "pooled_z_mse": 0.5761546639052986,
+                "raw_mae": 1074.792391382426
+              },
+              {
+                "seed": 46,
+                "patient_macro_pathway_pcc": 0.5960251586813405,
+                "pooled_pcc": 0.6981002986127949,
+                "pooled_z_mse": 0.5735299451436262,
+                "raw_mae": 1079.7936612595613
+              },
+              {
+                "seed": 47,
+                "patient_macro_pathway_pcc": 0.5841692612903423,
+                "pooled_pcc": 0.6781709852870549,
+                "pooled_z_mse": 0.5865826242424067,
+                "raw_mae": 1075.7478553462554
+              }
+            ]
+          }
+        },
+        {
+          "stage": "backbone-batch2",
+          "model": "phikonv2",
+          "protocol": "full_fov_224_bicubic_v1",
+          "arm": "spatial",
+          "recipe": "frozen_spatial",
+          "internal_val": {
+            "n_seeds": 3,
+            "seeds": [
+              45,
+              46,
+              47
+            ],
+            "n_points_per_seed": 1078,
+            "n_patients": 6,
+            "mean": {
+              "patient_macro_pathway_pcc": 0.6649956183611349,
+              "pooled_pcc": 0.8018733552457326,
+              "pooled_z_mse": 0.3674037379559201,
+              "raw_mae": 869.8719055520218
+            },
+            "sample_sd": {
+              "patient_macro_pathway_pcc": 0.0003741089836363519,
+              "pooled_pcc": 0.0006456674297523605,
+              "pooled_z_mse": 0.0011766289793164971,
+              "raw_mae": 2.396704859412076
+            },
+            "per_seed": [
+              {
+                "seed": 45,
+                "patient_macro_pathway_pcc": 0.665042219191673,
+                "pooled_pcc": 0.8019004983420767,
+                "pooled_z_mse": 0.36719686005613683,
+                "raw_mae": 870.0422775187573
+              },
+              {
+                "seed": 46,
+                "patient_macro_pathway_pcc": 0.6653442437497331,
+                "pooled_pcc": 0.8025050230865347,
+                "pooled_z_mse": 0.36634426809343495,
+                "raw_mae": 867.39456066343
+              },
+              {
+                "seed": 47,
+                "patient_macro_pathway_pcc": 0.6646003921419986,
+                "pooled_pcc": 0.8012145443085865,
+                "pooled_z_mse": 0.3686700857181883,
+                "raw_mae": 872.178878473878
+              }
+            ]
+          },
+          "external_test": {
+            "n_seeds": 3,
+            "seeds": [
+              45,
+              46,
+              47
+            ],
+            "n_points_per_seed": 1039,
+            "n_patients": 1,
+            "mean": {
+              "patient_macro_pathway_pcc": 0.5013129540295617,
+              "pooled_pcc": 0.6149781928038288,
+              "pooled_z_mse": 0.7639631414565965,
+              "raw_mae": 1242.1443440698383
+            },
+            "sample_sd": {
+              "patient_macro_pathway_pcc": 0.007548461978681726,
+              "pooled_pcc": 0.008237759139068738,
+              "pooled_z_mse": 0.030564345537239093,
+              "raw_mae": 17.99339943926296
+            },
+            "per_seed": [
+              {
+                "seed": 45,
+                "patient_macro_pathway_pcc": 0.5056323502742415,
+                "pooled_pcc": 0.6175016523308376,
+                "pooled_z_mse": 0.7570028791757569,
+                "raw_mae": 1240.7163366470174
+              },
+              {
+                "seed": 46,
+                "patient_macro_pathway_pcc": 0.5057096566198604,
+                "pooled_pcc": 0.6216590564231543,
+                "pooled_z_mse": 0.737479206119714,
+                "raw_mae": 1224.907497676556
+              },
+              {
+                "seed": 47,
+                "patient_macro_pathway_pcc": 0.4925968551945832,
+                "pooled_pcc": 0.6057738696574947,
+                "pooled_z_mse": 0.7974073390743185,
+                "raw_mae": 1260.8091978859413
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "mpp2_uni2h_mlp_baseline_20260906",

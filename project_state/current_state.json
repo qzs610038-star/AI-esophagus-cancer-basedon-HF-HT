@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "state_revision": 265,
-  "updated_at": "2026-09-19T18:15:10+08:00",
+  "state_revision": 266,
+  "updated_at": "2026-09-28T12:29:36+08:00",
   "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
     "DIR-20260710-003",
@@ -26,7 +26,8 @@
     "DIR-20260912-001",
     "DIR-20260912-002",
     "DIR-20260908-003",
-    "DIR-20260908-004"
+    "DIR-20260908-004",
+    "DIR-20260927-001"
   ],
   "active_plans": {
     "manual_experiment_delivery": {
@@ -116,6 +117,8 @@
     "mpp2-task23-scratch-ablation-20260915-full-pending-result"
   ],
   "latest_accepted_result_ids": [
+    "phase2-backbone-spatial-ablation-batch2-20260927-result",
+    "phase2-task2-gene-pathway-first-batch-20260923-result",
     "mpp1_std10val_xzy_ext_uni2h_mlp_20260706",
     "mpp2_std10val_xzy_ext_uni2h_mlp_20260706",
     "mpp3_std10val_embargo_xzy_ext_uni2h_mlp_20260706",
@@ -137,7 +140,7 @@
   ],
   "phase2_program": {
     "status": "classic_spatial_fixed_paper_preparation",
-    "updated_at": "2026-09-19T18:15:10+08:00",
+    "updated_at": "2026-09-28T12:29:36+08:00",
     "baseline_experiment_id": "mpp2_barcode_repair_v003_frozen_baseline_20260711",
     "latest_result_review": {
       "experiment_id": "phase2_fullfov_hpo_v1",
@@ -157,12 +160,8 @@
       "accepted_at": "2026-09-18T21:31:00+08:00",
       "review_record_path": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79/analysis/复核接纳记录_20260918.md"
     },
-    "planned_experiment_ids": [
-      "phase2_gene_reconstruction_comparison_v001_20260904",
-      "phase2_spatial_density_comparison_v001_20260904"
-    ],
+    "planned_experiment_ids": [],
     "pending_inputs": [
-      "task2_target_and_scoring_contract",
       "team_return_acceptance_scope",
       "handoff_delivery_and_member_confirmation",
       "final_publication_metric_selection",
@@ -183,12 +182,12 @@
     "method_reference_experiment_id": "phase2_softlink_local_v2",
     "method_reference_arm": "spatial",
     "baseline_role": "第一轮 point 单点预测臂作为基础模型替换对照；旧冻结 MPP2 基线保留为历史量化锚点",
-    "supplementary_execution_status": "fullfov_accepted_handoff_materials_ready_task3_code_ready_team_return_pending_review",
+    "supplementary_execution_status": "batch2_complete_and_task2_first_batch_accepted_task3_accepted",
     "priority_order": [
-      "暂停 Phase2 方法改进，固定经典空间残差",
-      "对齐任务2与任务3的输入、输出和操作，交团队成员实践",
-      "单点基线基础模型替换消融已完成、复核并登记",
-      "围绕论文整理指标、代码与关键架构图"
+      "暂停 Phase2 方法改进，固定经典空间残差及已接纳结果的适用边界",
+      "第二批模型消融与任务3已接纳；整理其证据和代码供论文使用",
+      "任务2首批已接纳但完整比较未完成；真值来源及同目标对照按可选补证清单处理",
+      "审阅论文 v2，决定最终发表指标，并确认团队材料实际交付状态"
     ],
     "training_authorized_by_this_decision": false,
     "publication_metric_policy": {
@@ -251,7 +250,7 @@
       "selection_boundary": "模型与超参数选择仅使用训练集或内部验证集，外部测试仅用于冻结方案评估"
     },
     "task_2_3_handoff": {
-      "status": "task2_contract_pending_task3_new_code_ready_team_return_pending_review",
+      "status": "task2_first_batch_accepted_task3_accepted_optional_followups",
       "executor": "另一位团队成员（姓名待定）",
       "existing_materials": [
         "experiments/phase2_softlink_local_v2/给队友的任务说明.md",
@@ -277,14 +276,17 @@
       ],
       "task3_experiment_id": "phase2_spatial_density_comparison_v001_20260904",
       "task3_current_package": "experiments/phase2_task3_fullfov_density_ablation_v1",
-      "task3_code_status": "local_package_validated_formal_training_not_started",
+      "task3_code_status": "formal_completed_accepted_20260920",
       "team_return_experiment_id": "mpp2_task23_scratch_ablation_20260915",
       "team_return_evidence_status": "pending",
       "task2_diagnostic_report": "03审计报告/Phase2任务二_319基因ssGSEA重构通路与BarcodeRepairV003标签差异_专项审计报告_20260919.md",
-      "task2_diagnostic_merge_status": "pending_user_decision_do_not_merge_into_handoff_plan"
+      "task2_diagnostic_merge_status": "recorded_in_internal_rigor_note_20260927",
+      "task2_first_batch_result_id": "phase2-task2-gene-pathway-first-batch-20260923-result",
+      "task2_complete_comparison": false,
+      "task2_followups_block_writing": false
     },
     "paper_preparation": {
-      "status": "first_handoff_materials_ready_team_review_and_paper_writing_pending",
+      "status": "paper_v2_draft_ready",
       "tasks": [
         "论文结构与结果叙事",
         "正文及补充材料指标选择",
@@ -295,7 +297,22 @@
       "handoff_entry": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md",
       "delivery_check": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/版本与交付检查.md",
       "team_delivery_status": "not_confirmed",
-      "teammate_review_status": "not_confirmed"
+      "teammate_review_status": "not_confirmed",
+      "writing_package": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922",
+      "writing_entry": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/00_阅读入口.md",
+      "internal_rigor_note": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/严谨性与待补证据说明.md",
+      "updated_at": "2026-09-28T00:17:04+08:00",
+      "validation_record": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/04_证据与对应/v2_validation.json",
+      "draft_entry": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v2/README.md",
+      "figure_entry": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/README.md",
+      "completed_scope": [
+        "accepted_result_registration",
+        "bilingual_draft_v2",
+        "two_new_figures_with_data_and_code",
+        "evidence_and_code_source_update",
+        "separate_internal_rigor_note"
+      ],
+      "external_publication_performed": false
     },
     "current_model_delivery": {
       "path": "团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918",
@@ -318,8 +335,36 @@
       "team_delivery_status": "not_confirmed"
     },
     "registered_code_only_experiment_ids": [
-      "phase2_backbone_spatial_ablation_batch2_20260919",
       "mpp2_uni2h_mlp_baseline_20260906"
+    ],
+    "latest_supplemental_result_review": {
+      "backbone_batch2": {
+        "experiment_id": "phase2_backbone_spatial_ablation_batch2_20260919",
+        "result_id": "phase2-backbone-spatial-ablation-batch2-20260927-result",
+        "status": "accepted",
+        "complete_comparison": true,
+        "report_path": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/复核接纳记录_20260927.md"
+      },
+      "task2_first_batch": {
+        "experiment_id": "phase2_gene_reconstruction_comparison_v001_20260904",
+        "result_id": "phase2-task2-gene-pathway-first-batch-20260923-result",
+        "status": "accepted",
+        "complete_comparison": false,
+        "non_blocking_followups": true,
+        "report_path": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/首批结果接纳与内部核验_20260927.md"
+      }
+    },
+    "historical_planned_experiment_ids": [
+      "phase2_gene_reconstruction_comparison_v001_20260904",
+      "phase2_spatial_density_comparison_v001_20260904"
+    ],
+    "optional_followup_experiment_ids": [
+      "phase2_gene_reconstruction_comparison_v001_20260904"
+    ],
+    "non_blocking_pending_inputs": [
+      "task2_training_run_metadata",
+      "task2_complete_truth_provenance",
+      "task2_same_target_direct_arm_and_matched_repeats"
     ]
   },
   "blocked_actions": [
@@ -414,7 +459,7 @@
     "routine_git_precheck": false,
     "github_role": "backup_and_web_reading",
     "commit_push_policy": "user_triggered_only",
-    "before_large_changes": "arrange_user_triggered_backup_commit",
+    "before_large_changes": "read_only_change_list_before_cross_module_rewrite_or_bulk_migration_then_user_triggered_backup",
     "server_outputs": "raw_training_outputs_and_training_selection_metrics",
     "derived_metrics_and_registration": "local",
     "preserve_all_previously_retained_metrics": true,

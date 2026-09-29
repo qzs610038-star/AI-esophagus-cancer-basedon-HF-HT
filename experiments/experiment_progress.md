@@ -1,21 +1,21 @@
 # 实验进度
 
-> 当前状态版本 `265`，核对时间 `2026-09-19T18:15:10+08:00`。本页为派生导航，接纳状态以 [Registry（实验注册器）](experiment_registry.json) 为准。
+> 当前状态版本 rev266，核对时间 2026-09-28T12:29:36+08:00。此页为派生导航，接纳状态以[实验注册器](experiment_registry.json)为准。
 
-## 当前进展与新补登记（2026-09-19）
+## 当前进展与结果接纳（2026-09-28）
 
-| 对象 | 状态及下一步 |
+| 对象 | 当前状态 |
 |---|---|
-| 全视野三编码器批次 | accepted（已接纳）；保留单 XZY 和物理支持域未确认的局限 |
-| [当前模型包](../团队项目进度与结论/qzs/Phase2最终模型_Phase3交接包_20260918/README.md) / [首版交接包](../团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/00_从这里开始.md) | 本地材料已生成；实际发送、队友验收未确认 |
-| [任务3全视野密度对照](phase2_task3_fullfov_density_ablation_v1/README.md) | 1.0.1 包已登记，本地验证完成；无正式结果登记 |
-| [第二批空间头基础模型替换](phase2_backbone_spatial_ablation_batch2_20260919/README.md) | v002 代码补登；planned，不代表训练启动或完成 |
-| [MPP2 独立复用包](mpp2_uni2h_mlp_baseline_20260906/README.md) | v001 代码补登，不替代旧 accepted 基线 |
-| LJQ 任务2/3旧协议回传 | full 与 smoke 分开登记；full 待审，smoke 仅诊断；不替代中央任务2/3新计划 |
-| Ridge / 旧 MPP 训练合同 | 已退出活跃计划；Ridge 原 rejected 状态保留 |
+| 全视野主实验 | 已接纳；结论限登记批次、三种子及单外部患者 XZY |
+| 任务3稀疏训练与稠密测试 | 正式结果已接纳；沿用原运行来源与统计 |
+| 第二批编码器空间臂 | v006；9项成功训练、9份内部与9份 XZY 预测已接纳；[复核记录](results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/复核接纳记录_20260927.md) |
+| 任务2首批单臂 | 已接纳，完整同目标匹配比较未完成；内部双 PCC 0.496128/0.436066，XZY 0.416020/0.717011；补实验可选且不阻塞写作 |
+| 论文写作包 | [v2 入口](../团队项目进度与结论/方案共享/Phase2论文写作包_20260922/00_阅读入口.md)；双语草稿及两张结果图已就绪，终版指标仍待确定 |
+| 团队交付与评审 | 本地材料已形成；实际发送、队友验收及团队返还未确认 |
+| 团队内部证据边界 | [严谨性与待补证据说明](../团队项目进度与结论/方案共享/Phase2论文写作包_20260922/严谨性与待补证据说明.md) |
+| 下游模型 | 继续采用预先指定 UNI2-h 空间模型 seed45；不依据外部排名更换 |
 
-[当前机器状态](../project_state/current_state.json) · [待决事项与建议风险](../maintenance_logs/项目事实与规则治理完成与待决事项_20260919.md)。下方保留原数值表和旧记录，旧 next_action、W### 或门控文字仅供追溯。
-
+下方分日期记录为历史材料；其中旧 planned 或待回传描述仅代表当时时点，不用于当前排程。当前状态以实验注册器及上表为准。
 
 ## Phase2 全视野修复与调参结果已复核接纳（2026-09-18）
 
@@ -50,10 +50,6 @@
 - 外部只有XZY一名患者；三种子标准差不是泛化置信区间。内部为同患者留出点位。
 - [完整指标与验证](results/phase2_softlink_local_v2/20260908_005325_810_8d306c10/analysis/registration_record.json) · [分析报告](../01_指南与解读/分析报告/Phase2软连接v2_1_实验结果与机制分析_20260908.md)
 
-> 依据实验登记生成；本次按用户会议决定更新相关进度。
-> 本次按会议决策更新相关导航；不生成普通文档哈希。
-> state_revision: `265`；updated_at: `2026-09-19T18:15:10+08:00`
-
 ## 9月12日决策及后续单点消融记录（历史时点）
 
 - 方法已固定：第一轮 `phase2_softlink_local_v2` 的 `spatial`（经典空间残差）臂；暂停进一步改进。
@@ -70,13 +66,13 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | mpp2_online_cache_parity_v003_20260711 | mpp2_online_cache_parity_v003_20260711 | legacy-import-mpp2_online_cache_parity_v003_20260711 | — | Parity passed 48/48 samples; prepare paired S0 frozen-continue and S1 LoRA r=8 smoke, then evaluate incremental benefit before any formal training. | preflight | done | planned | 暂无 | 待审查 | prepare_paired_smoke | — |
 | Phase 2 基因预测后通路重建对照 | phase2_gene_reconstruction_comparison_v001_20260904 | — | — | Do not claim an executable protocol until the gene-expression and pathway-scoring inputs are confirmed. | formal | planned | planned | 暂无 | 待审查 | 准备输入输出与操作合同；模型替换限单点基线 | — |
-| Phase 2 稀疏训练与稠密测试对照 | phase2_spatial_density_comparison_v001_20260904 | — | — | Apply sparsification only after the leakage-safe train/test split; keep the test set dense and unchanged. | formal | planned | planned | 暂无 | 待审查 | 准备输入输出与操作合同；模型替换限单点基线 | — |
 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | S1b_gfnet_lora_r8_cls_pool8x8_fold1 | — | — | 2026-07-09 superseded: old 3-patient/JFX-affected spatial Token+LoRA gate is tuning reference only. Do not launch before MPP2 new-data LoRA baseline is established. | — | paused | pending | 暂无 | 待审查 | paused_mpp2_lora_first | — |
 
 ## 已接纳结果
 
 | 可读名称 | experiment ID | result ID | W### | 目的/比较 | 阶段 | 状态 | 证据等级 | 关键结果 | 当前结论 | 下一步 | 更新时间 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
+| Phase 2 稀疏训练与稠密测试对照 | phase2_spatial_density_comparison_v001_20260904 | phase2-task3-fullfov-density-ablation-v1-formal-20260919-151714-result | — | 比较稠密、规则2×2与逐患者随机等量训练，内部与外部保持稠密评价 | formal | done | accepted | 内部双PCC：稠密0.6770/0.8105、规则0.6394/0.7895、随机0.6381/0.7886；XZY：0.5711/0.6837、0.5554/0.6715、0.5412/0.6683 | 消融实验结果符合预期，证明了Visume HD 10x提供的稠密点位确实能提升预测效果 | closed_registered_accepted_no_automatic_training | 2026-09-20T14:36:23+08:00 |
 | mpp1_barcode_repair_v003_frozen_recheck_20260711 | mpp1_barcode_repair_v003_frozen_recheck_20260711 | mpp1-repair-v003-recheck-20260711-result-20260711203346-1a513ba4 | — | DIR-20260711-006 satisfied by validated result import; use this repaired formal result for reporting and do not redispatch automatically. | formal | done | accepted | Val PCC=0.7597；Val loss=0.4323；XZY PCC=0.6900；XZY MAE=0.8597；Test loss=1.2151 | 已接纳 | closed_use_accepted_repaired_result_for_reporting | 2026-07-11T12:50:59+00:00 |
 | mpp2_barcode_repair_v003_frozen_baseline_20260711 | mpp2_barcode_repair_v003_frozen_baseline_20260711 | mpp2-repair-v003-frozen-20260711-r002-result-20260711164140-f2b1b51d | — | Safety guard was evaluated and led to the completed repaired MPP1/3/4/5 rechecks; use this accepted repaired baseline for reporting and do not redispatch automatically. | formal | done | accepted | Val PCC=0.7971；Val loss=0.3749；XZY PCC=0.6549；XZY MAE=0.6191；Test loss=0.6621 | 已接纳 | closed_use_accepted_repaired_result_for_reporting | 2026-07-11T08:42:23+00:00 |
 | mpp2_lora_r8_dropout10_smoke_20260714 | mpp2_lora_r8_dropout10_smoke_20260714 | mpp2-lora-r8-dropout10-smoke-20260714-r001-result-20260714182311-7971c360 | — | Single-factor dropout=0.10 only; compare against accepted S0 after internal checkpoint selection; do not retry or tune from XZY. Observed best_val_loss=0.38228295 exceeds S0=0.37892210 and best_val_pcc=0.79290723 is below S0=0.79479160, so the pre-registered internal-first gate failed. | smoke | done | accepted | Val PCC=0.7929；Val loss=0.3823；XZY PCC=0.6438；XZY MAE=0.6349；Test loss=0.6843 | 已接纳 | close_dropout10_route_no_retry_or_tuning_after_internal_first_failure | 2026-07-14T10:25:16+00:00 |
