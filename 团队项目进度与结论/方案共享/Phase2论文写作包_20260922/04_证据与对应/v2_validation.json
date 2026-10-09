@@ -1,0 +1,34 @@
+{
+  "status": "pass",
+  "checked_at": "2026-09-28T00:17:26+08:00",
+  "scope": "本轮登记与写作包v2的派生数值、链接、图件和状态一致性；非训练链审计。",
+  "state_revision": 266,
+  "accepted_results": [
+    "phase2-backbone-spatial-ablation-batch2-20260927-result",
+    "phase2-task2-gene-pathway-first-batch-20260923-result"
+  ],
+  "counts": {
+    "six_model_summary_rows": 12,
+    "per_seed_rows": 36,
+    "task2_summary_rows": 2,
+    "numeric_equalities": 152,
+    "manuscript_numeric_cells": 88,
+    "extracted_registry_fields": 72,
+    "figure_data_copies": 4,
+    "figure_exports": 6,
+    "markdown_files": 17,
+    "local_links": 288
+  },
+  "broken_links": [],
+  "manual_review": {
+    "reviewer": "root",
+    "final_pngs_inspected": [
+      "Fig_P2_3S_six_encoders.png",
+      "Fig_P2_5_gene_route.png"
+    ],
+    "result": "最终两张PNG已目视检查；标题、图例、坐标与脚注无重叠，任务二无虚构误差线。",
+    "paper_rigor_handling": "评分差异诊断、缺证清单及任务二补证建议放入独立内部说明；方法和图注保留真实目标构建与运行次数。"
+  },
+  "new_training": false,
+  "hashes_computed": false
+}

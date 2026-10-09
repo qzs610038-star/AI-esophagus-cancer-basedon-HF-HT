@@ -1,0 +1,899 @@
+{
+  "schema_version": "1.0",
+  "checked_at": "2026-10-09T14:26:15.000+08:00",
+  "scope": "用户授权网页论文改稿资料交接；后两项仅项目计划",
+  "github": {
+    "remote": "git@github.com:qzs610038-star/AI-esophagus-cancer-basedon-HF-HT.git",
+    "branch": "main",
+    "before": {
+      "fetch_performed": true,
+      "ahead": 0,
+      "behind": 0,
+      "modified": 0,
+      "staged": 0,
+      "untracked": 173
+    },
+    "selected_paper_files": [
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/00_来源核对与证据状态.md",
+        "bytes": 6216
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/00_阅读入口.md",
+        "bytes": 2956
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/严谨性与待补证据说明.md",
+        "bytes": 4994
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/验收记录.md",
+        "bytes": 6179
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/01_论文详细提纲/消融预期与结果回填.md",
+        "bytes": 12430
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/01_论文详细提纲/原大纲替换对照.md",
+        "bytes": 5208
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/01_论文详细提纲/Phase2详细提纲.md",
+        "bytes": 17772
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/图表配置与图注.md",
+        "bytes": 28895
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/双语图注.md",
+        "bytes": 2918
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/图集.html",
+        "bytes": 1552
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/README.md",
+        "bytes": 1848
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/render_checks.json",
+        "bytes": 10018
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/data/baseline_descriptive_comparison.csv",
+        "bytes": 918
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/data/six_model_per_seed.csv",
+        "bytes": 13073
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/data/six_model_summary.csv",
+        "bytes": 2308
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/data/source_manifest.json",
+        "bytes": 1856
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/data/task2_summary.csv",
+        "bytes": 302
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/exports/Fig_P2_3S_six_encoders.pdf",
+        "bytes": 71272
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/exports/Fig_P2_3S_six_encoders.png",
+        "bytes": 382242
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/exports/Fig_P2_3S_six_encoders.svg",
+        "bytes": 103878
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/exports/Fig_P2_5_gene_route.pdf",
+        "bytes": 48506
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/exports/Fig_P2_5_gene_route.png",
+        "bytes": 327954
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/exports/Fig_P2_5_gene_route.svg",
+        "bytes": 33781
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/第二批图片_v2/source/draw_figures.py",
+        "bytes": 25356
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/首批图片图注.md",
+        "bytes": 3863
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/图集.html",
+        "bytes": 5231
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/export_checks.json",
+        "bytes": 1449
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/README.md",
+        "bytes": 4209
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/render_checks.json",
+        "bytes": 458
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/schematic_sources.md",
+        "bytes": 2699
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/data/density_graph.csv",
+        "bytes": 378
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/data/density_per_seed.csv",
+        "bytes": 5212
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/data/density_summary.csv",
+        "bytes": 2403
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/data/main_per_seed.csv",
+        "bytes": 6466
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/data/main_summary.csv",
+        "bytes": 2938
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/data/paired_spatial_gain_per_seed.csv",
+        "bytes": 2021
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/data/paired_spatial_gain_summary.csv",
+        "bytes": 954
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/data/source_manifest.json",
+        "bytes": 3732
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_1_data_flow.pdf",
+        "bytes": 96343
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_1_data_flow.png",
+        "bytes": 604202
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_1_data_flow.svg",
+        "bytes": 25492
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_2_model_structure.pdf",
+        "bytes": 86290
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_2_model_structure.png",
+        "bytes": 521215
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_2_model_structure.svg",
+        "bytes": 36830
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_3_编码器与空间分支.pdf",
+        "bytes": 88352
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_3_编码器与空间分支.png",
+        "bytes": 452968
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_3_编码器与空间分支.svg",
+        "bytes": 130739
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_4_训练密度消融.pdf",
+        "bytes": 89564
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_4_训练密度消融.png",
+        "bytes": 516264
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_4_训练密度消融.svg",
+        "bytes": 84459
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_4S_等50轮敏感性分析.pdf",
+        "bytes": 85287
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_4S_等50轮敏感性分析.png",
+        "bytes": 479518
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/exports/Fig_P2_4S_等50轮敏感性分析.svg",
+        "bytes": 48648
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/source/build_gallery.py",
+        "bytes": 4525
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/source/draw_results.py",
+        "bytes": 14080
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/source/draw_schematics.py",
+        "bytes": 11535
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/02_图表配置/首批图片_v1/source/prepare_plot_data.py",
+        "bytes": 13366
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/03_代码打包准备/代码来源与打包准备.md",
+        "bytes": 20259
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/04_证据与对应/论文实验图表代码对应表.md",
+        "bytes": 5755
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/04_证据与对应/上游大纲读取记录.json",
+        "bytes": 22180
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/04_证据与对应/已接纳结果摘录.json",
+        "bytes": 89693
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/04_证据与对应/已接纳结果摘录.md",
+        "bytes": 6198
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/04_证据与对应/v2_validation.json",
+        "bytes": 1237
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/04_证据与对应/verify_v2.py",
+        "bytes": 8711
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v1/核对记录.md",
+        "bytes": 2886
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v1/Phase2_English_Draft.md",
+        "bytes": 38460
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v1/Phase2拟引用文献.md",
+        "bytes": 8559
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v1/Phase2中文初稿.md",
+        "bytes": 28672
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v1/README.md",
+        "bytes": 1877
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v2/Phase2_English_Draft.md",
+        "bytes": 41620
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v2/Phase2拟引用文献.md",
+        "bytes": 10938
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v2/Phase2中文初稿.md",
+        "bytes": 32343
+      },
+      {
+        "path": "团队项目进度与结论/方案共享/Phase2论文写作包_20260922/05_中英文论文初稿_v2/README.md",
+        "bytes": 2123
+      }
+    ],
+    "selected_baseline_plan_directory": "01_指南与解读/部署方案/经典方法复现准备_STNet_HisToGene_BLEEP_20261002",
+    "remaining_untracked_count": 143,
+    "remaining_untracked_groups": {
+      "code_references": 10,
+      "maintenance_logs": 2,
+      "团队项目进度与结论": 131
+    },
+    "remaining_untracked_files": [
+      "code_references/W007_20260815/README.md",
+      "code_references/W007_20260815/configs/protocol_v001.yaml",
+      "code_references/W007_20260815/mpp2_cpgcr/__init__.py",
+      "code_references/W007_20260815/mpp2_cpgcr/batch_plan.py",
+      "code_references/W007_20260815/mpp2_cpgcr/losses.py",
+      "code_references/W007_20260815/mpp2_cpgcr/model.py",
+      "code_references/W007_20260815/mpp2_cpgcr/one_click_runner.py",
+      "code_references/W007_20260815/mpp2_cpgcr/result_contract.py",
+      "code_references/W007_20260815/mpp2_cpgcr/train_eval.py",
+      "code_references/W007_20260815/来源.json",
+      "maintenance_logs/daily/2026-10-07.md",
+      "maintenance_logs/daily/2026-10-08.md",
+      "团队项目进度与结论/lzd/task2_gene_pathway_v001/README.md",
+      "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/HANDOFF.md",
+      "团队项目进度与结论/lzd/task2_gene_pathway_v001/gene_prediction_eval_v001/README.md",
+      "团队项目进度与结论/lzd/task2_gene_pathway_v001/jfx_single_patch_diagnostic_v001/README.md",
+      "团队项目进度与结论/qzs/Phase2任务二_通路聚合复核交接包_20260920/aggregation_review/current_phase2_labels/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/01/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/02/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/03/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/04/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/05/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/06/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/07/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/00_precheck/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/00_precheck/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/00_precheck/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/00_precheck/raw/summary_zh.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/analysis/GPT事实包与报告大纲_20260908.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/analysis/三个问题_GPT事实与推理_20260908.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/analysis/三个问题_Gemini原稿_待复核.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/analysis/三个问题_追加正文_已复核.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/analysis/通路补充正文_已复核.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_joint/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_joint/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_joint/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_point/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_point/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_point/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_relation/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_relation/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_relation/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_spatial/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_spatial/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_42_spatial/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_joint/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_joint/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_joint/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_point/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_point/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_point/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_relation/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_relation/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_relation/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_spatial/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_spatial/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_43_spatial/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_joint/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_joint/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_joint/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_point/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_point/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_point/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_relation/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_relation/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_relation/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_spatial/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_spatial/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/external_44_spatial/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/source_snapshot/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/source_snapshot/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/source_snapshot/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_joint/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_joint/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_joint/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_point/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_point/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_point/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_relation/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_relation/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_relation/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_spatial/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_spatial/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_42_spatial/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_joint/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_joint/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_joint/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_point/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_point/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_point/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_relation/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_relation/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_relation/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_spatial/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_spatial/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_43_spatial/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_joint/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_joint/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_joint/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_point/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_point/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_point/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_relation/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_relation/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_relation/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_spatial/provenance/docs/Phase2软连接升级_Fable意见与训练后排查清单_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_spatial/provenance/docs/Phase2软连接升级_决策与执行记录_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/08/records/result/train_44_spatial/provenance/docs/Phase2软连接升级_最终部署方案_v2_1_20260907.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/09/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/10/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/10/records/result/analysis/external_xzy_review.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/10/records/result/analysis/三轮综合分析_20260910/Gemini润色原稿_未经事实修正.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/10/records/result/analysis/三轮综合分析_20260910/Gemini润色输入.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/10/records/result/analysis/三轮综合分析_20260910/Gemini润色采纳与修正.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed42/provenance/package_snapshot/ACCEPTANCE.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed42/provenance/package_snapshot/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed42/provenance/package_snapshot/docs/protocol.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed42/provenance/package_snapshot/docs/服务器HuggingFace登录与模型下载操作卡.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed42/provenance/package_snapshot/docs/本地分析与回传操作卡.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed43_44/analysis/three_seed/三种子统一分析报告.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed43_44/provenance/package_snapshot/ACCEPTANCE.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed43_44/provenance/package_snapshot/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed43_44/provenance/package_snapshot/docs/protocol.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed43_44/provenance/package_snapshot/docs/服务器HuggingFace登录与模型下载操作卡.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/11/records/seed43_44/provenance/package_snapshot/docs/本地分析与回传操作卡.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/analysis/复核接纳记录_20260918.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/analysis/审核前结果汇报_20260918.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/check-inputs_20260916_231813_101_7b1b9a79/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/external-eval_20260918_101656_355_dc9bf25e/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/final-ablation_20260918_002437_956_adc7bf35/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/freeze_20260918_002436_154_a3b4235c/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/paired-recipe_20260917_001102_631_ef7fd174/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/paired-view_20260916_235742_553_1e4886d9/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/prepare-features_20260916_233001_693_5f72869f/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/search-point_20260917_142021_714_55b04196/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/12/records/result/search-spatial_20260917_193357_080_74f0d29c/provenance/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/13/README.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/13/records/formal/analysis/audit_summary.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/13/records/formal/analysis/结果审核报告.md",
+      "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版/07_原始训练记录/README.md"
+    ],
+    "push_receipt_location": "本次提交推送后，以主任务工具回执与最终答复为准；本文件随相同提交保存，不伪造自身提交编号。"
+  },
+  "drive": {
+    "destination_title": "AI空转云端方案管理/03_网页GPT6Pro改稿资料_20261009",
+    "destination_url": "https://drive.google.com/drive/folders/1Tui2LV1L1HNN0l73BVee32bow2Y9V63c",
+    "native_shared_drive_count_returned": 0,
+    "destination_kind": "existing_shared_folder_under_My_Drive",
+    "uploaded_core_count": 39,
+    "uploaded_handoff_documents_count": 2,
+    "files": [
+      {
+        "relative_path": "00_阅读入口.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\00_阅读入口.md",
+        "id": "1n7wQgfkXXzUTH60tBbVdoiAPIio1U-Q1",
+        "url": "https://drive.google.com/file/d/1n7wQgfkXXzUTH60tBbVdoiAPIio1U-Q1/view?usp=drivesdk",
+        "source_bytes": 2956
+      },
+      {
+        "relative_path": "05_中英文论文初稿_v2/Phase2_English_Draft.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\05_中英文论文初稿_v2\\Phase2_English_Draft.md",
+        "id": "1Y8wd3Dgh2Qg0neB77W4Gk0bfqkxigFfo",
+        "url": "https://drive.google.com/file/d/1Y8wd3Dgh2Qg0neB77W4Gk0bfqkxigFfo/view?usp=drivesdk",
+        "parent_id": "1ZTxscNXcfRISCElpk5JvqkTM9wGCl-lv",
+        "source_bytes": 41620
+      },
+      {
+        "relative_path": "05_中英文论文初稿_v2/Phase2拟引用文献.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\05_中英文论文初稿_v2\\Phase2拟引用文献.md",
+        "id": "1r8WW16n8t_YBRtD6hgevpkntHchhqYFM",
+        "url": "https://drive.google.com/file/d/1r8WW16n8t_YBRtD6hgevpkntHchhqYFM/view?usp=drivesdk",
+        "parent_id": "1ZTxscNXcfRISCElpk5JvqkTM9wGCl-lv",
+        "source_bytes": 10938
+      },
+      {
+        "relative_path": "05_中英文论文初稿_v2/Phase2中文初稿.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\05_中英文论文初稿_v2\\Phase2中文初稿.md",
+        "id": "1n7h6U-5_XrgSzxgCUA185l3diDK0MVI5",
+        "url": "https://drive.google.com/file/d/1n7h6U-5_XrgSzxgCUA185l3diDK0MVI5/view?usp=drivesdk",
+        "parent_id": "1ZTxscNXcfRISCElpk5JvqkTM9wGCl-lv",
+        "source_bytes": 32343
+      },
+      {
+        "relative_path": "05_中英文论文初稿_v2/README.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\05_中英文论文初稿_v2\\README.md",
+        "id": "1UzyJixrMG7omCz9-v31kF9wWepkv6gSV",
+        "url": "https://drive.google.com/file/d/1UzyJixrMG7omCz9-v31kF9wWepkv6gSV/view?usp=drivesdk",
+        "parent_id": "1ZTxscNXcfRISCElpk5JvqkTM9wGCl-lv",
+        "source_bytes": 2123
+      },
+      {
+        "relative_path": "00_来源核对与证据状态.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\00_来源核对与证据状态.md",
+        "id": "1ZTsYAYG6x_uS0NSwdS4NUfIeU3C7nlFu",
+        "url": "https://drive.google.com/file/d/1ZTsYAYG6x_uS0NSwdS4NUfIeU3C7nlFu/view?usp=drivesdk",
+        "parent_id": "1Tui2LV1L1HNN0l73BVee32bow2Y9V63c",
+        "source_bytes": 6216
+      },
+      {
+        "relative_path": "严谨性与待补证据说明.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\严谨性与待补证据说明.md",
+        "id": "14tuORFKVqE3QTvwHmLJJUKuIhQFYdhEX",
+        "url": "https://drive.google.com/file/d/14tuORFKVqE3QTvwHmLJJUKuIhQFYdhEX/view?usp=drivesdk",
+        "parent_id": "1Tui2LV1L1HNN0l73BVee32bow2Y9V63c",
+        "source_bytes": 4994
+      },
+      {
+        "relative_path": "验收记录.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\验收记录.md",
+        "id": "15iqS_msSsWZNdMO5XfO6fpUsmQy-O8Jv",
+        "url": "https://drive.google.com/file/d/15iqS_msSsWZNdMO5XfO6fpUsmQy-O8Jv/view?usp=drivesdk",
+        "parent_id": "1Tui2LV1L1HNN0l73BVee32bow2Y9V63c",
+        "source_bytes": 6179
+      },
+      {
+        "relative_path": "01_论文详细提纲/消融预期与结果回填.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\01_论文详细提纲\\消融预期与结果回填.md",
+        "id": "1KXzrddyAhCqrs8anDXWmcNSjNnM3_NL9",
+        "url": "https://drive.google.com/file/d/1KXzrddyAhCqrs8anDXWmcNSjNnM3_NL9/view?usp=drivesdk",
+        "parent_id": "1FniKqQH8FaYVS188rWqrOVnlcMxs3Jsi",
+        "source_bytes": 12430
+      },
+      {
+        "relative_path": "01_论文详细提纲/原大纲替换对照.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\01_论文详细提纲\\原大纲替换对照.md",
+        "id": "1wxH9WBRvoKwdWBrFOuXfDXkNlW3rkxYd",
+        "url": "https://drive.google.com/file/d/1wxH9WBRvoKwdWBrFOuXfDXkNlW3rkxYd/view?usp=drivesdk",
+        "parent_id": "1FniKqQH8FaYVS188rWqrOVnlcMxs3Jsi",
+        "source_bytes": 5208
+      },
+      {
+        "relative_path": "01_论文详细提纲/Phase2详细提纲.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\01_论文详细提纲\\Phase2详细提纲.md",
+        "id": "1xSw5xYsX1B3LFK35LEcy5Y2y7QYudLAy",
+        "url": "https://drive.google.com/file/d/1xSw5xYsX1B3LFK35LEcy5Y2y7QYudLAy/view?usp=drivesdk",
+        "parent_id": "1FniKqQH8FaYVS188rWqrOVnlcMxs3Jsi",
+        "source_bytes": 17772
+      },
+      {
+        "relative_path": "02_图表配置/图表配置与图注.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\图表配置与图注.md",
+        "id": "1xYlenEMMgrBS9Vt4hdn7KReGjxwSgkKF",
+        "url": "https://drive.google.com/file/d/1xYlenEMMgrBS9Vt4hdn7KReGjxwSgkKF/view?usp=drivesdk",
+        "parent_id": "1B6WDq0alQaLZ6ADkjtnHiIgErs2NoKid",
+        "source_bytes": 28895
+      },
+      {
+        "relative_path": "02_图表配置/第二批图片_v2/双语图注.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\第二批图片_v2\\双语图注.md",
+        "id": "1i-nC6-2DJdAi_V63LT5ljSrlL7gCC-fr",
+        "url": "https://drive.google.com/file/d/1i-nC6-2DJdAi_V63LT5ljSrlL7gCC-fr/view?usp=drivesdk",
+        "parent_id": "1cLxvaWoWgdRLr0yDFtiWLYuHQfcueJU-",
+        "source_bytes": 2918
+      },
+      {
+        "relative_path": "02_图表配置/第二批图片_v2/README.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\第二批图片_v2\\README.md",
+        "id": "1sFL0xtAB36X4JdXcihL0GwlDZM7bU5Gw",
+        "url": "https://drive.google.com/file/d/1sFL0xtAB36X4JdXcihL0GwlDZM7bU5Gw/view?usp=drivesdk",
+        "parent_id": "1cLxvaWoWgdRLr0yDFtiWLYuHQfcueJU-",
+        "source_bytes": 1848
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/首批图片图注.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\首批图片图注.md",
+        "id": "11kE4B4AxHvtkgab_8yZfS2i0tbrEucMp",
+        "url": "https://drive.google.com/file/d/11kE4B4AxHvtkgab_8yZfS2i0tbrEucMp/view?usp=drivesdk",
+        "parent_id": "1xhnytGSCy1G8Ff9pE6ZFT21JyF3os90e",
+        "source_bytes": 3863
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/README.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\README.md",
+        "id": "1cJHPi5R2L83R-ndKThGSRGS8agnM6YGp",
+        "url": "https://drive.google.com/file/d/1cJHPi5R2L83R-ndKThGSRGS8agnM6YGp/view?usp=drivesdk",
+        "parent_id": "1xhnytGSCy1G8Ff9pE6ZFT21JyF3os90e",
+        "source_bytes": 4209
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/schematic_sources.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\schematic_sources.md",
+        "id": "1LIQ8dz9J4CPZColPm-AYTjNbTIc_8Eyw",
+        "url": "https://drive.google.com/file/d/1LIQ8dz9J4CPZColPm-AYTjNbTIc_8Eyw/view?usp=drivesdk",
+        "parent_id": "1xhnytGSCy1G8Ff9pE6ZFT21JyF3os90e",
+        "source_bytes": 2699
+      },
+      {
+        "relative_path": "03_代码打包准备/代码来源与打包准备.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\03_代码打包准备\\代码来源与打包准备.md",
+        "id": "1_sXHDBJZSbFiLM8Up4LHVP5tE1YJh15_",
+        "url": "https://drive.google.com/file/d/1_sXHDBJZSbFiLM8Up4LHVP5tE1YJh15_/view?usp=drivesdk",
+        "parent_id": "1vGTqd3adYwboMiOvIRIVZRAbhbqilqoh",
+        "source_bytes": 20259
+      },
+      {
+        "relative_path": "04_证据与对应/论文实验图表代码对应表.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\04_证据与对应\\论文实验图表代码对应表.md",
+        "id": "1fY1kcxCqzEivG8mDwzDXGOJc24KjEOp_",
+        "url": "https://drive.google.com/file/d/1fY1kcxCqzEivG8mDwzDXGOJc24KjEOp_/view?usp=drivesdk",
+        "parent_id": "1q5De4eOFonNGe_RsC8Rc4L4vxwIQy5pZ",
+        "source_bytes": 5755
+      },
+      {
+        "relative_path": "04_证据与对应/已接纳结果摘录.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\04_证据与对应\\已接纳结果摘录.md",
+        "id": "1OP3mCWIugJuhPFl2TXuVKI9lBQh-On-l",
+        "url": "https://drive.google.com/file/d/1OP3mCWIugJuhPFl2TXuVKI9lBQh-On-l/view?usp=drivesdk",
+        "parent_id": "1q5De4eOFonNGe_RsC8Rc4L4vxwIQy5pZ",
+        "source_bytes": 6198
+      },
+      {
+        "relative_path": "02_图表配置/第二批图片_v2/data/baseline_descriptive_comparison.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\第二批图片_v2\\data\\baseline_descriptive_comparison.csv",
+        "id": "1SKhLWl8GuBO5WiCJLuBkE7ZRG2RkJfTJ",
+        "url": "https://drive.google.com/file/d/1SKhLWl8GuBO5WiCJLuBkE7ZRG2RkJfTJ/view?usp=drivesdk",
+        "parent_id": "1uj_SHKxPkwTSRB3Z2UZ6yIgQF37v3yLL",
+        "source_bytes": 918
+      },
+      {
+        "relative_path": "02_图表配置/第二批图片_v2/data/six_model_per_seed.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\第二批图片_v2\\data\\six_model_per_seed.csv",
+        "id": "130pZ2EOKrtBy2S8Oo8m2-MNyw31DtY4H",
+        "url": "https://drive.google.com/file/d/130pZ2EOKrtBy2S8Oo8m2-MNyw31DtY4H/view?usp=drivesdk",
+        "parent_id": "1uj_SHKxPkwTSRB3Z2UZ6yIgQF37v3yLL",
+        "source_bytes": 13073
+      },
+      {
+        "relative_path": "02_图表配置/第二批图片_v2/data/six_model_summary.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\第二批图片_v2\\data\\six_model_summary.csv",
+        "id": "1EQvysPoGw19gYB4PdW-manf0cT6PjOQB",
+        "url": "https://drive.google.com/file/d/1EQvysPoGw19gYB4PdW-manf0cT6PjOQB/view?usp=drivesdk",
+        "parent_id": "1uj_SHKxPkwTSRB3Z2UZ6yIgQF37v3yLL",
+        "source_bytes": 2308
+      },
+      {
+        "relative_path": "02_图表配置/第二批图片_v2/data/task2_summary.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\第二批图片_v2\\data\\task2_summary.csv",
+        "id": "1DL_utv3XlJ9mX-891ZJ0rqJ6JkQHVDmW",
+        "url": "https://drive.google.com/file/d/1DL_utv3XlJ9mX-891ZJ0rqJ6JkQHVDmW/view?usp=drivesdk",
+        "parent_id": "1uj_SHKxPkwTSRB3Z2UZ6yIgQF37v3yLL",
+        "source_bytes": 302
+      },
+      {
+        "relative_path": "02_图表配置/第二批图片_v2/exports/Fig_P2_3S_six_encoders.png",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\第二批图片_v2\\exports\\Fig_P2_3S_six_encoders.png",
+        "id": "1phTkQVkYsL2uyFBD_CLJ0gUs4lmqhcLE",
+        "url": "https://drive.google.com/file/d/1phTkQVkYsL2uyFBD_CLJ0gUs4lmqhcLE/view?usp=drivesdk",
+        "parent_id": "1Fzx2kbegQOmEmAeh9j7C1wIIh1NG9Q7B",
+        "source_bytes": 382242
+      },
+      {
+        "relative_path": "02_图表配置/第二批图片_v2/exports/Fig_P2_5_gene_route.png",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\第二批图片_v2\\exports\\Fig_P2_5_gene_route.png",
+        "id": "18UqlBLfc3RR_8NTB5aVuG9llTBh-1K-p",
+        "url": "https://drive.google.com/file/d/18UqlBLfc3RR_8NTB5aVuG9llTBh-1K-p/view?usp=drivesdk",
+        "parent_id": "1Fzx2kbegQOmEmAeh9j7C1wIIh1NG9Q7B",
+        "source_bytes": 327954
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/data/density_graph.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\data\\density_graph.csv",
+        "id": "1xE2AxjHaJDCmDzsdWXpA8ZOkkeNoiFsq",
+        "url": "https://drive.google.com/file/d/1xE2AxjHaJDCmDzsdWXpA8ZOkkeNoiFsq/view?usp=drivesdk",
+        "parent_id": "1rSQR31BQ3NlXEjaaNGbY-4tP5RSmIF3I",
+        "source_bytes": 378
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/data/density_per_seed.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\data\\density_per_seed.csv",
+        "id": "1eVFSSTF_9Sh5GLB-VEe5W1W8nCDIEHIi",
+        "url": "https://drive.google.com/file/d/1eVFSSTF_9Sh5GLB-VEe5W1W8nCDIEHIi/view?usp=drivesdk",
+        "parent_id": "1rSQR31BQ3NlXEjaaNGbY-4tP5RSmIF3I",
+        "source_bytes": 5212
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/data/density_summary.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\data\\density_summary.csv",
+        "id": "1tFPlhbNMH9qewuKM2Ai4NL4MafOdT1VG",
+        "url": "https://drive.google.com/file/d/1tFPlhbNMH9qewuKM2Ai4NL4MafOdT1VG/view?usp=drivesdk",
+        "parent_id": "1rSQR31BQ3NlXEjaaNGbY-4tP5RSmIF3I",
+        "source_bytes": 2403
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/data/main_per_seed.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\data\\main_per_seed.csv",
+        "id": "1xgPNgEpVb00XZ9ZpiSzKhaaorRlv2cMm",
+        "url": "https://drive.google.com/file/d/1xgPNgEpVb00XZ9ZpiSzKhaaorRlv2cMm/view?usp=drivesdk",
+        "parent_id": "1rSQR31BQ3NlXEjaaNGbY-4tP5RSmIF3I",
+        "source_bytes": 6466
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/data/main_summary.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\data\\main_summary.csv",
+        "id": "1V7-9b9E85PqiuJ2UXIxdv_IXJjgh-i4x",
+        "url": "https://drive.google.com/file/d/1V7-9b9E85PqiuJ2UXIxdv_IXJjgh-i4x/view?usp=drivesdk",
+        "parent_id": "1rSQR31BQ3NlXEjaaNGbY-4tP5RSmIF3I",
+        "source_bytes": 2938
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/data/paired_spatial_gain_per_seed.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\data\\paired_spatial_gain_per_seed.csv",
+        "id": "1Ww4Fs01g1n_HpGy1l05jQYvf63_qJSHm",
+        "url": "https://drive.google.com/file/d/1Ww4Fs01g1n_HpGy1l05jQYvf63_qJSHm/view?usp=drivesdk",
+        "parent_id": "1rSQR31BQ3NlXEjaaNGbY-4tP5RSmIF3I",
+        "source_bytes": 2021
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/data/paired_spatial_gain_summary.csv",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\data\\paired_spatial_gain_summary.csv",
+        "id": "1klgY7de8vqCHAuJ_2xNchRlSbXzIfcMI",
+        "url": "https://drive.google.com/file/d/1klgY7de8vqCHAuJ_2xNchRlSbXzIfcMI/view?usp=drivesdk",
+        "parent_id": "1rSQR31BQ3NlXEjaaNGbY-4tP5RSmIF3I",
+        "source_bytes": 954
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/exports/Fig_P2_1_data_flow.png",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\exports\\Fig_P2_1_data_flow.png",
+        "id": "1gg4Slt1TB_l8MiKMK5M8TraejAseFwLr",
+        "url": "https://drive.google.com/file/d/1gg4Slt1TB_l8MiKMK5M8TraejAseFwLr/view?usp=drivesdk",
+        "parent_id": "1tqKLyhqIYupGQUV9oRWk3_Gv7jAyWK-Z",
+        "source_bytes": 604202
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/exports/Fig_P2_2_model_structure.png",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\exports\\Fig_P2_2_model_structure.png",
+        "id": "1WIuBZCKLbP_gDZ4xRRoAer60zb5bbOhj",
+        "url": "https://drive.google.com/file/d/1WIuBZCKLbP_gDZ4xRRoAer60zb5bbOhj/view?usp=drivesdk",
+        "parent_id": "1tqKLyhqIYupGQUV9oRWk3_Gv7jAyWK-Z",
+        "source_bytes": 521215
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/exports/Fig_P2_3_编码器与空间分支.png",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\exports\\Fig_P2_3_编码器与空间分支.png",
+        "id": "1bk3sbBhMkvr2jWKx7AiqRSncKtnX_mBr",
+        "url": "https://drive.google.com/file/d/1bk3sbBhMkvr2jWKx7AiqRSncKtnX_mBr/view?usp=drivesdk",
+        "parent_id": "1tqKLyhqIYupGQUV9oRWk3_Gv7jAyWK-Z",
+        "source_bytes": 452968
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/exports/Fig_P2_4_训练密度消融.png",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\exports\\Fig_P2_4_训练密度消融.png",
+        "id": "1m4jRVy480vbA5NNSM9VL3aJKWx5wJa-c",
+        "url": "https://drive.google.com/file/d/1m4jRVy480vbA5NNSM9VL3aJKWx5wJa-c/view?usp=drivesdk",
+        "parent_id": "1tqKLyhqIYupGQUV9oRWk3_Gv7jAyWK-Z",
+        "source_bytes": 516264
+      },
+      {
+        "relative_path": "02_图表配置/首批图片_v1/exports/Fig_P2_4S_等50轮敏感性分析.png",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\exports\\Fig_P2_4S_等50轮敏感性分析.png",
+        "id": "1JHmb0gdo2cgQqgPTH-RYct_8P3Ja9nPo",
+        "url": "https://drive.google.com/file/d/1JHmb0gdo2cgQqgPTH-RYct_8P3Ja9nPo/view?usp=drivesdk",
+        "parent_id": "1tqKLyhqIYupGQUV9oRWk3_Gv7jAyWK-Z",
+        "source_bytes": 479518
+      },
+      {
+        "relative_path": "04_证据与对应/已接纳结果摘录.json",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\04_证据与对应\\已接纳结果摘录.json",
+        "id": "1A4ywQ-7ntRbOwf32dtmJLVluLHLa85NW",
+        "url": "https://drive.google.com/file/d/1A4ywQ-7ntRbOwf32dtmJLVluLHLa85NW/view?usp=drivesdk",
+        "parent_id": "1q5De4eOFonNGe_RsC8Rc4L4vxwIQy5pZ",
+        "source_bytes": 89693
+      },
+      {
+        "relative_path": "网页端改稿提示词.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\01_指南与解读\\论文交接\\网页GPT6Pro改稿交接_20261009\\网页端改稿提示词.md",
+        "id": "1FvYSq0Hx04YFv5JVN8fYVgYdhCOp8ryP",
+        "url": "https://drive.google.com/file/d/1FvYSq0Hx04YFv5JVN8fYVgYdhCOp8ryP/view?usp=drivesdk",
+        "parent_id": "1Tui2LV1L1HNN0l73BVee32bow2Y9V63c",
+        "source_bytes": null
+      },
+      {
+        "relative_path": "三项近期任务_20261009.md",
+        "local_path": "D:\\AI空间转录病理研究\\PFMval_new\\project_state\\plans\\三项近期任务_20261009.md",
+        "id": "1FGyUlbTQ4Kq0-qWuPI-ImULgWYPPhGqH",
+        "url": "https://drive.google.com/file/d/1FGyUlbTQ4Kq0-qWuPI-ImULgWYPPhGqH/view?usp=drivesdk",
+        "parent_id": "1Tui2LV1L1HNN0l73BVee32bow2Y9V63c",
+        "source_bytes": null
+      }
+    ],
+    "not_found_in_existing_project_locations_at_start": [
+      "2026-09-28 Phase2中英文初稿v2及其文献表",
+      "第二批六编码器完整空间臂已接纳结果及两批最新图表/来源",
+      "任务二首批partial/accepted结果与不同目标、单次运行的解释边界",
+      "2026-09-28严谨性说明与待补证据"
+    ],
+    "old_report_readback": {
+      "id": "1mjcvwlbFCWYk26y6s8Dlc9xlEG7oSSp3",
+      "title": "Phase2整体分析报告_模型指标与补充实验_20260905.md",
+      "does_not_contain_H_optimus_1_or_new_task2_metrics": true,
+      "disposition": "保留历史报告；本轮新目录为改稿资料入口"
+    },
+    "text_readback_checks": [
+      {
+        "file": "05_中英文论文初稿_v2/Phase2中文初稿.md",
+        "text_readback_matches_local": true
+      },
+      {
+        "file": "严谨性与待补证据说明.md",
+        "text_readback_matches_local": true
+      },
+      {
+        "file": "04_证据与对应/已接纳结果摘录.md",
+        "text_readback_matches_local": true
+      },
+      {
+        "file": "网页端改稿提示词.md",
+        "text_readback_matches_local": true
+      }
+    ],
+    "figure_metadata_checks": [
+      {
+        "file": "02_图表配置/第二批图片_v2/exports/Fig_P2_3S_six_encoders.png",
+        "size_matches": true,
+        "mime_type": "image/png",
+        "isError": false
+      },
+      {
+        "file": "02_图表配置/第二批图片_v2/exports/Fig_P2_5_gene_route.png",
+        "size_matches": true,
+        "mime_type": "image/png",
+        "isError": false
+      },
+      {
+        "file": "02_图表配置/首批图片_v1/exports/Fig_P2_1_data_flow.png",
+        "size_matches": true,
+        "mime_type": "image/png",
+        "isError": false
+      },
+      {
+        "file": "02_图表配置/首批图片_v1/exports/Fig_P2_2_model_structure.png",
+        "size_matches": true,
+        "mime_type": "image/png",
+        "isError": false
+      },
+      {
+        "file": "02_图表配置/首批图片_v1/exports/Fig_P2_3_编码器与空间分支.png",
+        "size_matches": true,
+        "mime_type": "image/png",
+        "isError": false
+      },
+      {
+        "file": "02_图表配置/首批图片_v1/exports/Fig_P2_4_训练密度消融.png",
+        "size_matches": true,
+        "mime_type": "image/png",
+        "isError": false
+      },
+      {
+        "file": "02_图表配置/首批图片_v1/exports/Fig_P2_4S_等50轮敏感性分析.png",
+        "size_matches": true,
+        "mime_type": "image/png",
+        "isError": false
+      }
+    ],
+    "verification_method": "关键正文规范化换行后逐字符比较；7张PNG核对返回MIME及文件大小；逐文件上传回执。不计算数据文件哈希。",
+    "omitted_duplicates": "Drive未上传旧v1正文、重复SVG/PDF导出和自动渲染日志；完整73文件论文包纳入GitHub。"
+  },
+  "documents": {
+    "prompt": "01_指南与解读/论文交接/网页GPT6Pro改稿交接_20261009/网页端改稿提示词.md",
+    "plan": "project_state/plans/三项近期任务_20261009.md",
+    "writer": "current-task-gpt",
+    "external_writer": {
+      "status": "not_dispatched",
+      "reason": "自动审批拒绝向Antigravity发送项目资料，外部目的地未获用户明确授权；主任务本地接力"
+    }
+  },
+  "boundaries": {
+    "new_training_runs": 0,
+    "new_result_acceptances": 0,
+    "ppt_created": false,
+    "baseline_methods_implemented": false,
+    "raw_data_uploaded": false,
+    "weights_or_feature_caches_uploaded": false
+  },
+  "warnings": [
+    "旧论文包Matplotlib SVG和部分原稿存在行尾空格，本轮原样备份，没有改写历史稿件。",
+    "学姐逐篇点名STNet/HisToGene/BLEEP的文字证据未找到，三方法来自现有本地准备包。",
+    "网页GPT是否实际可读取需其在连接器中验证，不能以本轮上传代替网页端读取证明。"
+  ]
+}

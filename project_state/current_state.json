@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "state_revision": 266,
-  "updated_at": "2026-09-28T12:29:36+08:00",
+  "state_revision": 267,
+  "updated_at": "2026-10-09T14:26:15.000+08:00",
   "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
     "DIR-20260710-003",
@@ -27,7 +27,8 @@
     "DIR-20260912-002",
     "DIR-20260908-003",
     "DIR-20260908-004",
-    "DIR-20260927-001"
+    "DIR-20260927-001",
+    "DIR-20261009-001"
   ],
   "active_plans": {
     "manual_experiment_delivery": {
@@ -111,6 +112,48 @@
       "materials_status": "first_version_ready",
       "delivery_status": "not_confirmed",
       "materials_path": "团队项目进度与结论/方案共享/Phase2完整交接包_20260919_首版"
+    },
+    {
+      "id": "20261009_paper_web_revision",
+      "owner": "用户",
+      "registered_at": "2026-10-09",
+      "due_date": null,
+      "status": "materials_ready_web_revision_pending",
+      "task": "使用网页GPT6Pro改写Phase2 v2论文，改善可读性",
+      "materials_path": "01_指南与解读/论文交接/网页GPT6Pro改稿交接_20261009/网页端改稿提示词.md",
+      "cloud_materials_url": "https://drive.google.com/drive/folders/1Tui2LV1L1HNN0l73BVee32bow2Y9V63c",
+      "note": "本轮交付上下文与提示词；网页端正文改稿待用户推进。"
+    },
+    {
+      "id": "20261009_midterm_defense",
+      "owner": "用户",
+      "registered_at": "2026-10-09",
+      "due_date": null,
+      "status": "planned_not_started",
+      "task": "准备项目中期答辩，预计至少PPT",
+      "plan_path": "project_state/plans/三项近期任务_20261009.md",
+      "pending_inputs": [
+        "答辩日期",
+        "汇报时长",
+        "学校模板与具体要求"
+      ],
+      "note": "本轮仅纳入项目日程并给简略建议，不制作PPT。"
+    },
+    {
+      "id": "20261009_three_baseline_reproductions",
+      "owner": "用户",
+      "registered_at": "2026-10-09",
+      "due_date": null,
+      "status": "planned_not_started",
+      "task": "后续分开推进STNet、HisToGene、BLEEP作为项目适配基线",
+      "methods": [
+        "STNet",
+        "HisToGene",
+        "BLEEP"
+      ],
+      "plan_path": "project_state/plans/三项近期任务_20261009.md",
+      "materials_path": "01_指南与解读/部署方案/经典方法复现准备_STNet_HisToGene_BLEEP_20261002",
+      "note": "已有设计与PDF路径已定位；本轮不实现不训练，学姐逐篇指定名单未找到文字确认。"
     }
   ],
   "pending_result_ids": [

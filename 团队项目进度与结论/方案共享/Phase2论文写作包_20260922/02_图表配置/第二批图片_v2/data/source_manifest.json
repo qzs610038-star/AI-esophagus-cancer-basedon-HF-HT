@@ -1,0 +1,47 @@
+{
+  "package": "Phase 2 second-batch figures v2",
+  "input_tables": [
+    {
+      "copied_file": "data/six_model_summary.csv",
+      "source_file": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/six_model_summary.csv",
+      "rows": 12,
+      "use": "六编码器双PCC汇总；图1及图2的UNI2-h基线"
+    },
+    {
+      "copied_file": "data/six_model_per_seed.csv",
+      "source_file": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis/six_model_per_seed.csv",
+      "rows": 36,
+      "use": "图1逐种子点；复算均值与样本SD"
+    },
+    {
+      "copied_file": "data/task2_summary.csv",
+      "source_file": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/task2_summary.csv",
+      "rows": 2,
+      "use": "任务二基因路线在内部验证和XZY的单次运行值"
+    },
+    {
+      "copied_file": "data/baseline_descriptive_comparison.csv",
+      "source_file": "团队项目进度与结论/lzd/task2_gene_pathway_v001/delivery_20260923/analysis/baseline_descriptive_comparison.csv",
+      "rows": 4,
+      "use": "交叉核对图2基线及任务二的目标标识、重复数和PCC"
+    }
+  ],
+  "figure_1_model_order": [
+    "UNI",
+    "UNI2-h",
+    "Virchow2",
+    "H-optimus-0",
+    "H-optimus-1",
+    "Phikon-v2"
+  ],
+  "metric_definitions": {
+    "pcc_macro": "患者—通路等权PCC：先逐患者逐通路计算相关，再对患者和通路等权平均",
+    "pcc_pooled": "整体展平pooled PCC：将全部点位×通路的z分数展平后计算一次相关"
+  },
+  "rendering": {
+    "library": "Matplotlib",
+    "formats": ["PNG 300 dpi", "SVG editable text", "PDF vector"],
+    "script": "source/draw_figures.py",
+    "no_new_dependencies_installed": true
+  }
+}

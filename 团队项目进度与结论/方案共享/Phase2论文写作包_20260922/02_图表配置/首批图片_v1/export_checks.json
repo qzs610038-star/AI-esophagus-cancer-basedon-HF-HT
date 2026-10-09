@@ -1,0 +1,75 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "figure": "Fig_P2_1_data_flow",
+      "png_size": [
+        3600,
+        2550
+      ],
+      "png_dpi": [
+        299.9994,
+        299.9994
+      ],
+      "svg_editable_text_nodes": 46,
+      "pdf_pages": 1,
+      "pdf_raster_images": 0
+    },
+    {
+      "figure": "Fig_P2_2_model_structure",
+      "png_size": [
+        3600,
+        2550
+      ],
+      "png_dpi": [
+        299.9994,
+        299.9994
+      ],
+      "svg_editable_text_nodes": 54,
+      "pdf_pages": 1,
+      "pdf_raster_images": 0
+    },
+    {
+      "figure": "Fig_P2_3_编码器与空间分支",
+      "png_size": [
+        3600,
+        3300
+      ],
+      "png_dpi": [
+        299.9994,
+        299.9994
+      ],
+      "svg_editable_text_nodes": 75,
+      "pdf_pages": 1,
+      "pdf_raster_images": 0
+    },
+    {
+      "figure": "Fig_P2_4_训练密度消融",
+      "png_size": [
+        3600,
+        2880
+      ],
+      "png_dpi": [
+        299.9994,
+        299.9994
+      ],
+      "svg_editable_text_nodes": 70,
+      "pdf_pages": 1,
+      "pdf_raster_images": 0
+    },
+    {
+      "figure": "Fig_P2_4S_等50轮敏感性分析",
+      "png_size": [
+        3600,
+        2880
+      ],
+      "png_dpi": [
+        299.9994,
+        299.9994
+      ],
+      "svg_editable_text_nodes": 62,
+      "pdf_pages": 1,
+      "pdf_raster_images": 0
+    }
+  ]
+}

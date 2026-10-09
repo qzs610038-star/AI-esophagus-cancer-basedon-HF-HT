@@ -1,0 +1,15 @@
+{
+  "status": "pass",
+  "checked_point_intervals": 72,
+  "checks": [
+    "mean and sample SD agree with all three seed values",
+    "text remains inside figure canvas"
+  ],
+  "derived_metric": "paired spatial-minus-no_b per seed; mean and sample SD with ddof=1",
+  "formats": [
+    "PNG at 300 dpi",
+    "SVG editable text",
+    "PDF vector"
+  ],
+  "visual_review": "See README; numerical and canvas checks alone do not prove visual quality."
+}

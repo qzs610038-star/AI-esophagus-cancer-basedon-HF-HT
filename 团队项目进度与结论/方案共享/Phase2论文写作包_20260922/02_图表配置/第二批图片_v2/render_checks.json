@@ -1,0 +1,328 @@
+{
+  "status": "pass",
+  "source_rows": {
+    "six_model_summary": 12,
+    "six_model_per_seed": 36,
+    "task2_summary": 2,
+    "baseline_descriptive_comparison": 4
+  },
+  "numerical_checks": [
+    {
+      "model": "UNI",
+      "split": "internal_val",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.6617653444446457,
+      "per_seed_mean": 0.6617653444446457,
+      "summary_sample_sd": 0.0010291621652182,
+      "per_seed_sample_sd": 0.0010291621652182223
+    },
+    {
+      "model": "UNI",
+      "split": "internal_val",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.801207974235758,
+      "per_seed_mean": 0.801207974235758,
+      "summary_sample_sd": 0.0004334251706384,
+      "per_seed_sample_sd": 0.00043342517063841966
+    },
+    {
+      "model": "UNI",
+      "split": "external_test",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.5594219354024009,
+      "per_seed_mean": 0.5594219354024009,
+      "summary_sample_sd": 0.0032287232339527,
+      "per_seed_sample_sd": 0.003228723233952773
+    },
+    {
+      "model": "UNI",
+      "split": "external_test",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.65675622585893,
+      "per_seed_mean": 0.65675622585893,
+      "summary_sample_sd": 6.342041270113427E-05,
+      "per_seed_sample_sd": 6.342041270113427E-05
+    },
+    {
+      "model": "UNI2-h",
+      "split": "internal_val",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.6769864632862603,
+      "per_seed_mean": 0.6769864632862603,
+      "summary_sample_sd": 0.0004020266559046,
+      "per_seed_sample_sd": 0.0004020266559046044
+    },
+    {
+      "model": "UNI2-h",
+      "split": "internal_val",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.8105488542433372,
+      "per_seed_mean": 0.8105488542433372,
+      "summary_sample_sd": 0.00022805002394,
+      "per_seed_sample_sd": 0.0002280500239400387
+    },
+    {
+      "model": "UNI2-h",
+      "split": "external_test",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.5710726811139469,
+      "per_seed_mean": 0.5710726811139469,
+      "summary_sample_sd": 0.0033060803654049,
+      "per_seed_sample_sd": 0.0033060803654049965
+    },
+    {
+      "model": "UNI2-h",
+      "split": "external_test",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.6837477861023317,
+      "per_seed_mean": 0.6837477861023317,
+      "summary_sample_sd": 0.0015266322215856,
+      "per_seed_sample_sd": 0.0015266322215856819
+    },
+    {
+      "model": "Virchow2",
+      "split": "internal_val",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.6792425566581639,
+      "per_seed_mean": 0.6792425566581639,
+      "summary_sample_sd": 0.0004570432684658,
+      "per_seed_sample_sd": 0.0004570432684658227
+    },
+    {
+      "model": "Virchow2",
+      "split": "internal_val",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.8113464281393182,
+      "per_seed_mean": 0.8113464281393182,
+      "summary_sample_sd": 0.0009227264368502,
+      "per_seed_sample_sd": 0.0009227264368502202
+    },
+    {
+      "model": "Virchow2",
+      "split": "external_test",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.5777557962744377,
+      "per_seed_mean": 0.5777557962744377,
+      "summary_sample_sd": 0.0110059755611428,
+      "per_seed_sample_sd": 0.011005975561142894
+    },
+    {
+      "model": "Virchow2",
+      "split": "external_test",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.6783112976150981,
+      "per_seed_mean": 0.6783112976150981,
+      "summary_sample_sd": 0.0134149774924577,
+      "per_seed_sample_sd": 0.013414977492457762
+    },
+    {
+      "model": "H-optimus-0",
+      "split": "internal_val",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.6788584066111308,
+      "per_seed_mean": 0.6788584066111308,
+      "summary_sample_sd": 0.0008523403862319,
+      "per_seed_sample_sd": 0.0008523403862319101
+    },
+    {
+      "model": "H-optimus-0",
+      "split": "internal_val",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.8104739648723482,
+      "per_seed_mean": 0.8104739648723482,
+      "summary_sample_sd": 0.0005024592075498,
+      "per_seed_sample_sd": 0.0005024592075498881
+    },
+    {
+      "model": "H-optimus-0",
+      "split": "external_test",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.5814818802691838,
+      "per_seed_mean": 0.5814818802691838,
+      "summary_sample_sd": 0.0032490586089993,
+      "per_seed_sample_sd": 0.0032490586089993162
+    },
+    {
+      "model": "H-optimus-0",
+      "split": "external_test",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.6753934287961764,
+      "per_seed_mean": 0.6753934287961764,
+      "summary_sample_sd": 0.0050107841063141,
+      "per_seed_sample_sd": 0.00501078410631415
+    },
+    {
+      "model": "H-optimus-1",
+      "split": "internal_val",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.6781905672668272,
+      "per_seed_mean": 0.6781905672668272,
+      "summary_sample_sd": 0.0017573338562831,
+      "per_seed_sample_sd": 0.001757333856283196
+    },
+    {
+      "model": "H-optimus-1",
+      "split": "internal_val",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.8120379590360409,
+      "per_seed_mean": 0.8120379590360409,
+      "summary_sample_sd": 0.0010020616821006,
+      "per_seed_sample_sd": 0.001002061682100671
+    },
+    {
+      "model": "H-optimus-1",
+      "split": "external_test",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.5907546696082697,
+      "per_seed_mean": 0.5907546696082697,
+      "summary_sample_sd": 0.0060363345833245,
+      "per_seed_sample_sd": 0.006036334583324599
+    },
+    {
+      "model": "H-optimus-1",
+      "split": "external_test",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.6901435040808487,
+      "per_seed_mean": 0.6901435040808487,
+      "summary_sample_sd": 0.0105540946281182,
+      "per_seed_sample_sd": 0.0105540946281182
+    },
+    {
+      "model": "Phikon-v2",
+      "split": "internal_val",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.6649956183611349,
+      "per_seed_mean": 0.6649956183611349,
+      "summary_sample_sd": 0.0003741089836363,
+      "per_seed_sample_sd": 0.0003741089836363519
+    },
+    {
+      "model": "Phikon-v2",
+      "split": "internal_val",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.8018733552457326,
+      "per_seed_mean": 0.8018733552457326,
+      "summary_sample_sd": 0.0006456674297523,
+      "per_seed_sample_sd": 0.0006456674297523605
+    },
+    {
+      "model": "Phikon-v2",
+      "split": "external_test",
+      "metric": "macro",
+      "n_runs": 3,
+      "summary_mean": 0.5013129540295617,
+      "per_seed_mean": 0.5013129540295617,
+      "summary_sample_sd": 0.0075484619786817,
+      "per_seed_sample_sd": 0.007548461978681726
+    },
+    {
+      "model": "Phikon-v2",
+      "split": "external_test",
+      "metric": "pooled",
+      "n_runs": 3,
+      "summary_mean": 0.6149781928038288,
+      "per_seed_mean": 0.6149781928038288,
+      "summary_sample_sd": 0.0082377591390687,
+      "per_seed_sample_sd": 0.008237759139068738
+    },
+    {
+      "cross_check": "UNI2-h baseline_descriptive_comparison vs six_model_summary",
+      "split": "internal_val",
+      "n_runs": 3,
+      "pcc_macro_mean": 0.6769864632862603,
+      "pcc_macro_sample_sd": 0.0004020266559046,
+      "pcc_pooled_mean": 0.8105488542433372,
+      "pcc_pooled_sample_sd": 0.00022805002394
+    },
+    {
+      "cross_check": "UNI2-h baseline_descriptive_comparison vs six_model_summary",
+      "split": "external_test",
+      "n_runs": 3,
+      "pcc_macro_mean": 0.5710726811139469,
+      "pcc_macro_sample_sd": 0.0033060803654049,
+      "pcc_pooled_mean": 0.6837477861023317,
+      "pcc_pooled_sample_sd": 0.0015266322215856
+    },
+    {
+      "cross_check": "task2_summary vs baseline_descriptive_comparison",
+      "split": "internal_val",
+      "target": "319_gene_candidate_reconstructed_30d_provenance_pending",
+      "n_runs": 1,
+      "pcc_macro": 0.4961280493625188,
+      "pcc_pooled": 0.4360656397309733,
+      "sample_sd": null
+    },
+    {
+      "cross_check": "task2_summary vs baseline_descriptive_comparison",
+      "split": "external_test",
+      "target": "319_gene_candidate_reconstructed_30d_provenance_pending",
+      "n_runs": 1,
+      "pcc_macro": 0.4160200834383632,
+      "pcc_pooled": 0.7170107823351617,
+      "sample_sd": null
+    }
+  ],
+  "shared_pcc_axis_ranges": {
+    "Fig_P2_3S_six_encoders": {
+      "macro": [
+        0.46,
+        0.72
+      ],
+      "pooled": [
+        0.58,
+        0.84
+      ]
+    },
+    "Fig_P2_5_gene_route": {
+      "macro": [
+        0.38,
+        0.72
+      ],
+      "pooled": [
+        0.38,
+        0.86
+      ]
+    }
+  },
+  "rendered_formats": [
+    "PNG (300 dpi)",
+    "SVG (editable text)",
+    "PDF (vector)"
+  ],
+  "visual_review": {
+    "status": "pass",
+    "items": [
+      "文字重叠",
+      "文字越界或裁切",
+      "图例与误差线可读性",
+      "数值与面板标签"
+    ],
+    "reviewed_files": [
+      "exports/Fig_P2_3S_six_encoders.png",
+      "exports/Fig_P2_5_gene_route.png"
+    ],
+    "notes": "Both final PNGs were inspected with view_image at high detail. Figure titles, legend, panel labels, axis ticks, marks, uncertainty annotations, and footers were readable without visible overlap or clipping. This visual review applies to PNG; SVG and PDF were generated and numerical values are covered by the checks above."
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "purpose": "图P2-3与图P2-4制图辅助数据；不是正式实验包或新实验结果。",
+  "generated_by": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\02_图表配置\\首批图片_v1\\source\\prepare_plot_data.py",
+  "hashes_computed": false,
+  "accepted_experiments": {
+    "phase2_fullfov_hpo_v1": {
+      "accepted_at": "2026-09-18T21:31:00+08:00",
+      "result_root": "experiments/results/phase2_fullfov_hpo_v1/20260916_231813_101_7b1b9a79",
+      "filter": "stage=final-ablation; models=uni,uni2h,virchow2; arms=point,no_b,spatial; seeds=45,46,47"
+    },
+    "phase2_spatial_density_comparison_v001_20260904": {
+      "accepted_at": "2026-09-20T14:36:23+08:00",
+      "result_root": "experiments\\results\\phase2_task3_fullfov_density_ablation_v1\\formal_20260919_151714",
+      "filter": "arms=dense,stride_2x2,random_equal; selectors=equal_updates,equal_50_epochs; seeds=45,46,47"
+    }
+  },
+  "sources": {
+    "registry": "D:\\AI空间转录病理研究\\PFMval_new\\experiments\\experiment_registry.json",
+    "writing_package_evidence_snapshot": "D:\\AI空间转录病理研究\\PFMval_new\\团队项目进度与结论\\方案共享\\Phase2论文写作包_20260922\\04_证据与对应\\已接纳结果摘录.json",
+    "main_runtime_summaries": [
+      "D:\\AI空间转录病理研究\\PFMval_new\\experiments\\results\\phase2_fullfov_hpo_v1\\20260916_231813_101_7b1b9a79\\analysis\\local_metrics.json",
+      "D:\\AI空间转录病理研究\\PFMval_new\\experiments\\results\\phase2_fullfov_hpo_v1\\20260916_231813_101_7b1b9a79\\analysis\\external_metrics.json"
+    ],
+    "density_run_summaries": "D:\\AI空间转录病理研究\\PFMval_new\\experiments\\results\\phase2_task3_fullfov_density_ablation_v1\\formal_20260919_151714\\runs\\<arm>__seed<45|46|47>\\run_summary.json",
+    "density_graph_statistics": "D:\\AI空间转录病理研究\\PFMval_new\\experiments\\results\\phase2_task3_fullfov_density_ablation_v1\\formal_20260919_151714\\analysis\\review_training_graph_stats.csv"
+  },
+  "statistics": {
+    "mean": "45/46/47三种子的算术平均；直接读取已登记值或既有run_summary指标。",
+    "sample_sd": "45/46/47三种子的样本标准差，ddof=1；不从预测文件复算。",
+    "metric_mapping": {
+      "macro_pcc": "patient_macro_pathway_pcc",
+      "pooled_pcc": "pooled_pcc（主实验）或pooled_flattened_pcc（密度消融）"
+    },
+    "density_graph": "mean_degree为训练图平均邻居数；isolated_rate为无邻居节点比例；其余两列为既有图权重统计的三种子均值。"
+  },
+  "validations": {
+    "evidence_snapshot": {
+      "comparison": "当前 Registry vs 写作包已接纳结果摘录",
+      "experiments": [
+        {
+          "experiment_id": "phase2_fullfov_hpo_v1",
+          "status_matches": true
+        },
+        {
+          "experiment_id": "phase2_spatial_density_comparison_v001_20260904",
+          "status_matches": true
+        }
+      ],
+      "within_tolerance": true
+    },
+    "main_registry_vs_runtime": {
+      "comparison": "Registry results_summary vs local_metrics/external_metrics recipe_groups",
+      "max_abs_difference": 0.0,
+      "within_tolerance": true
+    },
+    "density_registry_vs_runtime": {
+      "comparison": "Registry equal_updates results_summary vs nine run_summary.json files",
+      "max_abs_difference": 1.1635248320374103e-11,
+      "within_tolerance": true
+    }
+  },
+  "outputs": {
+    "main_summary.csv": 36,
+    "main_per_seed.csv": 108,
+    "density_summary.csv": 24,
+    "density_per_seed.csv": 72,
+    "density_graph.csv": 3
+  }
+}
