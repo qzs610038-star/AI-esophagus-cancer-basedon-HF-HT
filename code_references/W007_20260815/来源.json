@@ -1,0 +1,58 @@
+{
+  "purpose": "historical_source_reading_reference",
+  "source_commit": "0f81be3cd542baa19ef3a2fe97bb146122a055bb",
+  "source_root": "experiments/workspaces/W007/mpp2_cpgcr_probe",
+  "restored_on": "2026-09-20",
+  "github_state": "local_reference_pending_user_sync",
+  "files": [
+    {
+      "path": "configs/protocol_v001.yaml",
+      "source_path": "experiments/workspaces/W007/mpp2_cpgcr_probe/configs/protocol_v001.yaml",
+      "size_bytes": 2113,
+      "verification": "bytewise_equal_to_existing_git_object"
+    },
+    {
+      "path": "mpp2_cpgcr/__init__.py",
+      "source_path": "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/__init__.py",
+      "size_bytes": 187,
+      "verification": "bytewise_equal_to_existing_git_object"
+    },
+    {
+      "path": "mpp2_cpgcr/batch_plan.py",
+      "source_path": "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/batch_plan.py",
+      "size_bytes": 4127,
+      "verification": "bytewise_equal_to_existing_git_object"
+    },
+    {
+      "path": "mpp2_cpgcr/losses.py",
+      "source_path": "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/losses.py",
+      "size_bytes": 9566,
+      "verification": "bytewise_equal_to_existing_git_object"
+    },
+    {
+      "path": "mpp2_cpgcr/model.py",
+      "source_path": "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/model.py",
+      "size_bytes": 6465,
+      "verification": "bytewise_equal_to_existing_git_object"
+    },
+    {
+      "path": "mpp2_cpgcr/one_click_runner.py",
+      "source_path": "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/one_click_runner.py",
+      "size_bytes": 36721,
+      "verification": "bytewise_equal_to_existing_git_object"
+    },
+    {
+      "path": "mpp2_cpgcr/result_contract.py",
+      "source_path": "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/result_contract.py",
+      "size_bytes": 25677,
+      "verification": "bytewise_equal_to_existing_git_object"
+    },
+    {
+      "path": "mpp2_cpgcr/train_eval.py",
+      "source_path": "experiments/workspaces/W007/mpp2_cpgcr_probe/mpp2_cpgcr/train_eval.py",
+      "size_bytes": 30983,
+      "verification": "bytewise_equal_to_existing_git_object"
+    }
+  ],
+  "note": "从既有Git对象读取，保留源码原字节；参考实现中的旧服务器与同步约定按原实验时点阅读。"
+}

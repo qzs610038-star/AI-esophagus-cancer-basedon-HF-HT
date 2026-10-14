@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "state_revision": 267,
-  "updated_at": "2026-10-09T14:26:15.000+08:00",
+  "state_revision": 268,
+  "updated_at": "2026-10-14T14:25:00+08:00",
   "source_commit": "9adc14b8167c73d9f51959511e306a8d2e8b93cf",
   "active_directive_ids": [
     "DIR-20260710-003",
@@ -154,6 +154,29 @@
       "plan_path": "project_state/plans/三项近期任务_20261009.md",
       "materials_path": "01_指南与解读/部署方案/经典方法复现准备_STNet_HisToGene_BLEEP_20261002",
       "note": "已有设计与PDF路径已定位；本轮不实现不训练，学姐逐篇指定名单未找到文字确认。"
+    },
+    {
+      "id": "20261014_phase2_uni2h_backbone_tuning",
+      "owner": "用户",
+      "requested_by": "李博士",
+      "registered_at": "2026-10-14",
+      "due_date": null,
+      "priority": "尽快推进，未指定截止日期",
+      "status": "planned_not_started",
+      "task": "核查 Phase2 病理基础模型消融差异，制定并后续尝试 UNI2-h 调优或重训，评估能否提升性能及比较排名",
+      "plan_path": "project_state/plans/Phase2病理基础模型消融_UNI2h调优任务_20261014.md",
+      "source": "用户提供的李博士与用户 2026-10-14 12:33—12:57 聊天",
+      "deliverables": [
+        "按 baseline/spatial、内部/外部、两种 PCC 和种子区分的现有对照表",
+        "UNI2-h 差异原因核查及有界调优方案",
+        "后续新旧参数与对照模型比较及反馈材料"
+      ],
+      "pending_inputs": [
+        "具体比较臂、主指标及聊天对应的运行批次",
+        "调优预算、调整范围和停止条件",
+        "Phase3 继续使用的旧参数版本"
+      ],
+      "note": "本轮仅登记，不启动训练。争取 UNI2-h 更优是目标，未达预期也如实汇总；Phase3 可以继续旧参数。论文 UNI2-h 更优仅为李博士的写作预期，尚非新实验结论；其他模型的操作含义未明确，未登记为执行授权。既有结果与确认状态保留。"
     }
   ],
   "pending_result_ids": [

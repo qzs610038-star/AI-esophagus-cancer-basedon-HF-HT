@@ -1,0 +1,69 @@
+schema_version: "1.0"
+workspace_id: W007
+experiment_id: mpp2_cpgcr_probe_v001_20260811
+protocol_revision: 1
+authorization_directive: DIR-20260811-006
+critical_contract_sha256: ecb2c753ecaac8f48278a4eb5adf08a0af398bf52c36378607267d25c969c459
+data_manifest_id: barcode-repair-20260711-d626ad8-v003:1204018178a4d355
+arms: [FBR, RCC, HCR, CPGCR]
+seed: 42
+random_streams:
+  model_initialization: 42
+  pathway_initialization: 43
+  batch_plan: 20042
+model:
+  feature_dim: 1536
+  baseline_hidden_dim: 1024
+  pathway_dim: 30
+  projection_dim: 256
+  baseline_dropout: 0.3
+  projector_dropout: 0.0
+  residual_zero_initialized: true
+training:
+  patients: [HYZ15040, JFX, LMZ12939, TGC, XSL, ZHZ]
+  patients_per_batch: 6
+  spots_per_patient: 5
+  batch_size: 30
+  optimizer: Adam
+  learning_rate: 0.0001
+  max_epochs: 50
+  patience: 10
+  min_delta: 0.0001
+  checkpoint_metric: internal_val_patient_balanced_z_mse
+  checkpoint_direction: minimize
+loss:
+  absolute: patient_balanced_z_mse
+  contrastive_weight: 0.1
+  tau_z: 0.07
+  tau_y_rule: train_fold_cross_patient_distance_median
+  tau_y_max_pairs: 100000
+  candidate_set: all_valid_in_batch
+  candidate_mask: padding_or_missing_only
+data:
+  train_mpp_id: 2
+  external_mpp_id: 2
+  external_patient: XZY
+  splits_path_id: mpp_standard_splits
+  cache_path_id: server_mpp_partner_cache
+  flat_cache_path_id: server_mpp_flat_cache
+  baseline_checkpoint_path_id: server_mpp2_frozen_baseline_checkpoint
+selection_policy:
+  train_and_checkpoint_sources: [train, internal_val]
+  external_may_select_checkpoint: false
+  external_may_change_config: false
+  external_may_trigger_rerun: false
+baseline_replay_contract:
+  reference_val_loss: 0.374886
+  reference_val_pcc: 0.797126
+  loss_tolerance: 0.00001
+  pcc_tolerance: 0.00001
+external_policy:
+  mode: external_benchmark
+  timing: once_after_each_internal_checkpoint_freeze
+  freeze_four_arm_configuration_before_first_external: true
+  fixed_order: [FBR, RCC, HCR, CPGCR]
+approval:
+  required: true
+  fixed_path: automation/approvals/W007-cpgcr-formal-batch.json
+  required_training_attempts: 3
+  create_jobs_in_this_revision: false
