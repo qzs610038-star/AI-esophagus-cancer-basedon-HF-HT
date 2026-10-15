@@ -12,7 +12,6 @@
   "stop_rule": null,
   "required_user_decisions": [
     "explicit experiment approval",
-    "W### workspace binding",
     "run budget"
   ]
 }

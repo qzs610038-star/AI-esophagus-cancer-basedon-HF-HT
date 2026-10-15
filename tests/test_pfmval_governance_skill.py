@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILL_ROOT = ROOT / ".agents" / "skills" / "pfmval-governance"
 
 
-def test_g08_canonical_skill_and_thin_adapter_expose_seven_safe_routes():
+def test_canonical_skill_and_thin_adapter_follow_current_governance_boundaries():
     skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
     adapter = (
         ROOT / ".claude" / "skills" / "pfmval-governance" / "SKILL.md"
@@ -19,30 +19,19 @@ def test_g08_canonical_skill_and_thin_adapter_expose_seven_safe_routes():
     assert adapter.count("../../../.agents/skills/pfmval-governance/SKILL.md") == 1
     assert "deploy/pfmval_ops.py" not in adapter
     assert "scripts/" not in adapter
-    for route in (
-        "project_fact",
-        "meeting_brief",
-        "research_path",
-        "learning_guide",
-        "lifecycle_review",
-        "workflow_discovery",
-        "paper_output",
+    for current_boundary in (
+        "the user's current instruction has priority",
+        "explicit authorization remains valid",
+        "Create a worktree only on an explicit user instruction",
+        "Do not check Git cleanliness or run start-check",
+        "Do not calculate hashes without the user's explicit approval",
+        "manual_directory",
+        "do not auto-create archives",
+        "continue on `WARN` unless the user has specified a stop condition",
+        "Do not infer permission for training, publication, external writes or destructive changes",
+        "This adds no approval, training, or automatic reviewer delegation",
     ):
-        assert f"`{route}`" in skill
-    assert "active Registry learning guide" in skill
-    assert "--task knowledge" in skill
-
-    forbidden_direct_actions = (
-        "ssh ",
-        "scp ",
-        "git push",
-        "result accept",
-        "fact-confirm",
-        "close --execute",
-        "rm -rf",
-        "git clean",
-    )
-    assert all(value not in skill.lower() for value in forbidden_direct_actions)
+        assert current_boundary in skill
 
 
 def test_g08_skill_ships_all_approved_local_intake_templates():
@@ -65,6 +54,12 @@ def test_g08_skill_ships_all_approved_local_intake_templates():
         payload = json.loads(path.read_text(encoding="utf-8"))
         assert payload["fixture_only"] is True
         assert payload["real_operation"] == "NOT RUN"
+    experiment_intake = json.loads(
+        (SKILL_ROOT / "templates" / "experiment_intake_interface.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert "W### workspace binding" not in experiment_intake["required_user_decisions"]
 
 
 def test_g08_seven_technical_routes_use_synthetic_templates_without_real_writes(

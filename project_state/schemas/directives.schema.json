@@ -9,7 +9,12 @@
       "properties": {
         "event_type": {"const": "directive"},
         "status": {"enum": ["active", "completed", "superseded", "cancelled"]},
-        "source": {"const": "explicit_user_instruction"},
+        "source": {"type": "string", "pattern": "^explicit_user_"},
+        "amends": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
         "supersedes": {
           "type": "array",
           "items": {"type": "string", "minLength": 1},

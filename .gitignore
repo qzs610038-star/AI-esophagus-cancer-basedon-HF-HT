@@ -290,7 +290,9 @@ account_migration_export/
 account_migration_export_*.zip
 
 # Historical reference package remains local-only until an explicit index is approved.
-historical_file/
+historical_file/*
+# 2026-10-14 古早方案降权归档夹：只移动不删除，需随 Git 备份，其余 historical_file 内容仍仅本地。
+!historical_file/legacy_plans_20261014/
 
 # MPP1-5 前旧代码本地只读归档；当前树只保留迁移清单与 Git 历史。
 historical_code/

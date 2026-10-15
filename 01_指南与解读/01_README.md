@@ -36,24 +36,18 @@
 - **PFMval_MPP2_双线优化方案体系化学习指南_20260801.md** — 按最新排序串联绝对线、相对线、Phase 3 融合，以及 UCell、CHRep、VPT、SPIRAL/OT 的对应位置与执行逻辑
 
 ### 部署与集成方案
+> **2026-10-14 归档说明**：已迁移的旧文档统一从[历史夹说明](../historical_file/legacy_plans_20261014/README.md)和[旧路径与新路径对照表](../historical_file/legacy_plans_20261014/MOVED_MAP.csv)查阅,仅供追溯、不构成当前规则。当前服务器路径与规则以 `configs/server_paths.yaml` 和仓库根 `AGENTS.md` 为准。默认全文检索排除该历史夹;按需查询可在项目根目录执行 `rg --hidden --no-ignore "关键词" historical_file/legacy_plans_20261014/`。
+
 - **空间信息修复方案_20260613.md** — 🆕 四问题诊断 + 三步路线图：cls_pool8x8 token采样修复 → 零参数空间后处理 → 训练内空间正则
 - **ssGSEA标签预处理与JFX修复数据部署方案_20260616.md** — JFX fixed data 划分、标准 z-score 主线、Yeo-Johnson 标签变换对照与 Claude 执行清单
-- **Mamba与频域模块实验部署方案_20260609.md** — GFNet/AFNO 实验的精确部署步骤、命令、代码改动清单
 - **EGNv1_部署方案.md** — EGN-v1模型部署指南
 - **EGNv2_部署方案.md** — EGN-v2模型部署指南
 - **EGNv2_UNI集成方案.md** — EGN-v2+UNI特征集成方案
 - **HisToGene_UNI特征集成方案.md** — HisToGene-UNI特征集成方案
 - **Loki_OmiCLIP_安装指南.md** — OmiCLIP Loki 环境安装指南
 - **OmiCLIP_部署方案.md** — OmiCLIP coca_ViT-L-14 特征提取与训练部署
-- **RL方案B与方案D_部署实现策略.md** — RL DQN训练调度 + BO通路选择的 MDP 设计与实现
 - **Virchow2_部署方案.md** — Virchow2 (ViT-H/14) 部署与训练流程（方向已关闭）
-- **服务器部署指南.md** — 服务器环境部署指南
-- **服务器手动部署速查手册.md** — Windows 服务器手动部署快速步骤
-- **服务器训练操作手册.md** — 服务器端训练全流程操作手册
 - **服务器路径索引_20260701.md** — Windows 服务器 qzs 工作区、外部 MPP 数据目录、共享缓存目录的路径快照、稳定性说明和训练脚本填路径模板；涉及服务器工作时必读
-- **SSH远程连接排障与部署方案_20260616.md** — 🆕 SSH 远程连接 15 项逐层排查完整记录 + 方案对比矩阵（供 Codex 审查）
-- **VS Code Remote Tunnels远程连接部署方案_20260617.md** — 🆕 方案 E 完整实现路径：无需管理员、出站隧道穿透 NAT、持久化运行、AI Agent 适配
-- **融合空间组学执行方案_20260522.md** — 空间转录组数据融合执行方案
 
 ### 分析与报告
 - **5.16修复记录.md** — 2026-05-16 数据集修复记录

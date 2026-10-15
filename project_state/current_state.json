@@ -23,10 +23,11 @@
     "DIR-20260905-003",
     "DIR-20260908-001",
     "DIR-20260908-002",
-    "DIR-20260912-001",
-    "DIR-20260912-002",
     "DIR-20260908-003",
     "DIR-20260908-004",
+    "DIR-20260912-001",
+    "DIR-20260912-002",
+    "DIR-20260920-001",
     "DIR-20260927-001",
     "DIR-20261009-001"
   ],
@@ -558,7 +559,7 @@
   "historical_plans": {
     "workflow_governance_v3": {
       "doc_id": "doc-a567a7562613",
-      "path": "project_state/plans/workflow_governance_v3_20260726.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_20260726.md",
       "status": "historical",
       "approved_at": "2026-07-26T18:26:19+08:00",
       "superseded_by": "DIR-20260905-002"
@@ -580,7 +581,7 @@
     },
     "mpp2_pathway_ridge_calibration": {
       "doc_id": "doc-2f635595aea6",
-      "path": "project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/mpp2_pathway_ridge_calibration_v001_20260717.md",
       "status": "historical",
       "approved_at": "2026-07-17T20:19:30+08:00",
       "archived_at": "2026-09-19T18:15:10+08:00",
@@ -589,109 +590,109 @@
   },
   "historical_plan_reviews": {
     "gitee_numbered_workspace_protocol_v001": {
-      "path": "project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/gitee_numbered_workspace_protocol_v001_20260726.md",
       "status": "historical",
       "approved_at": "2026-07-26T20:02:02+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_review": {
-      "path": "project_state/plans/workflow_governance_v3_refactor_review_20260726.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor_review_20260726.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_p0a": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/P0A_experiment_lifecycle_closure.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_p0b": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/P0B_user_views_and_navigation.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_p0c": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/P0C_extended_scientific_workflows_and_acceptance.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r0": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R0_baseline_and_compatibility.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r1": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R1_workspace_registry_shadow.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R1_workspace_registry_shadow.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r2": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R2_persistent_experiment_workspace.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R2_persistent_experiment_workspace.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r3": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R3_protocol_approval_and_run_budget.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R3_protocol_approval_and_run_budget.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r4": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R4_critical_contract_and_gate_tiering.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R4_critical_contract_and_gate_tiering.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r5": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R5_result_artifact_tiering.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R5_result_artifact_tiering.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r5b": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R5b_document_registry_and_state_gates.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R5b_document_registry_and_state_gates.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r6": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R6_asset_registry_shadow.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R6_asset_registry_shadow.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r7": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R7_shared_dependency_extraction.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R7_shared_dependency_extraction.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r8": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R8_lifecycle_migration_and_unprotection.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r9": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R9_closeout_and_cleanup.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r10": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R10_project_knowledge_and_document_lifecycle.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"
     },
     "workflow_governance_v3_refactor_r11": {
-      "path": "project_state/plans/workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md",
+      "path": "historical_file/legacy_plans_20261014/project_state/plans/workflow_governance_v3_refactor/R11_workflow_catalog_and_evolution.md",
       "status": "historical",
       "approved_at": "2026-07-27T03:25:05+08:00",
       "superseded_by": "DIR-20260905-002"

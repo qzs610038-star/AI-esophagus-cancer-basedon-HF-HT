@@ -2371,7 +2371,7 @@ def render_current_state(root: Path, state: Mapping[str, Any], registry: Mapping
         else:
             lines.append(f"- `{result_id}`: **missing from Registry**")
     if state.get("pending_result_ids"):
-        lines.extend(["", "## Pending result imports", ""])
+        lines.extend(["", "## Pending results awaiting import or review", ""])
         lines.extend(f"- `{item}`" for item in state["pending_result_ids"])
     repair = state.get("mpp_repair")
     if repair:
@@ -3263,6 +3263,10 @@ def validate_state(
         report.fail("state lock exists; a writer may have been interrupted")
 
     imported_results = {item.get("result_id") for item in registry.get("experiments", []) if item.get("result_id")}
+    registered_pending = {
+        item["result_id"] for item in registry.get("experiments", [])
+        if item.get("result_id") and item.get("evidence_status") == "pending"
+    }
     inbox = root / "project_state" / "inbox"
     local_pending: List[str] = []
     if inbox.exists():
@@ -3274,10 +3278,23 @@ def validate_state(
                 continue
             if result_id and result_id not in imported_results:
                 local_pending.append(result_id)
-    if sorted(local_pending) != sorted(state.get("pending_result_ids", [])):
-        report.fail(f"pending result state does not match inbox: inbox={local_pending} state={state.get('pending_result_ids', [])}")
-    elif local_pending:
+    # Manual registration can leave evidence pending review without an inbox
+    # envelope. Registration and scientific acceptance are separate states.
+    state_pending = set(state.get("pending_result_ids", []))
+    missing_from_state = sorted(set(local_pending) - state_pending)
+    unsupported_pending = sorted(state_pending - set(local_pending) - registered_pending)
+    if missing_from_state:
+        report.warn(f"unimported inbox results missing from pending result state: {missing_from_state}")
+    if unsupported_pending:
+        report.warn(
+            "pending result state has no unimported inbox or pending Registry record: "
+            f"{unsupported_pending}"
+        )
+    if local_pending:
         report.warn(f"pending results must be imported before model conclusions: {local_pending}")
+    pending_review = sorted(state_pending & registered_pending)
+    if pending_review:
+        report.warn(f"registered results await review before model conclusions: {pending_review}")
 
     validate_server_paths(root, report, task=task, host_scope=host_scope)
     validate_governance_v3_state(

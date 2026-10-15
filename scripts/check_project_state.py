@@ -245,7 +245,7 @@ def check_doc_registry_coverage(checker):
 
 
 def check_experiment_registry_schema(checker):
-    """Check 6: experiment_registry.json schema completeness."""
+    """Check 6: shared identity and legacy run-record completeness."""
     registry_path = PROJECT_ROOT / "experiments" / "experiment_registry.json"
     if not registry_path.exists():
         checker.fail("registry:schema", "experiment_registry.json not found")
@@ -261,25 +261,46 @@ def check_experiment_registry_schema(checker):
     for key in required_top:
         if key not in registry:
             checker.fail(f"registry:schema:top", f"missing top-level key: {key}")
+    experiments = registry.get("experiments", [])
+    if not isinstance(experiments, list):
+        checker.fail("registry:schema:top", "experiments must be a list")
+        return
 
-    required_exp = [
-        "id", "status", "script", "run_dir", "selection_metric",
-        "created_at", "started_at", "completed_at"
-    ]
-    for i, exp in enumerate(registry.get("experiments", [])):
+    # New independent packages and aggregate result records do not represent
+    # one training run. Only legacy records with a run_dir use the old run
+    # fields; requiring them on every entry misclassifies valid registrations.
+    required_exp = ["id", "status"]
+    for i, exp in enumerate(experiments):
+        if not isinstance(exp, dict):
+            checker.fail("registry:schema", f"experiment at index {i} is not an object")
+            continue
         eid = exp.get("id", f"index_{i}")
         for key in required_exp:
-            if key not in exp:
+            if not exp.get(key):
                 checker.fail(f"registry:schema:{eid}", f"missing field: {key}")
 
-    valid_statuses = {"done", "done_incomplete_data", "running", "planned", "paused", "failed"}
-    for exp in registry.get("experiments", []):
+        if "run_dir" in exp:
+            for key in ("script", "run_dir", "selection_metric", "created_at"):
+                if not exp.get(key):
+                    checker.warn(f"registry:schema:{eid}", f"missing legacy run field: {key}")
+            if exp.get("status") in {"done", "done_incomplete_data", "failed"}:
+                for key in ("started_at", "completed_at"):
+                    if not exp.get(key):
+                        checker.warn(f"registry:schema:{eid}", f"missing legacy run field: {key}")
+
+    valid_statuses = {
+        "done", "done_incomplete_data", "running", "planned", "paused",
+        "failed", "closed", "partial", "returned_pending_review",
+    }
+    for exp in experiments:
+        if not isinstance(exp, dict):
+            continue
         eid = exp.get("id", "?")
         status = exp.get("status", "")
         if status not in valid_statuses:
             checker.warn(f"registry:schema:{eid}", f"unknown status: '{status}'")
 
-    checker.ok("registry:schema", f"{len(registry.get('experiments', []))} experiments validated")
+    checker.ok("registry:schema", f"{len(experiments)} experiment entries checked")
 
 
 def check_run_dir_existence(checker):

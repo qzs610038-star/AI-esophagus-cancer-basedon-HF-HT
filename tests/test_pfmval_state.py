@@ -1131,8 +1131,9 @@ def test_server_profile_is_the_only_machine_configuration(monkeypatch):
     assert profile["schema_version"] == "2.0"
     assert profile["runtime"]["python_interpreter"].endswith("python.exe")
     assert profile["transport"]["mode"] == "configurable"
-    assert profile["transport"]["current_channel"] == "gitee"
-    assert profile["transport"]["remote"] == "gitee"
+    assert profile["transport"]["current_channel"] == "manual_directory"
+    assert profile["transport"]["remote"] is None
+    assert profile["legacy_transport"]["current_channel"] == "gitee"
     with pytest.raises(ValueError, match="已退役"):
         load_config(project_root / "configs" / "config.server.yaml")
     monkeypatch.setenv("PFMVAL_CONFIG", "legacy-config.yaml")
@@ -2631,6 +2632,93 @@ def test_missing_current_state_md_is_warning_only(tmp_path):
 
     assert any("CURRENT_STATE.md missing" in item for item in report.warn_items)
     assert not any("CURRENT_STATE.md missing" in item for item in report.fail_items)
+
+
+@pytest.fixture
+def pending_validation_project(tmp_path, monkeypatch):
+    # Exercise pending bookkeeping without legacy imports or hash-based fixtures.
+    state = {
+        "schema_version": "1.0", "state_revision": 1, "updated_at": "2026-10-15",
+        "source_commit": "unknown", "active_directive_ids": [], "active_plans": {},
+        "server_transport": {}, "active_training_jobs": [], "pending_result_ids": [],
+        "latest_accepted_result_ids": [], "blocked_actions": [], "superseded_conclusions": [],
+    }
+    write_json(tmp_path / "project_state/current_state.json", state)
+    write_json(tmp_path / "project_state/document_registry.json", {"state_revision": 1, "documents": []})
+    write_json(tmp_path / "experiments/experiment_registry.json", {"experiments": []})
+    (tmp_path / "project_state/directives.jsonl").write_text("", encoding="utf-8")
+    monkeypatch.setattr(state_module, "validate_against_schema", lambda *_args: True)
+    monkeypatch.setattr(state_module, "validate_server_paths", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(state_module, "validate_governance_v3_state", lambda *_args, **_kwargs: None)
+    return tmp_path
+
+
+@pytest.mark.parametrize("inbox_copy", [False, True])
+def test_registered_pending_result_does_not_require_inbox(pending_validation_project, inbox_copy):
+    root = pending_validation_project
+    state_path = root / "project_state/current_state.json"
+    state = read_json(state_path)
+    state["pending_result_ids"] = ["returned-pending"]
+    write_json(state_path, state)
+    write_json(root / "experiments/experiment_registry.json", {"experiments": [
+        {"id": "exp1", "result_id": "returned-pending", "evidence_status": "pending"},
+    ]})
+    if inbox_copy:
+        write_json(root / "project_state/inbox/returned/result.json", {"result_id": "returned-pending"})
+
+    report = validate_state(root, strict=True)
+
+    assert not report.fail_items
+    assert any("registered results await review" in item and "returned-pending" in item for item in report.warn_items)
+    assert not any("does not match" in item for item in report.warn_items)
+
+
+@pytest.mark.parametrize("evidence_status", [None, "accepted", "rejected"])
+def test_pending_result_without_pending_source_warns(pending_validation_project, evidence_status):
+    root = pending_validation_project
+    state_path = root / "project_state/current_state.json"
+    state = read_json(state_path)
+    state["pending_result_ids"] = ["stale-result"]
+    write_json(state_path, state)
+    if evidence_status:
+        write_json(root / "experiments/experiment_registry.json", {"experiments": [
+            {"id": "exp1", "result_id": "stale-result", "evidence_status": evidence_status},
+        ]})
+
+    report = validate_state(root, strict=True)
+
+    assert not report.fail_items
+    assert any("pending result state has no unimported inbox or pending Registry record" in item
+               and "stale-result" in item for item in report.warn_items)
+
+
+@pytest.mark.parametrize("listed_in_state", [False, True])
+def test_unimported_inbox_result_keeps_import_and_state_warnings(pending_validation_project, listed_in_state):
+    root = pending_validation_project
+    write_json(root / "project_state/inbox/returned/result.json", {"result_id": "inbox-result"})
+    if listed_in_state:
+        state_path = root / "project_state/current_state.json"
+        state = read_json(state_path)
+        state["pending_result_ids"] = ["inbox-result"]
+        write_json(state_path, state)
+
+    report = validate_state(root, strict=True)
+
+    assert not report.fail_items
+    assert any("pending results must be imported" in item and "inbox-result" in item for item in report.warn_items)
+    assert any("unimported inbox results missing from pending result state" in item
+               for item in report.warn_items) == (not listed_in_state)
+
+
+def test_invalid_inbox_json_still_fails_pending_validation(pending_validation_project):
+    root = pending_validation_project
+    manifest = root / "project_state/inbox/returned/result.json"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text("{broken", encoding="utf-8")
+
+    report = validate_state(root, strict=True)
+
+    assert any("invalid inbox result envelope" in item for item in report.fail_items)
 
 
 def test_invalid_workflow_catalog_is_warning_not_hard_fail(tmp_path):
