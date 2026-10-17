@@ -1,0 +1,65 @@
+{
+  "source_batch_analysis": "experiments/results/phase2_backbone_spatial_ablation_batch2_20260919/20260927_154318_475_2242f53b/analysis",
+  "arm": "full_fov spatial, seeds 45/46/47",
+  "external_used_for_selection": false,
+  "post_hoc_immune_inflammatory_group": [
+    "ifng",
+    "mhc",
+    "Interferon_Alpha",
+    "icp",
+    "Inflammatory_Response",
+    "IL6_JAK_STAT3",
+    "toxic",
+    "TNF_Signaling",
+    "Complement",
+    "tls"
+  ],
+  "wins": {
+    "internal_val": {
+      "virchow2": {
+        "mean_diff_macro_pcc": -0.0022560933719036635,
+        "patients_uni2h_higher": "4/6",
+        "pathways_uni2h_higher": "14/30",
+        "patient_pathway_combos_uni2h_higher": "84/180",
+        "share_of_net_deficit_from_worst_10pct_combos": 3.0132671701670346
+      },
+      "hoptimus0": {
+        "mean_diff_macro_pcc": -0.0018719433248706552,
+        "patients_uni2h_higher": "3/6",
+        "pathways_uni2h_higher": "16/30",
+        "patient_pathway_combos_uni2h_higher": "86/180",
+        "share_of_net_deficit_from_worst_10pct_combos": 3.074599431478883
+      },
+      "hoptimus1": {
+        "mean_diff_macro_pcc": -0.0012041039805671162,
+        "patients_uni2h_higher": "2/6",
+        "pathways_uni2h_higher": "15/30",
+        "patient_pathway_combos_uni2h_higher": "95/180",
+        "share_of_net_deficit_from_worst_10pct_combos": 4.3519182888514205
+      }
+    },
+    "external_test": {
+      "virchow2": {
+        "mean_diff_macro_pcc": -0.006683115160490751,
+        "patients_uni2h_higher": "0/1",
+        "pathways_uni2h_higher": "14/30",
+        "patient_pathway_combos_uni2h_higher": "14/30",
+        "share_of_net_deficit_from_worst_10pct_combos": 1.538122076126832
+      },
+      "hoptimus0": {
+        "mean_diff_macro_pcc": -0.010409199155236809,
+        "patients_uni2h_higher": "0/1",
+        "pathways_uni2h_higher": "16/30",
+        "patient_pathway_combos_uni2h_higher": "16/30",
+        "share_of_net_deficit_from_worst_10pct_combos": 1.0329871928600238
+      },
+      "hoptimus1": {
+        "mean_diff_macro_pcc": -0.0196819884943228,
+        "patients_uni2h_higher": "0/1",
+        "pathways_uni2h_higher": "13/30",
+        "patient_pathway_combos_uni2h_higher": "13/30",
+        "share_of_net_deficit_from_worst_10pct_combos": 0.5994742610595266
+      }
+    }
+  }
+}
