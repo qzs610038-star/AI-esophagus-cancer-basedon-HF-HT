@@ -163,8 +163,19 @@
       "registered_at": "2026-10-14",
       "due_date": null,
       "priority": "尽快推进，未指定截止日期",
-      "status": "planned_not_started",
+      "status": "phase2_code_ready_not_trained",
+      "updated_at": "2026-10-15",
       "task": "核查 Phase2 病理基础模型消融差异，制定并后续尝试 UNI2-h 调优或重训，评估能否提升性能及比较排名",
+      "priorities": [
+        "先用调参手段抬升 UNI2-h 性能（冻结编码器：特征读出方式、视角平均、输入尺度、头部补充搜索）",
+        "确定抬升后，用同一套参数训练 Virchow2 或其他病理基础模型查看效果"
+      ],
+      "decisions": [
+        "本轮暂不做开发患者留一交叉验证（六折）",
+        "选模只用既定内部验证主指标，XZY 不参与选择",
+        "本轮不做 LoRA 等编码器微调",
+        "其他模型是否同等处理及论文口径待 UNI2-h 完成后再定"
+      ],
       "plan_path": "project_state/plans/Phase2病理基础模型消融_UNI2h调优任务_20261014.md",
       "source": "用户提供的李博士与用户 2026-10-14 12:33—12:57 聊天",
       "deliverables": [
@@ -173,11 +184,14 @@
         "后续新旧参数与对照模型比较及反馈材料"
       ],
       "pending_inputs": [
-        "具体比较臂、主指标及聊天对应的运行批次",
-        "调优预算、调整范围和停止条件",
         "Phase3 继续使用的旧参数版本"
       ],
-      "note": "本轮仅登记，不启动训练。争取 UNI2-h 更优是目标，未达预期也如实汇总；Phase3 可以继续旧参数。论文 UNI2-h 更优仅为李博士的写作预期，尚非新实验结论；其他模型的操作含义未明确，未登记为执行授权。既有结果与确认状态保留。"
+      "phase1_scale_check": "experiments/results/phase2_uni2h_tuning_20261015/20261015_194602_958_72001de9/analysis/尺度核对结论_20261015.md",
+      "phase1_report": "01_指南与解读/分析报告/UNI2h调优阶段一_差距定位_20261015/阶段一差距定位报告_20261015.md",
+      "phase2_package": "experiments/phase2_uni2h_tuning_20261015",
+      "phase2_code_version": "v002",
+      "next_step": "用户将 experiments/phase2_uni2h_tuning_20261015 复制到服务器 D:\\AIPatho\\qzs\\code\\phase2_uni2h_tuning_20261015，先 check-inputs，再 prepare-features；锚点缓存比对为 match 后 train-screen。本机不启动训练",
+      "note": "2026-10-15 阶段二代码包 v002 已写完并通过包内测试与最小自检，服务器训练未启动。争取 UNI2-h 更优是目标，未达预期也如实汇总；Phase3 可以继续旧参数。论文 UNI2-h 更优仅为李博士的写作预期，尚非新实验结论；其他模型的操作含义未明确，未登记为执行授权。既有结果与确认状态保留。"
     }
   ],
   "pending_result_ids": [
